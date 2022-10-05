@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>DataProcessor widget: a guide for Mantid developers</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.12.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Interfaces" href="index.html" />
+    <link rel="next" title="Dynamic PDF" href="Dynamic PDF Background Remover.html" />
+    <link rel="prev" title="Data Comparison" href="Data Comparison.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.12</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="dataprocessor-widget-a-guide-for-mantid-developers">
+<span id="dataprocessorwidget-developersguide-ref"></span><h1>DataProcessor widget: a guide for Mantid developers<a class="headerlink" href="#dataprocessor-widget-a-guide-for-mantid-developers" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#what-the-widget-is-for" id="id2">What the widget is for</a></li>
+<li><a class="reference internal" href="#how-to-build-the-widget" id="id3">How to build the widget</a><ul>
+<li><a class="reference internal" href="#whitelist" id="id4">Whitelist</a></li>
+<li><a class="reference internal" href="#pre-processing-algorithms-and-pre-process-map" id="id5">Pre-processing Algorithms and Pre-process Map</a></li>
+<li><a class="reference internal" href="#processing-algorithm" id="id6">Processing Algorithm</a></li>
+<li><a class="reference internal" href="#post-processing-algorithm" id="id7">Post-processing Algorithm</a></li>
+<li><a class="reference internal" href="#the-widget" id="id8">The widget</a></li>
+<li><a class="reference internal" href="#loading-algorithm" id="id9">Loading Algorithm</a></li>
+<li><a class="reference internal" href="#table-editing-actions" id="id10">Table editing actions</a></li>
+<li><a class="reference internal" href="#signals-emitted-by-the-widget" id="id11">Signals emitted by the widget</a></li>
+<li><a class="reference internal" href="#notebook" id="id12">Notebook</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#how-to-build-the-widget-ii" id="id13">How to build the widget (II)</a><ul>
+<li><a class="reference internal" href="#how-to-control-the-name-of-the-output-workspaces" id="id14">How to control the name of the output workspaces</a></li>
+<li><a class="reference internal" href="#how-to-auto-populate-columns-after-the-reduction" id="id15">How to auto-populate columns after the reduction</a></li>
+<li><a class="reference internal" href="#how-to-specify-the-list-of-available-instruments" id="id16">How to specify the list of available instruments</a></li>
+<li><a class="reference internal" href="#transferring-runs-to-the-table" id="id17">Transferring runs to the table</a></li>
+<li><a class="reference internal" href="#how-to-use-global-options-for-the-reduction" id="id18">How to use global options for the reduction</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#how-to-use-the-widget-from-a-c-interface" id="id19">How to use the widget from a C++ interface</a></li>
+<li><a class="reference internal" href="#how-to-use-the-widget-from-a-python-interface" id="id20">How to use the widget from a Python interface</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This document is intended for Mantid developers as a guide to the architecture of the <em>DataProcessor</em> widget.
+This is a C++ widget exposed to Python that can be found in <em>mantid/MantidQt/MantidWidgets/</em>. It consists of
+several classes defining the widget behaviour as well as unit tests covering most of its functionality.</p>
+<p>A design document including motivation, proposed solution and main requirements for the
+widget can be found in <a class="reference external" href="https://github.com/mantidproject/documents/tree/master/Design/DataProcessorAlgorithmUI">https://github.com/mantidproject/documents/tree/master/Design/DataProcessorAlgorithmUI</a>.</p>
+<p>The purpose of this document is to explain and illustrate how the widget can be inserted into a custom
+interface and the minimal requirements needed to build it and use it. However, this guide is built with
+Reflectometry at ISIS in mind, as it is the only used case at the moment.</p>
+</div>
+<div class="section" id="what-the-widget-is-for">
+<h2><a class="toc-backref" href="#id2">What the widget is for</a><a class="headerlink" href="#what-the-widget-is-for" title="Permalink to this headline">¶</a></h2>
+<p>The DataProcessor widget is a technique-independent <em>MantidWidget</em> that can be used to execute complex
+batch-processing via <em>DataProcessorAlgorithms</em> by reducing sequentially groups of runs that can be later
+post-processed.</p>
+<p>The widget, displayed below, consists in a set of table editing options, a processing table where runs can be entered
+for reduction, a progress bar reporting progress, a combo-box where different
+instruments can be selected, a checkbox to request a notebook which will contain all the steps taking
+place in the reduction, and a button to start processing the table.</p>
+<div class="figure">
+<img alt="../_images/data-processor-widget.png" src="../_images/data-processor-widget.png" />
+</div>
+</div>
+<div class="section" id="how-to-build-the-widget">
+<h2><a class="toc-backref" href="#id3">How to build the widget</a><a class="headerlink" href="#how-to-build-the-widget" title="Permalink to this headline">¶</a></h2>
+<p>Different elements can be specified to build the widget. Some of them are mandatory. Below is a description
+of the available elements that can be used to build and define the behaviour of the widget.</p>
+<div class="section" id="whitelist">
+<span id="whitelist-label"></span><h3><a class="toc-backref" href="#id4">Whitelist</a><a class="headerlink" href="#whitelist" title="Permalink to this headline">¶</a></h3>
+<p>A <em>whitelist</em> is an object defining the number of columns, their names, and the algorithm property names linked to them.
+Below is an example illustrating how to create a white list and add some columns using the public method <em>addElement()</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">whitelist</span> <span class="o">=</span> <span class="n">MantidQt</span><span class="o">.</span><span class="n">MantidWidgets</span><span class="o">.</span><span class="n">DataProcessor</span><span class="o">.</span><span class="n">WhiteList</span><span class="p">()</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Runs&#39;</span><span class="p">,</span> <span class="s">&#39;InputWorkspace&#39;</span><span class="p">,</span> <span class="s">&#39;The run to reduce&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Angle&#39;</span><span class="p">,</span> <span class="s">&#39;ThetaIn&#39;</span><span class="p">,</span> <span class="s">&#39;The incident angle&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Transmission Runs&#39;</span><span class="p">,</span> <span class="s">&#39;FirstTransmissionRun&#39;</span><span class="p">,</span> <span class="s">&#39;Transmission runs&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Q min&#39;</span><span class="p">,</span> <span class="s">&#39;MomentumTransferMin&#39;</span><span class="p">,</span> <span class="s">&#39;Q min&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Q max&#39;</span><span class="p">,</span> <span class="s">&#39;MomentumTransferMax&#39;</span><span class="p">,</span> <span class="s">&#39;Q max&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;dQ/Q&#39;</span><span class="p">,</span> <span class="s">&#39;MomentumTransferStep&#39;</span><span class="p">,</span> <span class="s">&#39;Resolution&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Scale&#39;</span><span class="p">,</span> <span class="s">&#39;ScaleFactor&#39;</span><span class="p">,</span> <span class="s">&#39;Scale Factor&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that, in addition to the specified columns, an extra column called <em>Options</em> is always added. Users can use
+this column to override default property values of the main reduction algorithm. It uses a <em>HintingLineEdit</em> delegate to
+display the main reduction algorithm properties and provides auto-completion capability. See section
+<a class="reference internal" href="#processing-algorithm-label"><em>Processing Algorithm</em></a> for more information.</p>
+<p>The example above defines a table with seven columns, where the first column is named <tt class="docutils literal"><span class="pre">Run</span></tt>, is linked to an algorithm property
+named <tt class="docutils literal"><span class="pre">InputWorkspace</span></tt> and has a description <tt class="docutils literal"><span class="pre">The</span> <span class="pre">run</span> <span class="pre">to</span> <span class="pre">reduce</span></tt>, the second column is named <tt class="docutils literal"><span class="pre">Angle</span></tt>, it is
+linked to an algorithm property called <tt class="docutils literal"><span class="pre">ThetaIn</span></tt>, and has description <tt class="docutils literal"><span class="pre">Angle</span> <span class="pre">in</span> <span class="pre">degrees</span></tt>, and so on. Note that
+there is no restriction in terms of the number of columns, their names, or the name of the algorithm properties linked to them.</p>
+<p>Descriptions are shown as part of the &#8220;What&#8217;s This?&#8221; mode which can be accessed by clicking on the &#8220;What&#8217;s This?&#8221; action on the
+toolbar (last icon) and the column of interest. Below is an example:</p>
+<div class="figure">
+<img alt="../_images/column_description.png" src="../_images/column_description.png" />
+</div>
+<p>The method <em>addElement()</em> also accepts two extra optional arguments which are used to determine the name of the
+reduced workspace. See section <a class="reference internal" href="#output-workspace-name-label"><em>How to control the name of the output workspaces</em></a> for more details. These extra parameters have
+no effect on the way the table is displayed. Therefore, the following whitelist:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">whitelist</span> <span class="o">=</span> <span class="n">MantidQt</span><span class="o">.</span><span class="n">MantidWidgets</span><span class="o">.</span><span class="n">DataProcessor</span><span class="o">.</span><span class="n">WhiteList</span><span class="p">()</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Runs&#39;</span><span class="p">,</span> <span class="s">&#39;InputWorkspace&#39;</span><span class="p">,</span> <span class="s">&#39;The run to reduce&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Angle&#39;</span><span class="p">,</span> <span class="s">&#39;ThetaIn&#39;</span><span class="p">,</span> <span class="s">&#39;The incident angle&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Transmission Runs&#39;</span><span class="p">,</span> <span class="s">&#39;FirstTransmissionRun&#39;</span><span class="p">,</span> <span class="s">&#39;Transmission runs&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Q min&#39;</span><span class="p">,</span> <span class="s">&#39;MomentumTransferMin&#39;</span><span class="p">,</span> <span class="s">&#39;Q min&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Q max&#39;</span><span class="p">,</span> <span class="s">&#39;MomentumTransferMax&#39;</span><span class="p">,</span> <span class="s">&#39;Q max&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;dQ/Q&#39;</span><span class="p">,</span> <span class="s">&#39;MomentumTransferStep&#39;</span><span class="p">,</span> <span class="s">&#39;Resolution&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Scale&#39;</span><span class="p">,</span> <span class="s">&#39;ScaleFactor&#39;</span><span class="p">,</span> <span class="s">&#39;Scale Factor&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will produce a the same table as the first example.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a mandatory argument.</p>
+</div>
+</div>
+<div class="section" id="pre-processing-algorithms-and-pre-process-map">
+<span id="pre-processing-algorithm-label"></span><h3><a class="toc-backref" href="#id5">Pre-processing Algorithms and Pre-process Map</a><a class="headerlink" href="#pre-processing-algorithms-and-pre-process-map" title="Permalink to this headline">¶</a></h3>
+<p>Pre-processing algorithms are algorithms used to pre-process certain columns. In Reflectometry at ISIS, we
+need to pre-process columns <tt class="docutils literal"><span class="pre">Run</span></tt> and <tt class="docutils literal"><span class="pre">Transmission</span></tt> when users enter more than one run. As
+an example, consider the following table:</p>
+<div class="figure">
+<img alt="../_images/pre-processing.png" src="../_images/pre-processing.png" />
+</div>
+<p>We want the widget to load run <tt class="docutils literal"><span class="pre">INTER00001</span></tt> (note the instrument combo box below the table), run
+<tt class="docutils literal"><span class="pre">INTER00002</span></tt> and run <tt class="docutils literal"><span class="pre">INTER00003</span></tt> and sum these runs together. For transmission runs, we
+also want to load runs <tt class="docutils literal"><span class="pre">INTER00010</span></tt> and <tt class="docutils literal"><span class="pre">INTER00011</span></tt> but in this case the runs should be
+combined using a different algorithm, <a class="reference internal" href="../algorithms/CreateTransmissionWorkspaceAuto-v2.html#algm-createtransmissionworkspaceauto"><em>CreateTransmissionWorkspaceAuto v2</em></a>. This is achieved by using a
+<em>pre-process</em> map, an object that uses a map behind the scenes, where keys are column
+names and values are pre-processing algorithms. In this example, a pre-process map would be defined as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">preprocess_map</span> <span class="o">=</span> <span class="n">MantidQt</span><span class="o">.</span><span class="n">MantidWidgets</span><span class="o">.</span><span class="n">DataProcessor</span><span class="o">.</span><span class="n">PreprocessMap</span><span class="p">()</span>
+<span class="n">preprocess_map</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Runs&#39;</span><span class="p">,</span> <span class="s">&#39;Plus&#39;</span><span class="p">)</span>
+<span class="n">preprocess_map</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Transmission Runs&#39;</span><span class="p">,</span> <span class="s">&#39;CreateTransmissionWorkspaceAuto&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This object tells the widget that runs in column <tt class="docutils literal"><span class="pre">Runs</span></tt> have to be combined using the
+<a class="reference internal" href="../algorithms/Plus-v1.html#algm-plus"><em>Plus v1</em></a> algorithm, and runs in column <tt class="docutils literal"><span class="pre">Transmission</span> <span class="pre">Runs</span></tt> have to be pre-processed
+with <a class="reference internal" href="../algorithms/CreateTransmissionWorkspaceAuto-v2.html#algm-createtransmissionworkspaceauto"><em>CreateTransmissionWorkspaceAuto v2</em></a>. There is no restriction in the number of columns
+to pre-process, but there are some limitations in terms of the allowed pre-processing algorithms:</p>
+<ul class="simple">
+<li>Only algorithms with <strong>two</strong> input workspace properties are allowed.</li>
+<li>Only algorithms with <strong>one</strong> output workspace property are allowed.</li>
+<li>The above refers to <a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><em>MatrixWorkspaces</em></a> and <a class="reference internal" href="../concepts/Workspace.html#workspace"><em>Workspaces</em></a> only.</li>
+</ul>
+<p>The pre-processing is a follows:</p>
+<ol class="arabic simple">
+<li>The widget loads the first two runs and puts them into the ADS.</li>
+<li>It then runs the specified pre-processing algorithm on both workspaces and keeps a temporary workspace that is not added to the ADS.</li>
+<li>It loads the third workspace and runs the specified pre-processing algorithm on this workspace and the temporary one from the previous step.</li>
+</ol>
+<p>Note that in this context pre-processing refers to algorithms used to combine two or more
+runs specified in the same column. It does not refer to additional processing of the loaded runs. For instance, the widget is not
+able to <a class="reference internal" href="../algorithms/Load-v1.html#algm-load"><em>Load v1</em></a> and <a class="reference internal" href="../algorithms/Rebin-v1.html#algm-rebin"><em>Rebin v1</em></a> a workspace or apply any other algorithms to the loaded
+run. This means that, if only one run is specified no pre-processing is needed, as the widget only has to load the
+corresponding run. Runs that need to be pre-processed must be specified as a list separated by <tt class="docutils literal"><span class="pre">+</span></tt>
+or <tt class="docutils literal"><span class="pre">,</span></tt>.</p>
+<p>When pre-processing using the above pre-process map, the widget will create different workspaces in the ADS:</p>
+<ul class="simple">
+<li>A workspace named <tt class="docutils literal"><span class="pre">13460</span></tt> that corresponds to the loaded run <tt class="docutils literal"><span class="pre">INTER00013460</span></tt></li>
+<li>A workspace named <tt class="docutils literal"><span class="pre">13462</span></tt> that corresponds to the loaded run <tt class="docutils literal"><span class="pre">INTER00013462</span></tt></li>
+<li>A workspace named <tt class="docutils literal"><span class="pre">13460_13462</span></tt> that corresponds to the sum of the two workspaces above</li>
+<li>A workspace named <tt class="docutils literal"><span class="pre">13463</span></tt>, corresponding to run <tt class="docutils literal"><span class="pre">INTER00013463</span></tt></li>
+<li>A workspace named <tt class="docutils literal"><span class="pre">13464</span></tt>, corresponding to run <tt class="docutils literal"><span class="pre">INTER00013464</span></tt></li>
+<li>A workspace named <tt class="docutils literal"><span class="pre">13463_13464</span></tt> corresponding to the combined transmission run</li>
+</ul>
+<p>The names of the above workspaces can be controlled to some extent by providing an extra parameter when
+creating the pre-process map. This extra parameter corresponds to a prefix that will be added to
+the loaded workspaces. The example below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">preprocess_map</span> <span class="o">=</span> <span class="n">MantidQt</span><span class="o">.</span><span class="n">MantidWidgets</span><span class="o">.</span><span class="n">DataProcessor</span><span class="o">.</span><span class="n">PreprocessMap</span><span class="p">()</span>
+<span class="n">preprocess_map</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Runs&#39;</span><span class="p">,</span> <span class="s">&#39;Plus&#39;</span><span class="p">,</span> <span class="s">&#39;TOF_&#39;</span><span class="p">)</span>
+<span class="n">preprocess_map</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Transmission Runs&#39;</span><span class="p">,</span> <span class="s">&#39;CreateTransmissionWorkspaceAuto&#39;</span><span class="p">,</span> <span class="s">&#39;TRANS_&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Produces the following workspaces:</p>
+<ul class="simple">
+<li>Workspace <tt class="docutils literal"><span class="pre">TOF_13460</span></tt>, corresponding to run <tt class="docutils literal"><span class="pre">INTER00013460</span></tt></li>
+<li>Workspace <tt class="docutils literal"><span class="pre">TOF_13462</span></tt>, corresponding to run <tt class="docutils literal"><span class="pre">INTER00013462</span></tt></li>
+<li>Workspace <tt class="docutils literal"><span class="pre">TOF_13460_13462</span></tt>, corresponding to the sum of the two workspaces above</li>
+<li>Workspace <tt class="docutils literal"><span class="pre">TRANS_13463</span></tt>, corresponding to run <tt class="docutils literal"><span class="pre">INTER00013463</span></tt></li>
+<li>Workspace <tt class="docutils literal"><span class="pre">TRANS_13464</span></tt>, corresponding to run <tt class="docutils literal"><span class="pre">INTER00013464</span></tt></li>
+<li>Workspace <tt class="docutils literal"><span class="pre">TRANS_13463_13464</span></tt> corresponding to the combined transmission run</li>
+</ul>
+<p>Additionally, there is one more extra parameter that can be specified. It is a list of comma-separated
+strings that refer to the blacklist of algorithm properties that should not be shown
+in a hinting line edit associated with the algorithm. Note that such hinting line edit is
+not included by default in the widget, and has to be added manually.</p>
+<p>Note that, at the moment, even if users are not supposed to enter more than
+one run, you&#8217;ll have to specify a pre-processing algorithm so that runs can be loaded.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is an optional argument.</p>
+</div>
+<p>Note that if a pre-processed run already exists in the ADS with the same name, the widget will use it
+to avoid loading it again.</p>
+</div>
+<div class="section" id="processing-algorithm">
+<span id="processing-algorithm-label"></span><h3><a class="toc-backref" href="#id6">Processing Algorithm</a><a class="headerlink" href="#processing-algorithm" title="Permalink to this headline">¶</a></h3>
+<p>The processing algorithm refers to the main reduction algorithm that is used to reduce the runs. Processing
+algorithms must satify the following conditions:</p>
+<ul class="simple">
+<li>Only algorithms with at least one input workspace property are allowed.</li>
+<li>Only algorithms with at least one output workspace property are allowed.</li>
+<li>The above refers to <a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><em>MatrixWorkspaces</em></a> and <a class="reference internal" href="../concepts/Workspace.html#workspace"><em>Workspaces</em></a> only.</li>
+</ul>
+<p>A processing algorithm can be created like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">alg</span> <span class="o">=</span> <span class="n">MantidQt</span><span class="o">.</span><span class="n">MantidWidgets</span><span class="o">.</span><span class="n">DataProcessor</span><span class="o">.</span><span class="n">ProcessingAlgorithm</span><span class="p">(</span><span class="s">&#39;ReflectometryReductionOneAuto&#39;</span><span class="p">,</span><span class="s">&#39;IvsQ_binned_, IvsQ_, IvsLam_&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This tells the widget that each rown in the table should be reduced with <a class="reference internal" href="../algorithms/ReflectometryReductionOneAuto-v2.html#algm-reflectometryreductiononeauto"><em>ReflectometryReductionOneAuto v2</em></a>, and
+the output workspaces resulting from the reduction should be named with prefixes <tt class="docutils literal"><span class="pre">IvsQ_binned_</span></tt>, <tt class="docutils literal"><span class="pre">Ivs_Q</span></tt> and
+<tt class="docutils literal"><span class="pre">IvsLam_</span></tt>. The number of comma-separated prefixes must match the number of output workspaces
+of the algorithm, otherwise an excpetion will be thrown when constructing the widget. Additionally, a
+blacklist of algorithms properties can be provided as a string of comma-separated algorithm property names:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">alg</span> <span class="o">=</span> <span class="n">MantidQt</span><span class="o">.</span><span class="n">MantidWidgets</span><span class="o">.</span><span class="n">DataProcessor</span><span class="o">.</span><span class="n">ProcessingAlgorithm</span><span class="p">(</span><span class="s">&#39;ReflectometryReductionOneAuto&#39;</span><span class="p">,</span> <span class="s">&#39;IvsQ_binned_, IvsQ_, IvsLam_&#39;</span><span class="p">,</span>
+                                                               <span class="s">&#39;InputWorkspace,&#39;</span>
+                                                               <span class="s">&#39;ThetaIn,&#39;</span>
+                                                               <span class="s">&#39;FirstTransmissionWorkspace,&#39;</span>
+                                                               <span class="s">&#39;SecondTransmissionWorkspace,&#39;</span>
+                                                               <span class="s">&#39;MomentumTransferMin,&#39;</span>
+                                                               <span class="s">&#39;MomentumTransferMax,&#39;</span>
+                                                               <span class="s">&#39;MomentumTransferStep,&#39;</span>
+                                                               <span class="s">&#39;ScaleFactor,&#39;</span>
+                                                               <span class="s">&#39;OutputWorkspaceBinned,&#39;</span>
+                                                               <span class="s">&#39;OutputWorkspace,&#39;</span>
+                                                               <span class="s">&#39;OutputWorkspaceWavelength,&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The only effect of the blacklist is on the <em>Options</em> column, not in the reduction. This column uses a <em>HintingLineEdit</em> (a MantidWidget)
+delegate to provide auto-completion functionality so that when users start typing in this column, they get a list of algorithm
+property names they can easily select. The figure below illustrates this behaviour:</p>
+<div class="figure">
+<img alt="../_images/options-hinting-line-edit.png" src="../_images/options-hinting-line-edit.png" />
+</div>
+<p>Note that only those algorithm properties that have not been blacklisted are shown: <tt class="docutils literal"><span class="pre">MomentumTransferMin</span></tt>,
+<tt class="docutils literal"><span class="pre">MomentumTransferMax</span></tt> and <tt class="docutils literal"><span class="pre">MomentumTransferStep</span></tt>, which are also input properties of our main
+reduction algorithm, <a class="reference internal" href="../algorithms/ReflectometryReductionOneAuto-v2.html#algm-reflectometryreductiononeauto"><em>ReflectometryReductionOneAuto v2</em></a>, are not displayed when users start typing with character <tt class="docutils literal"><span class="pre">M</span></tt>.
+Normally, you&#8217;d want to black list the input/output workspace properties and properties that are linked to the table columns. In this example,
+as <tt class="docutils literal"><span class="pre">ThetaIn</span></tt> is linked to column <tt class="docutils literal"><span class="pre">Angle</span></tt> (see the whitelist definition in section <a class="reference internal" href="#whitelist-label"><em>Whitelist</em></a>),
+<tt class="docutils literal"><span class="pre">MomentumTransferMin</span></tt> is linked to column <tt class="docutils literal"><span class="pre">Q</span> <span class="pre">min</span></tt> and so on, it does not make sense for them to appear
+as additional options for the reduction.</p>
+<p>To illustrate how the reduction takes place, consider the white list and pre-processing map defined
+in the previous sections, and consider the following table:</p>
+<div class="figure">
+<img alt="../_images/processing-example.png" src="../_images/processing-example.png" />
+</div>
+<p>The widget iterates over each column. If the cell is not empty,
+it checks if the column needs to be pre-processed (essentially by checking if the column name is contained
+in the pre-process map), and if so, loads and pre-processes the specified runs. Then it gets the algorithm
+property name linked to the column and sets the pre-processed run as the workspace for that property. If the
+column does not need to be pre-processed, it simply assigns the value in the cell to the algorithm property.
+Below is a summary in pseudocode:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">IAlgorithm_sptr</span> <span class="n">alg</span> <span class="o">=</span>
+      <span class="n">AlgorithmManager</span><span class="o">::</span><span class="n">Instance</span><span class="p">().</span><span class="n">create</span><span class="p">(</span><span class="n">processing</span> <span class="n">algorithm</span> <span class="n">name</span><span class="p">);</span>
+<span class="n">alg</span><span class="o">-&gt;</span><span class="n">initialize</span><span class="p">();</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">columns</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">cell</span> <span class="n">is</span> <span class="n">not</span> <span class="n">empty</span><span class="p">)</span>
+
+        <span class="n">get</span> <span class="n">the</span> <span class="n">algorithm_property</span> <span class="n">linked</span> <span class="n">to</span> <span class="n">this</span> <span class="n">column</span> <span class="n">from</span> <span class="n">the</span> <span class="n">white</span> <span class="n">list</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">column_name</span> <span class="n">in</span> <span class="n">pre_process_map</span><span class="p">)</span>
+              <span class="n">load</span> <span class="n">and</span> <span class="n">pre</span><span class="o">-</span><span class="n">process_runs</span><span class="p">;</span>
+              <span class="n">alg</span><span class="o">-&gt;</span><span class="n">setPropertyValue</span><span class="p">(</span><span class="n">algorithm_property</span><span class="p">,</span> <span class="n">pre_processed_runs</span><span class="p">);</span>
+
+            <span class="k">else</span>
+              <span class="n">alg</span><span class="o">-&gt;</span><span class="n">setPropertyValue</span><span class="p">(</span><span class="n">algorithm_property</span><span class="p">,</span> <span class="n">cell</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Column <em>Options</em> is treated separately: the value in this cell is expected to be a comma-separated list of
+input properties with their values, as illustrated in the figure above. The widget simply parses this string:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="k">auto</span> <span class="n">optionsMap</span> <span class="o">=</span> <span class="n">parseKeyValueString</span><span class="p">(</span><span class="n">options</span><span class="p">);</span>
+<span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">kvp</span> <span class="o">=</span> <span class="n">optionsMap</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">kvp</span> <span class="o">!=</span> <span class="n">optionsMap</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">kvp</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">try</span> <span class="p">{</span>
+    <span class="n">alg</span><span class="o">-&gt;</span><span class="n">setProperty</span><span class="p">(</span><span class="n">kvp</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">,</span> <span class="n">kvp</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">);</span>
+  <span class="p">}</span> <span class="n">catch</span> <span class="p">(</span><span class="n">Mantid</span><span class="o">::</span><span class="n">Kernel</span><span class="o">::</span><span class="n">Exception</span><span class="o">::</span><span class="n">NotFoundError</span> <span class="o">&amp;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">throw</span> <span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&quot;Invalid property in options column: &quot;</span> <span class="o">+</span>
+                             <span class="n">kvp</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Finally the algorithm is executed and the widget reduces the next row in the same way.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a mandatory argument.</p>
+</div>
+</div>
+<div class="section" id="post-processing-algorithm">
+<h3><a class="toc-backref" href="#id7">Post-processing Algorithm</a><a class="headerlink" href="#post-processing-algorithm" title="Permalink to this headline">¶</a></h3>
+<p>A post-processing algorithm defines the way in which a group of runs should be post-processed. As
+an example, in Reflectometry at ISIS, a run typically constists in two or three runs measured
+under the same conditions of temperature, magnetic field, etc, but at different incident
+angles. These runs belong to the same group and need to be stitched together. The post-processing
+algorithm is in this case <a class="reference internal" href="../algorithms/Stitch1DMany-v1.html#algm-stitch1dmany"><em>Stitch1DMany v1</em></a>, and can be defined as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">post_alg</span> <span class="o">=</span> <span class="n">MantidQt</span><span class="o">.</span><span class="n">MantidWidgets</span><span class="o">.</span><span class="n">DataProcessor</span><span class="o">.</span><span class="n">PostprocessingAlgorithm</span><span class="p">(</span><span class="s">&#39;Stitch1DMany&#39;</span><span class="p">,</span> <span class="s">&#39;IvsQ_&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As with pre-processing and processing algorithms, a third parameter indicating the list of properties
+to blacklist can be used. As with the pre-process map, you must add manually a hinting line edit
+and link the post-processing black list to it, as this functionality is not available by default.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">post_alg</span> <span class="o">=</span> <span class="n">MantidQt</span><span class="o">.</span><span class="n">MantidWidgets</span><span class="o">.</span><span class="n">DataProcessor</span><span class="o">.</span><span class="n">PostprocessingAlgorithm</span><span class="p">(</span><span class="s">&#39;Stitch1DMany&#39;</span><span class="p">,</span> <span class="s">&#39;IvsQ_&#39;</span><span class="p">,</span> <span class="s">&#39;InputWorkspaces, OutputWorkspaces&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is an optional argument.</p>
+</div>
+<p>Note that this is an optional argument. When a post-processing algorithm is defined, the table is arranged
+as a two-level tree where parent items are groups and child items are runs. Different runs (child items) can belong
+to the same group (parent) as shown on the left figure below. Note that you can enter a name for the group but
+it will not be used in the reduction. However, when no post-processing is defined, parent items no longer make
+sense, and the table is arranged as a on-level tree, as illustrated on the right figure below. Note that
+table editing options referring to groups are also removed. See section <a class="reference internal" href="#table-editing-and-notebook-label"><em>Table editing actions</em></a>
+for more details.</p>
+<div class="figure">
+<img alt="../_images/table-with-post-processing.png" src="../_images/table-with-post-processing.png" />
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Note that, because the widget is currently only used in the ISIS Reflectometry interface with a
+post-processing algorithm, the functionality without it is not well tested in terms of the
+table-editing options, more specifically in terms of adding/deleting/copying/pasting rows.</p>
+</div>
+<p>In addition to the post-processing algorithm, a post-process map can also be specified (note that this is a C++
+feature only which is not currently exposed to Python). A post-process map is a STL map where keys are
+column names and values are algorithm property names referring to the post-processing algorithm. This can
+be used when you need to use the values in a column as input properties to the post-processing algorithm.</p>
+</div>
+<div class="section" id="the-widget">
+<h3><a class="toc-backref" href="#id8">The widget</a><a class="headerlink" href="#the-widget" title="Permalink to this headline">¶</a></h3>
+<p>One you have defined all the elements above, at least the mandatory ones, the widget can be created
+like this in Python (in C++ the code would be the equivalent of the code below):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">data_processor_table</span> <span class="o">=</span> <span class="n">MantidQt</span><span class="o">.</span><span class="n">MantidWidgets</span><span class="o">.</span><span class="n">QDataProcessorWidget</span><span class="p">(</span><span class="n">whitelist</span><span class="p">,</span> <span class="n">preprocess_map</span><span class="p">,</span> <span class="n">alg</span><span class="p">,</span> <span class="n">post_alg</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="loading-algorithm">
+<h3><a class="toc-backref" href="#id9">Loading Algorithm</a><a class="headerlink" href="#loading-algorithm" title="Permalink to this headline">¶</a></h3>
+<p>By default, the widget will use <a class="reference internal" href="../algorithms/Load-v1.html#algm-load"><em>Load v1</em></a> to load the runs.</p>
+<p>In C++ it is possible to specify the loading algorithm the widget should use (for instance,
+in Reflectometry at ISIS we use <a class="reference internal" href="../algorithms/LoadISISNexus-v2.html#algm-loadisisnexus"><em>LoadISISNexus v2</em></a>). However, at the moment
+this is only possible if both pre-processing and post-processing algorithms are specified. The only
+reason for this is that it was requested by Reflectometry scientists at ISIS, who work with pre-processing
+and post-processing. However, if you need to implement this, all you need to do is add an optional
+string argument to the relevant <tt class="docutils literal"><span class="pre">GenericDataProcessorPresenter</span></tt> constuctor. For instance,
+assuming that you don&#8217;t need to pre-process and post-process groups of runs, the constructor:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="c1">// Constructor: no pre-processing, no post-processing</span>
+<span class="n">GenericDataProcessorPresenter</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">WhiteList</span> <span class="o">&amp;</span><span class="n">whitelist</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">ProcessingAlgorithm</span> <span class="o">&amp;</span><span class="n">processor</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>should become:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="c1">// Constructor: no pre-processing, no post-processing</span>
+<span class="n">GenericDataProcessorPresenter</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">WhiteList</span> <span class="o">&amp;</span><span class="n">whitelist</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">ProcessingAlgorithm</span> <span class="o">&amp;</span><span class="n">processor</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">loader</span> <span class="o">=</span> <span class="s">&quot;Load&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Then in the implementation, the following should be enough:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm">* Delegating constructor: no pre-processing, no post-processing</span>
+<span class="cm">* @param whitelist : The set of properties we want to show as columns</span>
+<span class="cm">* @param processor : The processing algorithm</span>
+<span class="cm">* @param loader :: The loading algorithm</span>
+<span class="cm">*/</span>
+<span class="n">GenericDataProcessorPresenter</span><span class="o">::</span><span class="n">GenericDataProcessorPresenter</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">WhiteList</span> <span class="o">&amp;</span><span class="n">whitelist</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">ProcessingAlgorithm</span> <span class="o">&amp;</span><span class="n">processor</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">loader</span><span class="p">)</span>
+    <span class="o">:</span> <span class="n">GenericDataProcessorPresenter</span><span class="p">(</span>
+          <span class="n">whitelist</span><span class="p">,</span>
+          <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">PreprocessingAlgorithm</span><span class="o">&gt;</span><span class="p">(),</span>
+          <span class="n">processor</span><span class="p">,</span> <span class="n">PostprocessingAlgorithm</span><span class="p">(),</span>
+          <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(),</span> <span class="n">loader</span><span class="p">)</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>In addition, if you are using the widget in a Python interface, you will have to expose this
+functionality using SIP. You first need to modify the relevant <tt class="docutils literal"><span class="pre">QDataProcessorWidget</span></tt>
+constructor and make it pass the loading algorithm to the <tt class="docutils literal"><span class="pre">GenericDataProcessorPresenter</span></tt>.
+Assuming the example above, i.e. no pre-processing and no post-processing, the constructor:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="c1">// Constructor: no pre-processing, no post-processing</span>
+<span class="n">QDataProcessorWidget</span><span class="p">(</span><span class="k">const</span> <span class="n">WhiteList</span> <span class="o">&amp;</span><span class="p">,</span>
+                     <span class="k">const</span> <span class="n">ProcessingAlgorithm</span> <span class="o">&amp;</span><span class="p">,</span>
+                     <span class="n">QWidget</span> <span class="o">*</span><span class="n">parent</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>should become:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="c1">// Constructor: no pre-processing, no post-processing</span>
+<span class="n">QDataProcessorWidget</span><span class="p">(</span><span class="k">const</span> <span class="n">WhiteList</span> <span class="o">&amp;</span><span class="p">,</span>
+                     <span class="k">const</span> <span class="n">ProcessingAlgorithm</span> <span class="o">&amp;</span><span class="p">,</span>
+                     <span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">loader</span><span class="p">,</span>
+                     <span class="n">QWidget</span> <span class="o">*</span><span class="n">parent</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>and then the implementation would be:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="cm">/** Delegating constructor, no pre-processing, no post-processing</span>
+<span class="cm">* @param whitelist :: The white list</span>
+<span class="cm">* @param algorithm :: The processing algorithm</span>
+<span class="cm">* @param loader :: The loading algorithm</span>
+<span class="cm">* @param parent :: The parent of this view</span>
+<span class="cm">*/</span>
+<span class="n">QDataProcessorWidget</span><span class="o">::</span><span class="n">QDataProcessorWidget</span><span class="p">(</span>
+    <span class="k">const</span> <span class="n">WhiteList</span> <span class="o">&amp;</span><span class="n">whitelist</span><span class="p">,</span>
+    <span class="k">const</span> <span class="n">ProcessingAlgorithm</span> <span class="o">&amp;</span><span class="n">algorithm</span><span class="p">,</span>
+            <span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">loader</span><span class="p">,</span> <span class="n">QWidget</span> <span class="o">*</span><span class="n">parent</span><span class="p">)</span>
+    <span class="o">:</span> <span class="n">QDataProcessorWidget</span><span class="p">(</span>
+          <span class="n">Mantid</span><span class="o">::</span><span class="n">Kernel</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">GenericDataProcessorPresenter</span><span class="o">&gt;</span><span class="p">(</span><span class="n">whitelist</span><span class="p">,</span>
+                                                                     <span class="n">algorithm</span><span class="p">,</span>
+                                                                     <span class="n">loader</span><span class="p">.</span><span class="n">toStdString</span><span class="p">()),</span>
+          <span class="n">parent</span><span class="p">)</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>Finally, you will need to modify file <tt class="docutils literal"><span class="pre">qt/python/mantidqtpython/mantidqtpython_def.sip</span></tt> to include the
+above constructor:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">class</span> <span class="n">QDataProcessorWidget</span> <span class="o">:</span> <span class="n">QWidget</span>
+<span class="p">{</span>
+<span class="o">%</span><span class="n">TypeHeaderCode</span>
+<span class="cp">#include &quot;MantidQtWidgets/DataProcessorUI/QDataProcessorWidget.h&quot;</span>
+<span class="o">%</span><span class="n">End</span>
+<span class="nl">public:</span>
+<span class="n">QDataProcessorWidget</span><span class="p">(</span><span class="k">const</span> <span class="n">MantidQt</span><span class="o">::</span><span class="n">MantidWidgets</span><span class="o">::</span><span class="n">DataProcessor</span><span class="o">::</span><span class="n">WhiteList</span> <span class="o">&amp;</span><span class="p">,</span>
+                     <span class="k">const</span> <span class="n">MantidQt</span><span class="o">::</span><span class="n">MantidWidgets</span><span class="o">::</span><span class="n">DataProcessor</span><span class="o">::</span><span class="n">ProcessingAlgorithm</span> <span class="o">&amp;</span><span class="p">,</span>
+                     <span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="p">,</span>
+                     <span class="n">QWidget</span> <span class="o">*</span><span class="n">parent</span> <span class="p">);</span>
+<span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="table-editing-actions">
+<span id="table-editing-and-notebook-label"></span><h3><a class="toc-backref" href="#id10">Table editing actions</a><a class="headerlink" href="#table-editing-actions" title="Permalink to this headline">¶</a></h3>
+<p>The widget comes with a set of table-editing options. Some of them are shown in the toolbar above the
+processing table:</p>
+<div class="figure">
+<img alt="../_images/table-editing-options.png" src="../_images/table-editing-options.png" />
+</div>
+<p>These are also shown in a context menu when clicking on a row in the table:</p>
+<div class="figure">
+<img alt="../_images/table-editing-options-context-menu.png" src="../_images/table-editing-options-context-menu.png" />
+</div>
+<p>Other actions are not shown by default but the widget can export them so that they can be added to the parent
+widget containing the data processor widget. In the example below, all the available editing options
+have been added to two menus: a <em>File</em> menu, which contains actions to save/load/open a new table, as well
+as general options related to error/warning messages and rounding, and an <em>Edit</em> menu containing
+the options shown on the toolbar:</p>
+<div class="figure">
+<img alt="../_images/table-editing-options-outside-widget.png" src="../_images/table-editing-options-outside-widget.png" />
+</div>
+<p>Note that when no post-processing algorithm are defined, some of the options that refer to groups
+do not make sense, and therefore, they are not shown and cannot be accessed. Below is a description
+of the available actions.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="87%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Action</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Open Table</td>
+<td>A submenu containing a list of valid TableWorkspaces that can be loaded in the processing table
+for processing. Valid table workspaces are those who have the same number of columns as the processing table.</td>
+</tr>
+<tr class="row-odd"><td>New Table</td>
+<td>Discards the current contents of the processing table
+presenting a blank table.</td>
+</tr>
+<tr class="row-even"><td>Save Table</td>
+<td>Saves the current contents of the processing to the TableWorkspaces it came from. If no such
+workspace already exists, a new one can be created.</td>
+</tr>
+<tr class="row-odd"><td>Save Table As</td>
+<td>Saves the current contents of the processing table to a new table workspace.</td>
+</tr>
+<tr class="row-even"><td>Import .TBL</td>
+<td>Opens a <a class="reference internal" href="../algorithms/LoadTBL-v1.html#algm-loadtbl"><em>LoadTBL</em></a> dialog, enabling you to load a <tt class="docutils literal"><span class="pre">.tbl</span></tt> file into the processing table. A table
+workspace is also created in the ADS.</td>
+</tr>
+<tr class="row-odd"><td>Export .TBL</td>
+<td>Opens a <a class="reference internal" href="../algorithms/SaveTBL-v1.html#algm-savetbl"><em>SaveTBL</em></a> dialog, enabling you to save a table workspace to a <tt class="docutils literal"><span class="pre">.tbl</span></tt> file.</td>
+</tr>
+<tr class="row-even"><td>Options</td>
+<td>Opens the <em>Options</em> menu. This menu allows to adjust settings related to warning/error messages and rounding options.</td>
+</tr>
+<tr class="row-odd"><td>Process</td>
+<td>Processes the selected runs, or, if no runs are selected, all of the runs in the table. When post-processing is
+defined and a group is selected, runs belonging to the same group are post-processed together.</td>
+</tr>
+<tr class="row-even"><td>Expand Selection</td>
+<td>This action is only available when post-processing is defined. It expands your selection such that the group containing
+the row you have selected is selected.</td>
+</tr>
+<tr class="row-odd"><td>Plot Selected
+Rows</td>
+<td>Creates a plot of the reduced workspaces generated by any of the selected rows.</td>
+</tr>
+<tr class="row-even"><td>Plot Selected
+Groups</td>
+<td>Only available when post-processing is defined. Creates a plot of the post-processed workspaces generated
+by any of the selected groups.</td>
+</tr>
+<tr class="row-odd"><td>Insert Row</td>
+<td>Adds a new row after the first selected row, or at the end of the group if a group was selected. If nothing
+was selected the new row is appended at the end of the
+last group.</td>
+</tr>
+<tr class="row-even"><td>Insert Group</td>
+<td>Only available when post-processing is defined. Adds a new group after the first selected group, or at
+the end of the table if no groups were selected.</td>
+</tr>
+<tr class="row-odd"><td>Group Rows</td>
+<td>Only available when post-processing is defined. Takes all the selected rows and places them in a group
+together, separate from any other group.</td>
+</tr>
+<tr class="row-even"><td>Copy Rows</td>
+<td>Copies the selected rows to the clipboard. In the clipboard, each column&#8217;s value is separated by a tab, and
+each row is placed on a new line.</td>
+</tr>
+<tr class="row-odd"><td>Cut Rows</td>
+<td>Copies the selected rows, and then deletes them.</td>
+</tr>
+<tr class="row-even"><td>Paste Rows</td>
+<td>Pastes the contents of the clipboard into the selected rows. If no rows are selected, new rows are inserted.</td>
+</tr>
+<tr class="row-odd"><td>Clear Rows</td>
+<td>Resets the cells in any selected rows to their initial value, in other words, blank.</td>
+</tr>
+<tr class="row-even"><td>Delete Row</td>
+<td>Deletes any selected rows. If no rows are selected, nothing happens. For groups, if the single row of a group is
+selected for deletion, the group will also be deleted.</td>
+</tr>
+<tr class="row-odd"><td>Delete Group</td>
+<td>Only available when post-processing is defined. Deletes any selected Groups. If no groups are selected,
+nothing happens.</td>
+</tr>
+<tr class="row-even"><td>What&#8217;s This</td>
+<td>Provides guidance on what various parts of the interface are for.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="signals-emitted-by-the-widget">
+<h3><a class="toc-backref" href="#id11">Signals emitted by the widget</a><a class="headerlink" href="#signals-emitted-by-the-widget" title="Permalink to this headline">¶</a></h3>
+<p>The widget emits a <tt class="docutils literal"><span class="pre">runPythonrunPythonCode(const</span> <span class="pre">QString</span> <span class="pre">&amp;)</span></tt> signal to plot workspace and load/save
+a .tbl file. The parent widget containing the data processor widget must catch this signal and re-emit it
+so that the python code is executed.</p>
+</div>
+<div class="section" id="notebook">
+<h3><a class="toc-backref" href="#id12">Notebook</a><a class="headerlink" href="#notebook" title="Permalink to this headline">¶</a></h3>
+<p>The widget includes a checkbox called &#8220;Output Notebook&#8221; that, when selected, will produce an IPython Notebook
+including all the steps taking place in the reduction.</p>
+<div class="figure">
+<img alt="../_images/notebook.png" src="../_images/notebook.png" />
+</div>
+</div>
+</div>
+<div class="section" id="how-to-build-the-widget-ii">
+<h2><a class="toc-backref" href="#id13">How to build the widget (II)</a><a class="headerlink" href="#how-to-build-the-widget-ii" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-to-control-the-name-of-the-output-workspaces">
+<span id="output-workspace-name-label"></span><h3><a class="toc-backref" href="#id14">How to control the name of the output workspaces</a><a class="headerlink" href="#how-to-control-the-name-of-the-output-workspaces" title="Permalink to this headline">¶</a></h3>
+<p>The widget will use the data in the table to generate a name for the output workspace. The way
+in which the output name is generated also depends on the way the whitelist has been defined and
+on the prefixes specified in the processing algorithm (and post-processing algorithm if defined).</p>
+<p>First, the name of the reduced workspaces will start with the prefix specified when constructing
+the processing algorithm, that is, if the processing algorithm was created as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">alg</span> <span class="o">=</span> <span class="n">MantidQt</span><span class="o">.</span><span class="n">MantidWidgets</span><span class="o">.</span><span class="n">ProcessingAlgorithm</span><span class="p">(</span><span class="s">&#39;ReflectometryReductionOneAuto&#39;</span><span class="p">,</span><span class="s">&#39;IvsQ_binned_, IvsQ_, IvsLam_&#39;</span><span class="p">,</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>the name of the first output workspace returned by the processing algorithm will start with prefix
+<tt class="docutils literal"><span class="pre">IvsQ_binned_</span></tt>, the name of the second output workspace return by the algorithm will start with
+<tt class="docutils literal"><span class="pre">IvsQ_</span></tt>, and the third output workspace name will start with <tt class="docutils literal"><span class="pre">IvsLam_</span></tt>.
+Next, the whitelist is considered: only those columns with fourth argument set to true will be considered.
+In addition, if a prefix was also specified, it will be added to the name too. For instance, if we have a white list:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># White list</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Runs&#39;</span><span class="p">,</span> <span class="s">&#39;InputWorkspace&#39;</span><span class="p">,</span> <span class="s">&#39;The run to reduce&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Angle&#39;</span><span class="p">,</span> <span class="s">&#39;ThetaIn&#39;</span><span class="p">,</span> <span class="s">&#39;The incident angle&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Transmission Runs&#39;</span><span class="p">,</span> <span class="s">&#39;FirstTransmissionRun&#39;</span><span class="p">,</span> <span class="s">&#39;Transmission runs&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Q min&#39;</span><span class="p">,</span> <span class="s">&#39;MomentumTransferMin&#39;</span><span class="p">,</span> <span class="s">&#39;Q min&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="s">&#39;q_&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Q max&#39;</span><span class="p">,</span> <span class="s">&#39;MomentumTransferMax&#39;</span><span class="p">,</span> <span class="s">&#39;Q max&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;dQ/Q&#39;</span><span class="p">,</span> <span class="s">&#39;MomentumTransferStep&#39;</span><span class="p">,</span> <span class="s">&#39;Resolution&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+<span class="n">whitelist</span><span class="o">.</span><span class="n">addElement</span><span class="p">(</span><span class="s">&#39;Scale&#39;</span><span class="p">,</span> <span class="s">&#39;ScaleFactor&#39;</span><span class="p">,</span> <span class="s">&#39;Scale Factor&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and a table:</p>
+<div class="figure">
+<img alt="../_images/output-ws-names.png" src="../_images/output-ws-names.png" />
+</div>
+<p>The names of the reduced workspaces will be <tt class="docutils literal"><span class="pre">IvsQ_binned_13460_q_0.01_0.3</span></tt>,
+<tt class="docutils literal"><span class="pre">IvsQ_13460_q_0.01_0.3</span></tt> and <tt class="docutils literal"><span class="pre">IvsLam_13460_q_0.01_0.3</span></tt> respectively for the first row, as columns
+<tt class="docutils literal"><span class="pre">Runs</span></tt>, <tt class="docutils literal"><span class="pre">Q</span> <span class="pre">min</span></tt> and <tt class="docutils literal"><span class="pre">Q</span> <span class="pre">max</span></tt> have been marked to generate the workspace names,
+and in addition a prefix has been added to column <tt class="docutils literal"><span class="pre">Q</span> <span class="pre">min</span></tt>. Analogously, for the second row,
+the reduced workspaces will be named <tt class="docutils literal"><span class="pre">IvsQ_binned_13462_q_0.01_0.3</span></tt>,
+<tt class="docutils literal"><span class="pre">IvsQ_13462_q_0.01_0.3</span></tt> and <tt class="docutils literal"><span class="pre">IvsLam_13462_q_0.01_0.3</span></tt> respectively.</p>
+<p>If a post-processing algorithm is defined:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">post_alg</span> <span class="o">=</span> <span class="n">MantidQt</span><span class="o">.</span><span class="n">MantidWidgets</span><span class="o">.</span><span class="n">DataProcessor</span><span class="o">.</span><span class="n">PostprocessingAlgorithm</span><span class="p">(</span><span class="s">&#39;Stitch1DMany&#39;</span><span class="p">,</span> <span class="s">&#39;stitched_&#39;</span><span class="p">,</span> <span class="s">&#39;InputWorkspaces, OutputWorkspaces&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>the name of the post-processed workspace will start with prefix specified in the post-processing algorithm, stitched in this case,
+plus the names of the reduced workspaces without their prefixes joined with &#8220;_&#8221;. That is, in this example we would get a workspace
+called <tt class="docutils literal"><span class="pre">stitched_13460_q_0.01_0.06_13462_q_0.035_0.3</span></tt>.</p>
+</div>
+<div class="section" id="how-to-auto-populate-columns-after-the-reduction">
+<h3><a class="toc-backref" href="#id15">How to auto-populate columns after the reduction</a><a class="headerlink" href="#how-to-auto-populate-columns-after-the-reduction" title="Permalink to this headline">¶</a></h3>
+<p>Columns left empty will be auto-populated after the reduction with the default values of
+the corresponding algorithm properties.</p>
+</div>
+<div class="section" id="how-to-specify-the-list-of-available-instruments">
+<h3><a class="toc-backref" href="#id16">How to specify the list of available instruments</a><a class="headerlink" href="#how-to-specify-the-list-of-available-instruments" title="Permalink to this headline">¶</a></h3>
+<p>Once the widget has been created, you can specify the list of instruments that should appear in the instrument combo box:</p>
+<div class="figure">
+<img alt="../_images/instrument-combo-box.png" src="../_images/instrument-combo-box.png" />
+</div>
+<p>like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">data_processor_table</span><span class="o">.</span><span class="n">setInstrumentList</span><span class="p">(</span><span class="s">&#39;INTER, POLREF, OFFSPEC&#39;</span><span class="p">,</span> <span class="s">&#39;INTER&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where the first argument is a comma-separated list of instruments, and the second argument is the instrument that will be
+set by default when opening the interface. In C++, this can be done in a similar way using the method
+<tt class="docutils literal"><span class="pre">GenericDataProcessorPresenter::setInstrumentList(const</span> <span class="pre">std::vector&lt;std::string&gt;</span> <span class="pre">&amp;instruments,</span> <span class="pre">const</span> <span class="pre">std::string</span> <span class="pre">&amp;defaultInstrument)</span></tt>,
+where the list of instruments is specified as a vector of strings.</p>
+</div>
+<div class="section" id="transferring-runs-to-the-table">
+<h3><a class="toc-backref" href="#id17">Transferring runs to the table</a><a class="headerlink" href="#transferring-runs-to-the-table" title="Permalink to this headline">¶</a></h3>
+<p>Runs can be transferred to the table using the method <tt class="docutils literal"><span class="pre">transfer()</span></tt>. In C++ this method takes a vector of maps as the argument, where
+each vector represents a row, and maps contain for each row (key) the value that should be inserted into the table (value). For instance, the following:</p>
+<div class="highlight-c"><div class="highlight"><pre><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">runs</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">{{</span><span class="s">&quot;Group&quot;</span><span class="p">,</span> <span class="s">&quot;0&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s">&quot;Runs&quot;</span><span class="p">,</span> <span class="s">&quot;13460&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s">&quot;Angle&quot;</span><span class="p">,</span> <span class="s">&quot;0.5&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s">&quot;Scale&quot;</span><span class="p">,</span> <span class="s">&quot;1&quot;</span><span class="p">}},</span>
+  <span class="p">{{</span><span class="s">&quot;Group&quot;</span><span class="p">,</span> <span class="s">&quot;0&quot;</span><span class="p">},{{</span><span class="s">&quot;Runs&quot;</span><span class="p">,</span> <span class="s">&quot;13462&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s">&quot;Angle&quot;</span><span class="p">,</span> <span class="s">&quot;1.5&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s">&quot;Scale&quot;</span><span class="p">,</span> <span class="s">&quot;2&quot;</span><span class="p">}}}};</span>
+</pre></div>
+</div>
+<p>will add two new rows populated with values:</p>
+<div class="figure">
+<img alt="../_images/transferred-runs.png" src="../_images/transferred-runs.png" />
+</div>
+<p>Note that a key &#8220;Group&#8221; must be specify with a value corresponding to the name of the group where the runs will be added.
+If no post-processing algorithm is specified, it can be omitted. The equivalent in Python is a Qlist&lt;QString&gt; as shown below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="bp">self</span><span class="o">.</span><span class="n">data_processor_table</span><span class="o">.</span><span class="n">transfer</span><span class="p">([</span><span class="s">&#39;Group:0,Runs:13460,Angle:0.5,Scale:1&#39;</span><span class="p">,</span> <span class="s">&#39;Group:0,Runs:13462,Angle:1.5,Scale:2&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-use-global-options-for-the-reduction">
+<h3><a class="toc-backref" href="#id18">How to use global options for the reduction</a><a class="headerlink" href="#how-to-use-global-options-for-the-reduction" title="Permalink to this headline">¶</a></h3>
+<p>Global options are options common to all the rows in the processing table. At the moment, they have to be specified outside the widget.
+In Reflectometry for instance, this is done via a separate tab called <em>Settings</em> where users can enter values that will be used to reduce all the rows
+in the processing table. This behaviour is achieved by making the parent containing the widget inherit from <em>DataProcessorMainPresenter</em>.
+This is an abstract base class defining methods to retrieve global options for pre-processing, processing, and post-processing. More
+specifically, the methods you will have to implement are listed below:</p>
+<ul class="simple">
+<li>getPreprocessingOptionsAsString(): returns pre-processing options as a string. As there may be more than one column that need
+pre-processing, the string returned by this method must have the following format:
+- Options to different pre-processing algorithms (i.e. columns) must be separated by &#8221;;&#8221;
+- For each column, the name of the column and the different options must be specified as comma-separated strings of <tt class="docutils literal"><span class="pre">key=value</span></tt> pairs.
+Example: <tt class="docutils literal"><span class="pre">Runs,</span> <span class="pre">AllowDifferentNumberSpectra=1;</span> <span class="pre">Transmission</span> <span class="pre">Runs,</span> <span class="pre">WavelengthMin=2.0,</span> <span class="pre">WavelengthMax=4.0</span></tt> will make the
+widget apply <tt class="docutils literal"><span class="pre">AllowDifferentNumberSpectra=1</span></tt> to <a class="reference internal" href="../algorithms/Plus-v1.html#algm-plus"><em>Plus v1</em></a> and <tt class="docutils literal"><span class="pre">WavelengthMin=2.0,</span> <span class="pre">WavelengthMax=4.0</span></tt> to
+<a class="reference internal" href="../algorithms/CreateTransmissionWorkspaceAuto-v2.html#algm-createtransmissionworkspaceauto"><em>CreateTransmissionWorkspaceAuto v2</em></a>, assuming the pre-process map defined in section <a class="reference internal" href="#pre-processing-algorithm-label"><em>Pre-processing Algorithms and Pre-process Map</em></a>.</li>
+<li>getProcessingOptions(): returns processing options as a string of comma-separated <tt class="docutils literal"><span class="pre">key=value</span></tt> pairs. Example:
+<tt class="docutils literal"><span class="pre">WavelengthMin=3.5,</span> <span class="pre">Params=&quot;1,2,3&quot;</span></tt>.</li>
+<li>getPostprocessingOptions(): similar to the previous one. Example: <tt class="docutils literal"><span class="pre">ScaleRHSWorkspace=1,</span> <span class="pre">ManualScaleFactor=0.5</span></tt>.</li>
+</ul>
+<p>In addition, because the widget is a <em>WorkspaceObserver</em> observing changes in the ADS, you may want to implement method
+notifyADSChanged(). The purpose of this method is to update the <em>OpenTable</em> action (see section <a class="reference internal" href="#table-editing-and-notebook-label"><em>Table editing actions</em></a>
+for more details about this command) with the list of table workspace that can be loaded into the interface.</p>
+</div>
+</div>
+<div class="section" id="how-to-use-the-widget-from-a-c-interface">
+<h2><a class="toc-backref" href="#id19">How to use the widget from a C++ interface</a><a class="headerlink" href="#how-to-use-the-widget-from-a-c-interface" title="Permalink to this headline">¶</a></h2>
+<p>An example of a C++ interface currently using the widget is the Reflectometry GUI at ISIS. The relevant
+classes creating and communicating with the widget are listed below:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">QtReflRunsTabView</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">ReflRunsTabPresenter</span></tt></li>
+</ul>
+<p>Both can be found in MantidQt/CustomInterfaces, the first one is the view in the MVP pattern, responsible
+for creating the widget, and the second one is the presenter in the MVP pattern, responsible for interacting
+with the widget in terms of providing global options for the reduction.</p>
+</div>
+<div class="section" id="how-to-use-the-widget-from-a-python-interface">
+<h2><a class="toc-backref" href="#id20">How to use the widget from a Python interface</a><a class="headerlink" href="#how-to-use-the-widget-from-a-python-interface" title="Permalink to this headline">¶</a></h2>
+<p>There is a toy example written in Python that can be found in mantid/scripts/Interface/ui/dataprocessorinterface.
+It is currently invisible to users, but you can make it visible for you by adding <tt class="docutils literal"><span class="pre">Utility/DataProcessorInterface.py</span></tt> to
+Framework/Properties/Mantid.properties.template. This will make the toy example appear under category <tt class="docutils literal"><span class="pre">Utility</span></tt>.</p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Data Comparison.html" title="Previous Chapter: Data Comparison"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Data Comparison</span>
+    </a>
+  </li>
+  <li>
+    <a href="Dynamic PDF Background Remover.html" title="Next Chapter: Dynamic PDF"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Dynamic PDF &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2018-04-19.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

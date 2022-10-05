@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>LatticeFunction</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="next" title="LinearBackground" href="LinearBackground.html" />
+    <link rel="prev" title="LatticeErrors" href="LatticeErrors.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.6</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="latticefunction">
+<span id="func-latticefunction"></span><h1>LatticeFunction<a class="headerlink" href="#latticefunction" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<span id="index-0"></span><h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>After a list of Bragg reflections has been indexed, it is often necessary to refine the unit cell parameters that have
+been used to assign indices. LatticeFunction can be used to achieve that task with <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>Fit v1</em></a>. The function can
+work with a PeaksWorkspace or with a TableWorkspace that contains two columns named <cite>HKL</cite> and <cite>d</cite> (see
+<a class="reference internal" href="../algorithms/PawleyFit-v1.html#algm-pawleyfit"><em>PawleyFit v1</em></a> for specification of the table).</p>
+<p>After setting the <cite>LatticeSystem</cite> attribute to one of the seven lattice systems, the function exposes the
+corresponding lattice parameters, as well as a <cite>ZeroShift</cite>. In most cases it&#8217;s recommended to fix this additional
+parameter as this is often taken care of in earlier steps of the data reduction.</p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To run these usage examples please first download the
+<a class="reference external" href="https://sourceforge.net/projects/mantid/files/Sample%20Data/UsageData.zip/download">usage data</a>,
+and add these to your path. In MantidPlot this is done using <a class="reference external" href="http://www.mantidproject.org/ManageUserDirectories">Manage User Directories</a>.</p>
+</div>
+<p>The following script demonstrates how the function can be used. The algorithm <a class="reference internal" href="../algorithms/PoldiCreatePeaksFromCell-v1.html#algm-poldicreatepeaksfromcell"><em>PoldiCreatePeaksFromCell v1</em></a> is
+used to generate Bragg reflections that are expected for the crystal structure of Silicon.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c"># Create Silicon peaks for indexing</span>
+<span class="n">peaks_Si</span> <span class="o">=</span> <span class="n">PoldiCreatePeaksFromCell</span><span class="p">(</span>
+            <span class="n">SpaceGroup</span><span class="o">=</span><span class="s">&quot;F d -3 m&quot;</span><span class="p">,</span>
+            <span class="n">a</span><span class="o">=</span><span class="mf">5.4311946</span><span class="p">,</span>
+            <span class="n">Atoms</span><span class="o">=</span><span class="s">&quot;Si 0 0 0&quot;</span><span class="p">,</span>
+            <span class="n">LatticeSpacingMin</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+
+<span class="c"># Fit a cubic cell, starting parameter is 5</span>
+<span class="n">Fit</span><span class="p">(</span><span class="n">Function</span><span class="o">=</span><span class="s">&quot;name=LatticeFunction,LatticeSystem=Cubic,a=5&quot;</span><span class="p">,</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">peaks_Si</span><span class="p">,</span>
+    <span class="n">Ties</span><span class="o">=</span><span class="s">&quot;ZeroShift=0.0&quot;</span><span class="p">,</span>
+    <span class="n">CreateOutput</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">Output</span><span class="o">=</span><span class="s">&quot;Si&quot;</span><span class="p">,</span>
+    <span class="n">CostFunction</span><span class="o">=</span><span class="s">&quot;Unweighted least squares&quot;</span><span class="p">)</span>
+
+<span class="c"># Print the refined lattice parameter with error estimate</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="n">AnalysisDataService</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="s">&quot;Si_Parameters&quot;</span><span class="p">)</span>
+
+<span class="n">a_true</span> <span class="o">=</span> <span class="mf">5.4311946</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">7</span><span class="p">)</span>
+<span class="n">a_err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s">&quot;Refined lattice parameter: a =&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="s">&quot;+/-&quot;</span><span class="p">,</span> <span class="n">a_err</span>
+<span class="k">print</span> <span class="s">&quot;Difference from expected value: a_observed - a_expected =&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">a_true</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;Is this difference within the standard deviation?&quot;</span><span class="p">,</span> <span class="s">&quot;Yes&quot;</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">a_true</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">a_err</span> <span class="k">else</span> <span class="s">&quot;No&quot;</span>
+</pre></div>
+</div>
+<p>Executing the script produces some output with information about the fit:</p>
+<div class="highlight-none"><div class="highlight"><pre>Refined lattice parameter: a = 5.4311946 +/- 2e-16
+Difference from expected value: a_observed - a_expected = 0.0
+Is this difference within the standard deviation? Yes
+</pre></div>
+</div>
+<p>In addition there is also an output workspace, which contains information about the peaks used for the fit and how
+well the peak positions calculated from the fitted parameters match the observed positions.</p>
+</div>
+<div class="section" id="attributes-non-fitting-parameters">
+<h2>Attributes (non-fitting parameters)<a class="headerlink" href="#attributes-non-fitting-parameters" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="84%" />
+<col width="5%" />
+<col width="5%" />
+<col width="6%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>LatticeSystem</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>ProfileFunction</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="properties-fitting-parameters">
+<h2>Properties (fitting parameters)<a class="headerlink" href="#properties-fitting-parameters" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="62%" />
+<col width="31%" />
+<col width="7%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>a</td>
+<td>1.0</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>b</td>
+<td>1.0</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>c</td>
+<td>1.0</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>Alpha</td>
+<td>90.0</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>Beta</td>
+<td>90.0</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>Gamma</td>
+<td>90.0</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>ZeroShift</td>
+<td>0.0</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/FitFunctions.html">FitFunctions</a> | <a class="reference external" href="categories/General.html">General</a></p>
+</div>
+<div class="section" id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/939e6b7103a9dafe3e7e23581d47d06fd4669ecd/Framework/CurveFitting/src/LatticeFunction.cpp">LatticeFunction.cpp</a></p>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/939e6b7103a9dafe3e7e23581d47d06fd4669ecd/Framework/CurveFitting/inc/MantidCurveFitting/LatticeFunction.h">LatticeFunction.h</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="LatticeErrors.html" title="Previous Chapter: LatticeErrors"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; LatticeErrors</span>
+    </a>
+  </li>
+  <li>
+    <a href="LinearBackground.html" title="Next Chapter: LinearBackground"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">LinearBackground &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

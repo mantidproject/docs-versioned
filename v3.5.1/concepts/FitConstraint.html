@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Fit Constraint</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.5.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Framework Manager" href="FrameworkManager.html" />
+    <link rel="prev" title="Facilities File" href="FacilitiesFile.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.5</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="fit-constraint">
+<span id="fitconstraint"></span><h1>Fit Constraint<a class="headerlink" href="#fit-constraint" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="how-constraints-on-parameters-work">
+<h2>How constraints on parameters work<a class="headerlink" href="#how-constraints-on-parameters-work" title="Permalink to this headline">¶</a></h2>
+<p>Consider the scenario where the aim is to fit a lorenzian function to a
+1D dataset but a constraint applied on the peak centre parameter. Assume
+the 1D dataset consists of <img class="math" src="../_images/math/8c45b38d633fb6de83fc7087c4db116a5565752a.png" alt="N" style="vertical-align: 0px"/> data points
+<img class="math" src="../_images/math/cf2a5a18283ec468a6d89189a84b3b1cec40ce28.png" alt="(x_1,y_1^{obs}), (x_2,y_2^{obs}), ... (x_N,y_N^{obs})" style="vertical-align: -6px"/>, where
+<img class="math" src="../_images/math/c2f01810eef41c68678f5efa3d9ca634ff6785da.png" alt="x_i" style="vertical-align: -3px"/> is the ith x-value and <img class="math" src="../_images/math/2c24f5f28341b700bcab568ff528eedf4b202dbf.png" alt="y_i^{obs}" style="vertical-align: -5px"/> is the ith observed
+value for that x-value. Write the lorentzian function as:</p>
+<div class="math">
+<p><img src="../_images/math/843af57854fdc4f7e6526390db79aeabd14cec8b.png" alt="y_i^{cal}(h, x0, w) = h \left( \frac{w^2}{(x_i-x0)^2+w^2} \right)"/></p>
+</div><p>where he lorentzian fitting parameters here are</p>
+<ul class="simple">
+<li><img class="math" src="../_images/math/9cd0d4269389ccc2c3fc96c538e266229f00bd9f.png" alt="h" style="vertical-align: 0px"/> - height of peak (at maximum)</li>
+<li><img class="math" src="../_images/math/ea69ee19e5a683a5da9380f281614637d53edeec.png" alt="x0" style="vertical-align: 0px"/> - centre of peak</li>
+<li><img class="math" src="../_images/math/efe9dc01d6e2fca16dbf81148e1aebaef667c4cb.png" alt="w" style="vertical-align: 0px"/> - half-width at half-maximum</li>
+</ul>
+<p><img class="math" src="../_images/math/c2f01810eef41c68678f5efa3d9ca634ff6785da.png" alt="x_i" style="vertical-align: -3px"/> is the x-value of the ith data point and <img class="math" src="../_images/math/ed9fc7bf9471272867d93fc38d089f1673ad9b7d.png" alt="y_i^{cal}" style="vertical-align: -5px"/>
+is the lorentzian calculated value at that data point.</p>
+<p>We want to apply a constraint on the x0 parameter, i.e. the centre of
+the peak. For example, apply the constraint that <img class="math" src="../_images/math/ea69ee19e5a683a5da9380f281614637d53edeec.png" alt="x0" style="vertical-align: 0px"/> should be in
+between <img class="math" src="../_images/math/ed660b16ea4ae82af3e7a49b401fe1d710e25497.png" alt="x0_{min}" style="vertical-align: -3px"/> and <img class="math" src="../_images/math/7335fbc770abfa4b3c00545c99c819a441f8b5a6.png" alt="x0_{max}" style="vertical-align: -3px"/>. If this is not satisfied
+we then add the following penalty function to <img class="math" src="../_images/math/ed9fc7bf9471272867d93fc38d089f1673ad9b7d.png" alt="y_i^{cal}" style="vertical-align: -5px"/> if
+<img class="math" src="../_images/math/5c0a6a75aa379b19ccb7ee698d8466e0856f3792.png" alt="x0 &lt; x0_{min}&lt;/" style="vertical-align: -5px"/>:</p>
+<div class="math">
+<p><img src="../_images/math/31a6eed5bb8c995878c394a13558ab8b72b28d4f.png" alt="p_i = C(x0_{min}-x0)*R(x_i)"/></p>
+</div><p>where <img class="math" src="../_images/math/875115b09dbfdddf88f0a77ae12cef18b239e614.png" alt="C" style="vertical-align: 0px"/> is a constant (default 1000) and <img class="math" src="../_images/math/76ff3d3f93a23b797de7a21bcddf1d5d53569a1f.png" alt="R(x_i)" style="vertical-align: -4px"/> a spiky
+function which takes the value 1 for the first and last data point and
+for every 10th data point from the 1st data point, but is otherwise
+zero. The penalty function when <img class="math" src="../_images/math/75fc1b97ae67fd72139fcec23b0d1d7539d77ea7.png" alt="x0 &gt; x0_{min}&lt;/" style="vertical-align: -5px"/> takes the form:</p>
+<div class="math">
+<p><img src="../_images/math/a105cf272588f240cd21d9e9bb37bdbf09a0058e.png" alt="p_i = C(x0-x0_{max})*R(x_i)"/></p>
+</div><p>.</p>
+<p>If more than one constraint is defined, then for each violated
+constraint a penalty of the type defined above is added to the
+calculated fitting function.</p>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="FacilitiesFile.html" title="Previous Chapter: Facilities File"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Facilities File</span>
+    </a>
+  </li>
+  <li>
+    <a href="FrameworkManager.html" title="Next Chapter: Framework Manager"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Framework Manage... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

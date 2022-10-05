@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Geometry of Position</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '4.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Geometry of Shape" href="GeometryofShape.html" />
+    <link rel="prev" title="Geometry" href="Geometry.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>4.1</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="geometry-of-position">
+<span id="id1"></span><h1>Geometry of Position<a class="headerlink" href="#geometry-of-position" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-it">
+<h2>What is it?<a class="headerlink" href="#what-is-it" title="Permalink to this headline">¶</a></h2>
+<p>In Mantid we need to be able to define the position and orientation of
+every component within an <a class="reference internal" href="Instrument.html#instrument"><em>instrument</em></a>.</p>
+</div>
+<div class="section" id="what-is-a-component">
+<h2>What is a component?<a class="headerlink" href="#what-is-a-component" title="Permalink to this headline">¶</a></h2>
+<p>A component is an abstract concept that is anything that we want to
+define a position for, it could be a detector pixel, a whole detector
+bank, a sample position or the whole instrument itself. For each
+component we store:</p>
+<ul class="simple">
+<li>A link to it&#8217;s parent component.</li>
+<li>Position co-ordinates as a <a class="reference external" href="http://en.wikipedia.org/wiki/Vector_(spatial)">3D
+Vector</a>, internally
+these store the location in <a class="reference external" href="http://en.wikipedia.org/wiki/Cartesian_coordinate_system">cartesian
+co-ordinates</a>
+in metres, but can also be set in <a class="reference external" href="http://en.wikipedia.org/wiki/Spherical_coordinate_system">spherical
+co-ordinates</a>.
+This position is the relative position compared to it&#8217;s parent.</li>
+<li>Orientation as a
+<a class="reference external" href="http://en.wikipedia.org/wiki/Quaternion">quaternion</a>. The
+orientation is applied after any position adjustment relative to the
+parent.</li>
+</ul>
+<div class="section" id="subtypes-of-component">
+<h3>Subtypes of Component<a class="headerlink" href="#subtypes-of-component" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="object-component">
+<h4>Object Component<a class="headerlink" href="#object-component" title="Permalink to this headline">¶</a></h4>
+<p>An object component is a component that has a
+<a class="reference internal" href="GeometryofShape.html#geometry-of-shape"><em>shape</em></a>. Shapes can contain a lot more information
+to properly define them, and therefore take more memory. Where an
+instrument contains a lot of instances of the same shape Mantid shares
+one instance of the object(shape) across all of the object components
+that need it.</p>
+</div>
+<div class="section" id="component-assembly">
+<h4>Component Assembly<a class="headerlink" href="#component-assembly" title="Permalink to this headline">¶</a></h4>
+<p>This component that is a logical collection of several smaller
+components, an example of this is a bank of detector pixels. The whole
+instrument itself is a Component Assembly which contains all of the
+other top level components in the Instrument tree.</p>
+</div>
+</div>
+</div>
+<div class="section" id="instrument-tree">
+<h2>Instrument Tree<a class="headerlink" href="#instrument-tree" title="Permalink to this headline">¶</a></h2>
+<p><img alt="SimpleInstrumentTree.png" src="../_images/SimpleInstrumentTree.png" /> Most instruments in Mantid are defined using
+a tree structure allowing the top level structure objects to be reused
+if they are repeated in an instrument. This is an example of a
+simplified instrument tree, the lines show the links between the parent
+and child relationships of the components. Full details on how to define
+an instrument can be found <a class="reference internal" href="InstrumentDefinitionFile.html#instrumentdefinitionfile"><em>here</em></a>.</p>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Geometry.html" title="Previous Chapter: Geometry"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Geometry</span>
+    </a>
+  </li>
+  <li>
+    <a href="GeometryofShape.html" title="Next Chapter: Geometry of Shape"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Geometry of Shap... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2019-07-22.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

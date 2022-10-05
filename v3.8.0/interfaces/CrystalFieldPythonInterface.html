@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Crystal Field Python Interface</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.8.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Interfaces" href="index.html" />
+    <link rel="next" title="DGS Planner" href="DGSPlanner.html" />
+    <link rel="prev" title="Interfaces" href="index.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.8</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="crystal-field-python-interface">
+<span id="id1"></span><h1>Crystal Field Python Interface<a class="headerlink" href="#crystal-field-python-interface" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#setting-up-crystal-field-parameters" id="id2">Setting up crystal field parameters</a></li>
+<li><a class="reference internal" href="#calculating-the-eigensystem" id="id3">Calculating the Eigensystem</a></li>
+<li><a class="reference internal" href="#calculating-a-spectrum" id="id4">Calculating a Spectrum</a></li>
+<li><a class="reference internal" href="#plotting-in-mantidplot" id="id5">Plotting in MantidPlot</a></li>
+<li><a class="reference internal" href="#adding-a-background" id="id6">Adding a Background</a></li>
+<li><a class="reference internal" href="#setting-ties-and-constraints" id="id7">Setting Ties and Constraints</a></li>
+<li><a class="reference internal" href="#defining-multiple-spectra" id="id8">Defining Multiple Spectra</a></li>
+<li><a class="reference internal" href="#multiple-ions" id="id9">Multiple Ions</a></li>
+<li><a class="reference internal" href="#fitting" id="id10">Fitting</a></li>
+</ul>
+</div>
+<p>The python facilities for Crystal Field calculations are avalable in Mantid from module <cite>CrystalField</cite>.
+There are two main classes the module provides: <cite>CrystalFiled</cite> that defines various properties of a crystal
+field and <cite>CrystalFieldFit</cite> that manages the fitting process.</p>
+<div class="section" id="setting-up-crystal-field-parameters">
+<h2><a class="toc-backref" href="#id2">Setting up crystal field parameters</a><a class="headerlink" href="#setting-up-crystal-field-parameters" title="Permalink to this headline">¶</a></h2>
+<p>A crystal field computation starts with cretaing an instance of the <cite>CrystalField</cite> class. The constructor
+has two mandatory arguments: <cite>Ion</cite> - a symbolic name of the ion, and <cite>Symmetry</cite> - a name of the symmetry group
+of the field. The rest of the parameters are optional.</p>
+<p>Possible values for the <cite>Ion</cite> argument:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Ce</span><span class="p">,</span> <span class="n">Pr</span><span class="p">,</span> <span class="n">Nd</span><span class="p">,</span> <span class="n">Pm</span><span class="p">,</span> <span class="n">Sm</span><span class="p">,</span> <span class="n">Eu</span><span class="p">,</span> <span class="n">Gd</span><span class="p">,</span> <span class="n">Tb</span><span class="p">,</span> <span class="n">Dy</span><span class="p">,</span> <span class="n">Ho</span><span class="p">,</span> <span class="n">Er</span><span class="p">,</span> <span class="n">Tm</span><span class="p">,</span> <span class="n">Yb</span>
+</pre></div>
+</div>
+<p>Allowed values for <cite>Symmetry</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">C1</span><span class="p">,</span> <span class="n">Ci</span><span class="p">,</span> <span class="n">C2</span><span class="p">,</span> <span class="n">Cs</span><span class="p">,</span> <span class="n">C2h</span><span class="p">,</span> <span class="n">C2v</span><span class="p">,</span> <span class="n">D2</span><span class="p">,</span> <span class="n">D2h</span><span class="p">,</span> <span class="n">C4</span><span class="p">,</span> <span class="n">S4</span><span class="p">,</span> <span class="n">C4h</span><span class="p">,</span> <span class="n">D4</span><span class="p">,</span> <span class="n">C4v</span><span class="p">,</span> <span class="n">D2d</span><span class="p">,</span> <span class="n">D4h</span><span class="p">,</span> <span class="n">C3</span><span class="p">,</span>
+<span class="n">S6</span><span class="p">,</span> <span class="n">D3</span><span class="p">,</span> <span class="n">C3v</span><span class="p">,</span> <span class="n">D3d</span><span class="p">,</span> <span class="n">C6</span><span class="p">,</span> <span class="n">C3h</span><span class="p">,</span> <span class="n">C6h</span><span class="p">,</span> <span class="n">D6</span><span class="p">,</span> <span class="n">C6v</span><span class="p">,</span> <span class="n">D3h</span><span class="p">,</span> <span class="n">D6h</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Td</span><span class="p">,</span> <span class="n">Th</span><span class="p">,</span> <span class="n">O</span><span class="p">,</span> <span class="n">Oh</span>
+</pre></div>
+</div>
+<p>The minimum code to create a crystal field object is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">CrystalField</span> <span class="kn">import</span> <span class="n">CrystalField</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Names of the crystal field parameters have the form <cite>Bnn</cite> and <cite>IBnn</cite> where <cite>nn</cite> are two digits between 0 and 6.
+The <cite>Bnn</cite> is a real and the <cite>IBnn</cite> is an imaginary part of a complex parameter. If a parameter isn&#8217;t set explicitely
+its default value is 0. To set a parameter pass it to the <cite>CrystalField</cite> constructor as a keyword argument, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>An alternative way to set a parameter is to use the <cite>param</cite> property of a <cite>CrystalField</cite> object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s">&#39;B40&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.031</span>
+</pre></div>
+</div>
+<p>The <cite>param</cite> property can also be used to query the value of a parameter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">b</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s">&#39;B40&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calculating-the-eigensystem">
+<h2><a class="toc-backref" href="#id3">Calculating the Eigensystem</a><a class="headerlink" href="#calculating-the-eigensystem" title="Permalink to this headline">¶</a></h2>
+<p><cite>CrystalFiled</cite> class has methods to calculate the Hamiltonian and its eigensystem:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Calculate and return the Hamiltonian matrix as a 2D numpy array.</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getHamiltonian</span><span class="p">()</span>
+
+<span class="c"># Calculate and return the eigenvalues of the Hamiltonian as a 1D numpy array.</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getEigenvalues</span><span class="p">()</span>
+
+<span class="c"># Calculate and return the eigenvectors of the Hamiltonian as a 2D numpy array.</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getEigenvectors</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>It is efficient to call the above methods multiple times as all the outputs are cached and the calculations are repeated
+only after a parameter changes.</p>
+</div>
+<div class="section" id="calculating-a-spectrum">
+<h2><a class="toc-backref" href="#id4">Calculating a Spectrum</a><a class="headerlink" href="#calculating-a-spectrum" title="Permalink to this headline">¶</a></h2>
+<p>To calculate a spectrum <cite>CrystalField</cite> needs to know the sample temperature and the shape of the peaks.</p>
+<p>The temperature can be set either via a keyword argument <cite>Temperature</cite> of the constructor or using the
+<cite>Temperature</cite> property:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Using the keyword argument</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">,</span> <span class="n">Temperature</span><span class="o">=</span><span class="mi">44</span><span class="p">)</span>
+
+<span class="c"># Using the property</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">Temperature</span> <span class="o">=</span> <span class="mi">44</span>
+</pre></div>
+</div>
+<p>Knowing the temperature allows us to calculate a peak list: a list of transition energies and intensities.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">cf</span><span class="o">.</span><span class="n">getPeakList</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The output is:</p>
+<div class="highlight-python"><div class="highlight"><pre>[[  0.00000000e+00   2.44006198e+01   4.24977124e+01   1.80970926e+01 -2.44006198e+01]
+ [  2.16711565e+02   8.83098530e+01   5.04430056e+00   1.71153708e-01  1.41609425e-01]]
+</pre></div>
+</div>
+<p>The first row are the energies (in meV) and the second row are the integrated intensities (in milibarn per steradian).</p>
+<p>The number of peaks that the function returns is controlled by two tolerance parameters: <cite>ToleranceEnergy</cite> and
+<cite>ToleranceIntensity</cite>. If a peak has an intensity below the value of <cite>ToleranceIntensity</cite> the peak is ignored.
+It two peaks have a difference in the energies smaller than <cite>ToleranceEnergy</cite> they are combined into a single peak.</p>
+<p>If we set <cite>ToleranceIntensity</cite> of the above crystal field object to 1 mb/sr we&#8217;ll have only three peaks in the list:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">ToleranceIntensity</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">print</span> <span class="n">cf</span><span class="o">.</span><span class="n">getPeakList</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The new output:</p>
+<div class="highlight-python"><div class="highlight"><pre>[[   0.           24.40061976   42.49771237]
+ [ 216.71156467   88.30985303    5.04430056]]
+</pre></div>
+</div>
+<p>To calcualte a spectrum we need to define a shape of each peak (peak profile function) and its default width (<cite>FWHM</cite>).
+The width can be set either via a keyword argument or a property with name <cite>FWHM</cite>. If the peak shape isn&#8217;t set the default
+of Lorentzian is assumed. To set a different shape use the <cite>setPeaks</cite> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">setPeaks</span><span class="p">(</span><span class="s">&#39;Gaussian&#39;</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">FWHM</span> <span class="o">=</span> <span class="mf">0.9</span>
+</pre></div>
+</div>
+<p>The arguments of <cite>setPeaks</cite> are expected to be names of Mantid peak fit functions. At the moment only <cite>Lorentzian</cite> and
+<cite>Gaussian</cite> can be used.</p>
+<p>After the peak shape is defined a spectrum can be calculated:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The output is a tuple of two 1d numpy arrays (x, y) that can be used with <cite>matplotlib</cite> to plot:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">sp</span><span class="p">)</span>
+<span class="n">pyplot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/CrystalFieldSpectrum1.png"><img alt="../_images/CrystalFieldSpectrum1.png" src="../_images/CrystalFieldSpectrum1.png" style="height: 300px;" /></a>
+<p>It is possible to change parameters of individual peaks separately. Note though that only the shape parameters can be changed,
+the peak centre and the integrated intensity are defined by the crystal field parameters. To change the width of a peak
+use the following syntax:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># If the peak shape is Gaussian</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;Sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;Sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+<span class="c"># If the peak shape is Lorentzian</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;FWHM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;FWHM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.01</span>
+</pre></div>
+</div>
+<p>The three peaks now have all different widths. The first peak (index 0) keeps the default value.</p>
+<a class="reference internal image-reference" href="../_images/CrystalFieldSpectrum2.png"><img alt="../_images/CrystalFieldSpectrum2.png" src="../_images/CrystalFieldSpectrum2.png" style="height: 300px;" /></a>
+<p>If called without arguments <cite>getSpectrum()</cite> determines automatically the range and number of the <cite>x</cite>-points. To have more control
+of how the spectrum is calculated a list (or numpy array) of x-values can be provided as a first argument to <cite>getSpectrum</cite>.
+Alternatively, the x-values can be taken from a workspace:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Use a list for x-values</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c"># Use the first spectrum of a workspace</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
+
+<span class="c"># Use the i-th spectrum of a workspace</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="plotting-in-mantidplot">
+<h2><a class="toc-backref" href="#id5">Plotting in MantidPlot</a><a class="headerlink" href="#plotting-in-mantidplot" title="Permalink to this headline">¶</a></h2>
+<p>To plot a spectrum using MantidPlot&#8217;s graphing facilities <cite>CrystalField</cite> has method <cite>plot</cite>. It has the same arguments as <cite>getSpectrum</cite>
+and opens a window with a plot.</p>
+</div>
+<div class="section" id="adding-a-background">
+<h2><a class="toc-backref" href="#id6">Adding a Background</a><a class="headerlink" href="#adding-a-background" title="Permalink to this headline">¶</a></h2>
+<p>A background has two components: a peak and a general background function. Set a background using the <cite>background</cite> property:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">CrystalField</span> <span class="kn">import</span> <span class="n">CrystalField</span><span class="p">,</span> <span class="n">CrystalFieldFit</span><span class="p">,</span> <span class="n">Background</span><span class="p">,</span> <span class="n">Function</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">,</span> <span class="n">B40</span><span class="o">=-</span><span class="mf">0.031787</span><span class="p">,</span> <span class="n">B42</span><span class="o">=-</span><span class="mf">0.11611</span><span class="p">,</span> <span class="n">B44</span><span class="o">=-</span><span class="mf">0.12544</span><span class="p">,</span>
+                  <span class="n">Temperature</span><span class="o">=</span><span class="mf">44.0</span><span class="p">,</span> <span class="n">FWHM</span><span class="o">=</span><span class="mf">1.1</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="n">Background</span><span class="p">(</span><span class="n">peak</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="s">&#39;Gaussian&#39;</span><span class="p">,</span> <span class="n">Height</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                           <span class="n">background</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="s">&#39;LinearBackground&#39;</span><span class="p">,</span> <span class="n">A0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">A1</span><span class="o">=</span><span class="mf">0.01</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Here is an example of how to access the prameters of the background:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">h</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s">&#39;Height&#39;</span><span class="p">]</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s">&#39;A1&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-ties-and-constraints">
+<h2><a class="toc-backref" href="#id7">Setting Ties and Constraints</a><a class="headerlink" href="#setting-ties-and-constraints" title="Permalink to this headline">¶</a></h2>
+<p>Seting ties and constraints are done by calling the <cite>ties</cite> and <cite>constraints</cite> methods of the <cite>CrystalField</cite> class or its components.
+To <cite>Bnn</cite> parameters are tied by the <cite>CrystalField</cite> class directly specifying the tied parameter as a keyword argument:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="n">B20</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">B40</span><span class="o">=</span><span class="s">&#39;B20/2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The constraints are passed as strings containing expressions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;1 &lt; B22 &lt;= 2&#39;</span><span class="p">,</span> <span class="s">&#39;B22 &lt; 4&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For the parameters of the background the syntax is the same but the methods are called on the <cite>background</cite> property:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="n">Height</span><span class="o">=</span><span class="mf">10.1</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;Sigma &gt; 0&#39;</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="n">A0</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;A1 &gt; 0&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The names of the peak parameters both in ties and constraints must include the index of the peak to which they belong. Here we follow
+the naming convention of the <a class="reference internal" href="../fitfunctions/CompositeFunction.html#func-compositefunction"><em>CompositeFunction</em></a>: f&lt;n&gt;.&lt;name&gt;, where &lt;n&gt; stands for an integer index staring at 0 and &lt;name&gt;
+is the name of the parameter. For example, <cite>f1.Sigma</cite>, <cite>f3.FWHM</cite>. Because names now contain the period symmbol &#8216;.&#8217; keyword arguments
+cannot be used. Instead we must pass strings containing ties:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="s">&#39;f2.FWHM=2*f1.FWHM&#39;</span><span class="p">,</span> <span class="s">&#39;f3.FWHM=2*f2.FWHM&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and constraints are also a list of strings:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;f0.FWHM &lt; 2.2&#39;</span><span class="p">,</span> <span class="s">&#39;f1.FWHM &gt;= 0.1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If a parameter of all peaks needs to be tied/constrained with the same expression then the following shortcut methods can be used:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">tieAll</span><span class="p">(</span><span class="s">&#39;Sigma=0.1&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">constrainAll</span><span class="p">(</span><span class="s">&#39;0 &lt; Sigma &lt; 0.1&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where the first argument is the general formula of the tie/constraint and the second is the number of peaks to apply to.
+The is also a version for a range of peak indices:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">tieAll</span><span class="p">(</span><span class="s">&#39;Sigma=f0.Sigma&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which is equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="s">&#39;f1.Sigma=f0.Sigma&#39;</span><span class="p">,</span> <span class="s">&#39;f2.Sigma=f0.Sigma&#39;</span><span class="p">,</span> <span class="s">&#39;f3.Sigma=f0.Sigma&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="defining-multiple-spectra">
+<h2><a class="toc-backref" href="#id8">Defining Multiple Spectra</a><a class="headerlink" href="#defining-multiple-spectra" title="Permalink to this headline">¶</a></h2>
+<p>A <cite>CrystalField</cite> object can be configured to work with multiple spectra. In this case some many of the object&#8217;s properties
+become lists. Here is an example of defining a <cite>CrystalField</cite> object with two spectra:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">,</span> <span class="n">B40</span><span class="o">=-</span><span class="mf">0.031787</span><span class="p">,</span> <span class="n">B42</span><span class="o">=-</span><span class="mf">0.11611</span><span class="p">,</span> <span class="n">B44</span><span class="o">=-</span><span class="mf">0.12544</span><span class="p">,</span>
+                  <span class="n">Temperature</span><span class="o">=</span><span class="p">[</span><span class="mf">44.0</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="n">FWHM</span><span class="o">=</span><span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">setPeaks</span><span class="p">(</span><span class="s">&#39;Lorentzian&#39;</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;FWHM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.11</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;FWHM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.12</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">setBackground</span><span class="p">(</span><span class="n">peak</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="s">&#39;Gaussian&#39;</span><span class="p">,</span> <span class="n">Height</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.3</span><span class="p">),</span>
+                 <span class="n">background</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="s">&#39;FlatBackground&#39;</span><span class="p">,</span> <span class="n">A0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s">&#39;Sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.8</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s">&#39;A0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.1</span>
+</pre></div>
+</div>
+<p>Note how <cite>Temperature</cite>, <cite>FWHM</cite>, <cite>peaks</cite> and <cite>background</cite> become lists. They must have the same size. Ties and constraints similarily
+change:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># The B parameters are common for all spectra - syntax doesn&#39;t change</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="n">B20</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">B40</span><span class="o">=</span><span class="s">&#39;B20/2&#39;</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;1 &lt; B22 &lt;= 2&#39;</span><span class="p">,</span> <span class="s">&#39;B22 &lt; 4&#39;</span><span class="p">)</span>
+
+<span class="c"># Backgrounds and peaks are different for different spectra - must be indexed</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="n">Height</span><span class="o">=</span><span class="mf">10.1</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;Sigma &gt; 0.1&#39;</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="n">Height</span><span class="o">=</span><span class="mf">20.2</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;Sigma &gt; 0.2&#39;</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tieAll</span><span class="p">(</span><span class="s">&#39;FWHM=2*f1.FWHM&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">constrainAll</span><span class="p">(</span><span class="s">&#39;FWHM &lt; 2.2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To calcualte a spectrum call the same method <cite>getSpectrum</cite> but pass the pectrum index as its first parameter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Calculate second spectrum, use the generated x-values</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c"># Calculate third spectrum, use a list for x-values</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="c"># Calculate second spectrum, use the first spectrum of a workspace</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ws</span><span class="p">)</span>
+
+<span class="c"># Calculate first spectrum, use the i-th spectrum of a workspace</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ws</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="multiple-ions">
+<h2><a class="toc-backref" href="#id9">Multiple Ions</a><a class="headerlink" href="#multiple-ions" title="Permalink to this headline">¶</a></h2>
+<p>If there are multiple ions define <cite>CrystalField</cite> objects for each ion separately then add them together:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;B20&#39;</span><span class="p">:</span> <span class="mf">0.377</span><span class="p">,</span> <span class="s">&#39;B22&#39;</span><span class="p">:</span> <span class="mf">3.9</span><span class="p">,</span> <span class="s">&#39;B40&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.03</span><span class="p">,</span> <span class="s">&#39;B42&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.116</span><span class="p">,</span> <span class="s">&#39;B44&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.125</span><span class="p">,</span>
+          <span class="s">&#39;Temperature&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">44.0</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="s">&#39;FWHM&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">]}</span>
+<span class="n">cf1</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">cf2</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Pr&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">cf1</span> <span class="o">+</span> <span class="n">cf2</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fitting">
+<h2><a class="toc-backref" href="#id10">Fitting</a><a class="headerlink" href="#fitting" title="Permalink to this headline">¶</a></h2>
+<p>To fit the crystal field and peak parameters first create a <cite>CrystalField</cite> object as described above. Then create an
+instance (object) of the <cite>CrystalFieldFit</cite> class:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">CrystalField</span> <span class="kn">import</span> <span class="n">CrystalFieldFit</span>
+<span class="c"># In case of a single spectrum (ws is a workspace)</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">)</span>
+
+<span class="c"># Or for multiple spectra</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="p">[</span><span class="n">ws1</span><span class="p">,</span> <span class="n">ws2</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Then call <cite>fit()</cite> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fit</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>After fitting finishes the <cite>CrystalField</cite> object updates automatically and contains new fitted parameter values.</p>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/Interfaces.html">Interfaces</a> | <a class="reference external" href="categories/Indirect.html">Indirect</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="index.html" title="Previous Chapter: Interfaces"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Interfaces</span>
+    </a>
+  </li>
+  <li>
+    <a href="DGSPlanner.html" title="Next Chapter: DGS Planner"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">DGS Planner &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

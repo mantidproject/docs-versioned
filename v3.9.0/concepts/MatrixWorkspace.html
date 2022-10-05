@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Matrix Workspace</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Nexus File" href="NexusFile.html" />
+    <link rel="prev" title="MD Workspace" href="MDWorkspace.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="matrix-workspace">
+<span id="matrixworkspace"></span><h1>Matrix Workspace<a class="headerlink" href="#matrix-workspace" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#what-information-is-in-a-matrixworkspace" id="id1">What information is in a MatrixWorkspace</a></li>
+<li><a class="reference internal" href="#working-with-matrix-workspaces-in-python" id="id2">Working with Matrix Workspaces in Python</a><ul>
+<li><a class="reference internal" href="#accessing-workspaces" id="id3">Accessing Workspaces</a></li>
+<li><a class="reference internal" href="#matrix-workspace-properties" id="id4">Matrix Workspace Properties</a><ul>
+<li><a class="reference internal" href="#instrument" id="id5">Instrument</a></li>
+<li><a class="reference internal" href="#run-to-access-logs-and-other-run-information" id="id6">Run - to access logs, and other run information</a></li>
+<li><a class="reference internal" href="#axes" id="id7">Axes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#matrix-workspace-operations" id="id8">Matrix Workspace Operations</a></li>
+<li><a class="reference internal" href="#accessing-data" id="id9">Accessing Data</a></li>
+<li><a class="reference internal" href="#workspace-algebra" id="id10">Workspace algebra</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#other-information-on-workspaces" id="id11">Other Information on Workspaces</a></li>
+</ul>
+</div>
+<p>A MatrixWorkspace is a generic name for any workspace that can be access like a table of X, Y and E values.  This is the prime interface for accessing workspace data in Mantid.  This covers several workspace types including:</p>
+<ul class="simple">
+<li><a class="reference internal" href="Workspace2D.html#workspace2d"><em>Workspace2D</em></a> - A workspace for holding two       dimensional data in memory, this is the most commonly used workspace.</li>
+<li><a class="reference internal" href="EventWorkspace.html#eventworkspace"><em>EventWorkspace</em></a> - A workspace that retains the       individual neutron event data.</li>
+</ul>
+<div class="section" id="what-information-is-in-a-matrixworkspace">
+<h2><a class="toc-backref" href="#id1">What information is in a MatrixWorkspace</a><a class="headerlink" href="#what-information-is-in-a-matrixworkspace" title="Permalink to this headline">¶</a></h2>
+<p>All Matrix Workspaces contain:</p>
+<ul class="simple">
+<li>Measured or derived data with associated errors, this is referenced as a 2D array of counts and error data.  The axes are commonly &#8220;SpectraNumber&#8221; and another unit of measure, but are very flexible.</li>
+</ul>
+<p>Also they may contain:</p>
+<ul class="simple">
+<li>Axes with
+<a class="reference internal" href="UnitFactory.html#unit-factory"><em>Units</em></a></li>
+<li><a class="reference internal" href="Sample.html#sample"><em>Sample</em></a> and sample environment data</li>
+<li><a class="reference internal" href="Run.html#run"><em>Run</em></a> logs</li>
+<li>A full <a class="reference internal" href="Instrument.html#instrument"><em>instrument</em></a> geometric definition, along with
+an instrument parameter map</li>
+<li>A spectra - detector mapping</li>
+<li>A distribution flag</li>
+<li>A list of &#8216;masked&#8217; bins</li>
+</ul>
+</div>
+<div class="section" id="working-with-matrix-workspaces-in-python">
+<h2><a class="toc-backref" href="#id2">Working with Matrix Workspaces in Python</a><a class="headerlink" href="#working-with-matrix-workspaces-in-python" title="Permalink to this headline">¶</a></h2>
+<p>MatrixWorkspace is an abstract description of an specific workspace implementation. It provides access to a common way of accessing the data for a 2D workspace without needing to know the details of how that data is actually stored.</p>
+<p>Matrix Workspaces have all the data and operations of the base <a class="reference internal" href="Workspace.html#workspace"><em>Workspace</em></a> class, but add operations to access the data in a useful way.</p>
+<p>You can look at the <a class="reference internal" href="../api/python/mantid/api/MatrixWorkspace.html#mantid-api-matrixworkspace"><em>Matrix Workspace API reference</em></a> for a full list of properties and operations, but here are some of the key ones.</p>
+<div class="section" id="accessing-workspaces">
+<h3><a class="toc-backref" href="#id3">Accessing Workspaces</a><a class="headerlink" href="#accessing-workspaces" title="Permalink to this headline">¶</a></h3>
+<p>The methods for getting a variable to a MatrixWorkspace is the same as shown in the <a class="reference internal" href="Workspace.html#workspace-accessing-workspaces"><em>Workspace</em></a> help page.</p>
+<p>If you want to check if a variable points to something that is a Matrix Workspace you can use this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mantid.api</span> <span class="kn">import</span> <span class="n">MatrixWorkspace</span>
+
+<span class="n">histoWS</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="n">WorkspaceType</span><span class="o">=</span><span class="s">&quot;Histogram&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">histoWS</span><span class="p">,</span> <span class="n">MatrixWorkspace</span><span class="p">):</span>
+    <span class="k">print</span> <span class="n">histoWS</span><span class="o">.</span><span class="n">name</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot; is a &quot;</span> <span class="o">+</span> <span class="n">histoWS</span><span class="o">.</span><span class="n">id</span><span class="p">()</span> <span class="o">+</span> \
+             <span class="s">&quot; and can be treated as a MatrixWorkspace&quot;</span>
+
+<span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">For more workspace types&quot;</span>
+<span class="n">eventWS</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="n">WorkspaceType</span><span class="o">=</span><span class="s">&quot;Event&quot;</span><span class="p">)</span>
+<span class="n">svWS</span> <span class="o">=</span> <span class="n">CreateSingleValuedWorkspace</span><span class="p">()</span>
+<span class="n">tableWS</span> <span class="o">=</span> <span class="n">CreateEmptyTableWorkspace</span><span class="p">()</span>
+<span class="n">groupWS</span> <span class="o">=</span> <span class="n">GroupWorkspaces</span><span class="p">(</span><span class="s">&quot;histoWS,eventWS&quot;</span><span class="p">)</span>
+<span class="n">mdWS</span> <span class="o">=</span> <span class="n">CreateMDWorkspace</span><span class="p">(</span><span class="n">Dimensions</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">Extents</span><span class="o">=</span><span class="s">&#39;-10,10,-10,10,-10,10&#39;</span><span class="p">,</span> <span class="n">Names</span><span class="o">=</span><span class="s">&#39;A,B,C&#39;</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="s">&#39;U,U,U&#39;</span><span class="p">)</span>
+<span class="n">mdHistoWS</span><span class="o">=</span><span class="n">CreateMDHistoWorkspace</span><span class="p">(</span><span class="n">Dimensionality</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Extents</span><span class="o">=</span><span class="s">&#39;-3,3,-10,10&#39;</span><span class="p">,</span><span class="n">SignalInput</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span><span class="n">ErrorInput</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span>\
+                           <span class="n">NumberOfBins</span><span class="o">=</span><span class="s">&#39;10,10&#39;</span><span class="p">,</span><span class="n">Names</span><span class="o">=</span><span class="s">&#39;Dim1,Dim2&#39;</span><span class="p">,</span><span class="n">Units</span><span class="o">=</span><span class="s">&#39;MomentumTransfer,EnergyTransfer&#39;</span><span class="p">)</span>
+
+<span class="n">myWorkspaceList</span> <span class="o">=</span> <span class="p">[</span><span class="n">histoWS</span><span class="p">,</span><span class="n">eventWS</span><span class="p">,</span><span class="n">svWS</span><span class="p">,</span><span class="n">tableWS</span><span class="p">,</span><span class="n">mdWS</span><span class="p">,</span><span class="n">mdHistoWS</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&quot;MatrixWorkspace?&quot;</span><span class="p">,</span><span class="s">&quot;Type&quot;</span>
+<span class="k">for</span> <span class="n">ws</span> <span class="ow">in</span> <span class="n">myWorkspaceList</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;  &quot;</span><span class="p">,</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">MatrixWorkspace</span><span class="p">),</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s">     &quot;</span><span class="p">,</span> <span class="n">ws</span><span class="o">.</span><span class="n">id</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>histoWS is a Workspace2D and can be treated as a MatrixWorkspace
+
+For more workspace types
+MatrixWorkspace? Type
+   True           Workspace2D
+   True           EventWorkspace
+   True           WorkspaceSingleValue
+   False          TableWorkspace
+   False          MDEventWorkspace&lt;MDLeanEvent,3&gt;
+   False          MDHistoWorkspace
+</pre></div>
+</div>
+</div>
+<div class="section" id="matrix-workspace-properties">
+<h3><a class="toc-backref" href="#id4">Matrix Workspace Properties</a><a class="headerlink" href="#matrix-workspace-properties" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># find out the number of histograms on a workspace use getNumberHistograms()</span>
+<span class="k">print</span> <span class="s">&quot;number of histograms = {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">getNumberHistograms</span><span class="p">())</span>
+
+<span class="c"># To find out the number of bins use blocksize()</span>
+<span class="k">print</span> <span class="s">&quot;number of bins = {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">blocksize</span><span class="p">())</span>
+<span class="c"># To find out the bin containing a value use binIndexOf()</span>
+<span class="k">print</span> <span class="s">&quot;bin index containing 502.2 for a histogram (0 by default) = {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">binIndexOf</span><span class="p">(</span><span class="mf">502.2</span><span class="p">))</span>
+<span class="k">print</span> <span class="s">&quot;bin index containing 997.1 for histogram 272 = {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">binIndexOf</span><span class="p">(</span><span class="mf">997.1</span><span class="p">,</span><span class="mi">272</span><span class="p">))</span>
+
+<span class="c"># To find a workspace index from a spectrum number</span>
+<span class="k">print</span> <span class="s">&quot;workspace index for histogram 272 = {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">getIndexFromSpectrumNumber</span><span class="p">(</span><span class="mi">272</span><span class="p">))</span>
+<span class="c"># To get the Run Number use getRunNumber()</span>
+<span class="k">print</span> <span class="s">&quot;run number = {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">getRunNumber</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>number of histograms = 922
+number of bins = 2663
+bin index containing 502.2 for a histogram (0 by default) = 19
+bin index containing 997.1 for histogram 272 = 39
+workspace index for histogram 272 = 271
+run number = 11015
+</pre></div>
+</div>
+<div class="section" id="instrument">
+<h4><a class="toc-backref" href="#id5">Instrument</a><a class="headerlink" href="#instrument" title="Permalink to this headline">¶</a></h4>
+<p>You can get access to the <a class="reference internal" href="Instrument.html#instrument"><em>Instrument</em></a> for a workspace with</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instrument</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getInstrument</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For the properties and operations of the instrument look at the <a class="reference internal" href="Instrument.html#instrument"><em>Instrument help</em></a>.</p>
+</div>
+<div class="section" id="run-to-access-logs-and-other-run-information">
+<h4><a class="toc-backref" href="#id6">Run - to access logs, and other run information</a><a class="headerlink" href="#run-to-access-logs-and-other-run-information" title="Permalink to this headline">¶</a></h4>
+<p>You can get access to the <a class="reference internal" href="Run.html#run"><em>Run</em></a> for a workspace with</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">run</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getRun</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For the properties and operations of the run object and how to access log data look at the <a class="reference internal" href="Run.html#run"><em>Run help</em></a>.</p>
+</div>
+<div class="section" id="axes">
+<h4><a class="toc-backref" href="#id7">Axes</a><a class="headerlink" href="#axes" title="Permalink to this headline">¶</a></h4>
+<p>Axes are used primarily for labeling plots, but are also used as validation criteria for several algorithms.
+You can list out the axes of a workspace using the following code.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ws</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">axes</span><span class="p">()):</span>
+    <span class="n">axis</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;Axis {0} is a {1}{2}{3}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+                                           <span class="s">&quot;Spectrum Axis&quot;</span> <span class="k">if</span> <span class="n">axis</span><span class="o">.</span><span class="n">isSpectra</span><span class="p">()</span> <span class="k">else</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
+                                           <span class="s">&quot;Text Axis&quot;</span> <span class="k">if</span> <span class="n">axis</span><span class="o">.</span><span class="n">isText</span><span class="p">()</span> <span class="k">else</span> <span class="s">&quot;&quot;</span><span class="p">,</span>
+                                           <span class="s">&quot;Numeric Axis&quot;</span> <span class="k">if</span> <span class="n">axis</span><span class="o">.</span><span class="n">isNumeric</span><span class="p">()</span> <span class="k">else</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">unit</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">getUnit</span><span class="p">()</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> caption:{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">caption</span><span class="p">())</span>
+    <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s"> symbol:{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">symbol</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>Axis 0 is a Numeric Axis
+   caption:Time-of-flight
+   symbol:microsecond
+Axis 1 is a Spectrum Axis
+   caption:Spectrum
+   symbol:
+</pre></div>
+</div>
+<p><strong>Setting the axisLabel</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ws</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">axis</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="c"># Create a new axis</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">setUnit</span><span class="p">(</span><span class="s">&quot;Label&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s">&#39;Temperature&#39;</span><span class="p">,</span> <span class="s">&#39;K&#39;</span><span class="p">)</span>
+
+<span class="n">unit</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">getUnit</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;New caption:{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">caption</span><span class="p">())</span>
+<span class="k">print</span> <span class="s">&quot;New symbol:{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">symbol</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>New caption:Temperature
+New symbol:K
+</pre></div>
+</div>
+<p><strong>Replacing the Axis</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mantid.api</span> <span class="kn">import</span> <span class="n">NumericAxis</span>
+
+<span class="n">axis</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">unit</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">getUnit</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;Old caption:{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">caption</span><span class="p">())</span>
+<span class="k">print</span> <span class="s">&quot;Old symbol:{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">symbol</span><span class="p">())</span>
+
+<span class="c"># Create a new axis</span>
+<span class="n">newAxis</span> <span class="o">=</span> <span class="n">NumericAxis</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">getNumberHistograms</span><span class="p">())</span>
+<span class="n">newAxis</span><span class="o">.</span><span class="n">setUnit</span><span class="p">(</span><span class="s">&quot;Label&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s">&#39;Temperature&#39;</span><span class="p">,</span> <span class="s">&#39;K&#39;</span><span class="p">)</span>
+
+<span class="c"># Set the vertical axis values</span>
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ws</span><span class="o">.</span><span class="n">getNumberHistograms</span><span class="p">()):</span>
+    <span class="n">tempValue</span> <span class="o">=</span> <span class="n">idx</span><span class="o">*</span><span class="mi">3</span><span class="o">+</span><span class="mi">25</span> <span class="c"># some made up value</span>
+    <span class="n">newAxis</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">tempValue</span><span class="p">)</span>
+
+<span class="c"># Replace axis 1 with the new axis</span>
+<span class="n">ws</span><span class="o">.</span><span class="n">replaceAxis</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">newAxis</span><span class="p">)</span>
+
+<span class="n">axis</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">unit</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">getUnit</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;New caption:{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">caption</span><span class="p">())</span>
+<span class="k">print</span> <span class="s">&quot;New symbol:{0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">symbol</span><span class="p">())</span>
+<span class="k">print</span> <span class="s">&quot;New values: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">axis</span><span class="o">.</span><span class="n">extractValues</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>Old caption:Spectrum
+Old symbol:
+New caption:Temperature
+New symbol:K
+New values: [ 25. 28. ... 2785. 2788.]
+</pre></div>
+</div>
+<p><strong>Setting the Y Label</strong></p>
+<div class="figure align-right">
+<img alt="PlotMatrixWorkspaceYUnitElephants.png" src="../_images/PlotMatrixWorkspaceYUnitElephants.png" />
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">ws</span><span class="o">.</span><span class="n">YUnitLabel</span><span class="p">()</span>
+<span class="n">ws</span><span class="o">.</span><span class="n">setYUnitLabel</span><span class="p">(</span><span class="s">&quot;Elephants&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">ws</span><span class="o">.</span><span class="n">YUnitLabel</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>Counts
+Elephants
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="matrix-workspace-operations">
+<h3><a class="toc-backref" href="#id8">Matrix Workspace Operations</a><a class="headerlink" href="#matrix-workspace-operations" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># To create a copy of a workspace</span>
+<span class="n">wsClone</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+<span class="c"># or</span>
+<span class="n">wsClone</span> <span class="o">=</span> <span class="n">CloneWorkspace</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
+
+<span class="c"># To check if two variables point to the same workspace</span>
+<span class="k">if</span> <span class="n">ws</span> <span class="o">==</span> <span class="n">wsClone</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;They are the same workspace&quot;</span>
+
+<span class="c"># To check if two workspaces have equal values</span>
+<span class="k">if</span> <span class="n">ws</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">wsClone</span><span class="p">,</span> <span class="n">tolerance</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&quot;They have the same data&quot;</span>
+
+<span class="c"># To create a copy of a workspace</span>
+<span class="n">wsWavelength</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">convertUnits</span><span class="p">(</span><span class="n">Target</span><span class="o">=</span><span class="s">&quot;Wavelength&quot;</span><span class="p">)</span>
+<span class="c"># or</span>
+<span class="n">wsWavelength</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span><span class="n">Target</span><span class="o">=</span><span class="s">&quot;Wavelength&quot;</span><span class="p">)</span>
+
+<span class="c"># To rebin the workspace</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">rebin</span><span class="p">(</span><span class="n">Params</span> <span class="o">=</span> <span class="mi">200</span><span class="p">)</span>
+<span class="c"># or</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">Params</span> <span class="o">=</span> <span class="mi">200</span><span class="p">)</span>
+
+<span class="c"># Mask detectors or spectra (or use the MaskDetectors algorithm</span>
+<span class="n">ws</span><span class="o">.</span><span class="n">maskDetectors</span><span class="p">(</span><span class="n">SpectraList</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+<span class="n">ws</span><span class="o">.</span><span class="n">maskDetectors</span><span class="p">(</span><span class="n">WorkspaceIndexList</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">,</span><span class="mi">105</span><span class="p">))</span>
+<span class="n">ws</span><span class="o">.</span><span class="n">maskDetectors</span><span class="p">(</span><span class="n">DetectorList</span><span class="o">=</span><span class="p">[</span><span class="mi">150</span><span class="p">,</span><span class="mi">160</span><span class="p">,</span><span class="mi">170</span><span class="p">])</span>
+
+<span class="c"># To delete the workspace</span>
+<span class="n">ws</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+<span class="c"># or</span>
+<span class="n">DeleteWorkspace</span><span class="p">(</span><span class="n">wsClone</span><span class="p">)</span>
+<span class="c"># Do not access the python variable again as you will get a RuntimeError</span>
+<span class="c"># e.g. RuntimeError: Variable invalidated, data has been deleted.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="accessing-data">
+<h3><a class="toc-backref" href="#id9">Accessing Data</a><a class="headerlink" href="#accessing-data" title="Permalink to this headline">¶</a></h3>
+<p>A MatrixWorkspace is essentially a 2D list of binned data where a workspace index, starting at 0, gives access to the data fields in each spectra.</p>
+<p>The data is accessed using the <tt class="docutils literal"><span class="pre">readX()</span></tt>, <tt class="docutils literal"><span class="pre">readY()</span></tt> and <tt class="docutils literal"><span class="pre">readE()</span></tt> commands. Each of these commands takes a number that refers to the index on the workspace and returns a list of the data for that workspace index, i.e</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Get the Y vector for the second row of data</span>
+<span class="n">y_data2</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">y_data2</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">y</span>
+
+<span class="c"># Or in loop access. Print the first value in all spectra</span>
+<span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ws</span><span class="o">.</span><span class="n">getNumberHistograms</span><span class="p">()):</span>
+    <span class="c">#Note the round brackets followed by the square brackets</span>
+    <span class="k">print</span> <span class="n">ws</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="n">index</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>There are more examples how to <a class="reference external" href="http://www.mantidproject.org/Extracting_And_Manipulating_Data">Extract and manipulate workspace data here</a>.</p>
+</div>
+<div class="section" id="workspace-algebra">
+<h3><a class="toc-backref" href="#id10">Workspace algebra</a><a class="headerlink" href="#workspace-algebra" title="Permalink to this headline">¶</a></h3>
+<p>MatrixWorkspaces can have algebraic operations applied to them directly without the need to call a specific algorithm, e.g. <a class="reference internal" href="../algorithms/Plus-v1.html#algm-plus"><em>Plus</em></a></p>
+<p>The expected operations of +,-,*,/ are supported with either a single number or another workspace as the second argument, e.g.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">w1</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&#39;workspace1&#39;</span><span class="p">]</span>
+<span class="n">w2</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&#39;workspace2&#39;</span><span class="p">]</span>
+
+<span class="c"># Sum the two workspaces and place the output into a third</span>
+<span class="n">w3</span> <span class="o">=</span> <span class="n">w1</span> <span class="o">+</span> <span class="n">w2</span>
+
+<span class="c"># Multiply the new workspace by 2 and place the output into a new workspace</span>
+<span class="n">w4</span> <span class="o">=</span> <span class="n">w3</span> <span class="o">*</span> <span class="mi">2</span>
+</pre></div>
+</div>
+<p>It is also possible to replace one of the input workspaces using one of +=,-=,*=,/= e.g.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Multiply a workspace by 2 and replace w1 with the output</span>
+<span class="n">w1</span> <span class="o">*=</span> <span class="mf">2.0</span>
+
+<span class="c"># Add &#39;workspace2&#39; to &#39;workspace1&#39; and replace &#39;workspace1&#39; with the output</span>
+<span class="n">w1</span> <span class="o">+=</span> <span class="n">w2</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="other-information-on-workspaces">
+<h2><a class="toc-backref" href="#id11">Other Information on Workspaces</a><a class="headerlink" href="#other-information-on-workspaces" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt><a class="reference internal" href="Workspace.html#workspace"><em>Workspace</em></a> - Overview of workspaces, which include the following classes:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#matrixworkspace"><em>MatrixWorkspace</em></a> - A base class that contains
+among others:<ul>
+<li>WorkspaceSingleValue - Holds a single number (and X &amp; error value,
+if desired). Mainly used for workspace algebra, e.g. to divide all
+bins in a 2D workspace by a single value.</li>
+<li><a class="reference internal" href="Workspace2D.html#workspace2d"><em>Workspace2D</em></a> - A workspace for holding two
+dimensional data in memory, this is the most commonly used
+workspace.</li>
+<li><a class="reference internal" href="EventWorkspace.html#eventworkspace"><em>EventWorkspace</em></a> - A workspace that retains the
+individual neutron event data.</li>
+</ul>
+</li>
+<li><a class="reference internal" href="TableWorkspaces.html#table-workspaces"><em>TableWorkspace</em></a> - A workspace holding data in
+rows of columns having a particular type (e.g. text, integer, ...).</li>
+<li><a class="reference internal" href="WorkspaceGroup.html#workspacegroup"><em>WorkspaceGroup</em></a> - A container for a collection of
+workspaces. Algorithms given a group as input run sequentially on
+each member of the group.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="MDWorkspace.html" title="Previous Chapter: MD Workspace"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; MD Workspace</span>
+    </a>
+  </li>
+  <li>
+    <a href="NexusFile.html" title="Next Chapter: Nexus File"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Nexus File &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GetDetOffsetsMultiPeaks v1</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="next" title="GetDetectorOffsets v1" href="GetDetectorOffsets-v1.html" />
+    <link rel="prev" title="GetAllEi v1" href="GetAllEi-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="getdetoffsetsmultipeaks-v1">
+<span id="algm-getdetoffsetsmultipeaks"></span><span id="algm-getdetoffsetsmultipeaks-v1"></span><h1>GetDetOffsetsMultiPeaks v1<a class="headerlink" href="#getdetoffsetsmultipeaks-v1" title="Permalink to this headline">¶</a></h1>
+<div class="figure align-right" id="index-0">
+<a class="screenshot reference internal image-reference" href="../_images/GetDetOffsetsMultiPeaks-v1_dlg.png"><img alt="../_images/GetDetOffsetsMultiPeaks-v1_dlg.png" class="screenshot" src="../_images/GetDetOffsetsMultiPeaks-v1_dlg.png" style="width: 303px;" /></a>
+<p class="caption"><strong>GetDetOffsetsMultiPeaks</strong> dialog.</p>
+</div>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#summary" id="id1">Summary</a></li>
+<li><a class="reference internal" href="#properties" id="id2">Properties</a></li>
+<li><a class="reference internal" href="#description" id="id3">Description</a><ul>
+<li><a class="reference internal" href="#fit-for-peak-offset" id="id4">Fit for peak offset</a></li>
+<li><a class="reference internal" href="#criteria-on-peaks" id="id5">Criteria on peaks</a></li>
+<li><a class="reference internal" href="#generate-fit-window" id="id6">Generate fit window</a><ul>
+<li><a class="reference internal" href="#uniform-fit-window" id="id7">Uniform fit window</a></li>
+<li><a class="reference internal" href="#fit-window-for-individual-peak" id="id8">Fit window for individual peak</a><ul>
+<li><a class="reference internal" href="#default-fit-windows" id="id9">Default fit windows</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#quality-of-fitting" id="id10">Quality of Fitting</a><ul>
+<li><a class="reference internal" href="#number-of-spectra-that-are-not-masked" id="id11">Number of spectra that are NOT masked</a></li>
+<li><a class="reference internal" href="#of-the-offset-fitting-function" id="id12"><img class="math" src="../_images/math/4dcb4a08df7a8b829443c0b6705fa279c77218c3.png" alt="\chi^2" style="vertical-align: -4px"/> of the offset fitting function</a></li>
+<li><a class="reference internal" href="#deviation-of-highest-peaks" id="id13">Deviation of highest peaks</a></li>
+<li><a class="reference internal" href="#collective-quantities-to-illustrate-goodness-of-fitting-still-in-developement" id="id14">Collective quantities to illustrate goodness of fitting (still in developement)</a></li>
+<li><a class="reference internal" href="#standard-error-on-offset" id="id15">Standard error on offset</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#spectra-to-be-masked" id="id16">Spectra to be masked</a></li>
+<li><a class="reference internal" href="#usage" id="id17">Usage</a><ul>
+<li><a class="reference internal" href="#output" id="id18">Output</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#source" id="id19">Source</a></li>
+</ul>
+</div>
+<div class="section" id="summary">
+<h2><a class="toc-backref" href="#id1">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Creates an OffsetsWorkspace containing offsets for each detector. You can then save these to a .cal file using SaveCalFile.</p>
+</div>
+<div class="section" id="properties">
+<h2><a class="toc-backref" href="#id2">Properties</a><a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="2%" />
+<col width="10%" />
+<col width="6%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Direction</th>
+<th class="head">Type</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>InputWorkspace</td>
+<td>Input</td>
+<td><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><em>MatrixWorkspace</em></a></td>
+<td><em>Mandatory</em></td>
+<td>A 2D matrix workspace with X values of d-spacing</td>
+</tr>
+<tr class="row-odd"><td>DReference</td>
+<td>Input</td>
+<td>dbl list</td>
+<td>&nbsp;</td>
+<td>Enter a comma-separated list of the expected X-position of the centre of the peaks. Only peaks near these positions will be fitted.</td>
+</tr>
+<tr class="row-even"><td>FitWindowMaxWidth</td>
+<td>Input</td>
+<td>number</td>
+<td>0</td>
+<td>Optional: The maximum width of the fitting window. If this is &lt;=0 the window is not specified to FindPeaks</td>
+</tr>
+<tr class="row-odd"><td>FitwindowTableWorkspace</td>
+<td>Input</td>
+<td><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><em>TableWorkspace</em></a></td>
+<td>&nbsp;</td>
+<td>Name of the input Tableworkspace containing peak fit window information for each spectrum.</td>
+</tr>
+<tr class="row-even"><td>PeakFunction</td>
+<td>Input</td>
+<td>string</td>
+<td>Gaussian</td>
+<td>Type of peak to fit. Allowed values: [&#8216;BackToBackExponential&#8217;, &#8216;Bk2BkExpConvPV&#8217;, &#8216;DeltaFunction&#8217;, &#8216;ElasticDiffRotDiscreteCircle&#8217;, &#8216;ElasticDiffSphere&#8217;, &#8216;ElasticIsoRotDiff&#8217;, &#8216;ExamplePeakFunction&#8217;, &#8216;Gaussian&#8217;, &#8216;IkedaCarpenterPV&#8217;, &#8216;Lorentzian&#8217;, &#8216;PseudoVoigt&#8217;, &#8216;Voigt&#8217;]</td>
+</tr>
+<tr class="row-odd"><td>BackgroundType</td>
+<td>Input</td>
+<td>string</td>
+<td>Linear</td>
+<td>Type of Background. The choice can be either Linear or Quadratic. Allowed values: [&#8216;Flat&#8217;, &#8216;Linear&#8217;, &#8216;Quadratic&#8217;]</td>
+</tr>
+<tr class="row-even"><td>HighBackground</td>
+<td>Input</td>
+<td>boolean</td>
+<td>True</td>
+<td>Relatively weak peak in high background</td>
+</tr>
+<tr class="row-odd"><td>GroupingFileName</td>
+<td>Input</td>
+<td>string</td>
+<td>&nbsp;</td>
+<td>Optional: The name of the output CalFile to save the generated OffsetsWorkspace. Allowed extensions: [&#8216;.cal&#8217;]</td>
+</tr>
+<tr class="row-even"><td>OutputWorkspace</td>
+<td>Output</td>
+<td>OffsetsWorkspace</td>
+<td>&nbsp;</td>
+<td>An output workspace containing the offsets.</td>
+</tr>
+<tr class="row-odd"><td>NumberPeaksWorkspace</td>
+<td>Output</td>
+<td>OffsetsWorkspace</td>
+<td>&nbsp;</td>
+<td>An output workspace containing the offsets.</td>
+</tr>
+<tr class="row-even"><td>MaskWorkspace</td>
+<td>Output</td>
+<td><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><em>MatrixWorkspace</em></a></td>
+<td>Mask</td>
+<td>An output workspace containing the mask.</td>
+</tr>
+<tr class="row-odd"><td>MaxOffset</td>
+<td>Input</td>
+<td>number</td>
+<td>1</td>
+<td>Maximum absolute value of offsets; default is 1</td>
+</tr>
+<tr class="row-even"><td>MaxChiSq</td>
+<td>Input</td>
+<td>number</td>
+<td>100</td>
+<td>Maximum chisq value for individual peak fit allowed. (Default: 100)</td>
+</tr>
+<tr class="row-odd"><td>MinimumPeakHeight</td>
+<td>Input</td>
+<td>number</td>
+<td>2</td>
+<td>Minimum value allowed for peak height.</td>
+</tr>
+<tr class="row-even"><td>MinimumPeakHeightObs</td>
+<td>Input</td>
+<td>number</td>
+<td>0</td>
+<td>Least value of the maximum observed Y value of a peak within specified region.  If any peak&#8217;s maximum observed Y value is smaller, then this peak will not be fit.  It is designed for EventWorkspace with integer counts.</td>
+</tr>
+<tr class="row-odd"><td>Minimizer</td>
+<td>Input</td>
+<td>string</td>
+<td>Levenberg-MarquardtMD</td>
+<td>Minimizer to use for fitting peaks. Allowed values: [&#8216;BFGS&#8217;, &#8216;Conjugate gradient (Fletcher-Reeves imp.)&#8217;, &#8216;Conjugate gradient (Polak-Ribiere imp.)&#8217;, &#8216;Damped GaussNewton&#8217;, &#8216;FABADA&#8217;, &#8216;Levenberg-Marquardt&#8217;, &#8216;Levenberg-MarquardtMD&#8217;, &#8216;More-Sorensen&#8217;, &#8216;Simplex&#8217;, &#8216;SteepestDescent&#8217;, &#8216;Trust Region&#8217;]</td>
+</tr>
+<tr class="row-even"><td>InputResolutionWorkspace</td>
+<td>Input</td>
+<td><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><em>MatrixWorkspace</em></a></td>
+<td>&nbsp;</td>
+<td>Name of the optional input resolution (delta(d)/d) workspace.</td>
+</tr>
+<tr class="row-odd"><td>SpectraFitInfoTableWorkspace</td>
+<td>Output</td>
+<td><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><em>TableWorkspace</em></a></td>
+<td>&nbsp;</td>
+<td>Name of the output table workspace containing spectra peak fit information.</td>
+</tr>
+<tr class="row-even"><td>PeaksOffsetTableWorkspace</td>
+<td>Output</td>
+<td><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><em>TableWorkspace</em></a></td>
+<td>&nbsp;</td>
+<td>Name of an output table workspace containing peaks&#8217; offset data.</td>
+</tr>
+<tr class="row-odd"><td>FittedResolutionWorkspace</td>
+<td>Output</td>
+<td><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><em>MatrixWorkspace</em></a></td>
+<td>ResolutionWS</td>
+<td>Name of the resolution workspace containing delta(d)/d for each unmasked spectrum.</td>
+</tr>
+<tr class="row-even"><td>MinimumResolutionFactor</td>
+<td>Input</td>
+<td>number</td>
+<td>0.1</td>
+<td>Factor of the minimum allowed Delta(d)/d of any peak to its suggested Delta(d)/d.</td>
+</tr>
+<tr class="row-odd"><td>MaximumResolutionFactor</td>
+<td>Input</td>
+<td>number</td>
+<td>10</td>
+<td>Factor of the maximum allowed Delta(d)/d of any peak to its suggested Delta(d)/d.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="description">
+<h2><a class="toc-backref" href="#id3">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>This algorithm requires a workspace that is in d-spacingand has been <a class="reference internal" href="Rebin-v1.html#algm-rebin"><em>rebinned</em></a> to a common set of d-spacing bin boundaries. In this first step you select one spectrum to be the
+reference spectrum and all of the other spectrum are cross correlated
+against it. Each output spectrum then contains a peak whose location
+defines the offset from the reference spectrum.</p>
+<p>The algorithm iterates over each spectrum in the workspace and fits a
+function (default is a <a class="reference internal" href="../fitfunctions/Gaussian.html#func-gaussian"><em>Gaussian</em></a>) to the reference peak. The fit is used
+to calculate the centre of the fitted peak, and the offset is then
+calculated as:</p>
+<p>This is then written into a <a class="reference external" href="http://www.mantidproject.org/CalFile">.cal file</a> for every detector
+that contributes to that spectrum. All of the entries in the cal file
+are initially set to both be included, but also to all group into a
+single group on <a class="reference internal" href="DiffractionFocussing-v2.html#algm-diffractionfocussing"><em>DiffractionFocussing v2</em></a>. The
+<a class="reference internal" href="CreateCalFileByNames-v1.html#algm-createcalfilebynames"><em>CreateCalFileByNames v1</em></a> algorithm can be used to
+alter the grouping in the cal file.</p>
+<div class="section" id="fit-for-peak-offset">
+<h3><a class="toc-backref" href="#id4">Fit for peak offset</a><a class="headerlink" href="#fit-for-peak-offset" title="Permalink to this headline">¶</a></h3>
+<p>The algorithm to calculate offset of peaks&#8217; positions is to minimize a
+cost function as</p>
+<div class="math">
+<p><img src="../_images/math/c6085a2dbb9baac319946a7c680a420a186d1a84.png" alt="\sum_{p} |X_{0, p} - (1+offset)\cdot X_{0, p}|/\chi^2_{p}"/></p>
+</div><p>, which p is the index of a peak whose position is within MinD and MaxD.</p>
+</div>
+<div class="section" id="criteria-on-peaks">
+<h3><a class="toc-backref" href="#id5">Criteria on peaks</a><a class="headerlink" href="#criteria-on-peaks" title="Permalink to this headline">¶</a></h3>
+<p>The (fitted) peak must meet a series of criteria to be used to fit
+spectrum&#8217;s offset.</p>
+<p>A peak will not be used if</p>
+<ul class="simple">
+<li>its centre is out of pre-defined d-range, i.e., MinD and MaxD;</li>
+<li>its centre is out of fitting window if it is defined;</li>
+<li>its <img class="math" src="../_images/math/4dcb4a08df7a8b829443c0b6705fa279c77218c3.png" alt="\chi^2" style="vertical-align: -4px"/> of peak fitting is larger than pre-defined maximum
+value;</li>
+<li>its height is lower than pre-defined lowest peak height;</li>
+<li>its observed maximum value corrected by background is smaller than user specified value;</li>
+<li>its signal/noise ratio is less than 5
+<img class="math" src="../_images/math/c0e69f3b8caa3cddbb8a374ab18553e421bb352c.png" alt="H\cdot FWHM\_To\_SIGMA/width &lt; 5" style="vertical-align: -5px"/>;</li>
+<li>its height is not outside of error bars of background
+<img class="math" src="../_images/math/771cb959457bf55f832c6984da1c55395255697a.png" alt="H &lt; \sqrt{H + B}/2" style="vertical-align: -5px"/>;</li>
+<li>its z-value on <img class="math" src="../_images/math/056d427ec636f72f30e487cbfd8370031857201a.png" alt="\frac{\delta d}{d}" style="vertical-align: -6px"/> is larger than 2.0;</li>
+<li>its offset from theoretical position exceeds the limitation specified by user;</li>
+<li>its resolution (<img class="math" src="../_images/math/004a8095cfb4b78dde79ffdf0b3ab67a7b0bdadc.png" alt="\Delta(d)/d" style="vertical-align: -5px"/>) is out of user-specified range.</li>
+</ul>
+</div>
+<div class="section" id="generate-fit-window">
+<h3><a class="toc-backref" href="#id6">Generate fit window</a><a class="headerlink" href="#generate-fit-window" title="Permalink to this headline">¶</a></h3>
+<p>There are two approach to generate fit window.  One is via property &#8216;FitWindowMaxWidth&#8217;;
+and the other is &#8216;FitwindowTableWorkspace&#8217;.</p>
+<p>If neither of these 2 properties are correctly specified, then then there won&#8217;t be any window defined.</p>
+<div class="section" id="uniform-fit-window">
+<h4><a class="toc-backref" href="#id7">Uniform fit window</a><a class="headerlink" href="#uniform-fit-window" title="Permalink to this headline">¶</a></h4>
+<p>By specifying a postive float, maxWidth, for &#8216;FitWindowMaxWidth&#8217;,
+it is the definition of fit window for peaks indexed from 0 to N-1:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Peak 0: window = <img class="math" src="../_images/math/59eba21aa487a94aead81cf468efd39f202e639c.png" alt="\min((X0_0-dmin), maxWidth)" style="vertical-align: -4px"/>, <img class="math" src="../_images/math/96ec8d6a0ab9e804eb19a0fb8764830fa5c58046.png" alt="\min((X0_1-X0_0)/2,maxWidth)" style="vertical-align: -5px"/></li>
+<li>Peak <img class="math" src="../_images/math/346e58a26963d80dfaf0f959970bc6dde03daa36.png" alt="i (0 &lt; i &lt; N-1)" style="vertical-align: -4px"/>: window = <img class="math" src="../_images/math/68d73caa56fa5ff2eb5650c499c23002407600f5.png" alt="\min((X0_i-X0_{i-1})/2, maxWidth)" style="vertical-align: -5px"/>, <img class="math" src="../_images/math/11807686a2d0e225cf4126f385beff556b7f6a73.png" alt="\min((X0_1-X0_0)/2, maxWidth)" style="vertical-align: -5px"/></li>
+<li>Peak <img class="math" src="../_images/math/abf6cca7fff9806e67bfa7f28d51c05fa67d80a7.png" alt="N-1" style="vertical-align: -1px"/>: window = <img class="math" src="../_images/math/68d73caa56fa5ff2eb5650c499c23002407600f5.png" alt="\min((X0_i-X0_{i-1})/2, maxWidth)" style="vertical-align: -5px"/>, <img class="math" src="../_images/math/bfb4a8d79154e5364b851b39d06caf70371d8167.png" alt="\min((dmax-X0_i), maxWidth)" style="vertical-align: -4px"/></li>
+</ul>
+</div></blockquote>
+<p>where <img class="math" src="../_images/math/3df319eb1039b981a243a0c801e28a945ad38d87.png" alt="X0_i" style="vertical-align: -3px"/> is the centre of i-th peak.</p>
+</div>
+<div class="section" id="fit-window-for-individual-peak">
+<h4><a class="toc-backref" href="#id8">Fit window for individual peak</a><a class="headerlink" href="#fit-window-for-individual-peak" title="Permalink to this headline">¶</a></h4>
+<p>FitwindowTableWorkspace contains the fit window for each individual peak in the workspace
+to find.
+It contains <img class="math" src="../_images/math/2931bfcea3c2050c7407f0390874a2a70d6bca46.png" alt="1+2\times N" style="vertical-align: -1px"/> columns, where N is the number of peaks positions specified in &#8216;DReference&#8217;.</p>
+<ul class="simple">
+<li>Column 0: spectrum number <img class="math" src="../_images/math/bf4336f51840230df6f6374bd92a48da97f96fd4.png" alt="spNum" style="vertical-align: -4px"/>.  If <img class="math" src="../_images/math/e8fc0a2b8647ec82fdd2d3c1c3656af491aa2812.png" alt="spNum &lt; 0" style="vertical-align: -4px"/>, then it is a &#8216;universal&#8217; spectrum;</li>
+<li>Column <img class="math" src="../_images/math/a59af4cc206c00b2b34208d5f212f2a86c3dd258.png" alt="2i+1" style="vertical-align: -1px"/>: left boundary of peak <img class="math" src="../_images/math/4cc7324e0d6c8c591e4d865a21144bda81fd3011.png" alt="i" style="vertical-align: 0px"/> defined in &#8216;DReference&#8217; of spectrum <img class="math" src="../_images/math/3fcc3e09087b1a82ddf61ee97d467940ed9ab1a4.png" alt="iws" style="vertical-align: 0px"/>;</li>
+<li>Column <img class="math" src="../_images/math/8884ed9c61128a8e2ec4869984371a8442e6bc37.png" alt="2i+2" style="vertical-align: -1px"/>: right boundary of peak <img class="math" src="../_images/math/4cc7324e0d6c8c591e4d865a21144bda81fd3011.png" alt="i" style="vertical-align: 0px"/> defined in &#8216;DReference&#8217; of spectrum <img class="math" src="../_images/math/3fcc3e09087b1a82ddf61ee97d467940ed9ab1a4.png" alt="iws" style="vertical-align: 0px"/>;</li>
+</ul>
+<div class="section" id="default-fit-windows">
+<h5><a class="toc-backref" href="#id9">Default fit windows</a><a class="headerlink" href="#default-fit-windows" title="Permalink to this headline">¶</a></h5>
+<p>In the fit window table workspace, if there is a row, whose &#8216;spectrum number&#8217; is a negative number,
+then the fit windows defined in this row is treated as the default fit windows.
+It means that for any spectrum that has no fit windows defined in the tableworkspace,
+the default fit windows will be applied to it.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="quality-of-fitting">
+<h2><a class="toc-backref" href="#id10">Quality of Fitting</a><a class="headerlink" href="#quality-of-fitting" title="Permalink to this headline">¶</a></h2>
+<p>GetDetOffsetsMultiPeaks have 2 levels of fitting. First it will call
+FindPeaks to fit Bragg peaks within d-range. Then it will fit offsets
+from the peak positions obtained in the previous step. Therefore, the
+performance of FindPeaks is critical to this algorithm. It is necessary
+to output values reflecting the goodness of fitting of this algorithm to
+users.</p>
+<div class="section" id="number-of-spectra-that-are-not-masked">
+<h3><a class="toc-backref" href="#id11">Number of spectra that are NOT masked</a><a class="headerlink" href="#number-of-spectra-that-are-not-masked" title="Permalink to this headline">¶</a></h3>
+<p>A spectrum will be masked if it is a dead pixel, has an empty detector
+or has no peak that can be fit with given peak positions. The
+performance of <em>FindPeaks</em> affects the third criteria. A better
+algorithm to find and fit peaks may save some spectrum with relatively
+much fewer events received, i.e., poorer signal.</p>
+</div>
+<div class="section" id="of-the-offset-fitting-function">
+<h3><a class="toc-backref" href="#id12"><img class="math" src="../_images/math/4dcb4a08df7a8b829443c0b6705fa279c77218c3.png" alt="\chi^2" style="vertical-align: -4px"/> of the offset fitting function</a><a class="headerlink" href="#of-the-offset-fitting-function" title="Permalink to this headline">¶</a></h3>
+<p>The goodness of fit, <img class="math" src="../_images/math/5c8eb3476fd79a810e8c66a11436362016c2207e.png" alt="\chi^2_{spNum}" style="vertical-align: -8px"/>, of the offset fitting
+function</p>
+<div class="math">
+<p><img src="../_images/math/9477b975f53ddfefc686df92e230530049216d3e.png" alt="\sum_{p} |X_{0, p} - (1+offset)X_{0, p}|\cdot H^2_{p}"/></p>
+</div><p>is an important measure of fitting quality on each spectrum (indexed as
+spNum).</p>
+</div>
+<div class="section" id="deviation-of-highest-peaks">
+<h3><a class="toc-backref" href="#id13">Deviation of highest peaks</a><a class="headerlink" href="#deviation-of-highest-peaks" title="Permalink to this headline">¶</a></h3>
+<p>We observed that in some situation, the calibrated peaks&#8217; positions of
+some spectra are far off to the targeted peak positions, while goodness
+of fit such as <img class="math" src="../_images/math/4dcb4a08df7a8b829443c0b6705fa279c77218c3.png" alt="\chi^2" style="vertical-align: -4px"/> are still good. It is usally caused by the
+bad fit of one or two peaks in that spectrum, which feeds some erroreous
+peak positions to peak offset fitting function.</p>
+<p>This type of bad fitting is very easily identified by visualization,
+because the shift of peaks from the correct positions is significant in
+fill plot.</p>
+<p>Therefore, deviation of highest peak if spectrum i, <img class="math" src="../_images/math/343cf47d3fec0feca24edf8d75734b9a6d2c011f.png" alt="D_{i}" style="vertical-align: -3px"/> is
+defined as:</p>
+<div class="math">
+<p><img src="../_images/math/72164ae21bdf3cd0bf188e11988f91abfb631d92.png" alt="D_{i} = |X^{(o)}\cdots(1+offset) - X^{(c)}|"/></p>
+</div><p>where <img class="math" src="../_images/math/57ce7b390d0cef45098b8fd9af0203a5f0392f9f.png" alt="X^{(o)}" style="vertical-align: 0px"/> is the fitted centre of the highest peak of
+spectrum i, and <img class="math" src="../_images/math/e357d05f14c7f6fcff85171c928b667ad203255d.png" alt="X^{(c)}" style="vertical-align: 0px"/> is the theoretical centre of this peak.</p>
+</div>
+<div class="section" id="collective-quantities-to-illustrate-goodness-of-fitting-still-in-developement">
+<h3><a class="toc-backref" href="#id14">Collective quantities to illustrate goodness of fitting (still in developement)</a><a class="headerlink" href="#collective-quantities-to-illustrate-goodness-of-fitting-still-in-developement" title="Permalink to this headline">¶</a></h3>
+<p>Be noticed that the idea of this section is still under development and
+has not been implemented yet.</p>
+<p>On the other hand, since GetDetOffsetsMultiPeaks always operates on an
+EventWorkspace with thousands or several ten thousands of spectra, it is
+very hard to tell the quality of fitting by looking at
+<img class="math" src="../_images/math/5c8eb3476fd79a810e8c66a11436362016c2207e.png" alt="\chi^2_{spNum}" style="vertical-align: -8px"/> of all spectra. Hence, Here are two other
+parameters are defined for comparison of results.</p>
+<blockquote>
+<div><img class="math" src="../_images/math/9d96dcb6ccf29a0df028957dedd6488435f64db5.png" alt="g_1 = \frac{\sum_{s}D_{s}^2}{N_{nm}}" style="vertical-align: -8px"/></div></blockquote>
+<p>, where s is the index of any unmasked spectrum and <img class="math" src="../_images/math/1a9c2571cbd3f9234222a5b789572e17192c305f.png" alt="N_{mn}" style="vertical-align: -3px"/> is
+the number of unmasked spectra;</p>
+<blockquote>
+<div><img class="math" src="../_images/math/babafbf219430ccf98ce26ad47d603dbb9a0019b.png" alt="g_2 = \frac{\sum_{s}D_{s}^2\cdot H_{s}^2}{N_{nm}}" style="vertical-align: -8px"/>,</div></blockquote>
+<p>where <img class="math" src="../_images/math/5b1732dd54a0bf1574c33f1d661ff5cb405c966f.png" alt="H_{s}" style="vertical-align: -3px"/> is the height of highest peak of spectrum s.</p>
+</div>
+<div class="section" id="standard-error-on-offset">
+<h3><a class="toc-backref" href="#id15">Standard error on offset</a><a class="headerlink" href="#standard-error-on-offset" title="Permalink to this headline">¶</a></h3>
+<p>The offset in unit of d-spacing differs is proportional to peak&#8217;s
+position by definition:</p>
+<div class="math">
+<p><img src="../_images/math/14f5d1bc7f3f40eb08ac482d3f4674b82269aa04.png" alt="X_0^{(f)} = X_0^{(o)} * (1+offset)"/></p>
+</div><p>where <img class="math" src="../_images/math/753052e5930a11ac53bf38573dcea522de00ef71.png" alt="X_0^{(f)}" style="vertical-align: -4px"/> is the focussed peak position, and
+<img class="math" src="../_images/math/f0c90c4780f44d749e07974518f6b88098cefd0c.png" alt="X_0^{(o)}" style="vertical-align: -4px"/> is the observed peak position by fitting.</p>
+<p>As different spectrum covers different d-space range, the highest peak
+differs. Therefore, the error of offset should be normalized by the
+peak&#8217;s position.</p>
+<div class="math">
+<p><img src="../_images/math/ec1eb5497be85ff532aeba06656558da57f64473.png" alt="E = (X_0^{(f)} - X_0^{(o)}*(1+offset))/X_0^{(f)} = 1 - \frac{X_0^{(o)}}{X_0^{(f)}}\cdot(1+offset)"/></p>
+</div><p>And it is unitless.</p>
+<p>By this mean, the error of all peaks should be close if they are fitted
+correctly.</p>
+</div>
+</div>
+<div class="section" id="spectra-to-be-masked">
+<h2><a class="toc-backref" href="#id16">Spectra to be masked</a><a class="headerlink" href="#spectra-to-be-masked" title="Permalink to this headline">¶</a></h2>
+<p>A MaskWorskpace is output from the algorithm.  Along with it, a TableWorkspace is output
+to describe the status of offset calculation.</p>
+<p>Here are the cases that a spectra (i.e., a detector) will be masked in the output MaskWorkspace.</p>
+<ul class="simple">
+<li>An empty spectrum (i.e., the corresponding EventList is empty).  It is noted as &#8220;empty det&#8221;;</li>
+<li>A dead detector, i.e., the corresponding spectrum has counts less than <img class="math" src="../_images/math/0f69792f2e4e1a31c72973b66b73fecc4ae64145.png" alt="10^{-3}" style="vertical-align: -1px"/> in defined d-range.  It isnoted as &#8220;dead det&#8221;;</li>
+<li>A spectrum that does not have peak within specified d-range.  It is noted as &#8220;no peaks&#8221;. Here is the criteria for this case.</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li>Algorithm FindPeaks fails to find any peak;</li>
+<li>No peak found has height larger than specified &#8216;MinimumPeakHeight&#8217;;</li>
+<li>No peak found has observed height larger than specified &#8216;MinimumPeakHeightObs&#8217;;</li>
+<li>No peak found has resolution within specified range;</li>
+<li>No peak found whose calculated offset is smaller than the user-defined maximum offset.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id17">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c"># Create a workspace with two Gaussian peaks in each spectrum</span>
+<span class="n">function_str</span> <span class="o">=</span> <span class="s">&#39;name=Gaussian,Height=3,PeakCentre=5,Sigma=0.3;name=Gaussian,Height=2.1,PeakCentre=15,Sigma=0.3&#39;</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="n">Function</span><span class="o">=</span><span class="s">&#39;User Defined&#39;</span><span class="p">,</span><span class="n">UserDefinedFunction</span><span class="o">=</span><span class="n">function_str</span><span class="p">,</span><span class="n">XMin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">XMax</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">BinWidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="c"># Make sure the X axis is in d-spacing.</span>
+<span class="n">ws</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">setUnit</span><span class="p">(</span> <span class="s">&#39;dSpacing&#39;</span> <span class="p">)</span>
+
+<span class="c"># Generate a file path to save the .cal file at.</span>
+<span class="n">calFilePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span> <span class="s">&#39;~/MantidUsageExample_CalFile.cal&#39;</span> <span class="p">)</span>
+
+<span class="c"># Run the algorithm</span>
+<span class="n">msk</span> <span class="o">=</span> <span class="n">GetDetOffsetsMultiPeaks</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span><span class="n">DReference</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">15</span><span class="p">],</span> <span class="n">GroupingFileName</span><span class="o">=</span><span class="n">calFilePath</span><span class="p">)</span>
+
+<span class="c"># Read the saved .cal file back in</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span> <span class="n">calFilePath</span><span class="p">,</span> <span class="s">&#39;r&#39;</span> <span class="p">)</span>
+<span class="nb">file</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c"># Print out first 10 lines of the file</span>
+<span class="k">print</span> <span class="nb">file</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">55</span><span class="p">],</span><span class="s">&#39;...&#39;</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">file</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">]:</span>
+  <span class="k">print</span> <span class="n">line</span>
+</pre></div>
+</div>
+<div class="section" id="output">
+<h3><a class="toc-backref" href="#id18">Output</a><a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-none"><div class="highlight"><pre># Calibration file for instrument basic_rect written on ...
+# Format: number    UDET         offset    select    group
+        0            100     -0.0033750       1       1
+        1            101     -0.0033750       1       1
+        2            102     -0.0033750       1       1
+        3            103     -0.0033750       1       1
+        4            104     -0.0033750       1       1
+        5            105     -0.0033750       1       1
+        6            106     -0.0033750       1       1
+        7            107     -0.0033750       1       1
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">Algorithm <a class="reference internal" href="EstimateResolutionDiffraction-v1.html#algm-estimateresolutiondiffraction"><em>EstimateResolutionDiffraction v1</em></a></p>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/Algorithms.html">Algorithms</a> | <a class="reference external" href="categories/Diffraction/Calibration.html">Diffraction\Calibration</a></p>
+</div>
+</div>
+<div class="section" id="source">
+<h2><a class="toc-backref" href="#id19">Source</a><a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/3343e70222874fbd364099f979bd048987dd346c/Framework/Algorithms/src/GetDetOffsetsMultiPeaks.cpp">GetDetOffsetsMultiPeaks.cpp</a></p>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/3343e70222874fbd364099f979bd048987dd346c/Framework/Algorithms/inc/MantidAlgorithms/GetDetOffsetsMultiPeaks.h">GetDetOffsetsMultiPeaks.h</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="GetAllEi-v1.html" title="Previous Chapter: GetAllEi v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; GetAllEi v1</span>
+    </a>
+  </li>
+  <li>
+    <a href="GetDetectorOffsets-v1.html" title="Next Chapter: GetDetectorOffsets v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">GetDetectorOffse... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

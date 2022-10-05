@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Indirect Data Reduction</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Interfaces" href="index.html" />
+    <link rel="next" title="Indirect Diffraction" href="Indirect_Diffraction.html" />
+    <link rel="prev" title="Indirect Data Analysis" href="Indirect_DataAnalysis.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.5</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="indirect-data-reduction">
+<h1>Indirect Data Reduction<a class="headerlink" href="#indirect-data-reduction" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#overview" id="id9">Overview</a><ul>
+<li><a class="reference internal" href="#instrument-options" id="id10">Instrument Options</a></li>
+<li><a class="reference internal" href="#action-buttons" id="id11">Action Buttons</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#isis-energy-transfer" id="id12">ISIS Energy Transfer</a><ul>
+<li><a class="reference internal" href="#options" id="id13">Options</a></li>
+<li><a class="reference internal" href="#grouping" id="id14">Grouping</a></li>
+<li><a class="reference internal" href="#rebinning" id="id15">Rebinning</a><ul>
+<li><a class="reference internal" href="#single" id="id16">Single</a></li>
+<li><a class="reference internal" href="#multiple" id="id17">Multiple</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ill-energy-transfer" id="id18">ILL Energy Transfer</a><ul>
+<li><a class="reference internal" href="#id1" id="id19">Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#isis-calibration-resolution" id="id20">ISIS Calibration &amp; Resolution</a><ul>
+<li><a class="reference internal" href="#id2" id="id21">Options</a><ul>
+<li><a class="reference internal" href="#calibration" id="id22">Calibration</a></li>
+<li><a class="reference internal" href="#resolution" id="id23">Resolution</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ill-calibration" id="id24">ILL Calibration</a><ul>
+<li><a class="reference internal" href="#id3" id="id25">Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#isis-diagnostics" id="id26">ISIS Diagnostics</a><ul>
+<li><a class="reference internal" href="#id4" id="id27">Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#transmission" id="id28">Transmission</a><ul>
+<li><a class="reference internal" href="#id5" id="id29">Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#symmetrise" id="id30">Symmetrise</a><ul>
+<li><a class="reference internal" href="#id6" id="id31">Options</a></li>
+<li><a class="reference internal" href="#preview" id="id32">Preview</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#s-q-w" id="id33">S(Q, w)</a><ul>
+<li><a class="reference internal" href="#id7" id="id34">Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#moments" id="id35">Moments</a><ul>
+<li><a class="reference internal" href="#id8" id="id36">Options</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id9">Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The Indirect Data Reduction interface provides the initial reduction that
+is used to convert raw instrument data to S(Q, w) for analysis in the
+Indirect Data Analysis and Indirect Bayes interfaces.</p>
+<p>The tabs shown on this interface will vary depending on the current default
+facility such that only tabs that will work with data from the facility are
+shown, this page describes all the tabs which can possibly be shown.</p>
+<div class="figure align-right">
+<a class="screenshot reference internal image-reference" href="../_images/Data_Reduction_interface.png"><img alt="../_images/Data_Reduction_interface.png" class="screenshot" src="../_images/Data_Reduction_interface.png" style="width: 350px;" /></a>
+</div>
+<div class="section" id="instrument-options">
+<h3><a class="toc-backref" href="#id10">Instrument Options</a><a class="headerlink" href="#instrument-options" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Instrument</dt>
+<dd>Used to select the instrument on which the data being reduced was created on.</dd>
+<dt>Analyser</dt>
+<dd>The analyser bank that was active when the experiment was run, or for which
+you are interested in seeing the results of.</dd>
+<dt>Reflection</dt>
+<dd>The reflection number of the instrument setup.</dd>
+</dl>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">If you need clarification as to the instrument setup you should use
+please speak to the instrument scientist who dealt with your experiment.</p>
+</div>
+</div>
+<div class="section" id="action-buttons">
+<h3><a class="toc-backref" href="#id11">Action Buttons</a><a class="headerlink" href="#action-buttons" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>?</dt>
+<dd>Opens this help page.</dd>
+<dt>Py</dt>
+<dd>Exports a Python script which will replicate the processing done by the current tab.</dd>
+<dt>Run</dt>
+<dd>Runs the processing configured on the current tab.</dd>
+<dt>Manage Directories</dt>
+<dd>Opens the Manage Directories dialog allowing you to change your search directories
+and default save directory and enable/disable data archive search.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="isis-energy-transfer">
+<h2><a class="toc-backref" href="#id12">ISIS Energy Transfer</a><a class="headerlink" href="#isis-energy-transfer" title="Permalink to this headline">¶</a></h2>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Data_Reduction_tabISISEnergyTransfer_widget.png"><img alt="../_images/Data_Reduction_tabISISEnergyTransfer_widget.png" class="screenshot" src="../_images/Data_Reduction_tabISISEnergyTransfer_widget.png" style="width: 500px;" /></a>
+</div>
+<p>This tab provides you with the functionality to convert the raw data from the
+experiment run into units of <img class="math" src="../_images/math/e7f3976c8fc98924a2661d692ffbe4a2f6b7e4d8.png" alt="\Delta E" style="vertical-align: 0px"/>.</p>
+<div class="section" id="options">
+<h3><a class="toc-backref" href="#id13">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Run Files</dt>
+<dd>Allows you to select the raw data files for an experiment. You can enter these
+either by clicking on the Browse button and selecting them, or entering the run
+numbers. Multiple files can be selected, multiple run numbers can be separated
+by a comma (,) or a sequence can be specified by using a dash (-).</dd>
+<dt>Use Calib File &amp; Calibration File</dt>
+<dd>Allows you to select a calibration file created using the Calibration tab.</dd>
+<dt>Sum Files</dt>
+<dd>If selected the data from each raw file will be summed and from then on
+treated as a single run.</dd>
+<dt>Load Log Files</dt>
+<dd>If selected the sample logs will be laoded from each of the run files.</dd>
+<dt>Efixed</dt>
+<dd>This option allows you to override the default fixed final energy for the
+analyser and reflection number setting. This can be useful in correcting an
+offset peak caused by the sample being slightly out of centre.</dd>
+<dt>Grouping</dt>
+<dd>Provides option of how data should be grouped.</dd>
+<dt>Background Removal</dt>
+<dd>Allows removal of a background given a time-of-flight range.</dd>
+<dt>Plot Time</dt>
+<dd>Creates a time of flight plot of the grouping of the spectra in the range
+defined in the Plot Time section, to include a single spectrum set the Spectra
+Min and Spectra Max selectors to the same value. Note that this first rebins
+the sample input to ensure that each detector spectrum has the same binning in
+order to be grouped into a single spectrum.</dd>
+<dt>Detailed Balance</dt>
+<dd>Gives the option to perform an exponential correction on the data once it has
+been converted to Energy based on the temperature.</dd>
+<dt>Scale</dt>
+<dd>Gives the option to scale the output by a given factor.</dd>
+<dt>Spectra Min &amp; Spectra Max</dt>
+<dd>Selecte the range of detectors you are interested in, default values are
+chosen based on the instrument and analyser bank selected.</dd>
+<dt>Rebin Steps</dt>
+<dd>Select the type of rebinning you wish to perform.</dd>
+<dt>Do Not Rebin</dt>
+<dd>If selected will disable the rebinning step.</dd>
+<dt>Plot Output</dt>
+<dd>Allows the result to be plotted as either a spectrum plot or contour plot.</dd>
+<dt>Fold Multiple Frames</dt>
+<dd>This option is only relevant for TOSCA. If checked, then multiple-framed data
+will be folded back into a single spectra, if unchecked the frames wil lbe
+left as is with the frame number given at the end of the workspace name.</dd>
+<dt>Output in <img class="math" src="../_images/math/4b957dfcf6372398dbe5cb300bddb225cf4fac03.png" alt="cm^{-1}" style="vertical-align: 0px"/></dt>
+<dd>Converts the units of the energy axis from <img class="math" src="../_images/math/60f5e78df788eaac1573b14c0ed79978c0895da0.png" alt="meV" style="vertical-align: 0px"/> to wave number
+(<img class="math" src="../_images/math/4b957dfcf6372398dbe5cb300bddb225cf4fac03.png" alt="cm^{-1}" style="vertical-align: 0px"/>).</dd>
+<dt>Select Save Formats</dt>
+<dd>Allows you to select multiple output save formats to save the reduced data as,
+in all cases the file will be saved in the defaut save directory.</dd>
+</dl>
+</div>
+<div class="section" id="grouping">
+<h3><a class="toc-backref" href="#id14">Grouping</a><a class="headerlink" href="#grouping" title="Permalink to this headline">¶</a></h3>
+<p>The following options are available for grouping output data:</p>
+<dl class="docutils">
+<dt>Default</dt>
+<dd>The data will be grouped according to the Workflow.GroupingMethod parameter in
+the instrument&#8217;s parameter file. If this value is not set then Individual is
+used.</dd>
+<dt>Individual</dt>
+<dd>All detectors will remain on individual spectra.</dd>
+<dt>Groups</dt>
+<dd>The detectors will automatically be divided into a given number of gorups.</dd>
+<dt>All</dt>
+<dd>All detectors will be grouped into a single spectra.</dd>
+<dt>File</dt>
+<dd>Gives the option of supplying a grouping file to be used with the
+<a class="reference internal" href="../algorithms/GroupDetectors-v2.html#algm-groupdetectors"><em>GroupDetectors</em></a> algorithm.</dd>
+</dl>
+</div>
+<div class="section" id="rebinning">
+<h3><a class="toc-backref" href="#id15">Rebinning</a><a class="headerlink" href="#rebinning" title="Permalink to this headline">¶</a></h3>
+<p>Rebinning can be done using either a single step or multiple steps as described
+in the sections below.</p>
+<div class="section" id="single">
+<h4><a class="toc-backref" href="#id16">Single</a><a class="headerlink" href="#single" title="Permalink to this headline">¶</a></h4>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Data_Reduction_pgSingleRebin_widget.png"><img alt="../_images/Data_Reduction_pgSingleRebin_widget.png" class="screenshot" src="../_images/Data_Reduction_pgSingleRebin_widget.png" style="width: 279px;" /></a>
+</div>
+<p>In this mode only a single binning range is defined as  a range and width.</p>
+</div>
+<div class="section" id="multiple">
+<h4><a class="toc-backref" href="#id17">Multiple</a><a class="headerlink" href="#multiple" title="Permalink to this headline">¶</a></h4>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Data_Reduction_pgMultipleRebin_widget.png"><img alt="../_images/Data_Reduction_pgMultipleRebin_widget.png" class="screenshot" src="../_images/Data_Reduction_pgMultipleRebin_widget.png" style="width: 253px;" /></a>
+</div>
+<p>In this mode multiple binning ranges can be defined using he rebin string syntax
+used by the <a class="reference internal" href="../algorithms/Rebin-v1.html#algm-rebin"><em>Rebin</em></a> algorithm.</p>
+</div>
+</div>
+</div>
+<div class="section" id="ill-energy-transfer">
+<h2><a class="toc-backref" href="#id18">ILL Energy Transfer</a><a class="headerlink" href="#ill-energy-transfer" title="Permalink to this headline">¶</a></h2>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Data_Reduction_tabILLEnergyTransfer_widget.png"><img alt="../_images/Data_Reduction_tabILLEnergyTransfer_widget.png" class="screenshot" src="../_images/Data_Reduction_tabILLEnergyTransfer_widget.png" style="width: 500px;" /></a>
+</div>
+<p>This tab handles the reduction of data from the IN16B instrument at the ILL.</p>
+<p>This will output the raw (<em>_raw</em>) data read from the file and reduced (<em>_red</em>)
+workspace by default, with mirror mode enabled you will also get the left
+(<em>_left</em>) and right (<em>_right</em>) hand components of the data as separate
+workspaces.</p>
+<p>Note that when using a calibration workspace the grouping of the calibration
+workspace must match that being used in the energy transfer reduction, i.e. both
+processes use the same grouping file (or both use the default grouping).</p>
+<div class="section" id="id1">
+<h3><a class="toc-backref" href="#id19">Options</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Input</dt>
+<dd>Used to select the raw data in <em>.nxs</em> format</dd>
+<dt>Calibration</dt>
+<dd>Gives the option of applying a calibration workspace or NeXus file created
+with the ILL Calibration tab or <a class="reference internal" href="../algorithms/ILLIN16BCalibration-v1.html#algm-illin16bcalibration"><em>ILLIN16BCalibration</em></a> algorithm.</dd>
+<dt>Grouping</dt>
+<dd>Used to switch between grouping as per the IDF (<em>Default</em>) or grouping using a
+mapping file (<em>Map File</em>).</dd>
+<dt>Use Mirror Mode</dt>
+<dd>Enable to reduce data that has been captured with mirror mode enabled.</dd>
+<dt>Plot</dt>
+<dd>If enabled will plot the result as a spectra plot.</dd>
+<dt>Save</dt>
+<dd>If enabled the result will be saved as a NeXus file in the default save
+directory.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="isis-calibration-resolution">
+<h2><a class="toc-backref" href="#id20">ISIS Calibration &amp; Resolution</a><a class="headerlink" href="#isis-calibration-resolution" title="Permalink to this headline">¶</a></h2>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Data_Reduction_tabISISCalibration_widget.png"><img alt="../_images/Data_Reduction_tabISISCalibration_widget.png" class="screenshot" src="../_images/Data_Reduction_tabISISCalibration_widget.png" style="width: 500px;" /></a>
+</div>
+<p>This tab gives you the ability to create Calibration and Resolution files.</p>
+<p>The calibrtion file is normalised to an average of 1.</p>
+<div class="section" id="id2">
+<h3><a class="toc-backref" href="#id21">Options</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Run No</dt>
+<dd>allows you to select a run for the function to use, either by selecting the
+<em>.raw</em> file with the Browse button or through entering the number in the box.</dd>
+<dt>Plot Raw</dt>
+<dd>Updates the preview plots.</dd>
+<dt>Intensity Scale Factor</dt>
+<dd>Optionally applies a scale by a given factor to the raw input data.</dd>
+<dt>Verbose</dt>
+<dd>Enables outputting additional information to the Results Log.</dd>
+<dt>Plot</dt>
+<dd>If enabled will plot the result as a spectra plot.</dd>
+<dt>Save</dt>
+<dd>If enabled the result will be saved as a NeXus file in the default save
+directory.</dd>
+</dl>
+<div class="section" id="calibration">
+<h4><a class="toc-backref" href="#id22">Calibration</a><a class="headerlink" href="#calibration" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt>Peak Min &amp; Peak Max</dt>
+<dd>Selects the time-of-flight range corresponding to the peak. A default starting
+value is generally provided from the instrument&#8217;s parameter file.</dd>
+<dt>Back Min &amp; Back Max</dt>
+<dd>Selects the time-of-flight range corresponding to the background. A default
+starting value is generally provided from the instrument&#8217;s parameter file.</dd>
+</dl>
+</div>
+<div class="section" id="resolution">
+<h4><a class="toc-backref" href="#id23">Resolution</a><a class="headerlink" href="#resolution" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt>Create RES File</dt>
+<dd>If selected will create a resolution file when the tab is run.</dd>
+<dt>Smooth RES</dt>
+<dd>If selected the <a class="reference internal" href="../algorithms/WienerSmooth-v1.html#algm-wienersmooth"><em>WienerSmooth</em></a> algorithm will be
+applied to the output of the resolution algorithm.</dd>
+<dt>Scale RES</dt>
+<dd>Optionally apply a scale by a given factor to the resolution output.</dd>
+<dt>Spectra Min &amp; Spectra Max</dt>
+<dd>Allows restriction of the range of spectra used when creating the resolution
+curve.</dd>
+<dt>Background Start &amp; Background End</dt>
+<dd>Defines the time-of-flight range used to calculate the background noise.</dd>
+<dt>Low, Width &amp; High</dt>
+<dd>Binning parameters used to rebin the resolution curve.</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="section" id="ill-calibration">
+<h2><a class="toc-backref" href="#id24">ILL Calibration</a><a class="headerlink" href="#ill-calibration" title="Permalink to this headline">¶</a></h2>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Data_Reduction_tabILLCalibration_widget.png"><img alt="../_images/Data_Reduction_tabILLCalibration_widget.png" class="screenshot" src="../_images/Data_Reduction_tabILLCalibration_widget.png" style="width: 500px;" /></a>
+</div>
+<p>This tab is used to create calibration workspaces for the IN16B spectrometer at
+the ILL using the <a class="reference internal" href="../algorithms/ILLIN16BCalibration-v1.html#algm-illin16bcalibration"><em>ILLIN16BCalibration</em></a>
+algorithm.</p>
+<div class="section" id="id3">
+<h3><a class="toc-backref" href="#id25">Options</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Grouping</dt>
+<dd>Used to switch between grouping as per the IDF (<em>Default</em>) or grouping using a
+mapping file (<em>Map File</em>).</dd>
+<dt>Peak Range</dt>
+<dd>Sets the integreation range over the peak in <img class="math" src="../_images/math/60f5e78df788eaac1573b14c0ed79978c0895da0.png" alt="meV" style="vertical-align: 0px"/></dd>
+<dt>Scale Factor</dt>
+<dd>Override the calculated scale factor</dd>
+<dt>Mirror Mode</dt>
+<dd>Enable of the data uses mirror mode</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="isis-diagnostics">
+<h2><a class="toc-backref" href="#id26">ISIS Diagnostics</a><a class="headerlink" href="#isis-diagnostics" title="Permalink to this headline">¶</a></h2>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Data_Reduction_tabISISDiagnostics_widget.png"><img alt="../_images/Data_Reduction_tabISISDiagnostics_widget.png" class="screenshot" src="../_images/Data_Reduction_tabISISDiagnostics_widget.png" style="width: 500px;" /></a>
+</div>
+<p>This tab allows you to perform an integration on a raw file over a specified
+time of flight range, and is equivalent to the Slice functionality found in
+MODES.</p>
+<div class="section" id="id4">
+<h3><a class="toc-backref" href="#id27">Options</a><a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Input</dt>
+<dd>allows you to select a run for the function to use, either by selecting the
+<em>.raw</em> file with the Browse button or through entering the number in the box.
+Multiple files can be selected, in the same manner as described for the Energy
+Transfer tab.</dd>
+<dt>Use Calibration</dt>
+<dd>Allows you to select either a calibrtion file or workspace to apply to the raw
+files.</dd>
+<dt>Preview Spectrum</dt>
+<dd>Allows selection of the spectrum to be shown in the preview plot to the right
+of the Time Slice section.</dd>
+<dt>Spectra Min &amp; Spectra Max</dt>
+<dd>Allows selection of the range of detectors you are interested in, this is
+automatically set based on the instrument and analyser bank that are currently
+selected.</dd>
+<dt>Peak</dt>
+<dd>The time-of-flight range that will be integrated over to give the result (the
+blue range in the plot window). A default starting value is generally provided
+from the instrument&#8217;s parameter file.</dd>
+<dt>Use Two Ranges</dt>
+<dd>If selected, enables subtraction of the background range.</dd>
+<dt>Background</dt>
+<dd>An optional range denoting background noice that is to be removed from the raw
+data before the integration is performed. A default starting value is generally
+provided from the instrument&#8217;s parameter file.</dd>
+<dt>Verbose</dt>
+<dd>Enables outputting additional information to the Results Log.</dd>
+<dt>Plot</dt>
+<dd>If enabled will plot the result as a spectra plot.</dd>
+<dt>Save</dt>
+<dd>If enabled the result will be saved as a NeXus file in the default save.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="transmission">
+<h2><a class="toc-backref" href="#id28">Transmission</a><a class="headerlink" href="#transmission" title="Permalink to this headline">¶</a></h2>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Data_Reduction_tabTransmission_widget.png"><img alt="../_images/Data_Reduction_tabTransmission_widget.png" class="screenshot" src="../_images/Data_Reduction_tabTransmission_widget.png" style="width: 656px;" /></a>
+</div>
+<p>Calculates the sample transmission using the raw data files of the sample and
+its background or container. The incident and transmission monitors are
+converted to wavelength and the transmission monitor is normalised to the
+incident monitor over the common wavelength range. The sample is then divided by
+the background/container to give the sample transmission as a function of
+wavelength.</p>
+<div class="section" id="id5">
+<h3><a class="toc-backref" href="#id29">Options</a><a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Sample</dt>
+<dd>Allows selection of a raw file or workspace to be used as the sample.</dd>
+<dt>Background</dt>
+<dd>Allows selection of a raw file or workspace to be used as the background.</dd>
+<dt>Verbose</dt>
+<dd>Enables outputting additional information to the Results Log.</dd>
+<dt>Plot</dt>
+<dd>If enabled will plot the result as a spectra plot.</dd>
+<dt>Save</dt>
+<dd>If enabled the result will be saved as a NeXus file in the default save.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="symmetrise">
+<h2><a class="toc-backref" href="#id30">Symmetrise</a><a class="headerlink" href="#symmetrise" title="Permalink to this headline">¶</a></h2>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Data_Reduction_tabSymmetrise_widget.png"><img alt="../_images/Data_Reduction_tabSymmetrise_widget.png" class="screenshot" src="../_images/Data_Reduction_tabSymmetrise_widget.png" style="width: 500px;" /></a>
+</div>
+<p>This tab allows you to take an asymmetric reduced file and symmetrise it about
+the Y axis.</p>
+<p>The curve is symmetrised such that the range of positive values between <img class="math" src="../_images/math/e3852128c338641e9045b4b0110ce2fb4b13766f.png" alt="EMin" style="vertical-align: 0px"/>
+and <img class="math" src="../_images/math/5c1945eb25a61b4bef616abf01864060aed7394a.png" alt="EMax" style="vertical-align: 0px"/> are reflected about the Y axis and repalce the negative values
+in the range <img class="math" src="../_images/math/ec8c497521ce2980d6c7192348e96c93d0e1124a.png" alt="-EMax" style="vertical-align: 0px"/> to <img class="math" src="../_images/math/e2cfbe59ae1bed74cc52ece8742fad882884ab3c.png" alt="-EMin" style="vertical-align: 0px"/>, the curve between <img class="math" src="../_images/math/e2cfbe59ae1bed74cc52ece8742fad882884ab3c.png" alt="-EMin" style="vertical-align: 0px"/> and
+<img class="math" src="../_images/math/e3852128c338641e9045b4b0110ce2fb4b13766f.png" alt="EMin" style="vertical-align: 0px"/> is not modified.</p>
+<div class="section" id="id6">
+<h3><a class="toc-backref" href="#id31">Options</a><a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Input</dt>
+<dd>Allows you to select a reduced NeXus file (<em>_red.nxs</em>) or workspace (<em>_red</em>) as the
+input to the algorithm.</dd>
+<dt>EMin &amp; EMax</dt>
+<dd>Sets the energy range that is to be reflected about <img class="math" src="../_images/math/4a8ca51fda072a5665a48fcec556db2677e987f0.png" alt="y=0" style="vertical-align: -4px"/>.</dd>
+<dt>Spectrum No</dt>
+<dd>Changes the spectra shown in the preview plots.</dd>
+<dt>XRange</dt>
+<dd>Changes the range of the preview plot, this can be useful for inspecting the
+curve before running the algorithm.</dd>
+<dt>Preview</dt>
+<dd>This button will update the preview plot and parameters under the Preview
+section.</dd>
+<dt>Verbose</dt>
+<dd>Enables outputting additional information to the Results Log.</dd>
+<dt>Plot</dt>
+<dd>If enabled will plot the result as a spectra plot.</dd>
+<dt>Save</dt>
+<dd>If enabled the result will be saved as a NeXus file in the default save.</dd>
+</dl>
+</div>
+<div class="section" id="preview">
+<h3><a class="toc-backref" href="#id32">Preview</a><a class="headerlink" href="#preview" title="Permalink to this headline">¶</a></h3>
+<p>The preview section shows what a given spectra in the input will look like after
+it has been symmetrised and gives an idea of how well the value of EMin fits the
+curve on both sides of the peak.</p>
+<dl class="docutils">
+<dt>Negative Y</dt>
+<dd>The value of <img class="math" src="../_images/math/95ca3c6a1fbeaaafe5800c3269c4c9c2cf2e5406.png" alt="y" style="vertical-align: -4px"/> at <img class="math" src="../_images/math/986ec401a2dbb362eed279fcb841895025b2ab7d.png" alt="x=-EMin" style="vertical-align: 0px"/>.</dd>
+<dt>Positive Y</dt>
+<dd>The value of <img class="math" src="../_images/math/95ca3c6a1fbeaaafe5800c3269c4c9c2cf2e5406.png" alt="y" style="vertical-align: -4px"/> at <img class="math" src="../_images/math/0eb8dea675cec56178082deb0cf38b9d7b46803d.png" alt="x=EMin" style="vertical-align: 0px"/>.</dd>
+<dt>Delta Y</dt>
+<dd>The difference between Negative and Positive Y, typically this should be as
+close to zero as possible.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="s-q-w">
+<h2><a class="toc-backref" href="#id33">S(Q, w)</a><a class="headerlink" href="#s-q-w" title="Permalink to this headline">¶</a></h2>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Data_Reduction_tabSQw_widget.png"><img alt="../_images/Data_Reduction_tabSQw_widget.png" class="screenshot" src="../_images/Data_Reduction_tabSQw_widget.png" style="width: 500px;" /></a>
+</div>
+<p>Provides an interface for running the SofQW algorithms.</p>
+<div class="section" id="id7">
+<h3><a class="toc-backref" href="#id34">Options</a><a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Input</dt>
+<dd>Allows you to select a reduced NeXus file (<em>_red.nxs</em>) or workspace (<em>_red</em>) as the
+input to the algorithm.</dd>
+<dt>Method</dt>
+<dd>Selects the <a class="reference internal" href="../algorithms/SofQW-v1.html#algm-sofqw"><em>SofQW</em></a> method that will be used.</dd>
+<dt>Q Low, Q Width &amp; Q High</dt>
+<dd>Q binning parameters that are passed to the SofQW algorithm.</dd>
+<dt>Rebin in Energy</dt>
+<dd>If enabled the data will first be rebinned in energy before being passed to
+the SofQW algorithm.</dd>
+<dt>E Low, E Width &amp; E High</dt>
+<dd>Energy rebinning parameters.</dd>
+<dt>Verbose</dt>
+<dd>Enables outputting additional information to the Results Log.</dd>
+<dt>Plot</dt>
+<dd>Allows the result to be plotted as either a spectrum plot or contour plot.</dd>
+<dt>Save</dt>
+<dd>If enabled the result will be saved as a NeXus file in the default save
+directory.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="moments">
+<h2><a class="toc-backref" href="#id35">Moments</a><a class="headerlink" href="#moments" title="Permalink to this headline">¶</a></h2>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Data_Reduction_tabMoments_widget.png"><img alt="../_images/Data_Reduction_tabMoments_widget.png" class="screenshot" src="../_images/Data_Reduction_tabMoments_widget.png" style="width: 500px;" /></a>
+</div>
+<p>This interface uses the <a class="reference internal" href="../algorithms/SofQWMoments-v1.html#algm-sofqwmoments"><em>SofQWMoments</em></a> algorithm to
+calculate the <img class="math" src="../_images/math/a9cc4e6e1b32f5ad5e5976176a48a6ecdf3acf08.png" alt="n^{th}" style="vertical-align: 0px"/> moment of an <img class="math" src="../_images/math/af385cf70e9aa29bed9ee6fc11c442d61c12f402.png" alt="S(Q, \omega)" style="vertical-align: -4px"/> workspace created
+by the SofQW tab.</p>
+<div class="section" id="id8">
+<h3><a class="toc-backref" href="#id36">Options</a><a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Input</dt>
+<dd>Allows you to select an <img class="math" src="../_images/math/af385cf70e9aa29bed9ee6fc11c442d61c12f402.png" alt="S(Q, \omega)" style="vertical-align: -4px"/> file (<em>_sqw.nxs</em>) or workspace
+(<em>_sqw</em>) as the input to the algorithm.</dd>
+<dt>Scale By</dt>
+<dd>Used to set an optional scale factor by which to scale the output of the
+algorithm.</dd>
+<dt>EMin &amp; EMax</dt>
+<dd>Used to set the energy range of the sample that the algorithm will use for
+processing.</dd>
+<dt>Verbose</dt>
+<dd>Enables outputting additional information to the Results Log.</dd>
+<dt>Plot</dt>
+<dd>If enabled will plot the result as a spectra plot.</dd>
+<dt>Save</dt>
+<dd>If enabled the result will be saved as a NeXus file in the default save
+directory.</dd>
+</dl>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/Interfaces.html">Interfaces</a> | <a class="reference external" href="categories/Indirect.html">Indirect</a></p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Indirect_DataAnalysis.html" title="Previous Chapter: Indirect Data Analysis"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Indirect Data An...</span>
+    </a>
+  </li>
+  <li>
+    <a href="Indirect_Diffraction.html" title="Next Chapter: Indirect Diffraction"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Indirect Diffrac... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Crystal Field Python Interface</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '4.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Interfaces" href="index.html" />
+    <link rel="next" title="DGS Planner" href="DGS Planner.html" />
+    <link rel="prev" title="Interfaces" href="index.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>4.1</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="crystal-field-python-interface">
+<span id="id1"></span><h1>Crystal Field Python Interface<a class="headerlink" href="#crystal-field-python-interface" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#setting-up-crystal-field-parameters" id="id2">Setting up crystal field parameters</a></li>
+<li><a class="reference internal" href="#calculating-the-eigensystem" id="id3">Calculating the Eigensystem</a></li>
+<li><a class="reference internal" href="#calculating-a-spectrum" id="id4">Calculating a Spectrum</a></li>
+<li><a class="reference internal" href="#plotting-in-mantidplot" id="id5">Plotting in MantidPlot</a></li>
+<li><a class="reference internal" href="#adding-a-background" id="id6">Adding a Background</a></li>
+<li><a class="reference internal" href="#setting-ties-and-constraints" id="id7">Setting Ties and Constraints</a></li>
+<li><a class="reference internal" href="#setting-resolution-model" id="id8">Setting Resolution Model</a></li>
+<li><a class="reference internal" href="#defining-multiple-spectra" id="id9">Defining Multiple Spectra</a></li>
+<li><a class="reference internal" href="#fitting" id="id10">Fitting</a></li>
+<li><a class="reference internal" href="#multiple-ions" id="id11">Multiple Ions</a></li>
+<li><a class="reference internal" href="#finding-initial-parameters" id="id12">Finding Initial Parameters</a><ul>
+<li><a class="reference internal" href="#using-a-monte-carlo-estimation-method" id="id13">Using a Monte Carlo estimation method</a></li>
+<li><a class="reference internal" href="#using-the-point-charge-model" id="id14">Using the point charge model</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#calculating-physical-properties" id="id15">Calculating Physical Properties</a></li>
+<li><a class="reference internal" href="#fitting-physical-properties" id="id16">Fitting Physical Properties</a></li>
+<li><a class="reference internal" href="#simultaneous-fitting-of-physical-properties-and-inelastic-neutron-spectra" id="id17">Simultaneous Fitting of Physical Properties and Inelastic Neutron Spectra</a></li>
+</ul>
+</div>
+<p>The python facilities for Crystal Field calculations are available in Mantid from module <cite>CrystalField</cite>.
+The module provides two main classes: <cite>CrystalField</cite> defines various properties of a crystal field and
+<cite>CrystalFieldFit</cite> manages the fitting process.</p>
+<div class="section" id="setting-up-crystal-field-parameters">
+<h2><a class="toc-backref" href="#id2">Setting up crystal field parameters</a><a class="headerlink" href="#setting-up-crystal-field-parameters" title="Permalink to this headline">¶</a></h2>
+<p>A crystal field computation starts with creating an instance of the <cite>CrystalField</cite> class. The constructor
+has two mandatory arguments: <cite>Ion</cite> - the symbolic name of the ion, and <cite>Symmetry</cite> - the name of the point symmetry
+group of the field. The rest of the parameters are optional.</p>
+<p>Possible values for the <cite>Ion</cite> argument are:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Ce</span><span class="p">,</span> <span class="n">Pr</span><span class="p">,</span> <span class="n">Nd</span><span class="p">,</span> <span class="n">Pm</span><span class="p">,</span> <span class="n">Sm</span><span class="p">,</span> <span class="n">Eu</span><span class="p">,</span> <span class="n">Gd</span><span class="p">,</span> <span class="n">Tb</span><span class="p">,</span> <span class="n">Dy</span><span class="p">,</span> <span class="n">Ho</span><span class="p">,</span> <span class="n">Er</span><span class="p">,</span> <span class="n">Tm</span><span class="p">,</span> <span class="n">Yb</span>
+</pre></div>
+</div>
+<p>These are the trivalent rare-earth ions. For other rare earth ions, use the equivalent trivalent ion based on
+the number of <em>f</em>-electrons in the outer shell (e.g. for Pr<sup>4+</sup> (4<em>f</em><sup>1</sup>) use <cite>Ce</cite>).
+The rare earth ions sets the correct value of the Lande g-factor. In addition, a pure spin ion with arbitrary
+(but half-integral) <em>S</em> (or <em>J</em>) values are also supported using the syntax: <cite>Ion=S&lt;n&gt;</cite> where <cite>&lt;n&gt;</cite> is an integer
+or half-integer value, e.g. <cite>Ion=S2</cite> or <cite>Ion=S1.5</cite>. In these cases, the g-factor is set to <em>g</em><sub>J</sub> = 2.
+The prefix letter can also be <cite>J</cite> instead of <cite>S</cite>, and lower case letters are also supported. (e.g. <cite>Ion=j1</cite>,
+<cite>Ion=s2.5</cite> and <cite>Ion=J0.5</cite> are all valid).</p>
+<p>Allowed values for <cite>Symmetry</cite> are:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">C1</span><span class="p">,</span> <span class="n">Ci</span><span class="p">,</span> <span class="n">C2</span><span class="p">,</span> <span class="n">Cs</span><span class="p">,</span> <span class="n">C2h</span><span class="p">,</span> <span class="n">C2v</span><span class="p">,</span> <span class="n">D2</span><span class="p">,</span> <span class="n">D2h</span><span class="p">,</span> <span class="n">C4</span><span class="p">,</span> <span class="n">S4</span><span class="p">,</span> <span class="n">C4h</span><span class="p">,</span> <span class="n">D4</span><span class="p">,</span> <span class="n">C4v</span><span class="p">,</span> <span class="n">D2d</span><span class="p">,</span> <span class="n">D4h</span><span class="p">,</span> <span class="n">C3</span><span class="p">,</span>
+<span class="n">S6</span><span class="p">,</span> <span class="n">D3</span><span class="p">,</span> <span class="n">C3v</span><span class="p">,</span> <span class="n">D3d</span><span class="p">,</span> <span class="n">C6</span><span class="p">,</span> <span class="n">C3h</span><span class="p">,</span> <span class="n">C6h</span><span class="p">,</span> <span class="n">D6</span><span class="p">,</span> <span class="n">C6v</span><span class="p">,</span> <span class="n">D3h</span><span class="p">,</span> <span class="n">D6h</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">Td</span><span class="p">,</span> <span class="n">Th</span><span class="p">,</span> <span class="n">O</span><span class="p">,</span> <span class="n">Oh</span>
+</pre></div>
+</div>
+<p>The minimum code to create a crystal field object is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">CrystalField</span> <span class="kn">import</span> <span class="n">CrystalField</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Names of the crystal field parameters have the form <cite>Bnn</cite> and <cite>IBnn</cite> where <cite>nn</cite> are two digits between 0 and 6.
+<cite>Bnn</cite> is the real and <cite>IBnn</cite> is the imaginary part of a complex parameter. If a parameter isn&#8217;t set explicitly
+its default value is 0. To set a parameter pass it to the <cite>CrystalField</cite> constructor as a keyword argument, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>An alternative way to set a parameter is to use the square brackets with a <cite>CrystalField</cite> object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="p">[</span><span class="s">&#39;B40&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.031</span>
+</pre></div>
+</div>
+<p>Which can also be used to query the value of a parameter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">b</span> <span class="o">=</span> <span class="n">cf</span><span class="p">[</span><span class="s">&#39;B40&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="calculating-the-eigensystem">
+<h2><a class="toc-backref" href="#id3">Calculating the Eigensystem</a><a class="headerlink" href="#calculating-the-eigensystem" title="Permalink to this headline">¶</a></h2>
+<p>The <cite>CrystalField</cite> class has methods to calculate the Hamiltonian and its eigensystem:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Calculate and return the Hamiltonian matrix as a 2D numpy array.</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getHamiltonian</span><span class="p">()</span>
+
+<span class="c"># Calculate and return the eigenvalues of the Hamiltonian as a 1D numpy array.</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getEigenvalues</span><span class="p">()</span>
+
+<span class="c"># Calculate and return the eigenvectors of the Hamiltonian as a 2D numpy array.</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getEigenvectors</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>It is efficient to call the above methods multiple times as all the outputs are cached and the calculations are repeated
+only after a parameter changes.</p>
+</div>
+<div class="section" id="calculating-a-spectrum">
+<h2><a class="toc-backref" href="#id4">Calculating a Spectrum</a><a class="headerlink" href="#calculating-a-spectrum" title="Permalink to this headline">¶</a></h2>
+<p>To calculate a spectrum <cite>CrystalField</cite> needs to know the sample temperature and the shape of the peaks.</p>
+<p>The temperature can be set either via a keyword argument <cite>Temperature</cite> of the constructor or using the
+<cite>Temperature</cite> property:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Using the keyword argument</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">,</span> <span class="n">Temperature</span><span class="o">=</span><span class="mi">44</span><span class="p">)</span>
+
+<span class="c"># Using the property</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">Temperature</span> <span class="o">=</span> <span class="mi">44</span>
+</pre></div>
+</div>
+<p>Knowing the temperature allows us to calculate a peak list: a list of transition energies and intensities.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">cf</span><span class="o">.</span><span class="n">getPeakList</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Which produces the output:</p>
+<div class="highlight-python"><div class="highlight"><pre>[[  0.00000000e+00   2.44006198e+01   4.24977124e+01   1.80970926e+01 -2.44006198e+01]
+ [  2.16711565e+02   8.83098530e+01   5.04430056e+00   1.71153708e-01  1.41609425e-01]]
+</pre></div>
+</div>
+<p>The first row are the energies (in meV) and the second row are the integrated intensities (in milibarn per steradian).</p>
+<p>The number of peaks that the function returns is controlled by two tolerance parameters: <cite>ToleranceEnergy</cite> and
+<cite>ToleranceIntensity</cite>. If a peak has an intensity below the value of <cite>ToleranceIntensity</cite> the peak is ignored.
+It two peaks have a difference in the energies smaller than <cite>ToleranceEnergy</cite> they are combined into a single peak.</p>
+<p>If we set <cite>ToleranceIntensity</cite> of the above crystal field object to 1 mb/sr we&#8217;ll have only three peaks in the list:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">ToleranceIntensity</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">print</span> <span class="n">cf</span><span class="o">.</span><span class="n">getPeakList</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The new output:</p>
+<div class="highlight-python"><div class="highlight"><pre>[[   0.           24.40061976   42.49771237]
+ [ 216.71156467   88.30985303    5.04430056]]
+</pre></div>
+</div>
+<p>To calculate a spectrum we need to define the shape of each peak (peak profile function) and its default width (<cite>FWHM</cite>).
+The width can be set either via a keyword argument or a property with name <cite>FWHM</cite>. If the peak shape isn&#8217;t set the default
+of <cite>Lorentzian</cite> is assumed. To set a different shape use the <cite>PeakShape</cite> property:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">PeakShape</span> <span class="o">=</span> <span class="s">&#39;Gaussian&#39;</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">FWHM</span> <span class="o">=</span> <span class="mf">0.9</span>
+</pre></div>
+</div>
+<p>The values of <cite>PeakShape</cite> are expected to be names of Mantid peak fit functions. At the moment only <cite>Lorentzian</cite> and
+<cite>Gaussian</cite> can be used.</p>
+<p>After the peak shape is defined a spectrum can be calculated:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The output is a tuple of two 1d numpy arrays (x, y) that can be used with <cite>matplotlib</cite> to plot:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">sp</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/CrystalFieldSpectrum1.png"><img alt="../_images/CrystalFieldSpectrum1.png" src="../_images/CrystalFieldSpectrum1.png" style="height: 300px;" /></a>
+<p>It is possible to change parameters of individual peaks separately. Note though that only the shape parameters can be changed,
+the peak centre and the integrated intensity are defined by the crystal field parameters. To change the width of a peak
+use the following syntax:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># If the peak shape is Gaussian</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;Sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;Sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+<span class="c"># If the peak shape is Lorentzian</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;FWHM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;FWHM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.01</span>
+</pre></div>
+</div>
+<p>The three peaks now have all different widths. The first peak (index 0) keeps the default value.</p>
+<a class="reference internal image-reference" href="../_images/CrystalFieldSpectrum2.png"><img alt="../_images/CrystalFieldSpectrum2.png" src="../_images/CrystalFieldSpectrum2.png" style="height: 300px;" /></a>
+<p>If called without arguments <cite>getSpectrum()</cite> determines automatically the range and number of the <cite>x</cite>-points. To have more control
+of how the spectrum is calculated a list (or numpy array) of x-values can be provided as a first argument to <cite>getSpectrum</cite>.
+Alternatively, the x-values can be taken from a workspace:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Use a list for x-values</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c"># Use the first spectrum of a workspace</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
+
+<span class="c"># Use the i-th spectrum of a workspace</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="plotting-in-mantidplot">
+<h2><a class="toc-backref" href="#id5">Plotting in MantidPlot</a><a class="headerlink" href="#plotting-in-mantidplot" title="Permalink to this headline">¶</a></h2>
+<p>To plot a spectrum using MantidPlot&#8217;s graphing facilities <cite>CrystalField</cite> has method <cite>plot</cite>. It has the same arguments as <cite>getSpectrum</cite>
+and opens a window with a plot, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>In addition to plotting, the <cite>plot</cite> method creates a workspace named <cite>CrystalField_&lt;Ion&gt;</cite> with the plot data. Subsequent calls to <cite>plot</cite>
+for the same <cite>CrystalField</cite> object will use the same plot window as created by the first call unless this window has been closed in the
+mean time.</p>
+</div>
+<div class="section" id="adding-a-background">
+<h2><a class="toc-backref" href="#id6">Adding a Background</a><a class="headerlink" href="#adding-a-background" title="Permalink to this headline">¶</a></h2>
+<p>A background has two components: a peak and a general background function. Set a background using the <cite>background</cite> property:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">CrystalField</span> <span class="kn">import</span> <span class="n">CrystalField</span><span class="p">,</span> <span class="n">CrystalFieldFit</span><span class="p">,</span> <span class="n">Background</span><span class="p">,</span> <span class="n">Function</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">,</span> <span class="n">B40</span><span class="o">=-</span><span class="mf">0.031787</span><span class="p">,</span> <span class="n">B42</span><span class="o">=-</span><span class="mf">0.11611</span><span class="p">,</span> <span class="n">B44</span><span class="o">=-</span><span class="mf">0.12544</span><span class="p">,</span>
+                  <span class="n">Temperature</span><span class="o">=</span><span class="mf">44.0</span><span class="p">,</span> <span class="n">FWHM</span><span class="o">=</span><span class="mf">1.1</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="n">Background</span><span class="p">(</span><span class="n">peak</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="s">&#39;Gaussian&#39;</span><span class="p">,</span> <span class="n">Height</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                           <span class="n">background</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="s">&#39;LinearBackground&#39;</span><span class="p">,</span> <span class="n">A0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">A1</span><span class="o">=</span><span class="mf">0.01</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Here is an example of how to access the parameters of the background:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">h</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s">&#39;Height&#39;</span><span class="p">]</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s">&#39;A1&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-ties-and-constraints">
+<h2><a class="toc-backref" href="#id7">Setting Ties and Constraints</a><a class="headerlink" href="#setting-ties-and-constraints" title="Permalink to this headline">¶</a></h2>
+<p>Setting ties and constraints are done by calling the <cite>ties</cite> and <cite>constraints</cite> methods of the <cite>CrystalField</cite> class or its components.
+The <cite>Bnn</cite> parameters are tied by the <cite>CrystalField</cite> class directly specifying the tied parameter as a keyword argument:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="n">B20</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">B40</span><span class="o">=</span><span class="s">&#39;B20/2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The constraints are passed as strings containing expressions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;1 &lt; B22 &lt;= 2&#39;</span><span class="p">,</span> <span class="s">&#39;B22 &lt; 4&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For the parameters of the background the syntax is the same but the methods are called on the <cite>background</cite> property:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="n">Height</span><span class="o">=</span><span class="mf">10.1</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;Sigma &gt; 0&#39;</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="n">A0</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;A1 &gt; 0&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The names of the peak parameters both in ties and constraints must include the index of the peak to which they belong. Here we follow
+the naming convention of the <a class="reference internal" href="../fitting/fitfunctions/CompositeFunction.html#func-compositefunction"><em>CompositeFunction</em></a>: f&lt;n&gt;.&lt;name&gt;, where &lt;n&gt; stands for an integer index staring at 0 and &lt;name&gt;
+is the name of the parameter. For example, <cite>f1.Sigma</cite>, <cite>f3.FWHM</cite>. Because names now contain the period symbol &#8216;.&#8217; keyword arguments
+cannot be used. Instead we must pass a dictionary containing ties. The keys are parameter names and the values are the ties:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">ties</span><span class="p">({</span><span class="s">&#39;f2.FWHM&#39;</span><span class="p">:</span> <span class="s">&#39;2*f1.FWHM&#39;</span><span class="p">,</span> <span class="s">&#39;f3.FWHM&#39;</span><span class="p">:</span> <span class="s">&#39;2*f2.FWHM&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>Constraints are a list of strings:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;f0.FWHM &lt; 2.2&#39;</span><span class="p">,</span> <span class="s">&#39;f1.FWHM &gt;= 0.1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If a parameter of all peaks needs to be tied/constrained with the same expression then the following shortcut methods can be used:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">tieAll</span><span class="p">(</span><span class="s">&#39;Sigma=0.1&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">constrainAll</span><span class="p">(</span><span class="s">&#39;0 &lt; Sigma &lt; 0.1&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where the first argument is the general formula of the tie/constraint and the second is the number of peaks to apply to.
+There is also a version for a range of peak indices:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">tieAll</span><span class="p">(</span><span class="s">&#39;Sigma=f0.Sigma&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which is equivalent to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="o">.</span><span class="n">ties</span><span class="p">({</span><span class="s">&#39;f1.Sigma&#39;</span><span class="p">:</span> <span class="s">&#39;f0.Sigma&#39;</span><span class="p">,</span> <span class="s">&#39;f2.Sigma&#39;</span><span class="p">:</span> <span class="s">&#39;f0.Sigma&#39;</span><span class="p">,</span> <span class="s">&#39;f3.Sigma&#39;</span><span class="p">:</span> <span class="s">&#39;f0.Sigma&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="setting-resolution-model">
+<h2><a class="toc-backref" href="#id8">Setting Resolution Model</a><a class="headerlink" href="#setting-resolution-model" title="Permalink to this headline">¶</a></h2>
+<p>A resolution model is a way to constrain the widths of the peaks to realistic numbers which agree with a measured or
+calculated instrument resolution function. A model is a function that returns a FWHM for a peak centre. The Crystal
+Field python interface defines the helper class <cite>ResolutionModel</cite> to help define and set resolution models.</p>
+<p>To construct an instance of <cite>ResolutionModel</cite> one needs to provide up to four input parameters. The first parameter, <cite>model</cite>, is
+mandatory and can be either of:</p>
+<ol class="arabic simple">
+<li>A tuple containing two arrays (lists) of real numbers which will be interpreted as tabulated values of the model function.
+The first element of the tuple is a list of increasing values for peak centres, and the second element is a list of corresponding
+widths. Values between the tabulated peak positions will be linearly interpolated.</li>
+<li>A python function that takes a <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><tt class="xref py py-class docutils literal"><span class="pre">numpy.ndarray</span></tt></a> of peak positions and returns a numpy array of widths.</li>
+</ol>
+<p>If the model is a tuple of two arrays then no additional parameters are required. If it&#8217;s a function then the rest of the parameters define how to tabulate this
+function. <cite>xstart</cite> and <cite>xend</cite> define the interval of interpolation which must include all fitted peaks. The last argument is <cite>accuracy</cite> that defaults to
+<img class="math" src="../_images/math/e7f2c64d4498b4feb861af770e92c3d7ee2c4108.png" alt="10^{-4}" style="vertical-align: -1px"/> and defines an approximate desired accuracy of the approximation. The interval will be split until the largest error of the interpolation
+is smaller than <cite>accuracy</cite>. Note that subdivision cannot go on to infinity as the number of points is limited by the class member <cite>ResolutionModel.max_model_size</cite>.</p>
+<p>Example of setting a resolution model using a tuple of two arrays:</p>
+<div class="highlight-python"><div class="highlight"><pre>from CrystalField import CrystalField, ResolutionModel
+rm = ResolutionModel(([1, 2, 3, ...., 100], [0.1, 0.3, 0.35, ..., 2.1]))
+cf = CrystalField(&#39;Ce&#39;, &#39;C2v&#39;, B20=0.37737, B22=3.9770, ..., Temperature=44.0, ResolutionModel=rm)
+</pre></div>
+</div>
+<p>Or using an arbitrary function <cite>my_func</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">my_func</span><span class="p">(</span><span class="n">en</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mi">25</span><span class="o">-</span><span class="n">en</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)</span> <span class="o">/</span> <span class="mi">200</span> <span class="o">+</span> <span class="mf">0.1</span>
+
+<span class="n">rm</span> <span class="o">=</span> <span class="n">ResolutionModel</span><span class="p">(</span><span class="n">my_func</span><span class="p">,</span> <span class="n">xstart</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xend</span><span class="o">=</span><span class="mf">24.0</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">Temperature</span><span class="o">=</span><span class="mf">44.0</span><span class="p">,</span> <span class="n">ResolutionModel</span><span class="o">=</span><span class="n">rm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, the <a class="reference internal" href="PyChop.html#pychop"><em>PyChop</em></a> interface may be used to generate the resolution function for a particular spectrometer:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">PyChop</span> <span class="kn">import</span> <span class="n">PyChop2</span>
+<span class="n">marires</span> <span class="o">=</span> <span class="n">PyChop2</span><span class="p">(</span><span class="s">&#39;MARI&#39;</span><span class="p">)</span>
+<span class="n">marires</span><span class="o">.</span><span class="n">setChopper</span><span class="p">(</span><span class="s">&#39;S&#39;</span><span class="p">)</span>
+<span class="n">marires</span><span class="o">.</span><span class="n">setFrequency</span><span class="p">(</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">marires</span><span class="o">.</span><span class="n">setEi</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">rm</span> <span class="o">=</span> <span class="n">ResolutionModel</span><span class="p">(</span><span class="n">marires</span><span class="o">.</span><span class="n">getResolution</span><span class="p">,</span> <span class="n">xstart</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xend</span><span class="o">=</span><span class="mf">29.0</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">Temperature</span><span class="o">=</span><span class="mf">44.0</span><span class="p">,</span> <span class="n">ResolutionModel</span><span class="o">=</span><span class="n">rm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When a resolution model is set, the peak width will be constrained to have a value close to the model. The degree of deviation is controlled by the
+<cite>FWHMVariation</cite> parameter. It has the default of 0.1 and is the maximum difference from the value given by the resolution model a width can have.
+If set to 0 the widths will be fixed to their calculated values (depending on the instant values of their peak centres). For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">Temperature</span><span class="o">=</span><span class="mf">44.0</span><span class="p">,</span> <span class="n">ResolutionModel</span><span class="o">=</span><span class="n">rm</span><span class="p">,</span> <span class="n">FWHMVariation</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will allow the peak widths to vary between <img class="math" src="../_images/math/426847f7a8336cd9ed3a1080df007ba5cad9bd51.png" alt="\Delta(E)-0.1" style="vertical-align: -4px"/> and <img class="math" src="../_images/math/8b1ff74a25e13702f82d5b6e598c19b41ae20a68.png" alt="\Delta(E)+0.1" style="vertical-align: -4px"/> where <img class="math" src="../_images/math/fe4e2f71cfe0db2ae0807b8ab0a47672fe1f44c4.png" alt="\Delta(E)" style="vertical-align: -4px"/> is the value of the
+resolution model at the peak position <img class="math" src="../_images/math/a9c4c0ee488c07deaee7584752e35cd1aac1b253.png" alt="E" style="vertical-align: 0px"/>.</p>
+</div>
+<div class="section" id="defining-multiple-spectra">
+<h2><a class="toc-backref" href="#id9">Defining Multiple Spectra</a><a class="headerlink" href="#defining-multiple-spectra" title="Permalink to this headline">¶</a></h2>
+<p>A <cite>CrystalField</cite> object can be configured to work with multiple spectra. In this case some many of the object&#8217;s properties
+become lists. Here is an example of defining a <cite>CrystalField</cite> object with two spectra:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">,</span> <span class="n">B40</span><span class="o">=-</span><span class="mf">0.031787</span><span class="p">,</span> <span class="n">B42</span><span class="o">=-</span><span class="mf">0.11611</span><span class="p">,</span> <span class="n">B44</span><span class="o">=-</span><span class="mf">0.12544</span><span class="p">,</span>
+                  <span class="n">Temperature</span><span class="o">=</span><span class="p">[</span><span class="mf">44.0</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="n">FWHM</span><span class="o">=</span><span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">PeakShape</span> <span class="o">=</span> <span class="s">&#39;Lorentzian&#39;</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;FWHM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.11</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;FWHM&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.12</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="n">Background</span><span class="p">(</span><span class="n">peak</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="s">&#39;Gaussian&#39;</span><span class="p">,</span> <span class="n">Height</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.3</span><span class="p">),</span>
+                           <span class="n">background</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="s">&#39;FlatBackground&#39;</span><span class="p">,</span> <span class="n">A0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">))</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s">&#39;Sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.8</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">param</span><span class="p">[</span><span class="s">&#39;A0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.1</span>
+</pre></div>
+</div>
+<p>Note how <cite>Temperature</cite>, <cite>FWHM</cite>, <cite>peaks</cite> and <cite>background</cite> become lists. They must have the same size. Ties and constraints similarly
+change:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># The B parameters are common for all spectra - syntax doesn&#39;t change</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="n">B20</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">B40</span><span class="o">=</span><span class="s">&#39;B20/2&#39;</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;1 &lt; B22 &lt;= 2&#39;</span><span class="p">,</span> <span class="s">&#39;B22 &lt; 4&#39;</span><span class="p">)</span>
+
+<span class="c"># Backgrounds and peaks are different for different spectra - must be indexed</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="n">Height</span><span class="o">=</span><span class="mf">10.1</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;Sigma &gt; 0.1&#39;</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="n">Height</span><span class="o">=</span><span class="mf">20.2</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;Sigma &gt; 0.2&#39;</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tieAll</span><span class="p">(</span><span class="s">&#39;FWHM=2*f1.FWHM&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">constrainAll</span><span class="p">(</span><span class="s">&#39;FWHM &lt; 2.2&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The resolution model also needs to be initialised from a list:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="p">[</span> <span class="o">...</span> <span class="p">],</span> <span class="p">[</span> <span class="o">...</span> <span class="p">],</span> <span class="p">[</span> <span class="o">...</span> <span class="p">],</span> <span class="p">[</span> <span class="o">...</span> <span class="p">]</span>
+<span class="n">rm</span> <span class="o">=</span> <span class="n">ResolutionModel</span><span class="p">([(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">),</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)])</span>
+
+<span class="c"># or</span>
+
+<span class="n">rm</span> <span class="o">=</span> <span class="n">ResolutionModel</span><span class="p">([</span><span class="n">func0</span><span class="p">,</span> <span class="n">func1</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">accuracy</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">ResolutionModel</span> <span class="o">=</span> <span class="n">rm</span>
+</pre></div>
+</div>
+<p>To calculate a spectrum call the same method <cite>getSpectrum</cite> but pass the spectrum index as its first parameter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Calculate second spectrum, use the generated x-values</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c"># Calculate third spectrum, use a list for x-values</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="c"># Calculate second spectrum, use the first spectrum of a workspace</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ws</span><span class="p">)</span>
+
+<span class="c"># Calculate first spectrum, use the i-th spectrum of a workspace</span>
+<span class="n">sp</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ws</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that the attributes <cite>Temperature</cite>, <cite>FWHM</cite>, <cite>peaks</cite> and <cite>background</cite> may be set separately from the constructor, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">,</span> <span class="n">B40</span><span class="o">=-</span><span class="mf">0.031787</span><span class="p">,</span> <span class="n">B42</span><span class="o">=-</span><span class="mf">0.11611</span><span class="p">,</span> <span class="n">B44</span><span class="o">=-</span><span class="mf">0.12544</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">Temperature</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>However, each time that <cite>Temperature</cite> is set, if it defines a different number of spectra from the previous value
+(e.g. if <cite>Temperature</cite> was initially empty or <cite>None</cite> and is then defined as in the example above, or if <cite>Temperature</cite>
+was initially a scalar value but is then redefined to be a list or vice versa), then all <cite>Ties</cite>, <cite>Constraints</cite>,
+<cite>FWHM</cite> and <cite>peaks</cite> parameters are cleared. Any crystal field parameters previously defined will be retained, however.</p>
+</div>
+<div class="section" id="fitting">
+<h2><a class="toc-backref" href="#id10">Fitting</a><a class="headerlink" href="#fitting" title="Permalink to this headline">¶</a></h2>
+<p>To fit the crystal field and peak parameters first create a <cite>CrystalField</cite> object as described above. Then create an
+instance (object) of the <cite>CrystalFieldFit</cite> class:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">CrystalField</span> <span class="kn">import</span> <span class="n">CrystalFieldFit</span>
+<span class="c"># In case of a single spectrum (ws is a workspace)</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">)</span>
+
+<span class="c"># Or for multiple spectra</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="p">[</span><span class="n">ws1</span><span class="p">,</span> <span class="n">ws2</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Then call <cite>fit()</cite> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fit</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>After fitting finishes the <cite>CrystalField</cite> object updates automatically and contains new fitted parameter values.</p>
+</div>
+<div class="section" id="multiple-ions">
+<h2><a class="toc-backref" href="#id11">Multiple Ions</a><a class="headerlink" href="#multiple-ions" title="Permalink to this headline">¶</a></h2>
+<p>If there are multiple ions you can define <cite>CrystalField</cite> objects for each ion separately then add them together to
+create a CrystalFieldMultiSite object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;B20&#39;</span><span class="p">:</span> <span class="mf">0.377</span><span class="p">,</span> <span class="s">&#39;B22&#39;</span><span class="p">:</span> <span class="mf">3.9</span><span class="p">,</span> <span class="s">&#39;B40&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.03</span><span class="p">,</span> <span class="s">&#39;B42&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.116</span><span class="p">,</span> <span class="s">&#39;B44&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.125</span><span class="p">,</span>
+          <span class="s">&#39;Temperature&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">44.0</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="s">&#39;FWHM&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">]}</span>
+<span class="n">cf1</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">cf2</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Pr&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">cfms</span> <span class="o">=</span> <span class="n">cf1</span> <span class="o">+</span> <span class="n">cf2</span>
+</pre></div>
+</div>
+<p>The expression that combines the <cite>CrystalField</cite> objects also defines the contributions of each site into the overall intensity.
+The higher the coefficient of the object in the expression the higher its relative contribution. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">cf1</span> <span class="o">+</span> <span class="n">cf2</span>
+</pre></div>
+</div>
+<p>means that the intensity of <cite>cf1</cite> should be twice that of <cite>cf2</cite>.</p>
+<p>Alternatively, you can create a <cite>CrystalFieldMultiSite</cite> object directly. This takes Ions, Symmetries, Temperatures and peak widths as lists:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">CrystalField</span> <span class="kn">import</span> <span class="n">CrystalFieldMultiSite</span>
+<span class="n">cfms</span> <span class="o">=</span> <span class="n">CrystalFieldMultiSite</span><span class="p">(</span><span class="n">Ions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;Pr&#39;</span><span class="p">],</span> <span class="n">Symmetries</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">],</span> <span class="n">Temperatures</span><span class="o">=</span><span class="p">[</span><span class="mf">44.0</span><span class="p">],</span> <span class="n">FWHMs</span><span class="o">=</span><span class="p">[</span><span class="mf">1.1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Note that <cite>Temperature</cite> and <cite>FWHM</cite> (without plural) can also be used in place of the equivalent plural parameters.
+To access parameters of a CrystalFieldMultiSite object, prefix them with the ion index:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cfms</span><span class="p">[</span><span class="s">&#39;ion0.B40&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.031</span>
+<span class="n">cfms</span><span class="p">[</span><span class="s">&#39;ion1.B20&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.37737</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">cfms</span><span class="p">[</span><span class="s">&#39;ion0.B22&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Parameters can be set when creating the object by passing in a dictionary using the <cite>parameters</cite> keyword:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cfms</span> <span class="o">=</span> <span class="n">CrystalFieldMultiSite</span><span class="p">(</span><span class="n">Ions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;Pr&#39;</span><span class="p">],</span> <span class="n">Symmetries</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">],</span> <span class="n">Temperatures</span><span class="o">=</span><span class="p">[</span><span class="mf">44.0</span><span class="p">],</span> <span class="n">FWHMs</span><span class="o">=</span><span class="p">[</span><span class="mf">1.1</span><span class="p">],</span>
+                             <span class="n">parameters</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;ion0.B20&#39;</span><span class="p">:</span> <span class="mf">0.37737</span><span class="p">,</span> <span class="s">&#39;ion0.B22&#39;</span><span class="p">:</span> <span class="mf">3.9770</span><span class="p">,</span> <span class="s">&#39;ion1.B40&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.031787</span><span class="p">,</span>
+                                         <span class="s">&#39;ion1.B42&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.11611</span><span class="p">,</span> <span class="s">&#39;ion1.B44&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.12544</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>A background can also be set this way, or using <cite>cfms.background.</cite> It can be passed as a string, a Function object(s), or a
+CompositeFunction object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cfms</span> <span class="o">=</span> <span class="n">CrystalFieldMultiSite</span><span class="p">(</span><span class="n">Ions</span><span class="o">=</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="n">Symmetries</span><span class="o">=</span><span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">Temperatures</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">],</span> <span class="n">FWHMs</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">],</span>
+                          <span class="n">Background</span><span class="o">=</span><span class="s">&#39;name=Gaussian,Height=0,PeakCentre=1,Sigma=0;name=LinearBackground,A0=0,A1=0&#39;</span><span class="p">)</span>
+
+<span class="n">cfms</span> <span class="o">=</span> <span class="n">CrystalFieldMultiSite</span><span class="p">(</span><span class="n">Ions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Ce&#39;</span><span class="p">],</span> <span class="n">Symmetries</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;C2v&#39;</span><span class="p">],</span> <span class="n">Temperatures</span><span class="o">=</span><span class="p">[</span><span class="mi">50</span><span class="p">],</span> <span class="n">FWHMs</span><span class="o">=</span><span class="p">[</span><span class="mf">0.9</span><span class="p">],</span>
+                               <span class="n">Background</span><span class="o">=</span><span class="n">LinearBackground</span><span class="p">(</span><span class="n">A0</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span> <span class="n">BackgroundPeak</span><span class="o">=</span><span class="n">Gaussian</span><span class="p">(</span><span class="n">Height</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.3</span><span class="p">))</span>
+
+<span class="n">cfms</span> <span class="o">=</span> <span class="n">CrystalFieldMultiSite</span><span class="p">(</span><span class="n">Ions</span><span class="o">=</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="n">Symmetries</span><span class="o">=</span><span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">Temperatures</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">],</span> <span class="n">FWHMs</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">],</span>
+                               <span class="n">Background</span><span class="o">=</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">PeakCentre</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">LinearBackground</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Ties and constraints are set similarly to <cite>CrystalField</cite> objects. <cite>f</cite> prefixes have been changed to be more descriptive:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cfms</span> <span class="o">=</span> <span class="n">CrystalFieldMultiSite</span><span class="p">(</span><span class="n">Ions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span><span class="s">&#39;Pr&#39;</span><span class="p">],</span> <span class="n">Symmetries</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">],</span> <span class="n">Temperatures</span><span class="o">=</span><span class="p">[</span><span class="mi">44</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="n">FWHMs</span><span class="o">=</span><span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span>
+                               <span class="n">Background</span><span class="o">=</span><span class="n">FlatBackground</span><span class="p">(),</span> <span class="n">BackgroundPeak</span><span class="o">=</span><span class="n">Gaussian</span><span class="p">(</span><span class="n">Height</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.3</span><span class="p">),</span>
+                               <span class="n">parameters</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;ion0.B20&#39;</span><span class="p">:</span> <span class="mf">0.37737</span><span class="p">,</span> <span class="s">&#39;ion0.B22&#39;</span><span class="p">:</span> <span class="mf">3.9770</span><span class="p">,</span> <span class="s">&#39;ion1.B40&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.031787</span><span class="p">,</span>
+                                           <span class="s">&#39;ion1.B42&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.11611</span><span class="p">,</span> <span class="s">&#39;ion1.B44&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.12544</span><span class="p">})</span>
+<span class="n">cfms</span><span class="o">.</span><span class="n">ties</span><span class="p">({</span><span class="s">&#39;sp0.bg.f0.Height&#39;</span><span class="p">:</span> <span class="mf">10.1</span><span class="p">})</span>
+<span class="n">cfms</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;sp0.bg.f0.Sigma &gt; 0.1&#39;</span><span class="p">)</span>
+<span class="n">cfms</span><span class="o">.</span><span class="n">constraints</span><span class="p">(</span><span class="s">&#39;ion0.sp0.pk1.FWHM &lt; 2.2&#39;</span><span class="p">)</span>
+<span class="n">cfms</span><span class="o">.</span><span class="n">ties</span><span class="p">({</span><span class="s">&#39;ion0.sp1.pk2.FWHM&#39;</span><span class="p">:</span> <span class="s">&#39;2*ion0.sp1.pk1.FWHM&#39;</span><span class="p">,</span> <span class="s">&#39;ion1.sp1.pk3.FWHM&#39;</span><span class="p">:</span> <span class="s">&#39;2*ion1.sp1.pk2.FWHM&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>Parameters which are not allowed by the specified symmetry will be fixed to be zero, but unlike for the single-site case,
+all other parameters are assumed to be free (in the single-site case, parameters which are unset are assumed to be fixed
+to be zero). For the multi-site case, parameters must be fixed explicitly. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;ion0.B20&#39;</span><span class="p">:</span> <span class="mf">0.37737</span><span class="p">,</span> <span class="s">&#39;ion0.B22&#39;</span><span class="p">:</span> <span class="mf">3.9770</span><span class="p">,</span> <span class="s">&#39;ion1.B40&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.031787</span><span class="p">,</span> <span class="s">&#39;ion1.B42&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.11611</span><span class="p">,</span> <span class="s">&#39;ion1.B44&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.12544</span><span class="p">}</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalFieldMultiSite</span><span class="p">(</span><span class="n">Ions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;Pr&#39;</span><span class="p">],</span> <span class="n">Symmetries</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">],</span> <span class="n">Temperatures</span><span class="o">=</span><span class="p">[</span><span class="mf">44.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">],</span>
+                                <span class="n">FWHMs</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="n">ToleranceIntensity</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span> <span class="n">ToleranceEnergy</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>  <span class="n">FixAllPeaks</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                               <span class="n">parameters</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+
+<span class="n">cf</span><span class="o">.</span><span class="n">fix</span><span class="p">(</span><span class="s">&#39;ion0.BmolX&#39;</span><span class="p">,</span> <span class="s">&#39;ion0.BmolY&#39;</span><span class="p">,</span> <span class="s">&#39;ion0.BmolZ&#39;</span><span class="p">,</span> <span class="s">&#39;ion0.BextX&#39;</span><span class="p">,</span> <span class="s">&#39;ion0.BextY&#39;</span><span class="p">,</span> <span class="s">&#39;ion0.BextZ&#39;</span><span class="p">,</span> <span class="s">&#39;ion0.B40&#39;</span><span class="p">,</span>
+       <span class="s">&#39;ion0.B42&#39;</span><span class="p">,</span> <span class="s">&#39;ion0.B44&#39;</span><span class="p">,</span> <span class="s">&#39;ion0.B60&#39;</span><span class="p">,</span> <span class="s">&#39;ion0.B62&#39;</span><span class="p">,</span> <span class="s">&#39;ion0.B64&#39;</span><span class="p">,</span> <span class="s">&#39;ion0.B66&#39;</span><span class="p">,</span> <span class="s">&#39;ion0.IntensityScaling&#39;</span><span class="p">,</span>
+       <span class="s">&#39;ion1.BmolX&#39;</span><span class="p">,</span> <span class="s">&#39;ion1.BmolY&#39;</span><span class="p">,</span> <span class="s">&#39;ion1.BmolZ&#39;</span><span class="p">,</span> <span class="s">&#39;ion1.BextX&#39;</span><span class="p">,</span> <span class="s">&#39;ion1.BextY&#39;</span><span class="p">,</span> <span class="s">&#39;ion1.BextZ&#39;</span><span class="p">,</span> <span class="s">&#39;ion1.B40&#39;</span><span class="p">,</span>
+       <span class="s">&#39;ion1.B42&#39;</span><span class="p">,</span> <span class="s">&#39;ion1.B44&#39;</span><span class="p">,</span> <span class="s">&#39;ion1.B60&#39;</span><span class="p">,</span> <span class="s">&#39;ion1.B62&#39;</span><span class="p">,</span> <span class="s">&#39;ion1.B64&#39;</span><span class="p">,</span> <span class="s">&#39;ion1.B66&#39;</span><span class="p">,</span> <span class="s">&#39;ion1.IntensityScaling&#39;</span><span class="p">,</span>
+       <span class="s">&#39;sp0.IntensityScaling&#39;</span><span class="p">,</span> <span class="s">&#39;sp1.IntensityScaling&#39;</span><span class="p">)</span>
+
+<span class="n">chi2</span> <span class="o">=</span> <span class="n">CalculateChiSquared</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">function</span><span class="p">),</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws1</span><span class="p">,</span> <span class="n">InputWorkspace_1</span><span class="o">=</span><span class="n">ws2</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">fit</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="p">[</span><span class="n">ws1</span><span class="p">,</span> <span class="n">ws2</span><span class="p">],</span> <span class="n">MaxIterations</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">fit</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Calculating a spectrum can be done with <cite>CrystalFieldMultiSite</cite> in the same way as a <cite>CrystalField</cite> object.</p>
+<p>CrystalFieldMultiSite can also be used in the single-site case to use the <cite>CrystalFieldFunction</cite> fitting function. It
+can be used like a <cite>CrystalField</cite> object in this way, although <cite>Temperatures</cite> and <cite>FWHMs</cite> must still be passed as lists:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cfms</span> <span class="o">=</span> <span class="n">CrystalFieldMultiSite</span><span class="p">(</span><span class="n">Ions</span><span class="o">=</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="n">Symmetries</span><span class="o">=</span><span class="s">&#39;C2&#39;</span><span class="p">,</span> <span class="n">Temperatures</span><span class="o">=</span><span class="p">[</span><span class="mi">25</span><span class="p">],</span> <span class="n">FWHMs</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">PeakShape</span><span class="o">=</span><span class="s">&#39;Gaussian&#39;</span><span class="p">,</span>
+                                 <span class="n">BmolX</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">B40</span><span class="o">=-</span><span class="mf">0.02</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="finding-initial-parameters">
+<h2><a class="toc-backref" href="#id12">Finding Initial Parameters</a><a class="headerlink" href="#finding-initial-parameters" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="using-a-monte-carlo-estimation-method">
+<h3><a class="toc-backref" href="#id13">Using a Monte Carlo estimation method</a><a class="headerlink" href="#using-a-monte-carlo-estimation-method" title="Permalink to this headline">¶</a></h3>
+<p>If the initial values of the fitting parameters are not known they can be estimated using <cite>estimate_parameters()</cite> method.
+It randomly searches the parameter space in a given region such that the calculated spectra are as close to the
+fit data as possible. The method uses <a class="reference internal" href="../algorithms/EstimateFitParameters-v1.html#algm-estimatefitparameters"><em>EstimateFitParameters</em></a> internally. See
+algorithm&#8217;s description for the available properties.
+Here is an example of a fit with initial estimation:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">CrystalField.fitting</span> <span class="kn">import</span> <span class="n">makeWorkspace</span>
+<span class="kn">from</span> <span class="nn">CrystalField</span> <span class="kn">import</span> <span class="n">CrystalField</span><span class="p">,</span> <span class="n">CrystalFieldFit</span><span class="p">,</span> <span class="n">Background</span><span class="p">,</span> <span class="n">Function</span>
+
+<span class="c"># Create some crystal field data</span>
+<span class="n">origin</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">,</span> <span class="n">B40</span><span class="o">=-</span><span class="mf">0.031787</span><span class="p">,</span> <span class="n">B42</span><span class="o">=-</span><span class="mf">0.11611</span><span class="p">,</span> <span class="n">B44</span><span class="o">=-</span><span class="mf">0.12544</span><span class="p">,</span>
+                      <span class="n">Temperature</span><span class="o">=</span><span class="mf">44.0</span><span class="p">,</span> <span class="n">FWHM</span><span class="o">=</span><span class="mf">1.1</span><span class="p">)</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">origin</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">()</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">makeWorkspace</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c"># Define a CrystalField object with parameters slightly shifted.</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">B40</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">B42</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">B44</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                  <span class="n">Temperature</span><span class="o">=</span><span class="mf">44.0</span><span class="p">,</span> <span class="n">FWHM</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ResolutionModel</span><span class="o">=</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">FWHMVariation</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c"># Set any ties on the field parameters.</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">)</span>
+<span class="c"># Create a fit object</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">)</span>
+<span class="c"># Find initial values for the field parameters.</span>
+<span class="c"># You need to define the energy splitting and names of parameters to estimate.</span>
+<span class="c"># Optionally additional constraints can be set on tied parameters (eg, peak centres).</span>
+<span class="n">fit</span><span class="o">.</span><span class="n">estimate_parameters</span><span class="p">(</span><span class="n">EnergySplitting</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                        <span class="n">Parameters</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;B22&#39;</span><span class="p">,</span> <span class="s">&#39;B40&#39;</span><span class="p">,</span> <span class="s">&#39;B42&#39;</span><span class="p">,</span> <span class="s">&#39;B44&#39;</span><span class="p">],</span>
+                        <span class="n">Constraints</span><span class="o">=</span><span class="s">&#39;20&lt;f1.PeakCentre&lt;45,20&lt;f2.PeakCentre&lt;45&#39;</span><span class="p">,</span>
+                        <span class="n">NSamples</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;Returned&#39;</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">get_number_estimates</span><span class="p">(),</span> <span class="s">&#39;sets of parameters.&#39;</span>
+<span class="c"># The first set (the smallest chi squared) is selected by default.</span>
+<span class="c"># Select a different parameter set if required</span>
+<span class="n">fit</span><span class="o">.</span><span class="n">select_estimated_parameters</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">cf</span><span class="p">[</span><span class="s">&#39;B22&#39;</span><span class="p">],</span> <span class="n">cf</span><span class="p">[</span><span class="s">&#39;B40&#39;</span><span class="p">],</span> <span class="n">cf</span><span class="p">[</span><span class="s">&#39;B42&#39;</span><span class="p">],</span> <span class="n">cf</span><span class="p">[</span><span class="s">&#39;B44&#39;</span><span class="p">]</span>
+<span class="c"># Run fit</span>
+<span class="n">fit</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-the-point-charge-model">
+<h3><a class="toc-backref" href="#id14">Using the point charge model</a><a class="headerlink" href="#using-the-point-charge-model" title="Permalink to this headline">¶</a></h3>
+<p>Alternatively, the <em>Point Charge Model</em> may be used to calculate the crystal field parameters. In this case, the
+crystal field interaction is assumed to be purely electrostatic. At an infinite distance away from an ion, or
+analogously, at a nonzero distance from an ion of infinitesimal extend (a <em>point charge</em>), the charge in free space
+is zero, so Gauss&#8217;s law becomes <img class="math" src="../_images/math/33c99995cf2112323905128babb38b09b5061bd2.png" alt="\nabla^2 V = 0" style="vertical-align: -1px"/> which is Laplace&#8217;s equation. The solution of this is a
+<em>multipole expansion</em>, a sum of spherical harmonic functions:
+<img class="math" src="../_images/math/4ae27d7334db5b9d761dda21a1eeced398e60e03.png" alt="V(r,\theta\phi) = \sum_{l=0}^{\infty} \sum_{m=-l}^l R_l(r) Y_l^m(\theta,\phi)" style="vertical-align: -5px"/>. In the limit of infinite
+<img class="math" src="../_images/math/3293e7078f4805bf0742b947e522da0a58d8e2b5.png" alt="r" style="vertical-align: 0px"/>, <img class="math" src="../_images/math/ac04e29e2b0fa049edf2161377065c659519e277.png" alt="R_l(r) = B / r^{l+1}" style="vertical-align: -5px"/>. The radial term is the crystal field parameters, and the angular term
+(spherical harmonics in this case) are the crystal field operators.</p>
+<p>One should now note that the quantities noted above are generally complex. In order to have real valued parameters,
+Stevens chose to use the <em>tesseral harmonics</em> <img class="math" src="../_images/math/61d69492dac3ff4caeed8a839781617bcf0f51a4.png" alt="Z_l^m(\theta,\phi)" style="vertical-align: -5px"/> instead of the spherical harmonics for the
+angular part. These functions are simply the hermitian combinations of spherical harmonics of the same rank <img class="math" src="../_images/math/4405711ef262f385468ed1d57aa98adfc376d268.png" alt="l" style="vertical-align: 0px"/>
+and opposite signed order <img class="math" src="../_images/math/47e031122c1df8bef662b93f6a2c0751959a98d1.png" alt="m" style="vertical-align: 0px"/>. (An alternative formulation by Wybourne uses the original spherical harmonics)</p>
+<p>In Mantid we use the Stevens convention, as common in the neutron scattering literature. The user should note that
+the convention amongst optical spectroscopists is that of Wybourne.</p>
+<p>A derivation of the point charge energy can be found in many text books (e.g.
+<a class="reference external" href="http://dx.doi.org/10.1007/978-3-642-93376-9_12">Morrison</a>), but will not be detailed here, where only the final
+result is given:</p>
+<div class="math">
+<p><img src="../_images/math/3609fd6bf37dac2da7373835a1e924db1d81ab7f.png" alt="B_l^m = \frac{4\pi}{2l+1} \frac{| e|^2}{4\pi\epsilon_0}
+        \sum_i \frac{q_i}{r_i^{l+1}} a_0^l \langle r^l \rangle Z_l^m(\theta_i,\phi_i)"/></p>
+</div><p>where <img class="math" src="../_images/math/22192d21978df3b54ed2099ed4ad5c6766f243d3.png" alt="q_i" style="vertical-align: -4px"/>, <img class="math" src="../_images/math/fc39a865565dfc8c8aa94787a1b0c028acb43e42.png" alt="r_i" style="vertical-align: -3px"/>, <img class="math" src="../_images/math/047e27b15cc42d8a3c8447360b79e2218dd5883a.png" alt="\theta_i" style="vertical-align: -3px"/> and <img class="math" src="../_images/math/f1efa017162fce0fd957a3aec78f059ef70a2bbc.png" alt="\phi_i" style="vertical-align: -4px"/> are the charge (in units of the elemental
+charge <img class="math" src="../_images/math/28bdd1ac81fedb35e595154f778f036e21e83500.png" alt="|e|" style="vertical-align: -5px"/>) and relative polar coordinates of the <img class="math" src="../_images/math/01274225c2ae3f42cb48636f95d51f77acf654cc.png" alt="i^{\mathrm{th}}" style="vertical-align: 0px"/> point charge from the magnetic ion;
+<img class="math" src="../_images/math/3dc76d74b89eedf5e00c20de2475ca514fab7fbf.png" alt="a_0" style="vertical-align: -3px"/> is the Bohr radius, <img class="math" src="../_images/math/fe3c47cd700bc4a4377427f829084aa55f2a3307.png" alt="\langle r^l \rangle" style="vertical-align: -5px"/> is the <img class="math" src="../_images/math/aa07476c0347d2e268aca94d8228d3ad871997b5.png" alt="l^{\mathrm{th}}" style="vertical-align: 0px"/> order expectation value
+of the radial wavefunction of the magnetic ion and <img class="math" src="../_images/math/8fd432b025b024ed94b39454aaeec44901098fe5.png" alt="\epsilon_0" style="vertical-align: -3px"/> is the permitivity of free space (note this
+equation is in SI units; many older texts use cgs units, but this does not matter because the value is eventually
+converted to energy units of <strong>meV</strong>, rather than Joules or ergs).</p>
+<p>In order to calculate the point charge model crystal field parameters a set of charged ligands around the magnetic
+ion has to be given. This may be done either directly, as a list of 4-element lists <tt class="docutils literal"><span class="pre">[charge,</span> <span class="pre">pos_x,</span> <span class="pre">pos_y,</span> <span class="pre">pos_z]</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">CrystalField</span> <span class="kn">import</span> <span class="n">PointCharge</span>
+<span class="n">axial_pc_model</span> <span class="o">=</span> <span class="n">PointCharge</span><span class="p">([[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">]],</span> <span class="s">&#39;Nd&#39;</span><span class="p">)</span>
+<span class="n">axial_blm</span> <span class="o">=</span> <span class="n">axial_pc_model</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">axial_blm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which represents a simple axial crystal field with charges at <img class="math" src="../_images/math/02f37c61d1efc78d7f9339f49496b1d2ebfa97ce.png" alt="\pm 4\mathrm{\AA}" style="vertical-align: -1px"/> away from a Nd ion in the
+<em>z</em>-direction.</p>
+<p>Alternatively, the set of ligands may be calculated from a crystal structure and a maximum distance. For example,
+for a cubic crystal field in the perovskite structure:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">CrystalField</span> <span class="kn">import</span> <span class="n">PointCharge</span>
+<span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">CrystalStructure</span>
+<span class="n">perovskite_structure</span> <span class="o">=</span> <span class="n">CrystalStructure</span><span class="p">(</span><span class="s">&#39;4 4 4 90 90 90&#39;</span><span class="p">,</span> <span class="s">&#39;P m -3 m&#39;</span><span class="p">,</span> <span class="s">&#39;Ce 0 0 0 1 0; Al 0.5 0.5 0.5 1 0; O 0.5 0.5 0 1 0&#39;</span><span class="p">)</span>
+<span class="n">cubic_pc_model</span> <span class="o">=</span> <span class="n">PointCharge</span><span class="p">(</span><span class="n">perovskite_structure</span><span class="p">,</span> <span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="n">Charges</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;Ce&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#39;Al&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#39;O&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">},</span> <span class="n">MaxDistance</span><span class="o">=</span><span class="mf">7.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The syntax for the <tt class="docutils literal"><span class="pre">CrystalStructure</span></tt> object is given in the <a class="reference internal" href="../concepts/CrystalStructureAndReflections.html#crystal-structure-and-reflections"><em>Crystal Structure concept page</em></a>.
+Instead of the maximum distance, <tt class="docutils literal"><span class="pre">MaxDistance</span></tt>, in Angstrom, the maximum <em>n</em><sup>th</sup> neighbour can be specified with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cubic_pc_model</span> <span class="o">=</span> <span class="n">PointCharge</span><span class="p">(</span><span class="n">perovskite_structure</span><span class="p">,</span> <span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="n">Charges</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;Ce&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#39;Al&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#39;O&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">},</span> <span class="n">Neighbour</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>note that this might result in a slightly slower calculation, because internally, a maximum distance much greater
+the <em>n</em><sup>th</sup> neighbour is set and then all neighbours up to <em>n</em> are found within this distance.</p>
+<p>If a workspace with a defined crystal structure exists, it can be used instead of the <tt class="docutils literal"><span class="pre">CrystalStructure</span></tt> object.
+Other inputs remain the same. Finally, a CIF file can be given directly:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cif_pc_model</span> <span class="o">=</span> <span class="n">PointCharge</span><span class="p">(</span><span class="s">&#39;somecompound.cif&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This uses <a class="reference internal" href="../algorithms/LoadCIF-v1.html#algm-loadcif"><em>LoadCIF</em></a> to parse the input CIF file. Note that <tt class="docutils literal"><span class="pre">LoadCIF</span></tt> changes the atom labels,
+so you should use the <tt class="docutils literal"><span class="pre">getIons()</span></tt> method to get the actual atom labels which <tt class="docutils literal"><span class="pre">PointCharge</span></tt> uses. E.g. using
+<a class="reference external" href="http://rruff.geo.arizona.edu/AMS/download.php?id=19658.cif&amp;down=cif">this cif file</a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cif_pc_model</span> <span class="o">=</span> <span class="n">PointCharge</span><span class="p">(</span><span class="s">&#39;AMS_DATA.cif&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">cif_pc_model</span><span class="o">.</span><span class="n">getIons</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>gives:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;O1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.375</span><span class="p">],</span>
+ <span class="s">&#39;O2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.375</span><span class="p">,</span> <span class="mf">0.375</span><span class="p">],</span>
+ <span class="s">&#39;Sm1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
+ <span class="s">&#39;Sm2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.021</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
+ <span class="s">&#39;Sm3&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.542</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">]}</span>
+</pre></div>
+</div>
+<p>You can then define the charges for each site, the magnetic ion and the maximum distance, and calculate:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cif_pc_model</span><span class="o">.</span><span class="n">Charges</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;O1&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;O2&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;Sm1&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#39;Sm2&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#39;Sm3&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">}</span>
+<span class="n">cif_pc_model</span><span class="o">.</span><span class="n">IonLabel</span> <span class="o">=</span> <span class="s">&#39;Sm2&#39;</span>
+<span class="n">cif_pc_model</span><span class="o">.</span><span class="n">Neighbour</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">cif_blm</span> <span class="o">=</span> <span class="n">cif_pc_model</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">cif_blm</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that only the magnetic structure (as a <tt class="docutils literal"><span class="pre">CrystalStructure</span></tt> object, CIF file name or workspace) is needed
+to construct a <tt class="docutils literal"><span class="pre">PointCharge</span></tt> object. However, the calculations will return an error unless both <tt class="docutils literal"><span class="pre">IonLabel</span></tt>
+and <tt class="docutils literal"><span class="pre">Charges</span></tt> are defined. By default a value of 5 <img class="math" src="../_images/math/175359d99aa877ee0047a81eb7ca961b04c1d748.png" alt="\mathrm{\AA}" style="vertical-align: -1px"/> for <tt class="docutils literal"><span class="pre">MaxDistance</span></tt> is used if neither
+<tt class="docutils literal"><span class="pre">MaxDistance</span></tt> nor <tt class="docutils literal"><span class="pre">Neighbour</span></tt> is defined. Whichever of <tt class="docutils literal"><span class="pre">MaxDistance</span></tt> or <tt class="docutils literal"><span class="pre">Neighbour</span></tt> is defined last
+takes precedent, and if both are defined in the constructor, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">bad_pc_model</span> <span class="o">=</span> <span class="n">PointCharge</span><span class="p">(</span><span class="s">&#39;AMS_DATA.cif&#39;</span><span class="p">,</span> <span class="n">MaxDistance</span><span class="o">=</span><span class="mf">7.5</span><span class="p">,</span> <span class="n">Neighbour</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>then the value for <tt class="docutils literal"><span class="pre">MaxDistance</span></tt> will be used regardless of where it appears in the keyword list.</p>
+<p>For <tt class="docutils literal"><span class="pre">Charges</span></tt>, instead of listing the charges of each site, you can just give the charge for each element, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cif_pc_model</span><span class="o">.</span><span class="n">Charges</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;O&#39;</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;Sm&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">}</span>
+<span class="n">cif_blm</span> <span class="o">=</span> <span class="n">cif_pc_model</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The result of the <tt class="docutils literal"><span class="pre">calculate()</span></tt> method can be put directly into a <tt class="docutils literal"><span class="pre">CrystalField</span></tt> object and used either
+to calculate a spectrum or as the starting parameters in a fit:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Sm&#39;</span><span class="p">,</span> <span class="s">&#39;C2&#39;</span><span class="p">,</span> <span class="n">Temperature</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">FWHM</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">cif_pc_model</span><span class="o">.</span><span class="n">calculate</span><span class="p">())</span>
+<span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">cf</span><span class="o">.</span><span class="n">getSpectrum</span><span class="p">())</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">)</span>
+<span class="n">fit</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Finally, note that the calculated crystal field parameters are defined with the quantisation axis along the <em>z</em> direction
+in the Busing-Levy convention (that is, it is perpendicular to the <em>a</em>-<em>b</em> plane). This means that if the particular
+magnetic ion lies on a higher symmetry site but the highest symmetry rotation axis is not along <em>z</em> (for example, the A
+or B site in the Pyrochlore lattice, which has a 3-fold axis along [111], whilst <em>z</em> is parallel to <em>c</em>), then the
+parameters may appear to have a low symmetry (e.g. more <em>m</em> terms are nonzero). You then need to rotate the parameters
+if you want it quantised along the high symmetry direction.</p>
+</div>
+</div>
+<div class="section" id="calculating-physical-properties">
+<h2><a class="toc-backref" href="#id15">Calculating Physical Properties</a><a class="headerlink" href="#calculating-physical-properties" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the inelastic neutron spectrum, various physical properties arising from the crystal field interaction
+can be calculated. These include the crystal field contribution to the magnetic heat capacity, the magnetic
+susceptibility, and magnetisation. The calculated values can be invoked using the <cite>getHeatCapacity()</cite>,
+<cite>getSusceptibility()</cite> and <cite>getMagneticMoment()</cite> methods.</p>
+<p>To calculate the heat capacity use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">,</span> <span class="n">Temperature</span><span class="o">=</span><span class="mf">44.0</span><span class="p">)</span>
+<span class="n">Cv</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getHeatCapacity</span><span class="p">()</span>       <span class="c"># Calculates Cv(T) for 1&lt;T&lt;300K in 1K steps  (default)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">Cv</span><span class="p">)</span>                   <span class="c"># Returns a tuple of (x, y) values</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">900</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">Cv</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getHeatCapacity</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>      <span class="c"># Calculates Cv(T) for specified values of T (1 to 900K in 5K steps here)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Cv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c"># Temperatures from a single spectrum workspace</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+<span class="n">Cv</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getHeatCapacity</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>     <span class="c"># Use the x-values of a workspace as the temperatures</span>
+<span class="n">ws_calc</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="o">*</span><span class="n">Cv</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">ws_calc</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>                <span class="c"># Creates workspace from data and plots it (plots the first spectrum, index 0)</span>
+
+<span class="c"># Temperatures from a multi-spectrum workspace</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">NSpec</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">Cv</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getHeatCapacity</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c"># Uses the second spectrum&#39;s x-values for T (e.g. 450&lt;T&lt;900)</span>
+<span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">Cv</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>All the physical properties methods returns a tuple of <cite>(x, y)</cite> values. The heat capacity is calculated in
+Jmol<sup>-1</sup>K<sup>-1</sup>.
+The theory is described in <a class="reference internal" href="../fitting/fitfunctions/CrystalFieldHeatCapacity.html#func-crystalfieldheatcapacity"><em>CrystalFieldHeatCapacity</em></a>.</p>
+<p>The molar susceptibility is calculated using Van Vleck&#8217;s formula, and requires in addition knowledge of the applied
+field direction (default is <cite>[0, 0, 1]</cite> where the field is along the crystal field quantisation direction):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">chi_v</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSusceptibility</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Hdir</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The field direction is a Cartesian vector with coordinates defined with the <cite>z</cite>-axis parallel to the quantisation
+direction of the crystal field parameters (usually taken to be the highest symmetry rotation axis). To calculate
+for a powder averaged field direction use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">chi_v_powder</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSusceptibility</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Hdir</span><span class="o">=</span><span class="s">&#39;powder&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The powder averaging is done by taking the mean of the susceptibility (or magnetisation) along the <img class="math" src="../_images/math/86e784d473f5fc5713b6ad4bea7af624b76966c2.png" alt="x" style="vertical-align: 0px"/>,
+<img class="math" src="../_images/math/95ca3c6a1fbeaaafe5800c3269c4c9c2cf2e5406.png" alt="y" style="vertical-align: -4px"/> and <img class="math" src="../_images/math/4764300df3b118f2c580952e9fb04e7cd7943ba5.png" alt="z" style="vertical-align: 0px"/> directions (e.g. <img class="math" src="../_images/math/b28e7977bf10a25fd936170de667bbbfec86e65a.png" alt="\chi^{\mathrm{pow}} = (\chi^x + \chi^y + \chi^z)/3" style="vertical-align: -5px"/>).</p>
+<p>Note that the function calculates the <em>molar</em> magnetic susceptibility, and by default outputs it in <em>cgs</em> units
+(cm<sup>3</sup>/mol or emu/mol). To obtain the result in SI units (m<sup>3</sup>/mol)
+use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">chi_v_cgs</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSusceptibility</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Hdir</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">Unit</span><span class="o">=</span><span class="s">&#39;SI&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In addition, &#8220;atomic&#8221; units (<img class="math" src="../_images/math/54240771c4523d8e491098992e575314f8f77d31.png" alt="\mu_B/\mathrm{T}/\mathrm{ion}" style="vertical-align: -5px"/>) can also be obtained using:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">chi_v_bohr</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getSusceptibility</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Unit</span><span class="o">=</span><span class="s">&#39;bohr&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The theory is described in the <a class="reference internal" href="../fitting/fitfunctions/CrystalFieldSusceptibility.html#func-crystalfieldsusceptibility"><em>CrystalFieldSusceptibility</em></a> function page.</p>
+<p>The magnetic moment is calculated by adding a Zeeman interaction to the crystal field Hamiltonian and diagonalising
+the combined matrix, from which the expectation of the magnetic moment operator is calculated. The moment can
+be calculated as a function of temperature or applied field magnitude:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">moment_t</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getMagneticMoment</span><span class="p">(</span><span class="n">Temperature</span><span class="o">=</span><span class="n">T</span><span class="p">,</span> <span class="n">Hdir</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">Hmag</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span> <span class="c"># Calcs M(T) with at 0.1T field||[111]</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">121</span><span class="p">)</span>
+<span class="n">moment_h</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getMagneticMoment</span><span class="p">(</span><span class="n">Hmag</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">Hdir</span><span class="o">=</span><span class="s">&#39;powder&#39;</span><span class="p">,</span> <span class="n">Temperature</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>   <span class="c"># Calcs M(H) at 10K for powder sample</span>
+</pre></div>
+</div>
+<p>By default, the magnetisation is calculated in atomic units of bohr magnetons per magnetic ion. Alternatively, the
+SI or cgs molar magnetic moments can be calculated:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">moment_SI</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getMagneticMoment</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">Unit</span><span class="o">=</span><span class="s">&#39;SI&#39;</span><span class="p">)</span>         <span class="c"># M(H) in Am^2/mol at 1K for H||[111]</span>
+<span class="n">moment_cgs</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">getMagneticMoment</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">Temperature</span><span class="o">=</span><span class="n">T</span><span class="p">,</span> <span class="n">Unit</span><span class="o">=</span><span class="s">&#39;cgs&#39;</span><span class="p">)</span> <span class="c"># M(T) in emu/mol in a field of 100G || [001]</span>
+</pre></div>
+</div>
+<p>Please note that if cgs units are used, then the magnetic field must be specified in <em>Gauss</em> rather than <em>Tesla</em>
+(1T == 10000G). Note also that the cgs unit &#8220;emu/mol&#8221; in this case is &#8220;erg/Gauss/mol&#8221; quantifying a molar magnetic
+moment.</p>
+<p>Finally, please note that the calculation result is the molar magnetic moment. Thus to get the magnetisation, you
+should divide this by the molar volume of the material.
+By default, the calculation temperature is 1K, and the applied magnetic field is 1T along [001]. For further details
+and a description of the theory, see the <a class="reference internal" href="../fitting/fitfunctions/CrystalFieldMagnetisation.html#func-crystalfieldmagnetisation"><em>CrystalFieldMagnetisation</em></a> and
+<a class="reference internal" href="../fitting/fitfunctions/CrystalFieldMoment.html#func-crystalfieldmoment"><em>CrystalFieldMoment</em></a> pages.</p>
+</div>
+<div class="section" id="fitting-physical-properties">
+<h2><a class="toc-backref" href="#id16">Fitting Physical Properties</a><a class="headerlink" href="#fitting-physical-properties" title="Permalink to this headline">¶</a></h2>
+<p>Instead of fitting the inelastic neutron spectrum, the physical properties can be fitted using a similar interface
+to that described above. The main difference is that some experimental setup information has to be given - especially
+for the susceptibility and magnetisation. This is done by specifying an instance of the <cite>PhysicalProperties</cite> helper
+class as the <cite>PhysicalProperty</cite> attribute of <cite>CrystalField</cite>, either as a keyword argument in the constructor:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">CrystalField</span> <span class="kn">import</span> <span class="n">CrystalField</span><span class="p">,</span> <span class="n">CrystalFieldFit</span><span class="p">,</span> <span class="n">PhysicalProperties</span>
+<span class="c"># Fits a heat capacity dataset - you must have subtracted the phonon contribution by some method already</span>
+<span class="c"># and the data must be in J/mol/K.</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">,</span> <span class="n">B40</span><span class="o">=-</span><span class="mf">0.031787</span><span class="p">,</span> <span class="n">B42</span><span class="o">=-</span><span class="mf">0.11611</span><span class="p">,</span> <span class="n">B44</span><span class="o">=-</span><span class="mf">0.12544</span><span class="p">,</span>
+                  <span class="n">PhysicalProperty</span><span class="o">=</span><span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;Cv&#39;</span><span class="p">))</span>
+<span class="n">fitcv</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">)</span>
+<span class="n">fitcv</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>or separately after construction:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;B20&#39;</span><span class="p">:</span><span class="mf">0.37737</span><span class="p">,</span> <span class="s">&#39;B22&#39;</span><span class="p">:</span><span class="mf">3.9770</span><span class="p">,</span> <span class="s">&#39;B40&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.031787</span><span class="p">,</span> <span class="s">&#39;B42&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.11611</span><span class="p">,</span> <span class="s">&#39;B44&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.12544</span><span class="p">}</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">PhysicalProperty</span> <span class="o">=</span> <span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;Cv&#39;</span><span class="p">)</span>
+<span class="n">fitcv</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">)</span>
+<span class="n">fitcv</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c"># Fits a susceptibility dataset. Data is the volume susceptibility in SI units</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">PhysicalProperty</span> <span class="o">=</span> <span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;susc&#39;</span><span class="p">,</span> <span class="n">Hdir</span><span class="o">=</span><span class="s">&#39;powder&#39;</span><span class="p">,</span> <span class="n">Unit</span><span class="o">=</span><span class="s">&#39;SI&#39;</span><span class="p">)</span>
+<span class="n">fit_chi</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">)</span>
+<span class="n">fit_chi</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c"># Fits a magnetisation dataset. Data is in emu/mol, and was measured at 5K with the field || [111].</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">PhysicalProperty</span> <span class="o">=</span> <span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;M(H)&#39;</span><span class="p">,</span> <span class="n">Temperature</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">Hdir</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">Unit</span><span class="o">=</span><span class="s">&#39;cgs&#39;</span><span class="p">)</span>
+<span class="n">fit_mag</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">)</span>
+<span class="n">fit_mag</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c"># Fits a magnetisation vs temperature dataset. Data is in Am^2/mol, measured with a 0.1T field || [110]</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">PhysicalProperty</span> <span class="o">=</span> <span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;M(T)&#39;</span><span class="p">,</span> <span class="n">Hmag</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">Hdir</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">Unit</span><span class="o">=</span><span class="s">&#39;SI&#39;</span><span class="p">)</span>
+<span class="n">fit_moment</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">)</span>
+<span class="n">fit_moment</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Unfortunately only 1D datasets can be fitted (e.g. M(H, T) cannot be fitted as a simultaneous function of field and
+temperature). Also, note that setting the <cite>PhysicalProperty</cite> attribute after constructing the <cite>CrystalField</cite> object
+(e.g. running <cite>cf.PhysicalProperty = PhysicalProperties(&#8216;Cv&#8217;)</cite>) causes the number of datasets to change and will
+clear all <cite>Ties</cite> and <cite>Constraints</cite> previously set, and also reset all <cite>FWHM</cite> and <cite>peaks</cite> to the default values (zero
+for <cite>FWHM</cite> and <cite>Lorentzian</cite> for <cite>peaks</cite>).</p>
+</div>
+<div class="section" id="simultaneous-fitting-of-physical-properties-and-inelastic-neutron-spectra">
+<h2><a class="toc-backref" href="#id17">Simultaneous Fitting of Physical Properties and Inelastic Neutron Spectra</a><a class="headerlink" href="#simultaneous-fitting-of-physical-properties-and-inelastic-neutron-spectra" title="Permalink to this headline">¶</a></h2>
+<p>Finally, physical properties data and neutron spectra may be fitted simultaneously. In this case, all the inelastic
+neutron spectra must be specified first in the list of input workspaces, with the physical properties dataset(s)
+following in the same order as specified in the <cite>PhysicalProperty</cite> attribute, which for multiple physical
+properties should be a list. E.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Fits an INS spectrum (at 10K) and the heat capacity simultaneously</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">,</span> <span class="n">B40</span><span class="o">=-</span><span class="mf">0.031787</span><span class="p">,</span> <span class="n">B42</span><span class="o">=-</span><span class="mf">0.11611</span><span class="p">,</span> <span class="n">B44</span><span class="o">=-</span><span class="mf">0.12544</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">Temperature</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">FWHM</span> <span class="o">=</span> <span class="mf">1.5</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">PhysicalProperty</span> <span class="o">=</span> <span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;Cv&#39;</span><span class="p">)</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="p">[</span><span class="n">ws_ins_10K</span><span class="p">,</span> <span class="n">ws_cp</span><span class="p">])</span>
+<span class="n">fit</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c"># Fits two INS spectra (at 44K and 50K) and the heat capacity, susceptibility and magnetisation simultaneously.</span>
+<span class="n">PPCv</span> <span class="o">=</span> <span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;Cv&#39;</span><span class="p">)</span>
+<span class="n">PPchi</span> <span class="o">=</span> <span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;susc&#39;</span><span class="p">,</span> <span class="s">&#39;powder&#39;</span><span class="p">,</span> <span class="n">Unit</span><span class="o">=</span><span class="s">&#39;cgs&#39;</span><span class="p">)</span>
+<span class="n">PPMag</span> <span class="o">=</span> <span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;M(H)&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&#39;bohr&#39;</span><span class="p">)</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s">&#39;Ce&#39;</span><span class="p">,</span> <span class="s">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.37737</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">3.9770</span><span class="p">,</span> <span class="n">B40</span><span class="o">=-</span><span class="mf">0.031787</span><span class="p">,</span> <span class="n">B42</span><span class="o">=-</span><span class="mf">0.11611</span><span class="p">,</span> <span class="n">B44</span><span class="o">=-</span><span class="mf">0.12544</span><span class="p">,</span>
+                  <span class="n">Temperature</span><span class="o">=</span><span class="p">[</span><span class="mf">44.0</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="n">FWHM</span><span class="o">=</span><span class="p">[</span><span class="mf">1.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">],</span> <span class="n">PhysicalProperty</span><span class="o">=</span><span class="p">[</span><span class="n">PPCv</span><span class="p">,</span> <span class="n">PPchi</span><span class="p">,</span> <span class="n">PPMag</span><span class="p">]</span> <span class="p">)</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="p">[</span><span class="n">ws_ins_44K</span><span class="p">,</span> <span class="n">ws_ins_50K</span><span class="p">,</span> <span class="n">ws_cp</span><span class="p">,</span> <span class="n">ws_chi</span><span class="p">,</span> <span class="n">ws_mag</span><span class="p">])</span>
+<span class="n">fit</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Note that <cite>PhysicalProperty</cite> requires the type of physical property (either <cite>&#8216;Cv&#8217;</cite> or <cite>&#8216;Cp&#8217;</cite> or <cite>&#8216;heatcap&#8217;</cite> for
+heat capacity; <cite>&#8216;susc&#8217;</cite> or <cite>&#8216;chi&#8217;</cite> for susceptibility; <cite>&#8216;mag&#8217;</cite> or <cite>&#8216;M(H)&#8217;</cite> for magnetic moment vs applied field;
+or <cite>&#8216;mom&#8217;</cite> or <cite>&#8216;M(T)&#8217;</cite> for moment vs temperature) as the first argument. Subsequent arguments are optional, and
+are in the following order:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;Cp&#39;</span><span class="p">)</span>  <span class="c"># No further parameters required for heat capacity</span>
+<span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;chi&#39;</span><span class="p">,</span> <span class="n">hdir</span><span class="p">,</span> <span class="n">inverse</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>
+<span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;chi&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>
+<span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;mag&#39;</span><span class="p">,</span> <span class="n">hdir</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>
+<span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;mag&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>
+<span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;M(T)&#39;</span><span class="p">,</span> <span class="n">hmag</span><span class="p">,</span> <span class="n">hdir</span><span class="p">,</span> <span class="n">inverse</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>
+<span class="n">PhysicalProperties</span><span class="p">(</span><span class="s">&#39;M(T)&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Or these parameters may be specified using keyword arguments, with the keywords: <cite>&#8216;Hdir&#8217;</cite>, <cite>&#8216;Hmag&#8217;</cite>, <cite>&#8216;Inverse&#8217;</cite>,
+<cite>&#8216;Unit&#8217;</cite>, and <cite>&#8216;Temperature&#8217;</cite> (note these are case sensitive, and not all parameters apply to all types of
+physical properties). The default values (<cite>Hdir=[0,0,1]</cite>, <cite>Hmag=1</cite>, <cite>Inverse=False</cite>, <cite>Unit=&#8217;cgs&#8217;</cite> and
+<cite>Temperature=1</cite> are used if nothing is specified for a particular attribute.</p>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/Interfaces.html">Interfaces</a> | <a class="reference external" href="categories/Indirect.html">Indirect</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="index.html" title="Previous Chapter: Interfaces"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Interfaces</span>
+    </a>
+  </li>
+  <li>
+    <a href="DGS Planner.html" title="Next Chapter: DGS Planner"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">DGS Planner &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2019-07-22.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

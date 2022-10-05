@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PseudoVoigt</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '4.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../../index.html" />
+    <link rel="next" title="Quadratic" href="Quadratic.html" />
+    <link rel="prev" title="ProductQuadraticExp" href="ProductQuadraticExp.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>4.2</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="pseudovoigt">
+<span id="func-pseudovoigt"></span><h1>PseudoVoigt<a class="headerlink" href="#pseudovoigt" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<span id="index-0"></span><h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>The Pseudo-Voigt function is an approximation for the Voigt function, which is a convolution of Gaussian and Lorentzian function. It is often used as a peak profile in powder diffraction for cases where neither a pure Gaussian or Lorentzian function appropriately describe a peak.</p>
+<p>Instead of convoluting those two functions, the Pseudo-Voigt function is defined as the sum of a Gaussian peak <img class="math" src="../../_images/math/ccd6b166d4a74dd883eb6b2567dedc7bbf0293c1.png" alt="G(x)" style="vertical-align: -4px"/> and a Lorentzian peak <img class="math" src="../../_images/math/b60edf9780120d815d5f0b52e378ce353657f2e9.png" alt="L(x)" style="vertical-align: -4px"/>, weighted by a fourth parameter <img class="math" src="../../_images/math/dc1f0f7986b8100c57705a5689e74aad25a9aa2f.png" alt="\eta" style="vertical-align: -4px"/> (values between 0 and 1) which shifts the profile more towards pure Gaussian or pure Lorentzian when approaching 1 or 0 respectively:</p>
+<div class="math">
+<p><img src="../../_images/math/906d65447fd340a5a5b15083a3f7e7bab6b0c32a.png" alt="pV(x) = \eta G(x) + (1 - \eta)L(x)"/></p>
+</div><p>Both functions share three parameters: Height (height of the peak at the maximum), PeakCentre (position of the maximum) and FWHM (full width at half maximum of the peak).</p>
+<p>Thus the Pseudo-voigt function can be expressed as</p>
+<div class="math">
+<p><img src="../../_images/math/121a16819cc68933be8aef921f837a8566082f5f.png" alt="pV(x) = I \cdot (\eta \cdot G'(x, \Gamma) + (1 - \eta) \cdot L'(x, \Gamma))"/></p>
+</div><p>where <img class="math" src="../../_images/math/5638fa9d9a43f9799b6b739ff50d134ff174ed53.png" alt="G'(x, \Gamma)" style="vertical-align: -4px"/> and <cite>L&#8217;(x, Gamma)</cite> are normalized Gaussian and Lorentzian.
+And <img class="math" src="../../_images/math/5048d43a53548e603aee5ece0b01e2fa6d7f4b68.png" alt="\Gamma" style="vertical-align: -1px"/> is FWHM.</p>
+<p>In Fullprof notation, <img class="math" src="../../_images/math/5f75778e1fdbd0354edda2de5144510a5da029c1.png" alt="H" style="vertical-align: 0px"/> is used for FHWM instead of <img class="math" src="../../_images/math/5048d43a53548e603aee5ece0b01e2fa6d7f4b68.png" alt="\Gamma" style="vertical-align: -1px"/>.
+In the code, <em>gamma</em> is used for FWHM in order to avoid confusion with peak height <img class="math" src="../../_images/math/9cd0d4269389ccc2c3fc96c538e266229f00bd9f.png" alt="h" style="vertical-align: 0px"/>.
+To be in line with it, we prefer to use <img class="math" src="../../_images/math/5048d43a53548e603aee5ece0b01e2fa6d7f4b68.png" alt="\Gamma" style="vertical-align: -1px"/> for FWHM here.</p>
+<div class="section" id="native-peak-parameters">
+<h3>Native peak parameters<a class="headerlink" href="#native-peak-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Pseudo-voigt function in Mantid has the following native parameters</p>
+<ul class="simple">
+<li>Peak intensity <img class="math" src="../../_images/math/8cbabf0be514c984d6ec320163dd139dc67e0d12.png" alt="I" style="vertical-align: 0px"/>: shared peak height between Gaussian and Lorentzian.</li>
+<li>Peak width FWHM <img class="math" src="../../_images/math/5048d43a53548e603aee5ece0b01e2fa6d7f4b68.png" alt="\Gamma" style="vertical-align: -1px"/> (or <img class="math" src="../../_images/math/5f75778e1fdbd0354edda2de5144510a5da029c1.png" alt="H" style="vertical-align: 0px"/>): shared FWHM be between Gaussian and Lorentzian</li>
+<li>Peak position <img class="math" src="../../_images/math/15752e53efcdc2bb348d175513bafef56ea42981.png" alt="x_0" style="vertical-align: -3px"/></li>
+<li>Gaussian ratio <img class="math" src="../../_images/math/dc1f0f7986b8100c57705a5689e74aad25a9aa2f.png" alt="\eta" style="vertical-align: -4px"/>: ratio of intensity of Gaussian.</li>
+</ul>
+<p>From given FWHM</p>
+<p><strong>Gaussian part</strong> <img class="math" src="../../_images/math/5638fa9d9a43f9799b6b739ff50d134ff174ed53.png" alt="G'(x, \Gamma)" style="vertical-align: -4px"/></p>
+<div class="math">
+<p><img src="../../_images/math/ba33c9e0b0b850a34fb9cf6f71610b6cb3a561b6.png" alt="G'(x, \Gamma) = a_G \cdot e^{-b_G (x - x_0)^2} = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{(x-x_0)^2}{2\sigma^2}}"/></p>
+</div><p>where</p>
+<div class="math">
+<p><img src="../../_images/math/f2b4c9a368690a1c7203231f591b03e8ae575929.png" alt="\sigma = \frac{\Gamma}{2\sqrt{2\ln(2)}}"/></p>
+</div><div class="math">
+<p><img src="../../_images/math/c87f39b28a5caada6b8b3523580a06fad8bbdf78.png" alt="a_G = \frac{2}{\Gamma}\sqrt{\frac{\ln{2}}{\pi}} = \frac{1}{\sigma\sqrt{2\pi}}"/></p>
+</div><div class="math">
+<p><img src="../../_images/math/b98e31357d234572b0700252b8c18fb01ff5175f.png" alt="b_G = \frac{4\ln{2}}{\Gamma^2}"/></p>
+</div><p><strong>Lorentzian part</strong> <img class="math" src="../../_images/math/0da9280eb47ce2a0d6cb40058dae17bfce669e54.png" alt="L'(x, \Gamma)" style="vertical-align: -4px"/></p>
+<div class="math">
+<p><img src="../../_images/math/2fef80f8d1bf5737538e70446d1dfa9f2143412c.png" alt="L'(x) = \frac{1}{\pi} \cdot \frac{\Gamma/2}{(x-x_0)^2 + (\Gamma/2)^2}"/></p>
+</div><p>Thus both <img class="math" src="../../_images/math/9244f63df117376c64fe022b85bf3f47e3f5f9f4.png" alt="G'(x)" style="vertical-align: -4px"/> and <img class="math" src="../../_images/math/8576a587afe2ab807229bd5e76ffd6b7a4441b65.png" alt="L'(x)" style="vertical-align: -4px"/> are normalized.</p>
+</div>
+<div class="section" id="effective-peak-parameters">
+<h3>Effective peak parameters<a class="headerlink" href="#effective-peak-parameters" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Peak height <img class="math" src="../../_images/math/9cd0d4269389ccc2c3fc96c538e266229f00bd9f.png" alt="h" style="vertical-align: 0px"/>:</li>
+</ul>
+<div class="math">
+<p><img src="../../_images/math/a1cf9a4fc533dbafec34b8f7321ec0683c03d587.png" alt="h = I \cdot (\eta \cdot a_G + (1 - \eta) \cdot \frac{2}{\pi\cdot \Gamma}) = \frac{2 I}{\pi \Gamma} (1 + (\sqrt{\pi\ln{2}}-1)\eta)"/></p>
+</div><ul class="simple">
+<li><img class="math" src="../../_images/math/867e88734ade43673557344be7e57c5488afba70.png" alt="\sigma" style="vertical-align: 0px"/>:</li>
+</ul>
+<div class="math">
+<p><img src="../../_images/math/f2b4c9a368690a1c7203231f591b03e8ae575929.png" alt="\sigma = \frac{\Gamma}{2\sqrt{2\ln(2)}}"/></p>
+</div></div>
+<div class="section" id="derivative">
+<h3>Derivative<a class="headerlink" href="#derivative" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>With respect to mixing parameter <img class="math" src="../../_images/math/dc1f0f7986b8100c57705a5689e74aad25a9aa2f.png" alt="\eta" style="vertical-align: -4px"/></li>
+</ul>
+<div class="math">
+<p><img src="../../_images/math/32e009b66854e3056ea81d2a8dd12274f5eed1b7.png" alt="\frac{\partial pV(x)}{\partial \eta} = I \cdot [G'(x, \Gamma) - L'(x, \Gamma)]"/></p>
+</div><ul class="simple">
+<li>With respect to intensity <img class="math" src="../../_images/math/8cbabf0be514c984d6ec320163dd139dc67e0d12.png" alt="I" style="vertical-align: 0px"/></li>
+</ul>
+<div class="math">
+<p><img src="../../_images/math/c9c3a343423203433afacecf938a09d5cef75380.png" alt="\frac{\partial pV(x)}{\partial I} = \eta G'(x, \Gamma) + (1-\eta) L'(x, \Gamma)"/></p>
+</div><ul class="simple">
+<li>With respect to peak centre <img class="math" src="../../_images/math/15752e53efcdc2bb348d175513bafef56ea42981.png" alt="x_0" style="vertical-align: -3px"/></li>
+</ul>
+<div class="math">
+<p><img src="../../_images/math/8626a76bf9785ac7f5ac0063a7e9c4e2e5109c06.png" alt="\frac{\partial pV(x)}{\partial x_0} = I \cdot [\eta \frac{\partial G'(x, \Gamma)}{\partial x_0} + (1 - \eta) \frac{\partial L'(x, \Gamma)}{\partial x_0}]"/></p>
+</div><div class="math">
+<p><img src="../../_images/math/1e03d15f12e091f988d31dd53171ae5f278ffb57.png" alt="\frac{\partial G'(x, \Gamma)}{\partial x_0} = a_G\cdot e^{(-b_G(x-x_0)^2)} (-b_G) (-2) (x - x_0) = 2 b_G (x - x_0) G'(x, \Gamma)"/></p>
+</div><div class="math">
+<p><img src="../../_images/math/9a04382a2756e8255a9c447de0b2b78fd408eb57.png" alt="\frac{\partial L'(x, \Gamma)}{\partial x_0} = \frac{\Gamma}{2\pi} (-1) (-2) (x - x_0) \frac{1}{[(x - x_0)^2 + \frac{\Gamma^2}{4}]^2} = \frac{(x-x_0)\Gamma}{\pi[(x - x_0)^2 + \frac{\Gamma^2}{4}]^2} = \frac{4\pi(x-x_0)}{\Gamma}[L'(x, \Gamma)]^2"/></p>
+</div><ul class="simple">
+<li>With respect to peak width <img class="math" src="../../_images/math/5048d43a53548e603aee5ece0b01e2fa6d7f4b68.png" alt="\Gamma" style="vertical-align: -1px"/></li>
+</ul>
+<div class="math">
+<p><img src="../../_images/math/bc676c176c7f2e2948312633b50cf0dbda107222.png" alt="\frac{\partial pV(x)}{\partial \Gamma} = I \cdot [\eta \frac{\partial G'(x, \Gamma)}{\partial \Gamma} + (1 - \eta) \frac{\partial L'(x, \Gamma)}{\partial \Gamma}]"/></p>
+</div><p>For Gaussian part:</p>
+<div class="math">
+<p><img src="../../_images/math/a6582354bd9b744d29796771501408a852308e9d.png" alt="\frac{\partial G'(x, \Gamma)}{\partial \Gamma} = \frac{\partial a_G}{\partial \Gamma} e^{-b_G(x-x_0)^2} + a_G \frac{\partial e^{-b_G(x-x_0)^2}}{\partial \Gamma} = t_1 + t_2"/></p>
+</div><div class="math">
+<p><img src="../../_images/math/b3a4b0815634ccd86b8a52015db7822867fed9a5.png" alt="t_1 = \frac{-1}{\Gamma} a_G e^{-b_G(x-x_0)^2} = \frac{-1}{\Gamma} G'(x, \Gamma)"/></p>
+</div><div class="math">
+<p><img src="../../_images/math/3ad475bbd4a021d8a4a971bb458ef76d507cb6d0.png" alt="t_2 = a_G e^{-b_G(x-x_0)^2} (-1) (x-x_0)^2 \frac{\partial b_G}{\partial \Gamma} = G'(x, \Gamma) (-1) (x-x_0)^2 \frac{-2}{\Gamma} b_G = \frac{2 b_G (x-x_0)^2 G'(x, \Gamma)}{\Gamma}"/></p>
+</div><p>For Lorentzian part:</p>
+<div class="math">
+<p><img src="../../_images/math/887c546db3110cb0548181a8556df8b967365816.png" alt="\frac{\partial L'(x, \Gamma)}{\partial \Gamma} = \frac{1}{\pi} \frac{\partial (\Gamma/2)}{\partial \Gamma}\frac{1}{(x-x_0)^2 + (\Gamma/2)^2} + \frac{\Gamma}{2}\frac{\partial \frac{1}{(x-x_0)^2 + (\Gamma/2)^2}}{\partial \Gamma} = t_3 + t_4"/></p>
+</div><div class="math">
+<p><img src="../../_images/math/62424ec1dbfb5ac365ccac61638e6d313fd35b59.png" alt="t_3 = \frac{1}{2\pi} \frac{1}{(x-x_0)^2 + (\Gamma/2)^2} = \frac{L'(x, \Gamma)}{\Gamma}"/></p>
+</div><div class="math">
+<p><img src="../../_images/math/82624e2db797946269d2c2df98881da41f694186.png" alt="t_4 = \frac{\Gamma}{2\pi}\frac{-1}{[(x-x_0)^2 + (\Gamma/2)^2]^2} \frac{\Gamma}{2} = -\pi[L'(x, \Gamma)]^2"/></p>
+</div></div>
+<div class="section" id="set-peak-parameters">
+<h3>Set peak parameters<a class="headerlink" href="#set-peak-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Peak parameters can be estimated from observation.
+But some peak parameters are correlated, because peak height is not a basic parameter of Pseudo-voigt.</p>
+<p>Here is the summary:</p>
+<ul class="simple">
+<li>Peak width (FWHM <img class="math" src="../../_images/math/5048d43a53548e603aee5ece0b01e2fa6d7f4b68.png" alt="\Gamma" style="vertical-align: -1px"/>): Peak height will be re-calculated.</li>
+<li>Peak intensity: Peak height will be re-calculated.</li>
+<li>Peak height: Peak intensity,  mixing pamameter or FWHM can be re-calculated depending on user&#8217;s choice.</li>
+<li>Peak centre: No other parameter will be affected.</li>
+<li>Mixing parameter <img class="math" src="../../_images/math/dc1f0f7986b8100c57705a5689e74aad25a9aa2f.png" alt="\eta" style="vertical-align: -4px"/>: Peak height will be re-calculated.</li>
+</ul>
+</div>
+<div class="section" id="estimating-mixing-parameter">
+<h3>Estimating mixing parameter<a class="headerlink" href="#estimating-mixing-parameter" title="Permalink to this headline">¶</a></h3>
+<p>Mixing parameter <img class="math" src="../../_images/math/ecd0ea26399d7799018ad2c4d61448aa5dd3b291.png" alt="eta" style="vertical-align: 0px"/> can be estimated from the observed value of peak&#8217;s height, FWHM and intensity.</p>
+</div>
+<div class="section" id="about-previous-implementation">
+<h3>About previous implementation<a class="headerlink" href="#about-previous-implementation" title="Permalink to this headline">¶</a></h3>
+<p>Before Mantid release v3.14, the equation of Pseudo-Voigt is defined as</p>
+<div class="math">
+<p><img src="../../_images/math/d2adecc16e883a4c72175af798358216ec21d658.png" alt="pV(x) = h \cdot [\eta \cdot \exp(-\frac{(x-x_0)^2}{-2\sigma^2}) + (1-\eta)\frac{(\Gamma/2)^2}{(x-x_0)^2 + (\Gamma/2)^2}]"/></p>
+</div><p>This equation has several issues:</p>
+<ol class="arabic simple">
+<li>It does not have normalized Gaussian and Lorentzian.</li>
+<li>At <img class="math" src="../../_images/math/5b8e47bc23c042b166b238199253853c209ac9b5.png" alt="x = x_0" style="vertical-align: -3px"/>, <img class="math" src="../../_images/math/c8fca683f7181cfe36074b23ebad32f965e45aff.png" alt="pV(x_0) = h" style="vertical-align: -4px"/>.  By this definition, the mixing ratio factor <img class="math" src="../../_images/math/dc1f0f7986b8100c57705a5689e74aad25a9aa2f.png" alt="\eta" style="vertical-align: -4px"/> between Gaussian and Lorentzian is the the intensity ratio at <img class="math" src="../../_images/math/5b8e47bc23c042b166b238199253853c209ac9b5.png" alt="x = x_0" style="vertical-align: -3px"/>.  But it does not make sense with other <img class="math" src="../../_images/math/86e784d473f5fc5713b6ad4bea7af624b76966c2.png" alt="x" style="vertical-align: 0px"/> value. According to the literature or manual (Fullprof and GSAS), <img class="math" src="../../_images/math/dc1f0f7986b8100c57705a5689e74aad25a9aa2f.png" alt="\eta" style="vertical-align: -4px"/> shall be the ratio of the intensities between Gaussian and Lorentzian.</li>
+</ol>
+<p>The figure below shows data together with a fitted Pseudo-Voigt function, as well as Gaussian and Lorentzian with equal parameters. The mixing parameter for that example is 0.7, which means that the function is behaving more like a Gaussian.</p>
+<div class="figure">
+<img alt="Comparison of Pseudo-Voigt function with Gaussian and Lorentzian profiles." src="../../_images/PseudoVoigt.png" />
+</div>
+</div>
+</div>
+<div class="section" id="properties-fitting-parameters">
+<h2>Properties (fitting parameters)<a class="headerlink" href="#properties-fitting-parameters" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="68%" />
+<col width="25%" />
+<col width="7%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Mixing</td>
+<td>0.5</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>Intensity</td>
+<td>1.0</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>PeakCentre</td>
+<td>0.0</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>FWHM</td>
+<td>1.0</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/FitFunctions.html">FitFunctions</a> | <a class="reference external" href="categories/Peak.html">Peak</a></p>
+</div>
+<div class="section" id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/242afc63eface10e47f5e9e6aeaed50e11e3eb4c/Framework/CurveFitting/src/Functions/PseudoVoigt.cpp">PseudoVoigt.cpp</a> <em>(last modified: 2019-06-04)</em></p>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/242afc63eface10e47f5e9e6aeaed50e11e3eb4c/Framework/CurveFitting/inc/MantidCurveFitting/Functions/PseudoVoigt.h">PseudoVoigt.h</a> <em>(last modified: 2019-05-01)</em></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="ProductQuadraticExp.html" title="Previous Chapter: ProductQuadraticExp"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; ProductQuadratic...</span>
+    </a>
+  </li>
+  <li>
+    <a href="Quadratic.html" title="Next Chapter: Quadratic"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Quadratic &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2019-11-18.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

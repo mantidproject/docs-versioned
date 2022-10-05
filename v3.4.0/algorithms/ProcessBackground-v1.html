@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ProcessBackground v1</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="next" title="ProcessDasNexusLog v1" href="ProcessDasNexusLog-v1.html" />
+    <link rel="prev" title="PreprocessDetectorsToMD v1" href="PreprocessDetectorsToMD-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.4</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="processbackground-v1">
+<span id="algm-processbackground"></span><span id="algm-processbackground-v1"></span><h1>ProcessBackground v1<a class="headerlink" href="#processbackground-v1" title="Permalink to this headline">¶</a></h1>
+<div class="figure align-right" id="index-0">
+<a class="screenshot reference internal image-reference" href="../_images/ProcessBackground-v1_dlg.png"><img alt="../_images/ProcessBackground-v1_dlg.png" class="screenshot" src="../_images/ProcessBackground-v1_dlg.png" style="width: 298px;" /></a>
+<p class="caption"><strong>ProcessBackground</strong> dialog.</p>
+</div>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#summary" id="id3">Summary</a></li>
+<li><a class="reference internal" href="#properties" id="id4">Properties</a></li>
+<li><a class="reference internal" href="#description" id="id5">Description</a><ul>
+<li><a class="reference internal" href="#select-background-points" id="id6">Select Background Points</a><ul>
+<li><a class="reference internal" href="#select-background-points-from-given-x-values" id="id7">Select background points from given X-values</a></li>
+<li><a class="reference internal" href="#select-background-points-from-given-function" id="id8">Select background points from given function</a></li>
+<li><a class="reference internal" href="#output-workspaces" id="id9">Output workspaces</a></li>
+<li><a class="reference internal" href="#algorithm-properties" id="id10">Algorithm properties</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#a-suggested-workflow" id="id11">A suggested workflow</a></li>
+<li><a class="reference internal" href="#simple-remove-peaks" id="id12">Simple Remove Peaks</a><ul>
+<li><a class="reference internal" href="#required-and-optional-algorithm-properties" id="id13">Required and optional algorithm properties</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#add-region" id="id14">Add Region</a><ul>
+<li><a class="reference internal" href="#id1" id="id15">Required and optional algorithm properties</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#delete-region" id="id16">Delete Region</a><ul>
+<li><a class="reference internal" href="#id2" id="id17">Required and optional algorithm properties</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage" id="id18">Usage</a></li>
+</ul>
+</div>
+<div class="section" id="summary">
+<h2><a class="toc-backref" href="#id3">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>ProcessBackground provides some tools to process powder diffraction pattern&#8217;s background in order to help Le Bail Fit.</p>
+</div>
+<div class="section" id="properties">
+<h2><a class="toc-backref" href="#id4">Properties</a><a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="3%" />
+<col width="15%" />
+<col width="8%" />
+<col width="61%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Direction</th>
+<th class="head">Type</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>InputWorkspace</td>
+<td>Input</td>
+<td><a class="reference internal" href="../concepts/Workspace2D.html#workspace2d"><em>Workspace2D</em></a></td>
+<td><em>Mandatory</em></td>
+<td>Name of the output workspace containing the processed background.</td>
+</tr>
+<tr class="row-odd"><td>WorkspaceIndex</td>
+<td>Input</td>
+<td>number</td>
+<td>0</td>
+<td>Workspace index for the input workspaces.</td>
+</tr>
+<tr class="row-even"><td>OutputWorkspace</td>
+<td>Output</td>
+<td><a class="reference internal" href="../concepts/Workspace2D.html#workspace2d"><em>Workspace2D</em></a></td>
+<td>&nbsp;</td>
+<td>Output workspace containing processed background</td>
+</tr>
+<tr class="row-odd"><td>Options</td>
+<td>Input</td>
+<td>string</td>
+<td>RemovePeaks</td>
+<td>Name of the functionality realized by this algorithm.</td>
+</tr>
+<tr class="row-even"><td>LowerBound</td>
+<td>Input</td>
+<td>number</td>
+<td><em>Optional</em></td>
+<td>Lower boundary of the data to have background processed.</td>
+</tr>
+<tr class="row-odd"><td>UpperBound</td>
+<td>Input</td>
+<td>number</td>
+<td><em>Optional</em></td>
+<td>Upper boundary of the data to have background processed.</td>
+</tr>
+<tr class="row-even"><td>ReferenceWorkspace</td>
+<td>Input</td>
+<td><a class="reference internal" href="../concepts/Workspace2D.html#workspace2d"><em>Workspace2D</em></a></td>
+<td>&nbsp;</td>
+<td>Name of the workspace containing the data required by function AddRegion.</td>
+</tr>
+<tr class="row-odd"><td>BackgroundType</td>
+<td>Input</td>
+<td>string</td>
+<td>Polynomial</td>
+<td>Type of the background. Options include Polynomial and Chebyshev.</td>
+</tr>
+<tr class="row-even"><td>SelectionMode</td>
+<td>Input</td>
+<td>string</td>
+<td>N/A</td>
+<td>If choise is UserFunction, background will be selected by an input background function.  Otherwise, background function will be fitted from user&#8217;s input data points.</td>
+</tr>
+<tr class="row-odd"><td>BackgroundOrder</td>
+<td>Input</td>
+<td>number</td>
+<td>0</td>
+<td>Order of polynomial or chebyshev background.</td>
+</tr>
+<tr class="row-even"><td>BackgroundPoints</td>
+<td>Input</td>
+<td>dbl list</td>
+<td>&nbsp;</td>
+<td>Vector of doubles, each of which is the X-axis value of the background point selected by user.</td>
+</tr>
+<tr class="row-odd"><td>BackgroundTableWorkspace</td>
+<td>Input</td>
+<td><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><em>TableWorkspace</em></a></td>
+<td>&nbsp;</td>
+<td>Name of the table workspace containing background parameters for mode SelectBackgroundPoints.</td>
+</tr>
+<tr class="row-even"><td>BackgroundPointSelectMode</td>
+<td>Input</td>
+<td>string</td>
+<td>All Background Points</td>
+<td>Mode to select background points.</td>
+</tr>
+<tr class="row-odd"><td>NoiseTolerance</td>
+<td>Input</td>
+<td>number</td>
+<td>1</td>
+<td>Tolerance of noise range.</td>
+</tr>
+<tr class="row-even"><td>NegativeNoiseTolerance</td>
+<td>Input</td>
+<td>number</td>
+<td><em>Optional</em></td>
+<td>Tolerance of noise range for negative number.</td>
+</tr>
+<tr class="row-odd"><td>UserBackgroundWorkspace</td>
+<td>Output</td>
+<td><a class="reference internal" href="../concepts/Workspace2D.html#workspace2d"><em>Workspace2D</em></a></td>
+<td>&nbsp;</td>
+<td>Output workspace containing fitted background from points specified by users.</td>
+</tr>
+<tr class="row-even"><td>OutputBackgroundParameterWorkspace</td>
+<td>Output</td>
+<td><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><em>TableWorkspace</em></a></td>
+<td>&nbsp;</td>
+<td>Output parameter table workspace containing the background fitting result.</td>
+</tr>
+<tr class="row-odd"><td>OutputBackgroundType</td>
+<td>Input</td>
+<td>string</td>
+<td>Polynomial</td>
+<td>Type of background to fit with selected background points.</td>
+</tr>
+<tr class="row-even"><td>OutputBackgroundOrder</td>
+<td>Input</td>
+<td>number</td>
+<td>6</td>
+<td>Order of background to fit with selected background points.</td>
+</tr>
+<tr class="row-odd"><td>BraggPeakTableWorkspace</td>
+<td>Input</td>
+<td><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><em>TableWorkspace</em></a></td>
+<td>&nbsp;</td>
+<td>Name of table workspace containing peaks&#8217; parameters.</td>
+</tr>
+<tr class="row-even"><td>NumberOfFWHM</td>
+<td>Input</td>
+<td>number</td>
+<td>1</td>
+<td>Number of FWHM to as the peak region to have peak removed.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="description">
+<h2><a class="toc-backref" href="#id5">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>The algorithm ProcessBackground() provides several functions for user to
+process background to prepare Le Bail Fit.</p>
+<p>There are a few functional options for user to choose.</p>
+<ul class="simple">
+<li>SelectBackgroundPoints: selecting background points from diffraction data. Usually the output will be used to fit background;</li>
+<li>RemovePeaks: removing peaks from a given MatrixWorks from diffraction data;</li>
+</ul>
+<div class="section" id="select-background-points">
+<h3><a class="toc-backref" href="#id6">Select Background Points</a><a class="headerlink" href="#select-background-points" title="Permalink to this headline">¶</a></h3>
+<p>This feature is designed to select many background points with user&#8217;s
+simple input. User is required to select only a few background points in
+the middle of two adjacent peaks. Algorithm will fit these few points
+(<em>BackgroundPoints</em>) to a background function of specified type.</p>
+<p>The purpose of this option is to select as many background data points as possible
+for future background function fitting.</p>
+<p>Prior information can be given by two modes.  Property &#8216;SelectionMode&#8217; determines which modes to use.
+One (1)is from a list of X-values specified by users via property &#8220;BackgroundPoints&#8221;.
+The other (2) is through a (background) function, whose type is specified by property &#8220;BackgroundType&#8221; and
+values are given via input table workspace &#8220;BackgroundTableWorkspace&#8221;.</p>
+<div class="section" id="select-background-points-from-given-x-values">
+<h4><a class="toc-backref" href="#id7">Select background points from given X-values</a><a class="headerlink" href="#select-background-points-from-given-x-values" title="Permalink to this headline">¶</a></h4>
+<p>Here is how it works.  Assume that the <img class="math" src="../_images/math/af8cb92a3251091c36de4a44ad17a11366cf2561.png" alt="X^{(u)}" style="vertical-align: 0px"/> is the list of x values specified by users.</p>
+<ul class="simple">
+<li>Create a data set (X, Y, E) from input workspace, where <img class="math" src="../_images/math/de87ff29e3fcb62e325379ab6e0590cc5595f438.png" alt="X_i" style="vertical-align: -3px"/> is the nearest value
+to <img class="math" src="../_images/math/2d37c3e914e49e25c962e313d431836a72718406.png" alt="X^{(u)}_i" style="vertical-align: -5px"/>;</li>
+<li>Fit the background function against the data set (X, Y, E);</li>
+<li>Select the data points, which are within a certain range above and below the fitted background function;</li>
+<li>The last step is to fit background function against the selected background points</li>
+</ul>
+</div>
+<div class="section" id="select-background-points-from-given-function">
+<h4><a class="toc-backref" href="#id8">Select background points from given function</a><a class="headerlink" href="#select-background-points-from-given-function" title="Permalink to this headline">¶</a></h4>
+<p>In this approach, the difference from the other apporach is to use the user given background function
+to select data points within a range other than fitting the background function from given data points in the
+other approach.
+Thus, it is just the last step of previous approach.</p>
+</div>
+<div class="section" id="output-workspaces">
+<h4><a class="toc-backref" href="#id9">Output workspaces</a><a class="headerlink" href="#output-workspaces" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>OutputWorkspace: It contains 3 spectra.<ul>
+<li>spectrum 0: the selected background data points;</li>
+<li>spectrum 1: the fitted background function against the selected data points;</li>
+<li>spectrum 2: the difference of sepctrum 0 and 1</li>
+</ul>
+</li>
+<li>OutputBackgroundParameterWorkspace: A table workspace containing the fitted parameter values including <img class="math" src="../_images/math/4dcb4a08df7a8b829443c0b6705fa279c77218c3.png" alt="\chi^2" style="vertical-align: -4px"/>.</li>
+<li>UserBackgroundWorkspace: a MatrixWorkspace to visualize by user.<ul>
+<li>spectrum 0: background function (either given by user or fit from given data points) that is used to select background points;</li>
+<li>spectrum 1: diffraction data with background (spectrum 0) removed;</li>
+<li>spectrum 2: upper boundary on data points to be selected for spectrum 1;</li>
+<li>spectrum 3: lower boundary on data points to be selected for spectrum 1</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="algorithm-properties">
+<h4><a class="toc-backref" href="#id10">Algorithm properties</a><a class="headerlink" href="#algorithm-properties" title="Permalink to this headline">¶</a></h4>
+<p>Besides the common algorithm properties, below is the list of properties specific to this function option.</p>
+<ul class="simple">
+<li>Inputs:<ul>
+<li>LowerBoundary</li>
+<li>UpperBoundary</li>
+<li>BackgroundType</li>
+<li>SelectionMode</li>
+<li>BackgroundOrder and BackgroundPoints / BackgroundTableWorkspace</li>
+<li>NoiseTolerance</li>
+<li>NegativeNoiseTolerance</li>
+<li>OutputBackgroundType</li>
+<li>OutputBackgroundOrder</li>
+</ul>
+</li>
+<li>Outputs:<ul>
+<li>OutputBackgroundParameterWorkspace</li>
+<li>UserBackgroundWorkspace</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="a-suggested-workflow">
+<h3><a class="toc-backref" href="#id11">A suggested workflow</a><a class="headerlink" href="#a-suggested-workflow" title="Permalink to this headline">¶</a></h3>
+<p>Here is a good example to select background points from a powder
+diffraction pattern by calling ProcessBackground() in a self-consistent
+manner.</p>
+<ol class="arabic simple">
+<li>Select a set of background points (X values only), which can roughly describes the background, manually;</li>
+<li>Call ProcessBackground with Option=&#8217;SelectBackgroundPoints&#8217; and SelectionMode=&#8217;UserSpecifyBackground&#8217;.
+A good choice for background function to enter is 6-th order polynomial;</li>
+<li>Plot spectra 2 to 4 in UserBackgroundWorkspace to check whether &#8216;Tolerance&#8217; is proper or not.
+If not then reset the tolerance and run ProcessBackground again with previous setup;</li>
+<li>Fit OutputWorkspace (the selected background) with a background function;</li>
+<li>Call ProcessBackground with Option=&#8217;SelectBackgroundPoints&#8217; and SelectionMode=&#8217;UserFunction&#8217;.
+Set the background parameter workspace as the output parameter table workspace obtained in the last step;</li>
+<li>Repeat step 4 and 5 for a few times until the background plot by fitted background function
+from selected background points is close enough to real background.</li>
+</ol>
+</div>
+<div class="section" id="simple-remove-peaks">
+<h3><a class="toc-backref" href="#id12">Simple Remove Peaks</a><a class="headerlink" href="#simple-remove-peaks" title="Permalink to this headline">¶</a></h3>
+<p>This algorithm is to remove peaks and output the backgrounds,
+which can be used to fit an artibrary background function after calling this algorithm.</p>
+<p>It is assumed that the all peaks have been fitted reasonably well.
+Then by removing the peaks within range <img class="math" src="../_images/math/817e7cace6005de82ae94919b958b7da7af966e1.png" alt="X_i^{(0)} \pm FWHM" style="vertical-align: -5px"/>,
+and save the rest data points, which are very likely backgrounds, to an output workspace.</p>
+<div class="section" id="required-and-optional-algorithm-properties">
+<h4><a class="toc-backref" href="#id13">Required and optional algorithm properties</a><a class="headerlink" href="#required-and-optional-algorithm-properties" title="Permalink to this headline">¶</a></h4>
+<p>Besides the common algorithm properties, below is the list of properties specific to this function option.</p>
+<ul class="simple">
+<li>Inputs:<ul>
+<li>BraggPeakTableWorkspace</li>
+<li>NumberOfFWHM</li>
+</ul>
+</li>
+<li>Outputs:<ul>
+<li>UserBackgroundWorkspace: a dummy output for not raising trouble with python script</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="add-region">
+<h3><a class="toc-backref" href="#id14">Add Region</a><a class="headerlink" href="#add-region" title="Permalink to this headline">¶</a></h3>
+<p>Replace a region, which is defined by &#8216;LowerBoundary&#8217; and &#8216;UpperBoundary&#8217;, in a workspace
+from another reference workspace.</p>
+<div class="section" id="id1">
+<h4><a class="toc-backref" href="#id15">Required and optional algorithm properties</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Inputs<ul>
+<li>LowerBoundary (required)</li>
+<li>UpperBoundary (required)</li>
+<li>ReferenceWorkspace (required)</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="delete-region">
+<h3><a class="toc-backref" href="#id16">Delete Region</a><a class="headerlink" href="#delete-region" title="Permalink to this headline">¶</a></h3>
+<p>Removed a specified region, which is defined by &#8216;LowerBoundary&#8217; and &#8216;UpperBoundary&#8217;, from the input workspace.</p>
+<div class="section" id="id2">
+<h4><a class="toc-backref" href="#id17">Required and optional algorithm properties</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Inputs<ul>
+<li>LowerBoundary (required)</li>
+<li>UpperBoundary (required)</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id18">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p><strong>Example - Select background from a powgen data:</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">LoadAscii</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s">r&#39;PG3_15035-3.dat&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;PG3_15035-3&#39;</span><span class="p">,</span><span class="n">Unit</span><span class="o">=</span><span class="s">&#39;TOF&#39;</span><span class="p">)</span>
+
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">ProcessBackground</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;PG3_15035-3&#39;</span><span class="p">,</span> <span class="n">WorkspaceIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Options</span><span class="o">=</span><span class="s">&#39;SelectBackgroundPoints&#39;</span><span class="p">,</span>
+      <span class="n">LowerBound</span><span class="o">=</span><span class="s">&#39;9726&#39;</span><span class="p">,</span><span class="n">UpperBound</span><span class="o">=</span><span class="s">&#39;119000&#39;</span><span class="p">,</span> <span class="n">BackgroundType</span> <span class="o">=</span> <span class="s">&#39;Polynomial&#39;</span><span class="p">,</span>  <span class="n">BackgroundOrder</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+      <span class="n">SelectionMode</span><span class="o">=</span><span class="s">&#39;FitGivenDataPoints&#39;</span><span class="p">,</span> <span class="n">BackgroundPointSelectMode</span> <span class="o">=</span> <span class="s">&quot;All Background Points&quot;</span><span class="p">,</span>
+      <span class="n">BackgroundPoints</span><span class="o">=</span><span class="s">&#39;10082,10591,11154,12615,13690,13715,15073,16893,17764,19628,21318,24192,35350,44212,50900,60000,69900,79000&#39;</span><span class="p">,</span>
+      <span class="n">NoiseTolerance</span> <span class="o">=</span> <span class="mf">0.10</span><span class="p">,</span>
+      <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;PG3_15035-3_BkgdPts&#39;</span><span class="p">,</span> <span class="n">OutputBackgroundType</span> <span class="o">=</span> <span class="s">&quot;Polynomial&quot;</span><span class="p">,</span> <span class="n">OutputBackgroundOrder</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+      <span class="n">OutputBackgroundParameterWorkspace</span> <span class="o">=</span> <span class="s">&quot;OutBackgroundParameters&quot;</span><span class="p">,</span> <span class="n">UserBackgroundWorkspace</span><span class="o">=</span><span class="s">&quot;UserTheory&quot;</span><span class="p">)</span>
+
+<span class="n">tbws</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="k">print</span> <span class="s">&quot;Number of output workspace = </span><span class="si">%d</span><span class="s">, Number of selected background points = </span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">outputs</span><span class="p">),</span>  <span class="nb">len</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+<span class="k">print</span> <span class="s">&quot;Fitted background function: A0 = </span><span class="si">%.5e</span><span class="s">, A1 = </span><span class="si">%.5e</span><span class="s">, A2 = </span><span class="si">%.5e</span><span class="s"> ...&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tbws</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">tbws</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">tbws</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>Number of output workspace = 3, Number of selected background points = 4944
+Fitted background function: A0 = 5.43859e-01, A1 = -5.20674e-05, A2 = 2.84119e-09 ...
+</pre></div>
+</div>
+<p><strong>Example - Add Region:</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">vecx</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">vecy1</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">vecy2</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">vece</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">x0</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">dx</span>
+  <span class="n">vecx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">4.0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">0.1</span><span class="p">)</span>
+  <span class="n">e</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+  <span class="n">vecy1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+  <span class="n">vecy2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span><span class="n">y</span><span class="p">)</span>
+  <span class="n">vece</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+<span class="n">ws1</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span> <span class="o">=</span> <span class="n">vecx</span><span class="p">,</span> <span class="n">DataY</span> <span class="o">=</span> <span class="n">vecy1</span><span class="p">,</span> <span class="n">DataE</span> <span class="o">=</span> <span class="n">vece</span><span class="p">,</span> <span class="n">NSpec</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">ws2</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span> <span class="o">=</span> <span class="n">vecx</span><span class="p">,</span> <span class="n">DataY</span> <span class="o">=</span> <span class="n">vecy2</span><span class="p">,</span> <span class="n">DataE</span> <span class="o">=</span> <span class="n">vece</span><span class="p">,</span> <span class="n">NSpec</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">ProcessBackground</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws1</span><span class="p">,</span> <span class="n">WorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&quot;ws12&quot;</span><span class="p">,</span> <span class="n">Options</span><span class="o">=</span><span class="s">&quot;AddRegion&quot;</span><span class="p">,</span>
+      <span class="n">LowerBound</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">UpperBound</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">,</span> <span class="n">ReferenceWorkspace</span> <span class="o">=</span> <span class="n">ws2</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">450</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">700</span><span class="p">]:</span>
+  <span class="k">print</span> <span class="s">&quot;X = </span><span class="si">%.5f</span><span class="s">, Input Y[</span><span class="si">%d</span><span class="s">] = </span><span class="si">%.5f</span><span class="s">, Reference Y[</span><span class="si">%d</span><span class="s">] = </span><span class="si">%.5f</span><span class="s">, Output Y[</span><span class="si">%d</span><span class="s">] = </span><span class="si">%.5f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">vecx</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="n">ws1</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="n">ws2</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">,</span> <span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>X = 2.00000, Input Y[200] = 1.65069, Reference Y[200] = -1.65069, Output Y[200] = 1.65069
+X = 4.00000, Input Y[400] = 3.81388, Reference Y[400] = -3.81388, Output Y[400] = -3.81388
+X = 4.50000, Input Y[450] = 2.68751, Reference Y[450] = -2.68751, Output Y[450] = -2.68751
+X = 5.00000, Input Y[500] = 2.00611, Reference Y[500] = -2.00611, Output Y[500] = 1.71367
+X = 7.00000, Input Y[700] = 1.12037, Reference Y[700] = -1.12037, Output Y[700] = 2.87033
+</pre></div>
+</div>
+<p><strong>Example - Delete Region:</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">vecx</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">vecy</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">vece</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">x0</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">dx</span>
+  <span class="n">vecx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">4.0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">0.1</span><span class="p">)</span>
+  <span class="n">e</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+  <span class="n">vecy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+  <span class="n">vece</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+<span class="n">ws1</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span> <span class="o">=</span> <span class="n">vecx</span><span class="p">,</span> <span class="n">DataY</span> <span class="o">=</span> <span class="n">vecy</span><span class="p">,</span> <span class="n">DataE</span> <span class="o">=</span> <span class="n">vece</span><span class="p">,</span> <span class="n">NSpec</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">ProcessBackground</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws1</span><span class="p">,</span> <span class="n">WorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&quot;ws2&quot;</span><span class="p">,</span> <span class="n">Options</span><span class="o">=</span><span class="s">&quot;DeleteRegion&quot;</span><span class="p">,</span>
+      <span class="n">LowerBound</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">UpperBound</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s">&quot;Input has </span><span class="si">%d</span><span class="s"> data points; Output has </span><span class="si">%d</span><span class="s"> data points.&quot;</span> <span class="o">%</span> <span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">ws1</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span> <span class="nb">len</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>Input has 1000 data points; Output has 799 data points.
+</pre></div>
+</div>
+<p><strong>Example - Remove peaks:</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">vecx</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">vecy</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">vece</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">numpts</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="n">dx</span>
+  <span class="n">y</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">+</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mf">2.</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">2.0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">0.1</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span> <span class="o">+</span> <span class="mi">20</span><span class="o">*</span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">7.5</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">0.05</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
+  <span class="n">e</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+  <span class="n">vecx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">vecy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+  <span class="n">vece</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span> <span class="o">=</span> <span class="n">vecx</span><span class="p">,</span> <span class="n">DataY</span> <span class="o">=</span> <span class="n">vecy</span><span class="p">,</span> <span class="n">DataE</span> <span class="o">=</span> <span class="n">vece</span><span class="p">,</span> <span class="n">NSpec</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">peaktb</span> <span class="o">=</span> <span class="n">CreateEmptyTableWorkspace</span><span class="p">()</span>
+<span class="n">peaktb</span><span class="o">.</span><span class="n">addColumn</span><span class="p">(</span><span class="s">&quot;double&quot;</span><span class="p">,</span> <span class="s">&quot;TOF_h&quot;</span><span class="p">)</span>
+<span class="n">peaktb</span><span class="o">.</span><span class="n">addColumn</span><span class="p">(</span><span class="s">&quot;double&quot;</span><span class="p">,</span> <span class="s">&quot;FWHM&quot;</span><span class="p">)</span>
+<span class="n">peaktb</span><span class="o">.</span><span class="n">addRow</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
+<span class="n">peaktb</span><span class="o">.</span><span class="n">addRow</span><span class="p">([</span><span class="mf">7.40</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">])</span>
+
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">ProcessBackground</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">WorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&quot;background&quot;</span><span class="p">,</span>
+    <span class="n">Options</span><span class="o">=</span><span class="s">&quot;RemovePeaks&quot;</span><span class="p">,</span> <span class="n">BraggPeakTableWorkspace</span><span class="o">=</span><span class="n">peaktb</span><span class="p">,</span> <span class="n">NumberOfFWHM</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">Fit</span><span class="p">(</span><span class="n">Function</span><span class="o">=</span><span class="s">&#39;name=Polynomial,n=1,A0=0.0,A1=0.0&#39;</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;background&#39;</span><span class="p">,</span>  <span class="n">CreateOutput</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">StartX</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">EndX</span><span class="o">=</span><span class="mf">9.9900000000000002</span><span class="p">,</span>
+    <span class="n">OutputNormalisedCovarianceMatrix</span><span class="o">=</span><span class="s">&#39;background_NormalisedCovarianceMatrix&#39;</span><span class="p">,</span> <span class="n">OutputParameters</span><span class="o">=</span><span class="s">&#39;background_Parameters&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;background_Workspace&#39;</span><span class="p">)</span>
+
+<span class="n">outparws</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&quot;background_Parameters&quot;</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&quot;Input workspace has </span><span class="si">%d</span><span class="s"> data points; Output workspace has </span><span class="si">%d</span><span class="s"> data points.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)),</span> <span class="nb">len</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+<span class="k">print</span> <span class="s">&quot;Fitted background parameters: A0 = </span><span class="si">%.5e</span><span class="s">, A1 = </span><span class="si">%.5e</span><span class="s">, Chi-square = </span><span class="si">%.5f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">outparws</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">outparws</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">outparws</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>Input workspace has 1000 data points; Output workspace has 741 data points.
+Fitted background parameters: A0 = 3.90254e+00, A1 = 1.09284e-02, Chi-square = 0.08237
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/Algorithms.html">Algorithms</a> | <a class="reference external" href="categories/Diffraction.html">Diffraction</a> | <a class="reference external" href="categories/Utility.html">Utility</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, Mantid.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

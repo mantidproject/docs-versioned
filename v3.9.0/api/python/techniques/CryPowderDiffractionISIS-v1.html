@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Crystallography Powder Diffraction Script</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '3.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../../../index.html" />
+    <link rel="up" title="Python API" href="../index.html" />
+    <link rel="next" title="Pearl Powder Diffraction Script" href="PearlPowderDiffractionISIS-v1.html" />
+    <link rel="prev" title="pyplot — Matplotlib-like plotting package" href="../mantidplot/pyplot/index.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="crystallography-powder-diffraction-script">
+<span id="cry-powder-diffraction-ref"></span><h1>Crystallography Powder Diffraction Script<a class="headerlink" href="#crystallography-powder-diffraction-script" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>A wide variety of algorithms are available within Mantid for processing of data,
+writing results files, etc.  These may be run interactively, one at a time, but
+in general scripting (using the Python scripting language) enables a series of
+algorithms to be called in a specific order to carry out more complex tasks, such
+as data normalisation and writing data files suitable for input to Rietveld
+refinement programmes (GSAS, FullProf, etc).</p>
+<p>All the script files used to process GEM, HRPD, INS and Polaris data have been
+integrated to Mantid which can be found inside the following directory on a Windows
+machine: <cite>C:\MantidInstall\scripts\CryPowderISIS</cite>.</p>
+</div>
+<div class="section" id="run-requirement">
+<h2>Run Requirement<a class="headerlink" href="#run-requirement" title="Permalink to this headline">¶</a></h2>
+<p>There are a preference file and a small script which is required to run inside
+<a class="reference external" href="http://docs.mantidproject.org/nightly/interfaces/ScriptingWindow.html">Scripting Window</a> on mantid in order to carry out the data normalisation:</p>
+<p>The preference file, a file with an extension name of .pref (e.g: UserPrefFile.pref)
+will contain the following at least:</p>
+<ul class="simple">
+<li>vanadium, background and empty sample container (if used) run numbers</li>
+<li>parameters  for carrying out a sample absorption correction (if required)</li>
+<li>directories which can be assigned to RAW files, Vanadium Directory</li>
+</ul>
+<p><em>These directories have been left blank but can be changed and set by each user</em>
+<em>on their preference. The directories are also modifiable via small script which</em>
+<em>is ran inside</em> <a class="reference external" href="http://docs.mantidproject.org/nightly/interfaces/ScriptingWindow.html">Scripting Window</a></p>
+<p>The script which is required to be written inside <a class="reference external" href="http://docs.mantidproject.org/nightly/interfaces/ScriptingWindow.html">Scripting Window</a> on Mantid contains:</p>
+<ul class="simple">
+<li>details of the location for all the files which will be utilised</li>
+<li>name of the pref file and folders</li>
+<li>the run number(s) you wish to process</li>
+</ul>
+</div>
+<div class="section" id="vanadium-background-files">
+<h2>Vanadium &amp; Background Files<a class="headerlink" href="#vanadium-background-files" title="Permalink to this headline">¶</a></h2>
+<p>The vanadium and background files are smoothed (a spline wih 150 points works well
+with Polaris data), and the vanadium Bragg reflections removed. The high and low
+d-spacing limits of the observed V reflections in each of the detector banks are stored
+in a file called VanaPeaks.dat - which is stored inside <cite>Polaris</cite> folder in
+<a class="reference internal" href="#post-structure-powderisis-ref"><em>Files &amp; Folder Post-Structure</em></a>.</p>
+<p>Both the smoothed and unsmoothed aligned and grouped vanadium data sets are written to
+the <cite>Polaris/test/Cycle_15_2/Calibration</cite> folder.  These may be read in to a workspace
+and compared against one another to ensure that the smoothing and peak stripping is
+satisfactory (the smoothing function and number of &#8216;fixed&#8217; points may be chosen to suit
+the data).</p>
+</div>
+<div class="section" id="files-folders">
+<h2>Files &amp; Folders<a class="headerlink" href="#files-folders" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="files-folder-pre-structure">
+<h3>Files &amp; Folder Pre-Structure<a class="headerlink" href="#files-folder-pre-structure" title="Permalink to this headline">¶</a></h3>
+<p>When <cite>ExistingV</cite> is <cite>yes</cite> inside the pref file that is being utilised, you are required
+to have nexus files named after the value of <cite>CorrVanFile</cite> which is also found inside
+the pref file. Within the image below we are using Polaris instrument so we shall need 5 nexus
+files as you can see inside the calibration folder (5 is the number of banks
+for Polaris). If the nexus files are not found, then the script will automatically change
+<cite>ExvistingV</cite> to <cite>no</cite> from <cite>yes</cite> until the end of the process.</p>
+<img alt="../../../_images/PowderISIS_pre_structure_extV_yes.PNG" src="../../../_images/PowderISIS_pre_structure_extV_yes.PNG" />
+</div>
+<div class="section" id="files-folder-post-structure">
+<span id="post-structure-powderisis-ref"></span><h3>Files &amp; Folder Post-Structure<a class="headerlink" href="#files-folder-post-structure" title="Permalink to this headline">¶</a></h3>
+<p>Once the process has completed, files should be generated inside the <cite>Calibration</cite>
+and <cite>Mantid_tester</cite> folder.</p>
+<img alt="../../../_images/PowderISIS_Post_structure_extV_yes.PNG" src="../../../_images/PowderISIS_Post_structure_extV_yes.PNG" />
+</div>
+<div class="section" id="dependencies">
+<h3>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h3>
+<p>The structure of the folder shown above in the image can be easily modified within
+the script that is written inside <a class="reference external" href="http://docs.mantidproject.org/nightly/interfaces/ScriptingWindow.html">Scripting Window</a>. The script that is being used to generate above
+folder structure can be found in the <a class="reference internal" href="#usage-powderisis-ref"><em>Usage</em></a> section.
+If the <cite>Analysisdir</cite> equals empty string (&#8220;&#8221;) or <cite>Analysisdir</cite> is not pass as a parameter
+within the python script, the <cite>GrpOff</cite> and <cite>Cycle_15_2</cite> folder will be required inside the
+<cite>Polaris</cite> folder.</p>
+<p>Similarly if the <cite>Cycle_15_2</cite> or <cite>user</cite> is passed as an empty string (&#8220;&#8221;) or else is not passed
+as a parameter, then the script shall look for the files in previous folder.</p>
+</div>
+</div>
+<div class="section" id="data-layout">
+<h2>Data Layout<a class="headerlink" href="#data-layout" title="Permalink to this headline">¶</a></h2>
+<p>The &#8216;GrpOff&#8217; folder is always required, within the &#8216;GrpOff&#8217; folder is a .cal file
+which gives the detector grouping (i.e. the detector banks&#8217; numbers) and the Offset
+to be applied to focus each detector (this is in addition to the &#8220;ideal&#8221; instrument
+geometry focusing information, which Mantid determines from the Instrument
+Definition File).</p>
+<p>The run number, vanadium number and V-Empty number data is required to be provided
+within the raw directory, if the vana-peaks are also required to be removed then a
+file named <cite>VanaPeaks.dat</cite> is needed inside the raw directory.
+This will enable vana peaks to be removed by interpolation in range given within
+the <cite>VanaPeaks.dat</cite> file. The vanadium number and V-Empty number is set in the pref file
+as shown below, the script shall look for the raw files (with the format of
+&lt;instrument&gt;&lt;run-number&gt;, e.g: POL78338 and POL78339) inside the raw directory.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#----------------------------------------------------</span>
+<span class="c"># Runs Numbers</span>
+<span class="c">#----------------------------------------------------</span>
+<span class="c">#</span>
+<span class="n">Vanadium</span>     <span class="mi">78338</span>
+<span class="n">V</span><span class="o">-</span><span class="n">Empty</span>      <span class="mi">78339</span>
+<span class="n">S</span><span class="o">-</span><span class="n">Empty</span>      <span class="mi">0</span>
+<span class="c">#</span>
+</pre></div>
+</div>
+<div class="section" id="output">
+<h3>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h3>
+<p>The output files will vary on the values provided in pref file for the following
+variables, which either equal yes or no.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#Output</span>
+<span class="n">XYE</span><span class="o">-</span><span class="n">TOF</span>      <span class="n">yes</span>
+<span class="n">XYE</span><span class="o">-</span><span class="n">D</span>        <span class="n">yes</span>
+<span class="n">GSS</span>          <span class="n">yes</span>
+<span class="n">Nexus</span>        <span class="n">yes</span>
+</pre></div>
+</div>
+<p>The <cite>XYE-TOF</cite>, <cite>XYE-D</cite>, <cite>GSS</cite> and <cite>Nexus</cite> files along with a copy of the <cite>Grouping</cite> file
+are all generated where the pref file is located, which would be inside the
+&#8216;Mantid_tester&#8217; folder in <a class="reference internal" href="#post-structure-powderisis-ref"><em>Files &amp; Folder Post-Structure</em></a>.</p>
+<p>The <cite>Calibration</cite> folder (which is created automatically), where that cycle&#8217;s smoothed
+and corrected vanadium files are stored (note - there is not a multiple scattering
+correction available yet for the vanadium).  If a file name is not specified in the
+.pref file for the smoothed vanadium files, a file name is generated automatically,
+which contains both the vanadium and the background run numbers.</p>
+</div>
+</div>
+<div class="section" id="default-directory">
+<h2>Default Directory<a class="headerlink" href="#default-directory" title="Permalink to this headline">¶</a></h2>
+<p>With the mantid feature <a class="reference external" href="http://www.mantidproject.org/ManageUserDirectories">Manage User Directories</a>, users are able to reveal the instrument directory to mantid,
+which can then be utilised inside the python script by simply calling DIRS[0], if the
+following script is also passed in <a class="reference external" href="http://docs.mantidproject.org/nightly/interfaces/ScriptingWindow.html">Scripting Window</a> (DIR[0]- 0 being the first/top directory listed
+inside <a class="reference external" href="http://www.mantidproject.org/ManageUserDirectories">Manage User Directories</a>).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mantid</span> <span class="kn">import</span> <span class="n">config</span>
+<span class="n">DIRS</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s">&#39;datasearch.directories&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To get the directory inside the <a class="reference external" href="http://www.mantidproject.org/ManageUserDirectories">Manage User Directories</a>, just use <cite>Browse To Directory</cite> button the find the directory
+of the instrument folder, once directory has been added, select the directory and move
+it to the top of the list with the help of <cite>Move Up</cite> button on the right.</p>
+<p>However depending on the preference of the user, a directory of the instrument can
+directly be passed as a variable, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">dir</span> <span class="o">=</span> <span class="s">&#39;X:</span><span class="se">\&#39;</span>
+<span class="n">FilesDir</span> <span class="o">=</span> <span class="s">&#39;X:\Polaris&#39;</span>
+
+<span class="n">expt</span> <span class="o">=</span> <span class="n">cry_ini</span><span class="o">.</span><span class="n">Files</span><span class="p">(</span><span class="s">&#39;Polaris&#39;</span><span class="p">,</span> <span class="n">RawDir</span><span class="o">=</span><span class="n">FilesDir</span><span class="p">,</span> <span class="n">Analysisdir</span><span class="o">=</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="n">forceRootDirFromScripts</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">inputInstDir</span><span class="o">=</span><span class="nb">dir</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>User may also place the instrument folder where the script is located, which would be
+found in the following directory on Windows platform <cite>C:\MantidInstall\scriptsCryPowderISIS</cite>.
+Using instrument folder from where the scripts are located can simply be done by
+modifying the following line of the <a class="reference internal" href="#usage-powderisis-ref"><em>Usage</em></a> script to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">expt</span> <span class="o">=</span> <span class="n">cry_ini</span><span class="o">.</span><span class="n">Files</span><span class="p">(</span><span class="s">&#39;Polaris&#39;</span><span class="p">,</span> <span class="n">RawDir</span><span class="o">=</span><span class="p">(</span><span class="n">DIRS</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot;Polaris&quot;</span><span class="p">),</span> <span class="n">Analysisdir</span><span class="o">=</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="n">forceRootDirFromScripts</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="workflow">
+<h2>Workflow<a class="headerlink" href="#workflow" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="high-level-workflow">
+<h3>High-Level Workflow<a class="headerlink" href="#high-level-workflow" title="Permalink to this headline">¶</a></h3>
+<img alt="../../../_images/PowderDiffractionISIS_HighLvl-v1_wkflw.png" src="../../../_images/PowderDiffractionISIS_HighLvl-v1_wkflw.png" />
+</div>
+<div class="section" id="mid-level-workflow">
+<h3>Mid-Level Workflow<a class="headerlink" href="#mid-level-workflow" title="Permalink to this headline">¶</a></h3>
+<img alt="../../../_images/PowderDiffractionISIS_MidLvl-v1_wkflw.png" src="../../../_images/PowderDiffractionISIS_MidLvl-v1_wkflw.png" />
+</div>
+<div class="section" id="low-level-workflow">
+<h3>Low-Level Workflow<a class="headerlink" href="#low-level-workflow" title="Permalink to this headline">¶</a></h3>
+<img alt="../../../_images/PowderDiffractionISIS_LowLvl-v1_wkflw.png" src="../../../_images/PowderDiffractionISIS_LowLvl-v1_wkflw.png" />
+</div>
+</div>
+<div class="section" id="additional-information">
+<h2>Additional Information<a class="headerlink" href="#additional-information" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="files-folder-pre-structure-with-no-existingv">
+<h3>Files &amp; Folder Pre-Structure With No ExistingV<a class="headerlink" href="#files-folder-pre-structure-with-no-existingv" title="Permalink to this headline">¶</a></h3>
+<p>Image below displays the only files required when <cite>ExistingV</cite> is <cite>no</cite> inside the
+pref file. This means that the <cite>Calibration</cite> folder, where that cycle&#8217;s smoothed
+and corrected vanadium files are stored will not be required for this process.
+Instead the files will be generated and the script will automatically change the
+pref file value of <cite>ExistingV</cite> to <cite>yes</cite> from <cite>no</cite> once the process has finished.</p>
+<img alt="../../../_images/PowderISIS_pre_structure.png" src="../../../_images/PowderISIS_pre_structure.png" />
+</div>
+<div class="section" id="files-folder-post-structure-with-no-existingv">
+<h3>Files &amp; Folder Post-Structure With No ExistingV<a class="headerlink" href="#files-folder-post-structure-with-no-existingv" title="Permalink to this headline">¶</a></h3>
+<p>Once the process has completed, additional files with the label <cite>unstripped</cite> should
+be generated inside the calibration folder, if <cite>ExistingV</cite> is <cite>no</cite>.</p>
+<a class="reference internal image-reference" href="../../../_images/PowderISIS_Post_structure.PNG"><img alt="../../../_images/PowderISIS_Post_structure.PNG" src="../../../_images/PowderISIS_Post_structure.PNG" style="width: 746.4px; height: 428.8px;" /></a>
+</div>
+</div>
+<div class="section" id="usage">
+<span id="usage-powderisis-ref"></span><h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p><strong>Example - General Script Utilised To Process Powder Diffraction With Polaris</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">mantid</span> <span class="kn">import</span> <span class="n">config</span>
+
+<span class="kn">import</span> <span class="nn">cry_ini</span>
+<span class="kn">import</span> <span class="nn">cry_focus</span>
+
+<span class="c"># Browse to the directory of the instrument and move the instrument directory up to the top</span>
+<span class="c"># with the use of Move Up button</span>
+<span class="n">DIRS</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s">&#39;datasearch.directories&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;;&#39;</span><span class="p">)</span>
+<span class="c"># Alternatively you could also pass the path where the instrument folder is located</span>
+<span class="c"># DIRS = X:\</span>
+
+<span class="n">expt</span> <span class="o">=</span> <span class="n">cry_ini</span><span class="o">.</span><span class="n">Files</span><span class="p">(</span><span class="s">&#39;Polaris&#39;</span><span class="p">,</span> <span class="n">RawDir</span><span class="o">=</span><span class="p">(</span><span class="n">DIRS</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot;Polaris&quot;</span><span class="p">),</span> <span class="n">Analysisdir</span><span class="o">=</span><span class="s">&#39;test&#39;</span><span class="p">,</span> <span class="n">forceRootDirFromScripts</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">inputInstDir</span><span class="o">=</span><span class="n">DIRS</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">expt</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="s">&#39;Cycle_15_2&#39;</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s">&#39;Mantid_tester&#39;</span><span class="p">,</span> <span class="n">prefFile</span><span class="o">=</span><span class="s">&#39;UserPrefFile_15_2.pref&#39;</span><span class="p">)</span>
+<span class="n">expt</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+
+<span class="n">cry_focus</span><span class="o">.</span><span class="n">focus_all</span><span class="p">(</span><span class="n">expt</span><span class="p">,</span> <span class="s">&quot;79514&quot;</span><span class="p">,</span> <span class="n">Write_ExtV</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="../mantidplot/pyplot/index.html" title="Previous Chapter: pyplot — Matplotlib-like plotting package"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; pyplot — Matplot...</span>
+    </a>
+  </li>
+  <li>
+    <a href="PearlPowderDiffractionISIS-v1.html" title="Next Chapter: Pearl Powder Diffraction Script"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Pearl Powder Dif... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

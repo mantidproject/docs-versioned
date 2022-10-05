@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Instrument</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.12.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Instrument Access via SpectrumInfo, DetectorInfo, ComponentInfo" href="InstrumentAccessLayers.html" />
+    <link rel="prev" title="How to reset detectors calibration" href="Howtoresetdetectorscalibration.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.12</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="instrument">
+<span id="id1"></span><h1>Instrument<a class="headerlink" href="#instrument" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#what-are-instruments" id="id2">What are Instruments?</a></li>
+<li><a class="reference internal" href="#working-with-instruments-in-python" id="id3">Working with Instruments in Python</a><ul>
+<li><a class="reference internal" href="#getting-the-instrument-from-a-workspace" id="id4">Getting the Instrument from a workspace</a></li>
+<li><a class="reference internal" href="#instrument-properties" id="id5">Instrument Properties</a></li>
+<li><a class="reference internal" href="#finding-specific-components-of-the-instrument" id="id6">Finding Specific Components of the instrument</a></li>
+<li><a class="reference internal" href="#instrument-parameters" id="id7">Instrument Parameters</a><ul>
+<li><a class="reference internal" href="#getting-all-the-parameters-on-an-instrument-component" id="id8">Getting all the Parameters on an instrument component</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="what-are-instruments">
+<h2><a class="toc-backref" href="#id2">What are Instruments?</a><a class="headerlink" href="#what-are-instruments" title="Permalink to this headline">¶</a></h2>
+<p>The Instrument in Mantid is a geometrical description of the components that make
+up the beam line. The components described will generally include:</p>
+<ul class="simple">
+<li>The source</li>
+<li>The sample position</li>
+<li>Each detector &#8216;pixel&#8217;</li>
+<li>Each monitor</li>
+</ul>
+<p>Other components may also be included such as</p>
+<ul class="simple">
+<li>Slits</li>
+<li>Mirrows</li>
+<li>Guides</li>
+<li>Choppers</li>
+<li>Engineering obstacles in the beam path</li>
+<li>Link between log-files and variable parameters of the instrument
+(such as the height of a detector table)</li>
+</ul>
+<p>An instrument is described using an <a class="reference internal" href="InstrumentDefinitionFile.html#instrumentdefinitionfile"><em>instrument definition
+file</em></a>.</p>
+<p>The Mantid geometry is further explained <a class="reference internal" href="Geometry.html#geometry"><em>here</em></a>.</p>
+<p><strong>Why do we have a full instrument description, and not just a list of L2 and 2Theta values?</strong></p>
+<p>A list of L2 and 2Theta values will provide information to perform unit
+conversions and several other algorithms, however a full geometric
+instrument description allows much more.</p>
+<ul class="simple">
+<li>Visualization of the instrument internals with data overlays</li>
+<li>Complex absorption corrections</li>
+<li>Montecarlo simulations of experiments</li>
+<li>Updating the instrument geometry according to values stored in
+log-files</li>
+</ul>
+</div>
+<div class="section" id="working-with-instruments-in-python">
+<h2><a class="toc-backref" href="#id3">Working with Instruments in Python</a><a class="headerlink" href="#working-with-instruments-in-python" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="getting-the-instrument-from-a-workspace">
+<h3><a class="toc-backref" href="#id4">Getting the Instrument from a workspace</a><a class="headerlink" href="#getting-the-instrument-from-a-workspace" title="Permalink to this headline">¶</a></h3>
+<p>You can get access to the Instrument for a workspace with</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">instrument</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getInstrument</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="instrument-properties">
+<h3><a class="toc-backref" href="#id5">Instrument Properties</a><a class="headerlink" href="#instrument-properties" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ws</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">instrument</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getInstrument</span><span class="p">()</span>
+
+<span class="c"># get the instrument name</span>
+<span class="k">print</span><span class="p">(</span><span class="n">instrument</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span>
+<span class="c"># Get the validity dates for this instrument definition</span>
+<span class="k">print</span><span class="p">(</span><span class="n">instrument</span><span class="o">.</span><span class="n">getValidToDate</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">instrument</span><span class="o">.</span><span class="n">getValidFromDate</span><span class="p">())</span>
+<span class="c"># Get the X,Y,Z position of the source and sample</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">instrument</span><span class="o">.</span><span class="n">getSource</span><span class="p">()</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="n">instrument</span><span class="o">.</span><span class="n">getSample</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">getPos</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">getPos</span><span class="p">())</span>
+<span class="c"># Get the distance from the source to the sample</span>
+<span class="k">print</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">getDistance</span><span class="p">(</span><span class="n">source</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="finding-specific-components-of-the-instrument">
+<h3><a class="toc-backref" href="#id6">Finding Specific Components of the instrument</a><a class="headerlink" href="#finding-specific-components-of-the-instrument" title="Permalink to this headline">¶</a></h3>
+<p>The instrument class has several methods to help in finding the objects that describe specific parts of the instrument.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ws</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">instrument</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getInstrument</span><span class="p">()</span>
+
+<span class="c"># Get the source and sample</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">instrument</span><span class="o">.</span><span class="n">getSource</span><span class="p">()</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="n">instrument</span><span class="o">.</span><span class="n">getSample</span><span class="p">()</span>
+
+<span class="c"># You can get a component by name</span>
+<span class="n">bank1</span> <span class="o">=</span> <span class="n">instrument</span><span class="o">.</span><span class="n">getComponentByName</span><span class="p">(</span><span class="s">&quot;bank1&quot;</span><span class="p">)</span>
+<span class="c"># Or by Detector_id</span>
+<span class="n">det101</span> <span class="o">=</span> <span class="n">instrument</span><span class="o">.</span><span class="n">getDetector</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="instrument-parameters">
+<h3><a class="toc-backref" href="#id7">Instrument Parameters</a><a class="headerlink" href="#instrument-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Instruments, or any component within them (bank, detector, chopper, slit etc) can have parameters defined for them.  These can be accessed from Python.  Any search for instrument parameters cascades up the instrument tree, so a detector will inherit any parameters from it&#8217;s back, and it&#8217;s instrument.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># setup</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="c">#set a string parameter on the whole instrument</span>
+<span class="n">SetInstrumentParameter</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span><span class="n">ParameterName</span><span class="o">=</span><span class="s">&quot;TestParam&quot;</span><span class="p">,</span><span class="n">Value</span><span class="o">=</span><span class="s">&quot;Hello&quot;</span><span class="p">)</span>
+
+<span class="c">#set a Number parameter just for bank 1</span>
+<span class="n">SetInstrumentParameter</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span><span class="n">ParameterName</span><span class="o">=</span><span class="s">&quot;NumberParam&quot;</span><span class="p">,</span><span class="n">Value</span><span class="o">=</span><span class="s">&quot;3&quot;</span><span class="p">,</span> <span class="n">ComponentName</span><span class="o">=</span><span class="s">&quot;bank1&quot;</span><span class="p">,</span><span class="n">ParameterType</span><span class="o">=</span><span class="s">&quot;Number&quot;</span><span class="p">)</span>
+
+<span class="c">#set a different value on bank 2</span>
+<span class="n">SetInstrumentParameter</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span><span class="n">ParameterName</span><span class="o">=</span><span class="s">&quot;NumberParam&quot;</span><span class="p">,</span><span class="n">Value</span><span class="o">=</span><span class="s">&quot;3.5&quot;</span><span class="p">,</span> <span class="n">ComponentName</span><span class="o">=</span><span class="s">&quot;bank2&quot;</span><span class="p">,</span><span class="n">ParameterType</span><span class="o">=</span><span class="s">&quot;Number&quot;</span><span class="p">)</span>
+
+
+<span class="n">instrument</span><span class="o">=</span><span class="n">ws</span><span class="o">.</span><span class="n">getInstrument</span><span class="p">()</span>
+<span class="n">bank1</span><span class="o">=</span><span class="n">instrument</span><span class="o">.</span><span class="n">getComponentByName</span><span class="p">(</span><span class="s">&quot;bank1&quot;</span><span class="p">)</span>
+<span class="n">bank2</span><span class="o">=</span><span class="n">instrument</span><span class="o">.</span><span class="n">getComponentByName</span><span class="p">(</span><span class="s">&quot;bank2&quot;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;The whole instrument parameter can be read from anywhere.&quot;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;  The instrument: &quot;</span> <span class="o">+</span> <span class="n">instrument</span><span class="o">.</span><span class="n">getStringParameter</span><span class="p">(</span><span class="s">&quot;TestParam&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;  bank 1: &quot;</span> <span class="o">+</span> <span class="n">bank1</span><span class="o">.</span><span class="n">getStringParameter</span><span class="p">(</span><span class="s">&quot;TestParam&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;  bank 2: &quot;</span> <span class="o">+</span> <span class="n">bank2</span><span class="o">.</span><span class="n">getStringParameter</span><span class="p">(</span><span class="s">&quot;TestParam&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;The parameters  on the Bank 1 can be read from the bank or below.&quot;</span><span class="p">)</span>
+<span class="c">#For this one call getIntParameter as the number was an int</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;  bank 1: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">bank1</span><span class="o">.</span><span class="n">getIntParameter</span><span class="p">(</span><span class="s">&quot;NumberParam&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="c">#For this one call getNumberParameter as the number was a float</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;  bank 2: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">bank2</span><span class="o">.</span><span class="n">getNumberParameter</span><span class="p">(</span><span class="s">&quot;NumberParam&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="c">#if you are not sure of the type of a parameter you can call getParameterType</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;  The type of NumberParam in bank 1: &quot;</span> <span class="o">+</span> <span class="n">bank1</span><span class="o">.</span><span class="n">getParameterType</span><span class="p">(</span><span class="s">&quot;NumberParam&quot;</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;  The type of NumberParam in bank 2: &quot;</span> <span class="o">+</span> <span class="n">bank2</span><span class="o">.</span><span class="n">getParameterType</span><span class="p">(</span><span class="s">&quot;NumberParam&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>The whole instrument parameter can be read from anywhere.
+  The instrument: Hello
+  bank 1: Hello
+  bank 2: Hello
+The parameters  on the Bank 1 can be read from the bank or below.
+  bank 1: 3
+  bank 2: 3.5
+  The type of NumberParam in bank 1: int
+  The type of NumberParam in bank 2: double
+</pre></div>
+</div>
+<div class="section" id="getting-all-the-parameters-on-an-instrument-component">
+<h4><a class="toc-backref" href="#id8">Getting all the Parameters on an instrument component</a><a class="headerlink" href="#getting-all-the-parameters-on-an-instrument-component" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># setup as above</span>
+<span class="n">instrument</span><span class="o">=</span><span class="n">ws</span><span class="o">.</span><span class="n">getInstrument</span><span class="p">()</span>
+<span class="n">det101</span><span class="o">=</span><span class="n">instrument</span><span class="o">.</span><span class="n">getDetector</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">det101</span><span class="o">.</span><span class="n">getParameterNames</span><span class="p">()</span> <span class="p">:</span>
+    <span class="k">if</span> <span class="n">det101</span><span class="o">.</span><span class="n">getParameterType</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">==</span> <span class="s">&quot;int&quot;</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">det101</span><span class="o">.</span><span class="n">getIntParameter</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">det101</span><span class="o">.</span><span class="n">getParameterType</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">==</span> <span class="s">&quot;double&quot;</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">det101</span><span class="o">.</span><span class="n">getNumberParameter</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">det101</span><span class="o">.</span><span class="n">getParameterType</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">==</span> <span class="s">&quot;string&quot;</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">det101</span><span class="o">.</span><span class="n">getStringParameter</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;{0} {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">value</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>NumberParam [3]
+TestParam [&#39;Hello&#39;]
+</pre></div>
+</div>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Howtoresetdetectorscalibration.html" title="Previous Chapter: How to reset detectors calibration"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; How to reset det...</span>
+    </a>
+  </li>
+  <li>
+    <a href="InstrumentAccessLayers.html" title="Next Chapter: Instrument Access via SpectrumInfo, DetectorInfo, ComponentInfo"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Instrument Acces... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2018-04-19.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Project Recovery</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.13.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Properties" href="Properties.html" />
+    <link rel="prev" title="Project" href="Project.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.13</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="project-recovery">
+<span id="id1"></span><h1>Project Recovery<a class="headerlink" href="#project-recovery" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-it">
+<h2>What is it?<a class="headerlink" href="#what-is-it" title="Permalink to this headline">¶</a></h2>
+<p>If Mantid crashes for some reason, we have introduced the functionality to attempt to recover the state that Mantid was in prior to the crash.</p>
+<p>Project recovery is a key part of our efforts to make Mantid as stable and reliable as possible.</p>
+</div>
+<div class="section" id="how-it-works">
+<h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
+<p>Project recovery works in two parts:</p>
+<ul class="simple">
+<li>History writer: This writes the history of the workspaces in your workspace dialog, periodically saving the files. It is not likely that you will ever notice the history writer process.</li>
+<li>Project recovery: This rebuilds the last saved state of Mantid after a crash, it uses the files produced by the history writer</li>
+</ul>
+<p>If Mantid has crashed, then on the subsequent reboot you will be presented with the project recovery dialog (see image)</p>
+<a class="reference internal image-reference" href="../_images/ProjectRecoveryDialog.png"><img alt="alternate text" class="align-center" src="../_images/ProjectRecoveryDialog.png" style="width: 400px;" /></a>
+<p>You can choose to attempt a full recovery, to open a recovery script or not to attempt a recovery. Full recovery will attempt to recover all workspaces present at the time of the crash as well as additional dialogs like plots or data windows. Script mode will attempt to construct a script that contains the history of all workspaces at the time of the crash.</p>
+<p>If full project recovery runs succesfully the scripting window will remain open in MantidPlot. It is safe to close this after a recovery.</p>
+<p><strong>NB</strong> This is an early version of project recovery. We think that it is a lot better than nothing, but we know it won&#8217;t always work. Known caveats are listed below. Moreover, we would sincerely appreciate feedback and input from users. Contact us at <cite>mantid-help&#64;mantidproject.org</cite></p>
+<p>The settings for project recovery, including switiching the feature on/off, and how to set them, are listed at the bottom of this page.</p>
+</div>
+<div class="section" id="caveats">
+<h2>Caveats<a class="headerlink" href="#caveats" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt>Multiple instances of Mantid</dt>
+<dd><ul class="first last simple">
+<li>Please allow first instance to start history writer before starting the next instance, otherwise it will not start for either. This usually means leaving Mantid until the GUI has opened fully.</li>
+<li>Only the first instance will have history writer enabled. There will be no project recovery for subsequent instances.</li>
+<li>All running instances of Mantid must be closed for project recovery to work after a crash.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Interfaces</dt>
+<dd><ul class="first last simple">
+<li>Muon - project recovery does not work at all with the existing Muon interfaces.</li>
+<li>Indirect analysis - project recovery does not work when performing fitting routines within the indirect analysis interface.</li>
+<li>SANS - project recovery does not currently work with the SANS interface.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Dictionary properties</dt>
+<dd><ul class="first last simple">
+<li>Affects: SANS interface, SetSample algorithm</li>
+<li>Cause: Currently the history writer does not serialise Python dictionaries correctly.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>If full project recovery does not work:</dt>
+<dd><ul class="first last simple">
+<li>If the project recovery process has managed to create a script of the ordered workspace histories, this will appear in MantidPlot, it will have a red arrow beside the line where the process failed. In many cases it is possible to edit the script by hand to get it to run.</li>
+<li>If project recovery did not manage to generate the ordered history script then it will return to MantidPlot as normal, with an error message.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="settings">
+<h2>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt>Project recovery behaviour can be edited by editing the <cite>Mantid.user.properties</cite> file</dt>
+<dd><ul class="first last simple">
+<li>Windows: <cite>$MantidInstallDirectorybinMantid.user.properties</cite></li>
+<li>OSX: <cite>$HOME/.mantid/Mantid.user.properties</cite></li>
+<li>Linux:<cite>$HOME/.mantid/Mantid.user.properties</cite></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Three settings you can add to this file:</dt>
+<dd><ul class="first last simple">
+<li><strong>On/off:</strong> <cite>projectRecovery.enabled=true</cite></li>
+<li><strong>Regularity:</strong> <cite>projectRecovery.secondsBetween = 60</cite></li>
+<li><strong>Number of backups to keep:</strong> <cite>projectRecovery.numberOfCheckpoints = 5</cite></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Project.html" title="Previous Chapter: Project"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Project</span>
+    </a>
+  </li>
+  <li>
+    <a href="Properties.html" title="Next Chapter: Properties"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Properties &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2018-07-25.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

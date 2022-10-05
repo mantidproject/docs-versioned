@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Indirect Bayes</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '4.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Interfaces" href="index.html" />
+    <link rel="next" title="Indirect Corrections" href="Indirect Corrections.html" />
+    <link rel="prev" title="ISIS Reflectometry Interface" href="ISIS Reflectometry.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>4.2</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="indirect-bayes">
+<h1>Indirect Bayes<a class="headerlink" href="#indirect-bayes" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#overview" id="id3">Overview</a></li>
+<li><a class="reference internal" href="#action-buttons" id="id4">Action Buttons</a></li>
+<li><a class="reference internal" href="#resnorm" id="id5">ResNorm</a><ul>
+<li><a class="reference internal" href="#options" id="id6">Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#quasi" id="id7">Quasi</a><ul>
+<li><a class="reference internal" href="#id1" id="id8">Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#stretch" id="id9">Stretch</a><ul>
+<li><a class="reference internal" href="#id2" id="id10">Options</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id3">Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Provides Bayesian analysis routines primarily for use with QENS data.</p>
+<div class="figure align-right">
+<a class="screenshot reference internal image-reference" href="../_images/Bayes_interface.png"><img alt="../_images/Bayes_interface.png" class="screenshot" src="../_images/Bayes_interface.png" style="width: 350px;" /></a>
+</div>
+</div>
+<div class="section" id="action-buttons">
+<h2><a class="toc-backref" href="#id4">Action Buttons</a><a class="headerlink" href="#action-buttons" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Settings</dt>
+<dd>Opens the <a class="reference internal" href="Indirect Settings.html#interface-indirect-settings"><em>Settings</em></a> GUI which allows you to
+customize the settings for the Indirect interfaces.</dd>
+</dl>
+<dl class="docutils">
+<dt>?</dt>
+<dd>Opens this help page.</dd>
+<dt>Manage Directories</dt>
+<dd>Opens the Manage Directories dialog allowing you to change your search directories
+and default save directory and enable/disable data archive search.</dd>
+</dl>
+</div>
+<div class="section" id="resnorm">
+<h2><a class="toc-backref" href="#id5">ResNorm</a><a class="headerlink" href="#resnorm" title="Permalink to this headline">¶</a></h2>
+<p>This tab creates a group &#8216;normalisation&#8217; file by taking a resolution file and
+fitting it to all the groups in the resolution (vanadium) data file which has
+the same grouping as the sample data of interest.</p>
+<p>The routine fits the width of the resolution file to give a &#8216;stretch factor&#8217;
+and the area provides an intensity normalisation factor.</p>
+<p>The fitted parameters are in the group workspace with suffix <em>_ResNorm</em> with
+additional suffices of <em>_Intensity</em> &amp; <em>_Stretch</em>.</p>
+<p>The processing on this tab is provided by the <a class="reference internal" href="../algorithms/ResNorm-v2.html#algm-resnorm"><em>ResNorm</em></a>
+algorithm.</p>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Bayes_ResNorm_widget.png"><img alt="../_images/Bayes_ResNorm_widget.png" class="screenshot" src="../_images/Bayes_ResNorm_widget.png" style="width: 878px;" /></a>
+</div>
+<div class="section" id="options">
+<h3><a class="toc-backref" href="#id6">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Vanadium File</dt>
+<dd>Either a reduced file created using the Energy Transfer tab or an
+<img class="math" src="../_images/math/af385cf70e9aa29bed9ee6fc11c442d61c12f402.png" alt="S(Q, \omega)" style="vertical-align: -4px"/> file.</dd>
+<dt>Resolution File</dt>
+<dd>A resolution file created using the Calibrtion tab.</dd>
+<dt>EMin &amp; EMax</dt>
+<dd>The energy range to perform fitting within.</dd>
+<dt>Preview Spectrum</dt>
+<dd>Changes the spectrum displayed in the preview plot.</dd>
+<dt>Plot Current Preview</dt>
+<dd>Plots the currently selected preview plot in a separate external window</dd>
+<dt>Run</dt>
+<dd>Runs the processing configured on the current tab.</dd>
+<dt>Plot</dt>
+<dd>Plots the selected parameter stored in the result workspaces.</dd>
+<dt>Save Result</dt>
+<dd>Saves the result in the default save directory.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="quasi">
+<h2><a class="toc-backref" href="#id7">Quasi</a><a class="headerlink" href="#quasi" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This interface is only available on Windows</p>
+</div>
+<p>The model that is being fitted is that of a <img class="math" src="../_images/math/591b907fa7ee32c200305f45926716d48b014170.png" alt="\delta" style="vertical-align: 0px"/>-function (elastic component)
+of amplitude <img class="math" src="../_images/math/39d3b0495059e5bb68e7cd152817a4d79ddb9a30.png" alt="A(0)" style="vertical-align: -4px"/> and Lorentzians of amplitude <img class="math" src="../_images/math/e0535130e41a4a91793ec3a2e1e28812fb503845.png" alt="A(j)" style="vertical-align: -4px"/> and HWHM
+<img class="math" src="../_images/math/e9bc02e614b6bab8c4c567a96bddf3cf55011d1f.png" alt="W(j)" style="vertical-align: -4px"/> where <img class="math" src="../_images/math/a9cb5749058cbaa05c4d047a016146ab30e9674f.png" alt="j=1,2,3" style="vertical-align: -4px"/>. The whole function is then convolved with
+the resolution function. The -function and Lorentzians are intrinsically
+normalised to unity so that the amplitudes represent their integrated areas.</p>
+<p>For a Lorentzian, the Fourier transform does the conversion:
+<img class="math" src="../_images/math/8cfe2d45d1b9de22f5e1b9f503b4a0353b75086f.png" alt="1/(x^{2}+\delta^{2}) \Leftrightarrow exp[-2\pi(\delta k)]" style="vertical-align: -5px"/>.  If <img class="math" src="../_images/math/86e784d473f5fc5713b6ad4bea7af624b76966c2.png" alt="x" style="vertical-align: 0px"/>
+is identified with energy <img class="math" src="../_images/math/a9c4c0ee488c07deaee7584752e35cd1aac1b253.png" alt="E" style="vertical-align: 0px"/> and <img class="math" src="../_images/math/f10b4261a3e7b9f5118893be44bdaf8220982428.png" alt="2\pi k" style="vertical-align: 0px"/> with <img class="math" src="../_images/math/f02fcc8da8c4c6feb6368399be28550bf140ca7d.png" alt="t/\hbar" style="vertical-align: -5px"/>
+where t is time then: <img class="math" src="../_images/math/180bb3d4794ca04a87d1544bcc0ddf9599ab2b0b.png" alt="1/[E^{2}+(\hbar / \tau)^{2}] \Leftrightarrow exp[−t
+/\tau]" style="vertical-align: -5px"/> and <img class="math" src="../_images/math/867e88734ade43673557344be7e57c5488afba70.png" alt="\sigma" style="vertical-align: 0px"/> is identified with <img class="math" src="../_images/math/514fdb413890ab63466172796d454c6dbba21ec2.png" alt="\hbar / \tau" style="vertical-align: -5px"/>.  The program
+estimates the quasielastic components of each of the groups of spectra and
+requires the resolution file and optionally the normalisation file created by
+ResNorm.</p>
+<p>For a Stretched Exponential, the choice of several Lorentzians is replaced with
+a single function with the shape : <img class="math" src="../_images/math/562df13e2b1e11259eb24219de06c1562093dbaf.png" alt="\psi\beta(x) \Leftrightarrow
+exp[-2\pi(\sigma k)\beta]" style="vertical-align: -5px"/>. This, in the energy to time FT transformation, is
+<img class="math" src="../_images/math/a107edd8fafd9951836b41fc46f0bfdd89b363db.png" alt="\psi\beta(E) \Leftrightarrow exp[-(t/\tau)\beta]" style="vertical-align: -5px"/>. So <img class="math" src="../_images/math/867e88734ade43673557344be7e57c5488afba70.png" alt="\sigma" style="vertical-align: 0px"/> is
+identified with <img class="math" src="../_images/math/470e1b6f16f54d88fadffe4ae6136ec92120333c.png" alt="(2\pi)\beta\hbar/\tau" style="vertical-align: -5px"/> .  The model that is fitted is
+that of an elastic component and the stretched exponential and the program gives
+the best estimate for the <img class="math" src="../_images/math/3edbdde8cd7a5140ace3a7f0b62e850ca34dcafc.png" alt="\beta" style="vertical-align: -4px"/> parameter and the width for each group
+of spectra.</p>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Bayes_Quasi_widget.png"><img alt="../_images/Bayes_Quasi_widget.png" class="screenshot" src="../_images/Bayes_Quasi_widget.png" style="width: 884px;" /></a>
+</div>
+<div class="section" id="id1">
+<h3><a class="toc-backref" href="#id8">Options</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Sample</dt>
+<dd>Either a reduced file created using the Energy Transfer tab or an
+<img class="math" src="../_images/math/af385cf70e9aa29bed9ee6fc11c442d61c12f402.png" alt="S(Q, \omega)" style="vertical-align: -4px"/> file.</dd>
+<dt>Resolution</dt>
+<dd>A resolution file created using the Calibration tab.</dd>
+<dt>Program</dt>
+<dd>The curve fitting program to use.</dd>
+<dt>Background</dt>
+<dd>The background fitting program to use.</dd>
+<dt>Elastic Peak</dt>
+<dd>If an elastic peak should be used.</dd>
+<dt>Sequential Fit</dt>
+<dd>Enables multiple fitting iterations.</dd>
+<dt>Fix Width</dt>
+<dd>Allows selection of a width file.</dd>
+<dt>Use ResNorm</dt>
+<dd>Allows selection of a ResNorm output file or workspace to use with fitting.</dd>
+<dt>EMin &amp; EMax</dt>
+<dd>The energy range to perform fitting within.</dd>
+<dt>Sample Binning</dt>
+<dd>Sample binning to use.</dd>
+<dt>Resolution Binning</dt>
+<dd>Resolution binning to use.</dd>
+<dt>Preview Spectrum</dt>
+<dd>Changes the spectrum displayed in the preview plot.</dd>
+<dt>Plot Current Preview</dt>
+<dd>Plots the currently selected preview plot in a separate external window</dd>
+<dt>Run</dt>
+<dd>Runs the processing configured on the current tab.</dd>
+<dt>Plot</dt>
+<dd>Plots the selected parameter stored in the result workspaces.</dd>
+<dt>Save Result</dt>
+<dd>Saves the result in the default save directory.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="stretch">
+<h2><a class="toc-backref" href="#id9">Stretch</a><a class="headerlink" href="#stretch" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This interface is only available on Windows</p>
+</div>
+<p>This is a variation of the stretched exponential option of Quasi. For each
+spectrum, a fit is performed for a grid of β and σ values. The distribution of
+goodness of fit values is plotted.</p>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Bayes_Stretch_widget.png"><img alt="../_images/Bayes_Stretch_widget.png" class="screenshot" src="../_images/Bayes_Stretch_widget.png" style="width: 884px;" /></a>
+</div>
+<div class="section" id="id2">
+<h3><a class="toc-backref" href="#id10">Options</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Sample</dt>
+<dd>Either a reduced file created using the Energy Transfer tab or an
+<img class="math" src="../_images/math/af385cf70e9aa29bed9ee6fc11c442d61c12f402.png" alt="S(Q, \omega)" style="vertical-align: -4px"/> file.</dd>
+<dt>Resolution</dt>
+<dd>A resolution file created using the Calibration tab.</dd>
+<dt>Background</dt>
+<dd>The background fitting program to use.</dd>
+<dt>Elastic Peak</dt>
+<dd>If an elastic peak should be used.</dd>
+<dt>Sequential Fit</dt>
+<dd>Enables multiple fitting iterations.</dd>
+<dt>EMin &amp; EMax</dt>
+<dd>The energy range to perform fitting within.</dd>
+<dt>Sample Binning</dt>
+<dd>Sample binning to use.</dd>
+<dt>Sigma</dt>
+<dd>Value of Sigma to use.</dd>
+<dt>Beta</dt>
+<dd>Value of Beta to use.</dd>
+<dt>Preview Spectrum</dt>
+<dd>Changes the spectrum displayed in the preview plot.</dd>
+<dt>Plot Current Preview</dt>
+<dd>Plots the currently selected preview plot in a separate external window</dd>
+<dt>Run</dt>
+<dd>Runs the processing configured on the current tab.</dd>
+<dt>Plot</dt>
+<dd>Plots the selected parameter stored in the result workspaces.</dd>
+<dt>Plot Contour</dt>
+<dd>Produces a contour plot of the selected workspace.</dd>
+<dt>Save Result</dt>
+<dd>Saves the result in the default save directory.</dd>
+</dl>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/Interfaces.html">Interfaces</a> | <a class="reference external" href="categories/Indirect.html">Indirect</a></p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="ISIS Reflectometry.html" title="Previous Chapter: ISIS Reflectometry Interface"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; ISIS Reflectomet...</span>
+    </a>
+  </li>
+  <li>
+    <a href="Indirect Corrections.html" title="Next Chapter: Indirect Corrections"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Indirect Correct... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2019-11-18.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

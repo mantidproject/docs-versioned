@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Error Handling</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '4.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../../index.html" />
+    <link rel="up" title="Introduction to Python" href="index.html" />
+    <link rel="next" title="Working With Functions" href="working_with_functions.html" />
+    <link rel="prev" title="More Sequence Types" href="more_sequence_types.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>4.1</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="error-handling">
+<span id="id1"></span><h1>Error Handling<a class="headerlink" href="#error-handling" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>As we saw earlier Python can give error messages under certain
+conditions. This is known as raising an exception and Python&#8217;s
+default behaviour is to halt execution. Exceptions are raised using
+the <tt class="docutils literal"><span class="pre">raise</span></tt> keyword:</li>
+</ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="c"># ...</span>
+
+<span class="c"># Execution stopped:</span>
+<span class="k">raise</span> <span class="ne">RuntimeError</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>In some cases we may be able to manage the error and still continue.
+This is known as exception handling and is achieved using
+<tt class="docutils literal"><span class="pre">try</span> <span class="pre">...</span> <span class="pre">except</span></tt> clauses,</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;Error: List index out of range, leaving loop&#39;</span><span class="p">)</span>
+        <span class="k">break</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>If an exception is raised then the code immediately jumps to the
+nearest <tt class="docutils literal"><span class="pre">except</span></tt> block. The output of the above code block is:</li>
+</ul>
+<div class="highlight-none"><div class="highlight"><pre>1
+2
+3
+4
+5
+Error: List index out of range, leaving loop
+</pre></div>
+</div>
+<ul class="simple">
+<li>As with other control structures there is an extra <tt class="docutils literal"><span class="pre">else</span></tt> clause
+that can be added which will only be executed if no error was raised,</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">try</span><span class="p">:</span>
+   <span class="n">value</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+<span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+   <span class="k">print</span><span class="p">(</span><span class="s">&#39;5 is not a valid array index&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+   <span class="k">print</span><span class="p">(</span><span class="s">&#39;6th element is &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>gives the output</p>
+<div class="highlight-none"><div class="highlight"><pre>5 is not a valid array index
+</pre></div>
+</div>
+<ul class="simple">
+<li>With a <tt class="docutils literal"><span class="pre">try...except...else</span></tt> structure only one of the except/else
+clauses will ever be executed. In some circumstances however it is
+necessary to perform some operation, maybe a clean up, regardless of
+whether an exception was raised. This is done with a
+<tt class="docutils literal"><span class="pre">try...except...finally</span></tt> structure,</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">element</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">element</span><span class="p">]</span>
+<span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">element</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; is not a valid array index&#39;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">element</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">+</span> <span class="s">&#39;th element is &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;Entered finally clause, do cleanup ...&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>gives the output</p>
+<div class="highlight-none"><div class="highlight"><pre>6 is not a valid array index
+Entered finally clause, do cleanup ...
+</pre></div>
+</div>
+<ul class="simple">
+<li>Changing the value of the element variable between valid/invalid
+values will show that one of the except/else clauses gets executed
+and then the finally clause always gets executed.</li>
+<li>It is also possible to catch exceptions of any type by leaving off
+the specific error that is to be caught. This is however not
+recommended as then it is not possible to say exactly what error
+occurred</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">element</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">element</span><span class="p">]</span>
+<span class="k">except</span><span class="p">:</span>     <span class="c"># Catch everything</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Something went wrong but I don&#39;t know what&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>gives the output</p>
+<div class="highlight-none"><div class="highlight"><pre>Something went wrong but I don&#39;t know what
+</pre></div>
+</div>
+<p><a class="reference external" href="Category:Tested_Examples">Category:Tested Examples</a></p>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="more_sequence_types.html" title="Previous Chapter: More Sequence Types"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; More Sequence Ty...</span>
+    </a>
+  </li>
+  <li>
+    <a href="working_with_functions.html" title="Next Chapter: Working With Functions"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Working With Fun... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2019-07-22.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

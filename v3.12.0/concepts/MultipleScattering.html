@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Multiple Scattering</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.12.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Nexus File" href="NexusFile.html" />
+    <link rel="prev" title="McStas - A neutron ray-trace simulation package" href="McStas.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.12</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="multiple-scattering">
+<span id="id1"></span><h1>Multiple Scattering<a class="headerlink" href="#multiple-scattering" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Determination of the structure of samples depends on the analysis of single scattering data.
+Small but unwanted higher-order scattering is always present although in many typical
+experiments multiple scattering effects are negligible. However, in some cases the data may
+contain a significant contribution from multiple scattering. To get an idea of when and why multiple scattering
+corrections are needed let us first define the total cross section per atom as the sum of its
+scattering and absorption cross sections:</p>
+<div class="math">
+<p><img src="../_images/math/62ef7367ea087a35b6e81e8ed8fbf38a076b8bda.png" alt="\sigma_t = \sigma_s + \sigma_a"/></p>
+</div><p>If <img class="math" src="../_images/math/4ef82dbfaa61b89f474c51a8cd3c4d6c4802cb54.png" alt="\sigma_m" style="vertical-align: -3px"/> is the likelihood of a neutron being scattered m times then it is possible
+to show <a class="footnote-reference" href="#id7" id="id2">[1]</a> that:</p>
+<div class="math">
+<p><img src="../_images/math/52eef730d5f9b4b9389fb2e89b172e787930b010.png" alt="\sigma_m \sim (\frac{\sigma_s}{\sigma_t})^m"/></p>
+</div><p>Where practical, the shape and thickness of a sample are carefully chosen to minimise as much
+unwanted multiple. This may be achieved by using a sample that is either <a class="footnote-reference" href="#id8" id="id3">[2]</a></p>
+<ul class="simple">
+<li>Small in comparison with its mean free path.</li>
+<li>Strongly absorbing (the absorption cross section is much greater than the scattering cross section. Usually this means the dimensions of a sample are chosen to ensure that between 10% and 20% of incident neutrons end up being scattered <a class="footnote-reference" href="#id9" id="id4">[3]</a> ).</li>
+</ul>
+<p>Increasing the absorption cross section is not always attainable - due to the type of material in question - or desirable, due to
+the accompanying intensity losses becoming overly prohibitive.</p>
+<p>The rest of this document shall explain the theory behind multiple scattering and then outline
+and compare the techniques currently available in Mantid to perform these corrections.</p>
+</div>
+<div class="section" id="theory">
+<h2>Theory<a class="headerlink" href="#theory" title="Permalink to this headline">¶</a></h2>
+<p>The figure shows how a general double scattering process might occur. The neutron travels
+a certain distance <img class="math" src="../_images/math/e5b8410e9d4e6e7e507f56fe9b31f3b0f9701861.png" alt="l_1" style="vertical-align: -4px"/> through the sample before the first scattering event. The second
+scattering occurs after a distance <img class="math" src="../_images/math/031ae54d84d5922aaa8aeb111f30ba946750820c.png" alt="l_{12}" style="vertical-align: -4px"/> has been traversed following which the
+neutron travels a final length <img class="math" src="../_images/math/131b1e65987add365d3597ba61291d62cf21f525.png" alt="l_2" style="vertical-align: -3px"/> before leaving the sample and being picked up by
+a detector.</p>
+<div class="figure">
+<img alt="MultipleScatteringVolume.png" src="../_images/MultipleScatteringVolume.png" />
+</div>
+<p>The difficulty in correcting multiple scattering arises from the fact that for each order of scattering
+we must perform m volume integrals <img class="math" src="../_images/math/352f6ab442d7606211cb1088bd1d5bf6d6788dc6.png" alt="dV_1dV_2...dV_m" style="vertical-align: -4px"/> over the sample to compute the contribution term
+for that order (although these terms tend to zero as explained in the introduction).
+This kind of calculation is incredibly difficult for all but the simplest of geometries
+(i.e. cylindrical, planar and spherical) although Monte Carlo integration
+methods may be utilised for the multiple scattering calculations of more general shapes.</p>
+<p>In some areas, such as small angle scattering, there may be useful approximations that can be
+applied that are not present for the more general wide angle scattering case.
+Again matters may become complicated, as for example small angle scatter followed by incoherent
+scatter from hydrogen can be more significant in blurring sharp features than double small angle scatter.
+For early considerations of multiple small angle scattering see for example <a class="footnote-reference" href="#id10" id="id5">[4]</a> <a class="footnote-reference" href="#id11" id="id6">[5]</a>.</p>
+<p>Some simplifying approximations can make the calculations somewhat more tractable and the currently
+supported Mantid solutions assume that scattering is isotropic and elastic (for something like vanadium this is usually
+reasonable).</p>
+</div>
+<div class="section" id="mantid-solutions">
+<h2>Mantid solutions<a class="headerlink" href="#mantid-solutions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="mayers-sample-correction">
+<h3>Mayers Sample Correction<a class="headerlink" href="#mayers-sample-correction" title="Permalink to this headline">¶</a></h3>
+<p>Documentation for this algorithm can found <a class="reference internal" href="../algorithms/MayersSampleCorrection-v1.html#algm-mayerssamplecorrection"><em>here</em></a>.</p>
+</div>
+<div class="section" id="multiple-scattering-cylinder-absorption">
+<h3>Multiple Scattering Cylinder Absorption<a class="headerlink" href="#multiple-scattering-cylinder-absorption" title="Permalink to this headline">¶</a></h3>
+<p>This is a Carpenter style correction. For more details see <a class="reference internal" href="../algorithms/MultipleScatteringCylinderAbsorption-v1.html#algm-multiplescatteringcylinderabsorption"><em>here</em></a>.</p>
+</div>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<table class="docutils footnote" frame="void" id="id7" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>Lindley, E.J., &amp; Mayers, J. Cywinski, R. (Ed.). (1988). Experimental method and corrections to data. United Kingdom: Adam Hilger. - <a class="reference external" href="https://inis.iaea.org/search/search.aspx?orig_q=RN:20000574">https://inis.iaea.org/search/search.aspx?orig_q=RN:20000574</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id8" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[2]</a></td><td>V.F. Sears (1975): Slow-neutron multiple scattering, <a class="reference external" href="http://dx.doi.org/10.1080/00018737500101361">Advances in Physics</a>, 24:1, 1-45</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id9" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[3]</a></td><td>A.K.Soper, W.S.Howells and A.C.Hannon <em>ATLAS - Analysis of Time-of-Flight Diffraction Data from Liquid and Amorphous Samples</em> Rutherford Appleton Laboratory Report (1989): <a class="reference external" href="http://wwwisis2.isis.rl.ac.uk/disordered/Manuals/ATLAS/ATLAS%20manual%20v1.0.pdf">RAL-89-046</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[4]</a></td><td>J.Schelten &amp; W.Schmatz, J.Appl.Cryst. 13(1980)385-390</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id11" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[5]</a></td><td>J.R.D.Copley J.Appl.Cryst 21(1988)639-644</td></tr>
+</tbody>
+</table>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="McStas.html" title="Previous Chapter: McStas - A neutron ray-trace simulation package"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; McStas - A neutr...</span>
+    </a>
+  </li>
+  <li>
+    <a href="NexusFile.html" title="Next Chapter: Nexus File"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Nexus File &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2018-03-19.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Muon Analysis: a guide for Mantid developers</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.11.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Interfaces" href="index.html" />
+    <link rel="next" title="Muon Interfaces Unscripted Testing" href="Muon Analysis Unscripted Testing Guide.html" />
+    <link rel="prev" title="Muon Analysis" href="Muon Analysis.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.11</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="muon-analysis-a-guide-for-mantid-developers">
+<span id="muon-analysis-developersguide-ref"></span><h1>Muon Analysis: a guide for Mantid developers<a class="headerlink" href="#muon-analysis-a-guide-for-mantid-developers" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#what-the-interface-is-for" id="id2">What the interface is for</a><ul>
+<li><a class="reference internal" href="#groups-and-periods" id="id3">Groups and Periods</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#loading-data" id="id4">Loading data</a><ul>
+<li><a class="reference internal" href="#load-current-run" id="id5">Load current run</a></li>
+<li><a class="reference internal" href="#muonanalysishelper" id="id6">MuonAnalysisHelper</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#plotting-data" id="id7">Plotting data</a></li>
+<li><a class="reference internal" href="#fitting-data" id="id8">Fitting data</a><ul>
+<li><a class="reference internal" href="#fit-function" id="id9">Fit function</a></li>
+<li><a class="reference internal" href="#data" id="id10">Data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sequence-of-events-when-fit-clicked" id="id11">Sequence of events when &#8220;Fit&#8221; clicked</a></li>
+<li><a class="reference internal" href="#sequential-fit-dialog" id="id12">Sequential fit dialog</a></li>
+<li><a class="reference internal" href="#after-a-fit" id="id13">After a fit</a></li>
+<li><a class="reference internal" href="#generating-results-tables" id="id14">Generating results tables</a></li>
+<li><a class="reference internal" href="#miscellaneous-notable-points" id="id15">Miscellaneous notable points</a></li>
+<li><a class="reference internal" href="#future-work" id="id16">Future work</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id1">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This document is intended for Mantid developers as a guide to the architecture of the Muon Analysis custom interface.
+User documentation for this interface can be found at <a class="reference internal" href="Muon Analysis.html#muon-analysis-ref"><em>Muon Analysis</em></a>.
+There is also an unscripted testing guide for developers at <a class="reference internal" href="Muon Analysis Unscripted Testing Guide.html#muon-analysis-testguide-ref"><em>Muon Interfaces Unscripted Testing</em></a>.</p>
+<p>There will be a particular focus on the <em>Data Analysis</em> tab, which has been significantly changed for Mantid 3.8.</p>
+<p>Note that there is also another custom interface for muons: ALC. Development on this is much easier as it has an MVP architecture and is far better tested, so it will not be covered in this document.</p>
+</div>
+<div class="section" id="what-the-interface-is-for">
+<h2><a class="toc-backref" href="#id2">What the interface is for</a><a class="headerlink" href="#what-the-interface-is-for" title="Permalink to this headline">¶</a></h2>
+<p>Muon Analysis is for reducing and analysing data from muon instruments at ISIS and SMuS.
+Muons are implanted into the sample and decay with a lifetime of about 2.2 microseconds.
+The decay products (positrons) are detected and the signal measured is the count of positrons over time.</p>
+<p>The instruments have many detectors (sometimes up to 600) in different positions, grouped spatially into &#8220;groups&#8221;.
+In a typical muon spin resonance experiment, the muon spins precess in a magnetic field, meaning that the positron count seen on a particular detector will be modulated with time. This gives information about the local fields in the sample at the location where the muon is implanted.</p>
+<p>Data is loaded into the interface, corrected for dead time, and the detectors grouped into groups.
+For example, MuSR (64 detectors) uses two groups, <em>fwd</em> (forward, detectors 33-64) and <em>bwd</em> (backward, detectors 1-32) in its longitudinal field configuration, corresponding to the two detector rings.
+(MuSR is special in that the main field direction can be rotated either longitudinal or transverse).
+In this case scientists will usually look at a &#8220;group pair&#8221; called <em>long</em>, defined as <em>fwd - bwd</em>.</p>
+<p>The grouping used is taken from the IDF by default, or from the data file if not present.
+The user can also specify their own grouping.</p>
+<p>The counts or log counts can be plotted, but what scientists usually want to look at is the <strong>asymmetry</strong> (see below).</p>
+<p>Processing is done using the workflow algorithm <a class="reference internal" href="../algorithms/MuonProcess-v1.html#algm-muonprocess"><em>MuonProcess v1</em></a> - see there for a fuller explanation and diagram of the steps performed.</p>
+<p>The &#8220;Data Analysis&#8221; tab is then used to fit a function to the data, and tables of the results from such fits can be generated with the &#8220;Results Table&#8221; tab.</p>
+<p>For a full explanation of what the interface does and how to use it, please see the user docs.
+Other useful documents are the &#8220;Mantid 4 Muons&#8221; document and the training school workbook, both of which can be found on the <a class="reference external" href="http://www.mantidproject.org/Muon">Muon page</a>.</p>
+<div class="section" id="groups-and-periods">
+<h3><a class="toc-backref" href="#id3">Groups and Periods</a><a class="headerlink" href="#groups-and-periods" title="Permalink to this headline">¶</a></h3>
+<p>Groups are explained above, as sets of detectors corresponding to physical arrangements.
+For example, the MuSR instrument has two rings of detectors, leading to two detector groups in the longitudinal field arrangement.</p>
+<p><em>Periods</em> refers to collecting data in several periods of time - for example you might have two periods &#8220;RF on&#8221; and &#8220;RF off&#8221; or &#8220;laser on&#8221; and &#8220;laser off&#8221;.
+The interface allows users to analyse one period at a time, or a sum/difference (such as &#8220;1+2&#8221;, &#8220;1-2&#8221; or even &#8220;1+2-3+4&#8221;).</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Note that for summed periods (1+2), you sum the periods 1 and 2 first, then calculate the asymmetry of the sum. For subtracted periods (1-2), you calculate the asymmetry of each period separately, then subtract the asymmetry of period 2 from that of period 1. So for 1+2-3+4, you sum 1+2 and 3+4, calculate asymmetry of each sum, then subtract the asymmetry of (3+4) from that of (1+2).</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">We don&#8217;t support names of periods yet, they are referred to by number. This is something scientists would like to have in the future, though. The names are stored in the NeXus file.</p>
+</div>
+<div class="topic">
+<p class="topic-title first">Asymmetry example</p>
+<p>Let&#8217;s look at a group first - the <em>fwd</em> group of <tt class="docutils literal"><span class="pre">MUSR00022725.nxs</span></tt>.
+For a group, you get the asymmetry simply by removing the exponential decay:</p>
+<img alt="../_images/MUSR22725-fwd.png" class="align-center" src="../_images/MUSR22725-fwd.png" />
+<p>Now let&#8217;s look at a group pair - the <em>long</em> pair (<em>fwd - bwd</em>) of <tt class="docutils literal"><span class="pre">MUSR00060625.nxs</span></tt>.
+For this, the asymmetry is defined as (see <a class="reference internal" href="../algorithms/AsymmetryCalc-v1.html#algm-asymmetrycalc"><em>AsymmetryCalc v1</em></a>)</p>
+<div class="math">
+<p><img src="../_images/math/d0d1b44a792d099a13bfa7d547b12922c1b972c0.png" alt="\textrm{Asymmetry} = \frac{F-\alpha B}{F+\alpha B}"/></p>
+</div><p>where <img class="math" src="../_images/math/68b0fc4683e0c8842b3a6cc6920f022f1c0db3fa.png" alt="F" style="vertical-align: 0px"/> is the front spectra, <img class="math" src="../_images/math/fd8a1eb9153f0dc573e5ebe023a59474dadd17ef.png" alt="B" style="vertical-align: 0px"/> is the back spectra
+and <img class="math" src="../_images/math/23bf3bdd8ce99fdb75f17e8b49934c62e9cf0841.png" alt="\alpha" style="vertical-align: 0px"/> is the balance parameter - see <a class="reference internal" href="../algorithms/AlphaCalc-v1.html#algm-alphacalc"><em>AlphaCalc v1</em></a>.</p>
+<img alt="../_images/MUSR60625-long.png" class="align-center" src="../_images/MUSR60625-long.png" />
+</div>
+</div>
+</div>
+<div class="section" id="loading-data">
+<h2><a class="toc-backref" href="#id4">Loading data</a><a class="headerlink" href="#loading-data" title="Permalink to this headline">¶</a></h2>
+<p>Data is loaded into the interface as NeXus files. This is the only file type supported at the moment.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Converters exist to translate most other formats (e.g. older ISIS files) to NeXus. PSI have a program called <tt class="docutils literal"><span class="pre">any2many</span></tt> that will convert their <tt class="docutils literal"><span class="pre">BIN</span></tt> files to NeXus.</p>
+</div>
+<p>Muon NeXus files come in two versions, v1 and v2, and there are two versions of the <a class="reference internal" href="../algorithms/LoadMuonNexus-v2.html#algm-loadmuonnexus"><em>LoadMuonNexus v2</em></a> algorithm to handle them.
+Both v1 and v2 are in active use (in fact most ISIS data is v1 at the moment).
+The schema can be found on the <a class="reference external" href="http://www.isis.stfc.ac.uk/groups/muons/muons3385.html">muon group website</a>, and Steve Cottrell is the best person to ask about NeXus-related questions at ISIS.
+Version 2 files support multiple detectors per spectrum, which version 1 files don&#8217;t. This isn&#8217;t used on any instruments at ISIS at the time of writing.</p>
+<p>Which data is loaded from which place in the NeXus file, and where it is put in the workspace/run object, is well documented for both versions of the algorithm in their algorithm doc pages.</p>
+<p>There are also some &#8220;version 0&#8221; muon NeXus files. These are old, pre-NeXus files that have been converted to NeXus.
+These mostly load OK into Mantid, but sometimes may be missing something that the loader is expecting.
+In one case, there used to be an instrument at ISIS called DEVA, which is not there any more and does not have an IDF (at the moment there is a hack to allow old DEVA files to be loaded).</p>
+<p>The class <tt class="docutils literal"><span class="pre">MuonAnalysisDataLoader</span></tt> handles loading files and creating analysis workspaces using <a class="reference internal" href="../algorithms/MuonProcess-v1.html#algm-muonprocess"><em>MuonProcess v1</em></a>.
+It is fully tested, in addition to the tests that the algorithms themselves have.</p>
+<p>The grouping is stored in a <tt class="docutils literal"><span class="pre">Mantid::API::Grouping</span></tt> struct. The user can specify their own grouping on the &#8220;Grouping Options&#8221; tab, and a <tt class="docutils literal"><span class="pre">MuonGroupingHelper</span></tt> object is used to deal with this. (This is not tested as it is too coupled to the GUI - needs refactoring).</p>
+<div class="section" id="load-current-run">
+<h3><a class="toc-backref" href="#id5">Load current run</a><a class="headerlink" href="#load-current-run" title="Permalink to this headline">¶</a></h3>
+<p><strong>ISIS only</strong></p>
+<p>Scientists at ISIS often use the &#8220;load current run&#8221; feature - a button on the front tab that will load the most recent data file from the selected instrument. The button is not enabled at other facilities, where this feature is not available.</p>
+<p>The location of the current run is kept in <tt class="docutils literal"><span class="pre">\\&lt;instrument&gt;\data\autosave.run</span></tt>, a file that points to another file in the same directory where the data is.
+For example, <tt class="docutils literal"><span class="pre">\\MUSR\data\autosave.run</span></tt> might contain the file name <tt class="docutils literal"><span class="pre">auto_B.tmp</span></tt>, meaning that the current data is in <tt class="docutils literal"><span class="pre">\\MUSR\data\auto_B.tmp</span></tt>.</p>
+<p>After loading the current run, the left/right buttons are used to cycle through recent datasets.</p>
+<p>At present the &#8220;load current run&#8221; feature is Windows only, due to how the shared data folder is accessed - at the moment this is OK, as most muon scientists at ISIS tend to use Windows, but it would be good to fix in the long run.</p>
+</div>
+<div class="section" id="muonanalysishelper">
+<h3><a class="toc-backref" href="#id6">MuonAnalysisHelper</a><a class="headerlink" href="#muonanalysishelper" title="Permalink to this headline">¶</a></h3>
+<p>On the whole, the main part of MuonAnalysis uses the &#8220;big ball of mud&#8221; design pattern.
+It is very difficult to write tests because the logic is mixed up with the GUI code.
+There is, however, a namespace called <tt class="docutils literal"><span class="pre">MuonAnalysisHelper</span></tt> which contains non-GUI MuonAnalysis-related functions, and these do have tests.</p>
+<p>As noted above, data loading/processing is handled with <tt class="docutils literal"><span class="pre">MuonAnalysisDataLoader</span></tt>, which is also tested.</p>
+<div class="topic">
+<p class="topic-title first">Workspace names in MuonAnalysis</p>
+<p><tt class="docutils literal"><span class="pre">MuonAnalysisHelper</span></tt> is also where the generation and parsing of workspace names is done.
+In the Muon Analysis interface, these follow a strict format delimited by semicolons:</p>
+<p><tt class="docutils literal"><span class="pre">INST00012345;</span> <span class="pre">Pair;</span> <span class="pre">long;</span> <span class="pre">Asym;[</span> <span class="pre">1;]</span> <span class="pre">#1</span></tt></p>
+<ol class="arabic simple">
+<li>Run label, made up of instrument and run number.</li>
+<li>&#8220;Item type&#8221;: Group (e.g. <em>fwd</em>, <em>bwd</em>) or Pair (e.g. <em>long</em>).</li>
+<li>Name of the group or pair.</li>
+<li>Plot type: Counts, Logs (logarithm) or Asym (asymmetry).</li>
+<li><strong>Optional:</strong> Period number, or combination like <tt class="docutils literal"><span class="pre">1+2</span></tt>. If not present, data is single-period OR all periods are summed together.</li>
+<li>Version: always <tt class="docutils literal"><span class="pre">#1</span></tt> if overwrite is on (Settings tab of interface), otherwise auto-increments.</li>
+</ol>
+<p>The suffix <tt class="docutils literal"><span class="pre">_Raw</span></tt> is appended if rebinning is used, to denote the un-rebinned data.</p>
+</div>
+</div>
+</div>
+<div class="section" id="plotting-data">
+<h2><a class="toc-backref" href="#id7">Plotting data</a><a class="headerlink" href="#plotting-data" title="Permalink to this headline">¶</a></h2>
+<p>To plot data, Muon Analysis uses a hard-coded Python script in the <tt class="docutils literal"><span class="pre">plotSpectrum</span></tt> method, which is run via the <tt class="docutils literal"><span class="pre">runPythonScript</span></tt> method common to all Mantid custom interfaces.
+(I wonder if there is a better way to do this? It is difficult to maintain the plotting script when it is a string within a C++ method).</p>
+<p>There are various options set on the Settings page - see the user docs for more information on these:</p>
+<ul class="simple">
+<li>Use a new window each time, or the previous window</li>
+<li>Whether it replots automatically, or waits for the &#8220;Plot&#8221; button to be pressed</li>
+<li>Y autoscale or fixed scale</li>
+<li>Curve type and errors on/off</li>
+</ul>
+<p>Note that, as well as plotting from the front tab, there are &#8220;Plot&#8221; buttons on the &#8220;Grouping Options&#8221; tab too.</p>
+<p>Another important point is the setting for &#8220;rebin options&#8221; on the settings page.
+If set, rebinned data will be plotted, and analysis workspaces will be created for <em>both</em> rebinned and raw data.
+Often, scientists will use the rebinning option but choose the &#8220;Fit to raw data&#8221; option on the fitting tab.</p>
+<p>If reusing the previous plot window, previous fit curves are kept when new raw data is loaded.
+The number of such curves kept is user-configurable.
+The script recognises which curves are fits by their name: <tt class="docutils literal"><span class="pre">Workspace-Calc</span></tt>.
+It will also keep any &#8220;plot guesses&#8221;, which are recognised by the name <tt class="docutils literal"><span class="pre">CompositeFunction</span></tt>.</p>
+</div>
+<div class="section" id="fitting-data">
+<h2><a class="toc-backref" href="#id8">Fitting data</a><a class="headerlink" href="#fitting-data" title="Permalink to this headline">¶</a></h2>
+<p>The Muon Analysis fitting (&#8220;Data Analysis&#8221;) tab was updated in Mantid 3.8 to support multi-dataset fitting.
+Its features are described in the user documentation; this section concentrates on its architecture.</p>
+<p>Prior to Mantid 3.8, this tab contained one thing: a <tt class="docutils literal"><span class="pre">FitPropertyBrowser</span></tt> (actually a <tt class="docutils literal"><span class="pre">MuonFitPropertyBrowser</span></tt>).</p>
+<img alt="../_images/MuonAnalysisDataAnalysis.png" class="align-center" src="../_images/MuonAnalysisDataAnalysis.png" />
+<p>This is still there, but only the bottom section (&#8220;Settings&#8221;) and the three buttons at the top are visible.
+The &#8220;Function&#8221; and &#8220;Data&#8221; sections are hidden.
+In their place are two new widgets - this is achieved by inserting an extra <tt class="docutils literal"><span class="pre">Layout</span></tt> into the muon fit property browser and adding the widgets to this layout.</p>
+<p>The above assumes that the &#8220;Enable multiple fitting&#8221; option is selected on the Settings tab.
+Since the <tt class="docutils literal"><span class="pre">MuonFitPropertyBrowser</span></tt> is all still there underneath, deselecting this option will hide the new widgets and show the previously hidden sections of the fit browser - note that, at present this option is <em>deselected</em> by default (i.e. the interface has the old UI).</p>
+<p>This tab can be thought of as something like an MVP (model-view-presenter) architecture.
+Of course, it&#8217;s not <em>properly</em> MVP, as that would have required a rewrite - the focus was on reusing as much existing code as possible!</p>
+<div class="topic">
+<p class="topic-title first">&#8220;MVP-like&#8221; design</p>
+<img alt="../_images/mvp_muon.png" class="align-center" src="../_images/mvp_muon.png" />
+<p><strong>Model:</strong> the <tt class="docutils literal"><span class="pre">MuonFitPropertyBrowser</span></tt>. Still performs the actual fit, keeps track of the workspace(s) fitted, and raises events (Qt signals) to notify the presenters.</p>
+<p>This model is shared between two presenter/view pairs, one to deal with the fitting function and one to deal with the data that will be fitted.</p>
+<p>It inherits from two new abstract base classes (i.e. implements two interfaces), so that it can be mocked when testing the two presenters.</p>
+<p><strong>Views:</strong></p>
+<ul>
+<li><p class="first">Fit function: <tt class="docutils literal"><span class="pre">FunctionBrowser</span></tt> - the same one used in the general multi-fitting interface. It is reused here, with the only change being to restrict the range of functions shown to only those that are of interest to muon scientists.</p>
+<p>The <tt class="docutils literal"><span class="pre">FunctionBrowser</span></tt>, as a pre-existing Mantid widget, is not a very humble view and has some logic inside it which unfortunately cannot be tested.</p>
+</li>
+<li><p class="first">Data: a <tt class="docutils literal"><span class="pre">MuonFitDataSelector</span></tt>, a new widget written as a humble view. It does as little as possible and leaves all the logic to the presenter.</p>
+</li>
+</ul>
+<p>Both these views inherit from abstract base classes - this is for mocking purposes when testing the presenters.</p>
+<p><strong>Presenters:</strong></p>
+<ul class="simple">
+<li>Fit function: <tt class="docutils literal"><span class="pre">MuonAnalysisFitFunctionPresenter</span></tt></li>
+<li>Data: <tt class="docutils literal"><span class="pre">MuonAnalysisFitDataPresenter</span></tt></li>
+</ul>
+<p>Both presenters have unit tests. The relevant views, and relevant part of the model, are mocked out for this purpose.</p>
+</div>
+<div class="section" id="fit-function">
+<h3><a class="toc-backref" href="#id9">Fit function</a><a class="headerlink" href="#fit-function" title="Permalink to this headline">¶</a></h3>
+<p>The actual function that is going to be fitted to the data is stored in the <tt class="docutils literal"><span class="pre">MuonFitPropertyBrowser</span></tt> (model) and, after the fit, this function will have the correct parameter values.</p>
+<p>It is therefore the job of the presenter to</p>
+<ul class="simple">
+<li>Update the model&#8217;s function when the user changes the function in the view</li>
+<li>Update the view&#8217;s displayed function parameters when the fit has finished.</li>
+</ul>
+<p>There are also some signals that come from the data presenter, when the user has used the <tt class="docutils literal"><span class="pre">&lt;&lt;</span></tt> or <tt class="docutils literal"><span class="pre">&gt;&gt;</span></tt> buttons to change datasets, or changed the number of workspaces to fit. In these cases the <tt class="docutils literal"><span class="pre">FunctionBrowser</span></tt> must be updated with this information, to set the number of datasets or to change which dataset&#8217;s parameters are being displayed.</p>
+</div>
+<div class="section" id="data">
+<h3><a class="toc-backref" href="#id10">Data</a><a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h3>
+<p>When the user changes something in the <tt class="docutils literal"><span class="pre">MuonFitDataSelector</span></tt> view, for example the runs to fit, selected groups/periods, fit type (single/co-add/simultaneous) or simultaneous fit label, an event is raised to notify the presenter.
+This gets the relevant information from the view and updates the model with it.</p>
+<p>(In a couple of cases, the signal actually goes via <tt class="docutils literal"><span class="pre">MuonAnalysis</span></tt> itself - because the grouping and plot type may have been changed by the user in that GUI, and so they need to be updated too).</p>
+<p>If the user&#8217;s chosen runs/groups/periods include datasets that haven&#8217;t had workspaces created for them yet, they will be created at that point, rather than just before the fit.
+Note that, when &#8220;Fit raw data&#8221; has been ticked, two workspaces must be created per dataset - one binned and one raw.
+The data presenter uses a <tt class="docutils literal"><span class="pre">MuonAnalysisDataLoader</span></tt> (see earlier) to create the analysis workspaces.</p>
+<p>The case where the user updates the fitting range by dragging lines on the graph is also dealt with by the data presenter.</p>
+<p>When a new dataset is loaded on the Home tab, this assigns a new &#8220;first run&#8221;.
+(Intended use case is that the first run will always be the one specified on the Home tab).
+The presenter therefore updates the view&#8217;s selected group/period in this case.</p>
+<p>When a fit is finished, the data presenter is notified so that it can process the results.
+This is only relevant in the case of a simultaneous fit, because the <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>Fit v1</em></a> algorithm produces output in a very different form to its regular output format.
+The presenter reorganises the output workspaces so that they are in the same format as they would have been for a regular fit - and then they can be easily read by the &#8220;Results table&#8221; tab.</p>
+</div>
+</div>
+<div class="section" id="sequence-of-events-when-fit-clicked">
+<h2><a class="toc-backref" href="#id11">Sequence of events when &#8220;Fit&#8221; clicked</a><a class="headerlink" href="#sequence-of-events-when-fit-clicked" title="Permalink to this headline">¶</a></h2>
+<p>The &#8220;Fit&#8221; button is part of the <em>MuonFitPropertyBrowser</em>, i.e. the model. This doesn&#8217;t fit with the MVP pattern but is this way for historical reasons, as the button was always part of this widget.</p>
+<p>When the user clicks &#8220;Fit&#8221;, the model emits a signal <tt class="docutils literal"><span class="pre">preFitChecksRequested</span></tt>. This is caught by the data presenter, which performs some checks that the data is valid before the fit starts. Extra checks could be easily added at this point.</p>
+<p>If everything is OK, the data presenter tells the model to continue, and the model emits <tt class="docutils literal"><span class="pre">functionUpdateAndFitRequested</span></tt>.
+This signal is caught by the function presenter, which updates the fit function in the model from that in the view, to ensure they are in sync before the fit. It then tells the model to start the fit.</p>
+</div>
+<div class="section" id="sequential-fit-dialog">
+<h2><a class="toc-backref" href="#id12">Sequential fit dialog</a><a class="headerlink" href="#sequential-fit-dialog" title="Permalink to this headline">¶</a></h2>
+<p>This is opened when the user selects <em>Fit/Sequential Fit</em>.
+A sequential fit runs the same fit (either one group/period or a simultaneous fit over groups/periods for one run) for one run at a time, over several runs in sequence.
+For example, fits group <em>fwd</em>, period 1 for run 15189, then the same group/period for run 15190, then run 15191...</p>
+<p>The dialog <tt class="docutils literal"><span class="pre">MuonSequentialFitDialog</span></tt> is part of the <tt class="docutils literal"><span class="pre">CustomInterfaces</span></tt> project.
+It holds pointers to the <tt class="docutils literal"><span class="pre">MuonAnalysisFitDataPresenter</span></tt> (which creates the workspaces to fit and processes the fitted workspaces) and to the <tt class="docutils literal"><span class="pre">MuonFitPropertyBrowser</span></tt> (&#8220;Model&#8221; - the dialog gets the fit function and properties from here).</p>
+<p>The actual fit is done by calling the <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>Fit v1</em></a> algorithm from the sequential fit dialog.</p>
+<p>One point to note is that the fit is done in two stages.
+On pressing the Fit button, the <tt class="docutils literal"><span class="pre">startFit</span></tt> method is called - this starts running the file search from the <tt class="docutils literal"><span class="pre">MWRunFiles</span></tt> (run number input widget).
+When the <tt class="docutils literal"><span class="pre">MWRunFiles</span></tt> widget signals that it has found the relevant files, only then does the fit process continue in <tt class="docutils literal"><span class="pre">continueFit</span></tt>.
+The reason for this is because users can type a range of runs into the box and then immediately hit Return or click Fit, without first clicking outside the box - and we need time to do the file search before starting.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Despite their names, <tt class="docutils literal"><span class="pre">MuonSequentialFitDialog</span></tt> does <em>not</em> inherit from <tt class="docutils literal"><span class="pre">SequentialFitDialog</span></tt> - they are completely separate classes. I assume this is for historical reasons. Amongst other differences, the muon sequential fit dialog calls <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>Fit v1</em></a> multiple times while the general sequential fit dialog uses <a class="reference internal" href="../algorithms/PlotPeakByLogValue-v1.html#algm-plotpeakbylogvalue"><em>PlotPeakByLogValue v1</em></a>.</p>
+</div>
+</div>
+<div class="section" id="after-a-fit">
+<h2><a class="toc-backref" href="#id13">After a fit</a><a class="headerlink" href="#after-a-fit" title="Permalink to this headline">¶</a></h2>
+<p>After fitting a single dataset, the plot is automatically updated with the fit curve and difference (if &#8220;Plot Difference&#8221; is selected).
+This is done by the <tt class="docutils literal"><span class="pre">PeakPickerTool</span></tt> from MantidPlot, not by anything within Muon Analysis.</p>
+<p>(The <tt class="docutils literal"><span class="pre">PeakPickerTool</span></tt> is set to the plot when the Data Analysis tab is selected - see box below.)</p>
+<p>The <tt class="docutils literal"><span class="pre">PeakPickerTool</span></tt> can recognise muon data by noticing that the fit property browser is a <tt class="docutils literal"><span class="pre">MuonFitPropertyBrowser</span></tt>.
+In this case it doesn&#8217;t remove previous fit curves like it would for other graphs, because this is handled by Muon Analysis instead - we have the option there to keep <em>n</em> previous fits as selected by the user...</p>
+<p>If it notes that the fit was a <em>simultaneous</em> fit of muon data, then <strong>nothing is plotted</strong>.
+This is a temporary solution.
+In the long run, we need to discuss with scientists what they would like to be plotted when a simultaneous fit ends.
+(N.B. We need to avoid the situation of automatically trying to make a tiled plot of hundreds of datasets at once!)</p>
+<p>What users can currently do to plot the results of a simultaneous or sequential fit is to right-click on the workspace group (<tt class="docutils literal"><span class="pre">MuonSimulFit_&lt;Label&gt;</span></tt> or <tt class="docutils literal"><span class="pre">MuonSeqFit_&lt;Label&gt;</span></tt>) and select <em>Plot Spectrum...</em>, then use the <em>Tiled Plot</em> option.
+Probably it would be best to make this automatic when a multiple fit ends, or provide a &#8220;Plot&#8221; button in Muon Analysis - this would most likely require exposing the relevant tiled plot functionality to Python first.</p>
+<div class="topic">
+<p class="topic-title first">Changing tabs in Muon Analysis</p>
+<p>Changing tabs is handled by the <tt class="docutils literal"><span class="pre">changeTab</span></tt> method in <tt class="docutils literal"><span class="pre">MuonAnalysis.cpp</span></tt>.
+When entering the <em>Data Analysis</em> tab:</p>
+<ul class="simple">
+<li>The <tt class="docutils literal"><span class="pre">MuonFitPropertyBrowser</span></tt> on this tab is set as the default, rather than Mantid&#8217;s general fit property browser</li>
+<li>Fitting range (start/end) is initialised, unless one is already set</li>
+<li>The <tt class="docutils literal"><span class="pre">PeakPickerTool</span></tt> is attached to the current plot</li>
+<li>The currently selected workspace is set in the fit data presenter</li>
+<li>The current value of the Mantid-wide setting <tt class="docutils literal"><span class="pre">curvefitting.peakRadius</span></tt> is cached, and its value is changed to 99. Muon scientists requested this as they don&#8217;t fit peaks on this tab. The change is localised only to while the <em>Data Analysis</em> tab is open, and the cached value will be restored on leaving this tab.</li>
+</ul>
+<p>When leaving the <em>Data Analysis</em> tab, the reverse happens:</p>
+<ul class="simple">
+<li>Default fit browser in MantidPlot is reset to Mantid&#8217;s default</li>
+<li>The config option <tt class="docutils literal"><span class="pre">curvefitting.peakRadius</span></tt> is reset to its cached value</li>
+<li>The <tt class="docutils literal"><span class="pre">PeakPickerTool</span></tt> is disconnected from the plot</li>
+</ul>
+</div>
+</div>
+<div class="section" id="generating-results-tables">
+<h2><a class="toc-backref" href="#id14">Generating results tables</a><a class="headerlink" href="#generating-results-tables" title="Permalink to this headline">¶</a></h2>
+<p>The &#8220;Results table&#8221; tab is structured with <tt class="docutils literal"><span class="pre">MuonAnalysisResultTableTab</span></tt> handling the GUI parts - populating the tables and getting the user&#8217;s choice - and uses a <tt class="docutils literal"><span class="pre">MuonAnalysisResultTableCreator</span></tt> object to actually create the table.</p>
+<p>The <tt class="docutils literal"><span class="pre">MuonAnalysisResultTableCreator</span></tt> is tested as it doesn&#8217;t use the GUI, but the tab class itself does not have tests.</p>
+<p>The user can tick time-series logs to add to the table, and a few non-timeseries logs are available too. These are:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">run_number</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">run_start</span></tt>, <tt class="docutils literal"><span class="pre">run_end</span></tt>: either as seconds relative to first run start, or ISO-formatted text</li>
+<li><tt class="docutils literal"><span class="pre">sample_temp</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">sample_magn_field</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">group</span></tt> and <tt class="docutils literal"><span class="pre">period</span></tt> - these are not logs from the NeXus file but, in the case of a simultaneous fit, the <tt class="docutils literal"><span class="pre">MuonFitDataPresenter</span></tt> adds them to the fitted workspace (in <tt class="docutils literal"><span class="pre">addSpecialLogs</span></tt>).</li>
+</ul>
+<p>The results table creator must check the workspaces have the same fit model, add the right columns and populate them with values.
+The columns must have the correct plot type (X, Y, YError or Label).
+If a parameter was fixed in the fit, its error will be zero for each row - so that error column can be removed.</p>
+<p>The <em>Multiple</em> option is a little different to the others.
+While the single, sequential or simultaneous fit tables have one row per dataset, the multiple fit table has one row per label - showing many fits in the same table, one row per fit.
+A <em>global</em> parameter has just one value column and one error column, while other (non-global) parameters have one value and one error column per dataset.</p>
+<p>The results table creator can recognise a global parameter by the fact that it has the same value for all datasets.</p>
+</div>
+<div class="section" id="miscellaneous-notable-points">
+<h2><a class="toc-backref" href="#id15">Miscellaneous notable points</a><a class="headerlink" href="#miscellaneous-notable-points" title="Permalink to this headline">¶</a></h2>
+<p>For a long time, using the Muon Analysis interface has produced a mysterious black box in the toolbars of MantidPlot:</p>
+<img alt="../_images/blackbox.png" class="align-center" src="../_images/blackbox.png" />
+<p>This is caused by using the &#8220;Hide Toolbars&#8221; option on the Settings tab.
+If selected, MantidPlot emits a <tt class="docutils literal"><span class="pre">setToolbarsHidden(true)</span></tt> signal, which is caught by MantidPlot, hiding all the toolbars.
+The option is meant to be helpful for users with small laptop screens.</p>
+<p>However, when the interface is closed/hidden, the reverse <tt class="docutils literal"><span class="pre">setToolbarsHidden(false)</span></tt> tells MantidPlot to show <em>all</em> the toolbars, even ones that the user didn&#8217;t have displayed in the first place!
+There is no cache of which toolbars were displayed, and no control over which to show - it&#8217;s all or none.</p>
+<p>The &#8220;black box&#8221; seen in the image is, in fact, one of the toolbars - the &#8220;Data Display&#8221; one.
+This is used by the &#8220;Screen reader&#8221; feature in MantidPlot, which displays coordinates from a graph.
+When no graph is being read, the toolbar appears as an empty black box, as above.</p>
+</div>
+<div class="section" id="future-work">
+<h2><a class="toc-backref" href="#id16">Future work</a><a class="headerlink" href="#future-work" title="Permalink to this headline">¶</a></h2>
+<p>Open muon issues can be found on Github with the <a class="reference external" href="https://github.com/mantidproject/mantid/issues?q=is%3Aopen+is%3Aissue+label%3A%22Component%3A+Muon%22">Component: Muon</a> label.
+Those marked <tt class="docutils literal"><span class="pre">Misc:</span> <span class="pre">Roadmap</span></tt> are the most important.</p>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/Interfaces.html">Interfaces</a> | <a class="reference external" href="../algorithms/categories/Muon.html">Muon</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Muon Analysis.html" title="Previous Chapter: Muon Analysis"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Muon Analysis</span>
+    </a>
+  </li>
+  <li>
+    <a href="Muon Analysis Unscripted Testing Guide.html" title="Next Chapter: Muon Interfaces Unscripted Testing"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Muon Interfaces ... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

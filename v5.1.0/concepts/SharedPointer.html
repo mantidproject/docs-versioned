@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Shared Pointer</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '5.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Symmetry groups" href="SymmetryGroups.html" />
+    <link rel="prev" title="Sample Environment" href="SampleEnvironment.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>5.1</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="shared-pointer">
+<span id="id1"></span><h1>Shared Pointer<a class="headerlink" href="#shared-pointer" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-are-they">
+<h2>What are they?<a class="headerlink" href="#what-are-they" title="Permalink to this headline">¶</a></h2>
+<p>Shared pointers are used extensively within the Mantid Framework to
+simplify memory management and reduce memory leaks. We use the Shared
+Pointer <a class="reference external" href="https://en.cppreference.com/w/cpp/memory/shared_ptr">definition from the Standard Template
+Library</a>.</p>
+<p>Shared pointers are objects which store pointers to dynamically
+allocated (heap) objects. They behave much like built-in C++ pointers
+except that they automatically delete the object pointed to at the
+appropriate time. Shared pointers are particularly useful in the face of
+exceptions as they ensure proper destruction of dynamically allocated
+objects. They can also be used to keep track of dynamically allocated
+objects shared by multiple owners.</p>
+<p>Conceptually, Shared pointers are seen as owning the object pointed to,
+and thus responsible for deletion of the object when it is no longer
+needed.</p>
+</div>
+<div class="section" id="declaring-a-shared-pointer">
+<h2>Declaring a shared pointer<a class="headerlink" href="#declaring-a-shared-pointer" title="Permalink to this headline">¶</a></h2>
+<p>creating a shared pointer to a new object</p>
+<p><code class="docutils literal"><span class="pre">std::shared_ptr</span></code>``&nbsp;ptr(new&nbsp;C);``</p>
+<p>assigning a shared pointer</p>
+<p><code class="docutils literal"><span class="pre">std::shared_ptr</span></code>``&nbsp;instrument&nbsp;=&nbsp;workspace-&gt;getInstrument();``</p>
+<p>Several of our shared pointers have typedefs to give them much shorter
+definitions. For example instead of std::shared_ptr you can just type
+workspace_sptr (where sptr stands for shared pointer).</p>
+</div>
+<div class="section" id="using-a-shared-pointer">
+<h2>Using a shared pointer<a class="headerlink" href="#using-a-shared-pointer" title="Permalink to this headline">¶</a></h2>
+<p>Shared pointer can be used just like any pointer.</p>
+<p><code class="docutils literal"><span class="pre">workspacePointer-&gt;readX(1);</span></code></p>
+<p>The only real differences are when casting the pointer instead of</p>
+<p><code class="docutils literal"><span class="pre">Workspace2D*&nbsp;input2D&nbsp;=&nbsp;dynamic_cast</span></code><code class="docutils literal"><span class="pre">(m_input);</span></code></p>
+<p>you would use</p>
+<p><code class="docutils literal"><span class="pre">Workspace2D_sptr&nbsp;input2D&nbsp;=&nbsp;std::dynamic_pointer_cast</span></code><code class="docutils literal"><span class="pre">(input);</span></code></p>
+<p>and that you should not delete a shared pointer, it will take care of
+itself.</p>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="SampleEnvironment.html" title="Previous Chapter: Sample Environment"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Sample Environment</span>
+    </a>
+  </li>
+  <li>
+    <a href="SymmetryGroups.html" title="Next Chapter: Symmetry groups"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Symmetry groups &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2020-09-29.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Calibration</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.4.20220909.1939',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Calibration Implementation Details" href="Calibration_implementation.html" />
+    <link rel="prev" title="BinMD Coordinate Transformations" href="BinMDCoordinateTransformations.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.4</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Techniques</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Calibration</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <p><span class="math">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<div class="section" id="calibration">
+<span id="api-calibration"></span><h1>Calibration<a class="headerlink" href="#calibration" title="Permalink to this headline">¶</a></h1>
+<p>Calibration is currently based on tubes and is accessed using the <a class="reference internal" href="#module-tube" title="tube"><code class="xref py py-mod docutils literal"><span class="pre">tube</span></code></a> module.</p>
+<span class="target" id="module-tube"></span><div class="section" id="definition-of-calibration">
+<h2>Definition of Calibration<a class="headerlink" href="#definition-of-calibration" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="tube.calibrate">
+<code class="descclassname">tube.</code><code class="descname">calibrate</code><span class="sig-paren">(</span><em>ws</em>, <em>tubeSet</em>, <em>knownPositions</em>, <em>funcForm</em><span class="optional">[</span>, <em>fitPar</em>, <em>margin</em>, <em>rangeList</em>, <em>calibTable</em>, <em>plotTube</em>, <em>excludeShorTubes</em>, <em>overridePeaks</em>, <em>fitPolyn</em>, <em>outputPeak</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#tube.calibrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the calibrated positions of the detectors inside the tubes defined
+in tubeSet.</p>
+<p>Tubes may be considered a list of detectors aligned that may be considered
+as pixels for the analogy when they values are displayed.</p>
+<p>The position of these pixels are provided by the manufacturer, but its real
+position depends on the electronics inside the tube and varies slightly
+from tube to tube. The calibrate method, aims to find the real positions
+of the detectors (pixels) inside the tube.</p>
+<p>For this, it will receive an Integrated workspace, where a special
+measurement was performed so to have a
+pattern of peaks or through. Where gaussian peaks or edges can be found.</p>
+<p>The calibration follows the following steps</p>
+<ol class="arabic simple">
+<li>Finding the peaks on each tube</li>
+<li>Fitting the peaks against the Known Positions</li>
+<li>Defining the new position for the pixels(detectors)</li>
+</ol>
+<p>Let’s consider the simplest way of calling calibrate:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tube</span> <span class="kn">import</span> <span class="n">calibrate</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;WISH17701&#39;</span><span class="p">)</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">Integration</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
+<span class="n">known_pos</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.41</span><span class="p">,</span><span class="o">-</span><span class="mf">0.31</span><span class="p">,</span><span class="o">-</span><span class="mf">0.21</span><span class="p">,</span><span class="o">-</span><span class="mf">0.11</span><span class="p">,</span><span class="o">-</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.18</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">,</span> <span class="mf">0.39</span> <span class="p">]</span>
+<span class="n">peaks_form</span> <span class="o">=</span> <span class="mi">9</span><span class="o">*</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># all the peaks are gaussian peaks</span>
+<span class="n">calibTable</span> <span class="o">=</span> <span class="n">calibrate</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span><span class="s1">&#39;WISH/panel03&#39;</span><span class="p">,</span><span class="n">known_pos</span><span class="p">,</span> <span class="n">peaks_form</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this example, the calibrate framework will consider all the
+tubes (152) from WISH/panel03.
+You may decide to look for a subset of the tubes, by passing the
+<strong>rangeList</strong> option.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># This code will calibrate only the tube indexed as number 3</span>
+<span class="c1"># (usually tube0004)</span>
+<span class="n">calibTable</span> <span class="o">=</span> <span class="n">calibrate</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span><span class="s1">&#39;WISH/panel03&#39;</span><span class="p">,</span><span class="n">known_pos</span><span class="p">,</span>
+                       <span class="n">peaks_form</span><span class="p">,</span> <span class="n">rangeList</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><strong>Finding the peaks on each tube</strong></p>
+<p><strong>Dynamically fitting peaks</strong></p>
+<p>The framework expects that for each tube, it will find a peak pattern
+around the pixels corresponding to the known_pos positions.</p>
+<p>The way it will work out the estimated peak position (in pixel) is:</p>
+<ol class="arabic simple">
+<li>Get the length of the tube: distance(first_detector,last_detector) in the tube.</li>
+<li>Get the number of detectors in the tube (nDets)</li>
+<li>It will be assumed that the center of the tube correspond to the origin (0)</li>
+</ol>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">centre_pixel</span> <span class="o">=</span> <span class="n">known_pos</span> <span class="o">*</span> <span class="n">nDets</span><span class="o">/</span><span class="n">tube_length</span> <span class="o">+</span> <span class="n">nDets</span><span class="o">/</span><span class="mi">2</span>
+</pre></div>
+</div>
+<p>It will them look for the real peak around the estimated value as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># consider tube_values the array of counts, and peak the estimated</span>
+<span class="c1"># position for the peak</span>
+<span class="n">real_peak_pos</span> <span class="o">=</span> <span class="n">argmax</span><span class="p">(</span><span class="n">tube_values</span><span class="p">[</span><span class="n">peak</span><span class="o">-</span><span class="n">margin</span><span class="p">:</span><span class="n">peak</span><span class="o">+</span><span class="n">margin</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>After finding the real_peak_pos, it will try to fit the region around
+the peak to find the best expected position of the peak in a continuous
+space. It will do this by fitting the region around the peak to a
+Gaussian Function, and them extract the PeakCentre returned by the
+Fitting.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">centre</span> <span class="o">=</span> <span class="n">real_peak_pos</span>
+<span class="n">fit_start</span><span class="p">,</span> <span class="n">fit_stop</span> <span class="o">=</span> <span class="n">centre</span><span class="o">-</span><span class="n">margin</span><span class="p">,</span> <span class="n">centre</span><span class="o">+</span><span class="n">margin</span>
+<span class="n">values</span> <span class="o">=</span> <span class="n">tube_values</span><span class="p">[</span><span class="n">fit_start</span><span class="p">,</span><span class="n">fit_stop</span><span class="p">]</span>
+<span class="n">background</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+<span class="n">peak</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">-</span> <span class="n">background</span>
+<span class="n">width</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">where</span><span class="p">(</span><span class="n">values</span> <span class="o">&gt;</span> <span class="n">peak</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="n">background</span><span class="p">))</span>
+<span class="c1"># It will fit to something like:</span>
+<span class="c1"># Fit(function=LinerBackground,A0=background;Gaussian,</span>
+<span class="c1"># Height=peak, PeakCentre=centre, Sigma=width,fit_start,fit_end)</span>
+</pre></div>
+</div>
+<p><strong>Force Fitting Parameters</strong></p>
+<p>These dynamically values can be avoided by defining the <strong>fitPar</strong> for
+the calibrate function</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">eP</span> <span class="o">=</span> <span class="p">[</span><span class="mf">57.5</span><span class="p">,</span> <span class="mf">107.0</span><span class="p">,</span> <span class="mf">156.5</span><span class="p">,</span> <span class="mf">206.0</span><span class="p">,</span> <span class="mf">255.5</span><span class="p">,</span> <span class="mf">305.0</span><span class="p">,</span> <span class="mf">354.5</span><span class="p">,</span> <span class="mf">404.0</span><span class="p">,</span> <span class="mf">453.5</span><span class="p">]</span>
+<span class="c1"># Expected Height of Gaussian Peaks (initial value of fit parameter)</span>
+<span class="n">ExpectedHeight</span> <span class="o">=</span> <span class="mf">1000.0</span>
+<span class="c1"># Expected width of Gaussian peaks in pixels</span>
+<span class="c1"># (initial value of fit parameter)</span>
+<span class="n">ExpectedWidth</span> <span class="o">=</span> <span class="mf">10.0</span>
+<span class="n">fitPar</span> <span class="o">=</span> <span class="n">TubeCalibFitParams</span><span class="p">(</span> <span class="n">eP</span><span class="p">,</span> <span class="n">ExpectedHeight</span><span class="p">,</span> <span class="n">ExpectedWidth</span> <span class="p">)</span>
+<span class="n">calibTable</span> <span class="o">=</span> <span class="n">calibrate</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="s1">&#39;WISH/panel03&#39;</span><span class="p">,</span> <span class="n">known_pos</span><span class="p">,</span> <span class="n">peaks_form</span><span class="p">,</span> <span class="n">fitPar</span><span class="o">=</span><span class="n">fitPar</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Different Function Factors</strong></p>
+<p>Although the examples consider only Gaussian peaks, it is possible to
+change the function factors to edges by passing the index of the
+known_position through the <strong>funcForm</strong>. Hence, considering three special
+points, where there are one gaussian peak and two edges, the calibrate
+could be configured as</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">known_pos</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.1</span> <span class="mi">2</span> <span class="mf">2.3</span><span class="p">]</span>
+<span class="c1"># gaussian peak followed by two edges (through)</span>
+<span class="n">form_factor</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">calibTable</span> <span class="o">=</span> <span class="n">calibrate</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span><span class="s1">&#39;WISH/panel03&#39;</span><span class="p">,</span><span class="n">known_pos</span><span class="p">,</span> <span class="n">form_factor</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Override Peaks</strong></p>
+<p>It is possible to scape the finding peaks position steps by providing the
+peaks through the <strong>overridePeaks</strong> parameters. The example below tests
+the calibration of a single tube (30) but skips the finding peaks step.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">known_pos</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.41</span><span class="p">,</span><span class="o">-</span><span class="mf">0.31</span><span class="p">,</span><span class="o">-</span><span class="mf">0.21</span><span class="p">,</span><span class="o">-</span><span class="mf">0.11</span><span class="p">,</span><span class="o">-</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.09</span><span class="p">,</span> <span class="mf">0.18</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">,</span> <span class="mf">0.39</span> <span class="p">]</span>
+<span class="n">define_peaks</span> <span class="o">=</span> <span class="p">[</span><span class="mf">57.5</span><span class="p">,</span> <span class="mf">107.0</span><span class="p">,</span> <span class="mf">156.5</span><span class="p">,</span> <span class="mf">206.0</span><span class="p">,</span> <span class="mf">255.5</span><span class="p">,</span> <span class="mf">305.0</span><span class="p">,</span> <span class="mf">354.5</span><span class="p">,</span>
+               <span class="mf">404.0</span><span class="p">,</span> <span class="mf">453.5</span><span class="p">]</span>
+<span class="n">calibTable</span> <span class="o">=</span> <span class="n">calibrate</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="s1">&#39;WISH/panel03&#39;</span><span class="p">,</span> <span class="n">known_pos</span><span class="p">,</span> <span class="n">peaks_form</span><span class="p">,</span>
+                 <span class="n">overridePeaks</span><span class="o">=</span><span class="p">{</span><span class="mi">30</span><span class="p">:</span><span class="n">define_peaks</span><span class="p">},</span> <span class="n">rangeList</span><span class="o">=</span><span class="p">[</span><span class="mi">30</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><strong>Output Peaks Positions</strong></p>
+<p>Enabling the option <strong>outputPeak</strong> a WorkspaceTable will be produced with
+the first column as tube name and the following columns with the position
+where corresponding peaks were found. Like the table below.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="27%" />
+<col width="19%" />
+<col width="27%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">TubeId</th>
+<th class="head">Peak1</th>
+<th class="head">…</th>
+<th class="head">PeakM</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>tube0</td>
+<td>15.5</td>
+<td>…</td>
+<td>370.3</td>
+</tr>
+<tr class="row-odd"><td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr class="row-even"><td>tubeN</td>
+<td>14.9</td>
+<td>…</td>
+<td>371.2</td>
+</tr>
+</tbody>
+</table>
+<p>The signature changes to:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">..</span> <span class="n">code</span><span class="o">-</span><span class="n">block</span><span class="p">::</span> <span class="n">python</span>
+</pre></div>
+</div>
+<blockquote>
+<div>calibTable, peakTable = calibrate(…)</div></blockquote>
+<p>It is possible to give a peakTable directly to the <strong>outputPeak</strong> option,
+which will make the calibration to append the peaks to the given table.</p>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">It is possible to save the peakTable to a file using the
+<a class="reference internal" href="#tube.savePeak" title="tube.savePeak"><code class="xref py py-meth docutils literal"><span class="pre">savePeak()</span></code></a> method.</p>
+</div>
+<p><strong>Find the correct position along the tube</strong></p>
+<p>The second step of the calibration is to define the correct position of
+pixels along the tube. This is done by fitting the peaks positions found
+at the previous step against the known_positions provided.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">known</span>       <span class="o">|</span>              <span class="o">*</span>
+<span class="n">positions</span>   <span class="o">|</span>           <span class="o">*</span>
+            <span class="o">|</span>      <span class="o">*</span>
+            <span class="o">|</span>  <span class="o">*</span>
+            <span class="o">|</span><span class="n">________________</span>
+              <span class="n">pixels</span> <span class="n">positions</span>
+</pre></div>
+</div>
+<p>The default operation is to fit the pixels positions against the known
+positions with a quadratic function in order to define an operation to
+move all the pixels to their real positions. If necessary, the user may
+select to fit using a polinomial of 3rd order, through the parameter
+<strong>fitPolyn</strong>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The known positions are given in the same unit as the spacial position
+(3D) and having the center of the tube as the origin.</p>
+</div>
+<p>Hence, this section will define a function that:</p>
+<div class="math">
+\[F(pix) = RealRelativePosition\]</div>
+<p>The fitting framework of Mantid stores values and errors for the optimized coefficients of the polynomial
+in a table (of type TableWorkspace). These tables can be grouped into a WorkspaceGroup by passing
+the name of this workspace to option <strong>parameters_table_group</strong>. The name of each table workspace will
+the string <strong>parameters_table_group</strong> plus a suffix which is the index of the tube in the input <strong>tubeSet</strong>.</p>
+<p><strong>Define the new position for the detectors</strong></p>
+<p>Finally, the position of the detectors are defined as a vector operation
+like</p>
+<div class="math">
+\[\vec{p} = \vec{c} + v \vec{u}\]</div>
+<p>Where <span class="math">\(\vec{p}\)</span> is the position in the 3D space, <strong>v</strong> is the
+RealRelativePosition deduced from the last session, and finally,
+<span class="math">\(\vec{u}\)</span> is the unitary vector in the direction of the tube.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ws</strong> – Integrated workspace with tubes to be calibrated.</li>
+<li><strong>tubeSet</strong> – Specification of Set of tubes to be calibrated. If a string is passed, a TubeSpec will be created     passing the string as the setTubeSpecByString.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This will be the case for TubeSpec as string</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">tube_spec</span> <span class="o">=</span> <span class="n">TubeSpec</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">tube_spec</span><span class="o">.</span><span class="n">setTubeSpecByString</span><span class="p">(</span><span class="n">tubeSet</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If a list of strings is passed, the TubeSpec will be created with this list:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">tube_spec</span> <span class="o">=</span> <span class="n">TubeSpec</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">tube_spec</span><span class="o">.</span><span class="n">setTubeSpecByStringArray</span><span class="p">(</span><span class="n">tubeSet</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If a <a class="reference internal" href="Calibration_implementation.html#tube_spec.TubeSpec" title="tube_spec.TubeSpec"><code class="xref py py-class docutils literal"><span class="pre">TubeSpec</span></code></a> object is passed, it will be used as it is.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>knownPositions</strong> – The defined position for the peaks/edges, taking the center as the origin and having the     same units as the tube length in the 3D space.</li>
+<li><strong>funcForm</strong> – list with special values to define the format of the peaks/edge (peaks=1, edge=2). If it is not     provided, it will be assumed that all the knownPositions are peaks.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Optionals parameters to tune the calibration:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fitPar</strong> – Define the parameters to be used in the fit as a <a class="reference internal" href="Calibration_implementation.html#tube_calib_fit_params.TubeCalibFitParams" title="tube_calib_fit_params.TubeCalibFitParams"><code class="xref py py-class docutils literal"><span class="pre">TubeCalibFitParams</span></code></a>.     If not provided, the dynamic mode is used. See <a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.provideTheExpectedValue" title="Examples.TubeCalibDemoMaps_All.provideTheExpectedValue"><code class="xref py py-func docutils literal"><span class="pre">provideTheExpectedValue()</span></code></a></li>
+<li><strong>margin</strong> – value in pixesl that will be used around the peaks/edges to fit them. Default = 15. See the code of     <a class="reference internal" href="#module-Examples.TubeCalibDemoMerlin" title="Examples.TubeCalibDemoMerlin"><code class="xref py py-mod docutils literal"><span class="pre">TubeCalibDemoMerlin</span></code></a> where <strong>margin</strong> is used to calibrate small tubes.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">fit_start</span><span class="p">,</span> <span class="n">fit_end</span> <span class="o">=</span> <span class="n">centre</span> <span class="o">-</span> <span class="n">margin</span><span class="p">,</span> <span class="n">centre</span> <span class="o">+</span> <span class="n">margin</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rangeList</strong> – list of tubes indexes that will be calibrated. As in the following code     (see: <a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.improvingCalibrationSingleTube" title="Examples.TubeCalibDemoMaps_All.improvingCalibrationSingleTube"><code class="xref py py-func docutils literal"><span class="pre">improvingCalibrationSingleTube()</span></code></a>):</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">rangelist</span><span class="p">:</span>
+    <span class="n">do_calibrate</span><span class="p">(</span><span class="n">tubeSet</span><span class="o">.</span><span class="n">getTube</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>calibTable</strong> – Pass the calibration table, it will them append the values to the provided one and return it.     (see: <a class="reference internal" href="#module-Examples.TubeCalibDemoMerlin" title="Examples.TubeCalibDemoMerlin"><code class="xref py py-mod docutils literal"><span class="pre">TubeCalibDemoMerlin</span></code></a>)</li>
+<li><strong>plotTube</strong> – If given, the tube whose index is in plotTube will be ploted as well as its fitted peaks, it can     receive a list of indexes to plot.(see: <a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.changeMarginAndExpectedValue" title="Examples.TubeCalibDemoMaps_All.changeMarginAndExpectedValue"><code class="xref py py-func docutils literal"><span class="pre">changeMarginAndExpectedValue()</span></code></a>)</li>
+<li><strong>excludeShortTubes</strong> – Do not calibrate tubes whose length is smaller than given value. (see at     Examples/TubeCalibDemoMerlin_Adjustable.py)</li>
+<li><strong>overridePeaks</strong> – dictionary that defines an array of peaks positions (in pixels) to be used for the specific     tube(key). (see: <a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.improvingCalibrationSingleTube" title="Examples.TubeCalibDemoMaps_All.improvingCalibrationSingleTube"><code class="xref py py-func docutils literal"><span class="pre">improvingCalibrationSingleTube()</span></code></a>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">rangelist</span><span class="p">:</span>
+  <span class="k">if</span> <span class="n">overridePeaks</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
+    <span class="n">use_this_peaks</span> <span class="o">=</span> <span class="n">overridePeaks</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+    <span class="c1"># skip finding peaks</span>
+    <span class="n">fit_peaks_to_position</span><span class="p">()</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fitPolyn</strong> – Define the order of the polynomial to fit the pixels positions against the known positions. The     acceptable values are 1, 2 or 3. Default = 2.</li>
+<li><strong>outputPeak</strong> – Enable the calibrate to output the peak table, relating the tubes with the pixels positions. It     may be passed as a boolean value (outputPeak=True) or as a peakTable value. The later case is to inform calibrate     to append the new values to the given peakTable. This is useful when you have to operate in subsets of tubes.     (see <a class="reference internal" href="#module-Examples.TubeCalibDemoMerlin" title="Examples.TubeCalibDemoMerlin"><code class="xref py py-mod docutils literal"><span class="pre">TubeCalibDemoMerlin</span></code></a> that shows a nice inspection on this table).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">calibTable</span><span class="p">,</span> <span class="n">peakTable</span> <span class="o">=</span> <span class="n">calibrate</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="p">(</span><span class="n">omitted</span><span class="p">),</span> <span class="n">rangeList</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+         <span class="n">outputPeak</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="c1"># appending the result to peakTable</span>
+<span class="n">calibTable</span><span class="p">,</span> <span class="n">peakTable</span> <span class="o">=</span> <span class="n">calibrate</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="p">(</span><span class="n">omitted</span><span class="p">),</span> <span class="n">rangeList</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+         <span class="n">outputPeak</span><span class="o">=</span><span class="n">peakTable</span><span class="p">)</span>
+<span class="c1"># now, peakTable has information for tube[1] and tube[2]</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">calibrationTable, a TableWorkspace with two columns DetectorID(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)">int</a>) and DetectorPositions(<a class="reference internal" href="../api/python/mantid/kernel/V3D.html#mantid.kernel.V3D" title="mantid.kernel.V3D">V3D</a>)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="use-cases">
+<h2>Use Cases<a class="headerlink" href="#use-cases" title="Permalink to this headline">¶</a></h2>
+<p>Among the examples, inside the <a class="reference internal" href="#module-Examples" title="Examples"><code class="xref py py-mod docutils literal"><span class="pre">Examples</span></code></a> folder, the user is encouraged to look at
+<a class="reference internal" href="#module-Examples.TubeCalibDemoMaps_All" title="Examples.TubeCalibDemoMaps_All"><code class="xref py py-mod docutils literal"><span class="pre">TubeCalibDemoMaps_All</span></code></a>, there he will find 7 examples showing how to use calibrate method.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.minimalInput" title="Examples.TubeCalibDemoMaps_All.minimalInput"><code class="xref py py-func docutils literal"><span class="pre">minimalInput()</span></code></a> shows the easiest way to use calibrate.</li>
+<li><a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.provideTheExpectedValue" title="Examples.TubeCalibDemoMaps_All.provideTheExpectedValue"><code class="xref py py-func docutils literal"><span class="pre">provideTheExpectedValue()</span></code></a> shows the usage of <strong>fitPar</strong> parameter to provide
+the expected values for the peaks in pixels.</li>
+<li><a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.changeMarginAndExpectedValue" title="Examples.TubeCalibDemoMaps_All.changeMarginAndExpectedValue"><code class="xref py py-func docutils literal"><span class="pre">changeMarginAndExpectedValue()</span></code></a> demonstrate how to use <strong>margin</strong>, <strong>fitPar</strong>,
+<strong>plotTube</strong>, and <strong>outputPeak</strong></li>
+<li><a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.improvingCalibrationSingleTube" title="Examples.TubeCalibDemoMaps_All.improvingCalibrationSingleTube"><code class="xref py py-func docutils literal"><span class="pre">improvingCalibrationSingleTube()</span></code></a> explores the usage of <strong>rangeList</strong> and
+<strong>overridePeaks</strong> to improve the calibration of specific tubes.</li>
+<li><a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.improvingCalibrationOfListOfTubes" title="Examples.TubeCalibDemoMaps_All.improvingCalibrationOfListOfTubes"><code class="xref py py-func docutils literal"><span class="pre">improvingCalibrationOfListOfTubes()</span></code></a> extends theimprovingCalibrationSingleTube
+to provide a good calibration to almost all instrument.</li>
+<li><a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.calibrateB2Window" title="Examples.TubeCalibDemoMaps_All.calibrateB2Window"><code class="xref py py-func docutils literal"><span class="pre">calibrateB2Window()</span></code></a> explore a singularity of the MAP14919 example, where the
+second peak does not appear clear on some tubes inside one door. So, this example, shows how to use <strong>rangeList</strong> to
+carry a calibration to the group of tubes.</li>
+<li><a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.completeCalibration" title="Examples.TubeCalibDemoMaps_All.completeCalibration"><code class="xref py py-func docutils literal"><span class="pre">completeCalibration()</span></code></a> demonstrate how the <strong>rangeList</strong>, <strong>overridePeaks</strong>,
+may be used together to allow the calibration of the whole instrument, despite, its particularities in some cases.</li>
+<li><a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.findThoseTubesThatNeedSpecialCareForCalibration" title="Examples.TubeCalibDemoMaps_All.findThoseTubesThatNeedSpecialCareForCalibration"><code class="xref py py-func docutils literal"><span class="pre">findThoseTubesThatNeedSpecialCareForCalibration()</span></code></a> show an approach to find the
+tubes that will require special care on calibrating. It will also help to find detectors that are not working well.</li>
+</ul>
+</div>
+<div class="section" id="module-Examples">
+<span id="examples"></span><h2>Examples<a class="headerlink" href="#module-Examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-Examples.TubeCalibDemoMaps_All">
+<span id="maps-instrument"></span><h3>MAPS instrument<a class="headerlink" href="#module-Examples.TubeCalibDemoMaps_All" title="Permalink to this headline">¶</a></h3>
+<p>Tube Calibration Demonstration for MAPS instrument.</p>
+<p>This module group many examples and also demonstrate how to work with
+the <a class="reference internal" href="#tube.calibrate" title="tube.calibrate"><code class="xref py py-func docutils literal"><span class="pre">tube.calibrate()</span></code></a>.</p>
+<p>It starts from the simplest way to perform a calibration. It them increase the complexity
+of dealing with real calibration work, when particularities of the instrument must be considered</p>
+<p>At the end, it gives a suggestion on a techinique to investigate and improve the calibration itself.</p>
+<div class="section" id="minimal-input">
+<h4>Minimal Input<a class="headerlink" href="#minimal-input" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="Examples.TubeCalibDemoMaps_All.minimalInput">
+<code class="descclassname">Examples.TubeCalibDemoMaps_All.</code><code class="descname">minimalInput</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#Examples.TubeCalibDemoMaps_All.minimalInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simplest way of calling <a class="reference internal" href="#tube.calibrate" title="tube.calibrate"><code class="xref py py-func docutils literal"><span class="pre">tube.calibrate()</span></code></a></p>
+<p>The minimal input for the calibration is the integrated workspace
+and the known positions.</p>
+<p>Even though it is easy to call, the calibration performs well, but there are ways to improve
+the results, as it is explored after.</p>
+<img alt="../_images/outputOfMinimalInput.png" src="../_images/outputOfMinimalInput.png" />
+</dd></dl>
+
+</div>
+<div class="section" id="provide-expected-value">
+<h4>Provide Expected Value<a class="headerlink" href="#provide-expected-value" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="Examples.TubeCalibDemoMaps_All.provideTheExpectedValue">
+<code class="descclassname">Examples.TubeCalibDemoMaps_All.</code><code class="descname">provideTheExpectedValue</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#Examples.TubeCalibDemoMaps_All.provideTheExpectedValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Giving the expected value for the position of the peaks in pixel.</p>
+<p>The <code class="xref py py-func docutils literal"><span class="pre">minimalInput()</span></code> let to the calibrate to guess the position of the pixels
+among the tubes. Although it works nicelly, providing these expected values may improve the results.
+This is done through the <strong>fitPar</strong> parameter.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="change-margin-and-expected-value">
+<h4>Change Margin and Expected Value<a class="headerlink" href="#change-margin-and-expected-value" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="Examples.TubeCalibDemoMaps_All.changeMarginAndExpectedValue">
+<code class="descclassname">Examples.TubeCalibDemoMaps_All.</code><code class="descname">changeMarginAndExpectedValue</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#Examples.TubeCalibDemoMaps_All.changeMarginAndExpectedValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>To fit correctly, it is important to have a good window around the peak. This windown is defined
+by the <strong>margin</strong> parameter.</p>
+<p>This examples shows how the results worsen if we change the margin from its default value <strong>15</strong>
+to <strong>10</strong>.</p>
+<p>It shows how to see the fitted values using the <strong>plotTube</strong> parameter.</p>
+<p>It will also output the peaks position and save them, through the <strong>outputPeak</strong> option and
+the <a class="reference internal" href="#tube.savePeak" title="tube.savePeak"><code class="xref py py-func docutils literal"><span class="pre">tube.savePeak()</span></code></a> method.</p>
+<p>An example of the fitted data compared to the acquired data to find the peaks positions:</p>
+<img alt="../_images/calibratePlotFittedData.png" src="../_images/calibratePlotFittedData.png" />
+<p>The result deteriorate, as you can see:</p>
+<img alt="../_images/calibrateChangeMarginAndExpectedValue.png" src="../_images/calibrateChangeMarginAndExpectedValue.png" />
+</dd></dl>
+
+</div>
+<div class="section" id="improving-calibration-single-tube">
+<h4>Improving Calibration Single Tube<a class="headerlink" href="#improving-calibration-single-tube" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="Examples.TubeCalibDemoMaps_All.improvingCalibrationSingleTube">
+<code class="descclassname">Examples.TubeCalibDemoMaps_All.</code><code class="descname">improvingCalibrationSingleTube</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#Examples.TubeCalibDemoMaps_All.improvingCalibrationSingleTube" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <code class="xref py py-func docutils literal"><span class="pre">provideTheExpectedValue()</span></code> provided a good solution, but there are few
+tubes whose calibration was not so good.</p>
+<p>This method explores how to deal with these tubes.</p>
+<p>First of all, it is important to identify the tubes that did not work well.</p>
+<p>From the outputs of provideTheExpectedValue, looking inside the instrument tree,
+it is possible to list all the tubes that are not so good.</p>
+<p>Unfortunately, they do not have a single name identifier.
+So, locating them it is a little bit trickier.
+The <code class="xref py py-func docutils literal"><span class="pre">findThoseTubesThatNeedSpecialCareForCalibration()</span></code> shows one way of finding those
+tubes.     The index is the position inside the PeakTable.</p>
+<p>For this example, we have used inspection from the Instrument View.
+One of them is inside the A1_Window, 3rd PSD_TUBE_STRIP 8 pack up, 4th PSD_TUBE_STRIP: Index = 8+8+4 - 1 = 19.</p>
+<p>In this example, we will ask the calibration to run the calibration only for 3 tubes
+(indexes 18,19,20). Them, we will check why the 19 is not working well. Finally, we will try to
+provide another peaks position for this tube,
+and run the calibration again for these tubes, to improve the results.</p>
+<p>This example shows how to use <strong>overridePeaks</strong> option</p>
+</dd></dl>
+
+</div>
+<div class="section" id="improving-calibration-of-list-of-tubes">
+<h4>Improving Calibration of List of Tubes<a class="headerlink" href="#improving-calibration-of-list-of-tubes" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="Examples.TubeCalibDemoMaps_All.improvingCalibrationOfListOfTubes">
+<code class="descclassname">Examples.TubeCalibDemoMaps_All.</code><code class="descname">improvingCalibrationOfListOfTubes</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#Examples.TubeCalibDemoMaps_All.improvingCalibrationOfListOfTubes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analysing the result of provideTheExpectedValue it was seen that the calibration
+of some tubes was not good.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This method list some of them, there are a group belonging to window B2 that shows
+only 2 peaks that are not dealt with here.</p>
+</div>
+<p>If first plot the bad ones using the <strong>plotTube</strong> option. It them, find where they fail, and how
+to correct their peaks, using the <strong>overridePeaks</strong>.
+If finally, applies the calibration again with the points corrected.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="calibrating-window-b2">
+<h4>Calibrating Window B2<a class="headerlink" href="#calibrating-window-b2" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="Examples.TubeCalibDemoMaps_All.calibrateB2Window">
+<code class="descclassname">Examples.TubeCalibDemoMaps_All.</code><code class="descname">calibrateB2Window</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#Examples.TubeCalibDemoMaps_All.calibrateB2Window" title="Permalink to this definition">¶</a></dt>
+<dd><p>There are among the B2 window tubes, some tubes that are showing only 2 strips.</p>
+<p>Those tubes must be calibrated separated, as the known positions are not valid.</p>
+<p>This example calibrate them, using only 4 known values: 2 edges and 2 peaks.</p>
+<p>Run this example, and them see the worksapce in the calibrated instrument and you will see
+how it worked.</p>
+<p>The picture shows the output, look that only a section of the B2 Window was calibrated.</p>
+<img alt="../_images/calibrateB2Window.png" src="../_images/calibrateB2Window.png" />
+</dd></dl>
+
+</div>
+<div class="section" id="complete-calibration">
+<h4>Complete Calibration<a class="headerlink" href="#complete-calibration" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="Examples.TubeCalibDemoMaps_All.completeCalibration">
+<code class="descclassname">Examples.TubeCalibDemoMaps_All.</code><code class="descname">completeCalibration</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#Examples.TubeCalibDemoMaps_All.completeCalibration" title="Permalink to this definition">¶</a></dt>
+<dd><p>This example shows how to use some properties of calibrate method to
+join together the calibration done in <a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.provideTheExpectedValue" title="Examples.TubeCalibDemoMaps_All.provideTheExpectedValue"><code class="xref py py-func docutils literal"><span class="pre">provideTheExpectedValue()</span></code></a>,
+and improved in <a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.calibrateB2Window" title="Examples.TubeCalibDemoMaps_All.calibrateB2Window"><code class="xref py py-func docutils literal"><span class="pre">calibrateB2Window()</span></code></a>, and <a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.improvingCalibrationOfListOfTubes" title="Examples.TubeCalibDemoMaps_All.improvingCalibrationOfListOfTubes"><code class="xref py py-func docutils literal"><span class="pre">improvingCalibrationOfListOfTubes()</span></code></a>.</p>
+<p>It also improves the result of the calibration because it deals with the E door. The
+acquired data cannot be used to calibrate the E door, and trying to do so, produces a bad
+result. In this example, the tubes inside the E door are excluded to the calibration.
+Using the ‘’‘rangeList’‘’ option.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="calibration-technique-finding-tubes-not-well-calibrated">
+<h4>Calibration technique: Finding tubes not well calibrated<a class="headerlink" href="#calibration-technique-finding-tubes-not-well-calibrated" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="Examples.TubeCalibDemoMaps_All.findThoseTubesThatNeedSpecialCareForCalibration">
+<code class="descclassname">Examples.TubeCalibDemoMaps_All.</code><code class="descname">findThoseTubesThatNeedSpecialCareForCalibration</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#Examples.TubeCalibDemoMaps_All.findThoseTubesThatNeedSpecialCareForCalibration" title="Permalink to this definition">¶</a></dt>
+<dd><p>The example <a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.provideTheExpectedValue" title="Examples.TubeCalibDemoMaps_All.provideTheExpectedValue"><code class="xref py py-func docutils literal"><span class="pre">provideTheExpectedValue()</span></code></a> has shown its capability to calibrate almost
+all tubes, but,    as explored in the <a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.improvingCalibrationOfListOfTubes" title="Examples.TubeCalibDemoMaps_All.improvingCalibrationOfListOfTubes"><code class="xref py py-func docutils literal"><span class="pre">improvingCalibrationOfListOfTubes()</span></code></a> and
+<a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.improvingCalibrationSingleTube" title="Examples.TubeCalibDemoMaps_All.improvingCalibrationSingleTube"><code class="xref py py-func docutils literal"><span class="pre">improvingCalibrationSingleTube()</span></code></a> there are
+some tubes that could not be calibrated using that method.</p>
+<p>The goal of this method is to show one way to find the tubes that will require special care.</p>
+<p>It will first perform the same calibration seen in <a class="reference internal" href="#Examples.TubeCalibDemoMaps_All.provideTheExpectedValue" title="Examples.TubeCalibDemoMaps_All.provideTheExpectedValue"><code class="xref py py-func docutils literal"><span class="pre">provideTheExpectedValue()</span></code></a>,
+them, it will process the <strong>peakTable</strong> output of the calibrate method when enabling the
+parameter <strong>outputPeak</strong>.</p>
+<p>It them creates the Peaks workspace, that is the difference of the peaks position from the
+expected values of the peaks positions for all the tubes. This allows to spot what are the
+tubes whose fitting are outliers in relation to the others.</p>
+<img alt="../_images/plotingPeaksDifference.png" src="../_images/plotingPeaksDifference.png" />
+<p>The final result for this method is to output using <strong>plotTube</strong> the result of the fitting
+to all the ‘outliers’ tubes.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-Examples.TubeCalibDemoMerlin">
+<span id="merlin-instrument"></span><h3>MERLIN instrument<a class="headerlink" href="#module-Examples.TubeCalibDemoMerlin" title="Permalink to this headline">¶</a></h3>
+<p>Tube Calibration Demonstration program for MERLIN.</p>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">MERLIN instruments are loaded with already calibrated values. The calibration works nicelly with these files,
+but if you want to see the uncalibrated file you can do it.
+Look at <a class="reference external" href="http://www.mantidproject.org/How_to_reset_detectors_calibration">How to reset detectors calibration</a>.</p>
+</div>
+<p>In this example, the calibration of the whole MERLIN instrument is shown. It demonstrate how to
+use <a class="reference internal" href="#tube.calibrate" title="tube.calibrate"><code class="xref py py-func docutils literal"><span class="pre">tube.calibrate()</span></code></a> to calibrate MERLIN tubes.</p>
+<p>Opening the calibrated data in the Instrument View, it is possible to group the tubes in some
+common regions:</p>
+<ul class="simple">
+<li>Doors 9 and 8 are similar and can be calibrated together using 7 key points</li>
+<li>Doors 7,6,5,4, 2 and 1 can be calibrated using 9 key points.</li>
+<li>Door 3 is particular, because it is formed with some smaller tubes as well as some large tubes.</li>
+</ul>
+<p>This example shows:</p>
+<blockquote>
+<div><ul class="simple">
+<li>How to calibrate regions of the instrument separetelly.</li>
+<li>How to use <strong>calibTable</strong> parameter to append information in order to create a calibration table for the whole instrument.</li>
+<li><dl class="first docutils">
+<dt>How to use the <strong>outputPeak</strong> to check how the calibration is working as well as the usage of analisePeakTable method to</dt>
+<dd>look into the details of the operation to improve the calibration.</dd>
+</dl>
+</li>
+<li>It deals with defining different known positions for the different tube lengths.</li>
+</ul>
+</div></blockquote>
+<p>The output of this examples shows an improvement in relation to the previous calibrated instrument.</p>
+<img alt="../_images/calibratedMantidMerlin1.png" src="../_images/calibratedMantidMerlin1.png" />
+<p>The previous calibrated instrument view:</p>
+<img alt="../_images/calibratedCurrentMerlin.png" src="../_images/calibratedCurrentMerlin.png" />
+</div>
+</div>
+<div class="section" id="other-useful-methods">
+<h2>Other Useful Methods<a class="headerlink" href="#other-useful-methods" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="tube.savePeak">
+<code class="descclassname">tube.</code><code class="descname">savePeak</code><span class="sig-paren">(</span><em>peakTable</em>, <em>filePath</em><span class="sig-paren">)</span><a class="headerlink" href="#tube.savePeak" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows to save the peakTable to a text file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>peakTable</strong> – peak table as the workspace table provided by calibrated method, as in the example:</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">calibTable</span><span class="p">,</span> <span class="n">peakTable</span> <span class="o">=</span> <span class="n">calibrate</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">outputPeak</span><span class="o">=</span><span class="n">peakTable</span><span class="p">)</span>
+<span class="n">savePeak</span><span class="p">(</span><span class="n">peakTable</span><span class="p">,</span> <span class="s1">&#39;myfolder/myfile.txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filePath</strong> – where to save the file. If the filePath is not given as an absolute path, it will be considered
+relative to the defaultsave.directory.</td>
+</tr>
+</tbody>
+</table>
+<p>The file will be saved with the following format:</p>
+<p>id_name (parsed space to %20) [peak1, peak2, …, peakN]</p>
+<p>You may load these peaks using readPeakFile</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">panel1</span><span class="o">/</span><span class="n">tube001</span> <span class="p">[</span><span class="mf">23.4</span><span class="p">,</span> <span class="mf">212.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span>
+<span class="o">...</span>
+<span class="n">panel1</span><span class="o">/</span><span class="n">tubeN</span>   <span class="p">[</span><span class="mf">56.3</span><span class="p">,</span> <span class="mf">87.5</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="tube.readPeakFile">
+<code class="descclassname">tube.</code><code class="descname">readPeakFile</code><span class="sig-paren">(</span><em>file_name</em><span class="sig-paren">)</span><a class="headerlink" href="#tube.readPeakFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the file calibration</p>
+<p>It returns a list of tuples, where the first value is the detector identification
+and the second value is its calibration values.</p>
+<p>Example of usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="n">det_code</span><span class="p">,</span> <span class="n">cal_values</span><span class="p">)</span> <span class="ow">in</span> <span class="n">readPeakFile</span><span class="p">(</span><span class="s1">&#39;pathname/TubeDemo&#39;</span><span class="p">):</span>
+   <span class="k">print</span><span class="p">(</span><span class="n">det_code</span><span class="p">)</span>
+   <span class="k">print</span><span class="p">(</span><span class="n">cal_values</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file_name</strong> – Path for the file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of tuples(det_code, peaks_values)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tube.saveCalibration">
+<code class="descclassname">tube.</code><code class="descname">saveCalibration</code><span class="sig-paren">(</span><em>table_name</em>, <em>out_path</em><span class="sig-paren">)</span><a class="headerlink" href="#tube.saveCalibration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the calibration table to file</p>
+<p>This creates a CSV file for the calibration TableWorkspace. The first
+column is the detector number and the second column is the detector position</p>
+<p>Example of usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">saveCalibration</span><span class="p">(</span><span class="s1">&#39;CalibTable&#39;</span><span class="p">,</span><span class="s1">&#39;/tmp/myCalibTable.txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>table_name</strong> – name of the TableWorkspace to save</li>
+<li><strong>out_path</strong> – location to save the file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tube.readCalibrationFile">
+<code class="descclassname">tube.</code><code class="descname">readCalibrationFile</code><span class="sig-paren">(</span><em>table_name</em>, <em>in_path</em><span class="sig-paren">)</span><a class="headerlink" href="#tube.readCalibrationFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a calibration table from file</p>
+<p>This loads a calibration TableWorkspace from a CSV file.</p>
+<p>Example of usage:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">saveCalibration</span><span class="p">(</span><span class="s1">&#39;CalibTable&#39;</span><span class="p">,</span><span class="s1">&#39;/tmp/myCalibTable.txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>table_name</strong> – name to call the TableWorkspace</li>
+<li><strong>in_path</strong> – the path to the calibration file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h2>
+<p>More details on the finer points of the calibration implementation can be found at <a class="reference internal" href="../concepts/calibration/TubeCalibrationIntroduction.html#tube-calibration-introduction"><span class="std std-ref">Tube Calibration</span></a> and
+in:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Calibration_implementation.html">Calibration Implementation Details</a></li>
+</ul>
+</div>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Techniques.html">Techniques</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="BinMDCoordinateTransformations.html" title="Previous Chapter: BinMD Coordinate Transformations"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; BinMD Coordin...</span>
+    </a>
+  </li>
+  <li>
+    <a href="Calibration_implementation.html" title="Next Chapter: Calibration Implementation Details"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Calibration I... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

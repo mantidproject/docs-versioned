@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>MDWorkspace</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="MatrixWorkspace" href="MatrixWorkspace.html" />
+    <link rel="prev" title="Multi dimensional neutron scattering data normalization" href="MDNorm.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.3</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="mdworkspace">
+<span id="id1"></span><h1>MDWorkspace<a class="headerlink" href="#mdworkspace" title="Permalink to this headline">¶</a></h1>
+<p>The MDWorkspace (short for &#8220;Multi-Dimensional&#8221; Workspace) is a generic
+data structure holdings points (MDEvents) that are defined by their
+position in several dimensions. See also
+<a class="reference internal" href="MDHistoWorkspace.html#mdhistoworkspace"><em>MDHistoWorkspace</em></a>.</p>
+<div class="section" id="description-of-mdworkspace">
+<h2>Description of MDWorkspace<a class="headerlink" href="#description-of-mdworkspace" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>Dimensions</strong>: A MDWorkspace can have between 1 and 9 dimensions.<ul>
+<li>Each dimension is defined with a name, units, and minimum/maximum
+extents.</li>
+</ul>
+</li>
+<li><strong>MDEvent</strong>: A MDEvent is simply a point in space defined by its
+coordinates, plus a signal (weight) and error.<ul>
+<li>The MDLeanEvent type contains only coordinates, signal and error.</li>
+<li>The MDEvent type also contains a run index (for multiple runs
+summed into one workspace) and a detector ID, allowing for more
+information to be extracted.</li>
+</ul>
+</li>
+<li>The class is named MDEventWorkspace.</li>
+</ul>
+<div class="section" id="structure">
+<h3>Structure<a class="headerlink" href="#structure" title="Permalink to this headline">¶</a></h3>
+<p>The MDWorkspace is a container that can hold a large number of MDEvents.
+The events are organized into &#8220;boxes&#8221;: types are MDBox and MDGridBox. At
+the simplest level, an MDWorkspace will be a single MDBox with an
+unsorted bunch of events.</p>
+<p>In order to allow for efficient searching and binning of these events,
+the boxes are organized into a recursive boxing structure (adaptive mesh
+refinement). During MDWorkspace construction, if a MDBox is found to
+contain too many events, it will be split into smaller boxes.</p>
+<div class="figure">
+<img alt="MDWorkspace_structure.png" src="../_images/MDWorkspace_structure.png" />
+<p class="caption">MDWorkspace_structure.png</p>
+</div>
+<p>The threshold for splitting is defined in
+<a class="reference internal" href="../algorithms/CreateMDWorkspace-v1.html#algm-createmdworkspace"><em>CreateMDWorkspace</em></a> as the SplitThreshold
+parameter. Each parent box will get split into N sub-boxes in each
+dimension. For example, in a 2D workspace, you might split a parent box
+into 4x4 sub-boxes, creating 16 MDBoxes under the parent box (which
+becomes a MDGridBox). The level of splitting is defined in the SplitInto
+parameter.</p>
+</div>
+</div>
+<div class="section" id="creating-a-mdworkspace">
+<h2>Creating a MDWorkspace<a class="headerlink" href="#creating-a-mdworkspace" title="Permalink to this headline">¶</a></h2>
+<p>There are several algorithms that will create a MDWorkspace:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../algorithms/CreateMDWorkspace-v1.html#algm-createmdworkspace"><em>CreateMDWorkspace</em></a> creates a blank MDWorkspace
+with any arbitrary set of dimensions.</li>
+<li><a class="reference internal" href="../algorithms/ConvertToDiffractionMDWorkspace-v2.html#algm-converttodiffractionmdworkspace"><em>ConvertToDiffractionMDWorkspace</em></a>
+converts an <a class="reference internal" href="EventWorkspace.html#eventworkspace"><em>EventWorkspace</em></a> or
+<a class="reference internal" href="Workspace2D.html#workspace2d"><em>Workspace2D</em></a> from detector space to reciprocal
+space, for elastic single-crystal or powder diffraction experiments.</li>
+<li><a class="reference internal" href="../algorithms/ConvertToMD-v1.html#algm-converttomd"><em>ConvertToMD</em></a> converts workspaces for
+inelastic experiments.</li>
+<li><a class="reference internal" href="../algorithms/SliceMD-v1.html#algm-slicemd"><em>SliceMD</em></a> takes a slice out of a MDWorkspace to create a
+new one.</li>
+<li><a class="reference internal" href="../algorithms/LoadSQW-v1.html#algm-loadsqw"><em>LoadSQW</em></a> converts from the SQW format.</li>
+</ul>
+</div>
+<div class="section" id="file-backed-mdworkspaces">
+<h2>File-Backed MDWorkspaces<a class="headerlink" href="#file-backed-mdworkspaces" title="Permalink to this headline">¶</a></h2>
+<p>For workspaces with a large number of events that would not fit in
+memory, it is possible to use a NXS file back-end as a data store. The
+box structure will always remain in memory, but the underlying events
+will be stored in a file and retrieved only when required. This can be
+set at creation (<a class="reference internal" href="../algorithms/CreateMDWorkspace-v1.html#algm-createmdworkspace"><em>CreateMDWorkspace</em></a>) or when
+loading from a file, or an in-memory MDWorkspace can be converted to
+file-backed with the <a class="reference internal" href="../algorithms/SaveMD-v1.html#algm-savemd"><em>SaveMD</em></a> algorithm.</p>
+<p>Because of disk IO, file-backed MDWorkspaces are slower to process for
+some operations (e.g. binning or slicing). Some types of visualization
+and analysis, however, are just as fast with file-backed MDWorkspaces as
+their in-memory equivalent.</p>
+</div>
+<div class="section" id="viewing-mdworkspaces">
+<h2>Viewing MDWorkspaces<a class="headerlink" href="#viewing-mdworkspaces" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Right-click on a MDWorkspace and select:<ul>
+<li><strong>Show Vates Simple Interface</strong>: to open a <a class="reference external" href="http://www.mantidproject.org/VatesSimpleInterface">simplified 3D
+view</a> based on Paraview.</li>
+<li><strong>Show Slice Viewer</strong>: to open the <a class="reference external" href="http://www.mantidproject.org/MantidPlot:_SliceViewer">Slice
+Viewer</a>, which shows 2D slices of the
+multiple-dimensional workspace.</li>
+</ul>
+</li>
+<li>You can also <a class="reference external" href="http://www.mantidproject.org/SliceViewer_Python_Interface">use Python script to open the
+SliceViewer</a>.</li>
+</ul>
+<p>Or, you can load a MDWorkspace .nxs file in Paraview if
+the proper plugin is installed.</p>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2014, Mantid.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

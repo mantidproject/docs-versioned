@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>MD Histogram Workspace</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.10.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Multi dimensional neutron scattering data normalization" href="MDNorm.html" />
+    <link rel="prev" title="Lattice" href="Lattice.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.10</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="md-histogram-workspace">
+<span id="mdhistoworkspace"></span><h1>MD Histogram Workspace<a class="headerlink" href="#md-histogram-workspace" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#creating-a-mdhistoworkspace" id="id1">Creating a MDHistoWorkspace</a></li>
+<li><a class="reference internal" href="#viewing-a-mdhistoworkspace" id="id2">Viewing a MDHistoWorkspace</a></li>
+<li><a class="reference internal" href="#working-with-md-histo-workspaces-in-python" id="id3">Working with MD Histo Workspaces in Python</a><ul>
+<li><a class="reference internal" href="#accessing-workspaces" id="id4">Accessing Workspaces</a></li>
+<li><a class="reference internal" href="#md-histo-workspace-properties" id="id5">MD Histo Workspace Properties</a><ul>
+<li><a class="reference internal" href="#dimensions" id="id6">Dimensions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#accessing-the-data" id="id7">Accessing the Data</a></li>
+<li><a class="reference internal" href="#arithmetic-operations" id="id8">Arithmetic Operations</a></li>
+<li><a class="reference internal" href="#boolean-operations" id="id9">Boolean Operations</a></li>
+<li><a class="reference internal" href="#using-boolean-masks" id="id10">Using Boolean Masks</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>The MD Histogram Workspace[MDHistoWorkspace] is a simple multi-dimensional workspace. In
+contrast to the <a class="reference internal" href="MDWorkspace.html#mdworkspace"><em>MDWorkspace</em></a>, which contains
+points in space, the MDHistoWorkspace consists of a signal and error
+spread around space on a regular grid.</p>
+<p>In a way, the MDHistoWorkspace is to a
+<a class="reference internal" href="MDWorkspace.html#mdworkspace"><em>MDWorkspace</em></a> is what the
+<a class="reference internal" href="Workspace2D.html#workspace2d"><em>Workspace2D</em></a> is to the
+<a class="reference internal" href="EventWorkspace.html#eventworkspace"><em>EventWorkspace</em></a>.</p>
+<div class="section" id="creating-a-mdhistoworkspace">
+<h2><a class="toc-backref" href="#id1">Creating a MDHistoWorkspace</a><a class="headerlink" href="#creating-a-mdhistoworkspace" title="Permalink to this headline">¶</a></h2>
+<p>MDHistoWorkspaces typically have 3 or 4 dimensions, although they can be
+created in up to 9 dimensions.</p>
+<ul class="simple">
+<li>You can bin a <a class="reference internal" href="MDWorkspace.html#mdworkspace"><em>MDWorkspace</em></a> to a
+MDHistoWorkspace using the <a class="reference internal" href="../algorithms/BinMD-v1.html#algm-binmd"><em>BinMD</em></a> algorithm.<ul>
+<li>You can use <a class="reference internal" href="../algorithms/CreateMDWorkspace-v1.html#algm-createmdworkspace"><em>CreateMDWorkspace</em></a> to create a
+blank MDWorkspace first, if you do not have data to bin.</li>
+</ul>
+</li>
+<li>Paraview and the <a class="reference external" href="http://www.mantidproject.org/VatesSimpleInterface">Vates Simple
+Interface</a> will create a MDHistoWorkspace
+from a <a class="reference internal" href="MDWorkspace.html#mdworkspace"><em>MDWorkspace</em></a> when rebinning on a regular
+grid.</li>
+</ul>
+</div>
+<div class="section" id="viewing-a-mdhistoworkspace">
+<h2><a class="toc-backref" href="#id2">Viewing a MDHistoWorkspace</a><a class="headerlink" href="#viewing-a-mdhistoworkspace" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>MDHistoWorkspaces can be created and visualized directly within
+Paraview and the <a class="reference external" href="http://www.mantidproject.org/VatesSimpleInterface">Vates Simple
+Interface</a> when rebinning along a regular
+grid.</li>
+<li>You can right-click on the workspace and select:<ul>
+<li><strong>Plot MD</strong>: to perform a 1D plot of the signal in the workspace
+(only works on 1D MDHistoWorkspaces).</li>
+<li><strong>Show Slice Viewer</strong>: to open the <a class="reference external" href="http://www.mantidproject.org/MantidPlot:_SliceViewer">Slice
+Viewer</a>, which shows 2D slices of the
+multiple-dimension workspace.</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="working-with-md-histo-workspaces-in-python">
+<h2><a class="toc-backref" href="#id3">Working with MD Histo Workspaces in Python</a><a class="headerlink" href="#working-with-md-histo-workspaces-in-python" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="accessing-workspaces">
+<h3><a class="toc-backref" href="#id4">Accessing Workspaces</a><a class="headerlink" href="#accessing-workspaces" title="Permalink to this headline">¶</a></h3>
+<p>The methods for getting a variable to an MDHistoWorkspace is the same as shown in the <a class="reference internal" href="Workspace.html#workspace-accessing-workspaces"><em>Workspace</em></a> help page.</p>
+<p>If you want to check if a variable points to something that is an MDHistoWorkspace you can use this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">mantid.api</span> <span class="kn">import</span> <span class="n">IMDHistoWorkspace</span>
+
+<span class="n">ws</span><span class="o">=</span><span class="n">CreateMDHistoWorkspace</span><span class="p">(</span><span class="n">Dimensionality</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Extents</span><span class="o">=</span><span class="s">&#39;-3,3,-10,10&#39;</span><span class="p">,</span> \
+                        <span class="n">SignalInput</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span><span class="n">ErrorInput</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span>\
+                        <span class="n">NumberOfBins</span><span class="o">=</span><span class="s">&#39;10,10&#39;</span><span class="p">,</span><span class="n">Names</span><span class="o">=</span><span class="s">&#39;Dim1,Dim2&#39;</span><span class="p">,</span><span class="n">Units</span><span class="o">=</span><span class="s">&#39;MomentumTransfer,EnergyTransfer&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">IMDHistoWorkspace</span><span class="p">):</span>
+ <span class="k">print</span> <span class="n">ws</span><span class="o">.</span><span class="n">name</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot; is a &quot;</span> <span class="o">+</span> <span class="n">ws</span><span class="o">.</span><span class="n">id</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>ws is a MDHistoWorkspace
+</pre></div>
+</div>
+</div>
+<div class="section" id="md-histo-workspace-properties">
+<h3><a class="toc-backref" href="#id5">MD Histo Workspace Properties</a><a class="headerlink" href="#md-histo-workspace-properties" title="Permalink to this headline">¶</a></h3>
+<p>For a full list of the available properties and operation look at the <a class="reference internal" href="../api/python/mantid/api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><tt class="xref py py-obj docutils literal"><span class="pre">IMDHistoWorkspace</span> <span class="pre">api</span> <span class="pre">page</span></tt></a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ws</span><span class="o">=</span><span class="n">CreateMDHistoWorkspace</span><span class="p">(</span><span class="n">Dimensionality</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Extents</span><span class="o">=</span><span class="s">&#39;-3,3,-10,10&#39;</span><span class="p">,</span> \
+                              <span class="n">SignalInput</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span><span class="n">ErrorInput</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span>\
+                              <span class="n">NumberOfBins</span><span class="o">=</span><span class="s">&#39;10,10&#39;</span><span class="p">,</span><span class="n">Names</span><span class="o">=</span><span class="s">&#39;Dim1,Dim2&#39;</span><span class="p">,</span><span class="n">Units</span><span class="o">=</span><span class="s">&#39;MomentumTransfer,EnergyTransfer&#39;</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s">&quot;Number of events =&quot;</span><span class="p">,</span> <span class="n">ws</span><span class="o">.</span><span class="n">getNEvents</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;Number of dimensions =&quot;</span><span class="p">,</span> <span class="n">ws</span><span class="o">.</span><span class="n">getNumDims</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;Normalization =&quot;</span><span class="p">,</span> <span class="n">ws</span><span class="o">.</span><span class="n">displayNormalization</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">getNumDims</span><span class="p">()):</span>
+   <span class="n">dimension</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getDimension</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+   <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s">Dimension {0} Name: {1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+      <span class="n">dimension</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="dimensions">
+<h4><a class="toc-backref" href="#id6">Dimensions</a><a class="headerlink" href="#dimensions" title="Permalink to this headline">¶</a></h4>
+<p>As a generic multi dimensional container being able to access information about the dimensions is very important.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ws</span><span class="o">=</span><span class="n">CreateMDHistoWorkspace</span><span class="p">(</span><span class="n">Dimensionality</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Extents</span><span class="o">=</span><span class="s">&#39;-3,3,-10,10&#39;</span><span class="p">,</span> \
+                              <span class="n">SignalInput</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span><span class="n">ErrorInput</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span>\
+                              <span class="n">NumberOfBins</span><span class="o">=</span><span class="s">&#39;10,10&#39;</span><span class="p">,</span><span class="n">Names</span><span class="o">=</span><span class="s">&#39;Dim1,Dim2&#39;</span><span class="p">,</span><span class="n">Units</span><span class="o">=</span><span class="s">&#39;MomentumTransfer,EnergyTransfer&#39;</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s">&quot;Number of dimensions =&quot;</span><span class="p">,</span> <span class="n">ws</span><span class="o">.</span><span class="n">getNumDims</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">getNumDims</span><span class="p">()):</span>
+  <span class="n">dimension</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getDimension</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+  <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s">Dimension {0} Name: {1} id: {2} Range: {3}-{4} {5}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+      <span class="n">dimension</span><span class="o">.</span><span class="n">getDimensionId</span><span class="p">(),</span>
+      <span class="n">dimension</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+      <span class="n">dimension</span><span class="o">.</span><span class="n">getMinimum</span><span class="p">(),</span>
+      <span class="n">dimension</span><span class="o">.</span><span class="n">getMaximum</span><span class="p">(),</span>
+      <span class="n">dimension</span><span class="o">.</span><span class="n">getUnits</span><span class="p">())</span>
+
+<span class="k">print</span> <span class="s">&quot;The dimension assigned to X =&quot;</span><span class="p">,</span> <span class="n">ws</span><span class="o">.</span><span class="n">getXDimension</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
+<span class="k">print</span> <span class="s">&quot;The dimension assigned to Y =&quot;</span><span class="p">,</span> <span class="n">ws</span><span class="o">.</span><span class="n">getYDimension</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
+<span class="k">try</span><span class="p">:</span>
+  <span class="k">print</span> <span class="s">&quot;The dimension assigned to Z =&quot;</span><span class="p">,</span> <span class="n">ws</span><span class="o">.</span><span class="n">getZDimension</span><span class="p">()</span><span class="o">.</span><span class="n">name</span>
+<span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+   <span class="c"># if the dimension does not exist you will get a RuntimeError</span>
+  <span class="k">print</span> <span class="s">&quot;Workspace does not have a Z dimension&quot;</span>
+
+<span class="c"># you can also get a dimension by it&#39;s id</span>
+<span class="n">dim</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getDimensionIndexById</span><span class="p">(</span><span class="s">&quot;Dim1&quot;</span><span class="p">)</span>
+<span class="c"># or name</span>
+<span class="n">dim</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getDimensionIndexByName</span><span class="p">(</span><span class="s">&quot;Dim2&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="accessing-the-data">
+<h3><a class="toc-backref" href="#id7">Accessing the Data</a><a class="headerlink" href="#accessing-the-data" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ws</span><span class="o">=</span><span class="n">CreateMDHistoWorkspace</span><span class="p">(</span><span class="n">Dimensionality</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Extents</span><span class="o">=</span><span class="s">&#39;-3,3,-10,10&#39;</span><span class="p">,</span> \
+                           <span class="n">SignalInput</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span><span class="n">ErrorInput</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span>\
+                           <span class="n">NumberOfBins</span><span class="o">=</span><span class="s">&#39;10,10&#39;</span><span class="p">,</span><span class="n">Names</span><span class="o">=</span><span class="s">&#39;Dim1,Dim2&#39;</span><span class="p">,</span><span class="n">Units</span><span class="o">=</span><span class="s">&#39;MomentumTransfer,EnergyTransfer&#39;</span><span class="p">)</span>
+
+<span class="c"># To get the signal and error at a prticular position</span>
+<span class="n">index</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getLinearIndex</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">ws</span><span class="o">.</span><span class="n">signalAt</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">ws</span><span class="o">.</span><span class="n">errorSquaredAt</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+<span class="c"># To extract the whole signal aray</span>
+<span class="n">signalArray</span> <span class="o">=</span>  <span class="n">ws</span><span class="o">.</span><span class="n">getSignalArray</span><span class="p">()</span>
+<span class="c"># or the whole error squared array</span>
+<span class="n">errorSquaredArray</span> <span class="o">=</span>  <span class="n">ws</span><span class="o">.</span><span class="n">getErrorSquaredArray</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="arithmetic-operations">
+<h3><a class="toc-backref" href="#id8">Arithmetic Operations</a><a class="headerlink" href="#arithmetic-operations" title="Permalink to this headline">¶</a></h3>
+<p>The following algorithms allow you to perform simple arithmetic on the
+values:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../algorithms/MinusMD-v1.html#algm-minusmd"><em>MinusMD</em></a>, <a class="reference internal" href="../algorithms/PlusMD-v1.html#algm-plusmd"><em>PlusMD</em></a>, <a class="reference internal" href="../algorithms/DivideMD-v1.html#algm-dividemd"><em>DivideMD</em></a>,
+<a class="reference internal" href="../algorithms/MultiplyMD-v1.html#algm-multiplymd"><em>MultiplyMD</em></a></li>
+<li><a class="reference internal" href="../algorithms/ExponentialMD-v1.html#algm-exponentialmd"><em>ExponentialMD</em></a>, <a class="reference internal" href="../algorithms/PowerMD-v1.html#algm-powermd"><em>PowerMD</em></a>,
+<a class="reference internal" href="../algorithms/LogarithmMD-v1.html#algm-logarithmmd"><em>LogarithmMD</em></a></li>
+</ul>
+<p>These arithmetic operations propagate errors as described
+<a class="reference external" href="http://en.wikipedia.org/wiki/Propagation_of_uncertainty#Example_formulas">here</a>.
+The formulas used are described in each algorithm&#8217;s wiki page.</p>
+<p>The basic arithmetic operators are available from python. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Get two workspaces</span>
+<span class="n">A</span><span class="o">=</span><span class="n">CreateMDHistoWorkspace</span><span class="p">(</span><span class="n">Dimensionality</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Extents</span><span class="o">=</span><span class="s">&#39;-3,3,-10,10&#39;</span><span class="p">,</span> \
+                                 <span class="n">SignalInput</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span><span class="n">ErrorInput</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span>\
+                                 <span class="n">NumberOfBins</span><span class="o">=</span><span class="s">&#39;10,10&#39;</span><span class="p">,</span><span class="n">Names</span><span class="o">=</span><span class="s">&#39;Dim1,Dim2&#39;</span><span class="p">,</span><span class="n">Units</span><span class="o">=</span><span class="s">&#39;MomentumTransfer,EnergyTransfer&#39;</span><span class="p">)</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+
+<span class="c"># Creating a new workspace</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">A</span> <span class="o">+</span> <span class="n">B</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">A</span> <span class="o">-</span> <span class="n">B</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="n">B</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">A</span> <span class="o">/</span> <span class="n">B</span>
+<span class="c"># Modifying a workspace in-place</span>
+<span class="n">C</span> <span class="o">+=</span> <span class="n">A</span>
+<span class="n">C</span> <span class="o">-=</span> <span class="n">A</span>
+<span class="n">C</span> <span class="o">*=</span> <span class="n">A</span>
+<span class="n">C</span> <span class="o">/=</span> <span class="n">A</span>
+<span class="c"># Operators with doubles</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="mf">12.3</span>
+<span class="n">C</span> <span class="o">*=</span> <span class="mf">3.45</span>
+
+<span class="c">#Compound arithmetic expressions can be made, e.g:</span>
+<span class="n">E</span> <span class="o">=</span> <span class="p">(</span><span class="n">A</span> <span class="o">-</span> <span class="n">B</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">C</span> <span class="o">*</span> <span class="n">C</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="boolean-operations">
+<h3><a class="toc-backref" href="#id9">Boolean Operations</a><a class="headerlink" href="#boolean-operations" title="Permalink to this headline">¶</a></h3>
+<p>The MDHistoWorkspace can be treated as a boolean workspace. In this
+case, 0.0 is &#8220;false&#8221; and 1.0 is &#8220;true&#8221;.</p>
+<p>The following operations can create a boolean MDHistoWorkspace:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../algorithms/LessThanMD-v1.html#algm-lessthanmd"><em>LessThanMD</em></a>, <a class="reference internal" href="../algorithms/GreaterThanMD-v1.html#algm-greaterthanmd"><em>GreaterThanMD</em></a>,
+<a class="reference internal" href="../algorithms/EqualToMD-v1.html#algm-equaltomd"><em>EqualToMD</em></a></li>
+</ul>
+<p>These operations can combine/modify boolean MDHistoWorkspaces:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../algorithms/NotMD-v1.html#algm-notmd"><em>NotMD</em></a>, <a class="reference internal" href="../algorithms/AndMD-v1.html#algm-andmd"><em>AndMD</em></a>, <a class="reference internal" href="../algorithms/OrMD-v1.html#algm-ormd"><em>OrMD</em></a>,
+<a class="reference internal" href="../algorithms/XorMD-v1.html#algm-xormd"><em>XorMD</em></a></li>
+</ul>
+<p>These boolean operators are available from python. Make sure you use the
+bitwise operators: &amp; | ^ ~ , not the &#8220;word&#8221; operators (and, or, not).
+For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Get two workspaces</span>
+<span class="n">A</span><span class="o">=</span><span class="n">CreateMDHistoWorkspace</span><span class="p">(</span><span class="n">Dimensionality</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Extents</span><span class="o">=</span><span class="s">&#39;-3,3,-10,10&#39;</span><span class="p">,</span> \
+                                 <span class="n">SignalInput</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span><span class="n">ErrorInput</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span>\
+                                 <span class="n">NumberOfBins</span><span class="o">=</span><span class="s">&#39;10,10&#39;</span><span class="p">,</span><span class="n">Names</span><span class="o">=</span><span class="s">&#39;Dim1,Dim2&#39;</span><span class="p">,</span><span class="n">Units</span><span class="o">=</span><span class="s">&#39;MomentumTransfer,EnergyTransfer&#39;</span><span class="p">)</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+
+<span class="c"># Create boolean workspaces by comparisons</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">A</span> <span class="o">&gt;</span> <span class="n">B</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">B</span> <span class="o">&lt;</span> <span class="mf">12.34</span>
+<span class="c"># Combine boolean workspaces using not, or, and, xor:</span>
+<span class="n">not_C</span> <span class="o">=</span> <span class="o">~</span><span class="n">C</span>
+<span class="n">C_or_D</span> <span class="o">=</span> <span class="n">C</span> <span class="o">|</span> <span class="n">D</span>
+<span class="n">C_and_D</span> <span class="o">=</span> <span class="n">C</span> <span class="o">&amp;</span> <span class="n">D</span>
+<span class="n">C_xor_D</span> <span class="o">=</span> <span class="n">C</span> <span class="o">^</span> <span class="n">D</span>
+<span class="n">C</span> <span class="o">|=</span> <span class="n">D</span>
+<span class="n">C</span> <span class="o">&amp;=</span> <span class="n">D</span>
+<span class="n">C</span> <span class="o">^=</span> <span class="n">D</span>
+<span class="c"># Compound expressions can be used:</span>
+<span class="n">D</span> <span class="o">=</span> <span class="p">(</span><span class="n">A</span> <span class="o">&gt;</span> <span class="mi">123</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">A</span> <span class="o">&gt;</span> <span class="n">B</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">A</span> <span class="o">&lt;</span> <span class="mi">456</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-boolean-masks">
+<h3><a class="toc-backref" href="#id10">Using Boolean Masks</a><a class="headerlink" href="#using-boolean-masks" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="../algorithms/SetMDUsingMask-v1.html#algm-setmdusingmask"><em>SetMDUsingMask</em></a> algorithm allows you to modify
+the values in a MDHistoWorkspace using a mask created using the boolean
+operations above. See the <a class="reference external" href="algm-SetMDUsingMask">algorithm wiki page</a> for
+more details.</p>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Lattice.html" title="Previous Chapter: Lattice"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Lattice</span>
+    </a>
+  </li>
+  <li>
+    <a href="MDNorm.html" title="Next Chapter: Multi dimensional neutron scattering data normalization"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Multi dimensiona... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

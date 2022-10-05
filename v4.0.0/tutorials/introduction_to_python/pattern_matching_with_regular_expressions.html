@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Pattern Matching With Regular Expressions</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '4.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../../index.html" />
+    <link rel="up" title="Introduction to Python" href="index.html" />
+    <link rel="next" title="Basic Python Exercises" href="basic_python_exercises_5.html" />
+    <link rel="prev" title="Using Modules" href="using_modules.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>4.0</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="pattern-matching-with-regular-expressions">
+<span id="id1"></span><h1>Pattern Matching With Regular Expressions<a class="headerlink" href="#pattern-matching-with-regular-expressions" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>A common file processing requirement is to match strings within the
+file to a standard form, for example a file may contain list of
+names, numbers and email addresses. A email extraction would need to
+extract only those entries that matched which look like an email
+address.</li>
+<li>Regular expressions, commonly called regexes, are ideally suited for
+this task and although they can become very complex it is also
+possible to perform many tasks with some relatively simple
+expressions.</li>
+<li>At their simplest, a regular expression is simply a string of
+characters and this string would then match with only that exact
+string, e.g.</li>
+</ul>
+<div class="code python highlight-python"><div class="highlight"><pre>string in file: &#39;email&#39;
+regex: &#39;email&#39; # This is a regular expression but albeit not a very
+               # useful one as only matches with one word!
+</pre></div>
+</div>
+<ul class="simple">
+<li>In reality regexes are used to search for a string that &#8220;has the
+form&#8221; of the regular expression, as in the above email example. For
+this to be possible we need to define some syntax that lets us
+specify things such as &#8216;a number is in a range&#8217;, &#8216;a letter is one of
+a set&#8217;, &#8216;a certain number of characters&#8217; etc. For this to work some
+characters are considered special and when used in conjunction with
+each other they let the user specify the correct search criteria.</li>
+<li>Here we will examine a few special characters, for a complete
+reference see <a class="reference external" href="http://www.regular-expressions.info/reference.html">http://www.regular-expressions.info/reference.html</a> or
+search for &#8220;regular expression reference&#8221; online.</li>
+</ul>
+<div class="section" id="special-characters">
+<h2>Special Characters<a class="headerlink" href="#special-characters" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>An asterisk <tt class="docutils literal"><span class="pre">*</span></tt> specifies that the character preceding it can
+appear zero or more times, e.g,</li>
+</ul>
+<div class="code highlight-python"><div class="highlight"><pre>regex: &#39;a*b&#39;
+test: &#39;b&#39;         # Matches as there are no occurrences of &#39;a&#39;
+test: &#39;ab&#39;        # Matches as there is a single &#39;a&#39;
+test: &#39;aaaaaaaab&#39; # Matches as there are multiple occurrences of &#39;a&#39;
+test: &#39;aaaabab&#39;   # Matches as there is an occurrence of a string of
+                  # a&#39;s followed by a b
+</pre></div>
+</div>
+<ul class="simple">
+<li>A range of characters, or a &#8220;character class&#8221; is defined using square
+brackets <tt class="docutils literal"><span class="pre">[]</span></tt>, e.g.</li>
+</ul>
+<div class="code highlight-python"><div class="highlight"><pre>regex: &#39;[a-z]&#39;
+test: &#39;m&#39; # Matches as it is a lower case letter
+test: &#39;M&#39; # Fails as it is an upper case letter
+test: &#39;4&#39; # Fails as it is a number
+</pre></div>
+</div>
+<ul class="simple">
+<li>Several ranges can be specified such that they are all checked, e.g.</li>
+</ul>
+<div class="code highlight-python"><div class="highlight"><pre>regex: &#39;[a-z,A-Z,0-9]&#39;
+test: &#39;m&#39;  # Matches!
+test: &#39;M&#39;  # Matches!
+test: &#39;4&#39;  # Matches!
+test: &#39;mm&#39; #Fails as there are two characters
+</pre></div>
+</div>
+<ul class="simple">
+<li>Combining ranges and the asterisk allows us to specify any number of
+alphanumeric characters!, e.g.</li>
+</ul>
+<div class="code highlight-python"><div class="highlight"><pre>regex: &#39;[a-z,A-Z,0-9]*&#39;
+test: &#39;mm&#39;    # Matches
+test: &#39;a0123&#39; # Matches
+</pre></div>
+</div>
+<ul class="simple">
+<li>To specify an exact number of characters use braces <tt class="docutils literal"><span class="pre">{}</span></tt>, e.g.</li>
+</ul>
+<div class="code highlight-python"><div class="highlight"><pre>regex: &#39;a{2}&#39;
+test: &#39;abab&#39;  # Fails as there is not two consecutive a&#39;s in the string
+test: &#39;aaaab&#39; # Matches
+</pre></div>
+</div>
+<ul class="simple">
+<li>For more complicated regular expressions it is not obvious whether
+you have written the expression correctly so it can be useful to
+check that it matches as you expect. For such tests there are online
+tools available such as the regex tester at
+<a class="reference external" href="http://www.regular-expressions.info/javascriptexample.html">http://www.regular-expressions.info/javascriptexample.html</a>. Simply
+type in your regex and a test string and it will tell you a match can
+be found within your string.</li>
+</ul>
+</div>
+<div class="section" id="regular-expressions-in-python">
+<h2>Regular Expressions in Python<a class="headerlink" href="#regular-expressions-in-python" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Python contains a regular expression module, called <tt class="docutils literal"><span class="pre">re</span></tt> that
+allows strings to be tested against regular expressions with a few
+lines of code. Reference: <a class="reference external" href="http://docs.python.org/2/library/re.html">http://docs.python.org/2/library/re.html</a></li>
+<li>The <tt class="docutils literal"><span class="pre">compile</span></tt> function also takes another optional argument
+controlling the matching process, all of which are documented at the
+above location. Here we pass the <tt class="docutils literal"><span class="pre">RE.IGNORECASE</span></tt> option meaning
+that a case-insensitive match is performed.</li>
+<li>Example:</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">re</span>
+
+<span class="k">def</span> <span class="nf">checkForMatch</span><span class="p">(</span><span class="n">checker</span><span class="p">,</span> <span class="n">test</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">checker</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">test</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;String matches!&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;String does not contain a match&#39;</span><span class="p">)</span>
+<span class="c"># End of function definition</span>
+
+<span class="n">checker</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&#39;[a-z]&#39;</span><span class="p">)</span>
+<span class="n">checkForMatch</span><span class="p">(</span><span class="n">checker</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+<span class="n">checkForMatch</span><span class="p">(</span><span class="n">checker</span><span class="p">,</span> <span class="s">&#39;9&#39;</span><span class="p">)</span>
+
+<span class="n">checker</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&#39;[a-z]&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<span class="n">checkForMatch</span><span class="p">(</span><span class="n">checker</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+<span class="n">checkForMatch</span><span class="p">(</span><span class="n">checker</span><span class="p">,</span> <span class="s">&#39;A&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Gives the output:</p>
+<div class="highlight-none"><div class="highlight"><pre>String matches!
+String does not contain a match
+String matches!
+String matches!
+</pre></div>
+</div>
+<ul class="simple">
+<li>Below we provide a more complex example of using regular expressions
+and a place where they would actually be used in a practical sense.
+The scenarios concern parsing a file with multiple lines of the form</li>
+</ul>
+<p><tt class="docutils literal"><span class="pre">Running&nbsp;13&nbsp;tests.............OK!</span></tt></p>
+<p>where the line has to start with the word &#8216;Running&#8217; and end with the
+word &#8216;OK!&#8217; or the test is considered a failure.</p>
+<ul class="simple">
+<li>Regular expressions make parsing such a file a relatively simple
+matter once the regular expression is known. Here is the full
+example:</li>
+</ul>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">filetestsRun</span> <span class="o">=</span> <span class="s">&#39;testResults.log&#39;</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filetestsRun</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">reTestCount</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&quot;Running</span><span class="se">\\</span><span class="s">s*(</span><span class="se">\\</span><span class="s">d+)</span><span class="se">\\</span><span class="s">s*test&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<span class="n">reCrashCount</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&quot;OK!&quot;</span><span class="p">)</span>
+<span class="n">reFailCount</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&quot;Failed</span><span class="se">\\</span><span class="s">s*(</span><span class="se">\\</span><span class="s">d+)</span><span class="se">\\</span><span class="s">s*of</span><span class="se">\\</span><span class="s">s*(</span><span class="se">\\</span><span class="s">d+)</span><span class="se">\\</span><span class="s">s*tests&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<span class="n">testCount</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">failCount</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">testsPass</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+    <span class="n">m</span><span class="o">=</span><span class="n">reTestCount</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+        <span class="n">testCount</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">m</span><span class="o">=</span><span class="n">reCrashCount</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="p">:</span>
+            <span class="n">failCount</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">testsPass</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">m</span><span class="o">=</span><span class="n">reFailCount</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">m</span><span class="p">:</span>
+        <span class="c"># Need to decrement failCount because crashCount will</span>
+        <span class="c"># have incremented it above</span>
+        <span class="n">failCount</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="n">failCount</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">testsPass</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;Tests Passed: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">testsPass</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;Tests Failed: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">failCount</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;Total Tests: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">testCount</span><span class="p">))</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>The loop keeps track of test crashes and failures by using regular
+expressions to match the required text within each line of the file</li>
+</ul>
+<p><a class="reference external" href="Category:Tested_Examples">Category:Tested Examples</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="using_modules.html" title="Previous Chapter: Using Modules"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Using Modules</span>
+    </a>
+  </li>
+  <li>
+    <a href="basic_python_exercises_5.html" title="Next Chapter: Basic Python Exercises"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Basic Python Exe... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2019-03-25.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

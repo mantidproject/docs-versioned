@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>MonteCarloAbsorption v1</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '5.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MostLikelyMean v1" href="MostLikelyMean-v1.html" />
+    <link rel="prev" title="MonitorLiveData v1" href="MonitorLiveData-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>5.0</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="montecarloabsorption-v1">
+<span id="algm-montecarloabsorption"></span><span id="algm-montecarloabsorption-v1"></span><h1>MonteCarloAbsorption v1<a class="headerlink" href="#montecarloabsorption-v1" title="Permalink to this headline">¶</a></h1>
+<div class="figure align-right" id="id4">
+<span id="index-0"></span><a class="screenshot reference internal image-reference" href="../_images/MonteCarloAbsorption-v1_dlg.png"><img alt="../_images/MonteCarloAbsorption-v1_dlg.png" class="screenshot" src="../_images/MonteCarloAbsorption-v1_dlg.png" style="width: 332px;" /></a>
+<p class="caption"><span class="caption-text"><strong>MonteCarloAbsorption</strong> dialog.</span></p>
+</div>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#summary" id="id6">Summary</a><ul>
+<li><a class="reference internal" href="#see-also" id="id7">See Also</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#properties" id="id8">Properties</a></li>
+<li><a class="reference internal" href="#description" id="id9">Description</a><ul>
+<li><a class="reference internal" href="#input-workspace-requirements" id="id10">Input Workspace Requirements</a></li>
+<li><a class="reference internal" href="#method" id="id11">Method</a></li>
+<li><a class="reference internal" href="#interpolation" id="id12">Interpolation</a></li>
+<li><a class="reference internal" href="#sparse-instrument" id="id13">Sparse instrument</a><ul>
+<li><a class="reference internal" href="#spatial-interpolation" id="id14">Spatial interpolation</a></li>
+<li><a class="reference internal" href="#wavelength-interpolation" id="id15">Wavelength interpolation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage" id="id16">Usage</a></li>
+<li><a class="reference internal" href="#references" id="id17">References</a></li>
+<li><a class="reference internal" href="#source" id="id18">Source</a></li>
+</ul>
+</div>
+<div class="section" id="summary">
+<h2><a class="toc-backref" href="#id6">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Calculates attenuation due to absorption and scattering in a sample &amp; its environment using a Monte Carlo.</p>
+<div class="section" id="see-also">
+<h3><a class="toc-backref" href="#id7">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="MayersSampleCorrection-v1.html#algm-mayerssamplecorrection"><span class="std std-ref">MayersSampleCorrection</span></a>, <a class="reference internal" href="CarpenterSampleCorrection-v1.html#algm-carpentersamplecorrection"><span class="std std-ref">CarpenterSampleCorrection</span></a>, <a class="reference internal" href="PearlMCAbsorption-v1.html#algm-pearlmcabsorption"><span class="std std-ref">PearlMCAbsorption</span></a>, <a class="reference internal" href="VesuvioCalculateMS-v1.html#algm-vesuviocalculatems"><span class="std std-ref">VesuvioCalculateMS</span></a></p>
+</div>
+</div>
+<div class="section" id="properties">
+<h2><a class="toc-backref" href="#id8">Properties</a><a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="2%" />
+<col width="10%" />
+<col width="3%" />
+<col width="77%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Direction</th>
+<th class="head">Type</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>InputWorkspace</td>
+<td>Input</td>
+<td><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></td>
+<td><em>Mandatory</em></td>
+<td>The name of the input workspace.  The input workspace must have X units of wavelength.</td>
+</tr>
+<tr class="row-odd"><td>OutputWorkspace</td>
+<td>Output</td>
+<td><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></td>
+<td><em>Mandatory</em></td>
+<td>The name to use for the output workspace.</td>
+</tr>
+<tr class="row-even"><td>NumberOfWavelengthPoints</td>
+<td>Input</td>
+<td>number</td>
+<td><em>Optional</em></td>
+<td>The number of wavelength points for which a simulation is attempted (default: all points)</td>
+</tr>
+<tr class="row-odd"><td>EventsPerPoint</td>
+<td>Input</td>
+<td>number</td>
+<td>1000</td>
+<td>The number of “neutron” events to generate per simulated point</td>
+</tr>
+<tr class="row-even"><td>SeedValue</td>
+<td>Input</td>
+<td>number</td>
+<td>123456789</td>
+<td>Seed the random number generator with this value</td>
+</tr>
+<tr class="row-odd"><td>Interpolation</td>
+<td>Input</td>
+<td>string</td>
+<td>Linear</td>
+<td>Method of interpolation used to compute unsimulated values. Allowed values: [‘Linear’, ‘CSpline’]</td>
+</tr>
+<tr class="row-even"><td>SparseInstrument</td>
+<td>Input</td>
+<td>boolean</td>
+<td>False</td>
+<td>Enable simulation on special instrument with a sparse grid of detectors interpolating the results to the real instrument.</td>
+</tr>
+<tr class="row-odd"><td>NumberOfDetectorRows</td>
+<td>Input</td>
+<td>number</td>
+<td>5</td>
+<td>Number of detector rows in the detector grid of the sparse instrument.</td>
+</tr>
+<tr class="row-even"><td>NumberOfDetectorColumns</td>
+<td>Input</td>
+<td>number</td>
+<td>10</td>
+<td>Number of detector columns in the detector grid of the sparse instrument.</td>
+</tr>
+<tr class="row-odd"><td>MaxScatterPtAttempts</td>
+<td>Input</td>
+<td>number</td>
+<td>5000</td>
+<td>Maximum number of tries made to generate a scattering point within the sample (+ optional container etc). Objects with holes in them, e.g. a thin annulus can cause problems if this number is too low. If a scattering point cannot be generated by increasing this value then there is most likely a problem with the sample geometry.</td>
+</tr>
+<tr class="row-even"><td>ResimulateTracksForDifferentWavelengths</td>
+<td>Input</td>
+<td>boolean</td>
+<td>False</td>
+<td>Resimulate tracks for each wavelength point.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="description">
+<h2><a class="toc-backref" href="#id9">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>This algorithm performs a Monte Carlo simulation to calculate the correction factors due
+to attenuation &amp; single scattering within a sample plus optionally its sample environment.</p>
+<div class="section" id="input-workspace-requirements">
+<h3><a class="toc-backref" href="#id10">Input Workspace Requirements</a><a class="headerlink" href="#input-workspace-requirements" title="Permalink to this headline">¶</a></h3>
+<p>The algorithm will compute the correction factors on a bin-by-bin basis for each spectrum within
+the input workspace. The following assumptions on the input workspace will are made:</p>
+<ul class="simple">
+<li>X units are in wavelength</li>
+<li>the instrument is fully defined</li>
+<li>properties of the sample and optionally its environment have been set with
+<a class="reference internal" href="SetSample-v1.html#algm-setsample"><span class="std std-ref">SetSample</span></a></li>
+</ul>
+<p>By default the beam is assumed to be the a slit with width and height matching
+the width and height of the sample. This can be overridden using <a class="reference internal" href="SetBeam-v1.html#algm-setbeam"><span class="std std-ref">SetBeam</span></a>.</p>
+</div>
+<div class="section" id="method">
+<h3><a class="toc-backref" href="#id11">Method</a><a class="headerlink" href="#method" title="Permalink to this headline">¶</a></h3>
+<p>By default, the material for the sample &amp; containers will define the values of the cross section used to compute the absorption factor and will
+include contributions from both the total scattering cross section &amp; absorption cross section.
+This follows the Hamilton-Darwin <a class="footnote-reference" href="#dar" id="id1">[1]</a>, <a class="footnote-reference" href="#ham" id="id2">[2]</a> approach as described by T. M. Sabine in the International Tables of Crystallography Vol. C <a class="footnote-reference" href="#sab" id="id3">[3]</a>.</p>
+<p>The algorithm proceeds as follows. For each spectrum:</p>
+<ol class="arabic">
+<li><p class="first">find the associated detector position</p>
+</li>
+<li><p class="first">find the associated efixed value (if applicable) &amp; convert to wavelength (<img class="math" src="../_images/math/23fb1b32661eca8d475168589fd1376ae1d16547.png" alt="\lambda_{fixed}" style="vertical-align: -6px"/>)</p>
+</li>
+<li><p class="first">for each event in <cite>NEvents</cite></p>
+<ul>
+<li><p class="first">loop over the bins.</p>
+<ul>
+<li><p class="first">If <cite>ResimulateTracksForDifferentWavelengths</cite> = True then generate tracks using the following procedure for each wavelength step,
+where the size of each wavelength step is defined by <cite>NumberOfWavelengthPoints</cite>. If <cite>ResimulateTracksForDifferentWavelengths</cite> = false
+generate one set of tracks and define a step size of 1 ie all bins are visited. At the moment there are no wavelength dependent effects in the simulation that affect the simulation of the track geometry so the default value for <cite>ResimulateTracksForDifferentWavelengths</cite> is false.
+For each step (<img class="math" src="../_images/math/14a022b86a438348b446e6064f681ab0e3842ceb.png" alt="\lambda_{step}" style="vertical-align: -6px"/>)</p>
+</li>
+<li><p class="first">generate a random point on the beam face defined by the input height &amp; width. If the point is outside of the
+area defined by the face of the sample then it is pulled to the boundary of this area</p>
+</li>
+<li><p class="first">generate a random point within the sample or container objects as the scatter point and create a <cite>Track</cite>
+from the selected position on the beam face to the scatter point</p>
+</li>
+<li><p class="first">test for intersections of the track &amp; sample/container objects, giving the number of subsections
+and corresponding distances within the object for each section, call them <img class="math" src="../_images/math/072649419c736ecb71ec03679dcadb879f09faa8.png" alt="l_{1i}" style="vertical-align: -4px"/></p>
+</li>
+<li><p class="first">form a second <cite>Track</cite> with the scatter position as the starting point and the direction defined by
+<cite>detPos - scatterPos</cite></p>
+</li>
+<li><p class="first">test for intersections of the track &amp; sample/container objects, giving the number of subsections
+and corresponding distances within the object for each section, call them <img class="math" src="../_images/math/e6bf663bced0f2d1ebbfcdf1c4163f8f18d75b2f.png" alt="l_{2i}" style="vertical-align: -3px"/></p>
+</li>
+<li><p class="first">define <img class="math" src="../_images/math/0c7a67f42e1cb5205592401ecd6ed3757c91fb0c.png" alt="\lambda_1" style="vertical-align: -4px"/> as the wavelength before scattering &amp; <img class="math" src="../_images/math/dfc8036c551ec4ca1f19f3d6d63502a1001fbb4a.png" alt="\lambda_2" style="vertical-align: -3px"/> as wavelength after scattering:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Direct: <img class="math" src="../_images/math/c9300718be836cee464a2eae0131907e1551607d.png" alt="\lambda_1 = \lambda_1" style="vertical-align: -4px"/>, <img class="math" src="../_images/math/85cc8e596cce14e96eb97cc139b909d1b0541f28.png" alt="\lambda_2 = \lambda_{step}" style="vertical-align: -6px"/></li>
+<li>Indirect: <img class="math" src="../_images/math/3e17a2902bf223f9f1e82b0f54910f9d5e3d3721.png" alt="\lambda_1 = \lambda_{step}" style="vertical-align: -6px"/>, <img class="math" src="../_images/math/2125551d28e0140f10fec25e04856a09c1882b7d.png" alt="\lambda_2 = \lambda_{fixed}" style="vertical-align: -6px"/></li>
+<li>Elastic: <img class="math" src="../_images/math/eb860b239c9f97f888eb61a2fc94af00d3367134.png" alt="\lambda_1 = \lambda_2 = \lambda_{step}" style="vertical-align: -6px"/></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">compute the self-attenuation factor for all intersections as
+<img class="math" src="../_images/math/881c13b5600cb6dad3a5c9c2fba2c118005484e0.png" alt="\prod\limits_{i} \exp(-(\rho_{1i}\sigma_{1i}(\lambda_{1i})l_{1i} + \rho_{2i}\sigma_{2i}(\lambda_{2i})l_{2i}))" style="vertical-align: -16px"/>
+where <img class="math" src="../_images/math/817f1f11a271a306890d322b311ff30209cc5209.png" alt="\rho" style="vertical-align: -4px"/> is the mass density of the material &amp;
+<img class="math" src="../_images/math/867e88734ade43673557344be7e57c5488afba70.png" alt="\sigma" style="vertical-align: 0px"/> the absorption cross-section at a given wavelength</p>
+</li>
+<li><p class="first">accumulate this wavelength-specific factor across all <cite>NEvents</cite></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p class="first">average the accumulated attentuation factors over <cite>NEvents</cite> and assign this as the correction factor for
+this <img class="math" src="../_images/math/14a022b86a438348b446e6064f681ab0e3842ceb.png" alt="\lambda_{step}" style="vertical-align: -6px"/>.</p>
+</li>
+<li><p class="first">finally, if <cite>ResimulateTracksForDifferentWavelengths</cite> = True, interpolate through the unsimulated wavelength points using the selected method</p>
+</li>
+</ol>
+</div>
+<div class="section" id="interpolation">
+<h3><a class="toc-backref" href="#id12">Interpolation</a><a class="headerlink" href="#interpolation" title="Permalink to this headline">¶</a></h3>
+<p>The default linear interpolation method will produce an absorption curve that is not smooth. CSpline interpolation
+will produce a smoother result by using a 3rd-order polynomial to approximate the original points.</p>
+</div>
+<div class="section" id="sparse-instrument">
+<h3><a class="toc-backref" href="#id13">Sparse instrument</a><a class="headerlink" href="#sparse-instrument" title="Permalink to this headline">¶</a></h3>
+<p>The simulation may take long to complete on instruments with a large number of detectors. To speed up the simulation, the instrument can be approximated by a sparse grid of detectors. The behavior can be enabled by setting the <em>SparseInstrument</em> property to true.</p>
+<p>The sparse instrument consists of a grid of detectors covering the full instrument entirely. The figure below shows an example of a such an instrument approximating the IN5 spectrometer at ILL.</p>
+<div class="figure" id="id5">
+<a class="reference internal image-reference" href="../_images/MonteCarloAbsorption_Sparse_Instrument.png"><img alt="IN5 spectrometer and its sparse approximation." src="../_images/MonteCarloAbsorption_Sparse_Instrument.png" style="width: 1054.2px; height: 298.2px;" /></a>
+<p class="caption"><span class="caption-text">Absorption corrections for IN5 spectrometer interpolated from the sparse instrument shown on the right. The sparse instrument has 6 detector rows and 22 columns, a total of 132 detectors. IN5, on the other hand, has approximately 100000 detectors.</span></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is recommended to remove monitor spectra from the input workspace since these are included in the area covered by the sparse instrument and may make the detector grid unnecessarily large.</p>
+</div>
+<p>When the sparse instrument option is enabled, a sparse instrument corresponding to the instrument attached to the input workspace is created. The simulation is then run using the created instrument. Finally, the simulated absorption corrections are interpolated to the output workspace.</p>
+<p>The interpolation is a two step process: first a spatial interpolation is done from the detector grid of the sparse instrument to the actual detector positions of the full instrument. Then, if <cite>ResimulateTracksForDifferentWavelengths</cite> = True the correction factors are interpolated over the missing wavelengths.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Currently, the sparse instrument mode does not support instruments with varying <em>EFixed</em>.</p>
+</div>
+<div class="section" id="spatial-interpolation">
+<h4><a class="toc-backref" href="#id14">Spatial interpolation</a><a class="headerlink" href="#spatial-interpolation" title="Permalink to this headline">¶</a></h4>
+<p>The sample to detector distance does not matter for absorption, so it suffices to consider directions only. The detector grid of the sparse instrument consists of detectors at constant latitude and longitude intervals. For a detector <img class="math" src="../_images/math/38c3f1bb635d72c20480efe631525d3464136e24.png" alt="D" style="vertical-align: 0px"/> of the full input instrument at latitude <img class="math" src="../_images/math/31474b06c59f21db91bcb3c8a425561a2e44a583.png" alt="\phi" style="vertical-align: -4px"/> and longitude <img class="math" src="../_images/math/412c0294db757d8807fe8fc2975ab586bb9042d8.png" alt="\lambda" style="vertical-align: 0px"/>, we pick the four detectors <img class="math" src="../_images/math/42647d38175c17880761375d26860b2ea84d8625.png" alt="D_i" style="vertical-align: -3px"/> (<img class="math" src="../_images/math/12ecebe74d51921ac5b5e339e32b400b763ba73f.png" alt="i = 1, 2, 3, 4" style="vertical-align: -4px"/>) at the corners of the grid cell which includes (<img class="math" src="../_images/math/31474b06c59f21db91bcb3c8a425561a2e44a583.png" alt="\phi" style="vertical-align: -4px"/>, <img class="math" src="../_images/math/412c0294db757d8807fe8fc2975ab586bb9042d8.png" alt="\lambda" style="vertical-align: 0px"/>). The distance <img class="math" src="../_images/math/0701c8177845fbfcfb1de144fa7ba8106d75aa80.png" alt="\Delta_i" style="vertical-align: -3px"/> in units of angle between <img class="math" src="../_images/math/38c3f1bb635d72c20480efe631525d3464136e24.png" alt="D" style="vertical-align: 0px"/> and  <img class="math" src="../_images/math/42647d38175c17880761375d26860b2ea84d8625.png" alt="D_i" style="vertical-align: -3px"/> on a spherical surface is given by</p>
+<div class="math">
+<p><img src="../_images/math/e6f02b6c7f9df1a82049ea1e28a7b049d161e461.png" alt="\Delta_i = 2 \arcsin \sqrt{\sin^2 \left(\frac{\phi - \phi_i}{2} \right) + \cos \phi \cos \phi_i \sin^2 \left( \frac{\lambda - \lambda_i}{2} \right)}"/></p>
+</div><p>If <img class="math" src="../_images/math/38c3f1bb635d72c20480efe631525d3464136e24.png" alt="D" style="vertical-align: 0px"/> coincides with any <img class="math" src="../_images/math/42647d38175c17880761375d26860b2ea84d8625.png" alt="D_i" style="vertical-align: -3px"/>, the <img class="math" src="../_images/math/95ca3c6a1fbeaaafe5800c3269c4c9c2cf2e5406.png" alt="y" style="vertical-align: -4px"/> values of the histogram linked to <img class="math" src="../_images/math/38c3f1bb635d72c20480efe631525d3464136e24.png" alt="D" style="vertical-align: 0px"/> are directly taken from <img class="math" src="../_images/math/42647d38175c17880761375d26860b2ea84d8625.png" alt="D_i" style="vertical-align: -3px"/>. Otherwise, <img class="math" src="../_images/math/95ca3c6a1fbeaaafe5800c3269c4c9c2cf2e5406.png" alt="y" style="vertical-align: -4px"/> is interpolated using the inverse distance weighing method</p>
+<div class="math">
+<p><img src="../_images/math/98dd5eb9693028464fe7b7696db365c865af774e.png" alt="y = \frac{\sum_i w_i y_i}{\sum_i w_i},"/></p>
+</div><p>where the weights are given by</p>
+<div class="math">
+<p><img src="../_images/math/f867cb47c000923def6230fb31eac6e786611009.png" alt="w_i = \frac{1}{\Delta_i^2}"/></p>
+</div></div>
+<div class="section" id="wavelength-interpolation">
+<h4><a class="toc-backref" href="#id15">Wavelength interpolation</a><a class="headerlink" href="#wavelength-interpolation" title="Permalink to this headline">¶</a></h4>
+<p>The wavelength points for simulation with the sparse instrument are chosen as follows:</p>
+<ol class="arabic simple">
+<li>Find the global minimum and maximum wavelengths of the input workspace.</li>
+<li>Divide the wavelength interval to as many points as defined by the input parameters.</li>
+</ol>
+<p>After the simulation has been run and the spatial interpolation done, the interpolated histograms will be further interpolated to the wavelength points of the input workspace. This is done similarly to the full instrument case. If only a single wavelength point is specified, then the output histograms will be filled with the single simulated value.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the input workspace contains varying bin widths then the output is always interpolated.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id16">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p><strong>Example: A cylindrical sample with no container</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="n">WorkspaceType</span><span class="o">=</span><span class="s1">&#39;Histogram&#39;</span><span class="p">,</span> <span class="n">NumBanks</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s2">&quot;Wavelength&quot;</span><span class="p">)</span>
+<span class="c1"># Default up axis is Y</span>
+<span class="n">SetSample</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Geometry</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Shape&#39;</span><span class="p">:</span> <span class="s1">&#39;Cylinder&#39;</span><span class="p">,</span> <span class="s1">&#39;Height&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">,</span> <span class="s1">&#39;Radius&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                  <span class="s1">&#39;Center&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]},</span>
+                <span class="n">Material</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ChemicalFormula&#39;</span><span class="p">:</span> <span class="s1">&#39;(Li7)2-C-H4-N-Cl6&#39;</span><span class="p">,</span> <span class="s1">&#39;SampleNumberDensity&#39;</span><span class="p">:</span> <span class="mf">0.07</span><span class="p">})</span>
+<span class="c1"># Simulating every data point can be slow. Use a smaller set and interpolate</span>
+<span class="n">abscor</span> <span class="o">=</span> <span class="n">MonteCarloAbsorption</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">corrected</span> <span class="o">=</span> <span class="n">data</span><span class="o">/</span><span class="n">abscor</span>
+</pre></div>
+</div>
+<p><strong>Example: A cylindrical sample with no container, resimulating tracks for different wavelengths, interpolating with a CSpline</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="n">WorkspaceType</span><span class="o">=</span><span class="s1">&#39;Histogram&#39;</span><span class="p">,</span> <span class="n">NumBanks</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s2">&quot;Wavelength&quot;</span><span class="p">)</span>
+<span class="c1"># Default up axis is Y</span>
+<span class="n">SetSample</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Geometry</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Shape&#39;</span><span class="p">:</span> <span class="s1">&#39;Cylinder&#39;</span><span class="p">,</span> <span class="s1">&#39;Height&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">,</span> <span class="s1">&#39;Radius&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                  <span class="s1">&#39;Center&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]},</span>
+                <span class="n">Material</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ChemicalFormula&#39;</span><span class="p">:</span> <span class="s1">&#39;(Li7)2-C-H4-N-Cl6&#39;</span><span class="p">,</span> <span class="s1">&#39;SampleNumberDensity&#39;</span><span class="p">:</span> <span class="mf">0.07</span><span class="p">})</span>
+<span class="c1"># Simulating every data point can be slow. Use a smaller set and interpolate</span>
+<span class="n">abscor</span> <span class="o">=</span> <span class="n">MonteCarloAbsorption</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ResimulateTracksForDifferentWavelengths</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">NumberOfWavelengthPoints</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                              <span class="n">Interpolation</span><span class="o">=</span><span class="s1">&#39;CSpline&#39;</span><span class="p">)</span>
+<span class="n">corrected</span> <span class="o">=</span> <span class="n">data</span><span class="o">/</span><span class="n">abscor</span>
+</pre></div>
+</div>
+<p><strong>Example: A cylindrical sample setting a beam size</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="n">WorkspaceType</span><span class="o">=</span><span class="s1">&#39;Histogram&#39;</span><span class="p">,</span> <span class="n">NumBanks</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s2">&quot;Wavelength&quot;</span><span class="p">)</span>
+<span class="c1"># Default up axis is Y</span>
+<span class="n">SetSample</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Geometry</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Shape&#39;</span><span class="p">:</span> <span class="s1">&#39;Cylinder&#39;</span><span class="p">,</span> <span class="s1">&#39;Height&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">,</span> <span class="s1">&#39;Radius&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                  <span class="s1">&#39;Center&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]},</span>
+                  <span class="n">Material</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ChemicalFormula&#39;</span><span class="p">:</span> <span class="s1">&#39;(Li7)2-C-H4-N-Cl6&#39;</span><span class="p">,</span> <span class="s1">&#39;SampleNumberDensity&#39;</span><span class="p">:</span> <span class="mf">0.07</span><span class="p">})</span>
+<span class="n">SetBeam</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Geometry</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Shape&#39;</span><span class="p">:</span> <span class="s1">&#39;Slit&#39;</span><span class="p">,</span> <span class="s1">&#39;Width&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="s1">&#39;Height&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">})</span>
+<span class="c1"># Simulating every data point can be slow. Use a smaller set and interpolate</span>
+<span class="n">abscor</span> <span class="o">=</span> <span class="n">MonteCarloAbsorption</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">NumberOfWavelengthPoints</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">corrected</span> <span class="o">=</span> <span class="n">data</span><span class="o">/</span><span class="n">abscor</span>
+</pre></div>
+</div>
+<p><strong>Example: A cylindrical sample with predefined container</strong></p>
+<p>The following example uses a test sample environment defined for the <code class="docutils literal"><span class="pre">TEST_LIVE</span></code>
+facility and <code class="docutils literal"><span class="pre">ISIS_Histogram</span></code> instrument and assumes that these are set as the
+default facility and instrument respectively. The definition can be found at
+<code class="docutils literal"><span class="pre">[INSTALLDIR]/instrument/sampleenvironments/TEST_LIVE/ISIS_Histogram/CRYO-01.xml</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="n">WorkspaceType</span><span class="o">=</span><span class="s1">&#39;Histogram&#39;</span><span class="p">,</span> <span class="n">NumBanks</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s2">&quot;Wavelength&quot;</span><span class="p">)</span>
+<span class="c1"># Sample geometry is defined by container but not completely filled so</span>
+<span class="c1"># we just define the height</span>
+<span class="n">SetSample</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Environment</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="s1">&#39;CRYO-01&#39;</span><span class="p">,</span> <span class="s1">&#39;Container&#39;</span><span class="p">:</span> <span class="s1">&#39;8mm&#39;</span><span class="p">},</span>
+          <span class="n">Geometry</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Height&#39;</span><span class="p">:</span> <span class="mf">4.0</span><span class="p">},</span>
+          <span class="n">Material</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ChemicalFormula&#39;</span><span class="p">:</span> <span class="s1">&#39;(Li7)2-C-H4-N-Cl6&#39;</span><span class="p">,</span> <span class="s1">&#39;SampleNumberDensity&#39;</span><span class="p">:</span> <span class="mf">0.07</span><span class="p">})</span>
+<span class="c1"># Simulating every data point can be slow. Use a smaller set and interpolate</span>
+<span class="n">abscor</span> <span class="o">=</span> <span class="n">MonteCarloAbsorption</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">corrected</span> <span class="o">=</span> <span class="n">data</span><span class="o">/</span><span class="n">abscor</span>
+</pre></div>
+</div>
+<p><strong>Example: A cylindrical sample using a sparse instrument description, interpolating with a CSpline</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="n">WorkspaceType</span><span class="o">=</span><span class="s1">&#39;Histogram&#39;</span><span class="p">,</span> <span class="n">NumBanks</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s1">&#39;Wavelength&#39;</span><span class="p">)</span>
+<span class="n">SetSample</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Geometry</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Shape&#39;</span><span class="p">:</span> <span class="s1">&#39;Cylinder&#39;</span><span class="p">,</span> <span class="s1">&#39;Height&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">,</span> <span class="s1">&#39;Radius&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+                  <span class="s1">&#39;Center&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]},</span>
+                <span class="n">Material</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;ChemicalFormula&#39;</span><span class="p">:</span> <span class="s1">&#39;(Li7)2-C-H4-N-Cl6&#39;</span><span class="p">,</span> <span class="s1">&#39;SampleNumberDensity&#39;</span><span class="p">:</span> <span class="mf">0.07</span><span class="p">},</span>
+         <span class="p">)</span>
+
+<span class="n">abscor</span> <span class="o">=</span> <span class="n">MonteCarloAbsorption</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">SparseInstrument</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">NumberOfDetectorRows</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">NumberOfDetectorColumns</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                              <span class="n">Interpolation</span><span class="o">=</span><span class="s1">&#39;CSpline&#39;</span><span class="p">)</span>
+<span class="n">corrected</span> <span class="o">=</span> <span class="n">data</span><span class="o">/</span><span class="n">abscor</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="references">
+<h2><a class="toc-backref" href="#id17">References</a><a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<table class="docutils footnote" frame="void" id="dar" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Darwin, C. G., <em>Philos. Mag.</em>, <strong>43</strong> 800 (1922)
+<a class="reference external" href="http://dx.doi.org/10.1080/10448639208218770">doi: 10.1080/10448639208218770</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="ham" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>Hamilton, W.C., <em>Acta Cryst</em>, <strong>10</strong>, 629 (1957)
+<a class="reference external" href="http://dx.doi.org/10.1107/S0365110X57002212">doi: 10.1107/S0365110X57002212</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="sab" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td>Sabine, T. M., <em>International Tables for Crystallography</em>, Vol. C, Page 609, Ed. Wilson, A. J. C and Prince, E. Kluwer Publishers (2004)
+<a class="reference external" href="http://dx.doi.org/10.1107/97809553602060000103">doi: 10.1107/97809553602060000103</a></td></tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/CorrectionFunctions/AbsorptionCorrections.html">CorrectionFunctions\AbsorptionCorrections</a></p>
+</div>
+<div class="section" id="source">
+<h2><a class="toc-backref" href="#id18">Source</a><a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/a412251b161c30a0be7a42eaf858d03199961661/Framework/Algorithms/inc/MantidAlgorithms/MonteCarloAbsorption.h">MonteCarloAbsorption.h</a> <em>(last modified: 2020-02-03)</em></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/a412251b161c30a0be7a42eaf858d03199961661/Framework/Algorithms/src/MonteCarloAbsorption.cpp">MonteCarloAbsorption.cpp</a> <em>(last modified: 2020-02-06)</em></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="MonitorLiveData-v1.html" title="Previous Chapter: MonitorLiveData v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; MonitorLiveData v1</span>
+    </a>
+  </li>
+  <li>
+    <a href="MostLikelyMean-v1.html" title="Next Chapter: MostLikelyMean v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">MostLikelyMean v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2020-03-14.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

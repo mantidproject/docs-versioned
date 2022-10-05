@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Instrument Access via SpectrumInfo and DetectorInfo</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.9.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Instrument Data Service" href="InstrumentDataService.html" />
+    <link rel="prev" title="Instrument" href="Instrument.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="instrument-access-via-spectruminfo-and-detectorinfo">
+<span id="instrumentaccesslayers"></span><h1>Instrument Access via SpectrumInfo and DetectorInfo<a class="headerlink" href="#instrument-access-via-spectruminfo-and-detectorinfo" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id9">Introduction</a><ul>
+<li><a class="reference internal" href="#current-status" id="id10">Current Status</a><ul>
+<li><a class="reference internal" href="#spectruminfo" id="id11">SpectrumInfo</a></li>
+<li><a class="reference internal" href="#detectorinfo" id="id12">DetectorInfo</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#changes-for-rollout" id="id13">Changes for Rollout</a><ul>
+<li><a class="reference internal" href="#performance-tests" id="id14">Performance Tests</a></li>
+<li><a class="reference internal" href="#id1" id="id15">SpectrumInfo</a><ul>
+<li><a class="reference internal" href="#basics" id="id16">Basics</a></li>
+<li><a class="reference internal" href="#access-to-detectors" id="id17">Access to Detectors</a></li>
+<li><a class="reference internal" href="#mutable-spectruminfo" id="id18">Mutable SpectrumInfo</a></li>
+<li><a class="reference internal" href="#useful-tips" id="id19">Useful Tips</a></li>
+<li><a class="reference internal" href="#complete-examples" id="id20">Complete Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id2" id="id21">DetectorInfo</a><ul>
+<li><a class="reference internal" href="#id3" id="id22">Basics</a></li>
+<li><a class="reference internal" href="#id4" id="id23">Access to Detectors</a></li>
+<li><a class="reference internal" href="#mutable-detectorinfo" id="id24">Mutable DetectorInfo</a></li>
+<li><a class="reference internal" href="#id5" id="id25">Useful Tips</a></li>
+<li><a class="reference internal" href="#id6" id="id26">Complete Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rollout-status" id="id27">Rollout status</a></li>
+<li><a class="reference internal" href="#dealing-with-problems" id="id28">Dealing with problems</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id9">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>There are two new layers to access instrument information, <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> and <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt>, that are going to be introduced to Mantid as part of the work towards Instrument 2.0. Eventually these classes will store commonly accessed information about spectra or detectors, namely masking, monitor flags, L1, L2, 2-theta and position, leading to improved performance and cleaner code.</p>
+<p>A spectrum corresponds to (a group of) one or more detectors. Most algorithms work with spectra and thus <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> would be used. Some algorithms work on a lower level (with individual detectors) and thus <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt> would be used.</p>
+<p>In many cases direct access to <tt class="docutils literal"><span class="pre">Instrument</span></tt> can be removed by using these layers. This will also help in moving to using indexes for enumeration, and only working with IDs for user-facing input.</p>
+<div class="section" id="current-status">
+<h3><a class="toc-backref" href="#id10">Current Status</a><a class="headerlink" href="#current-status" title="Permalink to this headline">¶</a></h3>
+<p><tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> and <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt> are currently implemented as wrapper classes in Mantid. Using the new interfaces everywhere now will help with the eventual rollout of Instrument 2.0. It also provides cleaner code and will help with the rollout of planned indexing changes. It is also necessary to provide the addition of time indexing, required to support scanning instruments.</p>
+<div class="section" id="spectruminfo">
+<h4><a class="toc-backref" href="#id11">SpectrumInfo</a><a class="headerlink" href="#spectruminfo" title="Permalink to this headline">¶</a></h4>
+<p><tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> can be obtained from a call to <tt class="docutils literal"><span class="pre">MatrixWorkspace::spectrumInfo()</span></tt>. The wrapper class holds a reference to a <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt> object and calls through to this for access to information on masking, monitor flags etc.</p>
+</div>
+<div class="section" id="detectorinfo">
+<h4><a class="toc-backref" href="#id12">DetectorInfo</a><a class="headerlink" href="#detectorinfo" title="Permalink to this headline">¶</a></h4>
+<p><tt class="docutils literal"><span class="pre">DetectorInfo</span></tt> can be obtained from a call to <tt class="docutils literal"><span class="pre">ExperimentInfo::detectorInfo()</span></tt> (usually this method would be called on <tt class="docutils literal"><span class="pre">MatrixWorkspace</span></tt>). The wrapper class holds a reference to the parametrised instrument for retrieving the relevant information.</p>
+<p>There is also a partial implementation of the &#8220;real&#8221; <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt> class, in the <tt class="docutils literal"><span class="pre">Beamline</span></tt> namespace. The real class currently stores the masking information for a detector. The wrapper <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt> class holds a reference to the real class. This does not affect the rollout, where the wrapper class should still be used in all cases.</p>
+</div>
+</div>
+</div>
+<div class="section" id="changes-for-rollout">
+<h2><a class="toc-backref" href="#id13">Changes for Rollout</a><a class="headerlink" href="#changes-for-rollout" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="performance-tests">
+<h3><a class="toc-backref" href="#id14">Performance Tests</a><a class="headerlink" href="#performance-tests" title="Permalink to this headline">¶</a></h3>
+<p>Before starting the refactoring work please take a look at the state of any performance tests that exist for the algorithms. If they exist they should be run to get the &#8220;before&#8221; timings. If they do not exist please add performance test for any algorithms that are widely used, or might be expected to have a performance increase. See <a class="reference external" href="https://github.com/mantidproject/mantid/pull/18189/files#diff-5695221d30495359738f90b83ceb0ba3">this performance test</a> added for the <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> rollout for an example of adding such a test.</p>
+<p>Each PR should include the runtime metrics for the algorithms changed, so that improvements can be captured for the release notes.</p>
+</div>
+<div class="section" id="id1">
+<h3><a class="toc-backref" href="#id15">SpectrumInfo</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="basics">
+<h4><a class="toc-backref" href="#id16">Basics</a><a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h4>
+<p>All instances of <tt class="docutils literal"><span class="pre">MatrixWorkspace::getDetector()</span></tt> should be replaced using calls to the <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> object obtained from <tt class="docutils literal"><span class="pre">MatrixWorkspace::spectrumInfo()</span></tt>. The methods below can then be called on <cite>SpectrumInfo</cite> instead of on the detector.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">isMonitor(wsIndex)</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">isMasked(wsIndex)</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">l2(wsIndex)</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">twoTheta(wsIndex)</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">signedTwoTheta(wsIndex)</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">position(wsIndex)</span></tt></li>
+</ul>
+<p>The try/catch pattern for checking if a spectrum has a detector might look something like the following before/after example.</p>
+<p><strong>Before refactoring</strong></p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="k">try</span> <span class="p">{</span>
+  <span class="n">Geometry</span><span class="o">::</span><span class="n">IDetector_const_sptr</span> <span class="n">det</span> <span class="o">=</span> <span class="n">ws</span><span class="p">.</span><span class="n">getDetector</span><span class="p">(</span><span class="n">wsIndex</span><span class="p">);</span>
+  <span class="c1">// do stuff</span>
+<span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span><span class="o">::</span><span class="n">NotFoundError</span> <span class="o">&amp;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// do exception</span>
+  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>After - check it has some detectors</strong></p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="cp">#include &quot;MantidAPI/SpectrumInfo.h&quot;</span>
+
+<span class="p">...</span>
+
+<span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="n">spectrumInfo</span> <span class="o">=</span> <span class="n">ws</span><span class="o">-&gt;</span><span class="n">spectrumInfo</span><span class="p">();</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">spectrumInfo</span><span class="p">.</span><span class="n">hasDetectors</span><span class="p">(</span><span class="n">wsIndex</span><span class="p">))</span> <span class="p">{</span>
+  <span class="c1">// do stuff</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="c1">// do exception</span>
+  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In this case, which is generally more common, the check is for at least one detector. It is also possible to check for the existence of a unique detector, see the alternative after example below.</p>
+<p><strong>After - check for a unique detector</strong></p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="cp">#include &quot;MantidAPI/SpectrumInfo.h&quot;</span>
+
+<span class="p">...</span>
+
+<span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="n">spectrumInfo</span> <span class="o">=</span> <span class="n">ws</span><span class="o">-&gt;</span><span class="n">spectrumInfo</span><span class="p">();</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">spectrumInfo</span><span class="p">.</span><span class="n">hasUniqueDetector</span><span class="p">(</span><span class="n">wsIndex</span><span class="p">))</span> <span class="p">{</span>
+  <span class="c1">// do exception</span>
+  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// do stuff</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="access-to-detectors">
+<h4><a class="toc-backref" href="#id17">Access to Detectors</a><a class="headerlink" href="#access-to-detectors" title="Permalink to this headline">¶</a></h4>
+<p>The <tt class="docutils literal"><span class="pre">detector(wsIndex)</span></tt> method on <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> returns the parameterised detector or detector group for the workspace. As <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> does not provide access to things like <tt class="docutils literal"><span class="pre">Object::solidAngle()</span></tt>, the <tt class="docutils literal"><span class="pre">detector()</span></tt> method on <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> can be used to get access to these methods.</p>
+</div>
+<div class="section" id="mutable-spectruminfo">
+<h4><a class="toc-backref" href="#id18">Mutable SpectrumInfo</a><a class="headerlink" href="#mutable-spectruminfo" title="Permalink to this headline">¶</a></h4>
+<p>The method <tt class="docutils literal"><span class="pre">MatrixWorkspace::mutableSpectrumInfo()</span></tt> returns a non-const <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> object. Currently the only method that this access is required for is <tt class="docutils literal"><span class="pre">SpectrumInfo::setMasked(const</span> <span class="pre">size_t</span> <span class="pre">index,</span> <span class="pre">bool</span> <span class="pre">masked)</span></tt>.</p>
+</div>
+<div class="section" id="useful-tips">
+<h4><a class="toc-backref" href="#id19">Useful Tips</a><a class="headerlink" href="#useful-tips" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Creation of <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> objects is not cheap. Make sure <tt class="docutils literal"><span class="pre">ws.spectrumInfo()</span></tt> is called outside of loops that go over all spectra.</li>
+<li>If a <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> object is required for more than one workspace then include the workspace name in the name of the <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> object, to avoid confusion.</li>
+<li>Get the <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> object as a const reference and use auto - <tt class="docutils literal"><span class="pre">const</span> <span class="pre">auto</span> <span class="pre">&amp;spectrumInfo</span> <span class="pre">=</span> <span class="pre">ws-&gt;spectrumInfo();</span></tt>.</li>
+<li>Do not forget to add the import - <tt class="docutils literal"><span class="pre">#include</span> <span class="pre">&quot;MantidAPI/SpectrumInfo.h&quot;</span></tt>.</li>
+</ul>
+</div>
+<div class="section" id="complete-examples">
+<h4><a class="toc-backref" href="#id20">Complete Examples</a><a class="headerlink" href="#complete-examples" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/mantidproject/mantid/pull/17394/files#diff-905c244467474fc320eaf3b8c7a9f0dd">FindCenterOfMassPosition2.cpp</a></li>
+<li><a class="reference external" href="https://github.com/mantidproject/mantid/pull/18218/files#diff-f490acf06e76f93898dc7d486c8dfa93">CreatePSDBleedMask.cpp</a></li>
+<li><a class="reference external" href="https://github.com/mantidproject/mantid/pull/18464/files#diff-fc151838d9d7cc2e4ea469e98472c791">HRPDSlabCanAbsorption.cpp</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="id2">
+<h3><a class="toc-backref" href="#id21">DetectorInfo</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h4><a class="toc-backref" href="#id22">Basics</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<p>The conversion is similar to that for <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt>. For <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt> all instances of <tt class="docutils literal"><span class="pre">Instrument::getDetector()</span></tt> should be replaced using calls to the <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt> object obtained from <tt class="docutils literal"><span class="pre">MatrixWorkspace::detectorInfo()</span></tt>. The methods below can then be called on <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt> instead of on the detector.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">isMonitor(detIndex)</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">isMasked(detIndex)</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">l2(detIndex)</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">twoTheta(detIndex)</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">signedTwoTheta(detIndex)</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">position(detIndex)</span></tt></li>
+</ul>
+<p><strong>Indexing</strong></p>
+<p>The <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt> object is accessed by an index going from 0 to the number of detectors. A vector of detector IDs can be obtained from a call to <tt class="docutils literal"><span class="pre">detectorInfo.detectorIDs()</span></tt>.</p>
+<p>It is also possible to use the method <tt class="docutils literal"><span class="pre">detectorInfo.indexOf(detID)</span></tt> to get the index for a particular detector ID. However, this is a call to a lookup in an unordered map, so is an expensive calculation which should be avoided where possible.</p>
+<p>Below is an example refactoring.</p>
+<p><strong>Before refactoring</strong></p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="k">auto</span> <span class="n">instrument</span> <span class="o">=</span> <span class="n">ws</span><span class="o">-&gt;</span><span class="n">getInstrument</span><span class="p">();</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">instrument</span><span class="p">)</span>
+  <span class="k">throw</span> <span class="n">runtime_error</span><span class="p">(</span><span class="s">&quot;There is no instrument in input workspace.&quot;</span><span class="p">)</span>
+
+<span class="n">size_t</span> <span class="n">numdets</span> <span class="o">=</span> <span class="n">instrument</span><span class="o">-&gt;</span><span class="n">getNumberDetectors</span><span class="p">();</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">detid_t</span><span class="o">&gt;</span> <span class="n">detIds</span> <span class="o">=</span> <span class="n">instrument</span><span class="o">-&gt;</span><span class="n">getDetectorIDs</span><span class="p">();</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numdets</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">IDetector_const_sptr</span> <span class="n">tmpdetector</span> <span class="o">=</span> <span class="n">instrument</span><span class="o">-&gt;</span><span class="n">getDetector</span><span class="p">(</span><span class="n">detIds</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">tmpdetector</span><span class="o">-&gt;</span><span class="n">isMasked</span><span class="p">())</span> <span class="p">{</span>
+    <span class="n">maskeddetids</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">tmpdetid</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>After - looping over index</strong></p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="cp">#include &quot;MantidAPI/Detector.h&quot;</span>
+
+<span class="p">...</span>
+
+<span class="k">const</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="n">detectorInfo</span> <span class="o">=</span> <span class="n">ws</span><span class="o">-&gt;</span><span class="n">detectorInfo</span><span class="p">();</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">detectorInfo</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="k">throw</span> <span class="n">runtime_error</span><span class="p">(</span><span class="s">&quot;There is no instrument in input workspace.&quot;</span><span class="p">)</span>
+
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">detid_t</span><span class="o">&gt;</span> <span class="n">detIds</span> <span class="o">=</span> <span class="n">detectorInfo</span><span class="p">.</span><span class="n">detectorIDs</span><span class="p">();</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">detectorInfo</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">detectorInfo</span><span class="p">.</span><span class="n">isMasked</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="p">{</span>
+    <span class="n">maskedDetIds</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">detIds</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h4><a class="toc-backref" href="#id23">Access to Detectors</a><a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<p>As for the <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> object <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt> can return a parameterised detector for the workspace.</p>
+</div>
+<div class="section" id="mutable-detectorinfo">
+<h4><a class="toc-backref" href="#id24">Mutable DetectorInfo</a><a class="headerlink" href="#mutable-detectorinfo" title="Permalink to this headline">¶</a></h4>
+<p>The method <tt class="docutils literal"><span class="pre">ExperimentInfo::mutableDetectorInfo()</span></tt> returns a non-const <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt> object. This allows the methods below to be used.</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">setMasked(const</span> <span class="pre">size_t</span> <span class="pre">index,</span> <span class="pre">bool</span> <span class="pre">masked);</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">clearMaskFlags();</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">setPosition(const</span> <span class="pre">size_t</span> <span class="pre">index,</span> <span class="pre">const</span> <span class="pre">Kernel::V3D</span> <span class="pre">&amp;position);</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">setRotation(const</span> <span class="pre">size_t</span> <span class="pre">index,</span> <span class="pre">const</span> <span class="pre">Kernel::Quat</span> <span class="pre">&amp;rotation);</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">setPosition(const</span> <span class="pre">Geometry::IComponent</span> <span class="pre">&amp;comp,</span> <span class="pre">const</span> <span class="pre">Kernel::V3D</span> <span class="pre">&amp;pos);</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">setRotation(const</span> <span class="pre">Geometry::IComponent</span> <span class="pre">&amp;comp,</span> <span class="pre">const</span> <span class="pre">Kernel::Quat</span> <span class="pre">&amp;rot);</span></tt></li>
+</ul>
+<p>For a complete example of setting the position of a detector see the changes to the algorithm <a class="reference external" href="https://github.com/mantidproject/mantid/commit/0c75f46e85c2dc39c2b76ea811f161fdfdef938e#diff-a4ccabae0099bfc22b3b87154cd6ee9e">ApplyCalibration.cpp</a>.</p>
+</div>
+<div class="section" id="id5">
+<h4><a class="toc-backref" href="#id25">Useful Tips</a><a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<p>See tips for <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> - the same advice applies to using <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt>.</p>
+</div>
+<div class="section" id="id6">
+<h4><a class="toc-backref" href="#id26">Complete Examples</a><a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/mantidproject/mantid/commit/177ad14b25db7c40ee10be513512be9ae7dd0da1#diff-7f367da22c1a837b315b4bca5b2b3e24">FindDetectorsInShape.cpp</a></li>
+<li><a class="reference external" href="https://github.com/mantidproject/mantid/pull/18295/files#diff-26a49ef923e1bdd77677b962528d1e01">SmoothNeighbours.cpp</a></li>
+<li><a class="reference external" href="https://github.com/mantidproject/mantid/pull/18198/files#diff-7f0f739ba6db714eb6ef64b6125e4620">ClaerMaskFlag.cpp</a></li>
+<li><a class="reference external" href="https://github.com/mantidproject/mantid/commit/0c75f46e85c2dc39c2b76ea811f161fdfdef938e#diff-a4ccabae0099bfc22b3b87154cd6ee9e">ApplyCalibration.cpp</a> - for mutable <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="rollout-status">
+<h2><a class="toc-backref" href="#id27">Rollout status</a><a class="headerlink" href="#rollout-status" title="Permalink to this headline">¶</a></h2>
+<p>See ticket <a class="reference external" href="https://github.com/mantidproject/mantid/issues/17743">17743</a> for an overview of the <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt> and <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt> rollout, including completed and algorithms, and remaining algorithms. Please follow the instructions on the ticket for the rollout.</p>
+</div>
+<div class="section" id="dealing-with-problems">
+<h2><a class="toc-backref" href="#id28">Dealing with problems</a><a class="headerlink" href="#dealing-with-problems" title="Permalink to this headline">¶</a></h2>
+<p>Join #instrument-2_0 on Slack if you need help or have questions. Please also feel free to get in touch with Ian Bush, Simon Heybrock or Owen Arnold directly for any questions about the <tt class="docutils literal"><span class="pre">SpectrumInfo</span></tt>, <tt class="docutils literal"><span class="pre">DetectorInfo</span></tt> and the rollout.</p>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Instrument.html" title="Previous Chapter: Instrument"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Instrument</span>
+    </a>
+  </li>
+  <li>
+    <a href="InstrumentDataService.html" title="Next Chapter: Instrument Data Service"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Instrument Data ... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

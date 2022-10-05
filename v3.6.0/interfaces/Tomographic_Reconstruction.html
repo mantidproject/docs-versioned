@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tomographic Reconstruction</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Interfaces" href="index.html" />
+    <link rel="next" title="Abragam" href="../fitfunctions/Abragam.html" />
+    <link rel="prev" title="Time of Flight Converter" href="TOF_Converter.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.6</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="tomographic-reconstruction">
+<h1>Tomographic Reconstruction<a class="headerlink" href="#tomographic-reconstruction" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#overview" id="id4">Overview</a></li>
+<li><a class="reference internal" href="#interface-at-a-glance" id="id5">Interface at a glance</a></li>
+<li><a class="reference internal" href="#tools" id="id6">Tools</a></li>
+<li><a class="reference internal" href="#data-formats" id="id7">Data formats</a></li>
+<li><a class="reference internal" href="#data-locations" id="id8">Data locations</a></li>
+<li><a class="reference internal" href="#running-jobs-remotely" id="id9">Running jobs remotely</a></li>
+<li><a class="reference internal" href="#setting-common-parameters-for-the-reconstruction-jobs" id="id10">Setting common parameters for the reconstruction jobs</a><ul>
+<li><a class="reference internal" href="#regions" id="id11">Regions</a></li>
+<li><a class="reference internal" href="#pre-post-processing" id="id12">Pre-/post-processing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#results-from-reconstruction-jobs" id="id13">Results from reconstruction jobs</a></li>
+<li><a class="reference internal" href="#running-jobs-locally" id="id14">Running jobs locally</a></li>
+<li><a class="reference internal" href="#visualization" id="id15">Visualization</a></li>
+<li><a class="reference internal" href="#energy-bands" id="id16">Energy bands</a></li>
+<li><a class="reference internal" href="#conversion-between-formats" id="id17">Conversion between formats</a></li>
+<li><a class="reference internal" href="#example" id="id18">Example</a></li>
+<li><a class="reference internal" href="#id1" id="id19">TomoPy</a></li>
+<li><a class="reference internal" href="#id2" id="id20">Astra Toolbox</a></li>
+<li><a class="reference internal" href="#id3" id="id21">Astra Toolbox</a></li>
+<li><a class="reference internal" href="#savu" id="id22">Savu</a><ul>
+<li><a class="reference internal" href="#pipeline-configuration" id="id23">Pipeline configuration</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id4">Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>This interface aims at integrating and simplifying the following tasks
+related to tomographic reconstruction and imaging with neutrons. While
+much of its functionality is being developed in a generic way, it is
+presently being tested and trialed for the IMAT instrument at ISIS.</p>
+<div class="figure align-center">
+<a class="screenshot reference internal image-reference" href="../_images/Tomographic_Reconstruction_interface.png"><img alt="../_images/Tomographic_Reconstruction_interface.png" class="screenshot" src="../_images/Tomographic_Reconstruction_interface.png" style="width: 600px;" /></a>
+</div>
+<p>An important feature of this interface is the capability to submit
+jobs to a remote compute resource (a compute cluster for
+example). Currently remote jobs are run on the <a class="reference external" href="http://www.scarf.rl.ac.uk/">SCARF cluster</a>, administered by the Scientific
+Computing Department of STFC. You can also use this cluster via remote
+login and through its <a class="reference external" href="https://portal.scarf.rl.ac.uk/">web portal</a>. This resource is available for
+ISIS users.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This interface is undergoing heavy works. The sections or
+tabs are subject to changes and reorganization.New
+functionality is being added and the pre-post-processing
+and reconstruction workflow is being modified based on
+feedback from initial test data.</p>
+</div>
+</div>
+<div class="section" id="interface-at-a-glance">
+<h2><a class="toc-backref" href="#id5">Interface at a glance</a><a class="headerlink" href="#interface-at-a-glance" title="Permalink to this headline">¶</a></h2>
+<p>By default the interface shows the <em>Run</em> tab, where you can visualize
+images, submit reconstruction jobs, see and control the status of the
+jobs submitted recently.</p>
+<div class="figure align-right">
+<a class="reference internal image-reference" href="../_images/tomo_tab1_submission_reconstruction_jobs.png"><img alt="../_images/tomo_tab1_submission_reconstruction_jobs.png" src="../_images/tomo_tab1_submission_reconstruction_jobs.png" style="width: 413.5px; height: 341.5px;" /></a>
+</div>
+<p>In the setup tab you can set the details of the remote and/or local
+compute resources. Importantly, here is where you can set you username
+and password to log into the remote compute resource. To be able to
+run jobs remotely you first need to log into the remote compute
+resource. Once you log in, an automatic mechanism will periodically
+query the status of jobs (for example every minute). You can also
+update it at any time by clicking on the refresh button.</p>
+<p>In this tab you also have to set the folders/directories where the
+input data for reconstruction jobs is found. This information is
+required every time you start analyzing a new dataset. The required
+fields are:</p>
+<dl class="docutils">
+<dt>Samples directory</dt>
+<dd>Directory containing the sample images</dd>
+<dt>Open beam directory</dt>
+<dd>Where to find the open beam (flat/white) image(s)</dd>
+<dt>Dark field directory</dt>
+<dd>Where to find the dark image(s)</dd>
+</dl>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/tomo_tab2_setup_authentication.png"><img alt="../_images/tomo_tab2_setup_authentication.png" src="../_images/tomo_tab2_setup_authentication.png" style="width: 496.2px; height: 409.2px;" /></a>
+</div>
+<p><strong>NB</strong>: This interface is under heavy development. Several practical
+details lack polishing and/or are missing. This implies that there may
+be usability issues at times and some steps may not be as intuitive or
+simple as they could. Please, do not hesitate to provide suggestions
+and feedback.</p>
+<p>The next sections provide further details that might be needed to
+fully understand the process of generating tomographic reconstructions
+with this interface.</p>
+</div>
+<div class="section" id="tools">
+<h2><a class="toc-backref" href="#id6">Tools</a><a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h2>
+<p>At the moment two reconstruction tools are being set up and trialed on
+SCARF and some ISIS machines:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://www1.aps.anl.gov/Science/Scientific-Software/TomoPy">TomoPy</a></li>
+<li><a class="reference external" href="http://visielab.uantwerpen.be/software">Astra Toolbox</a> found from
+<a class="reference external" href="http://sourceforge.net/p/astra-toolbox/wiki/Home/">here</a>.</li>
+</ul>
+<p>References for the Astra Toolbox:</p>
+<ul class="simple">
+<li>W. van Aarle, W J. Palenstijn, J. De
+Beenhouwer, T. Altantzis, S. Bals, K. J. Batenburg, and J. Sijbers,
+&#8220;The ASTRA Toolbox: a platform for advanced algorithm development in
+electron tomography&#8221;, Ultramicroscopy, Vol. 147, p. 35–47, (2015)</li>
+<li>W J. Palenstijn, K J. Batenburg, and J. Sijbers, &#8220;Performance
+improvements for iterative electron tomography reconstruction using
+graphics processing units (GPUs)&#8221;, Journal of structural biology,
+vol. 176, issue 2, pp. 250-253, 2011</li>
+</ul>
+<p>References for TomoPy:</p>
+<ul class="simple">
+<li>Gursoy D, De Carlo F, Xiao X, Jacobsen C. (2014). TomoPy: a
+framework for the analysis of synchrotron tomographic
+data. J. Synchrotron Rad. 21. 1188-1193
+doi:10.1107/S1600577514013939</li>
+</ul>
+<p>In the near future it is expected that support will be added for
+<a class="reference external" href="https://github.com/DiamondLightSource/Savu">Savu: Tomography Reconstruction Pipeline</a>, developed at the
+Diamond Light Source.</p>
+<p>References for Savu:</p>
+<ul class="simple">
+<li>Atwood R C, Bodey A J, Price S W T, Basham M and Drakopoulos M
+2015 A high-throughput system for high-quality tomographic reconstruction of
+large datasets at diamond light source Philosophical Transactions A 373 20140398</li>
+</ul>
+</div>
+<div class="section" id="data-formats">
+<h2><a class="toc-backref" href="#id7">Data formats</a><a class="headerlink" href="#data-formats" title="Permalink to this headline">¶</a></h2>
+<p>In principle, users do not need to deal with specificities of
+different file formats. That is the aim of this interface, but as it
+is currently being developed, and for reference a brief list of
+relevant file and data formats is given here:</p>
+<ul class="simple">
+<li>FITS: <a class="reference external" href="http://en.wikipedia.org/wiki/FITS">Flexible Image Transport System format</a> used to store images in
+files. You can see the details on how FITS images can be loaded into
+Mantid in the documentation of the algorithm LoadFITS
+<a class="reference external" href="http://docs.mantidproject.org/nightly/algorithms/LoadFITS-v1.html">http://docs.mantidproject.org/nightly/algorithms/LoadFITS-v1.html</a>.</li>
+<li>TIFF: <a class="reference external" href="http://en.wikipedia.org/wiki/Tagged_Image_File_Format">Tagged Image File Format</a> images
+used as FITS for image or slice files. This format is presently not
+supported in the Mantid data analysis framework but it is used in
+the tomographic reconstruction interface.</li>
+<li>Diamond Light Source (DLS) NXTomo: a specific NeXus format used by
+some of the tools that this interface supports or will support. See
+next sections for details.</li>
+</ul>
+<p>These formats are used in different processing steps and parts of this
+interface. For example, you can visualize FITS and TIFF images in the
+<strong>Run</strong> tab and also in the <strong>ROI, etc.</strong> tab. As another example, the
+reconstruction tools typically need as inputs at least a stack of
+images which can be in different formats, including a set of FITS or
+TIFF files, or a single DLS NXTomo file. Other third party tools use
+files in these formats as inputs, outputs or both.</p>
+</div>
+<div class="section" id="data-locations">
+<h2><a class="toc-backref" href="#id8">Data locations</a><a class="headerlink" href="#data-locations" title="Permalink to this headline">¶</a></h2>
+<p>This is dependent on the facility and instrument.</p>
+<p>TODO: this is work in progress. At ISIS In principle data will be
+replicated in the ISIS archive, the SCARF imat disk space, and
+possibly an analysis machine located in R3.</p>
+<p>The tab <em>Visualization</em> has simple push buttons to browse the files
+available from the local and remote locations, as well as any other
+directory or folder selected by the user.</p>
+</div>
+<div class="section" id="running-jobs-remotely">
+<h2><a class="toc-backref" href="#id9">Running jobs remotely</a><a class="headerlink" href="#running-jobs-remotely" title="Permalink to this headline">¶</a></h2>
+<p>To be able to run jobs on a remote compute resource (cluster, supercomputer, etc.)</p>
+<ul class="simple">
+<li>Log into the resource</li>
+<li>Select it and setup one reconstruction tool</li>
+<li>Use the <strong>reconstruct</strong> button in the <strong>Run</strong> tab of the interface</li>
+</ul>
+<p>You can monitor the status of the jobs currently running (and recently
+run) on remote compute resources in the same tab.</p>
+</div>
+<div class="section" id="setting-common-parameters-for-the-reconstruction-jobs">
+<h2><a class="toc-backref" href="#id10">Setting common parameters for the reconstruction jobs</a><a class="headerlink" href="#setting-common-parameters-for-the-reconstruction-jobs" title="Permalink to this headline">¶</a></h2>
+<p>Before any reconstruction job is started several pre-/post-processing
+options would normally need to be fine tuned for the sample data to be
+processed correctly. The region of interest and the &#8220;air&#8221; region (or
+region for normalization) can be set visually in a specific tab. All
+other pre- and post-processing settings are defined in a separate tab.</p>
+<div class="section" id="regions">
+<h3><a class="toc-backref" href="#id11">Regions</a><a class="headerlink" href="#regions" title="Permalink to this headline">¶</a></h3>
+<p>Several parameters can be set in the <strong>ROI etc.</strong> section or tab. These
+parameters will be used for all the reconstruction jobs, regardless of
+the tool and/or reconstruction method used.</p>
+<ul class="simple">
+<li>Region of interest (ROI) for the analysis</li>
+<li>Area for normalization (open beam, not blocked by sample)</li>
+<li>Center of rotation, for tomographic reconstruction</li>
+</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/tomo_tab3_ROI_etc.png"><img alt="../_images/tomo_tab3_ROI_etc.png" src="../_images/tomo_tab3_ROI_etc.png" style="width: 496.2px; height: 409.2px;" /></a>
+</div>
+<p>At any stage during the process of selecting the regions it is also
+possible to see how the selections fit different images by sliding
+through the images of the stack (using the slider or scroll bar).</p>
+<p>The center of rotation can be selected interactively by clicking on
+the select button and then clicking on an image pixel. To select the
+regions of interest or the area of normalization, just click on the
+respective &#8220;select&#8221; button and then click and drag with the mouse to
+select a rectangle. The precise coordinates of the center and regions
+can be set via the boxes of the right panel as well.</p>
+<p>Once you have selected or set one of the regions, or the center, they
+can be selected again by pushing the respective &#8220;Select&#8221; buttons
+and/or editing their coordinates manually.</p>
+<p>The default values, set in principle when a new stack of images is
+loaded, is as follows. The region of intererest is set to cover all
+the images. The regions of normalization is not set (empty), and the
+center of rotation is set to the center of the image. The option to
+find the center of rotation automatically is disabled at present.</p>
+<p>If when selection a region the mouse is moved outside of the images,
+it is possible to continue the selection of the region (second corner)
+by clicking again inside the image. Alternatively, any selection can
+be reset at any point by using the &#8220;reset&#8221; buttons.</p>
+</div>
+<div class="section" id="pre-post-processing">
+<h3><a class="toc-backref" href="#id12">Pre-/post-processing</a><a class="headerlink" href="#pre-post-processing" title="Permalink to this headline">¶</a></h3>
+<p>The <strong>Filters</strong> tab can be used to set up the pre- and post-processing
+steps. These are applied regardless of the particular tomographic
+reconstruction tool and algorithm used when running reconstruction
+jobs. Pre-processing filters are applied on the raw input images
+before the reconstruction algorithm is run. Post-processing steps are
+applied on the reconstructed volume produced by the algorithm.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/tomo_tab4_pre_post_proc_filters.png"><img alt="../_images/tomo_tab4_pre_post_proc_filters.png" src="../_images/tomo_tab4_pre_post_proc_filters.png" style="width: 496.2px; height: 409.2px;" /></a>
+</div>
+<p>The tab also shows options to define what outputs should be produced
+in addition to the reconstructed volume.</p>
+<p>The settings are remembered between sessions. It is possible to reset
+all the settings to their original defaults by clicking on the reset
+button.</p>
+</div>
+</div>
+<div class="section" id="results-from-reconstruction-jobs">
+<h2><a class="toc-backref" href="#id13">Results from reconstruction jobs</a><a class="headerlink" href="#results-from-reconstruction-jobs" title="Permalink to this headline">¶</a></h2>
+<p>The results are written into the output paths selected in the
+interface (in the <em>setup</em> section or tab). For every reconstructed
+volume a sequence of images (slices along the vertical axis) are
+written. In addition, two complementary outputs are generated in the
+same location:</p>
+<ul class="simple">
+<li>A <em>readme</em> file with detailed information on the reconstruction and
+settings (0.README_reconstruction.txt), including paths, algorithms,
+filters and parameters used.</li>
+<li>A compressed package file that contains the scripts and subpackages
+used for the reconstruction job, for reproducibility and to make it
+easier to track down potential issues. This file is written as
+0.reconstruction_scripts.zip</li>
+</ul>
+</div>
+<div class="section" id="running-jobs-locally">
+<h2><a class="toc-backref" href="#id14">Running jobs locally</a><a class="headerlink" href="#running-jobs-locally" title="Permalink to this headline">¶</a></h2>
+<p>This capability is being developed at the moment, and it requires
+additional setup steps on the local analysis machine. Basic
+functionality is supported only on the IMAT data analysis machine.</p>
+</div>
+<div class="section" id="visualization">
+<h2><a class="toc-backref" href="#id15">Visualization</a><a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The interface is being extended to have integration with
+third party tools for 3D visualization and segmentation.
+This is work in progress.</p>
+</div>
+<p>The <strong>Visualization</strong> tab can be used to browse the local and remote
+locations where results are stored. It is also possible to open these
+results in third party visualization applications. <strong>NB</strong>: ParaView is
+currently supported and additional tools are being integrated.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/tomo_tab5_send_to_viz.png"><img alt="../_images/tomo_tab5_send_to_viz.png" src="../_images/tomo_tab5_send_to_viz.png" style="width: 496.2px; height: 409.2px;" /></a>
+</div>
+</div>
+<div class="section" id="energy-bands">
+<h2><a class="toc-backref" href="#id16">Energy bands</a><a class="headerlink" href="#energy-bands" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The interface is being extended to provide different methods
+of combining energy bands from energy selective experiments.
+This is work in progress.</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/tomo_tab7_energy_bands.png"><img alt="../_images/tomo_tab7_energy_bands.png" src="../_images/tomo_tab7_energy_bands.png" style="width: 496.2px; height: 409.2px;" /></a>
+</div>
+</div>
+<div class="section" id="conversion-between-formats">
+<h2><a class="toc-backref" href="#id17">Conversion between formats</a><a class="headerlink" href="#conversion-between-formats" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The interface is being extended to provide a simple graphical
+interface to convert between different image formats for
+convenience and interoperability with third party tools.
+This is work in progress as support for new formats is being
+integrated.</p>
+</div>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../_images/tomo_tab6_formats_convert.png"><img alt="../_images/tomo_tab6_formats_convert.png" src="../_images/tomo_tab6_formats_convert.png" style="width: 496.2px; height: 409.2px;" /></a>
+</div>
+</div>
+<div class="section" id="example">
+<h2><a class="toc-backref" href="#id18">Example</a><a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>TODO: there should be an example using a small data set.</p>
+</div>
+<div class="section" id="id1">
+<h2><a class="toc-backref" href="#id19">TomoPy</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>TODO: how to use it. Hints.</p>
+</div>
+<div class="section" id="id2">
+<h2><a class="toc-backref" href="#id20">Astra Toolbox</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>TODO: how to use it. Hints.</p>
+</div>
+<div class="section" id="id3">
+<h2><a class="toc-backref" href="#id21">Astra Toolbox</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>TODO: how to use it. Hints.</p>
+</div>
+<div class="section" id="savu">
+<h2><a class="toc-backref" href="#id22">Savu</a><a class="headerlink" href="#savu" title="Permalink to this headline">¶</a></h2>
+<p>TODO: how to use it. Hints.</p>
+<p>Savu uses a specific file format developed by the Diamond Light
+Source, the DLS NXTomo. A few examples can be found from <a class="reference external" href="https://github.com/DiamondLightSource/Savu/tree/master/test_data">the savu
+repository on GitHub</a>.</p>
+<div class="section" id="pipeline-configuration">
+<h3><a class="toc-backref" href="#id23">Pipeline configuration</a><a class="headerlink" href="#pipeline-configuration" title="Permalink to this headline">¶</a></h3>
+<p>A Savu reconstruction pipeline is defined by a list of processing
+steps (or plugins) and their parameters. In the Savu setup dialog this
+list is built on the right panel (current configuration) by adding and
+sorting available plugins available from the tree shown on the left
+panel. From the file menu, different savu configurations can be saved for
+later use and loaded from previously saved files.</p>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/Interfaces.html">Interfaces</a> | <a class="reference external" href="../algorithms/categories/Diffraction.html">Diffraction</a></p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="TOF_Converter.html" title="Previous Chapter: Time of Flight Converter"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Time of Flight C...</span>
+    </a>
+  </li>
+  <li>
+    <a href="../fitfunctions/Abragam.html" title="Next Chapter: Abragam"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Abragam &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

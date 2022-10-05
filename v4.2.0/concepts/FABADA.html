@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FABADA</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '4.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Facilities File" href="FacilitiesFile.html" />
+    <link rel="prev" title="Event Workspace" href="EventWorkspace.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>4.2</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="fabada">
+<span id="id1"></span><h1>FABADA<a class="headerlink" href="#fabada" title="Permalink to this headline">¶</a></h1>
+<p>FABADA is a fitting algorithm for Bayesian data analysis, the theory of which is
+detailed here: <a class="reference external" href="http://dx.doi.org/10.1088/1742-6596/325/1/012006">http://dx.doi.org/10.1088/1742-6596/325/1/012006</a></p>
+<p>This documentation covers details of it&#8217;s implementation in Mantid.</p>
+<div class="section" id="important-notes">
+<h2>Important Notes<a class="headerlink" href="#important-notes" title="Permalink to this headline">¶</a></h2>
+<p>Currently in order to use FABADA the cost function must be set to Least Squares.</p>
+<p>The values for ChainLength and MaxIterations should be set to relatively high
+values where <img class="math" src="../_images/math/a58e35db1d0eda930902a37a067b8fc8bb86aad1.png" alt="MaxIterations &gt; 2 * ChainLength" style="vertical-align: -4px"/> (e.g. MaxIterations = 20^6
+and ChainLength = 10^6).</p>
+<p>Currently the starting values used for each parameter are required to be a
+fairly good estimate of the actual value, in the event that a parameter is not
+estimated to sufficient accuracy convergence of the parameters will not be
+reached and an error message will inform of the unconverged parameters.</p>
+</div>
+<div class="section" id="fabada-specific-parameters">
+<h2>FABADA Specific Parameters<a class="headerlink" href="#fabada-specific-parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>ChainLength</dt>
+<dd>Number of steps done by the algorithm once all of the parameters have
+converged.</dd>
+<dt>StepsBetweenValues</dt>
+<dd>Specifies interval at which to record parameter and cost function values in
+the chain outputs.</dd>
+<dt>ConvergenceCriteria</dt>
+<dd>The threshold variation in the cost function due to the change in a parameter
+under which it is assumed that the parameter has reached convergence.</dd>
+<dt>JumpAcceptanceRate</dt>
+<dd>The desired percentage of acceptance for new parameters (typically 0.666)</dd>
+</dl>
+</div>
+<div class="section" id="fabada-specific-outputs">
+<h2>FABADA Specific Outputs<a class="headerlink" href="#fabada-specific-outputs" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>PDF (<em>required</em>)</dt>
+<dd>Probability Density Function for each fitted parameter and the cost function.
+This is output as a <a class="reference internal" href="MatrixWorkspace.html#matrixworkspace"><em>Matrix Workspace</em></a>.</dd>
+<dt>Chains (<em>optional</em>)</dt>
+<dd>The value of each parameter and the cost function for each step taken.
+This is output as a <a class="reference internal" href="MatrixWorkspace.html#matrixworkspace"><em>Matrix Workspace</em></a>.</dd>
+<dt>ConvergedChain (<em>optional</em>)</dt>
+<dd>A subset of Chains containing only the section after which the parameters have
+converged.
+This records the parameters at step intervals given by StepsBetweenValues.
+This is output as a <a class="reference internal" href="MatrixWorkspace.html#matrixworkspace"><em>Matrix Workspace</em></a>.</dd>
+<dt>CostFunctionTable (<em>optional</em>)</dt>
+<dd>Table containing the minimum and most probable values of the cost function as
+well as their reduced values.
+This is output as a TableWorkspace.</dd>
+<dt>Parameters (<em>optional</em>)</dt>
+<dd>Similar to the standard parameter table but also includes left and right
+errors for each parameter (cost function is not included).
+This is output as a TableWorkspace.</dd>
+</dl>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p><strong>Example: A simple example</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ws_data</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s">&#39;irs26176_graphite002_red.nxs&#39;</span><span class="p">)</span>
+<span class="n">ws_res</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s">&#39;irs26173_graphite002_res.nxs&#39;</span><span class="p">)</span>
+
+<span class="n">function_str</span> <span class="o">=</span> <span class="s">&#39;composite=Convolution,FixResolution=tue,NumDeriv=false;name=Resolution,Workspace=ws_res,WorkspaceIndex=0;(composite=CompositeFunction,NumDeriv=true;name=Lorentzian,Amplitude=1,PeakCentre=0.01,FWHM=0.5;name=Lorentzian,Amplitude=1,PeakCentre=0.01,FWHM=0.5)&#39;</span>
+<span class="n">minimizer_str</span> <span class="o">=</span> <span class="s">&quot;FABADA,Chain Length=1000000,Steps between values=10,Convergence Criteria=0.01,PDF=pdf,Chains=chain,Converged chain=conv,Cost Function Table=CostFunction,Parameter Erros =Errors&quot;</span>
+
+<span class="n">Fit</span><span class="p">(</span><span class="n">Function</span> <span class="o">=</span> <span class="n">function_str</span><span class="p">,</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws_data</span><span class="p">,</span><span class="n">WorkspaceIndex</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">StartX</span><span class="o">=-</span><span class="mf">0.25</span><span class="p">,</span><span class="n">EndX</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span><span class="n">CreateOutput</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">Output</span> <span class="o">=</span> <span class="s">&#39;result&#39;</span><span class="p">,</span><span class="n">OutputCompositeMembers</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">MaxIterations</span><span class="o">=</span><span class="mi">2000000</span><span class="p">,</span> <span class="n">Minimizer</span><span class="o">=</span><span class="n">minimizer_str</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="EventWorkspace.html" title="Previous Chapter: Event Workspace"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Event Workspace</span>
+    </a>
+  </li>
+  <li>
+    <a href="FacilitiesFile.html" title="Next Chapter: Facilities File"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Facilities File &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2019-11-18.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

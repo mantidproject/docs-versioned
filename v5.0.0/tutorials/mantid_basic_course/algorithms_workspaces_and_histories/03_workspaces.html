@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>What is a Bin?, What is a Workspace? and the Power of Rebin</title>
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '5.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Algorithm Histories" href="04_algorith_histories.html" />
+    <link rel="prev" title="Algorithms" href="02_algorithms.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>5.0</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="what-is-a-bin-what-is-a-workspace-and-the-power-of-rebin">
+<span id="workspaces"></span><h1>What is a Bin?, What is a Workspace? and the Power of Rebin<a class="headerlink" href="#what-is-a-bin-what-is-a-workspace-and-the-power-of-rebin" title="Permalink to this headline">¶</a></h1>
+<p>Most data within Mantid are Histogram-like, so imagine a plot: There is an X-axis with a measured/calculated
+unit, such as Time-of-Flight (TOF) in μs. The Y-axis is the Counts (How many neutrons / positrons were detected
+at each TOF value?) and will have the inverse unit of the X-axis, such as (μs):sup:<cite>-1</cite>.</p>
+<p>But in a Histogram we cut the X-axis into set range blocks, and plot the Total Count (Y) within each block (range in X). Each set range or block is referred to as a “Bin”. The Bins may be of equal length or varying length (see right).</p>
+<p>If Algorithms are the verbs of Mantid, then Workspaces are the nouns.
+Workspaces are used to store data within Mantid, and when you manipulate data,
+you output to a new Workspace.</p>
+<p>Workspaces come in several forms, but the most common two are the <a class="reference internal" href="../../../concepts/Workspace2D.html#workspace2d"><span class="std std-ref">Workspace2D</span></a> and the <a class="reference internal" href="../../../concepts/EventWorkspace.html#eventworkspace"><span class="std std-ref">Event Workspace</span></a>. Their data are in an XYE format (the general Mantid term is <a class="reference internal" href="../../../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">Matrix Workspace</span></a>)
+containing 1 or more spectra.</p>
+<div class="section" id="workspace2d">
+<h2>Workspace2D<a class="headerlink" href="#workspace2d" title="Permalink to this headline">¶</a></h2>
+<p>A <a class="reference internal" href="../../../concepts/Workspace2D.html#workspace2d"><span class="std std-ref">Workspace2D</span></a> is histogrammed data, with one or more spectra. For each spectrum X, Y (counts) and E
+(error) data is stored.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/MBC_Workspace2D.png"><img alt="Workspace2D" src="../../../_images/MBC_Workspace2D.png" style="width: 600px;" /></a>
+</div>
+<p>When the Matrix table of a Workspace is displayed (via right-click &gt; “Show Data”):
+- Each row is a different Spectra.
+- Each vertical column in X-data is (usually) the edges of each Bin
+- Each vertical column in Y-data is the number of Counts in that Bin
+- Each vertical column in E-data is the Error of the Y-data for that Bin</p>
+<p>Note as the X-data refers to the Bin boundaries, there is one more column in the X-data, than the Y or E data.
+(An aside: if the X-data refers to Bin-centers, then it will have the same number of columns as Y and E)</p>
+<div class="section" id="correct-binning">
+<h3>Correct Binning<a class="headerlink" href="#correct-binning" title="Permalink to this headline">¶</a></h3>
+<p>Where bin boundaries are set along the X-axis determines, how long or short bins are. The overall arrangement
+of bins for a spectrum is called its <strong>binning</strong>. Converting units can lead to a <em>ragged workspace</em>, with inconsistent binning
+between different spectra! A Colorfill plot of ragged data looks poor and often algorithms will not accept a ragged input.</p>
+<p>To fix this <strong>Rebin</strong> the ragged workspace with regular binning:</p>
+<ol class="arabic simple">
+<li><strong>Load</strong> the <em>GEM38370_Focussed.nxs</em> file, naming the <strong>OutputWorkspace</strong> to be <em>ws</em></li>
+<li>Execute the Algorithm <strong>ConvertUnits</strong> with <em>ws</em> as the InputWorkspace, <em>ws_lambda</em> as the <strong>OutputWorkspace</strong>,
+<strong>Target</strong>=<em>Wavelength</em>, <strong>EMode</strong>=<em>Elastic</em>.</li>
+<li>Plotting the <em>ws_lambda</em> Workspace as a Colorfill demonstrates the ragged X-bins :-( .</li>
+</ol>
+<p>( You may need to alter the max value of the colorbar to around 300 by double-click on the right of the colorbar)</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/MBC_Ragged.png"><img alt="Ragged" src="../../../_images/MBC_Ragged.png" style="width: 600px;" /></a>
+</div>
+<ol class="arabic simple" start="4">
+<li>Execute the <strong>Rebin</strong> Algorithm on <em>ws_lambda</em> setting <strong>Params</strong> to <em>0.5</em> (setting the width of each bin to 0.5  Å) and
+<strong>OutputWorkspace</strong> to <em>Rebinned</em>. Plot this as a Colorfill to show uniform binning across all spectra has been
+achieved! :-)</li>
+</ol>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/MBC_Rebinned.png"><img alt="Rebinned" src="../../../_images/MBC_Rebinned.png" style="width: 600px;" /></a>
+</div>
+<p>As you can see <strong>Rebin</strong> is a very useful Algorithm for fixing ragged workspaces.
+Another important use of rebinning is prior to point-by-point normalisation (e.g. correcting for incident flux and detector efficiency) by normalising to a vanadium run). This is something that may be handled for you if executing an algorithm such as <a class="reference internal" href="../../../algorithms/NormaliseToMonitor-v1.html#algm-normalisetomonitor"><span class="std std-ref">NormaliseToMonitor v1</span></a>.</p>
+</div>
+</div>
+<div class="section" id="event-workspaces">
+<h2>Event Workspaces<a class="headerlink" href="#event-workspaces" title="Permalink to this headline">¶</a></h2>
+<p>An <a class="reference internal" href="../../../concepts/EventWorkspace.html#eventworkspace"><span class="std std-ref">Event Workspace</span></a> stores information about each
+individual particle detection. More specifically, at a
+neutron spallation source, this means that the Time of arrival and
+Detector ID of each individual neutron is recorded. Only fairly recent
+advances in computer and acquisition hardware have made storing this
+detailed knowledge a practical solution. For example at the SNS facility
+all data, except for data collected in monitors, are in Event mode.</p>
+<p>Event specifies “when” and “where”</p>
+<p><strong>Pulse time</strong> – when the proton pulse happened in absolute time</p>
+<p><strong>Time-of-flight</strong> – time interval for the neutron to travel from moderator to
+the detector</p>
+<div class="section" id="binning-of-event-workspaces">
+<h3>Binning of Event Workspaces<a class="headerlink" href="#binning-of-event-workspaces" title="Permalink to this headline">¶</a></h3>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/Binning_example.png"><img alt="Binning_example.png" src="../../../_images/Binning_example.png" style="width: 500px;" /></a>
+</div>
+<p>This extra information that Event Data has over Workspace2D (histogram) data
+means that rebinning is simply moving the Bin edges and summing the number of Counts
+within the new Bin. While this can be done for Workspace2D (histogram) data, any split bins are averaged.</p>
+<p>On the other hand, EventWorkspaces know (to a certain precision) exactly the Time of Arrival value for each particle
+and so if bins were split they would be split more “correctly”.</p>
+<p>Note: If you Execute <strong>Rebin</strong> on an EventWorkspace <em>AND</em> the PreserveEvents box is not ticked, it will be converted to a Workspace2D.</p>
+</div>
+<div class="section" id="performance">
+<h3>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h3>
+<p>Operating on an EventWorkspace is slower than on a Workspace2D, or put more technically:</p>
+<ul class="simple">
+<li>Each event list is separate</li>
+<li>Sorting events is O(n) = n log(n)</li>
+<li>Histogramming is O(n) = n</li>
+<li>Only convert an EventWorkspace to a Workspace2D (histogram) when performance is a concern.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="example-of-workspace-usage">
+<h2>Example of Workspace usage<a class="headerlink" href="#example-of-workspace-usage" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Load the event data HYS_11388_event.nxs</li>
+<li>Execute the <strong>SumSpectra</strong> algorithm and output to a sensible workspace name such as “HYS_sum”</li>
+<li>Rebin this summed Workspace with Params=10 (the width of each bin) with the box ticked to Preserve Events.</li>
+<li>Rebin again to binwidths of 100, 300 and 1000.</li>
+<li>Observe, on the plots below, that as the bins get larger, finer detail is “lost”. It’s nice to see rebinning graphically.</li>
+</ol>
+<p><strong>Keep these workspace open for the next page.</strong></p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../../_images/Rebin_example.png"><img alt="Rebin_example.png" src="../../../_images/Rebin_example.png" style="width: 800px;" /></a>
+</div>
+<div class="figure align-right">
+<a class="reference internal image-reference" href="../../../_images/peaksworkspace.png"><img alt="PeaksWorkspace" src="../../../_images/peaksworkspace.png" style="width: 600px;" /></a>
+</div>
+</div>
+<div class="section" id="tableworkspaces">
+<h2>TableWorkspaces<a class="headerlink" href="#tableworkspaces" title="Permalink to this headline">¶</a></h2>
+<p>A <a class="reference internal" href="../../../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">Table Workspaces</span></a> has columns of mixed data, like a spreadsheet. It can store text or calculated/measured values, which may relate to data from an experiment. An example is the output fit parameters from fitting within Mantid.</p>
+<p>A <a class="reference internal" href="../../../concepts/PeaksWorkspace.html#peaksworkspace"><span class="std std-ref">Peaks Workspace</span></a> is a special type of TableWorkspace with additional support for Single Crystal peaks.
+See right for an example of a PeaksWorkspace.</p>
+</div>
+<div class="section" id="other-workspace-types">
+<h2>Other Workspace Types<a class="headerlink" href="#other-workspace-types" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>A <a class="reference internal" href="../../../concepts/WorkspaceGroup.html#workspacegroup"><span class="std std-ref">Workspace Group</span></a> allows you to organise Workspaces into groups.
+To create a group simply select more than one workspace in the Workspace Toolbox and click the “<strong>Group</strong>” button.
+Either the whole group or individual members can be processed when using algorithms.</li>
+<li><a class="reference internal" href="../../../concepts/MDWorkspace.html#mdworkspace"><span class="std std-ref">MD Workspace</span></a> is a more complex, multi-dimension type of workspace.</li>
+</ul>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="02_algorithms.html" title="Previous Chapter: Algorithms"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Algorithms</span>
+    </a>
+  </li>
+  <li>
+    <a href="04_algorith_histories.html" title="Next Chapter: Algorithm Histories"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Algorithm Histories &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2020-03-14.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Comparing Minimizers</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.7.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Comparison of minimizers for individual test problems" href="FittingMinimizersComparisonDetailed.html" />
+    <link rel="prev" title="Fitting" href="Fitting.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.7</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="comparing-minimizers">
+<span id="fittingminimizers"></span><h1>Comparing Minimizers<a class="headerlink" href="#comparing-minimizers" title="Permalink to this headline">¶</a></h1>
+<p>Minimizers play a central role when <a class="reference internal" href="Fitting.html#fitting"><em>Fitting a model</em></a>
+in Mantid. Given the following elements:</p>
+<ul class="simple">
+<li>a dataset (e.g. a spectrum),</li>
+<li>a model or function to fit (e.g. a peak or background function, with parameters),</li>
+<li>an initial guess or starting point for the parameters of the function,</li>
+<li>a cost function (e.g., squared residuals (fitting errors) weighted by the
+spectrum errors),</li>
+<li>and a minimizer.</li>
+</ul>
+<p>The minimizer is the method that adjusts the function parameters so
+that the model fits the data as closely as possible. The cost function
+defines the concept of how close a fit is to the data. See the general
+concept page on <a class="reference internal" href="Fitting.html#fitting"><em>Fitting</em></a> for a broader discussion of
+how these components interplay when fitting a model with Mantid.</p>
+<p>Several minimizers are included with Mantid and can be selected in the
+<a class="reference external" href="http://www.mantidproject.org/MantidPlot:_Creating_Fit_Functions">Fit Function property browser</a>
+or when using the algorithm <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>Fit</em></a> The following
+options are available:</p>
+<ul>
+<li><p class="first"><a class="reference external" href="https://en.wikipedia.org/wiki/Nelder%E2%80%93Mead_method">Simplex</a></p>
+</li>
+<li><p class="first"><a class="reference external" href="https://en.wikipedia.org/wiki/Gradient_descent">SteepestDescent</a></p>
+</li>
+<li><p class="first"><a class="reference external" href="https://en.wikipedia.org/wiki/Nonlinear_conjugate_gradient_method">Conjugate gradient (Fletcher-Reeves imp.)</a></p>
+</li>
+<li><p class="first"><a class="reference external" href="https://en.wikipedia.org/wiki/Nonlinear_conjugate_gradient_method">Conjugate gradient (Polak-Ribiere imp.)</a></p>
+</li>
+<li><p class="first"><a class="reference external" href="https://en.wikipedia.org/wiki/Broyden–Fletcher–Goldfarb–Shanno_algorithm">BFGS (Broyden-Fletcher-Goldfarb-Shanno)</a></p>
+</li>
+<li><p class="first"><a class="reference external" href="https://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> (default)</p>
+</li>
+<li><p class="first">Levenberg-MarquardtMD</p>
+<p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> implementation generalised to allow different cost functions, and supporting chunking techniques for large datasets.</p>
+</li>
+<li><p class="first">Damping</p>
+<p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Gauss–Newton_algorithm#Improved_versions">Gauss-Newton</a> algorithm with damping.</p>
+</li>
+<li><p class="first"><a class="reference internal" href="FABADA.html#fabada"><em>FABADA</em></a></p>
+</li>
+</ul>
+<p>All these algorithms are <a class="reference external" href="https://en.wikipedia.org/wiki/Iterative_method">iterative</a>.  The <em>Simplex</em>
+algorithm, also known as Nelder–Mead method, belongs to the class of
+optimization algorithms without derivatives, or derivative-free
+optimization. Note that here simplex refers to downhill simplex
+optimization. <em>Steepest descent</em> and the two variants of Conjugate
+Gradient included with Mantid (<em>Fletcher-Reeves</em> and <em>Polak-Ribiere</em>)
+belong to the class of optimization or minimization algorithms
+generally known as conjugate gradient, which use first-order
+derivatives. The derivatives are calculated with respect to the cost
+function to drive the iterative process towards a local minimum.</p>
+<p>BFGS and the Levenberg-Marquardt algorithms belong to the second-order
+class of algorithms, in the sense that they use second-order
+information of the cost function (second derivatives or the Hessian
+matrix). Some algorithms like BFGS approximate the Hessian by the
+gradient values of successive iterations. The Levenberg-Marquard
+algorithm is a modified Gauss-Newton that introduces an adaptive term
+to prevent unstability when the approximated Hessian is not positive
+defined. An in-depth description of the methods is beyond the scope of
+these pages. More information can be found from the links and general
+references on optimization methods such as <a class="reference internal" href="#kelley1999" id="id1">[Kelley1999]</a> and
+<a class="reference internal" href="#nocedalandwright2006" id="id2">[NocedalAndWright2006]</a>.</p>
+<p>Finally, <a class="reference internal" href="FABADA.html#fabada"><em>FABADA</em></a> is an algorithm for Bayesian data
+analysis. It is excluded from the comparison described below, as it is
+a substantially different algorithm.</p>
+<p>In most cases, the implementation of these algorithms is based on the
+<a class="reference external" href="https://www.gnu.org/software/gsl/manual/html_node/Least_002dSquares-Fitting.html#Least_002dSquares-Fitting">GNU Scientific Libraty routines for least-squares fitting</a></p>
+<div class="section" id="comparison-of-relative-goodness-of-fit-and-run-time">
+<h2>Comparison of relative goodness of fit and run time<a class="headerlink" href="#comparison-of-relative-goodness-of-fit-and-run-time" title="Permalink to this headline">¶</a></h2>
+<p>Here we describe a comparison of minimizers available in Mantid, in
+terms of how they perform when fitting several benchmark
+problems. This is a relative comparison in the sense that for every
+problem the best possible results with Mantid minimizers are given a
+top score of &#8220;1&#8221;. The ranking is continuous and the score of a
+minimizer represents the ratio between its performance and the
+performance of the best. We compare accuracy and run time.</p>
+<p>For example, a ranking of 1.25 for a minimizer for a given problem
+means:</p>
+<ul class="simple">
+<li>Referring to the accuracy of a minimizer, it produces a solution
+with squared residuals 25% larger than the best solution in Mantid.</li>
+<li>Referring to the run time, it takes 25% more time than the fastest
+minimizer.</li>
+</ul>
+<p>All the minimizers available in Mantid 3.7 were compared, with the
+exception of FABADA which belongs to a different class of methods and
+would not be compared in a fair manner. For all the minimizers
+compared here the algorithm <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>Fit</em></a> was run using the
+same initialization or starting points for test every problem, as
+specified in the test problem definitions. No constraints or ties were
+added.</p>
+<p>Accuracy is measured using the sum of squared fitting errors as
+metric, or &#8220;ChiSquared&#8221; as defined in <a class="reference internal" href="../algorithms/CalculateChiSquared-v1.html#algm-calculatechisquared"><em>Fit</em></a>, where the fitting errors are the
+difference between the expected outputs and the outputs calculated by
+the model fitted: <img class="math" src="../_images/math/c232003d91402b1e495b161f7d37241f8a4873bf.png" alt="\chi_{1}^{2} = \sum_{i} (y_i - f_i)^2" style="vertical-align: -6px"/> (see
+<a class="reference internal" href="../algorithms/CalculateChiSquared-v1.html#algm-calculatechisquared"><em>CalculateChiSquared</em></a> for full details
+and different variants).  Run time is measured for the execution of
+the <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>Fit</em></a> algorithm for an equation and dataset
+previously created.</p>
+<p>The cost function used in this general comparison is &#8216;Least squares&#8217;
+but without using input error estimates (see details below).</p>
+<div class="section" id="benchmark-problems">
+<h3>Benchmark problems<a class="headerlink" href="#benchmark-problems" title="Permalink to this headline">¶</a></h3>
+<p>Each test problem included in this comparison is defined by the
+following information:</p>
+<ul class="simple">
+<li>Input data (<img class="math" src="../_images/math/c2f01810eef41c68678f5efa3d9ca634ff6785da.png" alt="x_i" style="vertical-align: -3px"/> values)</li>
+<li>Output data (<img class="math" src="../_images/math/62117283dadeb1279e6cde69c9ec465cf07ecdf1.png" alt="y_i" style="vertical-align: -4px"/> values)</li>
+<li>Function to fit, with parameters</li>
+<li>Starting point or initial values of the function parameters</li>
+<li>Certified or reference best values for the parameters, with an associated residual of the certified or best model</li>
+</ul>
+<p>The problems have been obtained from the following benchmark:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://itl.nist.gov/div898/strd/general/dataarchive.html">NIST nonlinear regression problems</a>.</li>
+</ul>
+<p>As the test problems do not define observational errors this
+comparison does not use the weights of the least squares cost
+function.  An <a class="reference internal" href="FittingMinimizersWeightedComparisonDetailed.html#minimizers-weighted-comparison"><em>alternative comparison using simulated errors is
+also available</em></a>, with similar results
+overall.</p>
+</div>
+<div class="section" id="comparison-in-terms-of-accuracy">
+<h3>Comparison in terms of accuracy<a class="headerlink" href="#comparison-in-terms-of-accuracy" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="summary-median-ranking">
+<h4>Summary, median ranking<a class="headerlink" href="#summary-median-ranking" title="Permalink to this headline">¶</a></h4>
+<p>The summary table shows the median ranking across all the test
+problems. See <a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy"><em>detailed results by test problem (accuracy)</em></a>.</p>
+<p>Alternatively, see the <a class="reference internal" href="FittingMinimizersWeightedComparisonDetailed.html#minimizers-weighted-comparison-in-terms-of-accuracy"><em>detailed results when using weighted
+least squares as cost function</em></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">&nbsp;</th>
+<th class="head">BFGS</th>
+<th class="head">Conjugate gradient (Fletcher-Reeves imp.)</th>
+<th class="head">Conjugate gradient (Polak-Ribiere imp.)</th>
+<th class="head">Damping</th>
+<th class="head">Levenberg-Marquardt</th>
+<th class="head">Levenberg-MarquardtMD</th>
+<th class="head">Simplex</th>
+<th class="head">SteepestDescent</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/nls_main.shtml">NIST, &#8220;lower&#8221; difficulty</a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-lower"><em>3.841</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-lower"><em>3.003</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-lower"><em>3.003</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-lower"><em>1</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-lower"><em>1</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-lower"><em>1</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-lower"><em>1.017</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-lower"><em>6.436</em></a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/nls_main.shtml">NIST, &#8220;average&#8221; difficulty</a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-average"><em>269</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-average"><em>22.35</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-average"><em>22.5</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-average"><em>1</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-average"><em>1</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-average"><em>1</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-average"><em>79.31</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-average"><em>315.9</em></a></td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/nls_main.shtml">NIST, &#8220;higher&#8221; difficulty</a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-higher"><em>36.33</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-higher"><em>10.82</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-higher"><em>8.366</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-higher"><em>1.847</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-higher"><em>1</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-higher"><em>1</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-higher"><em>18.55</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-accuracy-nist-higher"><em>100.7</em></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="comparison-in-terms-of-run-time">
+<h3>Comparison in terms of run time<a class="headerlink" href="#comparison-in-terms-of-run-time" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id3">
+<h4>Summary, median ranking<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<p>The summary table shows the median ranking across all the test
+problems. See <a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-run-time"><em>detailed results by test problem (run time)</em></a>.</p>
+<p>Alternatively, see the <a class="reference internal" href="FittingMinimizersWeightedComparisonDetailed.html#minimizers-weighted-comparison-in-terms-of-run-time"><em>detailed results when using weighted
+least squares as cost function</em></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">&nbsp;</th>
+<th class="head">BFGS</th>
+<th class="head">Conjugate gradient (Fletcher-Reeves imp.)</th>
+<th class="head">Conjugate gradient (Polak-Ribiere imp.)</th>
+<th class="head">Damping</th>
+<th class="head">Levenberg-Marquardt</th>
+<th class="head">Levenberg-MarquardtMD</th>
+<th class="head">Simplex</th>
+<th class="head">SteepestDescent</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/nls_main.shtml">NIST, &#8220;lower&#8221; difficulty</a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-lower"><em>1.258</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-lower"><em>1.412</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-lower"><em>1.391</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-lower"><em>1</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-lower"><em>1.094</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-lower"><em>1.036</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-lower"><em>1.622</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-lower"><em>11.83</em></a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/nls_main.shtml">NIST, &#8220;average&#8221; difficulty</a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-average"><em>1.326</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-average"><em>9.579</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-average"><em>7.935</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-average"><em>1</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-average"><em>1.11</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-average"><em>1.035</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-average"><em>1.901</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-average"><em>12.97</em></a></td>
+</tr>
+<tr class="row-even"><td><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/nls_main.shtml">NIST, &#8220;higher&#8221; difficulty</a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-higher"><em>1.02</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-higher"><em>1.84</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-higher"><em>2.155</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-higher"><em>1.244</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-higher"><em>1.044</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-higher"><em>1.198</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-higher"><em>1.206</em></a></td>
+<td><a class="reference internal" href="FittingMinimizersComparisonDetailed.html#minimizers-unweighted-comparison-in-terms-of-runtime-nist-higher"><em>5.321</em></a></td>
+</tr>
+</tbody>
+</table>
+<p>References:</p>
+<table class="docutils citation" frame="void" id="kelley1999" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[Kelley1999]</a></td><td>Kelley C.T. (1999). Iterative Methods for Optimization.
+SIAM series in Applied Mathematics. Frontiers in Applied
+Mathematics, vol. 18. ISBN: 978-0-898714-33-3.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="nocedalandwright2006" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[NocedalAndWright2006]</a></td><td>Nocedal J, Wright S. (2006). Numerical Optimization,
+2nd edition. pringer Series in Operations Research
+and Financial Engineering.
+DOI: 10.1007/978-0-387-40065-5</td></tr>
+</tbody>
+</table>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Fitting.html" title="Previous Chapter: Fitting"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Fitting</span>
+    </a>
+  </li>
+  <li>
+    <a href="FittingMinimizersComparisonDetailed.html" title="Next Chapter: Comparison of minimizers for individual test problems"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Comparison of mi... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How to reset detectors calibration</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.9.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Instrument" href="Instrument.html" />
+    <link rel="prev" title="How To Define Geometric Shape" href="HowToDefineGeometricShape.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="how-to-reset-detectors-calibration">
+<span id="id1"></span><h1>How to reset detectors calibration<a class="headerlink" href="#how-to-reset-detectors-calibration" title="Permalink to this headline">¶</a></h1>
+<p>Some NeXuS data files have the calibration inside the data. Hence, in loading
+time, Mantid will load the positions for the detector and correct them.
+These new positions are kept inside the parameter maps that each
+instrument has.</p>
+<p>Some times you may be interested in resetting the calibrated
+values, in order to see how the uncalibrated instrument. You may do this
+through two steps.</p>
+<p>Let&#8217;s load a calibrated workspace: MERLIN 12024 (cycle 11/05):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mer12024</span> <span class="o">=</span> <span class="p">:</span><span class="n">ref</span><span class="p">:</span><span class="sb">`Load &lt;algm-Load&gt;`</span><span class="p">(</span><span class="s">&#39;MER12024&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Open the Instrument View and select Cylindrical Rendering, you will see
+something like:</p>
+<img alt="../_images/Merlin_current_calibration.png" src="../_images/Merlin_current_calibration.png" />
+<p>This image is clearly calibrated. To reset the calibration, execute:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">empty_instr</span> <span class="o">=</span> <span class="n">LoadEmptyInstrument</span><span class="p">(</span><span class="s">&#39;MANTIDINSTALL/instrument/MERLIN_Definition.xml&#39;</span><span class="p">)</span>
+<span class="n">CopyInstrumentParameters</span><span class="p">(</span><span class="n">empty_instr</span><span class="p">,</span> <span class="n">mer12024</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result is reseting the calibration of this workspace as you can see
+in the image below:</p>
+<img alt="../_images/Merlin_uncalibrated.png" src="../_images/Merlin_uncalibrated.png" />
+<p><strong>Category</strong>: <a class="reference external" href="categories/Calibration.html">Calibration</a></p>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="HowToDefineGeometricShape.html" title="Previous Chapter: How To Define Geometric Shape"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; How To Define Ge...</span>
+    </a>
+  </li>
+  <li>
+    <a href="Instrument.html" title="Next Chapter: Instrument"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Instrument &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

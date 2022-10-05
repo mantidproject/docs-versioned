@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Fitting</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Which minimizers to use with Mantid" href="FittingMinimizers.html" />
+    <link rel="prev" title="Fit Constraint" href="FitConstraint.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.10</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="fitting">
+<span id="id1"></span><h1>Fitting<a class="headerlink" href="#fitting" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Fitting in Mantid is the process of trying to fit a model to some data,
+where data may originate from measurements at beamlines, simulations or
+in fact can be any data which has the form:</p>
+<ul class="simple">
+<li><img class="math" src="../_images/math/86e784d473f5fc5713b6ad4bea7af624b76966c2.png" alt="x" style="vertical-align: 0px"/> - could for example be a TOF value, a Q value or a temperature value, or <img class="math" src="../_images/math/86e784d473f5fc5713b6ad4bea7af624b76966c2.png" alt="x" style="vertical-align: 0px"/> can represent a point in a multi-dimensional space, for example, <img class="math" src="../_images/math/86e784d473f5fc5713b6ad4bea7af624b76966c2.png" alt="x" style="vertical-align: 0px"/> could represent <img class="math" src="../_images/math/003e0789cfeb111f4c319c51ee3ec709c113a7c0.png" alt="(Q_x, Q_y, Q_z)" style="vertical-align: -6px"/></li>
+<li><img class="math" src="../_images/math/e1b7c240fcf30456307d27bdb47a8cee865caf4e.png" alt="y^{obs}" style="vertical-align: -4px"/> - is the observed or calculated value at <img class="math" src="../_images/math/86e784d473f5fc5713b6ad4bea7af624b76966c2.png" alt="x" style="vertical-align: 0px"/></li>
+<li><img class="math" src="../_images/math/867e88734ade43673557344be7e57c5488afba70.png" alt="\sigma" style="vertical-align: 0px"/> - is an error estimate of <img class="math" src="../_images/math/e1b7c240fcf30456307d27bdb47a8cee865caf4e.png" alt="y^{obs}" style="vertical-align: -4px"/></li>
+</ul>
+<p>Error estimates are important in data reduction and data analysis and
+see <a class="reference internal" href="ErrorPropagation.html#error-propagation"><em>here</em></a> for information about how Mantid
+deals with error propagation. However, errors may optionally not be used in
+fitting, by choosing a cost function that does not depend on these.</p>
+<p>A cost function (also sometimes called a figure of merit or goodness of fit)
+is some metric which attempts to give an indication as to how good a given
+model fits some data. The by far most common way of measuring the difference
+between a model and data, for example for fitting neutron faciltiy data, is to use
+a so-called least-squares cost function which has the form</p>
+<div class="math">
+<p><img src="../_images/math/7844daf36424e1aa9603210f2856912ffafadd31.png" alt="\sum_i \left( \frac{y_i^{obs}-y_i}{\sigma_i} \right)^2"/></p>
+</div><p>where <img class="math" src="../_images/math/62117283dadeb1279e6cde69c9ec465cf07ecdf1.png" alt="y_i" style="vertical-align: -4px"/> is shorthand for <img class="math" src="../_images/math/9d08a3761efc45ccb736cde588d8e2b574cf6d54.png" alt="y(x_i)" style="vertical-align: -4px"/>, i.e. the <img class="math" src="../_images/math/95ca3c6a1fbeaaafe5800c3269c4c9c2cf2e5406.png" alt="y" style="vertical-align: -4px"/>-value
+calculated at the observed value <img class="math" src="../_images/math/c2f01810eef41c68678f5efa3d9ca634ff6785da.png" alt="x_i" style="vertical-align: -3px"/> from a model, and <img class="math" src="../_images/math/2c24f5f28341b700bcab568ff528eedf4b202dbf.png" alt="y_i^{obs}" style="vertical-align: -5px"/>
+and <img class="math" src="../_images/math/77ff5ac497d555d2bd95233eabab3fa10234f3ae.png" alt="\sigma_i" style="vertical-align: -3px"/> the observed and error estimate values at <img class="math" src="../_images/math/c2f01810eef41c68678f5efa3d9ca634ff6785da.png" alt="x_i" style="vertical-align: -3px"/> respectively.
+Mantid supports a number of other cost functions and these are described <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>here</em></a>.
+The above cost function is the default Mantid cost function. If you use the
+<a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>Fit algorithm</em></a> this cost function goes under the name
+&#8216;Least squares&#8217; and in some placed in Mantid is referred to as Chi-sq.</p>
+<p>Consider the simple example where a model depends on just one fitting parameter,
+here called Bob. The <img class="math" src="../_images/math/62117283dadeb1279e6cde69c9ec465cf07ecdf1.png" alt="y_i" style="vertical-align: -4px"/>&#8216;s then only depend on this parameter and hence the same
+is true for the cost function. Below is shown a made up example of how such a
+cost function could depend on the fitting parameter Bob:</p>
+<div class="figure">
+<img alt="CostFunctionVSbob.png" src="../_images/CostFunctionVSbob.png" />
+</div>
+<p>The primary problem which Mantid deals with is that of
+local minimization, also referred to as downhill minimization. Referencing to
+the figure above, this corresponds either to reach target B through fitting from
+the value of the fitting parameter shown by the red label 1 or 2, or reach
+target A from the parameter position 3. This is the common problem in
+reducing/analysing where &#8216;good&#8217; initial values of the fitting parameters are known, for
+instance from: knowledge of the instrument, the scientific problem in question,
+or a peak search algorithm is assumed to provide good initial fitting parameter values.</p>
+<p>Local minimization algorithms can be grouped into strictly downhill minimizers and local
+minimizers, where the former will find a lower value whereas
+for the latter this is not guaranteed. For a description of the minimizers
+Mantid supports see <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>here</em></a>. The default Mantid minimizer is
+Levenberg-Marquardt,
+which is a strictly downhill mimimizer. Mantid has a plug-in mechanism for added
+minimizers and hence the number of minimizers which Mantid supports is not static.
+For example recently a minimizer called FABADA was added which
+is aimed at fitting for Bayesian data analysis. The minimizers supported in Mantid
+perform differently in terms of accuracy and run time requirements. For a
+comparison of different minimizers see <a class="reference internal" href="FittingMinimizers.html#fittingminimizers"><em>Fitting Minimizers</em></a>. New fitting
+minimizers can be added through the plug-in mechanism or as is demonstrated in the
+section entitled &#8216;Global fitting&#8217; can be scripted from minimizers that already exist.</p>
+<p>Fitting in Mantid is more than just selecting a cost functions and minimizer.
+The Mantid fitting framework it is a pluggable framework that at a top level
+looks like this</p>
+<div class="figure">
+<img alt="FittingTopLevelClassView.png" src="../_images/FittingTopLevelClassView.png" />
+</div>
+<p><a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>Fit</em></a> is the algorithm that puts together the users choice of
+minimizer (IFuncMinimizer) and cost function (ICostFunction), but also the fit
+function (IFunction). The fit function defines the model that is used to model
+the data. The user defined fit function can be a complex mathematical product,
+sum and convolution of other fit functions. For more information for
+how to create a model see the documentation for <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>Fit</em></a>, the
+Fitting section of the Mantid Introduction tutorial
+(<a class="reference external" href="http://www.mantidproject.org/Mantid_Basic_Course">http://www.mantidproject.org/Mantid_Basic_Course</a>)
+for how to do this using the Fit Function Toolbox and
+this Python fit tutorial: <a class="reference external" href="http://www.mantidproject.org/Introduction_to_Python_Fit_Functions">http://www.mantidproject.org/Introduction_to_Python_Fit_Functions</a>.</p>
+<p>From the class diagram above note fitting also support constraints (IConstraint),
+see <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>here</em></a> for more on this. Further fitting parameters can be
+<a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>tied</em></a> to specific values or tied to other fitting parameters
+through mathematical formulas.</p>
+</div>
+<div class="section" id="multiple-datasets-and-sequential-fitting">
+<h2>Multiple datasets and sequential fitting<a class="headerlink" href="#multiple-datasets-and-sequential-fitting" title="Permalink to this headline">¶</a></h2>
+<p>Mantid can fit multiple datasets to one model. This can perhaps most easily be
+done using the Multi-Dataset Fitting interface
+(<a class="reference external" href="http://www.mantidproject.org/Fitting_QENS_I%28Q,_t%29">http://www.mantidproject.org/Fitting_QENS_I%28Q,_t%29</a>).</p>
+<p>Sequential fitting is simply the sequential fitting of datasets
+using the same fit function, and where, for example, fitting parameters obtained
+from one fit may be used as starting values in a next fit and so on. For
+an example of sequential fitting see here:
+<a class="reference external" href="http://www.mantidproject.org/MantidPlot:_Simple_Peak_Fitting_with_the_Fit_Wizard">http://www.mantidproject.org/MantidPlot:_Simple_Peak_Fitting_with_the_Fit_Wizard</a></p>
+</div>
+<div class="section" id="how-do-you-know-if-a-fit-is-successful">
+<h2>How do you know if a fit is successful<a class="headerlink" href="#how-do-you-know-if-a-fit-is-successful" title="Permalink to this headline">¶</a></h2>
+<p>If you are fitting using the Fit Function toolbox or the Multi-dataset
+Fitting interface then you get visual feedback as to how well the fit was.</p>
+<p>If you are scientists experienced in fitting a particular type of data
+then the absolute value of the cost function may be sufficient in itself
+to tell whether a fit is successful.</p>
+<p>As described in the <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>Fit algorithm documentation</em></a> this
+algorithm can output the result of parameters + error estimates and
+a matrix called the correlation matrix, which tells how
+parameters are correlated. The information from the correlation matrix
+and the error estimates (which happens to be the square root of the
+diagonal elements of the correlation matrix) can help highlight how much
+you can trust the fit. For example, if some fitting parameters are strongly
+correlated you may consider trying to introduce ties to help reduce
+this correlation.</p>
+<p>The <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><em>Fit</em></a> algorithm returns an OutputStatus property,
+which can be monitored.</p>
+<p>Create an algorithm or code that aims to be clever, for a given fitting
+problem, beyond that of the generic Fit algorithm. An example of this
+is <a class="reference internal" href="../algorithms/FitPeak-v1.html#algm-fitpeak"><em>FitPeak</em></a> which aims to fit single peaks
+with some checks to ensure results are physical.</p>
+<p>If you remain unsure if a given fit was successful then e.g. try the
+tool <a class="reference internal" href="../algorithms/CalculateChiSquared-v1.html#algm-calculatechisquared"><em>CalculateChiSquared</em></a>, which allows
+inspection of the cost function in the neighbourhood of a found minimum.</p>
+</div>
+<div class="section" id="global-fitting">
+<h2>Global fitting<a class="headerlink" href="#global-fitting" title="Permalink to this headline">¶</a></h2>
+<p>As of this writing the primary use of Mantid fitting is to do local
+minimization.</p>
+<p>Many well known global fitting algorithms are very simple in their
+implementation.</p>
+<p>To demonstrate an example of this, below is shown how to script
+a global fitting algorithm, which for example in <a class="reference external" href="http://dx.doi.org/10.1107/S0021889810008113">http://dx.doi.org/10.1107/S0021889810008113</a>
+has been shown to be competitive with a tuned Simulation Annealing algorithm
+(<a class="reference external" href="https://en.wikipedia.org/wiki/Simulated_annealing">https://en.wikipedia.org/wiki/Simulated_annealing</a>)
+implementation used for solving crystal structures from powder diffraction data.</p>
+<p><strong>Example: Multi local minimizations from random starting points</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># This script demonstrates a global fitting algorithm, which simply does local minimizations from random</span>
+<span class="c"># starting positions of the fitting parameters.</span>
+<span class="c"># For this demo example, just one fitting parameter is globally fitted, the peak center of a Gaussian peak</span>
+<span class="c"># Please bear in mind the example here is to demonstrate this algorithm not provide a real global fitting problem</span>
+
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">random</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s">&#39;HRP39182.RAW&#39;</span><span class="p">,</span><span class="n">LoadLogFiles</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">SpectrumList</span><span class="o">=</span><span class="s">&quot;1&quot;</span><span class="p">)</span>
+
+<span class="c"># Specify the fitting interval</span>
+<span class="n">startX</span> <span class="o">=</span> <span class="mi">93000</span>
+<span class="n">endX</span> <span class="o">=</span> <span class="mi">93300</span>
+
+<span class="c"># Set best very high value of the cost function to ensure lower is found at first attempt</span>
+<span class="n">costFuncBest</span> <span class="o">=</span> <span class="mf">1e+100</span>
+
+<span class="c"># Do local minimization from randow starting positions</span>
+<span class="n">numOfRandowAttempts</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="c"># pick a randow value for the peak centre fitting parameter in the fitting interval</span>
+    <span class="n">tryCentre</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">startX</span> <span class="o">+</span> <span class="n">random</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">endX</span><span class="o">-</span><span class="n">startX</span><span class="p">))</span>
+
+    <span class="c"># Do a fit from this starting value of the peak centre fitting parameter</span>
+    <span class="c"># Note choice of local minimizer will affect the outcome</span>
+    <span class="n">d0</span><span class="p">,</span> <span class="n">costFuncVal</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">d3</span> <span class="o">=</span> <span class="n">Fit</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;data&#39;</span><span class="p">,</span> <span class="n">WorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> \
+       <span class="n">StartX</span> <span class="o">=</span> <span class="n">startX</span><span class="p">,</span> <span class="n">EndX</span><span class="o">=</span><span class="n">endX</span><span class="p">,</span> <span class="n">Output</span><span class="o">=</span><span class="s">&#39;fit&#39;</span><span class="p">,</span> \
+       <span class="n">Function</span><span class="o">=</span><span class="s">&#39;name=Gaussian,Height=10,PeakCentre=&#39;</span><span class="o">+</span><span class="n">tryCentre</span><span class="o">+</span><span class="s">&#39;,Sigma=20&#39;</span><span class="p">,</span>
+       <span class="n">Minimizer</span><span class="o">=</span><span class="s">&#39;Conjugate gradient (Fletcher-Reeves imp.)&#39;</span><span class="p">)</span>
+
+    <span class="c"># Here simply keep record of the best fit found, but this could easily be extended to</span>
+    <span class="c"># keep a record of all the minima found</span>
+    <span class="k">if</span> <span class="n">costFuncVal</span> <span class="o">&lt;</span> <span class="n">costFuncBest</span><span class="p">:</span>
+        <span class="n">costFuncBest</span> <span class="o">=</span> <span class="n">costFuncVal</span>
+        <span class="c"># here keep clone of best fit</span>
+        <span class="n">CloneWorkspace</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;fit_Workspace&#39;</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;fitBest&#39;</span><span class="p">)</span>
+
+    <span class="c"># Uncomment the sleep if would like to watch this algorithm trying to</span>
+    <span class="c"># find the global minima (graphically and/or from command line)</span>
+    <span class="c"># print costFuncVal</span>
+    <span class="c"># sleep(2)</span>
+
+<span class="k">print</span> <span class="s">&#39;test&#39;</span>
+</pre></div>
+</div>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="FitConstraint.html" title="Previous Chapter: Fit Constraint"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Fit Constraint</span>
+    </a>
+  </li>
+  <li>
+    <a href="FittingMinimizers.html" title="Next Chapter: Which minimizers to use with Mantid"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Which minimizers... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

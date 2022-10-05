@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Error Propagation</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '5.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Event Filtering" href="EventFiltering.html" />
+    <link rel="prev" title="Ab initio calculation of dynamical structure factor (S)" href="DynamicalStructureFactorFromAbInitio.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>5.1</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="error-propagation">
+<span id="id1"></span><h1>Error Propagation<a class="headerlink" href="#error-propagation" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this document is to explain how Mantid deals with error
+propagation and how it is used in its algorithms.</p>
+<div class="section" id="theory">
+<h2>Theory<a class="headerlink" href="#theory" title="Permalink to this headline">¶</a></h2>
+<p>In order to deal with error propagation, Mantid treats errors as Gaussian
+probabilities (also known as a bell curve or normal probabilities) and each
+observation as independent. Meaning that if <img class="math" src="../_images/math/2b09de1ec8ea40267c2ded151fbab9d0a35a6040.png" alt="X = 100 \pm 1" style="vertical-align: -1px"/> then it is still
+possible for a value of <img class="math" src="../_images/math/8bd8c6dcf80a477b6d893022ecc6fffa96f63caa.png" alt="102" style="vertical-align: -1px"/> to occur, but less likely than <img class="math" src="../_images/math/12ccddd4da2fe36ae716d584f06adbb73a4e579e.png" alt="101" style="vertical-align: -1px"/>
+or <img class="math" src="../_images/math/3da1a88343cbeaba745dc0ac0f42d9e927b614ab.png" alt="99" style="vertical-align: 0px"/>, and a value of <img class="math" src="../_images/math/e06dba3ef9a9953f124372e168eae538fa6a60fe.png" alt="105" style="vertical-align: -1px"/> is far less likely still than any of
+these values.</p>
+</div>
+<div class="section" id="plus-and-minus-algorithm">
+<h2>Plus and Minus Algorithm<a class="headerlink" href="#plus-and-minus-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../algorithms/Plus-v1.html#algm-plus"><span class="std std-ref">Plus v1</span></a> algorithm adds two datasets together, propagating the
+uncertainties. Mantid calculates the result of <img class="math" src="../_images/math/4deed39c73d722bc2719298e0a1e9817508a1adb.png" alt="X_1 + X_2" style="vertical-align: -4px"/> as</p>
+<p><img class="math" src="../_images/math/bd3b52b259fd38331cb29397df4281f9a03d25dd.png" alt="X = X_1 + X_2" style="vertical-align: -4px"/></p>
+<p>with uncertainty</p>
+<p><img class="math" src="../_images/math/0a6b15644c5e7dec8a1a2b40d9426b73347327da.png" alt="\sigma_X = \sqrt{ \left( \sigma_{X_1} \right)^2 + \left( \sigma_{X_2} \right)^2 }" style="vertical-align: -10px"/>.</p>
+<p>Consider the example where <img class="math" src="../_images/math/ce9a698c28a098e183b4727877f8bf4a248bf1b4.png" alt="X_1 = 101 \pm 2" style="vertical-align: -4px"/> and <img class="math" src="../_images/math/1978ef407014feb390d3a8d5ef7358b455d1a937.png" alt="X_2 = 99 \pm 2" style="vertical-align: -3px"/>.
+Then for this algorithm:</p>
+<p><img class="math" src="../_images/math/868b332e5399eaa7ade63528e3c6d5f9739ebfcc.png" alt="X = X_1 + X_2 = 101 + 99 = 200" style="vertical-align: -4px"/></p>
+<p><img class="math" src="../_images/math/2caabf0a610b5ac1699faffef51f084b03f50352.png" alt="\sigma_X = \sqrt{ 2^2 + 2^2} = \sqrt{8} = 2.8284" style="vertical-align: -3px"/></p>
+<p>Hence the result of <a class="reference internal" href="../algorithms/Plus-v1.html#algm-plus"><span class="std std-ref">Plus v1</span></a> can be summarised as <img class="math" src="../_images/math/a5012e2e7a3d2d33ea9408d2d686058f8c0f3134.png" alt="X = 200 \pm \sqrt{8}" style="vertical-align: -3px"/>.</p>
+<p>Mantid deals with the <a class="reference internal" href="../algorithms/Minus-v1.html#algm-minus"><span class="std std-ref">Minus v1</span></a> algorithm similarly: the result of <img class="math" src="../_images/math/0f6cebdc891af40ca3be2caf129be0d45cb0a992.png" alt="X_1 - X_2" style="vertical-align: -4px"/> is</p>
+<p><img class="math" src="../_images/math/8391876134a598f16fbca43a243ec5dcb1dbc9da.png" alt="X = X_1 - X_2" style="vertical-align: -4px"/></p>
+<p>with error</p>
+<p><img class="math" src="../_images/math/0a6b15644c5e7dec8a1a2b40d9426b73347327da.png" alt="\sigma_X = \sqrt{ \left( \sigma_{X_1} \right)^2 + \left( \sigma_{X_2} \right)^2 }" style="vertical-align: -10px"/>.</p>
+</div>
+<div class="section" id="multiply-and-divide-algorithm">
+<h2>Multiply and Divide Algorithm<a class="headerlink" href="#multiply-and-divide-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="../algorithms/Multiply-v1.html#algm-multiply"><span class="std std-ref">Multiply v1</span></a> and <a class="reference internal" href="../algorithms/Divide-v1.html#algm-divide"><span class="std std-ref">Divide v1</span></a> algorithms propagate the uncertainties according
+to (see also <a class="reference external" href="http://en.wikipedia.org/wiki/Propagation_of_uncertainty">here</a>):</p>
+<p><img class="math" src="../_images/math/3c2d046c662156c7506c2bc653c6b2fe24b09ffb.png" alt="\sigma_X = \left|X\right| \sqrt{ \left( \frac{\sigma_{X_1}}{X_1} \right)^2 + \left( \frac{\sigma_{X_2}}{X_2} \right)^2 }" style="vertical-align: -16px"/>,</p>
+<p>where <img class="math" src="../_images/math/6b20f2302d5e3b4b32a7cd8bfb55204e21b36aed.png" alt="X" style="vertical-align: 0px"/> is the result of the multiplication, <img class="math" src="../_images/math/0dd5cb30ac33161ae09d4f25c99c4cd751776914.png" alt="X = X_1 \cdot X_2" style="vertical-align: -4px"/>, or the division, <img class="math" src="../_images/math/3d230552c3bc43316f0a0f516ec85048a909dbf4.png" alt="X = X_1 / X_2" style="vertical-align: -5px"/>.</p>
+<p>Considering the example above where <img class="math" src="../_images/math/ce9a698c28a098e183b4727877f8bf4a248bf1b4.png" alt="X_1 = 101 \pm 2" style="vertical-align: -4px"/> and
+<img class="math" src="../_images/math/1978ef407014feb390d3a8d5ef7358b455d1a937.png" alt="X_2 = 99 \pm 2" style="vertical-align: -3px"/>. Mantid would calculate the result of <img class="math" src="../_images/math/cff362c056f2e8cc0f9c532c5629e3d772374e55.png" alt="X_1 / X_2" style="vertical-align: -5px"/> as
+<img class="math" src="../_images/math/b14dc88fff8607a45a862554755db9217438da93.png" alt="X = 101 / 99 = 1.0202" style="vertical-align: -5px"/>, with uncertainty
+<img class="math" src="../_images/math/297510320b28bf676122133c5c3cd25825ecfa93.png" alt="\sigma_X = 1.0202 \sqrt{ \left(2/101\right)^2 + \left(2/99\right)^2} = 0.0288" style="vertical-align: -10px"/>.</p>
+<p>For <a class="reference internal" href="../algorithms/Multiply-v1.html#algm-multiply"><span class="std std-ref">Multiply v1</span></a>, the result of <img class="math" src="../_images/math/a363b6416898aa1a6eab53e8fca259ec8d624553.png" alt="X_1 \times X_2" style="vertical-align: -4px"/> is
+<img class="math" src="../_images/math/7f137a3fbbb4b29620d8281885d78dc06ea57bdf.png" alt="X = 101 \times 99 = 9999" style="vertical-align: -1px"/>, with uncertainty
+<img class="math" src="../_images/math/821567a57a47b9b3f8c3401f36fc2a3839a0a5b3.png" alt="\sigma_X = 9999 \sqrt{ \left(2/101\right)^2 + \left(2/99\right)^2} = 282.8568" style="vertical-align: -10px"/>.</p>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="DynamicalStructureFactorFromAbInitio.html" title="Previous Chapter: Ab initio calculation of dynamical structure factor (S)"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Ab initio cal...</span>
+    </a>
+  </li>
+  <li>
+    <a href="EventFiltering.html" title="Next Chapter: Event Filtering"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Event Filtering &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2020-09-29.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

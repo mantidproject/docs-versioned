@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tube Calibration Introduction</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '3.10.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../../index.html" />
+    <link rel="up" title="Calibration" href="index.html" />
+    <link rel="next" title="TubeSpec" href="TubeSpec.html" />
+    <link rel="prev" title="Introduction" href="TubeCalibrationExamples.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.10</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="tube-calibration-introduction">
+<span id="id1"></span><h1>Tube Calibration Introduction<a class="headerlink" href="#tube-calibration-introduction" title="Permalink to this headline">¶</a></h1>
+<p>This page is about the python code supporting tube calibration. The
+files are found in the <strong>scripts/Calibration/</strong> folder of the Mantid
+install directory.</p>
+</div>
+<div class="section" id="introduction-to-calibration">
+<h1>Introduction to Calibration<a class="headerlink" href="#introduction-to-calibration" title="Permalink to this headline">¶</a></h1>
+<p>Some instruments use tubes. Each tube acts as set of detectors along a
+line.</p>
+<div class="figure">
+<img alt="../../_images/Tubes_and_detectors.png" src="../../_images/Tubes_and_detectors.png" />
+<p class="caption">Illustration of a tube with its detectors</p>
+</div>
+<p>The exact position of each detector in a tube depends on the electronics
+of the tube and varies slightly from tube to tube. The aim of
+calibration is to find the actual position of each detector and put it
+into the representation of the instrument used by MANTID.</p>
+<p>The general technique is to use a calibration bin or to place neutron
+absorbing strips on the detector at known positions along the tube.
+Depending on the dimensions of these strips or bins the different
+patterns may be formed. Below you find an example of some narrow peaks
+or edges. Although the plot shows measures of peaks of neutron
+intensity, dip of intensity could be used as well.</p>
+<img alt="../../_images/CalibrationPeaksAndEdges.png" src="../../_images/CalibrationPeaksAndEdges.png" />
+<p>The image below shows an acquired data with the shadows and the
+peaks in two tubes; the blue are shadows and the red lines are peaks
+where neutron are getting through. Observe that the positions of the
+lines are different in each tube. Even though they were expected to be
+aligned, i.e. in the figure below the vertical red lines should be
+connected up to form straight lines.</p>
+<div class="figure">
+<img alt="Acquired Data in two tubes not calibrated" src="../../_images/CalibrationAcquiredDataInTwoTubes.png" />
+<p class="caption">Acquired Data in two tubes not calibrated</p>
+</div>
+<p>Below is the plot of the integration counts in a single tube. The x-axis
+shows pixels (detector numbers, where the detectors are numbered 0 to
+511) and the y-axis shows integrated counts.</p>
+<div class="figure">
+<img alt="Plot of the acquired Data in a single tube" src="../../_images/CalibrationAcquiredDataTube.png" />
+<p class="caption">Plot of the acquired Data in a single tube</p>
+</div>
+<p>So, it is the aim of the calibration to define the positions of the
+detectors, so that, the calibrated data will really show straight lines.</p>
+<p>This calibration is done through three main steps:</p>
+<ul class="simple">
+<li>Peak/Edge&nbsp;position&nbsp;estimation</li>
+<li>Find&nbsp;the&nbsp;correct&nbsp;position&nbsp;along&nbsp;the&nbsp;tube</li>
+<li>Apply&nbsp;the&nbsp;correction&nbsp;to&nbsp;the&nbsp;detectors</li>
+</ul>
+<p>From now on, the calibration will be explained considering only peaks.
+For edges the operation are similar.</p>
+<div class="section" id="peak-position-estimation">
+<span id="tubecalibintro-peak-pos-estimation"></span><h2>Peak position estimation<a class="headerlink" href="#peak-position-estimation" title="Permalink to this headline">¶</a></h2>
+<p>The first necessary operation to do is to find the position where the
+peak of acquisition should be in each tube. Currently, this is done
+through fitting the peak to a combination of a linear background and a
+<a class="reference internal" href="../../fitfunctions/Gaussian.html#func-gaussian"><em>Gaussian</em></a> function. But, in the future, different approaches can be
+foreseen as for example, the mean value among the peak position of the
+neighbors, or simply getting the index where the maximum value occur.</p>
+<a class="reference internal image-reference" href="../../_images/FittingPeaks.png"><img alt="Fitting peaks for the tubes acquired data" src="../../_images/FittingPeaks.png" style="width: 800px;" /></a>
+<p>By fitting the acquired data to the <a class="reference internal" href="../../fitfunctions/Gaussian.html#func-gaussian"><em>Gaussian</em></a> function, we are able to
+find the PeakCentre (one parameter of the <a class="reference internal" href="../../fitfunctions/Gaussian.html#func-gaussian"><em>Gaussian</em></a> Function), that is
+the estimated value of where the peak would be found in the tube. It is
+expected that this estimation provides better result than just getting
+the index of local maximum for the peak.</p>
+<p>In conclusion, this operation will provide the expected position of the
+peaks in each tube. For example, for the picture above, nine points will
+be found as peaks positions.</p>
+</div>
+<div class="section" id="find-the-correct-position-along-the-tube">
+<h2>Find the correct position along the tube<a class="headerlink" href="#find-the-correct-position-along-the-tube" title="Permalink to this headline">¶</a></h2>
+<p>In the introduction, it was said that the bin or strips are placed at
+known positions. These known positions in the calibration framework are
+used to construct the <strong>IdealTube</strong>, the tube where the peaks occur at
+the exactly known positions.</p>
+<p>Here, an agreement is necessary to define how the positions will be
+given for the tubes. The tubes may be considered as lines, where the
+detectors have to be adjusted only in one direction. In the example
+below, the positions were given having the center as origin and
+increasing from left to right. (Suggestion: it would be simple by
+assuming origin on the left and increasing values)</p>
+<p>Having this, we display the data using the peaks positions (pixel
+number) found for each tube and the correspondingly ideal position we
+expected them to be.</p>
+<img alt="../../_images/PeaksPositionsForTube100.png" src="../../_images/PeaksPositionsForTube100.png" />
+<p>Look, that the peaks positions are given in &#8216;pixels&#8217;, and we are looking
+for a transformation that moves the peaks position to the known position,
+those defined in the IdealTube, as the function:</p>
+<p><img class="math" src="../../_images/math/7213c51a1c62a53ca8d5bb0d7146818fd6ad39d7.png" alt="T(pixels) = TubePosition" style="vertical-align: -4px"/></p>
+<p>Currently, this is done by fitting these data to a quadratic function.
+(Should we consider 3rd order polynomial as said in the documentation?)</p>
+<p><img class="math" src="../../_images/math/9680576baa9d14d000cf9696a30d94314a98eb1b.png" alt="Position(pixels) = a  \times pixels^2 + b \times pixels + c" style="vertical-align: -4px"/></p>
+<p>The result is shown in the plot below</p>
+<img alt="../../_images/CalibrationTransformationPixelPosition.png" src="../../_images/CalibrationTransformationPixelPosition.png" />
+<p>The final step is to define the transformation that moves the position
+in relation to the center of the tube to the 3D space where the tube is.</p>
+<p>Assuming that the units given for the position in the <strong>IdealTube</strong> and
+for the 3D space are the same, as in the picture below</p>
+<img alt="../../_images/Changing_coordinates.png" src="../../_images/Changing_coordinates.png" />
+<p>We have that the 3D position is:</p>
+<p><img class="math" src="../../_images/math/5ede4ce83ae8b99a57a14b0363bd3fa2adf652a4.png" alt="\vec{p} = \vec{c} + v \vec{u}" style="vertical-align: -4px"/></p>
+<p>Where <img class="math" src="../../_images/math/9d018ba2d3002d15a8627f2a9599d6c2d8d415a1.png" alt="\vec{c}" style="vertical-align: 0px"/> is the coordinate of the center of the tube and is:</p>
+<p><img class="math" src="../../_images/math/0288109b77932fa7515a5331cce79710f191bb58.png" alt="\vec{c} = \frac{\vec{v_1} + \vec{v_2}}{2}" style="vertical-align: -6px"/></p>
+<p>For  <img class="math" src="../../_images/math/daa12ea19c5903ec523ca144063739f7c300f3ed.png" alt="\vec{v_1}" style="vertical-align: -4px"/> and  <img class="math" src="../../_images/math/b783f7fb3264cafbcffd558014239f262c491cd0.png" alt="\vec{v_2}" style="vertical-align: -3px"/> refer to the position of the first and the last
+detector inside the tube.</p>
+<p><strong>V</strong> is the real value of the position in relation to the center (the
+values from the equation <img class="math" src="../../_images/math/091a0864061d3629959e12c4f62b5048a234b486.png" alt="y = ax^2+bx+c" style="vertical-align: -4px"/>).</p>
+<p>And <strong>u</strong> is the unitary vector and is</p>
+<p><img class="math" src="../../_images/math/b43dd823db365b4f11e583df272d8ba26ee179d2.png" alt="\vec{u} = \frac{\vec{v_2} - \vec{v_1}}{|v_2-v_1|}" style="vertical-align: -9px"/></p>
+<p>If the units are different, them, the equation changes to:</p>
+<p><img class="math" src="../../_images/math/ae48ce773e9c9c248d0cc9077cac0ed793f47f80.png" alt="\vec{p} = \vec{c} + \frac{v}{l} l'  \vec{u}" style="vertical-align: -6px"/></p>
+<p>Where <img class="math" src="../../_images/math/4405711ef262f385468ed1d57aa98adfc376d268.png" alt="l" style="vertical-align: 0px"/> is the length of the tube in the coordinates given for the
+IdealTube while <img class="math" src="../../_images/math/dce06c3e5f4fbedb7f22bda5a6f6b4a6cb8829a9.png" alt="l'" style="vertical-align: 0px"/> is the length of the tube in the 3D space.</p>
+</div>
+<div class="section" id="apply-the-correction-to-the-detectors">
+<h2>Apply the correction to the detectors<a class="headerlink" href="#apply-the-correction-to-the-detectors" title="Permalink to this headline">¶</a></h2>
+<p>After having the defined position for the detectors, these positions are
+applied to the instrument.</p>
+<p><strong>Category</strong>: <a class="reference external" href="../categories/Calibration.html">Calibration</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="TubeCalibrationExamples.html" title="Previous Chapter: Introduction"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Introduction</span>
+    </a>
+  </li>
+  <li>
+    <a href="TubeSpec.html" title="Next Chapter: TubeSpec"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">TubeSpec &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

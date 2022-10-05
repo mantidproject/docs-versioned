@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Error Propagation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.8.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Event Filtering" href="EventFiltering.html" />
+    <link rel="prev" title="Dynamic Factory" href="DynamicFactory.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.8</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="error-propagation">
+<span id="id1"></span><h1>Error Propagation<a class="headerlink" href="#error-propagation" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this document is to explain how Mantid deals with Error
+Propogation and how it is used in its algorithms.</p>
+<div class="section" id="theory">
+<h2>Theory<a class="headerlink" href="#theory" title="Permalink to this headline">¶</a></h2>
+<p>In order to deal with error propagation, Mantid treats errors as guassian
+probabilities (also known as a bell curve or normal probabilities) and each
+observation as independent. Meaning that if X = 100 +- 1 then it is still
+possible for a value of 102 to occur, but less likely than 101 or 99, and a
+value of 105 is far less likely still than any of these values.</p>
+</div>
+<div class="section" id="plus-and-minus-algorithm">
+<h2>Plus and Minus Algorithm<a class="headerlink" href="#plus-and-minus-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>The plus algorithm adds a selection of datasets together, including their
+margin of errors. Mantid has to therefore adapt the margin of error so it
+continues to work with just one margin of error. The way it does this is by
+simply adding together the certain values. Consider the example where:
+X<sub>1</sub> = 101 ± 2 and X<sub>2</sub> = 99 ± 2. Then for the Plus algorithm</p>
+<p>X = 200 = (101 + 99).</p>
+<p>The propagated error is calculated by taking the root of the sum of the
+squares of the two error margins:</p>
+<p>(√2:sup:<cite>2</cite> + 2<sup>2</sup>) = √8</p>
+<p>Hence the result of the Plus algorithm can be summarised as:</p>
+<p>X = 200 ± √8</p>
+<p>Mantid deals with the Minus algorithm similarly.</p>
+</div>
+<div class="section" id="multiply-and-divide-algorithm">
+<h2>Multiply and Divide Algorithm<a class="headerlink" href="#multiply-and-divide-algorithm" title="Permalink to this headline">¶</a></h2>
+<p>The Multiply and Divide Algorithm work slightly different from the Plus
+and Minus Algorithms, in the sense that they have to be more complex,
+see also <a class="reference external" href="http://en.wikipedia.org/wiki/Propagation_of_uncertainty">here</a>.</p>
+<p>To calculate error propagation, of say X<sub>1</sub> and X<sub>2</sub>.
+X<sub>1</sub> = 101 ± 2 and X<sub>2</sub> = 99 ± 2 ,Mantid would
+undertake the following calculation for divide:</p>
+<p>Q = X<sub>1</sub>/X:sub:<cite>2</cite> = 101/99</p>
+<p>Error Propogation = (√ ± 2/99 + ±2/101) All multiplied by Q = 0.22425</p>
+<p>For the multiply algorithm, the only difference is in how Q is created,
+which in turn affects the Error Propogation,</p>
+<p>Q = X<sub>1</sub>*X<sub>2</sub> = 101*99</p>
+<p>Error Propogation = (√ ± 2/99 + ±2/101) All multiplied by Q = 0.22425</p>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="DynamicFactory.html" title="Previous Chapter: Dynamic Factory"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Dynamic Factory</span>
+    </a>
+  </li>
+  <li>
+    <a href="EventFiltering.html" title="Next Chapter: Event Filtering"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Event Filtering &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

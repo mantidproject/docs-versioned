@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Python in Mantid: Exercise 3</title>
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Further Algorithm and Workspaces with Python" href="../further_alg_ws/index.html" />
+    <link rel="prev" title="Formatting Plots with a script" href="02_scripting_plots.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.0</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <p><span class="math">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<div class="section" id="python-in-mantid-exercise-3">
+<span id="pim-ex-3"></span><h1>Python in Mantid: Exercise 3<a class="headerlink" href="#python-in-mantid-exercise-3" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#a-direct-matplotlib-with-sns-data" id="id1">A - Direct Matplotlib with SNS Data</a></li>
+<li><a class="reference internal" href="#b-plotspectrum-with-isis-data" id="id2">B - plotSpectrum with ISIS Data</a></li>
+<li><a class="reference internal" href="#c-2d-and-3d-plot-ill-data" id="id3">C - 2D and 3D Plot ILL Data</a></li>
+</ul>
+</div>
+<div class="section" id="a-direct-matplotlib-with-sns-data">
+<h2><a class="toc-backref" href="#id1">A - Direct Matplotlib with SNS Data</a><a class="headerlink" href="#a-direct-matplotlib-with-sns-data" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Load the processed CNCS data file Training_Exercise3a_SNS.nxs</li>
+<li>Directly using MPL (eg. axes.plot() ), plot the first 5 spectra</li>
+<li>Optionally set labels and colors for each spectrum</li>
+<li>Again directly in MPL, plot the final spectrum with errorbars</li>
+<li>Optionally, set a capsize &gt; 0, and choose a color and label</li>
+<li>Rescale x-axis limits to -1.5 &lt; x &lt; 1.8</li>
+<li>Change the y-axis to have a log scale</li>
+<li>Give the plot a title, legend and don’t forget to show the plot</li>
+</ol>
+</div>
+<div class="section" id="b-plotspectrum-with-isis-data">
+<h2><a class="toc-backref" href="#id2">B - plotSpectrum with ISIS Data</a><a class="headerlink" href="#b-plotspectrum-with-isis-data" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Load the GEM data set - <cite>GEM40979.raw</cite> using SpectrumMin=431 &amp; SpectrumMax=750</li>
+<li>Convert units to dSpacing</li>
+<li>Smooth the data using <a class="reference internal" href="../../../algorithms/SmoothData-v1.html#algm-smoothdata"><span class="std std-ref">SmoothData v1</span></a> using NPoints=20</li>
+<li>Using <cite>plotSpectrum()</cite>, plot workspace indices 0,1,2</li>
+<li>Set the x-axis limits to 4 &lt; x &lt; 6</li>
+<li>Set the y-axis limits to 0 &lt; y &lt; 5e3</li>
+<li>Again using <cite>plotSpectrum()</cite>, plot workspace index 5 on the same plot window</li>
+<li>Change the label of the Y axis</li>
+<li>Give the plot a legend with labels for each curve</li>
+<li>Give the plot a title</li>
+</ol>
+</div>
+<div class="section" id="c-2d-and-3d-plot-ill-data">
+<h2><a class="toc-backref" href="#id3">C - 2D and 3D Plot ILL Data</a><a class="headerlink" href="#c-2d-and-3d-plot-ill-data" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Load the file 164198.nxs</li>
+<li><a class="reference internal" href="../../../algorithms/ExtractSpectra-v1.html#algm-extractspectra"><span class="std std-ref">ExtractSpectra v1</span></a> using X range 470-490 and WorkspaceIndex range 199-209. Use this region of interest for plotting.</li>
+<li>Produce a figure and axes for subplots with ncols=2, nrows=1, using the mantid projection and also set the figsize = (6,4)</li>
+<li>Produce a 2D colorfill plot, using the imshow method, on both subplots (indexed as axes[0] and axes[1])</li>
+<li>For both set the colormap to <cite>jet</cite> and aspect=’auto’</li>
+<li>Overlay contour lines on the second subplot (axes[1]), colored white and with alpha = 0.5</li>
+<li>Set the title to ‘Colorfill’ for axes[0] and ‘Contour’ for axes[1]</li>
+<li>Add a colorbar to this figure</li>
+<li>Set the colorbar label to ‘Counts ($mu s$)$^{-1}$’</li>
+<li>Get another figure and axes for subplots with ncols=2, nrows=1, using the mantid3d projection and also set figsize = (8,3)</li>
+<li>Add a Surface and Wireframe plot to the subplot axes respectively (indexed as axes[0] and axes[1])</li>
+<li>Set the colormap for the surface plot to ‘summer’ and the color for the wireframe to ‘darkmagenta’</li>
+<li>Set the title for each subplot as ‘Surface’ and ‘Wireframe’</li>
+<li>Remember to show the plots</li>
+</ol>
+<p><a class="reference internal" href="../solutions/03_pim_sol.html#pim-sol"><span class="std std-ref">Solutions</span></a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="02_scripting_plots.html" title="Previous Chapter: Formatting Plots with a script"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Formatting Pl...</span>
+    </a>
+  </li>
+  <li>
+    <a href="../further_alg_ws/index.html" title="Next Chapter: Further Algorithm and Workspaces with Python"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Further Algor... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2021-02-09.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Ab initio calculation of dynamical structure factor (S)</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Elemental analysis using negative muons" href="ElementalAnalysisUsingNegativeMuons.html" />
+    <link rel="prev" title="Dynamic Factory" href="DynamicFactory.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.0</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <p><span class="math">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<div class="section" id="ab-initio-calculation-of-dynamical-structure-factor-s">
+<span id="dynamicalstructurefactorfromabinitio"></span><h1>Ab initio calculation of dynamical structure factor (S)<a class="headerlink" href="#ab-initio-calculation-of-dynamical-structure-factor-s" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The purpose of this document is to explain the link between theoretical and experimental <span class="math">\(S(\mathbf{Q}, \omega)\)</span> and to
+describe in general how the theoretical <span class="math">\(S\)</span> is calculated from from <em>ab initio</em> data by plugins in Mantid.</p>
+<p>During an inelastic neutron scattering experiment, a sample is exposed to neutron flux and a response is recorded in the form of dynamical structure factor, <span class="math">\(S(\mathbf{Q}, \omega)\)</span>.
+In principle, one obtains a vibrational spectrum that can be quite difficult to analyse; in crystalline materials this is
+related to the wavevector-dependent <em>phonon</em> spectrum.
+In order to better understand experimental outputs, one can compare with results from modelling.
+<em>Ab initio</em> calculations, especially within density-functional theory (DFT) <a class="footnote-reference" href="#kohn1964" id="id1">[1]</a>, have proven quite successful in predicting vibrational spectra.</p>
+<img alt="../_images/dft_phonon_scheme.png" class="align-center" src="../_images/dft_phonon_scheme.png" />
+<p>The usual workfow for calculating phonon spectra within DFT is presented in the figure above. First, one defines an
+initial guess for the structure of interest.
+The initial guess should be as close as possible to an experimental structure, and is usually derived from elastic X-ray and/or neutron scattering measurements.
+Then the structure parameters are locally optimised within DFT, finding the nearest structure that minimises the DFT energy.
+At this point, there should be no net force on the atoms.
+For this “relaxed” structure the dynamical matrix is calculated, either by finite displacements or perturbation theory.
+The dynamical matrix is related to the Hessian (the second derivative of the system Hamiltonian with respect to atomic displacements) by a Fourier transform:
+the eigenvectors obtained from diagonalisation of this matrix are atomic displacements
+and the eigenvalues are the squared frequencies of the corresponding movements.
+These vibrational <em>modes</em> are related to the <em>fundamental</em> vibrational excitations of the system;
+using this displacement and frequency information one can calculate theoretical <span class="math">\(S(\mathbf{Q}, \omega)\)</span>.
+In Abins this is calculated for each atom separately,
+then the total spectrum is obtained as a sum over all atomic contributions.</p>
+</div>
+<div class="section" id="working-equations">
+<h2>Working equations<a class="headerlink" href="#working-equations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="powder">
+<h3>Powder<a class="headerlink" href="#powder" title="Permalink to this headline">¶</a></h3>
+<img alt="../_images/s_powder_scheme.png" class="align-center" src="../_images/s_powder_scheme.png" />
+<p>In DFT studies of solid materials, the simulation region is generally a finite unit cell with periodic boundary conditions.
+This models an infinite perfect crystal;
+in order to compare such calculations with powder experiments, orientational averaging should be considered.
+Usually a semi-empirical model is applied <a class="footnote-reference" href="#howard1983" id="id2">[2]</a><sup>,</sup> <a class="footnote-reference" href="#howard1983b" id="id3">[3]</a>:</p>
+<p><span class="math">\(S^j (\mathbf{Q},\omega_i) = S^j (Q,\omega_i) = \frac{Q^2 \mathrm{Tr}B_{\omega_i}}{3} exp\left(-Q^2 \alpha^j_{\omega_i} coth^2\left(\frac{\hbar \omega_i}{2 k_B T}\right)  \right)\sigma^j\)</span></p>
+<p>where <span class="math">\(B\)</span> and <span class="math">\(A\)</span> are tensors created from atomic displacements in the following way:</p>
+<p><span class="math">\(B^j_{\omega_i} = c^j_{\omega_i}(c^{j}_{\omega_i})^T M^j  \frac{C_1}{\omega_i}\)</span></p>
+<p><span class="math">\(A^j = \sum_i B^j_{\omega_i}\)</span></p>
+<p>with</p>
+<p><span class="math">\(Q\)</span> – momentum transfer due to neutron scattering.  The momentum transfer <span class="math">\(\mathbf{Q}\)</span> is a technically a vector. However, the powder averaging of :math: <cite>S</cite> allows it to be represented as a scalar.</p>
+<p><span class="math">\(\alpha^j_{\omega_i}\)</span> – semi-empirical parameter calculated as: <span class="math">\(\alpha^j_{\omega_i} = \frac{1}{5} \left \lbrace \mathrm{Tr} A^j  + \frac{2 B^j_{\omega_i}: A^j}{\mathrm{Tr} B^j_{\omega_i}} \right\rbrace\)</span></p>
+<p><span class="math">\(\mathrm{Tr}\)</span> – trace operation</p>
+<p><span class="math">\(:\)</span> –  tensor contraction operation</p>
+<p><span class="math">\(j\)</span> – indicates <span class="math">\(j\)</span>-th atoms</p>
+<p><span class="math">\(i\)</span> – indicates <span class="math">\(i\)</span>-th energy transition</p>
+<p><span class="math">\(\omega_i\)</span> – frequency for <span class="math">\(i\)</span>-th transition in <span class="math">\(cm^{-1}\)</span> (called also mode or fundamental)</p>
+<p><span class="math">\(c^j_{\omega_i}\)</span>  – atomic displacement for <span class="math">\(j\)</span>-th atom and <span class="math">\(i\)</span>-th frequency in atomic units</p>
+<p><span class="math">\(M_j\)</span> – mass of <span class="math">\(j\)</span>-th atom in atomic units</p>
+<p><span class="math">\(C_1\)</span> –  <span class="math">\(\hbar / (4 / \pi)\)</span> expressed in spectroscopic units</p>
+<p><span class="math">\(k_B\)</span> – Boltzmann constant</p>
+<p><span class="math">\(T\)</span> – temperature in K</p>
+<p><span class="math">\(\sigma_j\)</span> – cross-section for <span class="math">\(j\)</span>-th atom</p>
+<p>The formula above covers the <em>first-order quantum events</em> – specifically the transitions <span class="math">\(0 \rightarrow 1\)</span> for each phonon.
+The <span class="math">\(1 \rightarrow 0\)</span> events (i.e. energy <em>to</em> the scattered neutron) would be infrequent at experimental conditions and are neglected.
+In order to reconstruct the full spectrum one has to also consider higher-order quantum events.
+For second-order quantum events one should not only
+consider transitions <span class="math">\(0 \rightarrow 2\)</span>, but also simultaneous transitions <span class="math">\(0 \rightarrow 1\)</span>, <span class="math">\(0 \rightarrow 1'\)</span> for different phonons.
+Within the harmonic approximation all second-order transitions form the following set: <span class="math">\(\lbrace \omega_1 +
+\omega_1, \omega_1 + \omega_2, \omega_1 + \omega_3, \ldots, \omega_p + \omega_p \rbrace\)</span>.
+The cardinality of this set is <span class="math">\(p^2\)</span>, where <span class="math">\(p\)</span> is a number of fundamentals.
+In practice one can reduce this number by taking into consideration a realistic energy window
+and neglecting those <span class="math">\(\omega_{ij}=\omega_i + \omega_j\)</span> for which <span class="math">\(S(Q, \omega_i)\)</span> or <span class="math">\(S(Q, \omega_j)\)</span> is negligible.
+Within the harmonic approximation each phonon is treated as independent harmonic quantum oscillator.  The formula for <span class="math">\(S(Q, \omega_{ik})\)</span> is as follows <a class="footnote-reference" href="#mitchell" id="id4">[4]</a>:</p>
+<p><span class="math">\(S^j(Q, \omega_{ik}) = \frac{Q^4}{15  C}\left( \mathrm{Tr}B^j_{\omega_i}\mathrm{Tr}B^j_{\omega_k} + B^j_{\omega_i}:B^j_{\omega_k} + B^j_{\omega_k}:B^j_{\omega_i} \right) exp\left(-Q^2 \beta^j coth^2\left(\frac{\hbar \omega_{ik}}{2 k_B T} \right) \right)\sigma^j\)</span></p>
+<p>where</p>
+<p><span class="math">\(\beta^j = A^j / 3\)</span>.</p>
+<p><span class="math">\(C\)</span> is a constant: if <span class="math">\(i=j\)</span> then <span class="math">\(C=2\)</span>, otherwise <span class="math">\(C=1\)</span>.</p>
+<p>Similarly, one can define the contribution for the third quantum order events (<span class="math">\(0 \rightarrow 3\)</span>, simultaneous  <span class="math">\(0 \rightarrow 1\)</span>, <span class="math">\(0 \rightarrow 1'\)</span>, <span class="math">\(0 \rightarrow 1''\)</span> for different oscillators, etc.) <a class="footnote-reference" href="#mitchell" id="id5">[4]</a>:</p>
+<p><span class="math">\(S^j(Q, \omega_{ikl}) = \frac{9Q^6}{543}\left( \mathrm{Tr}B^j_{\omega_i} \mathrm{Tr}B^j_{\omega_k} \mathrm{Tr}B^j_{\omega_l}  \right)  exp\left(-Q^2 \beta^j coth^2\left(\frac{\hbar \omega_{ikl}}{2 k_B T}\right) \right)\sigma^j\)</span>.</p>
+<p>Usually in order to reconstruct the experimental spectrum it is sufficient to include contributions up to the fourth order (<span class="math">\(0 \rightarrow 4\)</span> , simultaneous <span class="math">\(0 \rightarrow 1\)</span>, <span class="math">\(0 \rightarrow 1'\)</span>, <span class="math">\(0 \rightarrow 1''\)</span>, <span class="math">\(0 \rightarrow 1'''\)</span> for different oscillators, etc.)</p>
+<p><span class="math">\(S^j(Q, \omega_{iklm}) = \frac{27Q^8}{9850}\left( \mathrm{Tr}B^j_{\omega_i} \mathrm{Tr}B^j_{\omega_k} \mathrm{Tr}B^j_{\omega_l}\mathrm{Tr}B^j_{\omega_m}  \right) exp\left(-Q^2 \beta^j coth^2\left(\frac{\hbar \omega_{iklm}}{2 k_B T}\right) \right)\sigma^j\)</span>. <a class="footnote-reference" href="#mitchell" id="id6">[4]</a></p>
+<p>In the same way as for the second quantum order events, one can reduce the number of energy transitions by imposing the appropriate energy window and neglecting small <span class="math">\(S\)</span>.</p>
+<p>After evaluating the above equations one obtains the discrete <span class="math">\(S\)</span> for each quantum order and for each atom: <span class="math">\(S_\mathrm{discrete}\)</span>.
+In order to compare these functions with an experimental spectrum one has to convolve them with experimental resolution</p>
+<p><span class="math">\(S_\mathrm{theory}^{nj}(Q, \omega) = S_\mathrm{discrete}^{nj}(Q, \omega) * f(\omega)\)</span></p>
+<p>where:</p>
+<p><span class="math">\(j\)</span> – indicates <span class="math">\(j\)</span>-th atoms</p>
+<p><span class="math">\(n\)</span> – indicates <span class="math">\(n\)</span>-order event</p>
+<p><span class="math">\(f(\omega)\)</span> – is a resolution function</p>
+<p><span class="math">\(S_\mathrm{theory}\)</span> – is <em>theoretical</em> <span class="math">\(S\)</span> to be compared with experimental results.</p>
+<p>For <a class="reference external" href="http://www.isis.stfc.ac.uk/instruments/tosca/tosca4715.html">TOSCA</a>  and TOSCA-like instruments <span class="math">\(f(\omega)\)</span> has the following form:</p>
+<p><span class="math">\(f(\omega)=1.0 / \sqrt{\sigma(\omega)  \pi}  \exp(-(\omega)^2  / \sigma(\omega))\)</span></p>
+<p>where:</p>
+<p><span class="math">\(\sigma(\omega) = A  \omega^2  + B  \omega + C\)</span></p>
+<p>with <span class="math">\(A\)</span>, <span class="math">\(B\)</span>, <span class="math">\(C\)</span> as constants.</p>
+<p>Moreover, in case of TOSCA and TOSCA-like instruments, the length of momentum transfer depends on frequency (<em>indirect geometry spectrometer</em>).
+The formula for <span class="math">\(Q^2\)</span> is as follows:</p>
+<p><span class="math">\(Q^2(\omega)=k^2_i(\omega) + k^2_f - 2  \sqrt{k^2_i(\omega)  k^2_f} cos(\theta)\)</span></p>
+<p>where:</p>
+<p><span class="math">\(k^2_i(\omega)=(\omega + E_{final})  \hbar/ (4  \pi)\)</span> expressed in the spectroscopic units</p>
+<p><span class="math">\(k^2_f=E_{final}  \hbar/(4 \pi)\)</span></p>
+<p>with</p>
+<p><span class="math">\(E_{final}\)</span> – being the final energy on the crystal analyser in <span class="math">\(cm^{-1}\)</span> and</p>
+<p><span class="math">\(\theta\)</span> – is the crystal analyser angle in radians. (TOSCA has two angles to consider, corresponding to the forward- and back-scattering detectors).</p>
+</div>
+</div>
+<div class="section" id="current-implementation">
+<h2>Current implementation<a class="headerlink" href="#current-implementation" title="Permalink to this headline">¶</a></h2>
+<p>Calculation of theoretical <span class="math">\(S\)</span> from <em>ab initio</em> results is implemented in <a class="reference internal" href="../algorithms/Abins-v1.html#algm-abins"><span class="std std-ref">Abins</span></a>. At the moment Abins supports phonon outputs from the
+<a class="reference external" href="http://www.castep.org/">CASTEP</a>, <a class="reference external" href="http://www.crystal.unito.it/index.php">CRYSTAL</a>, Gaussian and DMOL3 <em>ab initio</em> codes.
+The Gamma-point frequencies are used and phonon bands are assumed to be flat throughout the Brillouin zone; this assumption is primarily applicable for incoherent scattering in molecular crystals.
+Instrument parameters are included for
+<a class="reference external" href="http://www.isis.stfc.ac.uk/instruments/tosca/tosca4715.html">TOSCA</a> and should be useful for TOSCA-like instruments.</p>
+</div>
+<div class="section" id="citing-abins">
+<h2>Citing Abins<a class="headerlink" href="#citing-abins" title="Permalink to this headline">¶</a></h2>
+<p>If Abins is used as part of your data analysis routines, please cite the relevant reference <a class="footnote-reference" href="#dymkowski2018" id="id8">[5]</a>.</p>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<table class="docutils footnote" frame="void" id="kohn1964" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><ol class="first last upperalpha simple" start="23">
+<li>Kohn et al., <em>Inhomogeneous Electron Gas</em>, Phys. Rev. B {bf 136}, 864 (1964).</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="howard1983" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td><ol class="first last upperalpha simple" start="10">
+<li>Howard, B.C. Boland, J. Tomkinson, <em>Intensities in inelastic neutron scattering spectra: a test of recent theory</em>, Chem. Phys. 77 (1983).</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="howard1983b" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td><ol class="first last upperalpha simple" start="10">
+<li>Howard and J. Tomkinson, <em>An analytical method for the calculation of the relative intensities of bending and stretching modes in inelastic neutron scattering spectra</em>, Chem. Phys. Letters 98 (1983).</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="mitchell" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[4]</td><td><em>(<a class="fn-backref" href="#id4">1</a>, <a class="fn-backref" href="#id5">2</a>, <a class="fn-backref" href="#id6">3</a>)</em> <ol class="last upperalpha simple" start="16">
+<li>C H Mitchell, S. F. Parker, A. J. Ramirez-Cuesta, J. Tomkinson, <em>Vibrational Spectroscopy with Neutrons With Applications in Chemistry, Biology, Materials Science and Catalysis</em>, ISBN: 978-981-256-013-1</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="dymkowski2018" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id8">[5]</a></td><td><ol class="first last upperalpha simple" start="11">
+<li>Dymkowski, S. F. Parker, F. Fernandez-Alonso and S. Mukhopadhyay,  “AbINS: The modern software for INS interpretation” , Physica B, doi:10.1016/j.physb.2018.02.034 (2018).</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="DynamicFactory.html" title="Previous Chapter: Dynamic Factory"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Dynamic Factory</span>
+    </a>
+  </li>
+  <li>
+    <a href="ElementalAnalysisUsingNegativeMuons.html" title="Next Chapter: Elemental analysis using negative muons"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Elemental ana... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2021-02-09.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>MergeRuns v1</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.12.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="next" title="Min v1" href="Min-v1.html" />
+    <link rel="prev" title="MergeMDFiles v1" href="MergeMDFiles-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.12</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="mergeruns-v1">
+<span id="algm-mergeruns"></span><span id="algm-mergeruns-v1"></span><h1>MergeRuns v1<a class="headerlink" href="#mergeruns-v1" title="Permalink to this headline">¶</a></h1>
+<div class="figure align-right" id="index-0">
+<a class="screenshot reference internal image-reference" href="../_images/MergeRuns-v1_dlg.png"><img alt="../_images/MergeRuns-v1_dlg.png" class="screenshot" src="../_images/MergeRuns-v1_dlg.png" style="width: 216px;" /></a>
+<p class="caption"><strong>MergeRuns</strong> dialog.</p>
+</div>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#summary" id="id1">Summary</a></li>
+<li><a class="reference internal" href="#properties" id="id2">Properties</a></li>
+<li><a class="reference internal" href="#description" id="id3">Description</a><ul>
+<li><a class="reference internal" href="#restrictions-on-the-input-workspace" id="id4">Restrictions on the input workspace</a></li>
+<li><a class="reference internal" href="#processing-group-workspaces" id="id5">Processing Group Workspaces</a><ul>
+<li><a class="reference internal" href="#multi-period-group-workspaces" id="id6">Multi-period Group Workspaces</a></li>
+<li><a class="reference internal" href="#group-workspaces-that-are-not-multiperiod" id="id7">Group Workspaces that are not multiperiod</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#merging-sample-logs" id="id8">Merging Sample Logs</a></li>
+<li><a class="reference internal" href="#merging-workspaces-with-detector-scans" id="id9">Merging Workspaces with Detector Scans</a><ul>
+<li><a class="reference internal" href="#the-workspaces-have-identical-scan-intervals" id="id10">1. The workspaces have identical scan intervals</a></li>
+<li><a class="reference internal" href="#the-workspaces-have-different-scan-intervals" id="id11">2. The workspaces have different scan intervals</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#childalgorithms-used" id="id12">ChildAlgorithms used</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage" id="id13">Usage</a></li>
+<li><a class="reference internal" href="#related-algorithms" id="id14">Related Algorithms</a></li>
+<li><a class="reference internal" href="#source" id="id15">Source</a></li>
+</ul>
+</div>
+<div class="section" id="summary">
+<h2><a class="toc-backref" href="#id1">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Combines the data contained in an arbitrary number of input workspaces.</p>
+</div>
+<div class="section" id="properties">
+<h2><a class="toc-backref" href="#id2">Properties</a><a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="2%" />
+<col width="10%" />
+<col width="4%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Direction</th>
+<th class="head">Type</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>InputWorkspaces</td>
+<td>Input</td>
+<td>str list</td>
+<td><em>Mandatory</em></td>
+<td>The names of the input workspaces as a list. You may also group workspaces using the GUI or [[GroupWorkspaces]], and specify the name of the group instead.</td>
+</tr>
+<tr class="row-odd"><td>OutputWorkspace</td>
+<td>Output</td>
+<td><a class="reference internal" href="../concepts/Workspace.html#workspace"><em>Workspace</em></a></td>
+<td><em>Mandatory</em></td>
+<td>Name of the output workspace</td>
+</tr>
+<tr class="row-even"><td>SampleLogsTimeSeries</td>
+<td>Input</td>
+<td>string</td>
+<td>&nbsp;</td>
+<td>A comma separated list of the sample logs to merge into a time series. The initial times are taken as the start times for the run. Sample logs must be numeric.</td>
+</tr>
+<tr class="row-odd"><td>SampleLogsList</td>
+<td>Input</td>
+<td>string</td>
+<td>&nbsp;</td>
+<td>A comma separated list of the sample logs to merge into a list.</td>
+</tr>
+<tr class="row-even"><td>SampleLogsWarn</td>
+<td>Input</td>
+<td>string</td>
+<td>&nbsp;</td>
+<td>A comma separated list of the sample logs to generate a warning if different when merging.</td>
+</tr>
+<tr class="row-odd"><td>SampleLogsWarnTolerances</td>
+<td>Input</td>
+<td>string</td>
+<td>&nbsp;</td>
+<td>The tolerances for warning if sample logs are different. Can either be empty for a comparison of the strings, a single value for all warn sample logs, or a comma separated list of values (must be the same length as SampleLogsWarn).</td>
+</tr>
+<tr class="row-even"><td>SampleLogsFail</td>
+<td>Input</td>
+<td>string</td>
+<td>&nbsp;</td>
+<td>The sample logs to fail if different when merging. If there is a difference the run is skipped.</td>
+</tr>
+<tr class="row-odd"><td>SampleLogsFailTolerances</td>
+<td>Input</td>
+<td>string</td>
+<td>&nbsp;</td>
+<td>The tolerances for failing if sample logs are different. Can either be empty for a comparison of the strings, a single value for all fail sample logs, or a comma separated list of values (must be the same length as SampleLogsFail).</td>
+</tr>
+<tr class="row-even"><td>SampleLogsSum</td>
+<td>Input</td>
+<td>string</td>
+<td>&nbsp;</td>
+<td>A comma separated list of the sample logs to sum into a single entry.  Sample logs must be numeric.</td>
+</tr>
+<tr class="row-odd"><td>RebinBehaviour</td>
+<td>Input</td>
+<td>string</td>
+<td>Rebin</td>
+<td>Choose whether to rebin when bins are different, or fail (fail behaviour defined in FailBehaviour option). Allowed values: [&#8216;Rebin&#8217;, &#8216;Fail&#8217;]</td>
+</tr>
+<tr class="row-even"><td>FailBehaviour</td>
+<td>Input</td>
+<td>string</td>
+<td>Skip File</td>
+<td>Choose whether to skip the file and continue, or stop and throw and error, when encountering a failure. Allowed values: [&#8216;Skip File&#8217;, &#8216;Stop&#8217;]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="description">
+<h2><a class="toc-backref" href="#id3">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Combines the data contained in an arbitrary number of input workspaces.
+If the input workspaces do not have common binning, the bins in the
+output workspace will cover the entire range of all the input
+workspaces, with the largest bin widths used in regions of overlap.</p>
+<p>The combination of each workspace is performed using the <a class="reference internal" href="Plus-v1.html#algm-plus"><em>Plus v1</em></a> algorithm,
+this does not preform any weighting based on the duration of collection, or proton charge.
+If you wish to perform Merge runs that should not be equally weighted then they should be
+corrected individually prior to merging.</p>
+<div class="section" id="restrictions-on-the-input-workspace">
+<h3><a class="toc-backref" href="#id4">Restrictions on the input workspace</a><a class="headerlink" href="#restrictions-on-the-input-workspace" title="Permalink to this headline">¶</a></h3>
+<p>The input workspaces must contain histogram data with the same number of
+spectra and matching units and instrument name in order for the
+algorithm to succeed.</p>
+<p><strong>Workspace2Ds</strong>: Each input workspace must have common binning for all
+its spectra.</p>
+<p><strong>EventWorkspaces</strong>: This algorithm is Event-aware; it will append
+event lists from common spectra. Binning parameters need not be compatible;
+the output workspace will use the first workspaces&#8217; X bin boundaries.</p>
+<p><strong>WorkspaceGroups</strong>: Each nested has to be one of the above.</p>
+<p>Other than this it is currently left to the user to ensure that the
+combination of the workspaces is a valid operation.</p>
+</div>
+<div class="section" id="processing-group-workspaces">
+<h3><a class="toc-backref" href="#id5">Processing Group Workspaces</a><a class="headerlink" href="#processing-group-workspaces" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="multi-period-group-workspaces">
+<h4><a class="toc-backref" href="#id6">Multi-period Group Workspaces</a><a class="headerlink" href="#multi-period-group-workspaces" title="Permalink to this headline">¶</a></h4>
+<p>Group workspaces will be merged respecting the periods within each
+group. For example if you have two multiperiod group workspaces A and B
+and an output workspace C. A contains matrix workspaces A_1 and A_2,
+and B contains matrix workspaces B_1 and B2. Since this is multiperiod
+data, A_1 and B_1 share the same period, as do A_2 and B_2. So
+merging must be with respect to workspaces of equivalent periods.
+Therefore, merging is conducted such that A_1 + B_1 = C_1 and A_2 +
+B_2 = C_2.</p>
+</div>
+<div class="section" id="group-workspaces-that-are-not-multiperiod">
+<h4><a class="toc-backref" href="#id7">Group Workspaces that are not multiperiod</a><a class="headerlink" href="#group-workspaces-that-are-not-multiperiod" title="Permalink to this headline">¶</a></h4>
+<p>If group workspaces are provided that are not multi-period, this
+algorithm will merge across all nested workspaces, to give a singe
+output matrix workspace.</p>
+</div>
+</div>
+<div class="section" id="merging-sample-logs">
+<h3><a class="toc-backref" href="#id8">Merging Sample Logs</a><a class="headerlink" href="#merging-sample-logs" title="Permalink to this headline">¶</a></h3>
+<p>Sample logs are optionally merged when running this algorithm. The behaviour
+when merging is defined in the instrument parameter file, but can be added to
+or overridden via this algorithm. Definitions in the XML file are given as
+shown in the example below. See the usage examples at the end of this document
+for examples of overriding the behaviour defined in the XML file.</p>
+<p>When performing the tolerance check for the warn or fail options it is always
+with respect to the first workspace in the merge. When choosing via the GUI
+this will be the first workspace that was selected.</p>
+<p><strong>Note:</strong> this currently only works when the underlying workspaces being merged are
+Matrix Workspaces.</p>
+<p><strong>Note:</strong> The sample log in the merged workspace is replaced in the case of Sum,
+Time Series and List merges. This means these merge types can not be used together
+for a given sample log.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">&quot;sample_logs_sum&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;value</span> <span class="na">val=</span><span class="s">&quot;duration, monitor1.monsum&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/parameter&gt;</span>
+<span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">&quot;sample_logs_time_series&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;value</span> <span class="na">val=</span><span class="s">&quot;sample.temperature, sample.pressure&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/parameter&gt;</span>
+<span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">&quot;sample_logs_list&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;value</span> <span class="na">val=</span><span class="s">&quot;run_number&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/parameter&gt;</span>
+<span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">&quot;sample_logs_warn&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;value</span> <span class="na">val=</span><span class="s">&quot;EPP, Fermi.phase, sample.temperature&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/parameter&gt;</span>
+<span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">&quot;sample_logs_warn_tolerances&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;value</span> <span class="na">val=</span><span class="s">&quot;5, 0.001, 50&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/parameter&gt;</span>
+<span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">&quot;sample_logs_fail&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;value</span> <span class="na">val=</span><span class="s">&quot;experiment_identifier, Ei, Fermi.rotation_speed&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/parameter&gt;</span>
+<span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">&quot;sample_logs_fail_tolerances&quot;</span> <span class="na">type=</span><span class="s">&quot;string&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;value</span> <span class="na">val=</span><span class="s">&quot;0, 0.1, 2&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/parameter&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="merging-workspaces-with-detector-scans">
+<h3><a class="toc-backref" href="#id9">Merging Workspaces with Detector Scans</a><a class="headerlink" href="#merging-workspaces-with-detector-scans" title="Permalink to this headline">¶</a></h3>
+<p>If the workspaces being merged contain detector scans then there are currently two options:</p>
+<div class="section" id="the-workspaces-have-identical-scan-intervals">
+<h4><a class="toc-backref" href="#id10">1. The workspaces have identical scan intervals</a><a class="headerlink" href="#the-workspaces-have-identical-scan-intervals" title="Permalink to this headline">¶</a></h4>
+<p>In this case the workspaces will be merged as they normally would be by MergeRuns,
+that is the counts in the two workspaces are summed. The detectors must have the same
+positions, rotations etc. for all time intervals, else the algorithm will throw.</p>
+</div>
+<div class="section" id="the-workspaces-have-different-scan-intervals">
+<h4><a class="toc-backref" href="#id11">2. The workspaces have different scan intervals</a><a class="headerlink" href="#the-workspaces-have-different-scan-intervals" title="Permalink to this headline">¶</a></h4>
+<p>For this case the scan intervals must not overlap. The merged workspace histograms are
+appended to the end of the first workspace.</p>
+</div>
+</div>
+<div class="section" id="childalgorithms-used">
+<h3><a class="toc-backref" href="#id12">ChildAlgorithms used</a><a class="headerlink" href="#childalgorithms-used" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="Rebin-v1.html#algm-rebin"><em>Rebin v1</em></a> algorithm is used, if neccessary, to put all the
+input workspaces onto a common binning.</p>
+<p>The <a class="reference internal" href="Plus-v1.html#algm-plus"><em>Plus v1</em></a> algorithm is used to combine each of the workspaces
+together one pair at a time.</p>
+</div>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id13">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p><strong>Example: Merge Two Workspaces</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dataX</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">dataY</span> <span class="o">=</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">dataX</span><span class="p">,</span> <span class="n">dataY</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">dataX</span><span class="p">,</span> <span class="n">dataY</span><span class="p">)</span>
+
+<span class="n">merged</span> <span class="o">=</span> <span class="n">MergeRuns</span><span class="p">(</span><span class="n">InputWorkspaces</span><span class="o">=</span><span class="s">&quot;a, b&quot;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;a      = {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;b      = {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;merged = {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>a      = [  6.  15.  21.   9.]
+b      = [  6.  15.  21.   9.]
+merged = [ 12.  30.  42.  18.]
+</pre></div>
+</div>
+<p><strong>Example: Merge Two GroupWorkspaces</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dataX</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">dataY</span> <span class="o">=</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">dataX</span><span class="p">,</span> <span class="n">dataY</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">dataX</span><span class="p">,</span> <span class="n">dataY</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">dataX</span><span class="p">,</span> <span class="n">dataY</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">dataX</span><span class="p">,</span> <span class="n">dataY</span><span class="p">)</span>
+
+<span class="n">group_1</span> <span class="o">=</span> <span class="n">GroupWorkspaces</span><span class="p">(</span><span class="n">InputWorkspaces</span><span class="o">=</span><span class="s">&quot;a, b&quot;</span><span class="p">)</span>
+<span class="n">group_2</span> <span class="o">=</span> <span class="n">GroupWorkspaces</span><span class="p">(</span><span class="n">InputWorkspaces</span><span class="o">=</span><span class="s">&quot;c, d&quot;</span><span class="p">)</span>
+
+<span class="n">merged</span> <span class="o">=</span> <span class="n">MergeRuns</span><span class="p">(</span><span class="n">InputWorkspaces</span><span class="o">=</span><span class="s">&quot;group_1, group_2&quot;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;group_1 = [{},&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">group_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;           {}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">group_1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;group_2 = [{},&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">group_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;           {}]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">group_2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;merged   = {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>group_1 = [[  6.  15.  21.   9.],
+           [  6.  15.  21.   9.]]
+group_2 = [[  6.  15.  21.   9.],
+           [  6.  15.  21.   9.]]
+merged   = [ 24.  60.  84.  36.]
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To run these usage examples please first download the
+<a class="reference external" href="https://sourceforge.net/projects/mantid/files/Sample%20Data/UsageData.zip/download">usage data</a>,
+and add these to your path. In MantidPlot this is done using <a class="reference external" href="http://www.mantidproject.org/ManageUserDirectories">Manage User Directories</a>.</p>
+</div>
+<p><strong>Example: Merge Workspace Summing Sample Logs</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s">&#39;MUSR00015189.nxs, MUSR00015190.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;gws&#39;</span><span class="p">)</span>
+
+<span class="n">merged</span> <span class="o">=</span> <span class="n">MergeRuns</span><span class="p">(</span><span class="n">InputWorkspaces</span><span class="o">=</span><span class="s">&#39;MUSR00015189_1, MUSR00015190_1&#39;</span><span class="p">,</span>
+                   <span class="n">SampleLogsSum</span><span class="o">=</span><span class="s">&#39;dur&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">run</span><span class="p">()</span><span class="o">.</span><span class="n">getLogData</span><span class="p">(</span><span class="s">&#39;dur&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>200.0
+</pre></div>
+</div>
+<p><strong>Example: Merge Workspace Combining Sample Logs as a TimeSeries</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s">&#39;MUSR00015189.nxs, MUSR00015190.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;gws&#39;</span><span class="p">)</span>
+
+<span class="n">merged</span> <span class="o">=</span> <span class="n">MergeRuns</span><span class="p">(</span><span class="n">InputWorkspaces</span><span class="o">=</span><span class="s">&#39;MUSR00015189_1, MUSR00015190_1&#39;</span><span class="p">,</span>
+                   <span class="n">SampleLogsTimeSeries</span><span class="o">=</span><span class="s">&#39;sample_magn_field&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">run</span><span class="p">()</span><span class="o">.</span><span class="n">getLogData</span><span class="p">(</span><span class="s">&#39;sample_magn_field&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">valueAsString</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>2007-Nov-27 17:10:35  1350
+2007-Nov-27 17:12:30  1360
+</pre></div>
+</div>
+<p><strong>Example: Merge Workspace Combining Sample Logs as a List</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s">&#39;MUSR00015189.nxs, MUSR00015190.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;gws&#39;</span><span class="p">)</span>
+
+<span class="n">merged</span> <span class="o">=</span> <span class="n">MergeRuns</span><span class="p">(</span><span class="n">InputWorkspaces</span><span class="o">=</span><span class="s">&#39;MUSR00015189_1, MUSR00015190_1&#39;</span><span class="p">,</span>
+                   <span class="n">SampleLogsList</span><span class="o">=</span><span class="s">&#39;sample_magn_field&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">run</span><span class="p">()</span><span class="o">.</span><span class="n">getLogData</span><span class="p">(</span><span class="s">&#39;sample_magn_field&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>1350, 1360
+</pre></div>
+</div>
+<p><strong>Example: Merge Workspace Combining Sample Logs with a Warnining if Different</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s">&#39;MUSR00015189.nxs, MUSR00015190.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;gws&#39;</span><span class="p">)</span>
+
+<span class="n">merged</span> <span class="o">=</span> <span class="n">MergeRuns</span><span class="p">(</span><span class="n">InputWorkspaces</span><span class="o">=</span><span class="s">&#39;MUSR00015189_1, MUSR00015190_1&#39;</span><span class="p">,</span>
+                   <span class="n">SampleLogsTimeSeries</span><span class="o">=</span><span class="s">&#39;sample_temp&#39;</span><span class="p">,</span>
+                   <span class="n">SampleLogsWarn</span><span class="o">=</span><span class="s">&#39;sample_magn_field&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">run</span><span class="p">()</span><span class="o">.</span><span class="n">getLogData</span><span class="p">(</span><span class="s">&#39;sample_temp&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>2
+</pre></div>
+</div>
+<p><strong>Example: Merge Workspace Combining Sample Logs with an Error if Different</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s">&#39;MUSR00015189.nxs, MUSR00015190.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;gws&#39;</span><span class="p">)</span>
+
+<span class="n">merged</span> <span class="o">=</span> <span class="n">MergeRuns</span><span class="p">(</span><span class="n">InputWorkspaces</span><span class="o">=</span><span class="s">&#39;MUSR00015189_1, MUSR00015190_1&#39;</span><span class="p">,</span>
+                   <span class="n">SampleLogsTimeSeries</span><span class="o">=</span><span class="s">&#39;sample_temp&#39;</span><span class="p">,</span>
+                   <span class="n">SampleLogsFail</span><span class="o">=</span><span class="s">&#39;sample_magn_field, nspectra&#39;</span><span class="p">,</span>
+                   <span class="n">SampleLogsFailTolerances</span><span class="o">=</span><span class="s">&#39;5, 0&#39;</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">merged</span><span class="o">.</span><span class="n">run</span><span class="p">()</span><span class="o">.</span><span class="n">getLogData</span><span class="p">(</span><span class="s">&#39;sample_temp&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>1
+</pre></div>
+</div>
+</div>
+<div class="section" id="related-algorithms">
+<h2><a class="toc-backref" href="#id14">Related Algorithms</a><a class="headerlink" href="#related-algorithms" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="ConjoinXRuns-v1.html#algm-conjoinxruns"><em>ConjoinXRuns</em></a> concatenates the workspaces in the x dimension by handling the merging of the Sample Logs.
+<a class="reference internal" href="ConjoinWorkspaces-v1.html#algm-conjoinworkspaces"><em>ConjoinWorkspaces</em></a> combines workspaces by appending their spectra.</p>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/Algorithms.html">Algorithms</a> | <a class="reference external" href="categories/Transforms/Merging.html">Transforms\Merging</a></p>
+</div>
+<div class="section" id="source">
+<h2><a class="toc-backref" href="#id15">Source</a><a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/5d6dddaa6354533ad7536be123c78a52660a8bbb/Framework/Algorithms/src/MergeRuns.cpp">MergeRuns.cpp</a> <em>(last modified: 2018-03-07)</em></p>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/5d6dddaa6354533ad7536be123c78a52660a8bbb/Framework/Algorithms/inc/MantidAlgorithms/MergeRuns.h">MergeRuns.h</a> <em>(last modified: 2018-03-07)</em></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="MergeMDFiles-v1.html" title="Previous Chapter: MergeMDFiles v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; MergeMDFiles v1</span>
+    </a>
+  </li>
+  <li>
+    <a href="Min-v1.html" title="Next Chapter: Min v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Min v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2018-04-19.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

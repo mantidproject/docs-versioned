@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Symmetry groups</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Table Workspaces" href="TableWorkspaces.html" />
+    <link rel="prev" title="Shared Pointer" href="SharedPointer.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.2</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <p><span class="math">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<div class="section" id="symmetry-groups">
+<span id="id1"></span><h1>Symmetry groups<a class="headerlink" href="#symmetry-groups" title="Permalink to this headline">¶</a></h1>
+<p>This is an introduction to group theoretical concepts for symmetry in Mantid. It is the basis for further descriptions covering point groups and space groups.</p>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Symmetry in space of any dimensionality can be described by symmetry groups. This and the following guides cover symmetry in three dimensions, as it is most commonly used in crystallography and how it is integrated into Mantid. All code samples are given as Python code and can be executed directly in the program.</p>
+</div>
+<div class="section" id="groups">
+<h2>Groups<a class="headerlink" href="#groups" title="Permalink to this headline">¶</a></h2>
+<p>A group <span class="math">\((G, \cdot)\)</span> is defined as a set of elements <span class="math">\(G\)</span> with a binary operation <span class="math">\(\cdot\)</span> which combines two elements of <span class="math">\(G\)</span>. <span class="math">\((G, \cdot)\)</span> is a group if the four group axioms are satisfied <a class="reference internal" href="#id5" id="id2">[Groups]</a>:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><strong>Closure</strong>: For all <span class="math">\(a, b\)</span> in <span class="math">\(G\)</span> the result of <span class="math">\(a \cdot b\)</span> is also in <span class="math">\(G\)</span>.</li>
+<li><strong>Associativity</strong>: For all <span class="math">\(a, b\)</span> in <span class="math">\(G\)</span>, <span class="math">\((a \cdot b) \cdot c\)</span> is equal to <span class="math">\(a \cdot (b \cdot c)\)</span>.</li>
+<li><strong>Identity element</strong>: There exists an element <span class="math">\(e\)</span> in <span class="math">\(G\)</span> such that <span class="math">\(e \cdot a = a\)</span>.</li>
+<li><strong>Inverse element</strong>: For each <span class="math">\(a\)</span> in <span class="math">\(G\)</span> there exists an element <span class="math">\(b\)</span> in <span class="math">\(G\)</span> such that <span class="math">\(a \cdot b = e\)</span>.</li>
+</ol>
+</div></blockquote>
+<p>There are many examples for groups, for example the group defined by the set of signed integer numbers and the addition operation. Any two integers added result again in an integer, integer addition is associative, there is an identity element (the number 0) and for each integer there is an inverse element (the number with the same magnitude, but opposite sign). For describing symmetry, groups are required that consist of a set of symmetry operations and a binary operation that combines them. The next section describes how symmetry operations can be represented and how to work with them in Mantid.</p>
+</div>
+<div class="section" id="symmetry-operations">
+<h2>Symmetry operations<a class="headerlink" href="#symmetry-operations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="theory">
+<h3>Theory<a class="headerlink" href="#theory" title="Permalink to this headline">¶</a></h3>
+<p>As symmetry operations are used for the definition of space groups, the mathematics behind this are covered in depth in the International Tables for Crystallography A (ITA), namely part 11 <a class="reference internal" href="#itasymmetry" id="id3">[ITASymmetry]</a>. A symmetry operation describes the transformation of an object <span class="math">\(O\)</span> into its image <span class="math">\(O'\)</span>:</p>
+<div class="math">
+\[O' = S \cdot O\]</div>
+<p>For a coordinate <span class="math">\(\mathbf{x}\)</span> in three dimensions, any transformation can be described using a transformation matrix <span class="math">\(\mathbf{W}\)</span> and a translation vector <span class="math">\(\mathbf{w}\)</span>. This leads to the following equation:</p>
+<div class="math">
+\[\mathbf{x}' = \mathbf{W} \cdot \mathbf{x} + \mathbf{w}\]</div>
+<p><span class="math">\(\mathbf{W}\)</span> is a <span class="math">\(3\times3\)</span>-matrix and for affine transformations, the determinant of the matrix is always equal to 1 or -1 (except for hexagonal coordinates, which are handled transparently in Mantid so this is not covered here).</p>
+<p>Coordinates <span class="math">\(x\)</span> are assumed to be fractional in terms of a unit cell, which defines the smallest unit of an infinite lattice that is repeated over and over.</p>
+<p>Of course it is also possible to transform vectors (such as reciprocal vectors <span class="math">\(\mathbf{h}\)</span> described by Miller indices h, k and l), in which case the translation does not apply and the matrix needs to be inverted and transposed:</p>
+<div class="math">
+\[\mathbf{h}' = {\mathbf{W}_i^{-1}}^T \cdot \mathbf{h}\]</div>
+<p>For the definition of the group <span class="math">\((G, \cdot)\)</span> this means that <span class="math">\(G\)</span> is a set of matrix and vector pairs <span class="math">\((\mathbf{W}_i, \mathbf{w}_i) = S_i\)</span>. All that’s missing for completing the description of a symmetry group is the definition of the binary operation <span class="math">\(\cdot\)</span>:</p>
+<div class="math">
+\[S_3 = S_1 \cdot S_2 = \left(\mathbf{W}_1 \cdot \mathbf{W}_2, \left[\mathbf{W}_1 \cdot \mathbf{w}_2\right] + \mathbf{w}_1\right)\]</div>
+<p>While matrix and vector pairs are very well suited for modelling symmetry operaitions in a computer language, they are not very convenient for human language. A very common notation is the “Jones-faithful” system, which is for example used in the symmetry operations section in the space group descriptions in ITA. It uses <span class="math">\((x,y,z)\)</span> triplets to describe the rows of the matrix (<span class="math">\(x\)</span> meaning <span class="math">\(1, 0, 0\)</span> and so on) and the translation vector (for example <span class="math">\(x,y,z+1/2\)</span> for a translation of half a unit cell vector in <span class="math">\(c\)</span>-direction). The following table shows some more examples:</p>
+<table border="1" class="docutils" id="id8">
+<caption><span class="caption-text">Examples for symmetry operations in Jones-faithful notation.</span><a class="headerlink" href="#id8" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Symbol</th>
+<th class="head">Symmetry operation</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">x,y,z</span></code></td>
+<td>Identity</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">-x,-y,-z</span></code></td>
+<td>Inversion</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">-x,-y,z</span></code></td>
+<td>2-fold rotation around <span class="math">\(z\)</span></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">x,y,-z</span></code></td>
+<td>Mirror plane perpendicular to <span class="math">\(z\)</span></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">-x,-y,z+1/2</span></code></td>
+<td><span class="math">\(2_1\)</span> screw axis along <span class="math">\(z\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>There are several advantages to this notation. First of all it’s very concise and secondly it directly shows how a point <span class="math">\(x\)</span> behaves under the symmetry transformation. As such this notation was chosen for generation of symmetry operations in Mantid.</p>
+<p>Last but not least, each symmetry operation has a so called order <span class="math">\(k\)</span>, which describes how many times the operation has to be chained together to arrive at identity:</p>
+<div class="math">
+\[I = S^k = S \cdot S \cdot \dots \cdot S\]</div>
+<p>The same is true for transforming coordinates as well. Applying a symmetry operation of order <span class="math">\(k\)</span> exactly <span class="math">\(k\)</span> times to a point <span class="math">\(x\)</span> will result in <span class="math">\(x\)</span> again, which is the definition of identity.</p>
+</div>
+<div class="section" id="symmetry-operations-in-mantid">
+<h3>Symmetry operations in Mantid<a class="headerlink" href="#symmetry-operations-in-mantid" title="Permalink to this headline">¶</a></h3>
+<p>Symmetry operations are implemented in Mantid following the scheme described above with matrix and vector pairs, it is written in C++ and resides in the <cite>Geometry</cite> library. How to use this code is described in the doxygen documentation and shall not be covered at this point. Instead this section describes how symmetry operations can be used in the Python environment of Mantid.</p>
+<p>As described above, the operations are represented using the Jones-faithful notation, so they can be created by a factory that parses these strings. It returns a <cite>SymmetryOperation</cite>-object which can be queried for certain characteristics. The most obvious one is the identifier string. It may differ from the one used to create the operation, because the strings are normalized internally so that a specific matrix and vector pair always has the same identifier.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SymmetryOperationFactory</span>
+
+<span class="c1"># This time the identifier is already normalized</span>
+<span class="n">symOp</span> <span class="o">=</span> <span class="n">SymmetryOperationFactory</span><span class="o">.</span><span class="n">createSymOp</span><span class="p">(</span><span class="s2">&quot;x,y,-z&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">symOp</span><span class="o">.</span><span class="n">getIdentifier</span><span class="p">())</span>
+
+<span class="c1"># This is an example for an identifier that changes</span>
+<span class="n">symOp</span> <span class="o">=</span> <span class="n">SymmetryOperationFactory</span><span class="o">.</span><span class="n">createSymOp</span><span class="p">(</span><span class="s2">&quot;1/2+x,y,z&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">symOp</span><span class="o">.</span><span class="n">getIdentifier</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Executing the above code yields the following output, which shows how the operation identifier is modified in some cases:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>x,y,-z
+x+1/2,y,z
+</pre></div>
+</div>
+<p>For ease of use with multiple symmetry operations it’s also possible to create multiple operations at once, using a semi-colon separated string of identifiers:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SymmetryOperationFactory</span>
+
+<span class="c1"># Create a list of symmetry operations</span>
+<span class="n">symOps</span> <span class="o">=</span> <span class="n">SymmetryOperationFactory</span><span class="o">.</span><span class="n">createSymOps</span><span class="p">(</span><span class="s2">&quot;x,y,-z; -x,-y,-z; z,x,y&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of operations: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">symOps</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Operations:&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">symOps</span><span class="p">:</span>
+   <span class="nb">print</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">getIdentifier</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>This prints each identifier on a new line:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Number of operations: 3
+Operations:
+x,y,-z
+-x,-y,-z
+z,x,y
+</pre></div>
+</div>
+<p>Symmetry operation objects can be used to transform coordinates or Miller indices, which are handled differently as detailed in the theory section above, so different methods exists for each of the two tasks.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SymmetryOperationFactory</span>
+
+<span class="n">symOp</span> <span class="o">=</span> <span class="n">SymmetryOperationFactory</span><span class="o">.</span><span class="n">createSymOp</span><span class="p">(</span><span class="s2">&quot;x-y,x,z&quot;</span><span class="p">)</span>
+
+<span class="n">coordinates</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+<span class="n">coordinatesPrime</span> <span class="o">=</span> <span class="n">symOp</span><span class="o">.</span><span class="n">transformCoordinates</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Transformed coordinates: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">coordinatesPrime</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>This script generates a symmetry operation that is used in hexagonal coordinate systems and uses it to transform the given coordinates:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Transformed coordinates: [-0.1,0.3,0.5]
+</pre></div>
+</div>
+<p>As transforming HKLs requires slightly different math, there is a special method for this as well:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SymmetryOperationFactory</span>
+
+<span class="n">symOp</span> <span class="o">=</span> <span class="n">SymmetryOperationFactory</span><span class="o">.</span><span class="n">createSymOp</span><span class="p">(</span><span class="s2">&quot;x,y,-z&quot;</span><span class="p">)</span>
+
+<span class="n">hkl</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">hklPrime</span> <span class="o">=</span> <span class="n">symOp</span><span class="o">.</span><span class="n">transformHKL</span><span class="p">(</span><span class="n">hkl</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Transformed hkl: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">hklPrime</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The above code will print the transformed Miller index triplet:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Transformed hkl: [1,-1,-3]
+</pre></div>
+</div>
+<p>It’s also possible to query the order of a symmetry operation. The next example generates a fourfold rotation around the <span class="math">\(z\)</span>-axis and prints some information about it.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SymmetryOperationFactory</span>
+
+<span class="n">symOp</span> <span class="o">=</span> <span class="n">SymmetryOperationFactory</span><span class="o">.</span><span class="n">createSymOp</span><span class="p">(</span><span class="s2">&quot;-y,x,z&quot;</span><span class="p">)</span>
+
+<span class="n">k</span> <span class="o">=</span> <span class="n">symOp</span><span class="o">.</span><span class="n">getOrder</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Order of the symmetry operation: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Original point: [&quot;</span><span class="o">+</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot; </span><span class="si">%.1f</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">x</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">+</span><span class="s2">&quot;]&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">symOp</span><span class="o">.</span><span class="n">transformCoordinates</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After </span><span class="si">{0}</span><span class="s2"> application(s): </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Order of the symmetry operation: 4
+Original point: [0.3, 0.4, 0.5]
+After 1 application(s): [-0.4,0.3,0.5]
+After 2 application(s): [-0.3,-0.4,0.5]
+After 3 application(s): [0.4,-0.3,0.5]
+After 4 application(s): [0.3,0.4,0.5]
+</pre></div>
+</div>
+</div>
+<div class="section" id="symmetry-elements">
+<h3>Symmetry elements<a class="headerlink" href="#symmetry-elements" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes it’s easier to describe symmetry in terms of the symmetry element that is associated to an operation. Several notation systems exist for these elements, but Hermann-Mauguin symbols are most commonly used in crystallography. Information on how to read these symbols can be found in ITA. Except identity, inversions and translations, all symmetry elements have a characteristic axis. In case of mirror and glide planes, this axis is perpendicular to the plane.</p>
+<p>Section 11.2 in the same book describes how to derive symmetry elements from matrix and vector pairs. The algorithms from that text are implemented in Mantid as well, so after a symmetry operation has been created using the factory, another factory can be used to generate the symmetry element corresponding to the operation. The resulting object can be queried for its Hermann-Mauguin symbol, its axis and its rotation sense (only for rotation axes). For identity, inversion and translation this returns <code class="docutils literal"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0]</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SymmetryOperationFactory</span><span class="p">,</span> <span class="n">SymmetryElementFactory</span>
+
+<span class="n">symOp</span> <span class="o">=</span> <span class="n">SymmetryOperationFactory</span><span class="o">.</span><span class="n">createSymOp</span><span class="p">(</span><span class="s2">&quot;x,y,-z&quot;</span><span class="p">)</span>
+<span class="n">element</span> <span class="o">=</span> <span class="n">SymmetryElementFactory</span><span class="o">.</span><span class="n">createSymElement</span><span class="p">(</span><span class="n">symOp</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The element corresponding to &#39;x,y,-z&#39; has the following symbol: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">getHMSymbol</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The mirror plane is perpendicular to: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">getAxis</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sense of rotation (or NoRotation): &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">getRotationSense</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>In this case, it’s a mirror plane perpendicular to the <span class="math">\(z\)</span>-axis:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>The element corresponding to &#39;x,y,-z&#39; has the following symbol: m
+The mirror plane is perpendicular to: [0,0,1]
+Sense of rotation (or NoRotation): NoRotation
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id4">
+<h2>Symmetry groups<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>In the previous section, symmetry operations and a binary operation combining them were introduced, which is finally sufficient to define symmetry groups. For the purpose of defining groups, it is assumed that coordinates <span class="math">\(x\)</span> and <span class="math">\(x + 1\)</span>, <span class="math">\(x + 2\)</span>, <span class="math">\(x - 1\)</span> and so forth are equivalent. That means that translation vectors are limited to have it’s elements on the interval <span class="math">\([0, 1)\)</span>. The most simple group possible contains only one element, the identity:</p>
+<div class="math">
+\[G = \left\{1\right\}\]</div>
+<p>This group fulfills all four group axioms. The identity matrix multiplied with itself is again identity, so the group is closed. Associativity holds as well, since it does not matter in which order multiple identical operations are performed. Since the only element of the group is the identity, the third axiom is fulfilled as well. So is the fourth, since the inverse of the identity is again identity. This group exists as the point group <span class="math">\(1\)</span> and describes objects that do not show any symmetry except identity.</p>
+<p>As more operations are added to a group, it can be useful to display the group in terms of a group table, which makes it easy to check the group axioms. The following example group contains the symmetry operations <span class="math">\(1\)</span>, <span class="math">\(\bar{1}\)</span>, <span class="math">\(2\)</span> and <span class="math">\(m\)</span>, the latter two being characterized by the same axis. The cells of the group tables show the result of the binary operation combining the symmetry operations in the header row and header column:</p>
+<table border="1" class="docutils" id="id9">
+<caption><span class="caption-text">Group table example</span><a class="headerlink" href="#id9" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head stub">&#160;</th>
+<th class="head"><span class="math">\(1\)</span></th>
+<th class="head"><span class="math">\(\bar{1}\)</span></th>
+<th class="head"><span class="math">\(2\)</span></th>
+<th class="head"><span class="math">\(m\)</span></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><th class="stub"><span class="math">\(1\)</span></th>
+<td><span class="math">\(1\)</span></td>
+<td><span class="math">\(\bar{1}\)</span></td>
+<td><span class="math">\(2\)</span></td>
+<td><span class="math">\(m\)</span></td>
+</tr>
+<tr class="row-odd"><th class="stub"><span class="math">\(\bar{1}\)</span></th>
+<td><span class="math">\(\bar{1}\)</span></td>
+<td><span class="math">\(1\)</span></td>
+<td><span class="math">\(m\)</span></td>
+<td><span class="math">\(2\)</span></td>
+</tr>
+<tr class="row-even"><th class="stub"><span class="math">\(2\)</span></th>
+<td><span class="math">\(2\)</span></td>
+<td><span class="math">\(m\)</span></td>
+<td><span class="math">\(1\)</span></td>
+<td><span class="math">\(\bar{1}\)</span></td>
+</tr>
+<tr class="row-odd"><th class="stub"><span class="math">\(m\)</span></th>
+<td><span class="math">\(m\)</span></td>
+<td><span class="math">\(2\)</span></td>
+<td><span class="math">\(\bar{1}\)</span></td>
+<td><span class="math">\(1\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Combining the symmetry operations does not result into any new operations, so the group is closed. Each element has an inverse (in this case, each element is its own inverse). :math:` and an identity element exists (all elements in the first row are the same as in the header row). Groups are available through the Python interface of Mantid. The following code generates the group in the table above (with the y-axis being characteristic for rotation and mirror symmetry) and checks whether this set of symmetry operations is indeed a Group:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">Group</span>
+
+<span class="n">group</span> <span class="o">=</span> <span class="n">Group</span><span class="p">(</span><span class="s2">&quot;x,y,z; -x,-y,-z; -x,y,-z; x,-y,z&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Order of group: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">getOrder</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fulfills group axioms: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">isGroup</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>This code confirms what was demonstrated by the group table above, the specified set of symmetry operations fulfills the group axioms:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Order of group: 4
+Fulfills group axioms: True
+</pre></div>
+</div>
+<p>For more fine-grained information, the four axioms can also be checked separately. Please note that the associativity axiom is always fulfilled due to the way the binary operation for symmetry operations is defined, it’s included for completeness reasons. In the next example, the inversion operation is removed and the four axioms are checked:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">Group</span><span class="p">,</span> <span class="n">GroupAxiom</span>
+
+<span class="n">group</span> <span class="o">=</span> <span class="n">Group</span><span class="p">(</span><span class="s2">&quot;x,y,z; -x,y,-z; x,-y,z&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Group axioms fulfilled:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  1. Closure: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">fulfillsAxiom</span><span class="p">(</span><span class="n">GroupAxiom</span><span class="o">.</span><span class="n">Closure</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  2. Associativity: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">fulfillsAxiom</span><span class="p">(</span><span class="n">GroupAxiom</span><span class="o">.</span><span class="n">Associativity</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  3. Identity: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">fulfillsAxiom</span><span class="p">(</span><span class="n">GroupAxiom</span><span class="o">.</span><span class="n">Identity</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  4. Inversion: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">fulfillsAxiom</span><span class="p">(</span><span class="n">GroupAxiom</span><span class="o">.</span><span class="n">Inversion</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>The code reveals that axioms 2 - 4 are fulfilled, but that the group is not closed:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Group axioms fulfilled:
+  1. Closure: False
+  2. Associativity: True
+  3. Identity: True
+  4. Inversion: True
+</pre></div>
+</div>
+<p>Looking into the group table above shows the reason: The combination of a mirror plane and a two-fold rotation axis implies the the presence of an inversion center. Similarly, the identity can be removed:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">Group</span><span class="p">,</span> <span class="n">GroupAxiom</span>
+
+<span class="n">group</span> <span class="o">=</span> <span class="n">Group</span><span class="p">(</span><span class="s2">&quot;-x,-y,-z; -x,y,-z; x,-y,z&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Group axioms fulfilled:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  1. Closure: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">fulfillsAxiom</span><span class="p">(</span><span class="n">GroupAxiom</span><span class="o">.</span><span class="n">Closure</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  2. Associativity: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">fulfillsAxiom</span><span class="p">(</span><span class="n">GroupAxiom</span><span class="o">.</span><span class="n">Associativity</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  3. Identity: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">fulfillsAxiom</span><span class="p">(</span><span class="n">GroupAxiom</span><span class="o">.</span><span class="n">Identity</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;  4. Inversion: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">fulfillsAxiom</span><span class="p">(</span><span class="n">GroupAxiom</span><span class="o">.</span><span class="n">Inversion</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>In contrast to removing the inversion, the group now also lacks an identity element:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Group axioms fulfilled:
+  1. Closure: False
+  2. Associativity: True
+  3. Identity: False
+  4. Inversion: True
+</pre></div>
+</div>
+<p>Using these specific checks can be helpful for finding out why a certain set of symmetry operations is not a group.</p>
+<p>Some groups are so called cyclic groups, all elements of the group can be expressed as powers of one symmetry operation (which are explained above) from 0 to <span class="math">\(k-1\)</span>, where <cite>k</cite> is the order of the operation. The group with elements <span class="math">\(1\)</span> and <span class="math">\(2\)</span> is an example for such a cyclic group, it can be expressed as <span class="math">\(2^0 = 1\)</span> and <span class="math">\(2^1 = 2\)</span>.</p>
+<p>Just like in the case of symmetry operations, it’s also possible to define a binary operation that combines two groups. For this, each symmetry operation of the first group is multiplied with each symmetry operation of the second group. If the resulting new set of operations fulfills the group axioms, the product of the two groups is again a group.</p>
+<p>These general group concepts are available in the C++ library of Mantid and are described in the API documentation (<a class="reference external" href="http://doxygen.mantidproject.org/nightly/d4/d82/classMantid_1_1Geometry_1_1SymmetryOperation.html">Mantid::Geometry::SymmetryOperation</a>, <a class="reference external" href="http://doxygen.mantidproject.org/nightly/df/d22/classMantid_1_1Geometry_1_1SymmetryElement.html">Mantid::Geometry::SymmetryElement</a>, <a class="reference external" href="http://doxygen.mantidproject.org/nightly/d3/d80/classMantid_1_1Geometry_1_1Group.html">Mantid::Geometry::Group</a>). The most important specializations of symmetry groups implemented in Mantid are point- and space groups. They are explained in an additional <a class="reference internal" href="PointAndSpaceGroups.html#point-and-space-groups"><span class="std std-ref">document</span></a>.</p>
+<table class="docutils citation" frame="void" id="id5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[Groups]</a></td><td><a class="reference external" href="http://en.wikipedia.org/wiki/Group_%28mathematics%29#Definition">Wikipedia article on groups</a>. Can be found in different formulations in various places such as <a class="reference external" href="http://mathworld.wolfram.com/Group.html">Wolfram MathWorld</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="itasymmetry" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[ITASymmetry]</a></td><td>International Tables for Crystallography (2006). Vol. A, part 11, p. 810 (chapters <a class="reference external" href="http://it.iucr.org/Ab/ch11o1v0001/">11.1</a> and <a class="reference external" href="http://it.iucr.org/Ab/ch11o2v0001/">11.2</a>).</td></tr>
+</tbody>
+</table>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="SharedPointer.html" title="Previous Chapter: Shared Pointer"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Shared Pointer</span>
+    </a>
+  </li>
+  <li>
+    <a href="TableWorkspaces.html" title="Next Chapter: Table Workspaces"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Table Workspaces &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2021-09-29.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

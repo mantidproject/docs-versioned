@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Time-of-Flight Powder Diffraction Calibration</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '4.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../../index.html" />
+    <link rel="up" title="Calibration" href="index.html" />
+    <link rel="next" title="Python Code For Calibration" href="PythonCodeForCalibration.html" />
+    <link rel="prev" title="PSD Tube Calibration" href="PSDTubeCalibration.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>4.1</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="time-of-flight-powder-diffraction-calibration">
+<span id="powder-diffraction-calibration"></span><h1>Time-of-Flight Powder Diffraction Calibration<a class="headerlink" href="#time-of-flight-powder-diffraction-calibration" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#data-required" id="id1">Data Required</a></li>
+<li><a class="reference internal" href="#calculating-calibration" id="id2">Calculating Calibration</a><ul>
+<li><a class="reference internal" href="#relative-to-a-specific-spectrum" id="id3">Relative to a specific spectrum</a></li>
+<li><a class="reference internal" href="#using-known-peak-positions" id="id4">Using known peak positions</a></li>
+<li><a class="reference internal" href="#workflow-algorithms" id="id5">Workflow algorithms</a></li>
+<li><a class="reference internal" href="#saving-and-loading-calibration" id="id6">Saving and Loading Calibration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-your-calibration" id="id7">Testing your Calibration</a></li>
+<li><a class="reference internal" href="#expanding-on-detector-masking" id="id8">Expanding on detector masking</a></li>
+<li><a class="reference internal" href="#creating-detector-grouping" id="id9">Creating detector grouping</a></li>
+<li><a class="reference internal" href="#adjusting-the-instrument-definition" id="id10">Adjusting the Instrument Definition</a></li>
+</ul>
+</div>
+<div class="section" id="data-required">
+<h2><a class="toc-backref" href="#id1">Data Required</a><a class="headerlink" href="#data-required" title="Permalink to this headline">¶</a></h2>
+<p>To get a good calibration you will want good statistics with
+calibration data. For most of the calibration algorithms, this means
+having enough statistics in a single pixel to fit individual peaks or
+to cross-correlate data. Some of the calibration algorithms also
+require knowing the ideal positions of peaks in d-spacing. For these
+algorithms, it is not uncommen to calibrate the instrument, refine the
+results using a Rietveld program, then using the updated peak
+positions to calibrate again. Often the sample selected will be diamond.</p>
+</div>
+<div class="section" id="calculating-calibration">
+<h2><a class="toc-backref" href="#id2">Calculating Calibration</a><a class="headerlink" href="#calculating-calibration" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="relative-to-a-specific-spectrum">
+<h3><a class="toc-backref" href="#id3">Relative to a specific spectrum</a><a class="headerlink" href="#relative-to-a-specific-spectrum" title="Permalink to this headline">¶</a></h3>
+<p>This technique of calibration uses a reference spectrum to calibrate
+the rest of the instrument to. The main algorithm that does this is
+<a class="reference internal" href="../../algorithms/GetDetectorOffsets-v1.html#algm-getdetectoroffsets"><em>GetDetectorOffsets</em></a> whose
+<tt class="docutils literal"><span class="pre">InputWorkspace</span></tt> is the <tt class="docutils literal"><span class="pre">OutputWorkspace</span></tt> of <a class="reference internal" href="../../algorithms/CrossCorrelate-v1.html#algm-crosscorrelate"><em>CrossCorrelate</em></a>. Generically the workflow is</p>
+<ol class="arabic simple">
+<li><a class="reference internal" href="../../algorithms/Load-v1.html#algm-load"><em>Load</em></a> the calibration data</li>
+<li>Convert the X-Units to d-spacing using <a class="reference internal" href="../../algorithms/ConvertUnits-v1.html#algm-convertunits"><em>ConvertUnits</em></a>. The &#8220;offsets&#8221; calculated are relative
+reference spectrum&#8217;s geometry so using <a class="reference internal" href="../../algorithms/AlignDetectors-v1.html#algm-aligndetectors"><em>AlignDetectors</em></a> will violate the assumptions for other
+algorithms used with time-of-flight powder diffraction and give the
+wrong results for focused data.</li>
+<li>Run <a class="reference internal" href="../../algorithms/Rebin-v1.html#algm-rebin"><em>Rebin</em></a> to set a common d-spacing bin
+structure across all of the spectra, you will need fine enough bins
+to allow fitting of your peak.  Whatever you choose, make a note of
+it you may need it later.</li>
+<li>Take a look at the data using the SpectrumViewer or a color map
+plot, find the workspace index of a spectrum that has the peak
+close to the known reference position.  This will be the reference
+spectra and will be used in the next step.</li>
+<li>Cross correlate the spectrum with <a class="reference internal" href="../../algorithms/CrossCorrelate-v1.html#algm-crosscorrelate"><em>CrossCorrelate</em></a>, enter the workspace index as the
+<tt class="docutils literal"><span class="pre">ReferenceSpectra</span></tt> you found in the last step.</li>
+<li>Run <a class="reference internal" href="../../algorithms/GetDetectorOffsets-v1.html#algm-getdetectoroffsets"><em>GetDetectorOffsets</em></a>, the
+InputWorkspace if the output from <a class="reference internal" href="../../algorithms/CrossCorrelate-v1.html#algm-crosscorrelate"><em>CrossCorrelate</em></a>.  Use the rebinning step you made a note of
+in step 3 as the step parameter, and DReference as the expected
+value of the reference peak that you are fitting to.  XMax and XMin
+define the window around the reference peak to search for the peak
+in each spectra, if you find that some spectra do not find the peak
+try increasing those values.</li>
+<li>The output is an <tt class="docutils literal"><span class="pre">OffsetsWorspace</span></tt>. See below for how to save,
+load, and use the workspace.</li>
+</ol>
+</div>
+<div class="section" id="using-known-peak-positions">
+<h3><a class="toc-backref" href="#id4">Using known peak positions</a><a class="headerlink" href="#using-known-peak-positions" title="Permalink to this headline">¶</a></h3>
+<p>These techniques require knowing the precise location, in d-space, of
+diffraction peaks and benefit from knowing
+more. <a class="reference internal" href="../../algorithms/GetDetOffsetsMultiPeaks-v1.html#algm-getdetoffsetsmultipeaks"><em>GetDetOffsetsMultiPeaks</em></a>
+and <a class="reference internal" href="../../algorithms/PDCalibration-v1.html#algm-pdcalibration"><em>PDCalibration</em></a> are the main choices for
+this. Both algorithms fit individual peak positions and use those fits
+to generate the calibration information.</p>
+<p>The workflow for <a class="reference internal" href="../../algorithms/GetDetOffsetsMultiPeaks-v1.html#algm-getdetoffsetsmultipeaks"><em>GetDetOffsetsMultiPeaks</em></a> is identical to that of
+<a class="reference internal" href="../../algorithms/GetDetectorOffsets-v1.html#algm-getdetectoroffsets"><em>GetDetectorOffsets</em></a> without the
+cross-correlation step (5). The main difference in the operation of
+the algorithm is that it essentially calculates an offset from each
+peak then calculates a weighted average of those offsets for the
+individual spectrum.</p>
+<p>The workflow for <a class="reference internal" href="../../algorithms/PDCalibration-v1.html#algm-pdcalibration"><em>PDCalibration</em></a> differs
+significantly from that of the other calibration techniques. It
+requires the data to be in time-of-flight, then uses either the
+instrument geometry, or a previous calibration, to convert the peak
+positions to time-of-flight. The individual peaks fits are then used
+to calculate <img class="math" src="../../_images/math/05350e613c7024e6914d1c980dac27b3aa57c20a.png" alt="DIFC" style="vertical-align: 0px"/> values directly. The benefit of this method, is
+that it allows for calibrating starting from a &#8220;good&#8221; calibration,
+rather than returning back to the instrument geometry. The steps for
+using this are</p>
+<ol class="arabic simple">
+<li><a class="reference internal" href="../../algorithms/Load-v1.html#algm-load"><em>Load</em></a> the calibration data</li>
+<li>Run <a class="reference internal" href="../../algorithms/PDCalibration-v1.html#algm-pdcalibration"><em>PDCalibration</em></a> with appropriate
+properties</li>
+<li>The <tt class="docutils literal"><span class="pre">OutputCalibrationTable</span></tt> is a <a class="reference internal" href="../TableWorkspaces.html#table-workspaces"><em>TableWorkspace</em></a>. See
+below for how to save, load, and use the workspace.</li>
+</ol>
+</div>
+<div class="section" id="workflow-algorithms">
+<h3><a class="toc-backref" href="#id5">Workflow algorithms</a><a class="headerlink" href="#workflow-algorithms" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="../../algorithms/CalibrateRectangularDetectors-v1.html#algm-calibraterectangulardetectors"><em>CalibrateRectangularDetectors</em></a>
+will do most of the workflow for you, including applying the
+calibration to the data. While its name suggests it is only for a
+particular subset of detector types, it is not. It has many options
+for selecting between <a class="reference internal" href="../../algorithms/GetDetectorOffsets-v1.html#algm-getdetectoroffsets"><em>GetDetectorOffsets</em></a> and <a class="reference internal" href="../../algorithms/GetDetOffsetsMultiPeaks-v1.html#algm-getdetoffsetsmultipeaks"><em>GetDetOffsetsMultiPeaks</em></a>.</p>
+</div>
+<div class="section" id="saving-and-loading-calibration">
+<h3><a class="toc-backref" href="#id6">Saving and Loading Calibration</a><a class="headerlink" href="#saving-and-loading-calibration" title="Permalink to this headline">¶</a></h3>
+<p>There are two basic formats for the calibration information. The
+legacy ascii format is described in <a class="reference internal" href="CalFile.html#calfile"><em>CalFile</em></a>. The newer HDF5
+version is described alongside the description of <a class="reference internal" href="../DiffractionCalibrationWorkspace.html#diffractioncalibrationworkspace"><em>calibration
+table</em></a>.</p>
+<p>Saving and loading the HDF5 format is done with <a class="reference internal" href="../../algorithms/SaveDiffCal-v1.html#algm-savediffcal"><em>SaveDiffCal</em></a> and <a class="reference internal" href="../../algorithms/LoadDiffCal-v1.html#algm-loaddiffcal"><em>LoadDiffCal</em></a>.</p>
+<p>Saving and loading the legacy format is done with <a class="reference internal" href="../../algorithms/SaveCalFile-v1.html#algm-savecalfile"><em>SaveCalFile</em></a> and <a class="reference internal" href="../../algorithms/LoadCalFile-v1.html#algm-loadcalfile"><em>LoadCalFile</em></a>. This
+can be converted from an <tt class="docutils literal"><span class="pre">OffsetsWorkspace</span></tt> to a calibration table
+using <a class="reference internal" href="../../algorithms/ConvertDiffCal-v1.html#algm-convertdiffcal"><em>ConvertDiffCal</em></a>.</p>
+<div class="figure align-right">
+<a class="reference internal image-reference" href="../../_images/PG3_Calibrate.png"><img alt="../../_images/PG3_Calibrate.png" src="../../_images/PG3_Calibrate.png" style="width: 400px;" /></a>
+</div>
+</div>
+</div>
+<div class="section" id="testing-your-calibration">
+<h2><a class="toc-backref" href="#id7">Testing your Calibration</a><a class="headerlink" href="#testing-your-calibration" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-right">
+<a class="reference internal image-reference" href="../../_images/SNAP_Calibrate.png"><img alt="../../_images/SNAP_Calibrate.png" src="../../_images/SNAP_Calibrate.png" style="width: 400px;" /></a>
+</div>
+<p>The first thing that should be done is to convert the calibration
+workspace (either table or <tt class="docutils literal"><span class="pre">OffsetsWorkspace</span></tt> to a workspace of
+<img class="math" src="../../_images/math/05350e613c7024e6914d1c980dac27b3aa57c20a.png" alt="DIFC" style="vertical-align: 0px"/> values to inspect using the <a class="reference internal" href="../../api/python/mantidplot/InstrumentView.html#mantidplot.InstrumentView" title="mantidplot.InstrumentView"><tt class="xref py py-obj docutils literal"><span class="pre">instrument</span> <span class="pre">view</span></tt></a>. This can be done using
+<a class="reference internal" href="../../algorithms/CalculateDIFC-v1.html#algm-calculatedifc"><em>CalculateDIFC</em></a>. The values of <img class="math" src="../../_images/math/05350e613c7024e6914d1c980dac27b3aa57c20a.png" alt="DIFC" style="vertical-align: 0px"/>
+should vary continuously across the detectors that are close to each
+other (e.g. neighboring pixels in an LPSD).</p>
+<p>You will need to test that the calibration managed to find a
+reasonable calibration constant for each of the spectra in your data.
+The easiest way to do this is to apply the calibration to your
+calibration data and check that the bragg peaks align as expected.</p>
+<ol class="arabic simple">
+<li>Load the calibration data using <a class="reference internal" href="../../algorithms/Load-v1.html#algm-load"><em>Load</em></a></li>
+<li>Run <a class="reference internal" href="../../algorithms/AlignDetectors-v1.html#algm-aligndetectors"><em>AlignDetectors</em></a>, this will convert the data to d-spacing and apply the calibration.  You can provide the calibration using the <tt class="docutils literal"><span class="pre">CalibrationFile</span></tt>, the <tt class="docutils literal"><span class="pre">CalibrationWorkspace</span></tt>, or <tt class="docutils literal"><span class="pre">OffsetsWorkspace</span></tt>.</li>
+<li>Plot the workspace as a Color Fill plot, in the spectrum view, or a few spectra in a line plot.</li>
+</ol>
+<p>Further insight can be gained by comparing the grouped (after aligning
+and focussing the data) spectra from a previous calibration or convert
+units to the newly calibrated version. This can be done using
+<a class="reference internal" href="../../algorithms/AlignAndFocusPowder-v1.html#algm-alignandfocuspowder"><em>AlignAndFocusPowder</em></a> with and without
+calibration information. In the end, a Rietveld refinement is the best
+test of the calibration.</p>
+</div>
+<div class="section" id="expanding-on-detector-masking">
+<h2><a class="toc-backref" href="#id8">Expanding on detector masking</a><a class="headerlink" href="#expanding-on-detector-masking" title="Permalink to this headline">¶</a></h2>
+<p>While many of the calibration methods will generate a mask based on the detectors calibrated, sometimes additional metrics for masking are desired. One way is to use <a class="reference internal" href="../../algorithms/DetectorDiagnostic-v1.html#algm-detectordiagnostic"><em>DetectorDiagnostic</em></a>. The result can be combined with an existing mask using</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="n">BinaryOperateMasks</span><span class="p">(</span><span class="n">InputWorkspace1</span><span class="o">=</span><span class="s">&#39;mask_from_cal&#39;</span><span class="p">,</span> <span class="n">InputWorkspace2</span><span class="o">=</span><span class="s">&#39;mask_detdiag&#39;</span><span class="p">,</span>
+                   <span class="n">OperationType</span><span class="o">=</span><span class="s">&#39;OR&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;mask_final&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-detector-grouping">
+<h2><a class="toc-backref" href="#id9">Creating detector grouping</a><a class="headerlink" href="#creating-detector-grouping" title="Permalink to this headline">¶</a></h2>
+<p>To create a grouping workspace for <a class="reference internal" href="../../algorithms/SaveDiffCal-v1.html#algm-savediffcal"><em>SaveDiffCal</em></a> you need to specify which detector pixels to
+combine to make an output spectrum. This is done using
+<a class="reference internal" href="../../algorithms/CreateGroupingWorkspace-v1.html#algm-creategroupingworkspace"><em>CreateGroupingWorkspace</em></a>. An
+alternative is to generate a grouping file to load with
+<a class="reference internal" href="../../algorithms/LoadDetectorsGroupingFile-v1.html#algm-loaddetectorsgroupingfile"><em>LoadDetectorsGroupingFile</em></a>.</p>
+</div>
+<div class="section" id="adjusting-the-instrument-definition">
+<h2><a class="toc-backref" href="#id10">Adjusting the Instrument Definition</a><a class="headerlink" href="#adjusting-the-instrument-definition" title="Permalink to this headline">¶</a></h2>
+<p>This approach attempts to correct the instrument component positions based on the calibration data. It can be more involved than applying the correction during focussing.</p>
+<ol class="arabic simple">
+<li>Perform a calibration using <a class="reference internal" href="../../algorithms/CalibrateRectangularDetectors-v1.html#algm-calibraterectangulardetectors"><em>CalibrateRectangularDetectors</em></a> or <a class="reference internal" href="../../algorithms/GetDetOffsetsMultiPeaks-v1.html#algm-getdetoffsetsmultipeaks"><em>GetDetOffsetsMultiPeaks</em></a>.  Only these algorithms can export the <a class="reference internal" href="../DiffractionCalibrationWorkspace.html#diffractioncalibrationworkspace"><em>Diffraction Calibration Workspace</em></a> required.</li>
+<li>Run <a class="reference internal" href="../../algorithms/AlignComponents-v1.html#algm-aligncomponents"><em>AlignComponents</em></a> this will move aspects of the instrument to optimize the offsets.  It can move any named aspect of the instrument including the sample and source positions.  You will likely need to run this several times, perhaps focussing on a single bank at a time, and then the source and sample positions in order to  get a good alignment.</li>
+<li>Then either:<ul>
+<li><a class="reference internal" href="../../algorithms/ExportGeometry-v1.html#algm-exportgeometry"><em>ExportGeometry</em></a> will export the resulting geometry into a format that can be used to create a new XML instrument definition.  The Mantid team at ORNL have tools to automate this for some instruments at the SNS.</li>
+<li>At ISIS enter the resulting workspace as the calibration workspace into the DAE software when recording new runs.  The calibrated workspace will be copied into the resulting NeXuS file of the run.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Category</strong>: <a class="reference external" href="../categories/Calibration.html">Calibration</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="PSDTubeCalibration.html" title="Previous Chapter: PSD Tube Calibration"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; PSD Tube Calibra...</span>
+    </a>
+  </li>
+  <li>
+    <a href="PythonCodeForCalibration.html" title="Next Chapter: Python Code For Calibration"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Python Code For ... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2019-07-22.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

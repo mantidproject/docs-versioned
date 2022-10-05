@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Table Workspaces</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Unit_Factory" href="Unit_Factory.html" />
+    <link rel="prev" title="Shared Pointer" href="Shared_Pointer.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.3</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="table-workspaces">
+<span id="id1"></span><h1>Table Workspaces<a class="headerlink" href="#table-workspaces" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>This page focusses on dealing with Table Workspaces in C++, and is
+aimed at developers. For details on interacting with Table Workspaces
+in Python, please see <a class="reference internal" href="../api/python/mantid/api/ITableWorkspace.html#mantid.api.ITableWorkspace" title="mantid.api.ITableWorkspace"><tt class="xref py py-obj docutils literal"><span class="pre">this</span> <span class="pre">page</span></tt></a>.</li>
+</ul>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Table workspaces are general purpose workspaces for storing data of
+mixed types. A table workspace is organized in columns. Each column has
+a name and a type - the type of the data in that column. Table wokspaces
+can be created using the workspace factory:</p>
+<p><tt class="docutils literal"><span class="pre">ITableWorkspace_sptr&nbsp;table&nbsp;=&nbsp;WorkspaceFactory::Instance().createTable(&quot;TableWorkspace&quot;);</span></tt></p>
+<p>Columns are added using the addColumn method:</p>
+<div class="line-block">
+<div class="line"><tt class="docutils literal"><span class="pre">table-&gt;addColumn(&quot;str&quot;,&quot;Parameter&nbsp;Name&quot;);</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">table-&gt;addColumn(&quot;double&quot;,&quot;Value&quot;);</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">table-&gt;addColumn(&quot;double&quot;,&quot;Error&quot;);</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">table-&gt;addColumn(&quot;int&quot;,&quot;Index&quot;);</span></tt></div>
+</div>
+<p>Here the first argument is a symbolic name of the column&#8217;s data type and
+the second argument is the name of the column. The predefined types are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="40%" />
+<col width="60%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Symbolic name</th>
+<th class="head">C++ type</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>int</td>
+<td>int</td>
+</tr>
+<tr class="row-odd"><td>float</td>
+<td>float</td>
+</tr>
+<tr class="row-even"><td>double</td>
+<td>double</td>
+</tr>
+<tr class="row-odd"><td>bool</td>
+<td>bool</td>
+</tr>
+<tr class="row-even"><td>str</td>
+<td>std::string</td>
+</tr>
+<tr class="row-odd"><td>V3D</td>
+<td>Mantid::Geometry::V3D</td>
+</tr>
+<tr class="row-even"><td>long64</td>
+<td>int64_t</td>
+</tr>
+</tbody>
+</table>
+<p>The data in the table can be accessed in a number of ways. The most
+simple way is to call templated method T&amp; cell(row,col), where col is
+the index of the column in the workspace and row is the index of the
+cell in the comlumn. Colunms are indexed in the order they are created
+with addColumn. There are also specialized methods for four predefined
+data types: int&amp; Int(row,col), double&amp; Double(row,col), std::string&amp;
+String(row,col), bool&amp; Bool(row,col). Columns use std::vector to store
+the data. To get access to the vector use getVector(name). To get the
+column object use getColumn(name).</p>
+<p>Only columns of type int, double and str can currently be saved to Nexus
+by <a class="reference internal" href="../algorithms/SaveNexus-v1.html#algm-savenexus"><em>SaveNexus</em></a> or
+<a class="reference internal" href="../algorithms/SaveNexusProcessed-v1.html#algm-savenexusprocessed"><em>SaveNexusProcessed</em></a>. Columns of other types will
+simply be ommitted from the Nexus file without any error message.</p>
+</div>
+<div class="section" id="table-rows">
+<h2>Table rows<a class="headerlink" href="#table-rows" title="Permalink to this headline">¶</a></h2>
+<p>Cells with the same index form a row. TableRow class represents a row.
+Use getRow(int) or getFirstRow() to access existing rows. For example:</p>
+<div class="line-block">
+<div class="line"><tt class="docutils literal"><span class="pre">std::string&nbsp;key;</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">double&nbsp;value;</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">TableRow&nbsp;row&nbsp;=&nbsp;table-&gt;getFirstRow();</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">do</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">{</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">&nbsp;&nbsp;row&nbsp;&gt;&gt;&nbsp;key&nbsp;&gt;&gt;&nbsp;value;</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">&nbsp;&nbsp;std::cout&nbsp;&lt;&lt;&nbsp;&quot;key=&quot;&nbsp;&lt;&lt;&nbsp;key&nbsp;&lt;&lt;&nbsp;&quot;&nbsp;value=&quot;&nbsp;&lt;&lt;&nbsp;value&nbsp;&lt;&lt;&nbsp;std::endl;</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">}</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">while(row.next());</span></tt></div>
+</div>
+<p>TableRow can also be use for writing into a table:</p>
+<div class="line-block">
+<div class="line"><tt class="docutils literal"><span class="pre">for(int&nbsp;i=0;&nbsp;i&nbsp;&lt;&nbsp;n;&nbsp;++i)</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">{</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">&nbsp;&nbsp;TableRow&nbsp;row&nbsp;=&nbsp;table-&gt;appendRow();</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">&nbsp;&nbsp;row&nbsp;&lt;&lt;&nbsp;keys[i]&nbsp;&lt;&lt;&nbsp;values[i];</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">}</span></tt></div>
+</div>
+</div>
+<div class="section" id="defining-new-column-types">
+<h2>Defining new column types<a class="headerlink" href="#defining-new-column-types" title="Permalink to this headline">¶</a></h2>
+<p>Users can define new data types to be used in TableWorkspace.
+TableColumn.h defines macro
+DECLARE_TABLECOLUMN(c_plus_plus_type,symbolic_name).
+c_plus_plus_type must be a copyable type and operators &lt;&lt; and &gt;&gt; must
+be defined. There is also DECLARE_TABLEPOINTERCOLUMN macro for
+declaring non-copyable types, but it has never been used.</p>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2014, Mantid.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

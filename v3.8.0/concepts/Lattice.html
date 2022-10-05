@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Lattice</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.8.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="MD Histogram Workspace" href="MDHistoWorkspace.html" />
+    <link rel="prev" title="IDF ISIS LET annotated" href="LETSampleIDF.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.8</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="lattice">
+<span id="id1"></span><h1>Lattice<a class="headerlink" href="#lattice" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this document is to explain how Mantid is using
+information about unit cells and their orientation with respect to the
+laboratory frame. For a detailed description, see
+<a class="reference external" href="http://github.com/mantidproject/documents/blob/master/Design/UBMatriximplementationnotes.pdf">http://github.com/mantidproject/documents/blob/master/Design/UBMatriximplementationnotes.pdf</a></p>
+<div class="section" id="theory">
+<h2>Theory<a class="headerlink" href="#theory" title="Permalink to this headline">¶</a></h2>
+<p>The physics of a system studied by neutron scattering is described by
+the conservation of energy and momentum. In the laboratory frame:</p>
+<div class="math">
+<p><img src="../_images/math/7d36690f96af4a8ab8626a07505c8a8dbd3922fd.png" alt="Q_l=  \hbar \mathbf{k}_i^{} -  \hbar \mathbf{k}_f"/></p>
+</div><div class="math">
+<p><img src="../_images/math/3f315f769f4876c84baf941781fafa048efbd0d9.png" alt="\Delta E_l= \frac{\hbar^2}{2m} (k_i^2 -  k_f^2)"/></p>
+</div><p>Note that the left side in the above equations refer to what is
+happening to the lattice, not to the neutron.</p>
+<p>Let&#8217;s assume that we have a periodic lattice, described by lattice
+parameters <img class="math" src="../_images/math/7abb5a128ccf354cd6b8736587b1ede54876787f.png" alt="a,\ b,\ c,\ \alpha,\ \beta,\ \gamma" style="vertical-align: -4px"/>. The reciprocal
+lattice will be described by parameters
+<img class="math" src="../_images/math/52480fbfebe6beb1763419d70d3c34acb2f2c3d3.png" alt="a^*,\ b^*,\ c^*,\ \alpha^*,\ \beta^*,\  \gamma^*" style="vertical-align: -4px"/>. Note that
+Mantid uses <img class="math" src="../_images/math/b0b60922e4176066cd9476e2a5dd89de59ad6149.png" alt="a^*=\frac{1}{a}" style="vertical-align: -6px"/> type of notation, like in
+crystallography.</p>
+<p>For such a lattice, the physics will be described in terms of reciprocal
+lattice parameters by</p>
+<div class="math">
+<p><img src="../_images/math/40e81ed16cc5eb274afc2ad65ea6aee294eac493.png" alt="Q= 2 \pi\left(h \mathbf{a}^* + k \mathbf{b}^* +l \mathbf{c}^* \right) = \left(\begin{array}{c}
+                                                        h \\
+                                                        k \\
+                                                        l
+                                                      \end{array}\right)"/></p>
+</div><p>The <img class="math" src="../_images/math/2cdd56aebfdd72cfbf3e847ced97e6a628c6e6c4.png" alt="UB_{}^{}" style="vertical-align: 0px"/> matrix formalism relates <img class="math" src="../_images/math/8ec9ab0232a59833c96529339f664f672bda9f75.png" alt="Q_l^{}" style="vertical-align: -5px"/> and
+<img class="math" src="../_images/math/573ffbc502782cad3d14a2619ed0af013aefcca2.png" alt="Q_{}^{}" style="vertical-align: -4px"/> with the following equation:</p>
+<div class="math">
+<p><img src="../_images/math/9e7c26621fb134d77a5d5f1f58b82368d715c519.png" alt="Q_l = 2 \pi R \cdot U \cdot B \left(\begin{array}{c}
+                                                        h \\
+                                                        k \\
+                                                        l
+                                                      \end{array}\right)"/></p>
+</div><p>The <img class="math" src="../_images/math/05975fc4e86a0711f935ee2a4fe044da55c6a6f9.png" alt="B_{}^{}" style="vertical-align: 0px"/> matrix transforms the <img class="math" src="../_images/math/6f8e9ffb46651f9350495bb9583fdc61a5764041.png" alt="h^{}_{}, k, l" style="vertical-align: -4px"/> triplet
+into a Cartesian system, with the first axis along
+<img class="math" src="../_images/math/420034c79f266ef57c93aa832f2ab96dfe8b56b1.png" alt="\ \mathbf{a}^*" style="vertical-align: 0px"/>, the second in the plane defined by
+<img class="math" src="../_images/math/420034c79f266ef57c93aa832f2ab96dfe8b56b1.png" alt="\ \mathbf{a}^*" style="vertical-align: 0px"/> and <img class="math" src="../_images/math/684b0b85b7366c5ab6a0d7b2d46541da3c2c0b88.png" alt="\ \mathbf{b}^*" style="vertical-align: 0px"/>, and the third axis
+perpendicular to this plane. In the Busing and Levi convention (W. R.
+Busing and H. A. Levy, Angle calculations for 3- and 4-circle X-ray and
+neutron diffractometers - Acta Cryst. (1967). 22, 457-464):</p>
+<div class="math">
+<p><img src="../_images/math/114c5a6d95c05241fae97b22af02d2e5f3ebcf33.png" alt="B = \left( \begin{array}{ccc}
+    a^* &amp; b^*\cos(\gamma^*) &amp; c^*\cos(\beta^*) \\
+    0 &amp; b^*\sin(\gamma^*) &amp; -c^*\sin(\beta^*)\cos(\alpha) \\
+    0 &amp; 0 &amp; 1/c \end{array} \right)"/></p>
+</div><p>The <img class="math" src="../_images/math/bb340e8d1af9c431f17fced8127d14cb97ccbcb5.png" alt="U_{}^{}" style="vertical-align: 0px"/> matrix represents the rotation from this Cartesian
+coordinate frame to the Cartesian coordinate frame attached to the
+innermost axis of the goniometer that holds the sample.</p>
+<p>The <img class="math" src="../_images/math/091dacd8f40f37243435b1c3c69e7a00bf24d0b9.png" alt="R_{}^{}" style="vertical-align: 0px"/> matrix is the rotation matrix of the goniometer</p>
+<p>Other useful equations:</p>
+<div class="math">
+<p><img src="../_images/math/b264cfb7e7f0fe17cd33f9c4cb8bdb910fffe808.png" alt="G^* = (UB)^T UB = B^T B = \left( \begin{array}{ccc}
+    a^*a^* &amp; a^*b^*\cos(\gamma^*) &amp; a^*c^*\cos(\beta^*) \\
+    a^*b^*\cos(\gamma^*) &amp; b^*b^* &amp; b^*c^*\cos(\alpha^*) \\
+    a^*c^*\cos(\beta^*) &amp; b^*c^*\cos(\alpha^*) &amp; c^*c^* \end{array} \right)"/></p>
+</div><div class="math">
+<p><img src="../_images/math/c022309adb476b9984f0654f9dbad9a529298931.png" alt="G=(G^*)^{-1}=\left( \begin{array}{ccc}
+    aa &amp; ab\cos(\gamma) &amp; ac\cos(\beta) \\
+    ab\cos(\gamma) &amp; bb &amp; bc\cos(\alpha) \\
+    ac\cos(\beta) &amp; bc\cos(\alpha) &amp; cc \end{array} \right)"/></p>
+</div><p>The distance in reciprocal space to the <img class="math" src="../_images/math/c292b51e25bc77ca6e8334c5c0262d1843a35448.png" alt="\left(h,k,l\right)" style="vertical-align: -4px"/> plane
+is given by</p>
+<div class="math">
+<p><img src="../_images/math/730e6f26ae0475479bcb75e390542e1b2128a653.png" alt="d^* =\left| B \left(\begin{array}{c}
+                                                        h \\
+                                                        k \\
+                                                        l
+                                                      \end{array}\right)\right|"/></p>
+</div><p>The distance in real space to the <img class="math" src="../_images/math/c292b51e25bc77ca6e8334c5c0262d1843a35448.png" alt="\left(h,k,l\right)" style="vertical-align: -4px"/> plane is
+given by <img class="math" src="../_images/math/2f41ab1f619324daae82b81c8570c2d76b03470c.png" alt="d=\frac{1}{d^*}" style="vertical-align: -6px"/></p>
+<p>The angle between <img class="math" src="../_images/math/311c021b243ae3079cc70f5b8cc9d30eaab06072.png" alt="Q_1^{}" style="vertical-align: -6px"/> and <img class="math" src="../_images/math/f184465c52edf4ecdb80e7360f2de4826bda86ba.png" alt="Q_2^{}" style="vertical-align: -5px"/> is given by
+<img class="math" src="../_images/math/55fcebd14f415b054b5f1c723d0ee85d396c865a.png" alt="\cos( Q_1^{}, Q_2^{})=\frac{(BQ_1)(BQ_2)}{|(BQ_1)| |(BQ_2)|}" style="vertical-align: -9px"/></p>
+</div>
+<div class="section" id="unit-cells">
+<h2>Unit cells<a class="headerlink" href="#unit-cells" title="Permalink to this headline">¶</a></h2>
+<p>The UnitCell class provides the following functions to access direct and
+reciprocal lattices. The examples can be run from the script console in
+Mantid</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="18%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Function</th>
+<th class="head">Example</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>UnitCell()</td>
+<td>u = UnitCell()</td>
+<td>default constructor, with <img class="math" src="../_images/math/7b88640523e2532cf6684d32ab4678b375fbb589.png" alt="a=b=c=1\rm \AA, \ \alpha=\beta=\gamma=90^\circ" style="vertical-align: -4px"/></td>
+</tr>
+<tr class="row-odd"><td>UnitCell(other unit cell)</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell()</div>
+<div class="line-block">
+<div class="line">u2 = UnitCell(u)</div>
+</div>
+</div>
+</td>
+<td>copy constructor</td>
+</tr>
+<tr class="row-even"><td>UnitCell(a,b,c)</td>
+<td>u = UnitCell(2,3.5,4)</td>
+<td>constructor using <img class="math" src="../_images/math/71555591d64afd253d27ec33b0400e6494eae239.png" alt="a, b, c\ (\rm {in \ \AA}), \ \alpha=\beta=\gamma=90^\circ" style="vertical-align: -4px"/></td>
+</tr>
+<tr class="row-odd"><td>UnitCell(a,b,c,alpha,beta,gamma,Unit = unit)</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,3.5,4,90,90,90)</div>
+<div class="line">u = UnitCell(2,3.5,4,90,90,90,Unit = Degrees)</div>
+<div class="line">u = UnitCell(2,3.5,4,0.5*math.pi,0.5*math.pi,0.5*math.pi,Unit = Radians)</div>
+</div>
+</td>
+<td>constructor using <img class="math" src="../_images/math/83fa773c6d4e0b6c7ebb760246a5e5372e74050d.png" alt="a, b, c\ (\rm {in \ \AA}), \ \alpha, \ \beta,\ \gamma \ (\rm {in \ degrees \ or \ radians})" style="vertical-align: -4px"/>. The optional parameter &#8220;Unit&#8221; controls the units for the angles, and can have the value of &#8220;Degrees&#8221; or &#8220;Radians&#8221;. By default Unit = Degrees</td>
+</tr>
+<tr class="row-even"><td><div class="first last line-block">
+<div class="line">a()</div>
+<div class="line-block">
+<div class="line">b()</div>
+<div class="line">c()</div>
+</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,3.5,4)</div>
+<div class="line-block">
+<div class="line">print u.c()</div>
+</div>
+</div>
+</td>
+<td>returns lattice parameters <img class="math" src="../_images/math/f5fd71be2c4ee417f7ceb30e3755db1f0927e0ec.png" alt="a, b, c\ (\rm {in \ \AA})" style="vertical-align: -4px"/></td>
+</tr>
+<tr class="row-odd"><td><div class="first last line-block">
+<div class="line">a1()</div>
+<div class="line-block">
+<div class="line">a2()</div>
+<div class="line">a3()</div>
+</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,3.5,4)</div>
+<div class="line-block">
+<div class="line">print u.a2()</div>
+</div>
+</div>
+</td>
+<td>returns lattice parameters <img class="math" src="../_images/math/a4653af26d6b5efa2da02e3c9bd96034dad86864.png" alt="a_1=a, a_2=b, a_3=c\ (\rm {in \ \AA})" style="vertical-align: -4px"/>. Note: <a class="reference external" href="http://it.iucr.org/Ba/ch1o1v0001/">&#8220;International Tables for Crystallography&#8221;</a> notation</td>
+</tr>
+<tr class="row-even"><td><div class="first last line-block">
+<div class="line">alpha()</div>
+<div class="line-block">
+<div class="line">beta()</div>
+<div class="line">gamma()</div>
+</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,3.5,4,95,95,105)</div>
+<div class="line-block">
+<div class="line">print u.alpha()</div>
+</div>
+</div>
+</td>
+<td>returns lattice parameters <img class="math" src="../_images/math/f21d5694e04a3f791f0236f49d2e51df5d5e9ac9.png" alt="\alpha,\ \beta, \gamma\ (\rm {in \ degrees})" style="vertical-align: -4px"/></td>
+</tr>
+<tr class="row-odd"><td><div class="first last line-block">
+<div class="line">alpha1()</div>
+<div class="line-block">
+<div class="line">alpha2()</div>
+<div class="line">alpha3()</div>
+</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,2,4,90,90,60)</div>
+<div class="line-block">
+<div class="line">print u.alpha3()</div>
+</div>
+</div>
+</td>
+<td>returns lattice parameters <img class="math" src="../_images/math/d272ae9b20a254879ce21e461f1787f9e99ff66a.png" alt="\alpha_1=\alpha,\ \alpha_2=\beta, \ \alpha_3=\gamma \ (\rm {in \ radians})" style="vertical-align: -4px"/>. Note: <a class="reference external" href="http://it.iucr.org/Ba/ch1o1v0001/">&#8220;International Tables for Crystallography&#8221;</a> notation</td>
+</tr>
+<tr class="row-even"><td><div class="first last line-block">
+<div class="line">astar()</div>
+<div class="line-block">
+<div class="line">bstar()</div>
+<div class="line">cstar()</div>
+</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,3.5,4)</div>
+<div class="line-block">
+<div class="line">print u.cstar()</div>
+</div>
+</div>
+</td>
+<td>returns reciprocal lattice parameters <img class="math" src="../_images/math/ffdb1cdfbb1a1ad20efe27f66387c59588f35e8a.png" alt="a^*, b^*, c^* \ (\rm {in \ \AA^{-1}})" style="vertical-align: -4px"/></td>
+</tr>
+<tr class="row-odd"><td><div class="first last line-block">
+<div class="line">b1()</div>
+<div class="line-block">
+<div class="line">b2()</div>
+<div class="line">b3()</div>
+</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,3.5,4)</div>
+<div class="line-block">
+<div class="line">print u.b2()</div>
+</div>
+</div>
+</td>
+<td>returns lattice parameters <img class="math" src="../_images/math/727619eeac62c51e73d80506f9b21a1e7426c814.png" alt="b_1=a^*, b_2=b^*, b_3=c^*\ (\rm {in \ \AA^{-1}})" style="vertical-align: -4px"/>. Note: <a class="reference external" href="http://it.iucr.org/Ba/ch1o1v0001/">&#8220;International Tables for Crystallography&#8221;</a> notation</td>
+</tr>
+<tr class="row-even"><td><div class="first last line-block">
+<div class="line">alphastar()</div>
+<div class="line-block">
+<div class="line">betastar()</div>
+<div class="line">gammastar()</div>
+</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,3.5,4,95,95,105)</div>
+<div class="line-block">
+<div class="line">print u.alphastar()</div>
+</div>
+</div>
+</td>
+<td>returns lattice parameters <img class="math" src="../_images/math/ded0ac6bef988525a2be7c55c1ce16b23158c65f.png" alt="\alpha^*,\ \beta^*, \gamma^*\ (\rm {in \ degrees})" style="vertical-align: -4px"/></td>
+</tr>
+<tr class="row-odd"><td><div class="first last line-block">
+<div class="line">beta1()</div>
+<div class="line">beta2()</div>
+<div class="line-block">
+<div class="line">beta3()</div>
+</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,2,4,90,90,60)</div>
+<div class="line-block">
+<div class="line">print u.beta3()</div>
+</div>
+</div>
+</td>
+<td>returns lattice parameters <img class="math" src="../_images/math/1ed0b7b1b192a2bd3e632f9919ac5cd950459c3b.png" alt="\beta_1=\alpha^*,\ \beta_2=\beta^*, \ \beta_3=\gamma^* \ (\rm {in \ radians})" style="vertical-align: -4px"/>. Note: <a class="reference external" href="http://it.iucr.org/Ba/ch1o1v0001/">&#8220;International Tables for Crystallography&#8221;</a> notation</td>
+</tr>
+<tr class="row-even"><td>set(a,b,c,alpha,beta,gamma,Unit=unit)</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell()</div>
+<div class="line">u.set(2,3.5,4,90,90,90)</div>
+<div class="line">u.set(2,3.5,4,90,90,90,Unit = Degrees)</div>
+<div class="line">u.set(2,3.5,4,0.5*math.pi,0.5*math.pi,0.5*math.pi,Unit = Radians)</div>
+</div>
+</td>
+<td>sets <img class="math" src="../_images/math/83fa773c6d4e0b6c7ebb760246a5e5372e74050d.png" alt="a, b, c\ (\rm {in \ \AA}), \ \alpha, \ \beta,\ \gamma \ (\rm {in \ degrees \ or \ radians})" style="vertical-align: -4px"/> values. The optional parameter &#8220;Unit&#8221; controls the units for the angles, and can have the value of &#8220;Degrees&#8221; or &#8220;Radians&#8221;. By default Unit = Degrees</td>
+</tr>
+<tr class="row-odd"><td><div class="first last line-block">
+<div class="line">seta(a)</div>
+<div class="line-block">
+<div class="line">setb(b)</div>
+<div class="line">setc(c)</div>
+</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,3.5,4)</div>
+<div class="line-block">
+<div class="line">u.setc(5)</div>
+</div>
+<div class="line">print u.c()</div>
+</div>
+</td>
+<td>sets lattice parameters <img class="math" src="../_images/math/f5fd71be2c4ee417f7ceb30e3755db1f0927e0ec.png" alt="a, b, c\ (\rm {in \ \AA})" style="vertical-align: -4px"/></td>
+</tr>
+<tr class="row-even"><td><div class="first last line-block">
+<div class="line">setalpha(alpha,Unit=unit)</div>
+<div class="line">setbeta(beta,Unit=unit)</div>
+<div class="line">setgamma(gamma,Unit=unit)</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell()</div>
+<div class="line">u.setalpha(88)</div>
+<div class="line">u.setbeta(95,Unit = Degrees)</div>
+<div class="line">u.setgamma(0.5*math.pi,Unit = Radians)</div>
+</div>
+</td>
+<td>sets <img class="math" src="../_images/math/fd4fc88923d4661ba527b5f1bc4af9793809e1ea.png" alt="\alpha, \ \beta,\ \gamma \ (\rm {in \ degrees \ or \ radians})" style="vertical-align: -4px"/> values. The optional parameter &#8220;Unit&#8221; controls the units for the angles, and can have the value of &#8220;Degrees&#8221; or &#8220;Radians&#8221;. By default Unit = Degrees</td>
+</tr>
+<tr class="row-odd"><td><div class="first last line-block">
+<div class="line">d(h,k,l)</div>
+<div class="line">d(V3D vector)</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,3.5,4)</div>
+<div class="line-block">
+<div class="line">print u.d(1,1,1)</div>
+<div class="line">print u.d(V3D(1,1,1))</div>
+</div>
+</div>
+</td>
+<td>returns <img class="math" src="../_images/math/b694d9091410849df445f897e7da37f16a39fe24.png" alt="d^{}_{}" style="vertical-align: 0px"/>-spacing <img class="math" src="../_images/math/ad339bbbada29233f5fe8ac39796ee3031147b22.png" alt="(\rm in \ \rm \AA)" style="vertical-align: -4px"/> for given h,k,l coordinates</td>
+</tr>
+<tr class="row-even"><td><div class="first last line-block">
+<div class="line">dstar(h,k,l)</div>
+<div class="line">dstar(V3D vector)</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,3.5,4)</div>
+<div class="line-block">
+<div class="line">print u.dstar(1,1,1)</div>
+<div class="line">print u.dstar(V3D(1,1,1))</div>
+</div>
+</div>
+</td>
+<td>returns <img class="math" src="../_images/math/239bede5846a4d6fc74c4929a80d7664baa10a10.png" alt="d^*=1/d \ (\rm in \ \rm \AA^{-1})" style="vertical-align: -5px"/> for given h,k,l coordinates</td>
+</tr>
+<tr class="row-odd"><td>recAngle(h1,k1,l1,h2,k2,l2,Unit=unit)</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,3.5,4)</div>
+<div class="line-block">
+<div class="line">print u.recAngle(1,0,0,1,1,0)</div>
+<div class="line">print u.recAngle(1,0,0,1,1,1,Unit=Degrees)</div>
+<div class="line">print u.recAngle(1,0,0,1,1,0,Unit = Radians)</div>
+</div>
+</div>
+</td>
+<td>returns the angle in reciprocal space between vectors given by <img class="math" src="../_images/math/bdef7c1e932f2d79f8f52f003a02d57e3953cde5.png" alt="\left(h_1, k_1, l_1\right)" style="vertical-align: -4px"/> and <img class="math" src="../_images/math/2b590f433de5b036d117aeefebc449d9f4c9595c.png" alt="\left(h_2, k_2, l_2\right) \ (\rm {in \ degrees \ or \ radians})" style="vertical-align: -4px"/>. The optional parameter &#8220;Unit&#8221; controls the units for the angles, and can have the value of &#8220;Degrees&#8221; or &#8220;Radians&#8221;. By default Unit = Degrees</td>
+</tr>
+<tr class="row-even"><td><div class="first last line-block">
+<div class="line">volume()</div>
+<div class="line-block">
+<div class="line">recVolume()</div>
+</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,3.5,4)</div>
+<div class="line-block">
+<div class="line">print u.volume()</div>
+<div class="line">print u.recVolume()</div>
+</div>
+</div>
+</td>
+<td>return the volume of the direct or reciprocal unit cell <img class="math" src="../_images/math/67f0c6d0897e775cbe400e85331bb33144b38565.png" alt="(\rm {in \ \AA^3 \ respectively \ \AA^{-3}})" style="vertical-align: -4px"/></td>
+</tr>
+<tr class="row-odd"><td><div class="first last line-block">
+<div class="line">getB()</div>
+<div class="line-block">
+<div class="line">getBinv()</div>
+</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,3.5,4)</div>
+<div class="line-block">
+<div class="line">print u.getB()</div>
+<div class="line">print u.getBinv()</div>
+</div>
+</div>
+</td>
+<td>return the <img class="math" src="../_images/math/8d876f18df662cf0a43af54a9fb36a83144f2e08.png" alt="B^{}_{}" style="vertical-align: 0px"/> and <img class="math" src="../_images/math/37bdd282332cc56338282fb3f814cfc33edd547b.png" alt="B^{-1}_{}" style="vertical-align: 0px"/> matrices</td>
+</tr>
+<tr class="row-even"><td><div class="first last line-block">
+<div class="line">getG()</div>
+<div class="line-block">
+<div class="line">getGstar()</div>
+</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">u = UnitCell(2,3.5,4)</div>
+<div class="line-block">
+<div class="line">print u.getG()</div>
+<div class="line">print u.getGstar()</div>
+</div>
+</div>
+</td>
+<td>return the <img class="math" src="../_images/math/728d56896566b6b07e6f9188a7ea457943eb7703.png" alt="G^{}_{}" style="vertical-align: 0px"/> and <img class="math" src="../_images/math/bc44a9e63eb1c16df1631f5f48c4e3cdade1857f.png" alt="G^{*}_{}" style="vertical-align: 0px"/> metric tensors of the direct and reciprocal lattices</td>
+</tr>
+<tr class="row-odd"><td>recalculateFromGstar(Gstar 2D 3x3 array)</td>
+<td><div class="first last line-block">
+<div class="line">newGstar=array([[2,0,0],[0,0.5,0],[0,0,1]])</div>
+<div class="line">u=UnitCell()</div>
+<div class="line">u.recalculateFromGstar(newGstar)</div>
+</div>
+</td>
+<td>recalculates the lattice parameters from the new <img class="math" src="../_images/math/bc44a9e63eb1c16df1631f5f48c4e3cdade1857f.png" alt="G^{*}_{}" style="vertical-align: 0px"/> and sets them to the current UnitCell object</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="oriented-lattices">
+<h2>Oriented lattices<a class="headerlink" href="#oriented-lattices" title="Permalink to this headline">¶</a></h2>
+<p>All the functions defined for UnitCell are inherited by the
+OrientedLattice objects. In addition, the following functions are
+defined for OrientedLattice only:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="18%" />
+<col width="70%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Function</th>
+<th class="head">Example</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>OrientedLattice()</td>
+<td>o = OrientedLattice()</td>
+<td>default constructor, with <img class="math" src="../_images/math/7b88640523e2532cf6684d32ab4678b375fbb589.png" alt="a=b=c=1\rm \AA, \ \alpha=\beta=\gamma=90^\circ" style="vertical-align: -4px"/>. The <img class="math" src="../_images/math/bbc5549aae57ba081aed58cbe53d0cf03b7dde47.png" alt="U^{}_{}" style="vertical-align: 0px"/> matrix is set to identity</td>
+</tr>
+<tr class="row-odd"><td>OrientedLattice(other oriented lattice)</td>
+<td><div class="first last line-block">
+<div class="line">o = OrientedLattice()</div>
+<div class="line-block">
+<div class="line">o2 = OrientedLattice(o)</div>
+</div>
+</div>
+</td>
+<td>copy constructor</td>
+</tr>
+<tr class="row-even"><td>OrientedLattice(a,b,c)</td>
+<td>o = OrientedLattice(2,3.5,4)</td>
+<td>constructor using <img class="math" src="../_images/math/71555591d64afd253d27ec33b0400e6494eae239.png" alt="a, b, c\ (\rm {in \ \AA}), \ \alpha=\beta=\gamma=90^\circ" style="vertical-align: -4px"/>. The <img class="math" src="../_images/math/bbc5549aae57ba081aed58cbe53d0cf03b7dde47.png" alt="U^{}_{}" style="vertical-align: 0px"/> matrix is set to identity</td>
+</tr>
+<tr class="row-odd"><td>OrientedLattice(a,b,c,alpha,beta,gamma,Unit = unit)</td>
+<td><div class="first last line-block">
+<div class="line">o = OrientedLattice(2,3.5,4,90,90,90)</div>
+<div class="line">o = OrientedLattice(2,3.5,4,90,90,90,Unit = Degrees)</div>
+<div class="line">o = OrientedLattice(2,3.5,4,0.5*math.pi,0.5*math.pi,0.5*math.pi,Unit = Radians)</div>
+</div>
+</td>
+<td>constructor using <img class="math" src="../_images/math/83fa773c6d4e0b6c7ebb760246a5e5372e74050d.png" alt="a, b, c\ (\rm {in \ \AA}), \ \alpha, \ \beta,\ \gamma \ (\rm {in \ degrees \ or \ radians})" style="vertical-align: -4px"/>. The optional parameter &#8220;Unit&#8221; controls the units for the angles, and can have the value of &#8220;Degrees&#8221; or &#8220;Radians&#8221;. By default Unit = Degrees. The <img class="math" src="../_images/math/bbc5549aae57ba081aed58cbe53d0cf03b7dde47.png" alt="U^{}_{}" style="vertical-align: 0px"/> matrix is set to identity</td>
+</tr>
+<tr class="row-even"><td>OrientedLattice(unit cell)</td>
+<td><div class="first last line-block">
+<div class="line">u=UnitCell(2,3,4)</div>
+<div class="line-block">
+<div class="line">o = OrientedLattice(u)</div>
+</div>
+</div>
+</td>
+<td>constructor from UnitCell. The <img class="math" src="../_images/math/bbc5549aae57ba081aed58cbe53d0cf03b7dde47.png" alt="U^{}_{}" style="vertical-align: 0px"/> matrix is set to identity</td>
+</tr>
+<tr class="row-odd"><td><div class="first last line-block">
+<div class="line">getU()</div>
+<div class="line-block">
+<div class="line">getUB()</div>
+</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">o.OrientedLattice(2,3.5,4)</div>
+<div class="line-block">
+<div class="line">print u.getU()</div>
+<div class="line">print u.getUB()</div>
+</div>
+</div>
+</td>
+<td>return the <img class="math" src="../_images/math/bbc5549aae57ba081aed58cbe53d0cf03b7dde47.png" alt="U^{}_{}" style="vertical-align: 0px"/> and <img class="math" src="../_images/math/1b20d24b4f4a45f28d6d764f5d6716e63456e157.png" alt="UB^{}_{}" style="vertical-align: 0px"/> matrices</td>
+</tr>
+<tr class="row-even"><td><div class="first last line-block">
+<div class="line">setU()</div>
+<div class="line-block">
+<div class="line">setUB()</div>
+</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">o.OrientedLattice(2,3.5,4)</div>
+<div class="line-block">
+<div class="line">newU=array([[0,1,0],[1,0,0],[0,0,-1]])</div>
+</div>
+<div class="line">o.setU(newU)</div>
+<div class="line-block">
+<div class="line">newUB=array([[2,1,0],[1,2,0],[2,0,-1]])</div>
+</div>
+<div class="line">o.setUB(newUB)</div>
+</div>
+</td>
+<td>sets the <img class="math" src="../_images/math/bbc5549aae57ba081aed58cbe53d0cf03b7dde47.png" alt="U^{}_{}" style="vertical-align: 0px"/> and <img class="math" src="../_images/math/1b20d24b4f4a45f28d6d764f5d6716e63456e157.png" alt="UB^{}_{}" style="vertical-align: 0px"/> matrices. for setUB function, it will calculate first the lattice parameters, then the <img class="math" src="../_images/math/8d876f18df662cf0a43af54a9fb36a83144f2e08.png" alt="B^{}_{}" style="vertical-align: 0px"/> matrix, and then <img class="math" src="../_images/math/bbc5549aae57ba081aed58cbe53d0cf03b7dde47.png" alt="U^{}_{}" style="vertical-align: 0px"/>. See  <a class="reference internal" href="#note-about-orientation">Note about orientation</a></td>
+</tr>
+<tr class="row-odd"><td>setUFromVectors(v1,v2)</td>
+<td><div class="first last line-block">
+<div class="line">o.OrientedLattice(2,3.5,4)</div>
+<div class="line-block">
+<div class="line">o.setUFromVectors([1,0,0],[0,1,0])</div>
+<div class="line">o.setUFromVectors(array([1,0,0]),array([0,1,0]))</div>
+<div class="line">o.setUFromVectors(V3D(1,0,0),V3D(0,1,0))</div>
+</div>
+</div>
+</td>
+<td>recalculates and sets the <img class="math" src="../_images/math/bbc5549aae57ba081aed58cbe53d0cf03b7dde47.png" alt="U^{}_{}" style="vertical-align: 0px"/> matrix, such as the first vector is along the beam direction, and the second vector is in the horizontal plane. See  <a class="reference internal" href="#note-about-orientation">Note about orientation</a>. In python, the v1 and v2 vectors can be of type V3D, or length 3 list, or length 3 numpy array, not necessarily the same</td>
+</tr>
+<tr class="row-even"><td><div class="first last line-block">
+<div class="line">getuVector()</div>
+<div class="line-block">
+<div class="line">getvVector()</div>
+</div>
+</div>
+</td>
+<td><div class="first last line-block">
+<div class="line">o.OrientedLattice(2,3.5,4)</div>
+<div class="line-block">
+<div class="line">o.setUFromVectors([5,5,0],[-2,1,0])</div>
+<div class="line">print o.getuVector()</div>
+<div class="line">print o.getvVector()</div>
+</div>
+</div>
+</td>
+<td>getuVector returns a vector along beam direction, while getvVector returns a vector in the horizontal plane, perpendicular to the beam direction (see <a class="reference external" href="http://horace.isis.rl.ac.uk/Getting_started">http://horace.isis.rl.ac.uk/Getting_started</a>). See <a class="reference internal" href="#note-about-orientation">Note about orientation</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="note-about-orientation">
+<h2>Note about orientation<a class="headerlink" href="#note-about-orientation" title="Permalink to this headline">¶</a></h2>
+<p>Most of the instruments have incident beam along the <img class="math" src="../_images/math/fef044f0fc272a1fbc5fc6e91c830c4af3a5f72d.png" alt="\mathbf{z}" style="vertical-align: 0px"/>
+direction. For an orthogonal lattice with <img class="math" src="../_images/math/d6a46ff343e1fa3a27ccab3983d8354ba26cab0f.png" alt="\mathbf{a}^*" style="vertical-align: 0px"/> along
+<img class="math" src="../_images/math/fef044f0fc272a1fbc5fc6e91c830c4af3a5f72d.png" alt="\mathbf{z}" style="vertical-align: 0px"/>, <img class="math" src="../_images/math/ab29e3d86aca0df4d59e85de141cb9051ab4e8f1.png" alt="\mathbf{b}^*" style="vertical-align: 0px"/> along <img class="math" src="../_images/math/9a3f13ae7e3f95a6f02f675d39caccd8de447299.png" alt="\mathbf{x}" style="vertical-align: -1px"/>, and
+<img class="math" src="../_images/math/7a9726912079d787fa2545ff28e214866b64ad11.png" alt="\mathbf{c}^*" style="vertical-align: 0px"/> along <img class="math" src="../_images/math/c7ed27e1e9e482af37e8d1a2fa6e4e5e9c245b74.png" alt="\mathbf{y}" style="vertical-align: -3px"/>, the <img class="math" src="../_images/math/bbc5549aae57ba081aed58cbe53d0cf03b7dde47.png" alt="U^{}_{}" style="vertical-align: 0px"/>
+matrix has the form:</p>
+<div class="math">
+<p><img src="../_images/math/676e6a44aa358da6cf5e6d92816f345c2c8416eb.png" alt="U =  \left( \begin{array}{ccc}
+    0 &amp; 1 &amp; 0 \\
+    0 &amp; 0 &amp; 1 \\
+    1 &amp; 0 &amp; 0 \end{array} \right)"/></p>
+</div><p><strong>Category</strong>: <a class="reference external" href="categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="LETSampleIDF.html" title="Previous Chapter: IDF ISIS LET annotated"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; IDF ISIS LET ann...</span>
+    </a>
+  </li>
+  <li>
+    <a href="MDHistoWorkspace.html" title="Next Chapter: MD Histogram Workspace"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">MD Histogram Wor... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

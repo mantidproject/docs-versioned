@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FFT v1</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.5.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="next" title="FFTDerivative v1" href="FFTDerivative-v1.html" />
+    <link rel="prev" title="ExtractSpectra v1" href="ExtractSpectra-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.5</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="fft-v1">
+<span id="algm-fft"></span><span id="algm-fft-v1"></span><h1>FFT v1<a class="headerlink" href="#fft-v1" title="Permalink to this headline">¶</a></h1>
+<div class="figure align-right" id="index-0">
+<a class="screenshot reference internal image-reference" href="../_images/FFT-v1_dlg.png"><img alt="../_images/FFT-v1_dlg.png" class="screenshot" src="../_images/FFT-v1_dlg.png" style="width: 296px;" /></a>
+<p class="caption"><strong>FFT</strong> dialog.</p>
+</div>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#summary" id="id1">Summary</a></li>
+<li><a class="reference internal" href="#properties" id="id2">Properties</a></li>
+<li><a class="reference internal" href="#description" id="id3">Description</a></li>
+<li><a class="reference internal" href="#details" id="id4">Details</a><ul>
+<li><a class="reference internal" href="#example-1" id="id5">Example 1</a></li>
+<li><a class="reference internal" href="#example-2" id="id6">Example 2</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#output" id="id7">Output</a></li>
+<li><a class="reference internal" href="#usage" id="id8">Usage</a></li>
+<li><a class="reference internal" href="#source" id="id9">Source</a></li>
+</ul>
+</div>
+<div class="section" id="summary">
+<h2><a class="toc-backref" href="#id1">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Performs complex Fast Fourier Transform</p>
+</div>
+<div class="section" id="properties">
+<h2><a class="toc-backref" href="#id2">Properties</a><a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="4%" />
+<col width="24%" />
+<col width="7%" />
+<col width="54%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Direction</th>
+<th class="head">Type</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>InputWorkspace</td>
+<td>Input</td>
+<td><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><em>MatrixWorkspace</em></a></td>
+<td><em>Mandatory</em></td>
+<td>The name of the input workspace.</td>
+</tr>
+<tr class="row-odd"><td>OutputWorkspace</td>
+<td>Output</td>
+<td><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><em>MatrixWorkspace</em></a></td>
+<td><em>Mandatory</em></td>
+<td>The name of the output workspace.</td>
+</tr>
+<tr class="row-even"><td>InputImagWorkspace</td>
+<td>Input</td>
+<td><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><em>MatrixWorkspace</em></a></td>
+<td>&nbsp;</td>
+<td>The name of the input workspace for the imaginary part. Leave blank if same as InputWorkspace</td>
+</tr>
+<tr class="row-odd"><td>Real</td>
+<td>Input</td>
+<td>number</td>
+<td>0</td>
+<td>Spectrum number to use as real part for transform</td>
+</tr>
+<tr class="row-even"><td>Imaginary</td>
+<td>Input</td>
+<td>number</td>
+<td><em>Optional</em></td>
+<td>Spectrum number to use as imaginary part for transform</td>
+</tr>
+<tr class="row-odd"><td>Transform</td>
+<td>Input</td>
+<td>string</td>
+<td>Forward</td>
+<td>Direction of the transform: forward or backward. Allowed values: [&#8216;Forward&#8217;, &#8216;Backward&#8217;]</td>
+</tr>
+<tr class="row-even"><td>Shift</td>
+<td>Input</td>
+<td>number</td>
+<td>0</td>
+<td>Apply an extra phase equal to this quantity times 2*pi to the transform</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="description">
+<h2><a class="toc-backref" href="#id3">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>The FFT algorithm performs discrete Fourier transform of complex data
+using the Fast Fourier Transform algorithm. It uses the GSL Fourier
+transform functions to do the calculations. Due to the nature of the
+fast fourier transform the input spectra must have linear x axes. If the
+imaginary part is not set the data is considered real. The &#8220;Transform&#8221;
+property defines the direction of the transform: direct (&#8220;Forward&#8221;) or
+inverse (&#8220;Backward&#8221;).</p>
+<p>Note that the input data is shifted before the transform along the x
+axis to place the origin in the middle of the x-value range. It means
+that for the data defined on an interval [A,B] the output
+<img class="math" src="../_images/math/4a42bfe6bed64cf042a55df068675e77432d7e51.png" alt="F(\xi_k)" style="vertical-align: -4px"/> must be multiplied by <img class="math" src="../_images/math/6ea0a62abd751734a10c7720b5204a850fa47cf7.png" alt="e^{-2\pi ix_0\xi_k}" style="vertical-align: 0px"/>,
+where <img class="math" src="../_images/math/6980f3a090a42a8cead4b726bf9f983d0af27447.png" alt="x_0=\tfrac{1}{2}(A+B)" style="vertical-align: -6px"/>, <img class="math" src="../_images/math/caa4087fc2514f9a2a814d633d9bebc985e412ed.png" alt="\xi_k" style="vertical-align: -4px"/> is the frequency.</p>
+</div>
+<div class="section" id="details">
+<h2><a class="toc-backref" href="#id4">Details</a><a class="headerlink" href="#details" title="Permalink to this headline">¶</a></h2>
+<p>The Fourier transform of a complex function <img class="math" src="../_images/math/b044ed76bc1c19b19b8891287d91667b5a32d8f0.png" alt="f(x)" style="vertical-align: -4px"/> is defined by
+equation:</p>
+<div class="math">
+<p><img src="../_images/math/a1bc0fd3aaa641bf178ec229aac26bead0f88a9d.png" alt="F(\xi)=\int_{-\infty}^\infty f(x)e^{-2\pi ix\xi} dx"/></p>
+</div><p>For discrete data with equally spaced <img class="math" src="../_images/math/2566cc2fd786798c26cdf251b4d55f1481cf4ec3.png" alt="x_n" style="vertical-align: -3px"/> and only non-zero on
+an interval <img class="math" src="../_images/math/8fedf99daa76b293f2e09845b6316f98e38036c7.png" alt="[A,B]" style="vertical-align: -5px"/> the integral can be approximated by a sum:</p>
+<div class="math">
+<p><img src="../_images/math/1db80e463bdeeaea3c743dec4a3f7fef6bf7857d.png" alt="F(\xi)=\Delta x\sum_{n=0}^{N-1}f(x_n)e^{-2\pi ix_n\xi}"/></p>
+</div><p>Here <img class="math" src="../_images/math/644d812148420d09e272b5a4853d8aeb61665f53.png" alt="\Delta x" style="vertical-align: 0px"/> is the bin width, <img class="math" src="../_images/math/f4286002216ff0613dfeea7e5a5c8e10e19f35db.png" alt="x_n=A+\Delta xn" style="vertical-align: -3px"/>. If we
+are looking for values of the transformed function <img class="math" src="../_images/math/68b0fc4683e0c8842b3a6cc6920f022f1c0db3fa.png" alt="F" style="vertical-align: 0px"/> at discrete
+frequencies <img class="math" src="../_images/math/283d6b6bd8c2f408d1b807a8f6b4f82efba1152b.png" alt="\xi_k=\Delta\xi k" style="vertical-align: -4px"/> with</p>
+<div class="math">
+<p><img src="../_images/math/efbfd9890e273d2d80f0bdd62fc2f9dd114f5e6d.png" alt="\Delta\xi=\frac{1}{B-A}=\frac{1}{L}=\frac{1}{N\Delta x}"/></p>
+</div><p>the equation can be rewritten:</p>
+<div class="math">
+<p><img src="../_images/math/3cb44e29974fa2081bf8e5ca5caa245291510fd2.png" alt="F_k=e^{-2\pi iA\xi_k}\Delta x\sum_{n=0}^{N-1}f_ne^{-\tfrac{2\pi i}{N}nk}"/></p>
+</div><p>Here <img class="math" src="../_images/math/e3beb70eddfbcd65af2e11b6152d6413c3e31fff.png" alt="f_n=f(x_n)" style="vertical-align: -4px"/> and <img class="math" src="../_images/math/27cf918ed03eac198c8ae89ee81819b5e153b7cb.png" alt="F_k=F(\xi_k)" style="vertical-align: -4px"/>. The formula</p>
+<div class="math">
+<p><img src="../_images/math/3d9c8bf4052bbade60142fe06bf818f5d98ea6e9.png" alt="\tilde{F}_k=\Delta x\sum_{n=0}^{N-1}f_ne^{-\tfrac{2\pi i}{N}nk}"/></p>
+</div><p>is the Discrete Fourier Transform (DFT) and can be efficiently evaluated
+using the Fast Fourier Transform algorithm. The DFT formula calculates
+the Fourier transform of data on the interval <img class="math" src="../_images/math/50922c76bfd9c9e64038ae352f70b736108988f1.png" alt="[0,L]" style="vertical-align: -5px"/>. It should
+be noted that it is periodic in <img class="math" src="../_images/math/99aa4698956c865059a0ab31e3bdde707a85853d.png" alt="k" style="vertical-align: 0px"/> with period <img class="math" src="../_images/math/8c45b38d633fb6de83fc7087c4db116a5565752a.png" alt="N" style="vertical-align: 0px"/>. If we
+also assume that <img class="math" src="../_images/math/883e82ec4230587f50db7cd23dc32564f3906df9.png" alt="f_n" style="vertical-align: -4px"/> is also periodic with period <img class="math" src="../_images/math/8c45b38d633fb6de83fc7087c4db116a5565752a.png" alt="N" style="vertical-align: 0px"/> the
+DFT can be used to transform data on the interval <img class="math" src="../_images/math/8e7d252c63ee5f64495f507b0a825b2b1ceb9b4a.png" alt="[-L/2,L/2]" style="vertical-align: -5px"/>. To
+do this we swap the two halves of the data array <img class="math" src="../_images/math/883e82ec4230587f50db7cd23dc32564f3906df9.png" alt="f_n" style="vertical-align: -4px"/>. If we
+denote the modified array as <img class="math" src="../_images/math/1bc67c236f9de4a69594f7cf98dde5b2f7e0c458.png" alt="\bar{f}_n" style="vertical-align: -4px"/>, its transform will be</p>
+<div class="math">
+<p><img src="../_images/math/2009c80b24bb5e15853a685c51a286468e1d9e97.png" alt="\bar{F}_k=\Delta x\sum_{n=0}^{N-1}\bar{f}_ne^{-\tfrac{2\pi i}{N}nk}"/></p>
+</div><p>The Mantid FFT algorithm returns the complex array <img class="math" src="../_images/math/68cf07b6e771f2f54328eb98b1e1cb74a5c85696.png" alt="\bar{F}_K" style="vertical-align: -3px"/> as
+Y values of two spectra in the output workspace, one for the real and
+the other for the imaginary part of the transform. The X values are set
+to the transform frequencies and have the range approximately equal to
+<img class="math" src="../_images/math/256515c3fccc96368ac7ad3327b2f91193380f41.png" alt="[-N/L,N/L]" style="vertical-align: -5px"/>. The actual limits depend sllightly on whether
+<img class="math" src="../_images/math/8c45b38d633fb6de83fc7087c4db116a5565752a.png" alt="N" style="vertical-align: 0px"/> is even or odd and whether the input spectra are histograms or
+point data. The variations are of the order of <img class="math" src="../_images/math/9846cb2db98ca9bd5ef4eb58463341232b689157.png" alt="\Delta\xi" style="vertical-align: -4px"/>. The
+zero frequency is always in the bin with index <img class="math" src="../_images/math/179cfff9baa3833e5ecc7e2b2cd373b7b06ea202.png" alt="k=int(N/2)" style="vertical-align: -5px"/>.</p>
+<div class="section" id="example-1">
+<h3><a class="toc-backref" href="#id5">Example 1</a><a class="headerlink" href="#example-1" title="Permalink to this headline">¶</a></h3>
+<p>In this example the input data were calculated using function
+<img class="math" src="../_images/math/5cf0fa9d75e30b4ab556bc096855ff8ed96f1bf7.png" alt="\exp(-(x-1)^2)" style="vertical-align: -4px"/> in the range [-5,5].</p>
+<div class="figure">
+<img alt="Gaussian" src="../_images/FFTGaussian1.png" />
+<p class="caption">Gaussian</p>
+</div>
+<div class="figure">
+<img alt="FFT of a Gaussian" src="../_images/FFTGaussian1FFT.png" />
+<p class="caption">FFT of a Gaussian</p>
+</div>
+<p>Because the <img class="math" src="../_images/math/592b03afc8df0f25025a1ef469a3797559a94bb3.png" alt="x=0" style="vertical-align: 0px"/> is in the middle of the data array the transform
+shown is the exact DFT of the input data.</p>
+</div>
+<div class="section" id="example-2">
+<h3><a class="toc-backref" href="#id6">Example 2</a><a class="headerlink" href="#example-2" title="Permalink to this headline">¶</a></h3>
+<p>In this example the input data were calculated using function
+<img class="math" src="../_images/math/3e5032bb2690010913c28e20e50985786070309e.png" alt="\exp(-x^2)" style="vertical-align: -4px"/> in the range [-6,4].</p>
+<div class="figure">
+<img alt="Gaussian" src="../_images/FFTGaussian2.png" />
+<p class="caption">Gaussian</p>
+</div>
+<div class="figure">
+<img alt="FFT of a Gaussian" src="../_images/FFTGaussian1FFT.png" />
+<p class="caption">FFT of a Gaussian</p>
+</div>
+<p>Because the <img class="math" src="../_images/math/592b03afc8df0f25025a1ef469a3797559a94bb3.png" alt="x=0" style="vertical-align: 0px"/> is not in the middle of the data array the
+transform shown includes a shifting factor of <img class="math" src="../_images/math/6c9d17c3c1e80153bfecd97bf35e44689721b961.png" alt="\exp(2\pi i\xi)" style="vertical-align: -4px"/>.
+To remove it the output must be mulitplied by <img class="math" src="../_images/math/805e1b6549df32399dabc74866bfb079473705b2.png" alt="\exp(-2\pi i\xi)" style="vertical-align: -4px"/>.
+The corrected transform will be:</p>
+<div class="figure">
+<img alt="FFT of a Gaussian" src="../_images/FFTGaussian2FFT.png" />
+<p class="caption">FFT of a Gaussian</p>
+</div>
+<p>It should be noted that in a case like this, i.e. when the input is a
+real positive even function, the correction can be done by finding the
+transform&#8217;s modulus <img class="math" src="../_images/math/23555a4ac1e0a32009b3d1bbad6d2a605d7bce63.png" alt="(Re^2+Im^2)^{1/2}" style="vertical-align: -4px"/>. The output workspace
+includes the modulus of the transform.</p>
+</div>
+</div>
+<div class="section" id="output">
+<h2><a class="toc-backref" href="#id7">Output</a><a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h2>
+<p>The output workspace for a direct (&#8220;Forward&#8221;) transform contains either
+three or six spectra, depending on whether the input function is complex
+or purely real. If the input function has an imaginary part, the
+transform is written to three spectra with indexes 0, 1, and 2. Indexes
+0 and 1 are the real and imaginary parts, while index 2 contains the
+modulus <img class="math" src="../_images/math/ed97507dc2301ad7e75e94a33d4d219f988c42dd.png" alt="\sqrt{Re^2+Im^2}" style="vertical-align: -3px"/>. If the input function does not contain
+an spectrum for the imaginary part (purely real function), the actual
+transform is written to spectra with indexes 3 and 4 which are the real
+and imaginary parts, respectively. The last spectrum (index 5) has the
+modulus of the transform. The spectra from 0 to 2 repeat these results
+for positive frequencies only.</p>
+<p>Output for the case of input function containing imaginary part:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="39%" />
+<col width="61%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Workspace index</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0</td>
+<td>Complete real part</td>
+</tr>
+<tr class="row-odd"><td>1</td>
+<td>Complete imaginary part</td>
+</tr>
+<tr class="row-even"><td>2</td>
+<td>Complete transform modulus</td>
+</tr>
+</tbody>
+</table>
+<p>Output for the case of input function containing no imaginary part:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Workspace index</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0</td>
+<td>Real part, positive frequencies</td>
+</tr>
+<tr class="row-odd"><td>1</td>
+<td>Imaginary part, positive frequencies</td>
+</tr>
+<tr class="row-even"><td>2</td>
+<td>Modulus, positive frequencies</td>
+</tr>
+<tr class="row-odd"><td>3</td>
+<td>Complete real part</td>
+</tr>
+<tr class="row-even"><td>4</td>
+<td>Complete imaginary part</td>
+</tr>
+<tr class="row-odd"><td>5</td>
+<td>Complete transform modulus</td>
+</tr>
+</tbody>
+</table>
+<p>The output workspace for an inverse (&#8220;Backward&#8221;) transform has 3 spectra
+for the real (0), imaginary (1) parts, and the modulus (2).</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="51%" />
+<col width="49%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Workspace index</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0</td>
+<td>Real part</td>
+</tr>
+<tr class="row-odd"><td>1</td>
+<td>Imaginary part</td>
+</tr>
+<tr class="row-even"><td>2</td>
+<td>Modulus</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id8">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p><strong>Example: Applying FFT algorithm</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#Create Sample Workspace</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="n">WorkspaceType</span> <span class="o">=</span> <span class="s">&#39;Event&#39;</span><span class="p">,</span> <span class="n">NumBanks</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Function</span> <span class="o">=</span> <span class="s">&#39;Exp Decay&#39;</span><span class="p">,</span> <span class="n">BankPixelWidth</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">NumEvents</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="c">#apply the FFT algorithm</span>
+<span class="n">outworkspace</span> <span class="o">=</span> <span class="n">FFT</span><span class="p">(</span><span class="n">InputWorkspace</span> <span class="o">=</span> <span class="n">ws</span><span class="p">,</span> <span class="n">Transform</span> <span class="o">=</span> <span class="s">&#39;Backward&#39;</span><span class="p">)</span>
+
+<span class="c">#print statements</span>
+<span class="k">print</span> <span class="s">&quot;DataX(0)[0] equals DataX(0)[100]? : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="nb">round</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">outworkspace</span><span class="o">.</span><span class="n">dataX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span> <span class="mi">3</span><span class="p">))</span> <span class="o">==</span> <span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">outworkspace</span><span class="o">.</span><span class="n">dataX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">100</span><span class="p">],</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="k">print</span> <span class="s">&quot;DataX(0)[10] equals DataX(0)[90]? : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="nb">round</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">outworkspace</span><span class="o">.</span><span class="n">dataX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">10</span><span class="p">]),</span> <span class="mi">3</span><span class="p">))</span> <span class="o">==</span> <span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">outworkspace</span><span class="o">.</span><span class="n">dataX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">90</span><span class="p">],</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="k">print</span> <span class="s">&quot;DataX((0)[50] equals 0? : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="nb">round</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">outworkspace</span><span class="o">.</span><span class="n">dataX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">50</span><span class="p">]),</span> <span class="mi">3</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&quot;DataY(0)[40] equals DataY(0)[60]? : &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="nb">round</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">outworkspace</span><span class="o">.</span><span class="n">dataY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">40</span><span class="p">]),</span> <span class="mi">5</span><span class="p">))</span> <span class="o">==</span> <span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">outworkspace</span><span class="o">.</span><span class="n">dataY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">60</span><span class="p">],</span> <span class="mi">5</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>DataX(0)[0] equals DataX(0)[100]? : True
+DataX(0)[10] equals DataX(0)[90]? : True
+DataX((0)[50] equals 0? : True
+DataY(0)[40] equals DataY(0)[60]? : True
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/Algorithms.html">Algorithms</a> | <a class="reference external" href="categories/Arithmetic.html">Arithmetic</a> | <a class="reference external" href="categories/FFT.html">FFT</a></p>
+</div>
+<div class="section" id="source">
+<h2><a class="toc-backref" href="#id9">Source</a><a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/940f1ec8a966df9d8a015c4c28a17c27d88e0d63/Code/Mantid/Framework/Algorithms/src/FFT.cpp">FFT.cpp</a></p>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/940f1ec8a966df9d8a015c4c28a17c27d88e0d63/Code/Mantid/Framework/Algorithms/inc/MantidAlgorithms/FFT.h">FFT.h</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="ExtractSpectra-v1.html" title="Previous Chapter: ExtractSpectra v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; ExtractSpectra v...</span>
+    </a>
+  </li>
+  <li>
+    <a href="FFTDerivative-v1.html" title="Next Chapter: FFTDerivative v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">FFTDerivative v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

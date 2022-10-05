@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Ab-initio calculation of dynamical structure factor (S)</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.2.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.2.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Error Propagation" href="ErrorPropagation.html" />
+    <link rel="prev" title="Dynamic Factory" href="DynamicFactory.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="ab-initio-calculation-of-dynamical-structure-factor-s">
+<span id="dynamicalstructurefactorfromabinitio"></span><h1>Ab-initio calculation of dynamical structure factor (S)<a class="headerlink" href="#ab-initio-calculation-of-dynamical-structure-factor-s" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The purpose of this document is to explain the link between theoretical and experimental <img class="math" src="../_images/math/4bce550adb70d15c6c20a802c21b45b134303671.png" alt="S(\mathbf{Q}, \omega)" style="vertical-align: -4px"/> and to
+describe the general idea how theoretical S from ab-initio is calculated by available plugins in Mantid.</p>
+<p>During an inelastic neutron scattering experiment sample is exposed to neutron flux and response of a sample in the
+form of dynamical structure factor  is recorded. In principle, one obtains phonon (vibrational) spectrum which is often
+quite  difficult to analyse. In order to better understand experimental results one can use modeling methods. One of the
+most successful theoretical method in predicting phonon spectrum is ab-initio method DFT [1].</p>
+<img alt="../_images/dft_phonon_scheme.png" class="align-center" src="../_images/dft_phonon_scheme.png" />
+<p>Usual approach in calculating phonon spectra within DFT is presented in the figure above. First, one defines initial
+guess for the structure in interest. The initial guess should be as close as possible to an experimental structure.
+Then, one optimise structure within DFT. By optimising structure one should understand finding the closest to the
+initial guess local minimum of energy within accuracy of DFT method. At the closest minimum there
+should be no effective force on atoms. For that structure the dynamical matrix, e.g, second derivative of system Hamiltonian with respect to
+atomic displacements is calculated. Eigenvectors obtained from diagonalisation of this matrix are atomic displacements
+and eigenvalues are squared frequencies of vibrations. Those vibrations are sometime called <em>modes</em> or <em>fundamentals</em>.
+Using atomic displacements and frequencies obtained by DFT method one can calculate theoretical <img class="math" src="../_images/math/4bce550adb70d15c6c20a802c21b45b134303671.png" alt="S(\mathbf{Q}, \omega)" style="vertical-align: -4px"/>. <img class="math" src="../_images/math/4bce550adb70d15c6c20a802c21b45b134303671.png" alt="S(\mathbf{Q}, \omega)" style="vertical-align: -4px"/>
+is calculated for each atom separately. Total S is sum over all partial atomic contributions.</p>
+</div>
+<div class="section" id="working-equations">
+<h2>Working equations<a class="headerlink" href="#working-equations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="powder">
+<h3>Powder<a class="headerlink" href="#powder" title="Permalink to this headline">¶</a></h3>
+<img alt="../_images/s_powder_scheme.png" class="align-center" src="../_images/s_powder_scheme.png" />
+<p>From DFT calculations one usually obtains phonon data for infinite single crystal (there are ways to perform
+calculations for molecule, e.g, gas phase). In order to compare it with experiment in which sample is in the form of
+powder one has to perform powder averaging. Usually semi-empirical formula is used [2], [3]:</p>
+<p><img class="math" src="../_images/math/65bda1e395ad5e8c1012b21607bf1965c1e2d2ff.png" alt="S^j (\mathbf{Q},\omega_i) = S^j (Q,\omega_i) = \frac{Q^2 TrB_{\omega_i}}{3} exp\left(-Q^2 \alpha^j_{\omega_i} coth^2\left(\frac{\hbar \omega_i}{2 k_B T}\right)  \right)\sigma^j" style="vertical-align: -13px"/></p>
+<p>where <img class="math" src="../_images/math/fd8a1eb9153f0dc573e5ebe023a59474dadd17ef.png" alt="B" style="vertical-align: 0px"/> and <img class="math" src="../_images/math/565d5265a5771ce110bca359c85a858ec1d8e7e2.png" alt="A" style="vertical-align: 0px"/> are tensors created from atomic displacements in the following way:</p>
+<p><img class="math" src="../_images/math/49743f5c38ff1ff1776f6a80526536313b22cb20.png" alt="B^j_{\omega_i} = c^j_{\omega_i}(c^{j}_{\omega_i})^T M^j  \frac{C_1}{\omega_i}" style="vertical-align: -8px"/></p>
+<p><img class="math" src="../_images/math/9d7b282d82740c01744c90bc8df243f6a8ebdce2.png" alt="A^j = \sum_i B^j_{\omega_i}" style="vertical-align: -6px"/></p>
+<p>with</p>
+<p><img class="math" src="../_images/math/f59dd7fde255c3f2d4d4d2f0631914aa7604d031.png" alt="Q" style="vertical-align: -4px"/> &#8211; momentum transfer which occurs during neutron scattering. In principle, momentum transfer <img class="math" src="../_images/math/e42f4eef28bc5bd5445a707050754850b573db05.png" alt="\mathbf{Q}" style="vertical-align: -3px"/> is a vector but due to powder averaging S for the powder case depends on length of <img class="math" src="../_images/math/e42f4eef28bc5bd5445a707050754850b573db05.png" alt="\mathbf{Q}" style="vertical-align: -3px"/></p>
+<p><img class="math" src="../_images/math/3e69c7f080bf8e7d5f189604675404319e578321.png" alt="\alpha^j_{\omega_i}" style="vertical-align: -6px"/> &#8211; semi-empirical parameter calculated as: <img class="math" src="../_images/math/effb4d4cccdd0914afada086ea33b86d099ae1df.png" alt="\alpha^j_{\omega_i} = \frac{1}{5} \left \lbrace Tr A^j  + \frac{2 B^j_{\omega_i}: A^j}{Tr B^j_{\omega_i}} \right\rbrace" style="vertical-align: -13px"/></p>
+<p><img class="math" src="../_images/math/71b6330ac726af6c606e409e6a7ec74aa5dca172.png" alt="Tr" style="vertical-align: 0px"/> &#8211; trace operation</p>
+<p><img class="math" src="../_images/math/08b3fc6ac7db2e14bf7ffaf7e3021a0e92434487.png" alt=":" style="vertical-align: 0px"/> &#8211;  tensor contraction operation</p>
+<p><img class="math" src="../_images/math/c18271eddf460603079ed91e4dc4af329a59eab2.png" alt="j" style="vertical-align: -4px"/> &#8211; indicates <img class="math" src="../_images/math/c18271eddf460603079ed91e4dc4af329a59eab2.png" alt="j" style="vertical-align: -4px"/>-th atoms</p>
+<p><img class="math" src="../_images/math/4cc7324e0d6c8c591e4d865a21144bda81fd3011.png" alt="i" style="vertical-align: 0px"/> &#8211; indicates <img class="math" src="../_images/math/4cc7324e0d6c8c591e4d865a21144bda81fd3011.png" alt="i" style="vertical-align: 0px"/>-th energy transition</p>
+<p><img class="math" src="../_images/math/eff45bb00adce96f923205d04aeb757a403aaa86.png" alt="\omega_i" style="vertical-align: -3px"/> &#8211; frequency for <img class="math" src="../_images/math/4cc7324e0d6c8c591e4d865a21144bda81fd3011.png" alt="i" style="vertical-align: 0px"/>-th transition in <img class="math" src="../_images/math/4b957dfcf6372398dbe5cb300bddb225cf4fac03.png" alt="cm^{-1}" style="vertical-align: 0px"/> (called also mode or fundamental)</p>
+<p><img class="math" src="../_images/math/9f0e07ac6a9bd86a94f4ea9e67b1c28ac53c7140.png" alt="c^j_{\omega_i}" style="vertical-align: -6px"/>  &#8211; atomic displacement for <img class="math" src="../_images/math/c18271eddf460603079ed91e4dc4af329a59eab2.png" alt="j" style="vertical-align: -4px"/>-th atom and <img class="math" src="../_images/math/4cc7324e0d6c8c591e4d865a21144bda81fd3011.png" alt="i" style="vertical-align: 0px"/>-th frequency in atomic units</p>
+<p><img class="math" src="../_images/math/8c1301af7c439aa3accfba5589d357bd9b391f78.png" alt="M_j" style="vertical-align: -6px"/> &#8211; mass of <img class="math" src="../_images/math/c18271eddf460603079ed91e4dc4af329a59eab2.png" alt="j" style="vertical-align: -4px"/>-th atom in atomic units</p>
+<p><img class="math" src="../_images/math/a7223a037dfd9076deee6e5754c08434bebef462.png" alt="C_1" style="vertical-align: -4px"/> &#8211;  <img class="math" src="../_images/math/b486e979a3b40ecaad0d848b42f349abf2333ae0.png" alt="\hbar / (4 / \pi)" style="vertical-align: -5px"/> expressed in spectroscopic units</p>
+<p><img class="math" src="../_images/math/592d0144647c3abb95890435224eb03b52068328.png" alt="k_B" style="vertical-align: -3px"/> &#8211; Boltzmann constant</p>
+<p><img class="math" src="../_images/math/5830b1441ec19bff0c7f338ee28ccd12654c1f69.png" alt="T" style="vertical-align: 0px"/> &#8211; temperature in K</p>
+<p><img class="math" src="../_images/math/03f079d928554916612c70fd7553da2c412c0b3a.png" alt="\sigma_j" style="vertical-align: -6px"/> &#8211; cross-section for <img class="math" src="../_images/math/c18271eddf460603079ed91e4dc4af329a59eab2.png" alt="j" style="vertical-align: -4px"/>-th atom</p>
+<p>The formula above is valid for <em>first order quantum events</em>, e. g., transitions <img class="math" src="../_images/math/b727e428ddc1aa9cb5f3c9cdf5409733451880a7.png" alt="0 \rightarrow 1" style="vertical-align: -1px"/> for each phonon. In order to
+reconstruct spectrum one has to also consider higher order quantum events. For second order quantum event one should
+consider transitions <img class="math" src="../_images/math/9c060f94901b5dc9fe06c1bc8fcb68a7b1860d07.png" alt="0 \rightarrow 2" style="vertical-align: -1px"/>, but also simultaneous transitions <img class="math" src="../_images/math/b727e428ddc1aa9cb5f3c9cdf5409733451880a7.png" alt="0 \rightarrow 1" style="vertical-align: -1px"/>, <img class="math" src="../_images/math/66e955629e63ce10a57e9ceb14d975baeea2c0d8.png" alt="0 \rightarrow 1'" style="vertical-align: -1px"/> for different phonons. Within harmonic approximation all second
+order transitions form the following  set: <img class="math" src="../_images/math/bd8195f035b2dc86d4b941526a6a5b39960bd9e7.png" alt="\lbrace \omega_1 + \omega_1, \omega_1 + \omega_2, \omega_1 + \omega_3, \ldots,  \omega_p + \omega_p \rbrace" style="vertical-align: -6px"/>.
+Cardinality of this set is <img class="math" src="../_images/math/8e757bd049baed40eae5824e3834795f45134902.png" alt="p^2" style="vertical-align: -4px"/>, where <img class="math" src="../_images/math/e4b98fa2422dae77531f07b1bbdd8599962267df.png" alt="p" style="vertical-align: -4px"/> is a number of fundamentals. In practice one can reduce this number by taking into consideration realistic energy  window
+and neglecting those <img class="math" src="../_images/math/8eb6ea8cca33592966f98af96a22601b32983d83.png" alt="\omega_{ij}=\omega_i + \omega_j" style="vertical-align: -6px"/> for which <img class="math" src="../_images/math/c2762e15c03d7de0da65635c1396950cf87345e3.png" alt="S(Q, \omega_i)" style="vertical-align: -4px"/> is negligible.
+Within harmonic approximation each phonon is treated as independent harmonic quantum oscillator.  The formula for <img class="math" src="../_images/math/9368199b78c473ebdec3ef9d48c7add2c5016281.png" alt="S(Q, \omega_{ik})" style="vertical-align: -4px"/> is as follows [4]:</p>
+<p><img class="math" src="../_images/math/a3d82f5621faecc8169e87607dd92656a67f3259.png" alt="S^j(Q, \omega_{ik}) = \frac{Q^4}{15  C}\left( TrB^j_{\omega_i}TrB^j_{\omega_k} + B^j_{\omega_i}:B^j_{\omega_k} + B^j_{\omega_k}:B^j_{\omega_i} \right) exp\left(-Q^2 \beta^j coth^2\left(\frac{\hbar \omega_{ik}}{2 k_B T} \right) \right)\sigma^j" style="vertical-align: -13px"/></p>
+<p>where:</p>
+<p><img class="math" src="../_images/math/81cfb6f4964f39b9d03362d4646612c17e286362.png" alt="\beta^j = A^j / 3" style="vertical-align: -5px"/></p>
+<p><img class="math" src="../_images/math/875115b09dbfdddf88f0a77ae12cef18b239e614.png" alt="C" style="vertical-align: 0px"/> &#8211; is a constant,  <img class="math" src="../_images/math/ca012bca6bb4bfb9b352e634ea52ecd9fdf81246.png" alt="C=2" style="vertical-align: 0px"/> if <img class="math" src="../_images/math/22671560fc3596546f18355e88db08a20b158ed6.png" alt="i=j" style="vertical-align: -4px"/> and <img class="math" src="../_images/math/bbab573efbadd41fdc19ff74ce6ae37bd4edfd53.png" alt="C=1" style="vertical-align: -1px"/> otherwise</p>
+<p>Similarly one can define contribution for the third quantum order event (<img class="math" src="../_images/math/d44b054013887a23e3e7eb004aaccb7eb0d99fee.png" alt="0 \rightarrow 3" style="vertical-align: -1px"/>, simultaneous  <img class="math" src="../_images/math/b727e428ddc1aa9cb5f3c9cdf5409733451880a7.png" alt="0 \rightarrow 1" style="vertical-align: -1px"/>, <img class="math" src="../_images/math/66e955629e63ce10a57e9ceb14d975baeea2c0d8.png" alt="0 \rightarrow 1'" style="vertical-align: -1px"/>, <img class="math" src="../_images/math/31fd600393f856cd534d7bfa363550bb7fc4234c.png" alt="0 \rightarrow 1''" style="vertical-align: -1px"/> for different oscillators ,etc.. ) [4]:</p>
+<p><img class="math" src="../_images/math/5d8a60f328e70a9fb11d8f984dd8d348055a867f.png" alt="S^j(Q, \omega_{ikl}) = \frac{9Q^6}{543}\left( TrB^j_{\omega_i} TrB^j_{\omega_k} TrB^j_{\omega_l}  \right)  exp\left(-Q^2 \beta^j coth^2\left(\frac{\hbar \omega_{ikl}}{2 k_B T}\right) \right)\sigma^j" style="vertical-align: -13px"/></p>
+<p>Usually in order to reconstruct experimental spectrum it is enough to give contribution up to fourth order (<img class="math" src="../_images/math/65c185b132dcc22cf0ba05a6eeef2f2a03914896.png" alt="0 \rightarrow 4" style="vertical-align: -1px"/> , simultaneous <img class="math" src="../_images/math/b727e428ddc1aa9cb5f3c9cdf5409733451880a7.png" alt="0 \rightarrow 1" style="vertical-align: -1px"/>, <img class="math" src="../_images/math/66e955629e63ce10a57e9ceb14d975baeea2c0d8.png" alt="0 \rightarrow 1'" style="vertical-align: -1px"/>, <img class="math" src="../_images/math/31fd600393f856cd534d7bfa363550bb7fc4234c.png" alt="0 \rightarrow 1''" style="vertical-align: -1px"/>, <img class="math" src="../_images/math/b1d2a11a9b989063e3142aa50f1eeee127c6d4a3.png" alt="0 \rightarrow 1'''" style="vertical-align: -1px"/> for different oscillators, etc.)  [4]:</p>
+<p><img class="math" src="../_images/math/5c6b216414bf974a6a5de3b9c11faddbb1d658eb.png" alt="S^j(Q, \omega_{iklm}) = \frac{27Q^8}{9850}\left( TrB^j_{\omega_i} TrB^j_{\omega_k} TrB^j_{\omega_l}TrB^j_{\omega_m}  \right) exp\left(-Q^2 \beta^j coth^2\left(\frac{\hbar \omega_{iklm}}{2 k_B T}\right) \right)\sigma^j" style="vertical-align: -13px"/></p>
+<p>In the similar way as for the second quantum order event one can reduce number of energy transitions by taking into account considered energy window and neglecting small S.</p>
+<p>After evaluating equations above one obtains discrete S for each quantum order and for each atom: <img class="math" src="../_images/math/2d07271e142f58d68b07cde4a336991ce1267e6b.png" alt="S_{discrete}" style="vertical-align: -3px"/>. In order to compare such a spectrum with an experimental spectrum one has to convolve it with experimental resolution:</p>
+<p><img class="math" src="../_images/math/d7fffc45d9470d3af3f763010a7d1da9ad194312.png" alt="S_{theory}^{nj}(Q, \omega) = S_{discrete}^{nj}(Q, \omega) * f(\omega)" style="vertical-align: -8px"/></p>
+<p>where:</p>
+<p><img class="math" src="../_images/math/c18271eddf460603079ed91e4dc4af329a59eab2.png" alt="j" style="vertical-align: -4px"/> &#8211; indicates <img class="math" src="../_images/math/c18271eddf460603079ed91e4dc4af329a59eab2.png" alt="j" style="vertical-align: -4px"/>-th atoms</p>
+<p><img class="math" src="../_images/math/3492c6d4b042ddb93d57b7a5aa9532131d9af611.png" alt="n" style="vertical-align: 0px"/> &#8211; indicates <img class="math" src="../_images/math/3492c6d4b042ddb93d57b7a5aa9532131d9af611.png" alt="n" style="vertical-align: 0px"/>-order event</p>
+<p><img class="math" src="../_images/math/44d7e157a59ef10d2dae01862acadc85ad2734f1.png" alt="f(\omega)" style="vertical-align: -4px"/> &#8211; resolution function</p>
+<p><img class="math" src="../_images/math/09b9ce200ec09f16ef7b29c2b456c470ffb1d64d.png" alt="S_{theory}" style="vertical-align: -6px"/> &#8211; it is <em>theoretical S</em> which can be compared with experimental results</p>
+<p>For <a class="reference external" href="http://www.isis.stfc.ac.uk/instruments/tosca/tosca4715.html">Tosca</a>  and Tosca-like instruments <img class="math" src="../_images/math/44d7e157a59ef10d2dae01862acadc85ad2734f1.png" alt="f(\omega)" style="vertical-align: -4px"/> has the following form:</p>
+<p><img class="math" src="../_images/math/f703d82e11c68c76fabfe014516861f817801aa3.png" alt="f(\omega)=1.0 / \sqrt{\sigma(\omega)  \pi}  \exp(-(\omega)^2  / \sigma(\omega))" style="vertical-align: -6px"/></p>
+<p>where:</p>
+<p><img class="math" src="../_images/math/51f00b0a07b02771490cddbf991f55af60e143ab.png" alt="\sigma(\omega) = A  \omega^2  + B  \omega + C" style="vertical-align: -4px"/></p>
+<p>with <img class="math" src="../_images/math/565d5265a5771ce110bca359c85a858ec1d8e7e2.png" alt="A" style="vertical-align: 0px"/>, <img class="math" src="../_images/math/fd8a1eb9153f0dc573e5ebe023a59474dadd17ef.png" alt="B" style="vertical-align: 0px"/>, <img class="math" src="../_images/math/875115b09dbfdddf88f0a77ae12cef18b239e614.png" alt="C" style="vertical-align: 0px"/> as constants.</p>
+<p>Moreover, in case of Tosca and Tosca-like instruments length of momentum transfer depends on frequency (<em>indirect geometry spectrometer</em>).
+The formula for <img class="math" src="../_images/math/7edac8130e66e0c0fd9585e7addfddd4f31ee3e3.png" alt="Q^2" style="vertical-align: -4px"/> is as follows:</p>
+<p><img class="math" src="../_images/math/b44f50724e621b79567248bff331f19cc132e45a.png" alt="Q^2(\omega)=k^2_i(\omega) + k^2_f - 2  \sqrt{k^2_i(\omega)  k^2_f} cos(\theta)" style="vertical-align: -13px"/></p>
+<p>where:</p>
+<p><img class="math" src="../_images/math/3fb0e93ef9f9f6b2e52e80880d5a651d1936be78.png" alt="k^2_i(\omega)=(\omega + E_{final})  \hbar/ (4  \pi)" style="vertical-align: -6px"/> expressed in the spectroscopic units</p>
+<p><img class="math" src="../_images/math/3a787c172ab65f0ab7a864ce3ee3483132ba1113.png" alt="k^2_f=E_{final}  \hbar/(4 \pi)" style="vertical-align: -8px"/></p>
+<p>with</p>
+<p><img class="math" src="../_images/math/81638d5da659ccb6a8d31d107ac066183ef815fa.png" alt="E_{final}" style="vertical-align: -6px"/> &#8211; final energy on the crystal analyser in <img class="math" src="../_images/math/4b957dfcf6372398dbe5cb300bddb225cf4fac03.png" alt="cm^{-1}" style="vertical-align: 0px"/></p>
+<p><img class="math" src="../_images/math/8a8b6280d3e056aed4593ec1c7856a902a145925.png" alt="cos(\theta)" style="vertical-align: -4px"/> &#8211; cosines of crystal analyser angle in radians</p>
+</div>
+</div>
+<div class="section" id="current-implementation">
+<h2>Current implementation<a class="headerlink" href="#current-implementation" title="Permalink to this headline">¶</a></h2>
+<p>Calculation of theoretical S from ab-initio results is implemented in <a class="reference internal" href="../algorithms/Abins-v1.html#algm-abins"><em>Abins</em></a>. At the moment Abins supports
+<a class="reference external" href="http://www.castep.org/">CASTEP</a> and <a class="reference external" href="http://www.crystal.unito.it/index.php">CRYSTAL</a> DFT programs. As it comes to instruments,
+<a class="reference external" href="http://www.isis.stfc.ac.uk/instruments/tosca/tosca4715.html">Tosca</a> and Tosca-like instruments are supported.</p>
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p>[1] W. Kohn et al., <em>Inhomogeneous Electron Gas</em>, Phys. Rev. B {bf 136}, 864 (1964).</p>
+<p>[2] J. Howard, B.C. Boland, J. Tomkinson, <em>Intensities in inelastic neutron scattering spectra: a test of recent theory</em>, Chem. Phys. 77 (1983).</p>
+<p>[3] J. Howard and J. Tomkinson, <em>An analytical method for the calculation of the relative intensities of bending and stretching modes in inelastic neutron scattering spectra</em>, Chem. Phys. Letters 98 (1983).</p>
+<p>[4] P. C H Mitchell, S. F. Parker, A. J. Ramirez-Cuesta, J. Tomkinson, <em>Vibrational Spectroscopy with Neutrons With Applications in Chemistry, Biology, Materials Science and Catalysis</em>, ISBN: 978-981-256-013-1</p>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="DynamicFactory.html" title="Previous Chapter: Dynamic Factory"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Dynamic Factory</span>
+    </a>
+  </li>
+  <li>
+    <a href="ErrorPropagation.html" title="Next Chapter: Error Propagation"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Error Propagatio... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

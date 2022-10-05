@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Multi dimensional neutron scattering data normalization</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.5.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="MD Workspace" href="MDWorkspace.html" />
+    <link rel="prev" title="MD Histogram Workspace" href="MDHistoWorkspace.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.5</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="multi-dimensional-neutron-scattering-data-normalization">
+<span id="mdnorm"></span><h1>Multi dimensional neutron scattering data normalization<a class="headerlink" href="#multi-dimensional-neutron-scattering-data-normalization" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction-to-normalization">
+<h2>Introduction to normalization<a class="headerlink" href="#introduction-to-normalization" title="Permalink to this headline">¶</a></h2>
+<p>In any experiment, a measurement consists of a raw quantity of interest and
+a statistical significance of the measurement itself.
+For neutron diffraction, the differential scattering cross section at some
+point <img class="math" src="../_images/math/e42f4eef28bc5bd5445a707050754850b573db05.png" alt="\mathbf{Q}" style="vertical-align: -3px"/> in the reciprocal space, measured with a single
+detector with a solid angle <img class="math" src="../_images/math/89a6e1603da9c272995a813abf3021c5bb68ecba.png" alt="d \Omega" style="vertical-align: 0px"/>, is given by:</p>
+<div class="math" id="equation-CrossSectionSingDet">
+<p><span class="eqno">(1)</span><img src="../_images/math/1bc906e4ef67022129e8740d1a6935dabb3ba835.png" alt="\frac{d\sigma}{d\Omega}=\frac{N}{\Phi \times d\Omega}"/></p>
+</div><p>where <img class="math" src="../_images/math/8c45b38d633fb6de83fc7087c4db116a5565752a.png" alt="N" style="vertical-align: 0px"/> is the number of scattered neutrons in a small volume
+<img class="math" src="../_images/math/ba2aba660161f6fa81e8a99e4315de42b188b6c5.png" alt="d \mathbf{Q}" style="vertical-align: -3px"/> around <img class="math" src="../_images/math/e42f4eef28bc5bd5445a707050754850b573db05.png" alt="\mathbf{Q}" style="vertical-align: -3px"/>, and <img class="math" src="../_images/math/4e13925d12ab61313a097e34a9d890df7dd247b0.png" alt="\Phi" style="vertical-align: -1px"/> is
+the time integrated incident flux that contribute to the scattering in the given
+volume. <img class="math" src="../_images/math/8c45b38d633fb6de83fc7087c4db116a5565752a.png" alt="N" style="vertical-align: 0px"/> is the raw quantity, while <img class="math" src="../_images/math/2cb2658725bdb9d20bda915aea3f668e128ce052.png" alt="\Phi \times d \Omega" style="vertical-align: -1px"/>
+is the statistical significance, or norm.</p>
+<p>If there are multiple detectors, or multiple experiments contributing to the
+scattering in the <img class="math" src="../_images/math/ba2aba660161f6fa81e8a99e4315de42b188b6c5.png" alt="d \mathbf{Q}" style="vertical-align: -3px"/> volume, one needs to add together the raw
+data, add together the norms, and then divide</p>
+<div class="math" id="equation-CrossSectionMultiDet">
+<p><span class="eqno">(2)</span><img src="../_images/math/e91741c15e3f86eefcbb882d671dd51e3cf5d282.png" alt="\frac{d\sigma}{d\Omega}=\frac{\sum_i N_i}{\sum_i \Phi_i \times d\Omega_i}"/></p>
+</div><p>The summation index <img class="math" src="../_images/math/4cc7324e0d6c8c591e4d865a21144bda81fd3011.png" alt="i" style="vertical-align: 0px"/> represents every detector and sample orientation
+or repeated measurement that contribute to the scattering in the desired region
+of the reciprocal space.
+In a similar fashion, for inelastic scattering, the double
+differential cross section must be written as:</p>
+<div class="math" id="equation-CrossSectionInelastic">
+<p><span class="eqno">(3)</span><img src="../_images/math/c0f96b62e0bf49cfd326df4b6c69cb918cb589ac.png" alt="\frac{d^2 \sigma}{dE d\Omega}=\frac{\sum_i N_i}{\sum_i \Phi_i \times d\Omega_i \times dE_i}"/></p>
+</div><p>What this means is that, in the triple axes type
+of measurements for example, where we have a single detector (solid
+angle <img class="math" src="../_images/math/1e94fc04ceecd3c6e2c0b83f89461faadd9df71a.png" alt="d \Omega_i" style="vertical-align: -3px"/> is a constant), we should not
+normalize data by monitor counts and then add different experiments together. The monitor
+count is a proxy for the incident flux. We should instead
+add raw data together, add monitors together, and only then divide.</p>
+</div>
+<div class="section" id="detector-trajectories-in-reciprocal-space-for-single-crystal-experiments">
+<h2>Detector trajectories in reciprocal space for single crystal experiments<a class="headerlink" href="#detector-trajectories-in-reciprocal-space-for-single-crystal-experiments" title="Permalink to this headline">¶</a></h2>
+<p>For direct geometry inelastic scattering, for any given experiment, all the incident
+flux <img class="math" src="../_images/math/115a836398453b9b415919b94fd7e626e7b7a2ed.png" alt="\Phi_i" style="vertical-align: -3px"/>  contributes to the scattering, and it is just a number.
+For diffraction and indirect geometry inelastic experiments one has to
+account only for the flux that contribute to the scattering in the <img class="math" src="../_images/math/ba2aba660161f6fa81e8a99e4315de42b188b6c5.png" alt="d \mathbf{Q}" style="vertical-align: -3px"/>
+region, which is detector and momentum dependent. Similarly, <img class="math" src="../_images/math/6e9a2e043a3d2252ce74b9ba0b5c0c6bbc1df7cb.png" alt="dE_i" style="vertical-align: -3px"/> is the length
+along energy transfer axis of the detector trajectory inside the <img class="math" src="../_images/math/ba2aba660161f6fa81e8a99e4315de42b188b6c5.png" alt="d \mathbf{Q}" style="vertical-align: -3px"/>
+region. It is therefore important to understand where is the scattering in reciprocal space
+for each of the detectors. In this section we describe the case of single crystal experiments.
+We assume that the regions <img class="math" src="../_images/math/ba2aba660161f6fa81e8a99e4315de42b188b6c5.png" alt="d \mathbf{Q}" style="vertical-align: -3px"/> are given by a regular gridding
+of the data in reciprocal space.</p>
+<p>For a scattering event in a particular detector,
+the momentum transfer in the laboratory frame is related to the momentum transfer
+in the sample frame by the rotation of the sample goniometer. This is further related to
+the crystallographic <img class="math" src="../_images/math/b02d313aabfe3f5cbbff831b47c83115e65b666c.png" alt="HKL" style="vertical-align: 0px"/> frame by the <img class="math" src="../_images/math/8b4bcb203763f57ab02d23d303852e5b9073bd77.png" alt="UB" style="vertical-align: 0px"/> matrix. In Mantid notation
+this can be written as</p>
+<div class="math" id="equation-MasterEquation">
+<p><span class="eqno">(4)</span><img src="../_images/math/dea7c8e4df74d870d834dc1e1d98b3db2226d1d4.png" alt="\left(\begin{array}{r}
+    -k_F \sin(\theta) \cos(\phi)\\
+    -k_F \sin(\theta) \sin(\phi)\\
+    k_I - k_F \cos(\theta)
+\end{array}\right) =
+R \left(\begin{array}{c}
+    Q^{sample}_x \\
+    Q^{sample}_y \\
+    Q^{sample}_z
+\end{array}\right) =
+2 \pi R \cdot U \cdot B
+\left(\begin{array}{c}
+    H \\
+    K \\
+    L
+\end{array}\right)"/></p>
+</div><p>where <img class="math" src="../_images/math/c463b1e87afe0aa9cf4ac70114a836f70df2e38e.png" alt="k_I" style="vertical-align: -3px"/> is the momentum of the incident neutron and <img class="math" src="../_images/math/8947652725142c14294cdc48fdf6cd71dd224f20.png" alt="k_F" style="vertical-align: -3px"/> is the one
+of the scattered neutron. R is the rotation matrix of the goniometer. For diffraction case,
+<img class="math" src="../_images/math/a67d771aa1de443e2410c6b50cd1456aad297dd8.png" alt="k_I = k_F =k" style="vertical-align: -3px"/>. For direct geometry inelastic <img class="math" src="../_images/math/c463b1e87afe0aa9cf4ac70114a836f70df2e38e.png" alt="k_I" style="vertical-align: -3px"/> is fixed in
+a particular experiment, while for indirect geometry inelastic <img class="math" src="../_images/math/8947652725142c14294cdc48fdf6cd71dd224f20.png" alt="k_F" style="vertical-align: -3px"/> is fixed for
+the detector. From equation <a href="#equation-MasterEquation">(4)</a> one can see that the trajectories in the reciprocal
+space are simply straight lines, parametrized by <img class="math" src="../_images/math/99aa4698956c865059a0ab31e3bdde707a85853d.png" alt="k" style="vertical-align: 0px"/> for diffraction,
+<img class="math" src="../_images/math/c463b1e87afe0aa9cf4ac70114a836f70df2e38e.png" alt="k_I" style="vertical-align: -3px"/> for direct geometry, or <img class="math" src="../_images/math/8947652725142c14294cdc48fdf6cd71dd224f20.png" alt="k_F" style="vertical-align: -3px"/> for indirect geometry.
+If we calculate what the <img class="math" src="../_images/math/9ae6b9398f0b6def47cc0889e891224fadf58886.png" alt="H, K, L" style="vertical-align: -4px"/> coordinates are for two points, say at
+<img class="math" src="../_images/math/a42dff13b721a298839b3fb75500cecbb33e5084.png" alt="k_{min}" style="vertical-align: -3px"/> and <img class="math" src="../_images/math/5ec0e2eda404565dfef5789819423aa49e052395.png" alt="k_{max}" style="vertical-align: -3px"/>, we can then write:</p>
+<div class="math" id="equation-proportionality">
+<p><span class="eqno">(5)</span><img src="../_images/math/a5a7886c28427f218803888a1d089baa087135a3.png" alt="\frac{H-H_{min}}{H_{max}-H_{min}}=\frac{K-K_{min}}{K_{max}-K_{min}}=
+\frac{L-L_{min}}{L_{max}-L_{min}}=\frac{k-k_{min}}{k_{max}-k_{min}}"/></p>
+</div><p>Thus, if we know for example that we want to calculate the intersection of
+the trajectory with a plane at <img class="math" src="../_images/math/8c3232426eac16435264f63e020c3190c6b2d495.png" alt="H=H_i" style="vertical-align: -3px"/>, we can just plug in <img class="math" src="../_images/math/ce6d0f5117d64b5432482f247c3bce1f11ec1d7d.png" alt="H_i" style="vertical-align: -3px"/>
+in the above equation and get the corresponding <img class="math" src="../_images/math/bb698e49f4379d4629e5b58e93fe823633b2083e.png" alt="K_i, L_i, k_i" style="vertical-align: -4px"/>.</p>
+<p>Any trajectory can miss a particular box in <img class="math" src="../_images/math/b02d313aabfe3f5cbbff831b47c83115e65b666c.png" alt="HKL" style="vertical-align: 0px"/> space, can be along one of the faces
+(say if <img class="math" src="../_images/math/9a87eb854a3de485077d6b8e9e559445ca1dcfe7.png" alt="H_{max}=H_{min}" style="vertical-align: -3px"/> then all <img class="math" src="../_images/math/5f75778e1fdbd0354edda2de5144510a5da029c1.png" alt="H" style="vertical-align: 0px"/> points have the same value),
+or it can intersect the box in exactly two points. If we know the momentum
+corresponding to the intersections, say <img class="math" src="../_images/math/a2b2ec42b3c598e0110b35cc9a11b1c48e944d2a.png" alt="k_1" style="vertical-align: -4px"/> and <img class="math" src="../_images/math/6d9b873ac372dc5b82dcafcf627f850644a71e3e.png" alt="k_2" style="vertical-align: -3px"/>, all we need is to
+integrate the incident flux between these two values, and then multiply with the solid
+angle of the detector, in order to obtain the statistical weight of this detector&#8217;s
+contribution to this particular region in the <img class="math" src="../_images/math/b02d313aabfe3f5cbbff831b47c83115e65b666c.png" alt="HKL" style="vertical-align: 0px"/> space.</p>
+<p>A similar equation to <a href="#equation-proportionality">(5)</a> can be obtained for inelastic scattering, by replacing
+<img class="math" src="../_images/math/99aa4698956c865059a0ab31e3bdde707a85853d.png" alt="k" style="vertical-align: 0px"/> with <img class="math" src="../_images/math/8947652725142c14294cdc48fdf6cd71dd224f20.png" alt="k_F" style="vertical-align: -3px"/> for direct geometry or with <img class="math" src="../_images/math/c463b1e87afe0aa9cf4ac70114a836f70df2e38e.png" alt="k_I" style="vertical-align: -3px"/> for the
+indirect case. We can then relate <img class="math" src="../_images/math/c463b1e87afe0aa9cf4ac70114a836f70df2e38e.png" alt="k_I" style="vertical-align: -3px"/> or <img class="math" src="../_images/math/8947652725142c14294cdc48fdf6cd71dd224f20.png" alt="k_F" style="vertical-align: -3px"/> with the energy
+transfer <img class="math" src="../_images/math/e7f3976c8fc98924a2661d692ffbe4a2f6b7e4d8.png" alt="\Delta E" style="vertical-align: 0px"/>, to get the intersections along the energy transfer
+direction.</p>
+<p>It is important to note that even if we calculate the intersections
+of the trajectory with a particular box the norm might still be zero,
+since we could have no incident neutron flux corresponding to that
+box in <img class="math" src="../_images/math/b02d313aabfe3f5cbbff831b47c83115e65b666c.png" alt="HKL" style="vertical-align: 0px"/> space.</p>
+<p>The way to account for excluded data is algorithm dependent. See
+the documentation for each particular implementation.</p>
+</div>
+<div class="section" id="symmetrization">
+<h2>Symmetrization<a class="headerlink" href="#symmetrization" title="Permalink to this headline">¶</a></h2>
+<p>To improve statistics in a certain region, one can use data from
+different regions of the reciprocal space that are related by the
+symmetry of the physics in the material that is being studied.
+A simple way to correctly estimate the statistical weight of the
+symmetrized data is to apply the symmetry operation on the detector
+trajectories (apply to <img class="math" src="../_images/math/9ae6b9398f0b6def47cc0889e891224fadf58886.png" alt="H, K, L" style="vertical-align: -4px"/>
+at <img class="math" src="../_images/math/a42dff13b721a298839b3fb75500cecbb33e5084.png" alt="k_{min}" style="vertical-align: -3px"/> and <img class="math" src="../_images/math/5ec0e2eda404565dfef5789819423aa49e052395.png" alt="k_{max}" style="vertical-align: -3px"/>) and recalculate the normalization.</p>
+</div>
+<div class="section" id="current-implementation">
+<h2>Current implementation<a class="headerlink" href="#current-implementation" title="Permalink to this headline">¶</a></h2>
+<p>As of release 3.3, the normalization can be calculated for single crystal
+diffraction (<a class="reference internal" href="../algorithms/MDNormSCD-v1.html#algm-mdnormscd"><em>MDNormSCD</em></a>)
+and single crystal direct geometry inelastic scattering
+(<a class="reference internal" href="../algorithms/MDNormDirectSC-v1.html#algm-mdnormdirectsc"><em>MDNormDirectSC</em></a>).</p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="MDHistoWorkspace.html" title="Previous Chapter: MD Histogram Workspace"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; MD Histogram Wor...</span>
+    </a>
+  </li>
+  <li>
+    <a href="MDWorkspace.html" title="Next Chapter: MD Workspace"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">MD Workspace &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

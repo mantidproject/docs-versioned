@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>MatrixWorkspace with Python</title>
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="TableWorkspace with Python" href="04_table_ws_py.html" />
+    <link rel="prev" title="Workspace Types Via Python" href="02_ws_types.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.0</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <p><span class="math">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<div class="section" id="matrixworkspace-with-python">
+<span id="matrix-ws-py"></span><h1>MatrixWorkspace with Python<a class="headerlink" href="#matrixworkspace-with-python" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="../../../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspaces</span></a> are the most frequently used workspace type in Mantid. The two most commonly used implementations are <a class="reference internal" href="../../../concepts/Workspace2D.html#workspace2d"><span class="std std-ref">Workspace2D</span></a> and <a class="reference internal" href="../../../concepts/EventWorkspace.html#eventworkspace"><span class="std std-ref">Event Workspace</span></a>. A <a class="reference internal" href="../../../concepts/Workspace2D.html#workspace2d"><span class="std std-ref">Workspace2D</span></a> stores the data in either a histogram form (most commonly) or as point data for each spectrum, whereas an <a class="reference internal" href="../../../concepts/EventWorkspace.html#eventworkspace"><span class="std std-ref">Event Workspace</span></a> stores a list of raw observations against each spectrum. More detail can be found by looking at the individual workspace pages for these workspace types.</p>
+<div class="figure align-center">
+<img alt="MatrixWorkspaceHierachy" src="../../../_images/MatrixWorkspaceHierachy.png" />
+</div>
+<div class="section" id="working-with-matrixworkspaces">
+<h2>Working with MatrixWorkspaces<a class="headerlink" href="#working-with-matrixworkspaces" title="Permalink to this headline">¶</a></h2>
+<p>Loading a Workspace2D and extracting some basic details:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ws2D</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s2">&quot;LOQ49886.nxs&quot;</span><span class="p">)</span>
+
+<span class="c1"># Basic queries</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Number of histograms: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ws2D</span><span class="o">.</span><span class="n">getNumberHistograms</span><span class="p">()))</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Is histogram data: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ws2D</span><span class="o">.</span><span class="n">isHistogramData</span><span class="p">()))</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Number of bins: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ws2D</span><span class="o">.</span><span class="n">blocksize</span><span class="p">()))</span>
+
+<span class="c1"># More advanced queries</span>
+<span class="n">spectrumAxis</span> <span class="o">=</span> <span class="n">ws2D</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Is spectra axis: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">spectrumAxis</span><span class="o">.</span><span class="n">isSpectra</span><span class="p">()))</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Number of spectra: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">spectrumAxis</span><span class="o">.</span><span class="n">length</span><span class="p">()))</span>
+
+<span class="n">xAxis</span> <span class="o">=</span> <span class="n">ws2D</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">xUnit</span> <span class="o">=</span> <span class="n">xAxis</span><span class="o">.</span><span class="n">getUnit</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;X-Unit: &quot;</span>  <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">xUnit</span><span class="o">.</span><span class="n">unitID</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="n">xUnit</span><span class="o">.</span><span class="n">caption</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">xUnit</span><span class="o">.</span><span class="n">symbol</span><span class="p">())))</span>
+
+<span class="c1"># Get x-axis data as a NumPy array</span>
+<span class="n">xData</span> <span class="o">=</span> <span class="n">ws2D</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">9683</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;X-Data type: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">xData</span><span class="p">)))</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;X-Data:&quot;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">xData</span><span class="p">)</span>
+
+<span class="c1"># Get y-axis data and error data</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Y-Data:&quot;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ws2D</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">9683</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;E-Data:&quot;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ws2D</span><span class="o">.</span><span class="n">readE</span><span class="p">(</span><span class="mi">9683</span><span class="p">))</span>
+
+<span class="c1"># Looping over each spectrum and obtaining a read-only reference to the counts</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ws2D</span><span class="o">.</span><span class="n">getNumberHistograms</span><span class="p">()):</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">ws2D</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="working-with-eventworkspaces">
+<h2>Working with EventWorkspaces<a class="headerlink" href="#working-with-eventworkspaces" title="Permalink to this headline">¶</a></h2>
+<p>Loading a Workspace checking it’s type, and reading the number of events.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">eventWS</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s2">&quot;CNCS_7860_event.nxs&quot;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Type of Workspace: &quot;</span><span class="p">,</span> <span class="n">eventWS</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;EventWorkspace called </span><span class="si">%s</span><span class="s2"> contains </span><span class="si">%s</span><span class="s2"> events&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">eventWS</span><span class="o">.</span><span class="n">name</span><span class="p">(),</span> <span class="n">eventWS</span><span class="o">.</span><span class="n">getNumberEvents</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rebinning-eventworkspaces">
+<h2>Rebinning EventWorkspaces<a class="headerlink" href="#rebinning-eventworkspaces" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center">
+<img alt="Binning_example" src="../../../_images/Binning_example.png" />
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">rebinned</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">eventWS</span><span class="p">,</span><span class="n">Params</span><span class="o">=</span><span class="s1">&#39;1000&#39;</span><span class="p">)</span>
+<span class="n">rebinnedToWorkspace2D</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">eventWS</span><span class="p">,</span><span class="n">Params</span><span class="o">=</span><span class="s1">&#39;1000&#39;</span><span class="p">,</span> <span class="n">PreserveEvents</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="02_ws_types.html" title="Previous Chapter: Workspace Types Via Python"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Workspace Typ...</span>
+    </a>
+  </li>
+  <li>
+    <a href="04_table_ws_py.html" title="Next Chapter: TableWorkspace with Python"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">TableWorkspac... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2021-02-09.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

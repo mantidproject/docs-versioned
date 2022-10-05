@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Calibration Implementation Details</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '4.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Techniques" href="index.html" />
+    <link rel="next" title="Data reduction for ILL’s direct geometry instruments" href="DirectILL.html" />
+    <link rel="prev" title="Calibration Implementation Details" href="" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>4.2</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="module-tube_calib">
+<span id="calibration-implementation-details"></span><h1>Calibration Implementation Details<a class="headerlink" href="#module-tube_calib" title="Permalink to this headline">¶</a></h1>
+<p>This file is concerned with calibrating a specified set of tubes</p>
+<p>The main function is <a class="reference internal" href="#tube_calib.getCalibration" title="tube_calib.getCalibration"><tt class="xref py py-func docutils literal"><span class="pre">getCalibration()</span></tt></a> which is at the end of this file.
+It populates an empty Calibration Table Workspace with the new positions of the pixel detectors after calibration.
+This Calibration Table Workspace can be used later to move the pixel detectors to the calibrated positions.</p>
+<p>Users should not need to directly call any other function other than <a class="reference internal" href="#tube_calib.getCalibration" title="tube_calib.getCalibration"><tt class="xref py py-func docutils literal"><span class="pre">getCalibration()</span></tt></a> from this file.</p>
+<dl class="function">
+<dt id="tube_calib.constructIdealTubeFromRealTube">
+<tt class="descclassname">tube_calib.</tt><tt class="descname">constructIdealTubeFromRealTube</tt><big>(</big><em>ws</em>, <em>tube</em>, <em>fitPar</em>, <em>funcForm</em><big>)</big><a class="headerlink" href="#tube_calib.constructIdealTubeFromRealTube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct an ideal tube from an actual tube (assumed ideal)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ws</strong> &#8211; integrated workspace</li>
+<li><strong>tube</strong> &#8211; specification of one tube (if several tubes, only first tube is used)</li>
+<li><strong>fitPar</strong> &#8211; initial fit parameters for peak of the tube</li>
+<li><strong>funcForm</strong> &#8211; listing the type of known positions 1=Gaussian; 2=edge</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">IdealTube</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tube_calib.correct_tube">
+<tt class="descclassname">tube_calib.</tt><tt class="descname">correct_tube</tt><big>(</big><em>AP</em>, <em>BP</em>, <em>CP</em>, <em>nDets</em><big>)</big><a class="headerlink" href="#tube_calib.correct_tube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Corrects position errors in a tube in the same manner as is done for MERLIN
+according to an algorithm used by Rob Bewley in his MATLAB code.</p>
+<p>&#64;param AP: Fit position of left (in pixels)
+&#64;param BP: Fit position of right (in pixels)
+&#64;param CP: Fit position of centre (in pixels)
+&#64;param nDets: Number of pixel detectors in tube</p>
+<p>Return Value: Array of corrected Xs  (in pixels)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tube_calib.correct_tube_to_ideal_tube">
+<tt class="descclassname">tube_calib.</tt><tt class="descname">correct_tube_to_ideal_tube</tt><big>(</big><em>tube_points</em>, <em>ideal_tube_points</em>, <em>n_detectors</em>, <em>test_mode=False</em>, <em>polin_fit=2</em><big>)</big><a class="headerlink" href="#tube_calib.correct_tube_to_ideal_tube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Corrects position errors in a tube given an array of points and their ideal positions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tube_points</strong> &#8211; Array of Slit Points along tube to be fitted (in pixels)</li>
+<li><strong>ideal_tube_points</strong> &#8211; The corresponding points in an ideal tube (Y-coords advised)</li>
+<li><strong>n_detectors</strong> &#8211; Number of pixel detectors in tube</li>
+<li><strong>test_mode</strong> &#8211; If true, detectors at the position of a slit will be moved out of the way
+to show the reckoned slit positions when the instrument is displayed.</li>
+<li><strong>polin_fit</strong> &#8211; Order of the polynomial to fit for the ideal positions</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Return Value: Array of corrected Xs  (in same units as ideal tube points)</p>
+<p>Note that any element of tubePoints not between 0.0 and nDets is considered a rogue point and so is ignored.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tube_calib.create_tube_calibration_ws_by_ws_index_list">
+<tt class="descclassname">tube_calib.</tt><tt class="descname">create_tube_calibration_ws_by_ws_index_list</tt><big>(</big><em>integrated_workspace</em>, <em>output_workspace</em>, <em>workspace_index_list</em><big>)</big><a class="headerlink" href="#tube_calib.create_tube_calibration_ws_by_ws_index_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates workspace with integrated data for one tube against distance along tube
+The tube is specified by a list of workspace indices of its spectra</p>
+<p>&#64;param integrated_workspace: Workspace of integrated data
+&#64;param workspace_index_list:  list of workspace indices for the tube
+&#64;param x_unit: unit of distance ( Pixel)
+&#64;param show_plot: True = show plot of workspace created, False = just make the workspace.</p>
+<p>Return Value: Workspace created</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tube_calib.getCalibratedPixelPositions">
+<tt class="descclassname">tube_calib.</tt><tt class="descname">getCalibratedPixelPositions</tt><big>(</big><em>ws</em>, <em>tube_positions</em>, <em>ideal_tube_positions</em>, <em>which_tube</em>, <em>peak_test_mode=False</em>, <em>polin_fit=2</em><big>)</big><a class="headerlink" href="#tube_calib.getCalibratedPixelPositions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the calibrated detector positions for one tube
+The tube is specified by a list of workspace indices of its spectra
+Calibration is assumed to be done parallel to the Y-axis</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ws</strong> &#8211; Workspace with tubes to be calibrated - may be integrated or raw</li>
+<li><strong>tube_positions</strong> &#8211; Array of calibration positions (in pixels)</li>
+<li><strong>ideal_tube_positions</strong> &#8211; Where these calibration positions should be (in Y coords)</li>
+<li><strong>which_tube</strong> &#8211; a list of workspace indices for the tube</li>
+<li><strong>peak_test_mode</strong> &#8211; true if shoving detectors that are reckoned to be at peak away (for test purposes)</li>
+<li><strong>polin_fit</strong> &#8211; Order of the polynomial to fit for the ideal positions</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Return  Array of pixel detector IDs and array of their calibrated positions</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tube_calib.getCalibration">
+<tt class="descclassname">tube_calib.</tt><tt class="descname">getCalibration</tt><big>(</big><em>ws</em>, <em>tubeSet</em>, <em>calibTable</em>, <em>fitPar</em>, <em>iTube</em>, <em>peaksTable</em>, <em>overridePeaks={}</em>, <em>excludeShortTubes=0.0</em>, <em>plotTube=</em>, <span class="optional">[</span><span class="optional">]</span><em>range_list=None</em>, <em>polinFit=2</em>, <em>peaksTestMode=False</em><big>)</big><a class="headerlink" href="#tube_calib.getCalibration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the results the calibration and put them in the calibration table provided.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ws</strong> &#8211; Integrated Workspace with tubes to be calibrated</li>
+<li><strong>tubeSet</strong> &#8211; Specification of Set of tubes to be calibrated ( <a class="reference internal" href="#tube_spec.TubeSpec" title="tube_spec.TubeSpec"><tt class="xref py py-class docutils literal"><span class="pre">TubeSpec</span></tt></a> object)</li>
+<li><strong>calibTable</strong> &#8211; Empty calibration table into which the calibration results are placed. It is composed by &#8216;Detector ID&#8217;
+and a V3D column &#8216;Detector Position&#8217;. It will be filled with the IDs and calibrated positions of the detectors.</li>
+<li><strong>fitPar</strong> &#8211; A <a class="reference internal" href="#tube_calib_fit_params.TubeCalibFitParams" title="tube_calib_fit_params.TubeCalibFitParams"><tt class="xref py py-class docutils literal"><span class="pre">TubeCalibFitParams</span></tt></a> object for fitting the peaks</li>
+<li><strong>iTube</strong> &#8211; The <a class="reference internal" href="#ideal_tube.IdealTube" title="ideal_tube.IdealTube"><tt class="xref py py-class docutils literal"><span class="pre">IdealTube</span></tt></a> which contains the positions in metres of the shadows of the slits,
+bars or edges used for calibration.</li>
+<li><strong>peaksTable</strong> &#8211; Peaks table into which the peaks positions will be put</li>
+<li><strong>overridePeaks</strong> &#8211; dictionary with tube indexes keys and an array of peaks in pixels to override those that would be
+fitted for one tube</li>
+<li><strong>excludeShortTubes</strong> &#8211; Exlude tubes shorter than specified length from calibration</li>
+<li><strong>plotTube</strong> &#8211; List of tube indexes that will be ploted</li>
+<li><strong>range_list</strong> &#8211; list of the tube indexes that will be calibrated. Default None, means all the tubes in tubeSet</li>
+<li><strong>polinFit</strong> &#8211; Order of the polynomial to fit against the known positions. Acceptable: 2, 3</li>
+<li><strong>peaksTestMode</strong> &#8211; true if shoving detectors that are reckoned to be at peak away (for test purposes)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This is the main method called from <a class="reference internal" href="Calibration.html#tube.calibrate" title="tube.calibrate"><tt class="xref py py-func docutils literal"><span class="pre">calibrate()</span></tt></a> to perform the calibration.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tube_calib.getCalibrationFromPeakFile">
+<tt class="descclassname">tube_calib.</tt><tt class="descname">getCalibrationFromPeakFile</tt><big>(</big><em>ws</em>, <em>calibTable</em>, <em>iTube</em>, <em>PeakFile</em><big>)</big><a class="headerlink" href="#tube_calib.getCalibrationFromPeakFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the results the calibration and put them in the calibration table provided.</p>
+<p>&#64;param ws: Integrated Workspace with tubes to be calibrated
+&#64;param calibTable: Calibration table into which the calibration results are placed
+&#64;param  iTube: The ideal tube
+&#64;param PeakFile: File of peaks for calibration</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tube_calib.getPoints">
+<tt class="descclassname">tube_calib.</tt><tt class="descname">getPoints</tt><big>(</big><em>integrated_ws</em>, <em>func_forms</em>, <em>fit_params</em>, <em>which_tube</em>, <em>show_plot=False</em><big>)</big><a class="headerlink" href="#tube_calib.getPoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the centres of N slits or edges for calibration</p>
+<p>It does look for the peak position in pixels by fitting the peaks and
+edges. It is the method responsible for estimating the peak position in each tube.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This N slit method is suited for WISH or the five sharp peaks of MERLIN .</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>integrated_ws</strong> &#8211; Workspace of integrated data</li>
+<li><strong>func_forms</strong> &#8211; array of function form 1=slit/bar, 2=edge</li>
+<li><strong>fit_params</strong> &#8211; a TubeCalibFitParams object contain the fit parameters</li>
+<li><strong>which_tube</strong> &#8211; a list of workspace indices for one tube (define a single tube)</li>
+<li><strong>show_plot</strong> &#8211; show plot for this tube</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array of the slit/edge positions (-1.0 indicates failed to find position)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tube_calib.get_ideal_tube_from_n_slits">
+<tt class="descclassname">tube_calib.</tt><tt class="descname">get_ideal_tube_from_n_slits</tt><big>(</big><em>integrated_workspace</em>, <em>slits</em><big>)</big><a class="headerlink" href="#tube_calib.get_ideal_tube_from_n_slits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given N slits for calibration on an ideal tube
+convert to Y values to form a ideal tube for correctTubeToIdealTube()</p>
+<p>&#64;param integrated_workspace: Workspace of integrated data
+&#64;param slits: positions of slits for ideal tube (in pixels)</p>
+<p>Return Value: Ideal tube in Y-coords for use by correctTubeToIdealTube()</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tube_calib.read_peak_file">
+<tt class="descclassname">tube_calib.</tt><tt class="descname">read_peak_file</tt><big>(</big><em>file_name</em><big>)</big><a class="headerlink" href="#tube_calib.read_peak_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the file calibration</p>
+<p>It returns a list of tuples, where the first value is the detector identification
+and the second value is its calibration values.</p>
+<dl class="docutils">
+<dt>Example of usage:</dt>
+<dd><dl class="first last docutils">
+<dt>for (det_code, cal_values) in readPeakFile(&#8216;pathname/TubeDemo&#8217;):</dt>
+<dd>print(det_code)
+print(cal_values)</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="section" id="tubespec">
+<h2>TubeSpec<a class="headerlink" href="#tubespec" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="tube_spec.TubeSpec">
+<em class="property">class </em><tt class="descclassname">tube_spec.</tt><tt class="descname">TubeSpec</tt><big>(</big><em>ws</em><big>)</big><a class="headerlink" href="#tube_spec.TubeSpec" title="Permalink to this definition">¶</a></dt>
+<dd><p>The python class <a class="reference internal" href="#tube_spec.TubeSpec" title="tube_spec.TubeSpec"><tt class="xref py py-class docutils literal"><span class="pre">TubeSpec</span></tt></a> provides a way of specifying a set of tubes for
+calibration, so that the necessary information about detectors etc. is forethcoming. This class
+is provide by the python file tube_spec.py. The function <a class="reference internal" href="#tube_calib.getCalibration" title="tube_calib.getCalibration"><tt class="xref py py-func docutils literal"><span class="pre">getCalibration()</span></tt></a> of
+<a class="reference internal" href="#module-tube_calib" title="tube_calib"><tt class="xref py py-mod docutils literal"><span class="pre">tube_calib</span></tt></a> needs such an object.</p>
+<p>Configuration methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#tube_spec.TubeSpec.setTubeSpecByString" title="tube_spec.TubeSpec.setTubeSpecByString"><tt class="xref py py-meth docutils literal"><span class="pre">setTubeSpecByString()</span></tt></a></li>
+<li><a class="reference internal" href="#tube_spec.TubeSpec.setTubeSpecByStringArray" title="tube_spec.TubeSpec.setTubeSpecByStringArray"><tt class="xref py py-meth docutils literal"><span class="pre">setTubeSpecByStringArray()</span></tt></a></li>
+</ul>
+</div></blockquote>
+<p>There are some functions useful for getting information about a tube specification.
+It is not necessary to call them in a calibration script, but they may be useful for checking
+the specification. These methods are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#tube_spec.TubeSpec.getNumTubes" title="tube_spec.TubeSpec.getNumTubes"><tt class="xref py py-meth docutils literal"><span class="pre">getNumTubes()</span></tt></a></li>
+<li><a class="reference internal" href="#tube_spec.TubeSpec.getDetectorInfoFromTube" title="tube_spec.TubeSpec.getDetectorInfoFromTube"><tt class="xref py py-meth docutils literal"><span class="pre">getDetectorInfoFromTube()</span></tt></a></li>
+<li><a class="reference internal" href="#tube_spec.TubeSpec.getTubeLength" title="tube_spec.TubeSpec.getTubeLength"><tt class="xref py py-meth docutils literal"><span class="pre">getTubeLength()</span></tt></a></li>
+<li><a class="reference internal" href="#tube_spec.TubeSpec.getTubeName" title="tube_spec.TubeSpec.getTubeName"><tt class="xref py py-meth docutils literal"><span class="pre">getTubeName()</span></tt></a></li>
+<li><a class="reference internal" href="#tube_spec.TubeSpec.getTubeByString" title="tube_spec.TubeSpec.getTubeByString"><tt class="xref py py-meth docutils literal"><span class="pre">getTubeByString()</span></tt></a></li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Tubes are currently ordered in the specification in the same order as they appear in the IDF.
+This may differ from the order they appear in the workspace indices.</p>
+</div>
+<dl class="method">
+<dt id="tube_spec.TubeSpec.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>ws</em><big>)</big><a class="headerlink" href="#tube_spec.TubeSpec.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>The constructor creates empty tube specification for specified instrument.
+:param ws: workspace containing the specified instrument with one pixel detector per spectrum.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tube_spec.TubeSpec.getComponent">
+<tt class="descname">getComponent</tt><big>(</big><big>)</big><a class="headerlink" href="#tube_spec.TubeSpec.getComponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns instrument component corresponding to specification</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">instrument component</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tube_spec.TubeSpec.getComponents">
+<tt class="descname">getComponents</tt><big>(</big><big>)</big><a class="headerlink" href="#tube_spec.TubeSpec.getComponents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns instrument components corresponding to specification</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">array of instrument components</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tube_spec.TubeSpec.getDetectorInfoFromTube">
+<tt class="descname">getDetectorInfoFromTube</tt><big>(</big><em>tubeIx</em><big>)</big><a class="headerlink" href="#tube_spec.TubeSpec.getDetectorInfoFromTube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns detector info for one tube.</p>
+<p>Returns information about detectors in the ( <strong>tubeIx</strong> +1)st tube in the specification,
+where <strong>tubeIx</strong> is the argument. Three integers are returned:</p>
+<blockquote>
+<div>the ID for the first detector,
+the number of detectors in the tube and
+the increment step of detector IDs in the tube (usually 1, but may be -1).</div></blockquote>
+<p>It assumes that all the pixels along the tube have consecutive detector IDs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tubeIx</strong> &#8211; index of Tube in specified set</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">ID of first detector, number of detectors and step between detectors +1 or -1</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tube_spec.TubeSpec.getNumTubes">
+<tt class="descname">getNumTubes</tt><big>(</big><big>)</big><a class="headerlink" href="#tube_spec.TubeSpec.getNumTubes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns number of tubes specified. May also save info about these tubes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Value, number of tubes (-1 for erroneous specification)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tube_spec.TubeSpec.getTube">
+<tt class="descname">getTube</tt><big>(</big><em>tubeIx</em><big>)</big><a class="headerlink" href="#tube_spec.TubeSpec.getTube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of workspace indices of a tube</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tubeIx</strong> &#8211; index of Tube in specified set</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of indices</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tube_spec.TubeSpec.getTubeByString">
+<tt class="descname">getTubeByString</tt><big>(</big><em>tubeIx</em><big>)</big><a class="headerlink" href="#tube_spec.TubeSpec.getTubeByString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of workspace indices of a tube set that has been specified by string
+It assumes that all the pixels along the tube have consecutive detector IDs</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tubeIx</strong> &#8211; index of Tube in specified set</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list of indices</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tube_spec.TubeSpec.getTubeLength">
+<tt class="descname">getTubeLength</tt><big>(</big><em>tubeIx</em><big>)</big><a class="headerlink" href="#tube_spec.TubeSpec.getTubeLength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns length of the ( <strong>tubeIx</strong> +1)st tube.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tubeIx</strong> &#8211; index of Tube in specified set</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Length of tube (first pixel to last pixel) in metres. 0.0 if tube not found.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tube_spec.TubeSpec.getTubeName">
+<tt class="descname">getTubeName</tt><big>(</big><em>tubeIx</em><big>)</big><a class="headerlink" href="#tube_spec.TubeSpec.getTubeName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns name of tube.</p>
+<p>This function is not used in tube calibration, but may be useful as a diagnostic.
+It is used in creating the peakfile, which lists the peaks found for each tube.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tubeIx</strong> &#8211; index of Tube in specified set</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Name of tube as in IDF or &#8216;unknown&#8217; if not found.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tube_spec.TubeSpec.isTube">
+<tt class="descname">isTube</tt><big>(</big><em>comp</em><big>)</big><a class="headerlink" href="#tube_spec.TubeSpec.isTube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines whether the component is a tube.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>comp</strong> &#8211; the component</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Value, true if component passes test as being a tube</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tube_spec.TubeSpec.searchForTubes">
+<tt class="descname">searchForTubes</tt><big>(</big><em>comp</em><big>)</big><a class="headerlink" href="#tube_spec.TubeSpec.searchForTubes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches the component for tubes and saves them in array, appending if array is not empty.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>comp</strong> &#8211; the component</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="tube_spec.TubeSpec.setTubeSpecByString">
+<tt class="descname">setTubeSpecByString</tt><big>(</big><em>tubeSpecString</em><big>)</big><a class="headerlink" href="#tube_spec.TubeSpec.setTubeSpecByString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the sets of tube from the workspace.</p>
+<p>Sets tube specification by string. The string specifies a component of the instrument
+as in the instrument tree of its IDF file. This component may contain one or more tubes
+and possibly all the tunes in the instrument.
+If the tube specification is not empty this component is added to those already
+in the specification. No checking is done for repeated or overlapping components.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tubeSpecString</strong> &#8211; string specifying tubes of a component of the instrument</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>tubeSpecString</strong> may be the full path name for the component or
+steps may be missed out provided it remains unique.
+For example panel03 of WISH can be specified by just <strong>panel03</strong>,
+because panel03 is unique within the instrument. Also tube012 of this panel,
+which is unique within the panel but not within the instrument
+can be specified by <strong>panel03/tube012</strong> but not <strong>tube012</strong>.
+If the specification is not unique, the first found will be used and there will
+be no error message. So if in doubt don&#8217;t skip a step.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="tube_spec.TubeSpec.setTubeSpecByStringArray">
+<tt class="descname">setTubeSpecByStringArray</tt><big>(</big><em>tubeSpecArray</em><big>)</big><a class="headerlink" href="#tube_spec.TubeSpec.setTubeSpecByStringArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the sets of tube from the workspace with an array of strings.</p>
+<p>Set tube specification like setTubeSpecByString, but with an array of string
+to enable multiple components to be calibrated.</p>
+<p>This function allows you to calibrate a set of tubes that is not defined by a single component.
+For example a set of windows. It takes an array of strings as its argument.
+Each string specifies a component such as a window or a single tube in the same manner as for
+<a class="reference internal" href="#tube_spec.TubeSpec.setTubeSpecByString" title="tube_spec.TubeSpec.setTubeSpecByString"><tt class="xref py py-meth docutils literal"><span class="pre">setTubeSpecByString()</span></tt></a>. The components must be disjoint.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tubeSpecArray</strong> &#8211; array of strings (ex. [&#8216;door1&#8217;, &#8216;door2&#8217;])</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="tubecalibfitparams">
+<h2>TubeCalibFitParams<a class="headerlink" href="#tubecalibfitparams" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="tube_calib_fit_params.TubeCalibFitParams">
+<em class="property">class </em><tt class="descclassname">tube_calib_fit_params.</tt><tt class="descname">TubeCalibFitParams</tt><big>(</big><em>peaks</em>, <em>height=1000.0</em>, <em>width=30.0</em>, <em>threePointMethod=False</em>, <em>outEdge=30.0</em>, <em>inEdge=50.0</em>, <em>edgeGrad=6.0</em>, <em>margin=15</em><big>)</big><a class="headerlink" href="#tube_calib_fit_params.TubeCalibFitParams" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="tube_calib_fit_params.TubeCalibFitParams.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>peaks</em>, <em>height=1000.0</em>, <em>width=30.0</em>, <em>threePointMethod=False</em>, <em>outEdge=30.0</em>, <em>inEdge=50.0</em>, <em>edgeGrad=6.0</em>, <em>margin=15</em><big>)</big><a class="headerlink" href="#tube_calib_fit_params.TubeCalibFitParams.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds the parameters needed for fitting the positions of the peaks formed by the slits or edges.</p>
+<p>The constructor has the following arguments:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>peaks</strong> &#8211; expected positions of the peaks in pixels</li>
+<li><strong>height</strong> &#8211; expect height of peaks</li>
+<li><strong>width</strong> &#8211; expected width (sigma for Gaussian fitting) of peaks</li>
+<li><strong>threePointMethod</strong> &#8211; True if three point method is used (first and last peaks are the extreme ends of very wide peaks).</li>
+<li><strong>margin</strong> &#8211; defines the region around the peak that will be considered for fitting</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This class has also an attribute, called automatic, accessed through
+<tt class="xref py py-meth docutils literal"><span class="pre">getAutomatic()</span></tt>, that
+defines it a dynamic evaluation of the fit parameters can be used or not
+(see <a class="reference internal" href="Calibration.html#tube.calibrate" title="tube.calibrate"><tt class="xref py py-func docutils literal"><span class="pre">calibrate()</span></tt></a> to check how the automatic flag will be used).</p>
+<p>The function <a class="reference internal" href="#tube_calib.getCalibration" title="tube_calib.getCalibration"><tt class="xref py py-func docutils literal"><span class="pre">getCalibration()</span></tt></a> of <a class="reference internal" href="#module-tube_calib" title="tube_calib"><tt class="xref py py-mod docutils literal"><span class="pre">tube_calib</span></tt></a> needs such an object.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="idealtube">
+<h2>IdealTube<a class="headerlink" href="#idealtube" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ideal_tube.IdealTube">
+<em class="property">class </em><tt class="descclassname">ideal_tube.</tt><tt class="descname">IdealTube</tt><a class="headerlink" href="#ideal_tube.IdealTube" title="Permalink to this definition">¶</a></dt>
+<dd><p>The IdealTube specifies where the peaks formed by slits or edges should occur.</p>
+<p>They can be considered as the known positions as well.
+It does also keep informatin about the shape of the known_positions, if they are
+peaks or edges.</p>
+<p>First you create an ideal tube by calling the empty constructor idealTube().
+Then call another function to populate it.</p>
+<p>You may fill it up with the following methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#ideal_tube.IdealTube.setArray" title="ideal_tube.IdealTube.setArray"><tt class="xref py py-meth docutils literal"><span class="pre">setArray()</span></tt></a></li>
+<li><a class="reference internal" href="#ideal_tube.IdealTube.setPositionsAndForm" title="ideal_tube.IdealTube.setPositionsAndForm"><tt class="xref py py-meth docutils literal"><span class="pre">setPositionsAndForm()</span></tt></a></li>
+</ul>
+</div></blockquote>
+<p>You may than query the known positions and functional forms through :</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#ideal_tube.IdealTube.getArray" title="ideal_tube.IdealTube.getArray"><tt class="xref py py-meth docutils literal"><span class="pre">getArray()</span></tt></a></li>
+<li><a class="reference internal" href="#ideal_tube.IdealTube.getFunctionalForms" title="ideal_tube.IdealTube.getFunctionalForms"><tt class="xref py py-meth docutils literal"><span class="pre">getFunctionalForms()</span></tt></a></li>
+</ul>
+</div></blockquote>
+<dl class="method">
+<dt id="ideal_tube.IdealTube.__init__">
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="headerlink" href="#ideal_tube.IdealTube.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create empty instance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ideal_tube.IdealTube.constructTubeFor3PointsMethod">
+<tt class="descname">constructTubeFor3PointsMethod</tt><big>(</big><em>idealAP</em>, <em>idealBP</em>, <em>idealCP</em>, <em>activeTubeLen</em><big>)</big><a class="headerlink" href="#ideal_tube.IdealTube.constructTubeFor3PointsMethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct and ideal tube for Merlin 3-point calibration</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>idealAP</strong> &#8211; Ideal left (AP) in pixels</li>
+<li><strong>idealBP</strong> &#8211; ideal right (BP) in pixels</li>
+<li><strong>idealCP</strong> &#8211; ideal centre (CP) in pixels</li>
+<li><strong>activeTubeLen</strong> &#8211; Active tube length in metres</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ideal_tube.IdealTube.getArray">
+<tt class="descname">getArray</tt><big>(</big><big>)</big><a class="headerlink" href="#ideal_tube.IdealTube.getArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the array of of points where the peaks should be in Metres</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ideal_tube.IdealTube.getFunctionalForms">
+<tt class="descname">getFunctionalForms</tt><big>(</big><big>)</big><a class="headerlink" href="#ideal_tube.IdealTube.getFunctionalForms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the array of of points where the peaks should be in Metres</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ideal_tube.IdealTube.setArray">
+<tt class="descname">setArray</tt><big>(</big><em>array</em><big>)</big><a class="headerlink" href="#ideal_tube.IdealTube.setArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct an ideal tube directly from an array of positions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>points</strong> &#8211; Array of points where the peaks should be in Metres</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ideal_tube.IdealTube.setForm">
+<tt class="descname">setForm</tt><big>(</big><em>form</em><big>)</big><a class="headerlink" href="#ideal_tube.IdealTube.setForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the functional form for the peaks</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ideal_tube.IdealTube.setPositionsAndForm">
+<tt class="descname">setPositionsAndForm</tt><big>(</big><em>pos</em>, <em>form</em><big>)</big><a class="headerlink" href="#ideal_tube.IdealTube.setPositionsAndForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct and ideal tube directly from an array of positions and functional forms</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pos</strong> &#8211; Array of points where the peaks or edges should be in Metres</li>
+<li><strong>form</strong> &#8211; Array of functional forms of the points 1=peak, 2=edge</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<p><strong>Category</strong>: <a class="reference external" href="categories/Techniques.html">Techniques</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="" title="Previous Chapter: Calibration Implementation Details"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Calibration Impl...</span>
+    </a>
+  </li>
+  <li>
+    <a href="DirectILL.html" title="Next Chapter: Data reduction for ILL’s direct geometry instruments"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Data reduction f... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2019-11-18.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

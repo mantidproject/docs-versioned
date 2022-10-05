@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Point and space groups</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Project" href="Project.html" />
+    <link rel="prev" title="Plugin" href="Plugin.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.0</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <p><span class="math">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<div class="section" id="point-and-space-groups">
+<span id="id1"></span><h1>Point and space groups<a class="headerlink" href="#point-and-space-groups" title="Permalink to this headline">¶</a></h1>
+<p>This document explains how crystallographic point and space groups are used in Mantid. The <a class="reference internal" href="SymmetryGroups.html#symmetry-groups"><span class="std std-ref">document</span></a> about symmetry operations, elements and groups is a prerequisite for this text, so it is recommended to read it beforehand.</p>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>As explained in the general text covering symmetry groups, groups are used to describe symmetry of objects in space. For crystallography, point and space groups are essential tools to describe crystal structures and aspects of diffraction experiments. According to the definition given in the International Tables for Crystallography A, a “point group is a group of symmetry operations all of which leave at least one point unmoved” <a class="reference internal" href="#itapointgroups" id="id2">[ITAPointGroups]</a>. This means that only symmetry operations without a translational component are allowed, which leaves only rotations <span class="math">\(1\)</span>, <span class="math">\(2\)</span>, <span class="math">\(3\)</span>, <span class="math">\(4\)</span>, <span class="math">\(6\)</span> and roto-inversions <span class="math">\(\bar{1}\)</span>, <span class="math">\(\bar{3}\)</span>, <span class="math">\(\bar{4}\)</span>, <span class="math">\(\bar{6}\)</span> and mirror planes <span class="math">\(m\)</span>. In space groups, translational symmetry is present as well (for example in the form of screw axes and glide planes).</p>
+</div>
+<div class="section" id="theory">
+<h2>Theory<a class="headerlink" href="#theory" title="Permalink to this headline">¶</a></h2>
+<p>In three dimensions there are 32 crystallographic point groups and in 11 of these an inversion center (<span class="math">\(\bar{1}\)</span>) is present. These so called Laue classes are important for diffraction experiments because Friedel’s law defines that diffraction patterns always show a center of symmetry if anomalous dispersion is not taken into account.</p>
+<p>Through the presence of certain symmetry operations in certain directions, the Laue classes (and also the point groups) can be categorized into seven crystal systems (see table below). This information is included in the Hermann-Mauguin symbol, which describes symmetry along different directions, depending on the crystal system.</p>
+<table border="1" class="docutils" id="id5">
+<caption><span class="caption-text">The seven crystal systems and how they relate to the 11 Laue classes and the 32 crystallographic point groups</span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col width="9%" />
+<col width="21%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Crystal system</th>
+<th class="head">Laue classes</th>
+<th class="head">Point groups</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Cubic</td>
+<td><span class="math">\(m\bar{3}\)</span>, <span class="math">\(m\bar{3}m\)</span></td>
+<td><span class="math">\(23\)</span>, <span class="math">\(m\bar{3}\)</span>, <span class="math">\(432\)</span>, <span class="math">\(\bar{4}3m\)</span>, <span class="math">\(m\bar{3}m\)</span></td>
+</tr>
+<tr class="row-odd"><td>Hexagonal</td>
+<td><span class="math">\(6/m\)</span>, <span class="math">\(6/mmm\)</span></td>
+<td><span class="math">\(6\)</span>, <span class="math">\(\bar{6}\)</span>, <span class="math">\(6/m\)</span>, <span class="math">\(622\)</span>, <span class="math">\(6mm\)</span>, <span class="math">\(\bar{6}2m\)</span>, <span class="math">\(\bar{6}m2\)</span>, <span class="math">\(6/mmm\)</span></td>
+</tr>
+<tr class="row-even"><td>Trigonal</td>
+<td><span class="math">\(\bar{3}\)</span>, <span class="math">\(\bar{3}m\)</span></td>
+<td><span class="math">\(3\)</span>, <span class="math">\(\bar{3}\)</span>, <span class="math">\(321\)</span>, <span class="math">\(312\)</span>, <span class="math">\(3m1\)</span>, <span class="math">\(31m\)</span>, <span class="math">\(\bar{3}m1\)</span>, <span class="math">\(\bar{3}1m\)</span></td>
+</tr>
+<tr class="row-odd"><td>Tetragonal</td>
+<td><span class="math">\(4/m\)</span>, <span class="math">\(4/mmm\)</span></td>
+<td><span class="math">\(4\)</span>, <span class="math">\(\bar{4}\)</span>, <span class="math">\(4/m\)</span>, <span class="math">\(422\)</span>, <span class="math">\(4mm\)</span>, <span class="math">\(\bar{4}2m\)</span>, <span class="math">\(\bar{4}m2\)</span>, <span class="math">\(4/mmm\)</span></td>
+</tr>
+<tr class="row-even"><td>Orthorhombic</td>
+<td><span class="math">\(mmm\)</span></td>
+<td><span class="math">\(222\)</span>, <span class="math">\(mm2\)</span>, <span class="math">\(mmm\)</span></td>
+</tr>
+<tr class="row-odd"><td>Monoclinic</td>
+<td><span class="math">\(2/m\)</span></td>
+<td><span class="math">\(2\)</span>, <span class="math">\(m\)</span>, <span class="math">\(2/m\)</span></td>
+</tr>
+<tr class="row-even"><td>Triclinic</td>
+<td><span class="math">\(\bar{1}\)</span></td>
+<td><span class="math">\(1\)</span>, <span class="math">\(\bar{1}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Any point group can be generated by using a maximum of three symmetry operations as so-called generators using the principle described in <a class="reference internal" href="#shmueli84" id="id3">[Shmueli84]</a>. According to this, any point group can be described either as a cyclic group or as a product of maximum three cyclic groups. The point group <span class="math">\(4\)</span> is an example for a group that is simply a cyclic group generated from a positive four fold rotation axis along the <span class="math">\(z\)</span>-axis, which has the order 4.</p>
+<div class="math">
+\[G = \left\{{4^{+}}^0, {4^{+}}^1, {4^{+}}^2, {4^{+}}^3\right\} = \left\{1, 4^{+}, 2, 4^{-}\right\}\]</div>
+<p>So by specifying one single symmetry operation as generator, all symmetry operations of the point group in question are generated. From this it’s convenient to expand the example to generate a point group that can be expressed as the product of two cyclic groups - <span class="math">\(4/m\)</span>. In this point group, an additional mirror plane is present perpendicular to the four fold axis. The point group can be expressed as product of <span class="math">\(4\)</span> shown above and a cyclic group generated by the symmetry operation <span class="math">\(m\)</span> (mirror plane perpendicular to <span class="math">\(z\)</span>):</p>
+<div class="math">
+\[G' = G \cdot \left\{m^0, m^1\right\} = \left\{1, 4^{+}, 2, 4^{-}\right\} \cdot \left\{1, m\right\} = \left\{1, m, 4^{+}, \bar{4}^{+}, 2, \bar{1}, 4^{-}, \bar{4}^{-}\right\}\]</div>
+<p>This means that <span class="math">\(4/m\)</span> contains an inversion center as well as a four fold rotoinversion axis which result from the combination of the operations of the two cyclic groups. It’s also possible to use a different cyclic group to achieve the same result (<span class="math">\(\bar{1}\)</span>). As mentioned above, for some point groups it’s necessary to use three generators, which follows the same principle and is not shown here.</p>
+<p>Space groups can be handled in a very similar way if translations are limited to the interval <span class="math">\([0, 1)\)</span> so that screw-axes and glide-planes can also be used to generate cyclic groups. Without this limitation, the translational components would not be the same for <span class="math">\(S^k\)</span> and <span class="math">\(S^0\)</span>.</p>
+</div>
+<div class="section" id="using-point-groups-in-mantid">
+<h2>Using point groups in Mantid<a class="headerlink" href="#using-point-groups-in-mantid" title="Permalink to this headline">¶</a></h2>
+<p>Point groups are represented in Mantid by the <code class="docutils literal"><span class="pre">PointGroup</span></code>-class, which is constructed for each actual point group using generators. The interface of the class consists of two parts, one for providing information about the point group and one for working with <span class="math">\(hkl\)</span>-indices. Just as in the case of <code class="docutils literal"><span class="pre">SymmetryOperation</span></code>, <code class="docutils literal"><span class="pre">PointGroup</span></code>-objects are created using a factory, this time by supplying the short Hermann-Mauguin symbol <a class="footnote-reference" href="#f1" id="id4">[1]</a> :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">PointGroupFactory</span>
+
+<span class="n">pg</span> <span class="o">=</span> <span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">createPointGroup</span><span class="p">(</span><span class="s2">&quot;-1&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Name: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">getName</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hermann-Mauguin symbol: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">getHMSymbol</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Crystal system: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">getCrystalSystem</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>When this code is executed, some information about the point group is printed:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Name: -1 (Triclinic)
+Hermann-Mauguin symbol: -1
+Crystal system: Triclinic
+</pre></div>
+</div>
+<p>It’s possible to query the factory about available point groups. One option returns a list of all available groups, while another possibility is to get only groups from a certain crystal system:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">PointGroupFactory</span><span class="p">,</span> <span class="n">PointGroup</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All point groups: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">getAllPointGroupSymbols</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cubic point groups: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">getPointGroupSymbols</span><span class="p">(</span><span class="n">PointGroup</span><span class="o">.</span><span class="n">CrystalSystem</span><span class="o">.</span><span class="n">Cubic</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tetragonal point groups: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">getPointGroupSymbols</span><span class="p">(</span><span class="n">PointGroup</span><span class="o">.</span><span class="n">CrystalSystem</span><span class="o">.</span><span class="n">Tetragonal</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>Which results in the following output:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>All point groups: [&#39;-1&#39;,&#39;-3&#39;,&#39;-3 r&#39;,&#39;-31m&#39;,&#39;-3m&#39;,&#39;-3m r&#39;,&#39;-3m1&#39;,&#39;-4&#39;,&#39;-42m&#39;,&#39;-43m&#39;,&#39;-4m2&#39;,&#39;-6&#39;,&#39;-62m&#39;,&#39;-6m2&#39;,&#39;1&#39;,&#39;112&#39;,&#39;112/m&#39;,&#39;11m&#39;,&#39;2&#39;,&#39;2/m&#39;,&#39;222&#39;,&#39;23&#39;,&#39;2mm&#39;,&#39;3&#39;,&#39;3 r&#39;,&#39;312&#39;,&#39;31m&#39;,&#39;32&#39;,&#39;32 r&#39;,&#39;321&#39;,&#39;3m&#39;,&#39;3m r&#39;,&#39;3m1&#39;,&#39;4&#39;,&#39;4/m&#39;,&#39;4/mmm&#39;,&#39;422&#39;,&#39;432&#39;,&#39;4mm&#39;,&#39;6&#39;,&#39;6/m&#39;,&#39;6/mmm&#39;,&#39;622&#39;,&#39;6mm&#39;,&#39;m&#39;,&#39;m-3&#39;,&#39;m-3m&#39;,&#39;m2m&#39;,&#39;mm2&#39;,&#39;mmm&#39;]
+Cubic point groups: [&#39;-43m&#39;,&#39;23&#39;,&#39;432&#39;,&#39;m-3&#39;,&#39;m-3m&#39;]
+Tetragonal point groups: [&#39;-4&#39;,&#39;-42m&#39;,&#39;-4m2&#39;,&#39;4&#39;,&#39;4/m&#39;,&#39;4/mmm&#39;,&#39;422&#39;,&#39;4mm&#39;]
+</pre></div>
+</div>
+<p>The point groups with an extra <code class="docutils literal"><span class="pre">r</span></code> at the end are trigonal point groups with rhombohedral axes. Trigonal point groups without that additional letter use the hexagonal coordinate system. For some of them there are two different axis choices, for example <span class="math">\(\bar{3}m\)</span>, which can be defined as <span class="math">\(\bar{3}m1\)</span> or <span class="math">\(\bar{3}1m\)</span>. Creating it by the symbol <code class="docutils literal"><span class="pre">-3m</span></code> defaults to <span class="math">\(\bar{3}m1\)</span>.</p>
+<p>After having obtained a <code class="docutils literal"><span class="pre">PointGroup</span></code>-object, it can be used for working with reflection data, more specifically <span class="math">\(hkl\)</span>-indices. It’s possible to check whether two reflections are equivalent in a certain point group:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">PointGroupFactory</span>
+
+<span class="n">pg</span> <span class="o">=</span> <span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">createPointGroup</span><span class="p">(</span><span class="s2">&quot;m-3m&quot;</span><span class="p">)</span>
+
+<span class="n">hkl1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">hkl2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">hkl3</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Are [2,0,0] and [0,0,-2] equivalent? </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">isEquivalent</span><span class="p">(</span><span class="n">hkl1</span><span class="p">,</span> <span class="n">hkl2</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Are [2,0,0] and [0,1,2] equivalent? </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">isEquivalent</span><span class="p">(</span><span class="n">hkl1</span><span class="p">,</span> <span class="n">hkl3</span><span class="p">)))</span>
+</pre></div>
+</div>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Are [2,0,0] and [0,0,-2] equivalent? True
+Are [2,0,0] and [0,1,2] equivalent? False
+</pre></div>
+</div>
+<p>Another common task is to find all symmetry equivalents of a reflection, for example to determine its multiplicity. <code class="docutils literal"><span class="pre">PointGroup</span></code> has a method for this purpose which returns the set of non-identical symmetry equivalents for a given <span class="math">\(hkl\)</span> (including <span class="math">\(hkl\)</span> itself):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">PointGroupFactory</span>
+
+<span class="n">pg</span> <span class="o">=</span> <span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">createPointGroup</span><span class="p">(</span><span class="s2">&quot;m-3m&quot;</span><span class="p">)</span>
+
+<span class="n">hkl1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">equivalents1</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">getEquivalents</span><span class="p">(</span><span class="n">hkl1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of reflections equivalent to [2,0,0]: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">equivalents1</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Equivalents: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">equivalents1</span><span class="p">))</span>
+
+
+<span class="n">hkl2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">equivalents2</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">getEquivalents</span><span class="p">(</span><span class="n">hkl2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of reflections equivalent to [1,1,1]: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">equivalents2</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Equivalents: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">equivalents2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Executing this code results in the following output:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Number of reflections equivalent to [2,0,0]: 6
+Equivalents: [[2,0,0], [0,2,0], [0,0,2], [0,0,-2], [0,-2,0], [-2,0,0]]
+Number of reflections equivalent to [1,1,1]: 8
+Equivalents: [[1,1,1], [1,1,-1], [1,-1,1], [1,-1,-1], [-1,1,1], [-1,1,-1], [-1,-1,1], [-1,-1,-1]]
+</pre></div>
+</div>
+<p>Sometimes, a list of reflections needs to be reduced to a set of symmetry independent reflections only. That means it should not contain any two reflections that are symmetry equivalents according to the point group symmetry. To achieve this, <code class="docutils literal"><span class="pre">PointGroup</span></code> offers a method that returns the same <span class="math">\(hkl'\)</span> for all symmetry equivalents.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">PointGroupFactory</span>
+
+<span class="n">pg</span> <span class="o">=</span> <span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">createPointGroup</span><span class="p">(</span><span class="s2">&quot;m-3m&quot;</span><span class="p">)</span>
+
+<span class="n">hklList</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>    <span class="c1"># Equivalent to [1,0,0]</span>
+           <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>               <span class="c1"># Equivalent to [1,1,1]</span>
+           <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span>  <span class="c1"># Equivalent to [3,1,1]</span>
+
+<span class="n">independent</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">hkl</span> <span class="ow">in</span> <span class="n">hklList</span><span class="p">:</span>
+    <span class="n">independent</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">getReflectionFamily</span><span class="p">(</span><span class="n">hkl</span><span class="p">))</span> <span class="c1"># getReflectionFamily returns the same hkl for all symmetry equivalents</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of independent reflections: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">independent</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reflections: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">independent</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>This example code produces the output below upon execution:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Number of independent reflections: 3
+Reflections: [...]
+</pre></div>
+</div>
+<p>Symmetry imposes restrictions on the metric of the unit cell. Cubic symmetry for example implies that all cell edges have the same length and all angles are 90 degrees. The <code class="docutils literal"><span class="pre">Group</span></code>-class (and thus, by inheritance also <code class="docutils literal"><span class="pre">PointGroup</span></code>) provides a method that checks is a metric tensor is compatible with the symmetry operations of the group:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">PointGroupFactory</span><span class="p">,</span> <span class="n">UnitCell</span>
+
+<span class="n">cell</span> <span class="o">=</span> <span class="n">UnitCell</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="n">pgCubic</span> <span class="o">=</span> <span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">createPointGroup</span><span class="p">(</span><span class="s2">&quot;m-3m&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Is the cell compatible with cubic symmetry? </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pgCubic</span><span class="o">.</span><span class="n">isInvariant</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">getG</span><span class="p">())))</span>
+
+<span class="n">pgTetragonal</span> <span class="o">=</span> <span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">createPointGroup</span><span class="p">(</span><span class="s2">&quot;4/mmm&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Is the cell compatible with tetragonal symmetry? </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pgTetragonal</span><span class="o">.</span><span class="n">isInvariant</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">getG</span><span class="p">())))</span>
+</pre></div>
+</div>
+<p>Executing the code above will produce the following output that reveals that the cell is only compatible with tetragonal, but not with cubic symmetry:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Is the cell compatible with cubic symmetry? False
+Is the cell compatible with tetragonal symmetry? True
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">SpaceGroup</span></code> class described below provides a convenience method that takes a unit cell object directly.</p>
+<p>This is all that’s covered by the Python interface regarding point groups in Mantid at the time of this writing. The use in C++ is very similar and described in detail in the API documentation.</p>
+</div>
+<div class="section" id="using-space-groups-in-mantid">
+<h2>Using space groups in Mantid<a class="headerlink" href="#using-space-groups-in-mantid" title="Permalink to this headline">¶</a></h2>
+<p>Space group representation in Mantid is very similar to the point group representation, there is a <code class="docutils literal"><span class="pre">SpaceGroup</span></code>-class that contains some information about the group, but also a method to generate equivalent positions from a coordinate triplet.</p>
+<p>Exactly like point groups, space groups are also created using a factory:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SpaceGroupFactory</span>
+
+<span class="n">sg</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;P -1&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hermann-Mauguin symbol: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">getHMSymbol</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ITA number: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">getNumber</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>Executing this code shows the Hermann-Mauguin symbol of the space group as well as the number defined in ITA:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Hermann-Mauguin symbol: P -1
+ITA number: 2
+</pre></div>
+</div>
+<p>For some space group types there is more than one setting, so the factory supports querying the available symbols for a given number:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SpaceGroupFactory</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Space group no. 26: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">subscribedSpaceGroupSymbols</span><span class="p">(</span><span class="mi">26</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total subscribed space group types: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">getAllSpaceGroupNumbers</span><span class="p">())))</span>
+</pre></div>
+</div>
+<p>This shows all 6 permutations of the orthorhombic space group no. 26, and that there are 230 space group types:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Space group no. 26: [&#39;P m c 21&#39;,&#39;P c m 21&#39;,&#39;P 21 m a&#39;,&#39;P 21 a m&#39;,&#39;P b 21 m&#39;,&#39;P m 21 b&#39;]
+Total subscribed space group types: 230
+</pre></div>
+</div>
+<p>Besides containing some very basic information, the most important functionality is the ability to generate equivalent coordinates. The following example generates all coordinates for the <span class="math">\(4h\)</span> position in space group <span class="math">\(P6/m\)</span> (No. 175):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SpaceGroupFactory</span>
+
+<span class="n">sg</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;P 6/m&quot;</span><span class="p">)</span>
+
+<span class="n">position</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="mf">2.</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">]</span>
+<span class="n">equivalents</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">getEquivalentPositions</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;There are </span><span class="si">{}</span><span class="s2"> equivalent coordinates.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">equivalents</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Coordinates:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">equivalents</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">pos</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Please note that for hexagonal and trigonal space groups, where translations of <span class="math">\(1/3\)</span>, <span class="math">\(2/3\)</span>, <span class="math">\(1/6\)</span> and so on are common, these coordinates must be supplied either as <code class="docutils literal"><span class="pre">1./3.</span></code> or with a precision of 5 digits, e.g. <code class="docutils literal"><span class="pre">0.66667</span></code>.</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>There are 4 equivalent coordinates.
+Coordinates:
+1: [0.333333,0.666667,0.25]
+2: [0.333333,0.666667,0.75]
+3: [0.666667,0.333333,0.25]
+4: [0.666667,0.333333,0.75]
+</pre></div>
+</div>
+<p>Closely related to the generation of equivalent coordinates is the site symmetry group, which leaves a point unchanged:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SpaceGroupFactory</span><span class="p">,</span> <span class="n">SymmetryElementFactory</span><span class="p">,</span> <span class="n">SymmetryElement</span>
+
+<span class="k">def</span> <span class="nf">getFullElementSymbol</span><span class="p">(</span><span class="n">symmetryElement</span><span class="p">):</span>
+<span class="c1"># Dictionary for mapping enum values to short strings</span>
+    <span class="n">rotationSenseDict</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="n">SymmetryElement</span><span class="o">.</span><span class="n">RotationSense</span><span class="o">.</span><span class="n">Positive</span><span class="p">:</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span>
+                            <span class="n">SymmetryElement</span><span class="o">.</span><span class="n">RotationSense</span><span class="o">.</span><span class="n">Negative</span><span class="p">:</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span>
+                            <span class="n">SymmetryElement</span><span class="o">.</span><span class="n">RotationSense</span><span class="o">.</span><span class="n">NoRotation</span><span class="p">:</span> <span class="s1">&#39;&#39;</span>
+                        <span class="p">}</span>
+    <span class="n">hmSymbol</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">getHMSymbol</span><span class="p">()</span>
+    <span class="n">rotationSense</span> <span class="o">=</span> <span class="n">rotationSenseDict</span><span class="p">[</span><span class="n">element</span><span class="o">.</span><span class="n">getRotationSense</span><span class="p">()]</span>
+    <span class="n">axis</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">getAxis</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="n">hmSymbol</span> <span class="o">+</span> <span class="n">rotationSense</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">axis</span>
+
+
+
+<span class="n">sg</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;P 6/m&quot;</span><span class="p">)</span>
+
+<span class="n">position</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="mf">2.</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">]</span>
+<span class="n">siteSymmetryGroup</span> <span class="o">=</span> <span class="n">sg</span><span class="o">.</span><span class="n">getSiteSymmetryGroup</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Order of the site symmetry group: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">siteSymmetryGroup</span><span class="o">.</span><span class="n">getOrder</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Group elements:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">op</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">siteSymmetryGroup</span><span class="o">.</span><span class="n">getSymmetryOperations</span><span class="p">()):</span>
+    <span class="n">element</span> <span class="o">=</span> <span class="n">SymmetryElementFactory</span><span class="o">.</span><span class="n">createSymElement</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">: </span><span class="si">{1}</span><span class="s2"> (</span><span class="si">{2}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">op</span><span class="o">.</span><span class="n">getIdentifier</span><span class="p">(),</span> <span class="n">getFullElementSymbol</span><span class="p">(</span><span class="n">element</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>The group contains three symmetry operations:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Order of the site symmetry group: 3
+Group elements:
+1: -x+y,-x,z (3- [0,0,1])
+2: -y,x-y,z (3+ [0,0,1])
+3: x,y,z (1 [0,0,0])
+</pre></div>
+</div>
+<p>An extended example below shows an algorithm to derive the site symmetry group.</p>
+<p>Furthermore, it is possible to create a PointGroup-object from a SpaceGroup object in order to obtain information about the crystal system and to perform the Miller index operations provided by PointGroup. For this, PointGroupFactory has a special method, but the point group can also be conveniently created directly from the space group object:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">PointGroupFactory</span><span class="p">,</span> <span class="n">SpaceGroupFactory</span>
+
+<span class="c1"># Create space group Fd-3m (for example silicon or diamond)</span>
+<span class="n">sg_diamond</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;F d -3 m&quot;</span><span class="p">)</span>
+<span class="n">pg_diamond</span> <span class="o">=</span> <span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">createPointGroupFromSpaceGroup</span><span class="p">(</span><span class="n">sg_diamond</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Space group no. </span><span class="si">{0}</span><span class="s2"> has point group: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sg_diamond</span><span class="o">.</span><span class="n">getNumber</span><span class="p">(),</span> <span class="n">pg_diamond</span><span class="o">.</span><span class="n">getHMSymbol</span><span class="p">()))</span>
+
+<span class="c1"># Related space group F-43m (sphalerite)</span>
+<span class="n">sg_zincblende</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;F -4 3 m&quot;</span><span class="p">)</span>
+<span class="n">pg_zincblende</span> <span class="o">=</span> <span class="n">sg_zincblende</span><span class="o">.</span><span class="n">getPointGroup</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Space group no. </span><span class="si">{0}</span><span class="s2"> has point group: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sg_zincblende</span><span class="o">.</span><span class="n">getNumber</span><span class="p">(),</span> <span class="n">pg_zincblende</span><span class="o">.</span><span class="n">getHMSymbol</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>The script prints the point group of the space group in question:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Space group no. 227 has point group: m-3m
+Space group no. 216 has point group: -43m
+</pre></div>
+</div>
+<p>Sometimes it’s useful to reverse the above process - which is not exactly possible, because several space groups may map to the same point group. The space group factory does however provide a way to get all space group symbols that belong to a certain point group:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">PointGroupFactory</span><span class="p">,</span> <span class="n">SpaceGroupFactory</span>
+
+<span class="n">pg</span> <span class="o">=</span> <span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">createPointGroup</span><span class="p">(</span><span class="s2">&quot;m-3&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Space groups with point group m-3: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">getSpaceGroupsForPointGroup</span><span class="p">(</span><span class="n">pg</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>The example produces the following output:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Space groups with point group m-3: [&#39;F d -3&#39;,&#39;F d -3 :2&#39;,&#39;F m -3&#39;,&#39;I a -3&#39;,&#39;I m -3&#39;,&#39;P a -3&#39;,&#39;P m -3&#39;,&#39;P n -3&#39;,&#39;P n -3 :2&#39;]
+</pre></div>
+</div>
+<p>While PointGroup offers useful methods to handle reflections, some information can only be obtained from the space group. The presence of translational symmetry causes the contributions from symmetrically equivalent atoms to the structure factor of certain reflections to cancel out completely so that it can not be observed. These systematically absent reflections are characteristic for each space group, a fact that can be used to determine the space group from measured reflection intensities. The following script shows how to check a few reflections:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.kernel</span> <span class="k">import</span> <span class="n">V3D</span>
+<span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SpaceGroupFactory</span>
+
+<span class="n">sg</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;F d d d&quot;</span><span class="p">)</span>
+
+<span class="n">hkls</span> <span class="o">=</span> <span class="p">[</span><span class="n">V3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">V3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">V3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">V3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)]</span>
+
+<span class="k">for</span> <span class="n">hkl</span> <span class="ow">in</span> <span class="n">hkls</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> is allowed: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hkl</span><span class="p">,</span> <span class="n">sg</span><span class="o">.</span><span class="n">isAllowedReflection</span><span class="p">(</span><span class="n">hkl</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>Because space group <span class="math">\(Fddd\)</span> contains diamond glide planes, only <span class="math">\(00l\)</span> reflections with <span class="math">\(l=4n\)</span> are allowed. The script gives the correct answer for these reflections:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>[0,0,2] is allowed: False
+[0,0,4] is allowed: True
+[0,0,6] is allowed: False
+[0,0,8] is allowed: True
+</pre></div>
+</div>
+<p><a class="reference internal" href="#spacegroupcheck"><span class="std std-ref">Below</span></a> is a more elaborate example which shows one possibility to find a likely candidate space group for a list of reflections. Please note that these reflection conditions only covers the ones listed for the “general position” in ITA. When atoms are located on special positions, there may be additional conditions that need to be fulfilled. A notable example is the <span class="math">\(222\)</span>-reflection in Silicon. It is forbidden because the silicon atom is located on the <span class="math">\(8a\)</span> position, which introduces additional reflection conditions.</p>
+<p>As mentioned above, <code class="docutils literal"><span class="pre">SpaceGroup</span></code> provides a function that verifies whether the metric of a unit cell is compatible with the space group’s symmetry:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SpaceGroupFactory</span><span class="p">,</span> <span class="n">UnitCell</span>
+
+<span class="c1"># An arbitrary cell with hexagonal metric</span>
+<span class="n">cell</span> <span class="o">=</span> <span class="n">UnitCell</span><span class="p">(</span><span class="mf">4.402</span><span class="p">,</span> <span class="mf">4.402</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">120</span><span class="p">)</span>
+
+<span class="n">sgR3mRh</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;R -3 m :r&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Is the cell allowed in R-3m (rhombohedral setting)? </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sgR3mRh</span><span class="o">.</span><span class="n">isAllowedUnitCell</span><span class="p">(</span><span class="n">cell</span><span class="p">)))</span>
+
+<span class="n">sgR3mHex</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;R -3 m&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Is the cell allowed in R-3m (hexagonal setting)? </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sgR3mHex</span><span class="o">.</span><span class="n">isAllowedUnitCell</span><span class="p">(</span><span class="n">cell</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>The code above shows that the defined cell is only compatible with space group <span class="math">\(R\bar{3}m\)</span> in hexagonal setting:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Is the cell allowed in R-3m (rhombohedral setting)? False
+Is the cell allowed in R-3m (hexagonal setting)? True
+</pre></div>
+</div>
+<p>The method uses a tolerance of <span class="math">\(10^{-8}\)</span> for comparison of the metric tensor and its transform. For more fine-grained control of the tolerance it is possible to use the <code class="docutils literal"><span class="pre">isInvariant</span></code>-method and supply the metric tensor along with the desired tolerance as a second parameter.</p>
+<p>Very similar constructions are available in C++ as well, as shown in the API documentation.</p>
+</div>
+<div class="section" id="other-ways-of-using-groups-in-mantid">
+<h2>Other ways of using groups in Mantid<a class="headerlink" href="#other-ways-of-using-groups-in-mantid" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="retrieving-information-about-space-group-symmetry">
+<h3>Retrieving information about space group symmetry<a class="headerlink" href="#retrieving-information-about-space-group-symmetry" title="Permalink to this headline">¶</a></h3>
+<p>The previous two sections demonstrated how to perform common tasks using point and space groups in Mantid. With the available Python tools it is however possible to obtain other information as well. One useful method that both PointGroup and SpaceGroup expose is to query the symmetry operations of the group, although in string format:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SpaceGroupFactory</span>
+
+<span class="n">sg</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;P 6/m&quot;</span><span class="p">)</span>
+<span class="n">symOpStrings</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">getSymmetryOperationStrings</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;There are </span><span class="si">{0}</span><span class="s2"> symmetry operations in space group </span><span class="si">{1}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">symOpStrings</span><span class="p">),</span> <span class="n">sg</span><span class="o">.</span><span class="n">getHMSymbol</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Symmetry operations: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">symOpStrings</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Which prints the symmetry operation information:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>There are 12 symmetry operations in space group P 6/m.
+Symmetry operations: [&#39;-x+y,-x,-z&#39;, &#39;-x+y,-x,z&#39;, &#39;-x,-y,-z&#39;, &#39;-x,-y,z&#39;, &#39;-y,x-y,-z&#39;, &#39;-y,x-y,z&#39;, &#39;x,y,-z&#39;, &#39;x,y,z&#39;, &#39;x-y,x,-z&#39;, &#39;x-y,x,z&#39;, &#39;y,-x+y,-z&#39;, &#39;y,-x+y,z&#39;]
+</pre></div>
+</div>
+<p>While this can be interesting for informational purposes, it’s more useful to obtain the symmetry operations directly as objects to use them for new purposes. This script for example sorts the contained symmetry operations according to their order:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SpaceGroupFactory</span>
+
+<span class="k">def</span> <span class="nf">getMaximumOrderOperation</span><span class="p">(</span><span class="n">spaceGroup</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">spaceGroup</span><span class="o">.</span><span class="n">getSymmetryOperations</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">getOrder</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">sg1</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;P 6/m&quot;</span><span class="p">)</span>
+<span class="n">sg2</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;P 4 3 2&quot;</span><span class="p">)</span>
+
+<span class="c1"># Get the symmetry operation with the highest order</span>
+<span class="n">symOpMax1</span> <span class="o">=</span> <span class="n">getMaximumOrderOperation</span><span class="p">(</span><span class="n">sg1</span><span class="p">)</span>
+<span class="n">symOpMax2</span> <span class="o">=</span> <span class="n">getMaximumOrderOperation</span><span class="p">(</span><span class="n">sg2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The symmetry operation with highest order in space group no. </span><span class="si">{0}</span><span class="s2"> is: </span><span class="si">{1}</span><span class="s2"> (k=</span><span class="si">{2}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sg1</span><span class="o">.</span><span class="n">getNumber</span><span class="p">(),</span><span class="n">symOpMax1</span><span class="o">.</span><span class="n">getIdentifier</span><span class="p">(),</span><span class="n">symOpMax1</span><span class="o">.</span><span class="n">getOrder</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The symmetry operation with highest order in space group no. </span><span class="si">{0}</span><span class="s2"> is: </span><span class="si">{1}</span><span class="s2"> (k=</span><span class="si">{2}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sg2</span><span class="o">.</span><span class="n">getNumber</span><span class="p">(),</span><span class="n">symOpMax2</span><span class="o">.</span><span class="n">getIdentifier</span><span class="p">(),</span><span class="n">symOpMax2</span><span class="o">.</span><span class="n">getOrder</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>Which produces the following output:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>The symmetry operation with highest order in space group no. 175 is: y,-x+y,z (k=6)
+The symmetry operation with highest order in space group no. 207 is: z,y,-x (k=4)
+</pre></div>
+</div>
+<p>Another way to extract more information about the symmetry in a space group is to obtain the symmetry elements and arrange them by their characteristic axis:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.kernel</span> <span class="k">import</span> <span class="n">V3D</span>
+<span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">PointGroupFactory</span><span class="p">,</span> <span class="n">SpaceGroupFactory</span><span class="p">,</span> <span class="n">SymmetryElementFactory</span>
+
+<span class="k">def</span> <span class="nf">getSymmetryElementsFromOperations</span><span class="p">(</span><span class="n">symmetryOperations</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">SymmetryElementFactory</span><span class="o">.</span><span class="n">createSymElement</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">symmetryOperations</span><span class="p">]</span>
+
+<span class="n">sg</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;P n m a&quot;</span><span class="p">)</span>
+<span class="n">pg</span> <span class="o">=</span> <span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">createPointGroupFromSpaceGroup</span><span class="p">(</span><span class="n">sg</span><span class="p">)</span>
+
+<span class="n">symElements</span> <span class="o">=</span> <span class="n">getSymmetryElementsFromOperations</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">getSymmetryOperations</span><span class="p">())</span>
+<span class="n">symElementsByAxis</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">symElementsNoAxis</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">symElem</span> <span class="ow">in</span> <span class="n">symElements</span><span class="p">:</span>
+    <span class="n">axis</span> <span class="o">=</span> <span class="n">pg</span><span class="o">.</span><span class="n">getReflectionFamily</span><span class="p">(</span><span class="n">symElem</span><span class="o">.</span><span class="n">getAxis</span><span class="p">())</span>
+    <span class="c1">#axis = symElem.getAxis()</span>
+
+    <span class="c1"># If axis is [0,0,0], put the element into the &quot;no axis&quot; list</span>
+    <span class="k">if</span> <span class="n">axis</span> <span class="o">==</span> <span class="n">V3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">symElementsNoAxis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">symElem</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Otherwise check if that axis is already in the dictionary with a list...</span>
+        <span class="k">if</span> <span class="n">axis</span> <span class="ow">in</span> <span class="n">symElementsByAxis</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">symElementsByAxis</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">symElem</span><span class="p">)</span>
+        <span class="c1"># ...or create a new list for that axis</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">symElementsByAxis</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">symElem</span><span class="p">]</span>
+
+<span class="n">noAxisSymbols</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">getHMSymbol</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">symElementsNoAxis</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;There are </span><span class="si">{}</span><span class="s2"> element(s) with no characteristic axis.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">symElementsNoAxis</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Are there translations? </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;Yes&quot;</span> <span class="k">if</span> <span class="s1">&#39;t&#39;</span> <span class="ow">in</span> <span class="n">noAxisSymbols</span> <span class="k">else</span> <span class="s2">&quot;No&quot;</span><span class="p">))</span>
+
+<span class="n">axes</span> <span class="o">=</span> <span class="n">symElementsByAxis</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;There is a total of </span><span class="si">{}</span><span class="s2"> different characteristic axes.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Symmetry in each direction:&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">axes</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">:  </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">getHMSymbol</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">symElementsByAxis</span><span class="p">[</span><span class="n">axis</span><span class="p">]])))</span>
+</pre></div>
+</div>
+<p>This prints the following information:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>There are 2 element(s) with no characteristic axis.
+Are there translations? No
+There is a total of 3 different characteristic axes.
+Symmetry in each direction:
+[0,0,1]:  [&#39;21&#39;, &#39;a&#39;]
+[0,1,0]:  [&#39;21&#39;, &#39;m&#39;]
+[1,0,0]:  [&#39;21&#39;, &#39;n&#39;]
+</pre></div>
+</div>
+<p>Looking up space group number 62 (<span class="math">\(Pnma\)</span> from the example) in ITA shows that the full Hermann-Mauguin symbol for that space group is <span class="math">\(P 2_1/n 2_1/m 2_1/a\)</span>. The short script gives us all of this information, since there are no translations (the primitive lattice translations are implicit) it must be a primitive lattice (<span class="math">\(P\)</span>) and all directions encoded in the HM-symbol contain a <span class="math">\(2_1\)</span> screw axis perpendicular to a glide or mirror plane.</p>
+</div>
+<div class="section" id="extracting-the-site-symmetry-group">
+<h3>Extracting the site symmetry group<a class="headerlink" href="#extracting-the-site-symmetry-group" title="Permalink to this headline">¶</a></h3>
+<p>With the space group information it’s also possible to derive information about site symmetry at specific coordinates and construct the site symmetry group, which is the sub-group of the point group that contains the symmetry operations of the space group that leave the point unchanged. In the following script, the site symmetry group of the <span class="math">\(6h\)</span> position (coordinates <span class="math">\(x, 2x, 1/4\)</span>) in space group <span class="math">\(P6_3/mmc\)</span> (no. 194) is determined:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.kernel</span> <span class="k">import</span> <span class="n">V3D</span>
+<span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SpaceGroupFactory</span><span class="p">,</span> <span class="n">Group</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Function that transforms coordinates to the interval [0, 1)</span>
+<span class="k">def</span> <span class="nf">getWrappedCoordinates</span><span class="p">(</span><span class="n">coordinates</span><span class="p">):</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">coordinates</span> <span class="o">+</span> <span class="n">V3D</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">V3D</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fmod</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">X</span><span class="p">(),</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">fmod</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">Y</span><span class="p">(),</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">fmod</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">Z</span><span class="p">(),</span> <span class="mf">1.0</span><span class="p">))</span>
+
+<span class="c1"># Function that construct the site symmetry group</span>
+<span class="k">def</span> <span class="nf">getSiteSymmetryGroup</span><span class="p">(</span><span class="n">spaceGroup</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+    <span class="n">symOps</span> <span class="o">=</span> <span class="n">spaceGroup</span><span class="o">.</span><span class="n">getSymmetryOperations</span><span class="p">()</span>
+
+    <span class="n">ops</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">symOps</span><span class="p">:</span>
+        <span class="n">transformed</span> <span class="o">=</span> <span class="n">getWrappedCoordinates</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">transformCoordinates</span><span class="p">(</span><span class="n">point</span><span class="p">))</span>
+
+        <span class="c1"># If the transformed coordinate is equivalent to the original, add it to the group</span>
+        <span class="k">if</span> <span class="n">transformed</span> <span class="o">==</span> <span class="n">point</span><span class="p">:</span>
+            <span class="n">ops</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+
+    <span class="c1"># Return group with symmetry operations that leave point unchanged</span>
+    <span class="k">return</span> <span class="n">Group</span><span class="p">(</span><span class="n">ops</span><span class="p">)</span>
+
+<span class="c1"># Construct space group object</span>
+<span class="n">sg</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;P 63/m m c&quot;</span><span class="p">)</span>
+
+<span class="c1"># Point on 6h-position, [x, 2x, 1/4]</span>
+<span class="n">point</span> <span class="o">=</span> <span class="n">V3D</span><span class="p">(</span><span class="mf">0.31</span><span class="p">,</span> <span class="mf">0.62</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">)</span>
+
+<span class="n">siteSymmGroup</span> <span class="o">=</span> <span class="n">getSiteSymmetryGroup</span><span class="p">(</span><span class="n">sg</span><span class="p">,</span> <span class="n">point</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Site symmetry group fulfills group axioms: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">siteSymmGroup</span><span class="o">.</span><span class="n">isGroup</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Order of site symmetry group: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">siteSymmGroup</span><span class="o">.</span><span class="n">getOrder</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Order of space group: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">getOrder</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Site multiplicity: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">getOrder</span><span class="p">()</span> <span class="o">//</span> <span class="n">siteSymmGroup</span><span class="o">.</span><span class="n">getOrder</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>The script produces the following output:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Site symmetry group fulfills group axioms: True
+Order of site symmetry group: 4
+Order of space group: 24
+Site multiplicity: 6
+</pre></div>
+</div>
+<p>There are four symmmetry operations that leave the coordinates <span class="math">\(x,2x,1/4\)</span> unchanged, they fulfill the group axioms. Dividing the order of the space group by the order of the site symmetry group gives the correct site multiplicity 6.</p>
+</div>
+<div class="section" id="checking-a-list-of-unique-reflections-for-possible-space-groups">
+<span id="spacegroupcheck"></span><h3>Checking a list of unique reflections for possible space groups<a class="headerlink" href="#checking-a-list-of-unique-reflections-for-possible-space-groups" title="Permalink to this headline">¶</a></h3>
+<p>Building on the example above which showed how to check whether a reflection is allowed by the symmetry operations contained in the space group, the next script goes a bit further. The starting point is a list of symmetry independent reflections with the information whether it’s observed or not. A list like can usually be obtained at some point during data reduction after intensities have been determined, which allows for the derivation of the Laue class (and thus, merging the reflections so only unique reflections are available) and decision if a reflection is observed or not (for example <span class="math">\(I/\sigma(I) &gt; 3\)</span>). Covering all these steps is beyond the scope of this document, so it’s assumed that a list with pairs of HKL and a boolean value (<cite>True</cite> for “observed” and <cite>False</cite> for “not observed”) is available. Furthermore it’s assumed that the space group belongs to Laue class <span class="math">\(m\bar{3}m\)</span>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="k">import</span> <span class="n">SpaceGroupFactory</span><span class="p">,</span> <span class="n">PointGroupFactory</span>
+
+<span class="c1"># Small helper function that distinguishes three cases:</span>
+<span class="c1">#   0: The reflection is observed and allowed or not observed and not allowed</span>
+<span class="c1">#  -1: The reflection is allowed, but not observed - additional reflection condition is present</span>
+<span class="c1">#   1: The reflection is observed, but not allowed - systematic absence violation</span>
+<span class="k">def</span> <span class="nf">conditionsMatch</span><span class="p">(</span><span class="n">spaceGroup</span><span class="p">,</span> <span class="n">hkl</span><span class="p">,</span> <span class="n">isObserved</span><span class="p">):</span>
+    <span class="n">isAllowed</span> <span class="o">=</span> <span class="n">spaceGroup</span><span class="o">.</span><span class="n">isAllowedReflection</span><span class="p">(</span><span class="n">hkl</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">isAllowed</span> <span class="o">==</span> <span class="n">isObserved</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">isAllowed</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">isObserved</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+
+<span class="c1"># Small helper function that returns the frequency of values in a list. Can be replaced with Counter from collections in Python &gt;= 2.7</span>
+<span class="k">def</span> <span class="nf">getValueFrequencies</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+    <span class="n">frequencyDict</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">uniqueValues</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">uniqueValues</span><span class="p">:</span>
+        <span class="n">frequencyDict</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">frequencyDict</span>
+
+<span class="c1"># List of reflections with &quot;observation status&quot; from a hypothetical experiment.</span>
+<span class="n">reflections</span> <span class="o">=</span> <span class="p">[([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">True</span><span class="p">),</span> <span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">True</span><span class="p">),</span> <span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">True</span><span class="p">),</span> <span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="kc">True</span><span class="p">),</span> <span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">True</span><span class="p">),</span> <span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="kc">True</span><span class="p">),</span> <span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">True</span><span class="p">),</span> <span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="kc">True</span><span class="p">),</span> <span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">6</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">6</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="p">([</span><span class="mi">6</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">True</span><span class="p">),</span> <span class="p">([</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">6</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">),</span> <span class="p">([</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="kc">False</span><span class="p">)]</span>
+
+<span class="n">reflectionCount</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">reflections</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;There are </span><span class="si">{}</span><span class="s2"> reflections to consider.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reflectionCount</span><span class="p">))</span>
+
+<span class="c1"># Check space groups and store results in a list</span>
+<span class="n">spaceGroupMatchList</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># As described above, point group m-3m is assumed</span>
+<span class="n">pg</span> <span class="o">=</span> <span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">createPointGroup</span><span class="p">(</span><span class="s2">&quot;m-3m&quot;</span><span class="p">)</span>
+<span class="n">possibleSpaceGroups</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">getSpaceGroupsForPointGroup</span><span class="p">(</span><span class="n">pg</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">sgSymbol</span> <span class="ow">in</span> <span class="n">possibleSpaceGroups</span><span class="p">:</span>
+    <span class="n">sgObject</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="n">sgSymbol</span><span class="p">)</span>
+
+    <span class="c1"># For each (hkl, observed) pair obtain whether this matches the space group&#39;s conditions</span>
+    <span class="n">conditionsMatchList</span> <span class="o">=</span> <span class="p">[</span><span class="n">conditionsMatch</span><span class="p">(</span><span class="n">sgObject</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">reflections</span><span class="p">]</span>
+
+    <span class="c1"># In this list, each reflection has a dictionary with frequency of the values 0, -1 and 1</span>
+    <span class="c1"># (see the helper functions defined above).</span>
+    <span class="n">spaceGroupMatchList</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">sgSymbol</span><span class="p">,</span> <span class="n">getValueFrequencies</span><span class="p">(</span><span class="n">conditionsMatchList</span><span class="p">)))</span>
+
+<span class="c1"># Sort the list according to absence violations and additional reflection conditions</span>
+<span class="n">spaceGroupMatchList</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+
+<span class="c1"># Remove the second setting that exists for some groups</span>
+<span class="n">finalSpaceGroupMatchList</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">spaceGroupMatchList</span> <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;:2&#39;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+<span class="c1"># Print some information about the most likely matches</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;5 best matching space groups:&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">sgPair</span> <span class="ow">in</span> <span class="n">finalSpaceGroupMatchList</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+    <span class="n">sgStatus</span> <span class="o">=</span> <span class="n">sgPair</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;    </span><span class="si">{0}</span><span class="s2">: </span><span class="si">{1}</span><span class="s2"> absence violations, </span><span class="si">{2: &gt;2}</span><span class="s2"> additional absences, </span><span class="si">{3: &gt;2}</span><span class="s2"> matches&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sgPair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sgStatus</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">sgStatus</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">sgStatus</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The best matching space group is: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">finalSpaceGroupMatchList</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>The script should produce the following output:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>There are 54 reflections to consider.
+5 best matching space groups:
+    F d -3 m: 0 absence violations,  3 additional absences, 51 matches
+    F m -3 m: 0 absence violations,  6 additional absences, 48 matches
+    P n -3 m: 0 absence violations, 31 additional absences, 23 matches
+    P m -3 m: 0 absence violations, 42 additional absences, 12 matches
+    F d -3 c: 6 absence violations,  3 additional absences, 45 matches
+The best matching space group is: F d -3 m
+</pre></div>
+</div>
+<p>In this case, the script gave the right answer, because the list of reflections was created using the crystal structure of silicon, which, as mentioned above, belongs to space group type <span class="math">\(Fd\bar{3}m\)</span>. The systematic absences derived from the symmetry operations explain all observations (and absences) expcept three. These are caused by the Si-atom on a special position. The presence of atoms in special positions can lead to incorrect determination of the space group because the introduced additional reflection conditions may match those of a different space group.</p>
+<table class="docutils citation" frame="void" id="itapointgroups" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[ITAPointGroups]</a></td><td>International Tables for Crystallography (2006). Vol. A, ch. 10.1, p. 762</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="shmueli84" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[Shmueli84]</a></td><td><ol class="first last upperalpha simple" start="21">
+<li>Shmueli, Acta Crystallogr. A, 40, p. 559 <a class="reference external" href="http://dx.doi.org/10.1107/S0108767384001161">DOI: 10.1107/S0108767384001161</a>)</li>
+</ol>
+</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[1]</a></td><td>In the case of the monoclinic Laue class <span class="math">\(2/m\)</span> it’s a bit more complicated, because there are two conventions regarding the unique axis. According to current crystallographic standards, the <span class="math">\(b\)</span>-axis is used, but in some cases one may find the <span class="math">\(c\)</span>-axis for this purpose. To resolve this, both options are offered in Mantid. When using the symbol <code class="docutils literal"><span class="pre">2/m</span></code>, the <span class="math">\(b\)</span>-axis convention is used, for <span class="math">\(c\)</span> one has to explicitly provide the symbol as <code class="docutils literal"><span class="pre">112/m</span></code>.</td></tr>
+</tbody>
+</table>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Plugin.html" title="Previous Chapter: Plugin"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Plugin</span>
+    </a>
+  </li>
+  <li>
+    <a href="Project.html" title="Next Chapter: Project"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Project &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2021-02-09.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

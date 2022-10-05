@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Properties</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Concepts" href="index.html" />
+    <link rel="next" title="Properties File" href="Properties_File.html" />
+    <link rel="prev" title="Project" href="Project.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.3</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="properties">
+<span id="id1"></span><h1>Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h1>
+<p>Properties in Mantid are the mechanism by which we pass parameters into
+<a class="reference internal" href="Algorithm.html#algorithm"><em>algorithms</em></a>. There are a number of different types of
+properties, and these are described below.</p>
+<div class="section" id="types-of-properties">
+<h2>Types of Properties<a class="headerlink" href="#types-of-properties" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="single-value-properties">
+<h3>Single Value Properties<a class="headerlink" href="#single-value-properties" title="Permalink to this headline">¶</a></h3>
+<p>This is the simplest type of property, which is essentially a name-value
+pair. Currently, single value properties of type integer (<tt class="docutils literal"><span class="pre">int</span></tt>),
+floating point (<tt class="docutils literal"><span class="pre">double</span></tt>), string (<tt class="docutils literal"><span class="pre">std::string</span></tt>) and boolean
+(<tt class="docutils literal"><span class="pre">bool</span></tt>) are supported. .</p>
+</div>
+<div class="section" id="array-properties">
+<h3>Array Properties<a class="headerlink" href="#array-properties" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes, a multi-element parameter may be required (a list of spectra
+to process, for example). This is achieved using an
+ArrayProperty
+(which is actually a PropertyWithValue - see above - of type
+std::vector). It can be created in a number of ways:</p>
+<ul class="simple">
+<li>As an empty vector: <tt class="docutils literal"><span class="pre">ArrayProperty&lt;double&gt;(&quot;PropertyName&quot;);</span></tt></li>
+<li>By passing in an existing vector:
+<tt class="docutils literal"><span class="pre">ArrayProperty&lt;double&gt;(&quot;PropertyName&quot;,myStdVecOfDoubles);</span></tt></li>
+<li>By passing in a string of comma-separated values:
+<tt class="docutils literal"><span class="pre">ArrayProperty&lt;int&gt;(&quot;PropertyName&quot;,&quot;1,2,3,4&quot;);</span></tt></li>
+</ul>
+<p>A validator (see below) argument can optionally be appended to all of
+these options.</p>
+<p>An ArrayProperty can be declared in a algorithm as follows:</p>
+<p><tt class="docutils literal"><span class="pre">declareProperty(new&nbsp;ArrayProperty</span></tt><tt class="docutils literal"><span class="pre">(...));</span></tt></p>
+<p>or, if creating using an already existing vector:</p>
+<p><tt class="docutils literal"><span class="pre">declareProperty(&quot;PropertyName&quot;,myVector);</span></tt></p>
+</div>
+<div class="section" id="file-properties">
+<h3>File Properties<a class="headerlink" href="#file-properties" title="Permalink to this headline">¶</a></h3>
+<p>These properties are for capturing and holding the path and filename to
+an external file. File properties have a FileAction property that
+controls it&#8217;s purpose and behaviour.</p>
+<p>Save :to specify a file to write to, the file may or may not exist
+OptionalSave :to specify a file to write to but an empty string is
+allowed here which will be passed to the algorithm
+Load :to specify a file to open for reading, the file must exist
+OptionalLoad :to specify a file to read but the file doesn&#8217;t have to
+exist</p>
+<p>If the file property is has a FileAction of Load as is given a relative
+path (such as &#8220;input.txt&#8221; or &#8220;\data\input.txt&#8221; as its value it will
+search for matching files in this order:</p>
+<ol class="arabic simple">
+<li>The current directory</li>
+<li>The entries in order from the datasearch.directories entry in the
+<a class="reference internal" href="Properties_File.html#properties-file"><em>Properties File</em></a></li>
+</ol>
+<p>If the file property is has a FileAction of Save as is given a relative
+path (such as &#8220;input.txt&#8221; or &#8220;\data\input.txt&#8221; as its value it will
+assume that path starts from the location defined in the
+defaultsave.directory entry in the <a class="reference internal" href="Properties_File.html#properties-file"><em>Properties File</em></a>.</p>
+<p>A FileProperty can be declared in a algorithm as follows:</p>
+<div class="line-block">
+<div class="line"><tt class="docutils literal"><span class="pre">declareProperty(new&nbsp;Kernel::FileProperty(&quot;Filename&quot;,&quot;&quot;,</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">&nbsp;&nbsp;Kernel::FileProperty::Load),&nbsp;&quot;Descriptive&nbsp;text&quot;);</span></tt></div>
+</div>
+<p>or for saving a file providing a suggested extension</p>
+<div class="line-block">
+<div class="line"><tt class="docutils literal"><span class="pre">declareProperty(new&nbsp;Kernel::FileProperty(&quot;Filename&quot;,&quot;&quot;,</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">&nbsp;&nbsp;Kernel::FileProperty::Save,&nbsp;</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">&nbsp;&nbsp;std::vector</span></tt><tt class="docutils literal"><span class="pre">(1,&quot;cal&quot;)),&nbsp;&quot;Descriptive&nbsp;text&quot;);</span></tt></div>
+</div>
+</div>
+<div class="section" id="workspace-properties">
+<h3>Workspace Properties<a class="headerlink" href="#workspace-properties" title="Permalink to this headline">¶</a></h3>
+<p>Properties for holding <a class="reference internal" href="Workspace.html#workspace"><em>workspaces</em></a> are more complicated,
+in that they need to hold links both to the workspace name (in the
+<a class="reference internal" href="Analysis_Data_Service.html#analysis-data-service"><em>Analysis Data Service</em></a>) and the workspace
+itself. When setting or retrieving the value as a string (i.e. using the
+<tt class="docutils literal"><span class="pre">setValue</span></tt> or <tt class="docutils literal"><span class="pre">value</span></tt> methods) you are interacting with the
+workspace&#8217;s name; other methods interact with a <a class="reference internal" href="Shared_Pointer.html#shared-pointer"><em>shared
+pointer</em></a> to the workspace.</p>
+<p>The syntax to declare a WorkspaceProperty
+in an algorithm is:</p>
+<p><tt class="docutils literal"><span class="pre">declareProperty(new&nbsp;WorkspaceProperty(&quot;PropertyName&quot;,&quot;WorkspaceName&quot;,direction));</span></tt></p>
+<p>In this case, the direction (see below) must be explicitly declared. An
+optional <a class="reference internal" href="#properties-validators"><em>validator</em></a> may also be appended to
+the above declaration.</p>
+</div>
+</div>
+<div class="section" id="other-property-properties">
+<h2>Other &#8216;Property Properties&#8217;<a class="headerlink" href="#other-property-properties" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="default-values">
+<h3>Default values<a class="headerlink" href="#default-values" title="Permalink to this headline">¶</a></h3>
+<p>If a property is empty</p>
+<ul class="simple">
+<li>in a GUI algorithm call, then the property&#8217;s default value is used
+(if there is any)</li>
+<li>in a Python API call, then the property&#8217;s value is left empty.</li>
+</ul>
+</div>
+<div class="section" id="direction">
+<h3>Direction<a class="headerlink" href="#direction" title="Permalink to this headline">¶</a></h3>
+<p>All properties have a direction. They can be input or output properties,
+or both. The default is always input. Technically, these are a C++ enum,
+which can have the following values:</p>
+<div class="line-block">
+<div class="line"><tt class="docutils literal"><span class="pre">Mantid::Kernel::Direction::Input</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">Mantid::Kernel::Direction::Output</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">Mantid::Kernel::Direction::InOut</span></tt></div>
+</div>
+<p>This is what should be passed in when a direction argument is required.
+The InOut option is principally used by workspace properties, when a
+single workspace is to be input and manipulated by as algorithm rather
+than a new one created to store the result.</p>
+</div>
+<div class="section" id="validators">
+<span id="properties-validators"></span><h3>Validators<a class="headerlink" href="#validators" title="Permalink to this headline">¶</a></h3>
+<p>A validator is an external object that is used to verify that the value
+of a property is suitable for a particular algorithm. If no validator is
+given, then the property can have any value (of the correct type).
+Validators are checked immediately before an algorithm is executed, when
+the value of a property is set (which will fail if it doesn&#8217;t pass the
+validator) and through the MantidPlot interface to an algorithm.</p>
+<p>The validators currently included in Mantid are:</p>
+<ul class="simple">
+<li>BoundedValidator - restricts a numeric property to a particular
+range.</li>
+<li>MandatoryValidator - requires that a string or array property not be
+empty.</li>
+<li>ListValidator - restricts a string property to one of a particular
+set of values.</li>
+<li>FileValidator - ensures that a file (given as a string property)
+exists (used internally by the FileProperty).</li>
+</ul>
+<p>In addition, there are a number of validators specifically for use with
+Workspace properties:</p>
+<ul class="simple">
+<li>InstrumentValidator - checks that the workspace has an Instrument
+object.</li>
+<li>WorkspaceUnitValidator - checks that the workspace has a specified
+unit.</li>
+<li>HistogramValidator - requires that the workspace contains histogram
+data (or not).</li>
+<li>RawCountValidator - requires that the workspace data is raw counts.</li>
+<li>CommonBinsValidator - checks that all spectra in a workspace have the
+same bins.</li>
+<li>SpectraAxisValidator - checks that the axis of the workspace contains
+spectra numbers.</li>
+<li>NumericAxisValidator - checks that the axis of the workspace contains
+numeric data.</li>
+<li>CompositeValidator - enables combination of more that one of the
+above validators for the same WorkspaceProperty.</li>
+</ul>
+<p>In addition to the above, if used, Workspace properties also have a
+built in validator that requires that input workspaces exist and are of
+the correct type and that output workspaces have a name set.</p>
+<p>For more details on using validators, see the
+<a class="reference external" href="https://github.com/mantidproject/mantid/blob/master/Code/Mantid/Framework/UserAlgorithms/PropertyAlgorithm.cpp">PropertyAlgorithm</a>
+example or the full documentation for the individual validators (linked
+above).</p>
+<p>Writing your own validator is relatively straightforward - it simply has
+to implement the IValidator interface.</p>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2014, Mantid.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Indirect Corrections</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Interfaces" href="index.html" />
+    <link rel="next" title="Indirect Data Analysis" href="Indirect_DataAnalysis.html" />
+    <link rel="prev" title="Indirect Bayes" href="Indirect_Bayes.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.6</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="indirect-corrections">
+<h1>Indirect Corrections<a class="headerlink" href="#indirect-corrections" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#overview" id="id6">Overview</a><ul>
+<li><a class="reference internal" href="#action-buttons" id="id7">Action Buttons</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#calculate-paalman-pings" id="id8">Calculate Paalman Pings</a><ul>
+<li><a class="reference internal" href="#options" id="id9">Options</a></li>
+<li><a class="reference internal" href="#shape-details" id="id10">Shape Details</a><ul>
+<li><a class="reference internal" href="#flat-plate" id="id11">Flat Plate</a></li>
+<li><a class="reference internal" href="#cylinder" id="id12">Cylinder</a></li>
+<li><a class="reference internal" href="#annulus" id="id13">Annulus</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#background" id="id14">Background</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#apply-paalman-pings" id="id15">Apply Paalman Pings</a><ul>
+<li><a class="reference internal" href="#id1" id="id16">Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#absorption-corrections" id="id17">Absorption Corrections</a><ul>
+<li><a class="reference internal" href="#common-options" id="id18">Common Options</a></li>
+<li><a class="reference internal" href="#id2" id="id19">Flat Plate</a></li>
+<li><a class="reference internal" href="#id3" id="id20">Annulus</a></li>
+<li><a class="reference internal" href="#id4" id="id21">Cylinder</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#container-subtraction" id="id22">Container Subtraction</a><ul>
+<li><a class="reference internal" href="#id5" id="id23">Options</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id6">Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-right">
+<a class="screenshot reference internal image-reference" href="../_images/Corrections_interface.png"><img alt="../_images/Corrections_interface.png" class="screenshot" src="../_images/Corrections_interface.png" style="width: 350px;" /></a>
+</div>
+<p>Provides correction routines for quasielastic, inelastic and diffraction
+reductions.</p>
+<div class="section" id="action-buttons">
+<h3><a class="toc-backref" href="#id7">Action Buttons</a><a class="headerlink" href="#action-buttons" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>?</dt>
+<dd>Opens this help page.</dd>
+<dt>Py</dt>
+<dd>Exports a Python script which will replicate the processing done by the current tab.</dd>
+<dt>Run</dt>
+<dd>Runs the processing configured on the current tab.</dd>
+<dt>Manage Directories</dt>
+<dd>Opens the Manage Directories dialog allowing you to change your search directories
+and default save directory and enable/disable data archive search.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="calculate-paalman-pings">
+<h2><a class="toc-backref" href="#id8">Calculate Paalman Pings</a><a class="headerlink" href="#calculate-paalman-pings" title="Permalink to this headline">¶</a></h2>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Corrections_tabCalculatePaalmanPings_widget.png"><img alt="../_images/Corrections_tabCalculatePaalmanPings_widget.png" class="screenshot" src="../_images/Corrections_tabCalculatePaalmanPings_widget.png" style="width: 604px;" /></a>
+</div>
+<p>Calculates absorption corrections in the Paalman &amp; Pings absorption factors that
+could be applied to the data when given information about the sample (and
+optionally can) geometry.</p>
+<div class="section" id="options">
+<h3><a class="toc-backref" href="#id9">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Input</dt>
+<dd>Either a reduced file (<em>_red.nxs</em>) or workspace (<em>_red</em>) or an <img class="math" src="../_images/math/a541d552e98780191bbfcbce2f098e20c42e8abb.png" alt="S(Q,
+\omega)" style="vertical-align: -4px"/> file (<em>_sqw.nxs</em>) or workspace (<em>_sqw</em>).</dd>
+<dt>Use Can</dt>
+<dd>If checked allows you to select a workspace for the container in the format of
+either a reduced file (<em>_red.nxs</em>) or workspace (<em>_red</em>) or an <img class="math" src="../_images/math/a541d552e98780191bbfcbce2f098e20c42e8abb.png" alt="S(Q,
+\omega)" style="vertical-align: -4px"/> file (<em>_sqw.nxs</em>) or workspace (<em>_sqw</em>).</dd>
+<dt>Sample Shape</dt>
+<dd>Sets the shape of the sample, this affects the options for the shape details
+(see below).</dd>
+<dt>Sample/Can Number Density</dt>
+<dd>Density of the sample or container.</dd>
+<dt>Sample/Can Chemical Formula</dt>
+<dd>Chemical formula of the sample or can material. This must be provided in the
+format expected by the <a class="reference internal" href="../algorithms/SetSampleMaterial-v1.html#algm-setsamplematerial"><em>SetSampleMaterial</em></a>
+algorithm.</dd>
+<dt>Plot Output</dt>
+<dd>Plots the <img class="math" src="../_images/math/1967529dd2c5f21c2b37fb011d28fe0b10c5997d.png" alt="A_{s,s}" style="vertical-align: -6px"/>, <img class="math" src="../_images/math/bc7f9902ac1113c44915d9134a7bbb305f1e8748.png" alt="A_{s,sc}" style="vertical-align: -6px"/>, <img class="math" src="../_images/math/2cc4bcf3bef41d04fcd0a671e9b592ede5bfa80b.png" alt="A_{c,sc}" style="vertical-align: -6px"/> and
+<img class="math" src="../_images/math/875ffb4fd8f1f64905cd9caf7910615c1c03ff6b.png" alt="A_{c,c}" style="vertical-align: -6px"/> workspaces as spectra plots.</dd>
+<dt>Save Result</dt>
+<dd>If enabled the result will be saved as a NeXus file in the default save
+directory.</dd>
+</dl>
+</div>
+<div class="section" id="shape-details">
+<h3><a class="toc-backref" href="#id10">Shape Details</a><a class="headerlink" href="#shape-details" title="Permalink to this headline">¶</a></h3>
+<p>Depending on the shape of the sample different parameters for the sample
+dimension are required and are detailed below.</p>
+<div class="section" id="flat-plate">
+<h4><a class="toc-backref" href="#id11">Flat Plate</a><a class="headerlink" href="#flat-plate" title="Permalink to this headline">¶</a></h4>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Corrections_pgFlatPlate_widget.png"><img alt="../_images/Corrections_pgFlatPlate_widget.png" class="screenshot" src="../_images/Corrections_pgFlatPlate_widget.png" style="width: 621px;" /></a>
+</div>
+<p>The calculation for a flat plate geometry is performed by the
+<a class="reference internal" href="../algorithms/FlatPlatePaalmanPingsCorrection-v1.html#algm-flatplatepaalmanpingscorrection"><em>FlatPlatePaalmanPingsCorrection</em></a>
+algorithm.</p>
+<dl class="docutils">
+<dt>Sample Thickness</dt>
+<dd>Thickness of sample in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Sample Angle</dt>
+<dd>Sample angle in degrees.</dd>
+<dt>Can Front Thickness</dt>
+<dd>Thickness of front container in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Can Back Thickness</dt>
+<dd>Thickness of back container in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+</dl>
+</div>
+<div class="section" id="cylinder">
+<h4><a class="toc-backref" href="#id12">Cylinder</a><a class="headerlink" href="#cylinder" title="Permalink to this headline">¶</a></h4>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Corrections_pgCylinder_widget.png"><img alt="../_images/Corrections_pgCylinder_widget.png" class="screenshot" src="../_images/Corrections_pgCylinder_widget.png" style="width: 411px;" /></a>
+</div>
+<p>The calculation for a cylindrical geometry is performed by the
+<a class="reference internal" href="../algorithms/CylinderPaalmanPingsCorrection-v2.html#algm-cylinderpaalmanpingscorrection"><em>CylinderPaalmanPingsCorrection</em></a>
+algorithm, this algorithm is currently only available on Windows as it uses
+FORTRAN code dependant of F2Py.</p>
+<dl class="docutils">
+<dt>Sample Inner Radius</dt>
+<dd>Radius of the inner wall of the sample in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Sample Outer Radius</dt>
+<dd>Radius of the outer wall of the sample in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Container Outer Radius</dt>
+<dd>Radius of outer wall of the container in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Beam Height</dt>
+<dd>Height of incident beam <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Beam Width</dt>
+<dd>Width of incident beam in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Step Size</dt>
+<dd>Step size used in calculation.</dd>
+</dl>
+</div>
+<div class="section" id="annulus">
+<h4><a class="toc-backref" href="#id13">Annulus</a><a class="headerlink" href="#annulus" title="Permalink to this headline">¶</a></h4>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Corrections_pgAnnulus_widget.png"><img alt="../_images/Corrections_pgAnnulus_widget.png" class="screenshot" src="../_images/Corrections_pgAnnulus_widget.png" style="width: 499px;" /></a>
+</div>
+<p>The calculation for an annular geometry is performed by the
+<a class="reference internal" href="../algorithms/CylinderPaalmanPingsCorrection-v2.html#algm-cylinderpaalmanpingscorrection"><em>CylinderPaalmanPingsCorrection</em></a>
+algorithm, this algorithm is currently only available on Windows as it uses
+FORTRAN code dependant of F2Py.</p>
+<p>The options here are the same as for Cylinder.</p>
+</div>
+</div>
+<div class="section" id="background">
+<h3><a class="toc-backref" href="#id14">Background</a><a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h3>
+<p>The main correction to be applied to neutron scattering data is that for
+absorption both in the sample and its container, when present. For flat plate
+geometry, the corrections can be analytical and have been discussed for example
+by Carlile [1]. The situation for cylindrical geometry is more complex and
+requires numerical integration. These techniques are well known and used in
+liquid and amorphous diffraction, and are described in the ATLAS manual [2].</p>
+<p>The absorption corrections use the formulism of Paalman and Pings [3] and
+involve the attenuation factors <img class="math" src="../_images/math/aeb90e3584ef24e687e77c67568aa655aeafc9c6.png" alt="A_{i,j}" style="vertical-align: -6px"/> where <img class="math" src="../_images/math/4cc7324e0d6c8c591e4d865a21144bda81fd3011.png" alt="i" style="vertical-align: 0px"/> refers to
+scattering and <img class="math" src="../_images/math/c18271eddf460603079ed91e4dc4af329a59eab2.png" alt="j" style="vertical-align: -4px"/> attenuation. For example, <img class="math" src="../_images/math/bc7f9902ac1113c44915d9134a7bbb305f1e8748.png" alt="A_{s,sc}" style="vertical-align: -6px"/> is the
+attenuation factor for scattering in the sample and attenuation in the sample
+plus container. If the scattering cross sections for sample and container are
+<img class="math" src="../_images/math/28f6cea0f812971de1a2ffdb8c51d6c88e9115af.png" alt="\Sigma_{s}" style="vertical-align: -3px"/> and <img class="math" src="../_images/math/5251da20961226441b843d679c42ed8d9cd22f23.png" alt="\Sigma_{c}" style="vertical-align: -3px"/> respectively, then the measured
+scattering from the empty container is <img class="math" src="../_images/math/a062d1f763aaa29b8c51076852bd5e443659be33.png" alt="I_{c} = \Sigma_{c}A_{c,c}" style="vertical-align: -6px"/> and
+that from the sample plus container is <img class="math" src="../_images/math/e6ae81e5e17bc6c963e5e995d6d20cd16a3afcac.png" alt="I_{sc} = \Sigma_{s}A_{s,sc} +
+\Sigma_{c}A_{c,sc}" style="vertical-align: -6px"/>, thus <img class="math" src="../_images/math/c59b78081156f2b5c4cdbf9e50fb6a1df0e37009.png" alt="\Sigma_{s} = (I_{sc} - I_{c}A_{c,sc}/A_{c,c}) /
+A_{s,sc}" style="vertical-align: -6px"/>.</p>
+<p>References:</p>
+<ol class="arabic simple">
+<li>C J Carlile, Rutherford Laboratory report, RL-74-103 (1974)</li>
+<li>A K Soper, W S Howells &amp; A C Hannon, <a class="reference external" href="http://wwwisis2.isis.rl.ac.uk/Disordered/Manuals/ATLAS/ATLAS%20manual%20v1.0%20Intro.pdf">RAL Report RAL-89-046 (1989)</a></li>
+<li>H H Paalman &amp; C J Pings, <a class="reference external" href="http://dx.doi.org/10.1063/1.1729034">J Appl Phys 33 2635 (1962)</a></li>
+</ol>
+</div>
+</div>
+<div class="section" id="apply-paalman-pings">
+<h2><a class="toc-backref" href="#id15">Apply Paalman Pings</a><a class="headerlink" href="#apply-paalman-pings" title="Permalink to this headline">¶</a></h2>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Corrections_tabApplyPaalmanPings_widget.png"><img alt="../_images/Corrections_tabApplyPaalmanPings_widget.png" class="screenshot" src="../_images/Corrections_tabApplyPaalmanPings_widget.png" style="width: 743px;" /></a>
+</div>
+<p>The Apply Corrections tab applies the corrections calculated in the Calculate
+Corrections tab of the Indirect Data Analysis interface.</p>
+<p>This uses the <a class="reference internal" href="../algorithms/ApplyPaalmanPingsCorrection-v1.html#algm-applypaalmanpingscorrection"><em>ApplyPaalmanPingsCorrection</em></a> algorithm to apply absorption corrections in
+the form of the Paalman &amp; Pings correction factors. When <em>Use Can</em> is disabled
+only the <img class="math" src="../_images/math/1967529dd2c5f21c2b37fb011d28fe0b10c5997d.png" alt="A_{s,s}" style="vertical-align: -6px"/> factor must be provided, when using a container the
+additional factors must be provided: <img class="math" src="../_images/math/2cc4bcf3bef41d04fcd0a671e9b592ede5bfa80b.png" alt="A_{c,sc}" style="vertical-align: -6px"/>, <img class="math" src="../_images/math/bc7f9902ac1113c44915d9134a7bbb305f1e8748.png" alt="A_{s,sc}" style="vertical-align: -6px"/> and
+<img class="math" src="../_images/math/875ffb4fd8f1f64905cd9caf7910615c1c03ff6b.png" alt="A_{c,c}" style="vertical-align: -6px"/>.</p>
+<p>Once run the corrected output and can correction is shown in the preview plot,
+the Spectrum spin box can be used to scroll through each spectrum. Note that
+when this plot shows the result of a calculation the X axis is always in
+wavelength, however when data is initially selected the X axis unit matches that
+of the sample workspace.</p>
+<p>The input and container workspaces will be converted to wavelength (using
+<a class="reference internal" href="../algorithms/ConvertUnits-v1.html#algm-convertunits"><em>ConvertUnits</em></a>) if they do not already have wavelength
+as their X unit.</p>
+<p>The binning of the sample, container and corrections factor workspace must all
+match, if the sample and container do not match you will be given the option to
+rebin (using <a class="reference internal" href="../algorithms/RebinToWorkspace-v1.html#algm-rebintoworkspace"><em>RebinToWorkspace</em></a>) the sample to
+match the container, if the correction factors do not match you will be given
+the option to interpolate (<a class="reference internal" href="../algorithms/SplineInterpolation-v1.html#algm-splineinterpolation"><em>SplineInterpolation</em></a>) the correction factor to match the sample.</p>
+<div class="section" id="id1">
+<h3><a class="toc-backref" href="#id16">Options</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Input</dt>
+<dd>Either a reduced file (<em>_red.nxs</em>) or workspace (<em>_red</em>) or an <img class="math" src="../_images/math/a541d552e98780191bbfcbce2f098e20c42e8abb.png" alt="S(Q,
+\omega)" style="vertical-align: -4px"/> file (<em>_sqw.nxs</em>) or workspace (<em>_sqw</em>).</dd>
+<dt>Geometry</dt>
+<dd>Sets the sample geometry (this must match the sample shape used when running
+Calculate Corrections).</dd>
+<dt>Use Can</dt>
+<dd>If checked allows you to select a workspace for the container in the format of
+either a reduced file (<em>_red.nxs</em>) or workspace (<em>_red</em>) or an <img class="math" src="../_images/math/a541d552e98780191bbfcbce2f098e20c42e8abb.png" alt="S(Q,
+\omega)" style="vertical-align: -4px"/> file (<em>_sqw.nxs</em>) or workspace (<em>_sqw</em>).</dd>
+<dt>Scale Can by factor</dt>
+<dd>Allows the container intensity to be scaled by a given scale factor before
+being used in the corrections calculation.</dd>
+<dt>Use Corrections</dt>
+<dd>The Paalman &amp; Pings correction factors to use in the calculation, note that
+the file or workspace name must end in either <em>_flt_abs</em> or <em>_cyl_abs</em> for the
+flat plate and cylinder geometries respectively.</dd>
+<dt>Plot Output</dt>
+<dd>Gives the option to create either a spectra or contour plot (or both) of the
+corrected workspace.</dd>
+<dt>Save Result</dt>
+<dd>If enabled the result will be saved as a NeXus file in the default save
+directory.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="absorption-corrections">
+<h2><a class="toc-backref" href="#id17">Absorption Corrections</a><a class="headerlink" href="#absorption-corrections" title="Permalink to this headline">¶</a></h2>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Corrections_tabAbsorptionCorrections_widget.png"><img alt="../_images/Corrections_tabAbsorptionCorrections_widget.png" class="screenshot" src="../_images/Corrections_tabAbsorptionCorrections_widget.png" style="width: 713px;" /></a>
+</div>
+<p>The Absorption Corrections tab provides a cross platform alternative to the
+previous Calculate and Apply Corrections tabs.</p>
+<div class="section" id="common-options">
+<h3><a class="toc-backref" href="#id18">Common Options</a><a class="headerlink" href="#common-options" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Sample Input</dt>
+<dd>Used to select the sample from either a file or a workspace already loaded
+into Mantid.</dd>
+<dt>Use Container</dt>
+<dd>Used to enable or disable use of a container and selects one from either a
+file or loaded workspace.</dd>
+<dt>Shape</dt>
+<dd>Select the shape of the sample (see specific geometry options below).</dd>
+<dt>Number Density</dt>
+<dd>Number density for either the sample or container.</dd>
+<dt>Chemical Formula</dt>
+<dd>Chemical formula for either the sample or container in the format expected by
+<a class="reference internal" href="../algorithms/SetSampleMaterial-v1.html#algm-setsamplematerial"><em>SetSampleMaterial</em></a>.</dd>
+<dt>Use Container Corrections</dt>
+<dd>Enables full container corrections, if disabled only a can subtraction will be
+performed.</dd>
+<dt>Scale</dt>
+<dd>Scale factor to scale container input by.</dd>
+<dt>Keep Correction Factors</dt>
+<dd>If checked a <a class="reference internal" href="../concepts/WorkspaceGroup.html#workspacegroup"><em>Workspace Group</em></a> containing the correction factors will also
+be created, this will have the suffix <em>_Factors</em>.</dd>
+<dt>Plot Result</dt>
+<dd>If checked the corrected workspace and correction factors will be plotted.</dd>
+<dt>Save Result</dt>
+<dd>If checked the corrected workspace and (if <em>Keep Correction Factors</em> is
+checked) the correction factor workspace will be saved as a NeXus file in the
+default save directory.</dd>
+</dl>
+</div>
+<div class="section" id="id2">
+<h3><a class="toc-backref" href="#id19">Flat Plate</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Corrections_pgAbsCorFlatPlate_widget.png"><img alt="../_images/Corrections_pgAbsCorFlatPlate_widget.png" class="screenshot" src="../_images/Corrections_pgAbsCorFlatPlate_widget.png" style="width: 547px;" /></a>
+</div>
+<p>Flat plate calculations are provided by the
+<a class="reference internal" href="../algorithms/IndirectFlatPlateAbsorption-v1.html#algm-indirectflatplateabsorption"><em>IndirectFlatPlateAbsorption</em></a> algorithm.</p>
+<dl class="docutils">
+<dt>Sample Width</dt>
+<dd>Width of the sample in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Sample Height</dt>
+<dd>Height of the sample in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Sample Thickness</dt>
+<dd>Thickness of the sample in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Container Front Thickness</dt>
+<dd>Thickness of the front of the container in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Container Back Thickness</dt>
+<dd>Thickness of the back of the container in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Element Size</dt>
+<dd>Size of the square &#8220;chunks&#8221; to divide the frontal area of the sample into to
+calculate corrections in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+</dl>
+</div>
+<div class="section" id="id3">
+<h3><a class="toc-backref" href="#id20">Annulus</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Corrections_pgAbsCorAnnulus_widget.png"><img alt="../_images/Corrections_pgAbsCorAnnulus_widget.png" class="screenshot" src="../_images/Corrections_pgAbsCorAnnulus_widget.png" style="width: 560px;" /></a>
+</div>
+<p>Annulus calculations are provided by the <a class="reference internal" href="../algorithms/IndirectAnnulusAbsorption-v1.html#algm-indirectannulusabsorption"><em>IndirectAnnulusAbsorption</em></a> algorithm.</p>
+<dl class="docutils">
+<dt>Sample Inner Radius</dt>
+<dd>Radius of the inner wall of the sample in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Sample Outer Radius</dt>
+<dd>Radius of the outer wall of the sample in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Container Inner Radius</dt>
+<dd>Radius of the inner wall of the container in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Container Outer Radius</dt>
+<dd>Radius of the outer wall of the container in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Neutron Events</dt>
+<dd>Number of events to use in the Monte Carlo simulation.</dd>
+</dl>
+</div>
+<div class="section" id="id4">
+<h3><a class="toc-backref" href="#id21">Cylinder</a><a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Corrections_pgAbsCorCylinder_widget.png"><img alt="../_images/Corrections_pgAbsCorCylinder_widget.png" class="screenshot" src="../_images/Corrections_pgAbsCorCylinder_widget.png" style="width: 471px;" /></a>
+</div>
+<p>Cylinder calculations are provided by the
+<a class="reference internal" href="../algorithms/IndirectCylinderAbsorption-v1.html#algm-indirectcylinderabsorption"><em>IndirectCylinderAbsorption</em></a> algorithm.</p>
+<dl class="docutils">
+<dt>Sample Radius</dt>
+<dd>Radius of the outer wall of the sample in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Container Radius</dt>
+<dd>Radius of the outer wall of the container in <img class="math" src="../_images/math/e1a40def7b482e6c31ea9a8a99338d1184c7b999.png" alt="cm" style="vertical-align: 0px"/>.</dd>
+<dt>Neutron Events</dt>
+<dd>Number of events to use in the Monte Carlo simulation.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="container-subtraction">
+<h2><a class="toc-backref" href="#id22">Container Subtraction</a><a class="headerlink" href="#container-subtraction" title="Permalink to this headline">¶</a></h2>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/Corrections_tabContainerSubtraction_widget.png"><img alt="../_images/Corrections_tabContainerSubtraction_widget.png" class="screenshot" src="../_images/Corrections_tabContainerSubtraction_widget.png" style="width: 743px;" /></a>
+</div>
+<p>The Container Subtraction Tab is used to remove the containers contribution to a run.</p>
+<p>Once run the corrected output and can correction is shown in the preview plot, the Spectrum
+spin box can be used to scroll through each spectrum. Note that when this plot shows the
+result of a calculation the X axis is always in wavelength, however when data is initially
+selected the X axis unit matches that of the sample workspace.</p>
+<p>The input and container workspaces will be converted to wavelength (using
+<a class="reference internal" href="../algorithms/ConvertUnits-v1.html#algm-convertunits"><em>ConvertUnits</em></a>) if they do not already have wavelength
+as their X unit.</p>
+<div class="section" id="id5">
+<h3><a class="toc-backref" href="#id23">Options</a><a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>Input Sample</dt>
+<dd>Either a reduced file (_red.nxs) or workspace (_red) or an S(Q,omega) file (_sqw.nxs) or workspace (_sqw) that represents the sample.</dd>
+<dt>Input Container</dt>
+<dd>Either a reduced file (_red.nxs) or workspace (_red) or an S(Q,omega) file (_sqw.nxs) or workspace (_sqw) that represents the container.</dd>
+<dt>Scale Can by Factor</dt>
+<dd>Allows the container intensity to be scaled by a given scale factor before being used in the corrections calculation.</dd>
+<dt>Plot Output</dt>
+<dd>Gives the option to create either a spectra or contour plot (or both) of the corrected workspace.</dd>
+<dt>Save Result</dt>
+<dd>If enabled the result will be saved as a NeXus file in the default save directory.</dd>
+</dl>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/Interfaces.html">Interfaces</a> | <a class="reference external" href="categories/Indirect.html">Indirect</a></p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Indirect_Bayes.html" title="Previous Chapter: Indirect Bayes"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Indirect Bayes</span>
+    </a>
+  </li>
+  <li>
+    <a href="Indirect_DataAnalysis.html" title="Next Chapter: Indirect Data Analysis"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Indirect Data An... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

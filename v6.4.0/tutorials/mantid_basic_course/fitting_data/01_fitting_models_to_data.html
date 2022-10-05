@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Fitting Models To Data</title>
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '6.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="A more Complex case" href="02_complex_case.html" />
+    <link rel="prev" title="Fitting Data" href="index.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.4</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../../index.html" >Training</a> &#187;</li>
+          
+            <li class="nav-item nav-item-2"><a href="../index.html" >Mantid Basic Course</a> &#187;</li>
+          
+            <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Fitting Data</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Fitting Models To Data</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <p><span class="math">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<div class="section" id="fitting-models-to-data">
+<span id="id1"></span><h1>Fitting Models To Data<a class="headerlink" href="#fitting-models-to-data" title="Permalink to this headline">¶</a></h1>
+<style> .red {color:#FF0000; font-weight:bold} </style>
+<style> .green {color:#008000; font-weight:bold} </style>
+<style> .blue {color:#0000FF; font-weight:bold} </style>
+<style> .orange {color:#FF8C00; font-weight:bold} </style><p>Fitting is iteratively searching for the parameter values that minimise some cost function to obtain
+the best fit of the model to the data.</p>
+<p>In summary the Mantid fitting provides</p>
+<ul class="simple">
+<li>General fitting capabilities</li>
+<li>Fitting extras, that make use of data log file and instrument
+geometry information to enhance the user fitting experience</li>
+<li>Easily expandable</li>
+</ul>
+<p>Here we will cover the basic mantid fitting capabilities.</p>
+<div class="section" id="simple-fitting">
+<h2>Simple fitting<a class="headerlink" href="#simple-fitting" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Plot the only spectrum in the data set MUSR00015189_cropped.nxs</li>
+</ol>
+<p><img alt="MUSRDataSet.png" src="../../../_images/MUSRDataSet.png" /></p>
+<ol class="arabic simple" start="2">
+<li>Select the Toolbar button to open Fit Property Browser: <img alt="PeakFitToolbar.png" src="../../../_images/PeakFitToolbar.png" /></li>
+</ol>
+<p><img alt="MUSRDataSetFittingOn.png" src="../../../_images/MUSRDataSetFittingOn.png" /></p>
+<ol class="arabic simple" start="3">
+<li>Right click on the plot and select “Add other function”</li>
+</ol>
+<p><a class="reference internal" href="../../../_images/AddOtherFunctionOption.png"><img alt="AddOtherFunctionOption.png" src="../../../_images/AddOtherFunctionOption.png" style="width: 500px;" /></a></p>
+<p>4. Choose ExpDecay and click OK
+<img alt="ChooseExpDecay.png" src="../../../_images/ChooseExpDecay.png" /></p>
+<p>5. Notice how the ExpDecay function has appeared in the Functions list on the Fit Property Browser, and there are pre-set Settings below.
+For now, just click on the drop-down menu “Fit” and run a normal Fit.</p>
+<div class="figure align-center">
+<img alt="RunFitOption" src="../../../_images/RunFitOption.png" />
+</div>
+<ol class="arabic simple" start="6">
+<li>Examine the results…</li>
+</ol>
+</div>
+<div class="section" id="fit-results">
+<h2>Fit results<a class="headerlink" href="#fit-results" title="Permalink to this headline">¶</a></h2>
+<p>After a successful fit the results can be examined in three ways.</p>
+<ol class="upperalpha simple">
+<li>A <strong>plot of the fitted model</strong> will be added to the graph that now
+shows the <span class="blue">Original data</span>, the <span class="orange">Calculated fit</span> and the <span class="green">Difference between them</span>.</li>
+<li>The Fit Function property browser will show the <strong>fitted parameters</strong>
+instead of their initial values. If you click on the <span class="red">triangle</span> beside <cite>fo-ExpDecay</cite> in the Functions list, it will reveal the Output fit parameters (Height and Lifetime values). Also the <span class="red">Chi-Squared value</span> is displayed at the top of the Fitting tab.</li>
+</ol>
+<p><img alt="MUSRDataSetFittingResults.png" src="../../../_images/MUSRDataSetFittingResults.png" /></p>
+<ol class="upperalpha simple" start="3">
+<li><strong>Output workspaces</strong> will be created and available via the main Mantid Workspaces Toolbox:</li>
+</ol>
+<div class="figure">
+<img alt="FitResults.png" src="../../../_images/FitResults.png" />
+</div>
+<p><strong>There are three output workspaces</strong>:</p>
+<blockquote>
+<div><p>1. A TableWorkspace with the name suffixed with “_Parameters”. It
+contains the fitting parameters and their corresponding errors.</p>
+<div class="figure">
+<img alt="ParametersTable.png" src="../../../_images/ParametersTable.png" />
+</div>
+<p>2. A MatrixWorkspace with the name suffixed with “_Workspace”. Its first
+three spectra are: the original data, the calculated model, and the
+difference.</p>
+<div class="figure">
+<img alt="FitResultWorkspace.png" src="../../../_images/FitResultWorkspace.png" />
+</div>
+<p>3. Another TableWorkspace with the name suffixed with
+“_NormalisedCovarianceMatrix”. It contains the variance-covariance
+matrix normalized to 100.</p>
+<div class="figure">
+<img alt="Covariance Table" src="../../../_images/CovarianceTable.png" />
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="index.html" title="Previous Chapter: Fitting Data"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Fitting Data</span>
+    </a>
+  </li>
+  <li>
+    <a href="02_complex_case.html" title="Next Chapter: A more Complex case"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">A more Complex case &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

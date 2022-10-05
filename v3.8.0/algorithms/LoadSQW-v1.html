@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>LoadSQW v1</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.8.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="next" title="LoadSQW v2" href="LoadSQW-v2.html" />
+    <link rel="prev" title="LoadSPE v1" href="LoadSPE-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.8</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="loadsqw-v1">
+<span id="algm-loadsqw-v1"></span><h1>LoadSQW v1<a class="headerlink" href="#loadsqw-v1" title="Permalink to this headline">¶</a></h1>
+<div class="figure align-right" id="index-0">
+<a class="screenshot reference internal image-reference" href="../_images/LoadSQW-v1_dlg.png"><img alt="../_images/LoadSQW-v1_dlg.png" class="screenshot" src="../_images/LoadSQW-v1_dlg.png" style="width: 409px;" /></a>
+<p class="caption"><strong>LoadSQW</strong> dialog.</p>
+</div>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#summary" id="id1">Summary</a></li>
+<li><a class="reference internal" href="#properties" id="id2">Properties</a></li>
+<li><a class="reference internal" href="#description" id="id3">Description</a><ul>
+<li><a class="reference internal" href="#notes-on-horace-sqw-files" id="id4">Notes on Horace SQW files</a></li>
+<li><a class="reference internal" href="#structure-of-sqw-class-with-remarks-on-what-is-currently-used-and-what-is-ignored" id="id5">Structure of sqw class with remarks on what is currently used and what is ignored</a></li>
+<li><a class="reference internal" href="#general-notes-about-sqw-file-assumptions" id="id6">General notes about SQW file assumptions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage" id="id7">Usage</a></li>
+<li><a class="reference internal" href="#source" id="id8">Source</a></li>
+</ul>
+</div>
+<div class="section" id="summary">
+<h2><a class="toc-backref" href="#id1">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Create a MDEventWorkspace with events in reciprocal space (Qx, Qy, Qz, Energy) from a SQW file.</p>
+</div>
+<div class="section" id="properties">
+<h2><a class="toc-backref" href="#id2">Properties</a><a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="3%" />
+<col width="15%" />
+<col width="5%" />
+<col width="71%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Direction</th>
+<th class="head">Type</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Filename</td>
+<td>Input</td>
+<td>string</td>
+<td><em>Mandatory</em></td>
+<td>File of type SQW format. Allowed extensions: [&#8216;.sqw&#8217;]</td>
+</tr>
+<tr class="row-odd"><td>OutputWorkspace</td>
+<td>Output</td>
+<td><a class="reference internal" href="../concepts/MDWorkspace.html#mdworkspace"><em>MDEventWorkspace</em></a></td>
+<td><em>Mandatory</em></td>
+<td>Output IMDEventWorkspace reflecting SQW data read-in.</td>
+</tr>
+<tr class="row-even"><td>MetadataOnly</td>
+<td>Input</td>
+<td>boolean</td>
+<td>False</td>
+<td>Load Metadata without events.</td>
+</tr>
+<tr class="row-odd"><td>OutputFilename</td>
+<td>Input</td>
+<td>string</td>
+<td>&nbsp;</td>
+<td>If the input SQW file is too large to fit in memory, specify an output NXS file. The MDEventWorkspace will be create with this file as its back-end. Allowed extensions: [&#8216;.nxs&#8217;]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="description">
+<h2><a class="toc-backref" href="#id3">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>The algorithm takes every pixel defined in the SQW horace file and
+converts it into an event.</p>
+<p>Only top level binning information is currently taken from DND/Image
+data. All DND image information is currently ignored and the resulting
+MDEvent workspace is in the units of <img class="math" src="../_images/math/37c2daaee41f477657b750f5d83f54f1b02986ca.png" alt="Q^{-1}" style="vertical-align: -4px"/> (SQW dimensions,
+recalculated to the Crystal? frame, without HKL transformation).</p>
+<p>U matrix is set to unity but the B-matrix is read from the SQW and
+attached to the workspace which may confuse the algorithms which work
+with <a class="reference external" href="http://www.mantidproject.org/MDEventWorkspace">MDEventWorkspace</a> produced by Mantid
+algorithms.</p>
+<div class="section" id="notes-on-horace-sqw-files">
+<h3><a class="toc-backref" href="#id4">Notes on Horace SQW files</a><a class="headerlink" href="#notes-on-horace-sqw-files" title="Permalink to this headline">¶</a></h3>
+<p>Sqw objects comes in two flavours:</p>
+<ul class="simple">
+<li>sqw-type</li>
+<li>dnd-type</li>
+</ul>
+<p>The former has the four main fields fully filled. The fields description
+is given below. The latter has:</p>
+<ul class="simple">
+<li><strong>main_header</strong>, <strong>header</strong>, <strong>detpar</strong> as empty structures (0x0 struct array with no fields)</li>
+<li>data.urange and data.pix do not exist.</li>
+</ul>
+<p>The dnd-type is created from d0d, d1d,... objects for most algorithms so
+as to use private methods of sqw objects.</p>
+<p>DND-type object can not be currently read or understood by Mantid.</p>
+</div>
+<div class="section" id="structure-of-sqw-class-with-remarks-on-what-is-currently-used-and-what-is-ignored">
+<h3><a class="toc-backref" href="#id5">Structure of sqw class with remarks on what is currently used and what is ignored</a><a class="headerlink" href="#structure-of-sqw-class-with-remarks-on-what-is-currently-used-and-what-is-ignored" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre>String started by:
+% -- ignored
+* -- used
+
+Main_header:
+%   main_headerfilename   Name of sqw file that is being read, excluding path
+%   main_headerfilepath   Path to sqw file that is being read, including terminating file separator
+%   main_headertitle      Title of sqw data structure
+%   main_headernfiles     Number of spe files that contribute to the sqw object
+
+Header: (scalar structure, or cellarray of scalar structures if more than one spe file)
+%   header{i}.filename   Name of sqw file excluding path
+%   header{i}.filepath   Path to sqw file including terminating file separator
+%   header{i}.efix       Fixed energy (ei or ef depending on emode)
+%   header{i}.emode      Emode=1 direct geometry, =2 indirect geometry, =0 if diffraction &#39;&#39;&#39; Only emode 1 have ever been tried &#39;&#39;&#39;
+%   header{i}.alatt      Lattice parameters (Angstroms)
+%   header{i}.angdeg     Lattice angles (deg)
+%   header{i}.cu         First vector defining scattering plane (r.l.u.)
+%   header{i}.cv         Second vector defining scattering plane (r.l.u.)
+%   header{i}.psi        Orientation angle (rad)
+%   header{i}.omega      --|
+%   header{i}.dpsi         |  Crystal misorientation description (rad)
+%   header{i}.gl           |  (See notes elsewhere e.g. Tobyfit manual
+%   header{i}.gs         --|
+%   header{i}.en         Energy bin boundaries (meV) in the input spe file [column vector]
+%   header{i}.uoffset    Offset of origin of pixel projection axes in r.l.u. and energy i.e. [h; k; l; en] [column vector]
+%   header{i}.u_to_rlu   Matrix (4x4) of pixel projection axes in hkle representation
+%                      u(:,1) first vector - u(1:3,1) r.l.u., u(4,1) energy etc.
+%   header{i}.ulen       Length of pixel projection axes vectors in Ang^-1 or meV [row vector]
+%   header{i}.ulabel     Labels of the pixel projection axes [1x4 cell array of character strings]
+</pre></div>
+</div>
+<p>The pixel projection axes, u1, u2, u3 are the orthonormal vectors of the
+crystal Cartesian coordinate frame i.e. u1 || a*, u2 in plane of a*,
+and b*, and u3 || a* x b*. They form the coordinate frame in which
+the pixel coordinates are stored in data.pix. The pixel projection axes
+must necessarily be identical for all contributing spe files.</p>
+<div class="highlight-python"><div class="highlight"><pre>\ **Detpar**\ :
+%   detpar.filename    Name of file excluding path
+%   detpar.filepath    Path to file including terminating file separator
+%   detpar.group       Row vector of detector group number
+%   detpar.x2          Row vector of secondary flightpaths (m)
+%   detpar.phi         Row vector of scattering angles (deg)
+%   detpar.azim        Row vector of azimuthal angles (deg)
+%                  (West bank=0 deg, North bank=90 deg etc.)
+%   detpar.width       Row vector of detector widths (m)
+%   detpar.height      Row vector of detector heights (m)
+
+\ **Data**\ :
+%   data.filename   Name of sqw file that is being read, excluding path
+%   data.filepath   Path to sqw file that is being read, including terminating file separator
+%   data.title      Title of sqw data structure
+*   data.alatt      Lattice parameters for data field (Ang^-1)
+*   data.angdeg     Lattice angles for data field (degrees)
+%   data.uoffset    Offset of origin of projection axes in r.l.u. and energy ie. [h; k; l; en] [column vector]
+%   data.u_to_rlu   Matrix (4x4) of projection axes in hkle representation
+%                      u(:,1) first vector - u(1:3,1) r.l.u., u(4,1) energy etc.
+%   data.ulen       Length of projection axes vectors in Ang^-1 or meV [row vector]
+%   data.ulabel     Labels of the projection axes [1x4 cell array of character strings]
+%   data.iax        Index of integration axes into the projection axes  [row vector]
+%                  Always in increasing numerical order
+%                       e.g. if data is 2D, data.iax=[1,3] means summation has been performed along u1 and u3 axes
+%   data.iint       Integration range along each of the integration axes. [iint(2,length(iax))]
+%                       e.g. in 2D case above, is the matrix vector [u1_lo, u3_lo; u1_hi, u3_hi]
+%   data.pax        Index of plot axes into the projection axes  [row vector]
+%                  Always in increasing numerical order
+%                       e.g. if data is 3D, data.pax=[1,2,4] means u1, u2, u4 axes are x,y,z in any plotting
+%                                       2D, data.pax=[2,4]     &quot;   u2, u4,    axes are x,y   in any plotting
+%   data.p          Call array containing bin boundaries along the plot axes [column vectors]
+%                       i.e. row cell array {data.p{1}, data.p{2} ...} (for as many axes as length of data.pax)
+%   data.dax        Index into data.pax of the axes for display purposes. For example we may have
+%                  data.pax=[1,3,4] and data.dax=[3,1,2] This means that the first display axis is data.pax(3)=4,
+%                  the second is data.pax(1)=1, the third is data.pax(2)=3. The reason for data.dax is to allow
+%                  the display axes to be permuted but without the contents of the fields p, s,..pix needing to
+%                  be reordered [row vector]
+-----&gt; Large data fields, data for MD image
+%   data.s          Cumulative signal.  [size(data.s)=(length(data.p1)-1, length(data.p2)-1, ...)]
+%   data.e          Cumulative variance [size(data.e)=(length(data.p1)-1, length(data.p2)-1, ...)]
+%   data.npix       No. contributing pixels to each bin of the plot axes.
+%                  [size(data.pix)=(length(data.p1)-1, length(data.p2)-1, ...)]
+-----&gt;
+*   data.urange     True range of the data along each axis [urange(2,4)]
+----&gt; Pixels or events data
+*   data.pix        Array containing data for each pixel:
+*                  If npixtot=sum(npix), then pix(9,npixtot) contains:
+*                   u1      -|
+*                   u2       |  Coordinates of pixel in the pixel projection axes
+*                   u3       |
+*                   u4      -|
+*                   irun        Run index in the header block from which pixel came
+*                   idet        Detector group number in the detector listing for the pixel
+*                   ien         Energy bin number for the pixel in the array in the (irun)th header
+*                   signal      Signal array
+*                   err         Error array (variance i.e. error bar squared)
+</pre></div>
+</div>
+<p>data.s is normalized by the number of pixels, as is the variance data.e.
+For those elements where data.npix==0, data.s=0 and data.e=0</p>
+</div>
+<div class="section" id="general-notes-about-sqw-file-assumptions">
+<h3><a class="toc-backref" href="#id6">General notes about SQW file assumptions</a><a class="headerlink" href="#general-notes-about-sqw-file-assumptions" title="Permalink to this headline">¶</a></h3>
+<p>Parts of the code were written with the idea of generalising
+functionality at a later stage. However, we can now assume that:</p>
+<ul class="simple">
+<li>the lattice parameters are all the same for all contributing spe files</li>
+<li>the energy offset is zero in cuts</li>
+<li>requires that all sqw files that are to be combined have
+#.   each been created from only one spe file
+#.   the same lattice parameters and pixel projection axes as held in the header block
+#.   the same projection axes and offsets, as held in the data block
+#.   the same plot and integration axes, with same bins and integration ranges</li>
+<li>the display axes will be taken from the first sqw object in the list to be combined</li>
+</ul>
+</div>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id7">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To run these usage examples please first download the
+<a class="reference external" href="https://sourceforge.net/projects/mantid/files/Sample%20Data/UsageData.zip/download">usage data</a>,
+and add these to your path. In MantidPlot this is done using <a class="reference external" href="http://www.mantidproject.org/ManageUserDirectories">Manage User Directories</a>.</p>
+</div>
+<p><strong>Example - Load 4D workspace form sample SQW file.</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Delete existing workspace if it is already in Mantid as LoadSQW does not support overwriting</span>
+<span class="c"># existig workspaces by design</span>
+<span class="k">if</span> <span class="s">&#39;mdws&#39;</span> <span class="ow">in</span> <span class="n">mtd</span><span class="p">:</span>
+    <span class="n">DeleteWorkspace</span><span class="p">(</span><span class="s">&#39;mdws&#39;</span><span class="p">)</span>
+<span class="c">#</span>
+<span class="c"># Load sample sqw file, present in Mantid unit tests as MD workspace</span>
+<span class="n">mdws</span> <span class="o">=</span> <span class="n">LoadSQW</span><span class="p">(</span><span class="s">&#39;test_horace_reader.sqw&#39;</span><span class="p">);</span>
+
+<span class="c"># Check results</span>
+<span class="k">print</span> <span class="s">&quot;Workspace type is: &quot;</span><span class="p">,</span><span class="n">mdws</span><span class="o">.</span><span class="n">id</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&quot;Workspace has:{0:2} dimensions and contains: {1:4} MD events&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mdws</span><span class="o">.</span><span class="n">getNumDims</span><span class="p">(),</span><span class="n">mdws</span><span class="o">.</span><span class="n">getNEvents</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>Workspace type is:  MDEventWorkspace&lt;MDEvent,4&gt;
+Workspace has: 4 dimensions and contains:  580 MD events
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/Algorithms.html">Algorithms</a> | <a class="reference external" href="categories/DataHandling/SQW.html">DataHandling\SQW</a> | <a class="reference external" href="categories/MDAlgorithms/DataHandling.html">MDAlgorithms\DataHandling</a></p>
+</div>
+<div class="section" id="source">
+<h2><a class="toc-backref" href="#id8">Source</a><a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/c46a67d64e22c52f6c639900deb1c2a0efa0aa66/Framework/MDAlgorithms/src/LoadSQW.cpp">LoadSQW.cpp</a></p>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/c46a67d64e22c52f6c639900deb1c2a0efa0aa66/Framework/MDAlgorithms/inc/MantidMDAlgorithms/LoadSQW.h">LoadSQW.h</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="LoadSPE-v1.html" title="Previous Chapter: LoadSPE v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; LoadSPE v1</span>
+    </a>
+  </li>
+  <li>
+    <a href="LoadSQW-v2.html" title="Next Chapter: LoadSQW v2"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">LoadSQW v2 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

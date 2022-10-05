@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Data reduction for ILL’s direct geometry instruments</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '4.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Techniques" href="index.html" />
+    <link rel="next" title="directtools" href="DirecttoolsPythonModule.html" />
+    <link rel="prev" title="Calibration Implementation Details" href="Calibration_implementation.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>4.1</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="data-reduction-for-ill-s-direct-geometry-instruments">
+<span id="directill"></span><h1>Data reduction for ILL&#8217;s direct geometry instruments<a class="headerlink" href="#data-reduction-for-ill-s-direct-geometry-instruments" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#instrument-specific-defaults-and-recommendations" id="id2">Instrument specific defaults and recommendations</a><ul>
+<li><a class="reference internal" href="#reduction-basics" id="id3">Reduction basics</a></li>
+<li><a class="reference internal" href="#connecting-inputs-and-outputs" id="id4">Connecting inputs and outputs</a></li>
+<li><a class="reference internal" href="#time-independent-background-for-position-sensitive-tubes" id="id5">Time-independent background for position sensitive tubes</a></li>
+<li><a class="reference internal" href="#self-shielding-corrections" id="id6">Self-shielding corrections</a></li>
+<li><a class="reference internal" href="#workspace-compatibility" id="id7">Workspace compatibility</a></li>
+<li><a class="reference internal" href="#container-subtraction" id="id8">Container subtraction</a><ul>
+<li><a class="reference internal" href="#interpolation-of-container-data-to-different-temperatures" id="id9">Interpolation of container data to different temperatures</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#finding-out-what-went-wrong" id="id10">Finding out what went wrong</a></li>
+<li><a class="reference internal" href="#id1" id="id11">Instrument specific defaults and recommendations</a><ul>
+<li><a class="reference internal" href="#elastic-peak-positions" id="id12">Elastic peak positions</a></li>
+<li><a class="reference internal" href="#diagnostics" id="id13">Diagnostics</a></li>
+<li><a class="reference internal" href="#memory-management" id="id14">Memory management</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#full-example" id="id15">Full example</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>There are seven workflow algorithms supporting data reduction at ILL&#8217;s time-of-flight instruments. These algorithms are:</p>
+<dl class="docutils">
+<dt><a class="reference internal" href="../algorithms/DirectILLCollectData-v1.html#algm-directillcollectdata"><em>DirectILLCollectData v1</em></a></dt>
+<dd>Loads data from disk and applies some simple reduction steps. The starting point of all reductions, as most of the other DirectILL algorithms expect their input data to originate from here.</dd>
+<dt><a class="reference internal" href="../algorithms/DirectILLReduction-v1.html#algm-directillreduction"><em>DirectILLReduction v1</em></a></dt>
+<dd>Does the actual reduction and produces the final <img class="math" src="../_images/math/04aac0ccf3b627925273ef7351471c3afff8f7c9.png" alt="S(q,\omega)" style="vertical-align: -4px"/>.</dd>
+<dt><a class="reference internal" href="../algorithms/DirectILLIntegrateVanadium-v1.html#algm-directillintegratevanadium"><em>DirectILLIntegrateVanadium v1</em></a></dt>
+<dd>Integrates a calibration workspace.</dd>
+<dt><a class="reference internal" href="../algorithms/DirectILLDiagnostics-v1.html#algm-directilldiagnostics"><em>DirectILLDiagnostics v1</em></a></dt>
+<dd>Provides a masking workspace to remove detectors (faulty or otherwise) from the reduction.</dd>
+<dt><a class="reference internal" href="../algorithms/DirectILLSelfShielding-v1.html#algm-directillselfshielding"><em>DirectILLSelfShielding v1</em></a></dt>
+<dd>Calculates absorption corrections for usage with <a class="reference internal" href="../algorithms/DirectILLApplySelfShielding-v1.html#algm-directillapplyselfshielding"><em>DirectILLApplySelfShielding v1</em></a>.</dd>
+<dt><a class="reference internal" href="../algorithms/DirectILLApplySelfShielding-v1.html#algm-directillapplyselfshielding"><em>DirectILLApplySelfShielding v1</em></a></dt>
+<dd>Applies absorption corrections and subtracts an empty container measurement.</dd>
+<dt><a class="reference internal" href="../algorithms/DirectILLTubeBackground-v1.html#algm-directilltubebackground"><em>DirectILLTubeBackground v1</em></a></dt>
+<dd>Calculates a per-tube backgrounds for position sensitive tubes such as those found in IN5.</dd>
+</dl>
+<p>The algorithms can be used as flexible building blocks in Python scripts. Not all of them need to be necessarily used in a reduction: the simplest script could call <a class="reference internal" href="../algorithms/DirectILLCollectData-v1.html#algm-directillcollectdata"><em>DirectILLCollectData v1</em></a> and <a class="reference internal" href="../algorithms/DirectILLReduction-v1.html#algm-directillreduction"><em>DirectILLReduction v1</em></a> only.</p>
+<p>Together with the other algorithms and services provided by the Mantid framework, the reduction algorithms can handle a great number of reduction scenarios. If this proves insufficient, however, the algorithms can be accessed using Python. Before making modifications it is recommended to copy the source files and rename the algorithms as not to break the original behavior.</p>
+<p>This document tries to give an overview on how the algorithms work together via Python examples. Please refer to the algorithm documentation for details of each individual algorithm.</p>
+<div class="section" id="instrument-specific-defaults-and-recommendations">
+<h2><a class="toc-backref" href="#id2">Instrument specific defaults and recommendations</a><a class="headerlink" href="#instrument-specific-defaults-and-recommendations" title="Permalink to this headline">¶</a></h2>
+<p>Some algorithm properties have the word &#8216;AUTO&#8217; in their default value. This means that the default will be chosen according to the instrument by reading the actual default from the instrument parameters. The documentation of the algorithms which have these types of properties includes tables showing the defaults for supported ILL instruments.</p>
+<div class="section" id="reduction-basics">
+<h3><a class="toc-backref" href="#id3">Reduction basics</a><a class="headerlink" href="#reduction-basics" title="Permalink to this headline">¶</a></h3>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To run these usage examples please first download the
+<a class="reference external" href="https://sourceforge.net/projects/mantid/files/Sample%20Data/UsageData.zip/download">usage data</a>,
+and add these to your path. In MantidPlot this is done using <a class="reference external" href="http://www.mantidproject.org/ManageUserDirectories">Manage User Directories</a>.</p>
+</div>
+<p>A very basic reduction would include a vanadium reference and a sample and follow the steps:</p>
+<ol class="arabic simple">
+<li>Load vanadium data.</li>
+<li>Integrate vanadium.</li>
+<li>Run diagnostics.<ul>
+<li>Generally, this step should not be skipped even if no actual diagnostics were performed, as <a class="reference internal" href="../algorithms/DirectILLDiagnostics-v1.html#algm-directilldiagnostics"><em>DirectILLDiagnostics v1</em></a> may create a default mask for the instrument. This is the case of IN5, for example, where the pixels at the detector tube ends are masked.</li>
+</ul>
+</li>
+<li>Load sample data.</li>
+<li>Reduce the data applying vanadium calibration coefficients and diagnostics mask.</li>
+</ol>
+<p>On instruments like IN4 and IN6, these steps would translate to something like the following simple Python script:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Uncomment to add a temporary data search directory.</span>
+<span class="c">#mantid.config.appendDataSearchDir(&#39;/data/&#39;)</span>
+
+<span class="c"># Vanadium</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/085801-085802.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium&#39;</span><span class="p">,</span>
+    <span class="n">OutputEPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span><span class="p">,</span>  <span class="c"># Elastic peak positions.</span>
+    <span class="n">OutputRawWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-raw&#39;</span>    <span class="c"># &#39;Raw&#39; data for diagnostics.</span>
+<span class="p">)</span>
+<span class="n">DirectILLIntegrateVanadium</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;integrated&#39;</span><span class="p">,</span>
+    <span class="n">EPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span>
+<span class="p">)</span>
+<span class="n">DirectILLDiagnostics</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-raw&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;diagnostics&#39;</span><span class="p">,</span>
+    <span class="n">EPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c"># Sample</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/087294+087295.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;sample&#39;</span>
+<span class="p">)</span>
+<span class="n">DirectILLReduction</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;sample&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;SofQW&#39;</span><span class="p">,</span>
+    <span class="n">IntegratedVanadiumWorkspace</span><span class="o">=</span><span class="s">&#39;integrated&#39;</span><span class="p">,</span>
+    <span class="n">DiagnosticsWorkspace</span><span class="o">=</span><span class="s">&#39;diagnostics&#39;</span>
+<span class="p">)</span>
+<span class="n">SofQW</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&#39;SofQW&#39;</span><span class="p">]</span>
+<span class="n">qAxis</span> <span class="o">=</span> <span class="n">SofQW</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c"># Vertical axis</span>
+<span class="n">eAxis</span> <span class="o">=</span> <span class="n">SofQW</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c"># Horizontal axis</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;S(Q,W): Q range: {:.3}...{:.3}A; W range {:.3}...{:.3}meV&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="n">qAxis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qAxis</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">eAxis</span><span class="o">.</span><span class="n">getMin</span><span class="p">(),</span> <span class="n">eAxis</span><span class="o">.</span><span class="n">getMax</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>S(Q,W): Q range: 0.0...9.18A; W range -96.3...7.62meV
+</pre></div>
+</div>
+<p>The basic reduction for IN5 and PANTHER differs slightly with regards to the diagnostics step. In this case, the &#8220;raw&#8221; workspace is not needed, and it is not necessary to pass the EPP workspace to <a class="reference internal" href="../algorithms/DirectILLDiagnostics-v1.html#algm-directilldiagnostics"><em>DirectILLDiagnostics v1</em></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Uncomment to add a temporary data search directory.</span>
+<span class="c">#mantid.config.appendDataSearchDir(&#39;/data/&#39;)</span>
+
+<span class="c"># Vanadium</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;085801-085802&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium&#39;</span><span class="p">,</span>
+    <span class="n">OutputEPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span><span class="p">,</span>  <span class="c"># Elastic peak positions.</span>
+<span class="p">)</span>
+<span class="n">DirectILLIntegrateVanadium</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;integrated&#39;</span><span class="p">,</span>
+    <span class="n">EPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span>
+<span class="p">)</span>
+<span class="n">DirectILLDiagnostics</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;diagnostics&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c"># Sample</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;087294+087295&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;sample&#39;</span>
+<span class="p">)</span>
+<span class="n">DirectILLReduction</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;sample&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;SofQW&#39;</span><span class="p">,</span>
+    <span class="n">IntegratedVanadiumWorkspace</span><span class="o">=</span><span class="s">&#39;integrated&#39;</span><span class="p">,</span>
+    <span class="n">DiagnosticsWorkspace</span><span class="o">=</span><span class="s">&#39;diagnostics&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="connecting-inputs-and-outputs">
+<h3><a class="toc-backref" href="#id4">Connecting inputs and outputs</a><a class="headerlink" href="#connecting-inputs-and-outputs" title="Permalink to this headline">¶</a></h3>
+<p>Every <tt class="docutils literal"><span class="pre">DirectILL</span></tt> algorithm has an <em>OutputWorkspace</em> property which provides the main output workspace. Additionally, the algorithms may provide optional output workspaces to be used with other algorithms or for reporting/debugging purposes. The linking of outputs to inputs is an important feature of the <tt class="docutils literal"><span class="pre">DirectILL</span></tt> algorithms and allows for great flexibility in the reduction. An example of the usage of these optional output workspaces is the <em>OutputEPPWorkspace</em> which in the vanadium case above is needed in the integration and diagnostics steps:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="o">...</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="o">...</span>
+    <span class="n">OutputEPPWorkspace</span><span class="o">=</span><span class="s">&#39;epps&#39;</span>  <span class="c"># This workspace...</span>
+<span class="p">)</span>
+<span class="n">DirectILLIntegrateVanadium</span><span class="p">(</span>
+    <span class="o">...</span>
+    <span class="n">EPPWorkspace</span><span class="o">=</span><span class="s">&#39;epps&#39;</span>        <span class="c"># ...is needed here...</span>
+<span class="p">)</span>
+<span class="n">DirectILLDiagnostics</span><span class="p">(</span>
+    <span class="o">...</span>
+    <span class="n">EPPWorkspace</span><span class="o">=</span><span class="s">&#39;epps&#39;</span>        <span class="c"># ...and here.</span>
+<span class="p">)</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>As shown above, these optional outputs are sometimes named similarly the corresponding inputs giving a hint were they are supposed to be used.</p>
+</div>
+<div class="section" id="time-independent-background-for-position-sensitive-tubes">
+<h3><a class="toc-backref" href="#id5">Time-independent background for position sensitive tubes</a><a class="headerlink" href="#time-independent-background-for-position-sensitive-tubes" title="Permalink to this headline">¶</a></h3>
+<p>The flat background subtraction in <a class="reference internal" href="../algorithms/DirectILLCollectData-v1.html#algm-directillcollectdata"><em>DirectILLCollectData v1</em></a> does not work properly for instruments such as IN5. Another algorithm, <a class="reference internal" href="../algorithms/DirectILLTubeBackground-v1.html#algm-directilltubebackground"><em>DirectILLTubeBackground v1</em></a> should be used instead. For this algorithm, one should run <a class="reference internal" href="../algorithms/DirectILLDiagnostics-v1.html#algm-directilldiagnostics"><em>DirectILLDiagnostics v1</em></a> to utilize the default hard mask and beam stop masking in the background determination.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Add a temporary data search directory.</span>
+<span class="n">mantid</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">appendDataSearchDir</span><span class="p">(</span><span class="s">&#39;/data/&#39;</span><span class="p">)</span>
+
+<span class="c"># Vanadium</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;0100-0109&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium&#39;</span><span class="p">,</span>
+    <span class="n">OutputEPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span><span class="p">,</span>  <span class="c"># Elastic peak positions.</span>
+<span class="p">)</span>
+
+<span class="n">DirectILLDiagnostics</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-raw&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;diagnostics&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c"># Determine time-independent background</span>
+<span class="n">DirectILLTubeBackground</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-background&#39;</span>
+    <span class="n">EPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadiums-epps&#39;</span><span class="p">,</span>
+    <span class="n">DiagnosticsWorkspace</span><span class="o">=</span><span class="s">&#39;diagnostics&#39;</span>
+<span class="p">)</span>
+<span class="c"># Subtract the background</span>
+<span class="n">Subtract</span><span class="p">(</span>
+    <span class="n">LHSWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium&#39;</span>
+    <span class="n">RHSWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-background&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-bkgsubtr&#39;</span>
+<span class="p">)</span>
+
+<span class="n">DirectILLIntegrateVanadium</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-bkgsubtr&#39;</span><span class="p">,</span>  <span class="c"># Integrate background subtracted data</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;integrated&#39;</span><span class="p">,</span>
+    <span class="n">EPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span>
+<span class="p">)</span>
+
+<span class="c"># Sample</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;0201+0205+0209-0210&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;sample&#39;</span><span class="p">,</span>
+    <span class="n">OutputEPPWorkspace</span><span class="o">=</span><span class="s">&#39;sample-epps&#39;</span>
+<span class="p">)</span>
+
+<span class="c"># Determine time-independent background</span>
+<span class="n">DirectILLTubeBackground</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;sample&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;sample-background&#39;</span><span class="p">,</span>
+    <span class="n">EPPWorkspace</span><span class="o">=</span><span class="s">&#39;sample-epps&#39;</span><span class="p">,</span>
+    <span class="n">DiagnosticsWorkspace</span><span class="o">=</span><span class="s">&#39;diagnostics&#39;</span>
+<span class="p">)</span>
+<span class="n">Subtract</span><span class="p">(</span>
+    <span class="n">LHSWorkspace</span><span class="o">=</span><span class="s">&#39;sample&#39;</span><span class="p">,</span>
+    <span class="n">RHSWorkspace</span><span class="o">=</span><span class="s">&#39;sample-background&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;sample-bkgsubtr&#39;</span>
+<span class="p">)</span>
+
+<span class="n">DirectILLReduction</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;sample-bkgsubtr&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;SofQW&#39;</span><span class="p">,</span>
+    <span class="n">IntegratedVanadiumWorkspace</span><span class="o">=</span><span class="s">&#39;integrated&#39;</span>
+    <span class="n">DiagnosticsWorkspace</span><span class="o">=</span><span class="s">&#39;diagnostics&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="self-shielding-corrections">
+<h3><a class="toc-backref" href="#id6">Self-shielding corrections</a><a class="headerlink" href="#self-shielding-corrections" title="Permalink to this headline">¶</a></h3>
+<p>A more complete reduction example would include corrections for self-shielding:</p>
+<ol class="arabic simple">
+<li>Load vanadium data.</li>
+<li>Integrate vanadium.</li>
+<li>Run diagnostics.</li>
+<li>Load sample data.</li>
+<li>Calculate absorption corrections for the sample.<ul>
+<li>This may be a time consuming step. Fortunately, the resulting correction factors can be reused as many times as needed.</li>
+<li>Sample and beam parameters can be set using <a class="reference internal" href="../algorithms/SetSample-v1.html#algm-setsample"><em>SetSample v1</em></a> and <a class="reference internal" href="../algorithms/SetBeam-v1.html#algm-setbeam"><em>SetBeam v1</em></a>.</li>
+</ul>
+</li>
+<li>Apply the corrections.</li>
+<li>Reduce the data applying vanadium calibration coefficients and diagnostics mask.</li>
+</ol>
+<p>The above workflow would translate to this kind of Python script for IN4 and IN6:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Uncomment to add a temporary data search directory.</span>
+<span class="c">#mantid.config.appendDataSearchDir(&#39;/data/&#39;)</span>
+
+<span class="c"># Vanadium</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/085801-085801.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium&#39;</span><span class="p">,</span>
+    <span class="n">OutputEPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span><span class="p">,</span>  <span class="c"># Elastic peak positions.</span>
+    <span class="n">OutputRawWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-raw&#39;</span>    <span class="c"># &#39;Raw&#39; data for diagnostics.</span>
+<span class="p">)</span>
+<span class="n">DirectILLIntegrateVanadium</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;integrated&#39;</span><span class="p">,</span>
+    <span class="n">EPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span>
+<span class="p">)</span>
+<span class="n">DirectILLDiagnostics</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-raw&#39;</span><span class="p">,</span>  <span class="c"># For IN5/PANTHER, &#39;vanadium&#39; could be used</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;diagnostics&#39;</span><span class="p">,</span>
+    <span class="n">EPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span><span class="p">,</span>  <span class="c"># Can be omitted for IN5/PANTHER</span>
+<span class="p">)</span>
+<span class="c"># Sample</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/087294+087295.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;sample&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">geometry</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;Shape&#39;</span><span class="p">:</span> <span class="s">&#39;FlatPlate&#39;</span><span class="p">,</span>
+    <span class="s">&#39;Width&#39;</span><span class="p">:</span> <span class="mf">4.0</span><span class="p">,</span>
+    <span class="s">&#39;Height&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">,</span>
+    <span class="s">&#39;Thick&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="s">&#39;Center&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+    <span class="s">&#39;Angle&#39;</span><span class="p">:</span> <span class="mf">45.0</span>
+<span class="p">}</span>
+<span class="n">material</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;ChemicalFormula&#39;</span><span class="p">:</span> <span class="s">&#39;Cd S&#39;</span><span class="p">,</span>
+    <span class="s">&#39;SampleNumberDensity&#39;</span><span class="p">:</span> <span class="mf">0.01</span>
+<span class="p">}</span>
+<span class="n">SetSample</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;sample&#39;</span><span class="p">,</span>
+    <span class="n">Geometry</span><span class="o">=</span><span class="n">geometry</span><span class="p">,</span>
+    <span class="n">Material</span><span class="o">=</span><span class="n">material</span>
+<span class="p">)</span>
+<span class="n">DirectILLSelfShielding</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;sample&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;corrections&#39;</span><span class="p">,</span>
+    <span class="n">NumberOfSimulatedWavelengths</span><span class="o">=</span><span class="mi">10</span>
+<span class="p">)</span>
+<span class="n">DirectILLApplySelfShielding</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;sample&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;sample-corrected&#39;</span><span class="p">,</span>
+    <span class="n">SelfShieldingCorrectionWorkspace</span><span class="o">=</span><span class="s">&#39;corrections&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">DirectILLReduction</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;sample-corrected&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;SofQW&#39;</span><span class="p">,</span>
+    <span class="n">IntegratedVanadiumWorkspace</span><span class="o">=</span><span class="s">&#39;integrated&#39;</span><span class="p">,</span>
+    <span class="n">DiagnosticsWorkspace</span><span class="o">=</span><span class="s">&#39;diagnostics&#39;</span>
+<span class="p">)</span>
+<span class="n">SofQW</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&#39;SofQW&#39;</span><span class="p">]</span>
+<span class="n">qAxis</span> <span class="o">=</span> <span class="n">SofQW</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c"># Vertical axis</span>
+<span class="n">eAxis</span> <span class="o">=</span> <span class="n">SofQW</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c"># Horizontal axis</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;S(Q,W): Q range: {:.3}...{:.3}A; W range {:.3}...{:.3}meV&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="n">qAxis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qAxis</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">eAxis</span><span class="o">.</span><span class="n">getMin</span><span class="p">(),</span> <span class="n">eAxis</span><span class="o">.</span><span class="n">getMax</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>S(Q,W): Q range: 0.0...9.18A; W range -96.3...7.62meV
+</pre></div>
+</div>
+</div>
+<div class="section" id="workspace-compatibility">
+<h3><a class="toc-backref" href="#id7">Workspace compatibility</a><a class="headerlink" href="#workspace-compatibility" title="Permalink to this headline">¶</a></h3>
+<p>Mantid can be picky with binning when doing arithmetics between workspaces. This is an issue for the time-of-flight instruments at ILL as the time axis needs to be corrected to correspond to a physical flight distance. Even thought data is recorded with the same nominal wavelength, the actual value written in the NeXus files may differ between runs. Incident energy calibration further complicates matters. As the correction to the time-of-flight axis depends on the wavelength, two datasets loaded into Mantid with <a class="reference internal" href="../algorithms/DirectILLCollectData-v1.html#algm-directillcollectdata"><em>DirectILLCollectData v1</em></a> may have slightly different time-of-flight axis. This prevents arithmetics between the workspaces. The situation is most often encountered between a sample and the corresponding empty container.</p>
+<p>To alleviate the situation, the output workspaces of <a class="reference internal" href="../algorithms/DirectILLCollectData-v1.html#algm-directillcollectdata"><em>DirectILLCollectData v1</em></a> can be forced to use the same wavelength. The following Python script shows how to propagate the calibrated incident energy from the first loaded workspace into the rest:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Sample</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/087294-087295.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;sample&#39;</span><span class="p">,</span>
+    <span class="n">OutputIncidentEnergyWorkspace</span><span class="o">=</span><span class="s">&#39;Ei&#39;</span>  <span class="c"># Get a common incident energy.</span>
+<span class="p">)</span>
+<span class="c"># Empty container.</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/087306-087309.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;container&#39;</span><span class="p">,</span>
+    <span class="n">IncidentEnergyWorkspace</span><span class="o">=</span><span class="s">&#39;Ei&#39;</span>  <span class="c"># Ensure same TOF binning.</span>
+<span class="p">)</span>
+<span class="n">x_sample</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&#39;sample&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">x_container</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&#39;container&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&quot;Sample&#39;s TOF axis starts at {:.4}mus, container&#39;s at {:.4}mus&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="n">x_sample</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_container</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>Sample&#39;s TOF axis starts at 966.8mus, container&#39;s at 966.8mus
+</pre></div>
+</div>
+</div>
+<div class="section" id="container-subtraction">
+<h3><a class="toc-backref" href="#id8">Container subtraction</a><a class="headerlink" href="#container-subtraction" title="Permalink to this headline">¶</a></h3>
+<p>The container subtraction is done perhaps a bit counterintuitively in <a class="reference internal" href="../algorithms/DirectILLApplySelfShielding-v1.html#algm-directillapplyselfshielding"><em>DirectILLApplySelfShielding v1</em></a>. At the moment the self-shielding corrections and the empty container data do not have much to do with each other but this may change in the future if the so called Paalman-Pings corrections are used.</p>
+<p>With empty container data, the steps to reduce the experimental data might look like this:</p>
+<ol class="arabic simple">
+<li>Load vanadium data.</li>
+<li>Integrate vanadium.</li>
+<li>Run diagnostics.</li>
+<li>Load sample data.</li>
+<li>Load container data.<ul>
+<li>Propagate the incident energy from the sample, see <a class="reference internal" href="#workspace-compatibility">Workspace compatibility</a>.</li>
+</ul>
+</li>
+<li>Calculate and apply absorption corrections for the container.</li>
+<li>Calculate the absorption corrections for the sample.</li>
+<li>Apply the absoprtion corrections and subtract the container.</li>
+<li>Reduce the data applying vanadium calibration coefficients and diagnostics mask.</li>
+</ol>
+<p>A corresponding Python script follows.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Uncomment to add a temporary data search directory.</span>
+<span class="c">#mantid.config.appendDataSearchDir(&#39;/data/&#39;)</span>
+
+<span class="c"># Vanadium</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/085801-085802.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium&#39;</span><span class="p">,</span>
+    <span class="n">OutputEPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span><span class="p">,</span>
+    <span class="n">OutputRawWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-raw&#39;</span>  <span class="c"># Can be omitted for IN5/PANTHER</span>
+<span class="p">)</span>
+<span class="n">DirectILLIntegrateVanadium</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;integrated&#39;</span><span class="p">,</span>
+    <span class="n">EPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span>
+<span class="p">)</span>
+<span class="n">DirectILLDiagnostics</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-raw&#39;</span><span class="p">,</span>  <span class="c"># IN5/PANTHER can use &#39;vanadium&#39;</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;diagnostics&#39;</span><span class="p">,</span>
+    <span class="n">EPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span><span class="p">,</span>  <span class="c"># Can be omitted for IN5/PANTHER</span>
+<span class="p">)</span>
+<span class="c"># Sample</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/087294+087295.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;sample&#39;</span><span class="p">,</span>
+    <span class="n">OutputIncidentEnergyWorkspace</span><span class="o">=</span><span class="s">&#39;Ei&#39;</span>  <span class="c"># For empty container</span>
+<span class="p">)</span>
+<span class="c"># Container</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/087306-087309.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;container&#39;</span><span class="p">,</span>
+    <span class="n">IncidentEnergyWorkspace</span><span class="o">=</span><span class="s">&#39;Ei&#39;</span>  <span class="c"># Ensure common TOF axis</span>
+<span class="p">)</span>
+<span class="c"># Sample self-shielding and container subtraction.</span>
+<span class="n">geometry</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;Shape&#39;</span><span class="p">:</span> <span class="s">&#39;HollowCylinder&#39;</span><span class="p">,</span>
+    <span class="s">&#39;Height&#39;</span><span class="p">:</span> <span class="mf">4.0</span><span class="p">,</span>
+    <span class="s">&#39;InnerRadius&#39;</span><span class="p">:</span> <span class="mf">1.9</span><span class="p">,</span>
+    <span class="s">&#39;OuterRadius&#39;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+    <span class="s">&#39;Center&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="n">material</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;ChemicalFormula&#39;</span><span class="p">:</span> <span class="s">&#39;Cd S&#39;</span><span class="p">,</span>
+    <span class="s">&#39;SampleNumberDensity&#39;</span><span class="p">:</span> <span class="mf">0.01</span>
+<span class="p">}</span>
+<span class="n">SetSample</span><span class="p">(</span><span class="s">&#39;sample&#39;</span><span class="p">,</span> <span class="n">geometry</span><span class="p">,</span> <span class="n">material</span><span class="p">)</span>
+<span class="n">DirectILLSelfShielding</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;sample&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;sample-corrections&#39;</span><span class="p">,</span>
+    <span class="n">NumberOfSimulatedWavelengths</span><span class="o">=</span><span class="mi">10</span>
+<span class="p">)</span>
+<span class="n">DirectILLApplySelfShielding</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;sample&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;sample-corrected&#39;</span><span class="p">,</span>
+    <span class="n">SelfShieldingCorrectionWorkspace</span><span class="o">=</span><span class="s">&#39;sample-corrections&#39;</span><span class="p">,</span>
+    <span class="n">EmptyContainerWorkspace</span><span class="o">=</span><span class="s">&#39;container&#39;</span>  <span class="c"># Also subtract container</span>
+<span class="p">)</span>
+<span class="n">DirectILLReduction</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;sample-corrected&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;SofQW&#39;</span><span class="p">,</span>
+    <span class="n">IntegratedVanadiumWorkspace</span><span class="o">=</span><span class="s">&#39;integrated&#39;</span><span class="p">,</span>
+    <span class="n">DiagnosticsWorkspace</span><span class="o">=</span><span class="s">&#39;diagnostics&#39;</span>
+<span class="p">)</span>
+<span class="n">SofQW</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&#39;SofQW&#39;</span><span class="p">]</span>
+<span class="n">qAxis</span> <span class="o">=</span> <span class="n">SofQW</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c"># Vertical axis</span>
+<span class="n">eAxis</span> <span class="o">=</span> <span class="n">SofQW</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c"># Horizontal axis</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;S(Q,W): Q range: {:.3}...{:.3}A; W range {:.3}...{:.3}meV&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="n">qAxis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qAxis</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">eAxis</span><span class="o">.</span><span class="n">getMin</span><span class="p">(),</span> <span class="n">eAxis</span><span class="o">.</span><span class="n">getMax</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>S(Q,W): Q range: 0.0...9.18A; W range -96.3...7.62meV
+</pre></div>
+</div>
+<div class="section" id="interpolation-of-container-data-to-different-temperatures">
+<h4><a class="toc-backref" href="#id9">Interpolation of container data to different temperatures</a><a class="headerlink" href="#interpolation-of-container-data-to-different-temperatures" title="Permalink to this headline">¶</a></h4>
+<p>Sometimes the empty container is not measured at all the experiment&#8217;s temperature points. One can use Mantid&#8217;s workspace arithmetics to perform simple linear interpolation in temperature:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/087283-087290.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;sample_50K&#39;</span><span class="p">,</span>
+    <span class="n">OutputIncidentEnergyWorkspace</span><span class="o">=</span><span class="s">&#39;E_i&#39;</span>
+<span class="p">)</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/087306-087309.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;container_1.5K&#39;</span><span class="p">,</span>
+    <span class="n">IncidentEnergyWorkspace</span><span class="o">=</span><span class="s">&#39;E_i&#39;</span>
+<span class="p">)</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/087311-087314.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;container_100K&#39;</span><span class="p">,</span>
+    <span class="n">IncidentEnergyWorkspace</span><span class="o">=</span><span class="s">&#39;E_i&#39;</span>
+<span class="p">)</span>
+<span class="c"># Container measurement temperatures.</span>
+<span class="n">T0</span> <span class="o">=</span> <span class="mf">1.5</span>
+<span class="n">T1</span> <span class="o">=</span> <span class="mf">100.0</span>
+<span class="n">DT</span> <span class="o">=</span> <span class="n">T1</span> <span class="o">-</span> <span class="n">T0</span>
+<span class="c"># Target sample temperature.</span>
+<span class="n">Ts</span> <span class="o">=</span> <span class="mf">50.0</span>
+<span class="c"># Linear interpolation.</span>
+<span class="n">container_50K</span> <span class="o">=</span> <span class="p">(</span><span class="n">T1</span> <span class="o">-</span> <span class="n">Ts</span><span class="p">)</span> <span class="o">/</span> <span class="n">DT</span> <span class="o">*</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&#39;container_1.5K&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">Ts</span> <span class="o">-</span> <span class="n">T0</span><span class="p">)</span> <span class="o">/</span> <span class="n">DT</span> <span class="o">*</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&#39;container_100K&#39;</span><span class="p">]</span>
+<span class="n">T_sample_logs</span> <span class="o">=</span> <span class="n">container_50K</span><span class="o">.</span><span class="n">run</span><span class="p">()</span><span class="o">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">&#39;sample.temperature&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+<span class="n">mean_T</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">T_sample_logs</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">&#39;Note, that the mean temperature from the sample logs is {:.4}K, a bit off.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mean_T</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>Note, that the mean temperature from the sample logs is 51.0K, a bit off.
+</pre></div>
+</div>
+<p>As usual, care should be taken when extrapolating the container data outside the measured range.</p>
+</div>
+</div>
+<div class="section" id="finding-out-what-went-wrong">
+<h3><a class="toc-backref" href="#id10">Finding out what went wrong</a><a class="headerlink" href="#finding-out-what-went-wrong" title="Permalink to this headline">¶</a></h3>
+<p>The reduction algorithms do not produce much output to Mantid logs by default. Also, none of the intermediate workspaces generated during the run of the <tt class="docutils literal"><span class="pre">DirectILL</span></tt> algorithms will show up in the analysis data service. Both behaviors can be controlled by the <em>SubalgorithmLogging</em> and <em>Cleanup</em> properties. Enabling <em>SubalgorithmLogging</em> will log all messages from child algorithms to Mantid&#8217;s logs. Disabling <em>Cleanup</em> will unhide the intermediate workspaces created during the algorithm run and disable their deletion.</p>
+<p>Note, that disabling <em>Cleanup</em> might produce a large number of workspaces and cause the computer to run out of memory.</p>
+</div>
+<div class="section" id="id1">
+<h3><a class="toc-backref" href="#id11">Instrument specific defaults and recommendations</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="elastic-peak-positions">
+<h4><a class="toc-backref" href="#id12">Elastic peak positions</a><a class="headerlink" href="#elastic-peak-positions" title="Permalink to this headline">¶</a></h4>
+<p>The intensities of individual pixels on position sensitive detectors are very low. This makes the fitting procedure employed by <a class="reference internal" href="../algorithms/FindEPP-v2.html#algm-findepp"><em>FindEPP v2</em></a> to work unreliably or fail altogether. Because of this, <a class="reference internal" href="../algorithms/DirectILLCollectData-v1.html#algm-directillcollectdata"><em>DirectILLCollectData v1</em></a> will use <a class="reference internal" href="../algorithms/CreateEPP-v1.html#algm-createepp"><em>CreateEPP v1</em></a> instead by default for IN5 and PANTHER. <a class="reference internal" href="../algorithms/CreateEPP-v1.html#algm-createepp"><em>CreateEPP v1</em></a> produces an artificial EPP workspace based on the instrument geometry. This should be accurate enough for vanadium integration and diagnostics.</p>
+</div>
+<div class="section" id="diagnostics">
+<h4><a class="toc-backref" href="#id13">Diagnostics</a><a class="headerlink" href="#diagnostics" title="Permalink to this headline">¶</a></h4>
+<p>The elastic peak and background diagnostics are turned off by default for IN5 and PANTHER as it makes no sense to mask individual pixels based on them.</p>
+</div>
+<div class="section" id="memory-management">
+<h4><a class="toc-backref" href="#id14">Memory management</a><a class="headerlink" href="#memory-management" title="Permalink to this headline">¶</a></h4>
+<p>When working on memory constrained systems, it is recommended to manually delete the workspaces which are not needed anymore in the reduction script. The <a class="reference internal" href="../algorithms/SaveNexus-v1.html#algm-savenexus"><em>SaveNexus v1</em></a> can be used to save the data to disk.</p>
+</div>
+</div>
+<div class="section" id="full-example">
+<h3><a class="toc-backref" href="#id15">Full example</a><a class="headerlink" href="#full-example" title="Permalink to this headline">¶</a></h3>
+<p>Lets put it all together into a complex Python script. The script below reduces the following dataset:</p>
+<ul class="simple">
+<li>Vanadium reference.</li>
+<li>Sample measured at 1.5 and 50K.<ul>
+<li>Share time-independent backgrounds from the measurement at 1.5K.</li>
+</ul>
+</li>
+<li>Empty container measured at 1.5 and 100K.<ul>
+<li>Need to interpolate to 50K.</li>
+</ul>
+</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Uncomment to add a temporary data search directory.</span>
+<span class="c">#mantid.config.appendDataSearchDir(&#39;/data/&#39;)</span>
+
+<span class="c"># Vanadium</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/085801-085802.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium&#39;</span><span class="p">,</span>
+    <span class="n">OutputEPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span><span class="p">,</span>
+    <span class="n">OutputRawWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-raw&#39;</span>  <span class="c"># Can be omitted for IN5/PANTHER</span>
+<span class="p">)</span>
+<span class="n">DirectILLIntegrateVanadium</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;integrated&#39;</span><span class="p">,</span>
+    <span class="n">EPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span>
+<span class="p">)</span>
+<span class="n">DirectILLDiagnostics</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-raw&#39;</span><span class="p">,</span>  <span class="c"># IN5/PANTHER can use &#39;vanadium&#39;</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;diagnostics&#39;</span><span class="p">,</span>
+    <span class="n">EPPWorkspace</span><span class="o">=</span><span class="s">&#39;vanadium-epps&#39;</span><span class="p">,</span>  <span class="c"># Can be omitted for IN5/PANTHER</span>
+<span class="p">)</span>
+<span class="c"># Samples</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/087294+087295.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;sample_1.5K&#39;</span><span class="p">,</span>
+    <span class="n">OutputIncidentEnergyWorkspace</span><span class="o">=</span><span class="s">&#39;Ei&#39;</span><span class="p">,</span>  <span class="c"># For other datasets</span>
+    <span class="n">OutputFlatBkgWorkspace</span><span class="o">=</span><span class="s">&#39;bkgs&#39;</span>  <span class="c"># For sample at 50K</span>
+<span class="p">)</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/087283-087290.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;sample_50K&#39;</span><span class="p">,</span>
+    <span class="n">IncidentEnergyWorkspace</span><span class="o">=</span><span class="s">&#39;Ei&#39;</span><span class="p">,</span>  <span class="c"># Ensure common TOF axis</span>
+    <span class="n">FlatBkgWorkspace</span><span class="o">=</span><span class="s">&#39;bkgs&#39;</span>  <span class="c"># Use flat backgrounds from 1.5K</span>
+<span class="p">)</span>
+<span class="c"># Containers</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/087306-087309.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;container_1.5K&#39;</span><span class="p">,</span>
+    <span class="n">IncidentEnergyWorkspace</span><span class="o">=</span><span class="s">&#39;Ei&#39;</span>  <span class="c"># Ensure common TOF axis</span>
+<span class="p">)</span>
+<span class="n">DirectILLCollectData</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s">&#39;ILL/IN4/087311-087314.nxs&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;container_100K&#39;</span><span class="p">,</span>
+    <span class="n">IncidentEnergyWorkspace</span><span class="o">=</span><span class="s">&#39;Ei&#39;</span>  <span class="c"># Ensure common TOF axis</span>
+<span class="p">)</span>
+<span class="c"># Sample self-shielding and container subtraction.</span>
+<span class="n">geometry</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;Shape&#39;</span><span class="p">:</span> <span class="s">&#39;HollowCylinder&#39;</span><span class="p">,</span>
+    <span class="s">&#39;Height&#39;</span><span class="p">:</span> <span class="mf">4.0</span><span class="p">,</span>
+    <span class="s">&#39;InnerRadius&#39;</span><span class="p">:</span> <span class="mf">1.9</span><span class="p">,</span>
+    <span class="s">&#39;OuterRadius&#39;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+    <span class="s">&#39;Center&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="n">material</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;ChemicalFormula&#39;</span><span class="p">:</span> <span class="s">&#39;Cd S&#39;</span><span class="p">,</span>
+    <span class="s">&#39;SampleNumberDensity&#39;</span><span class="p">:</span> <span class="mf">0.01</span>
+<span class="p">}</span>
+<span class="n">SetSample</span><span class="p">(</span><span class="s">&#39;sample_1.5K&#39;</span><span class="p">,</span> <span class="n">geometry</span><span class="p">,</span> <span class="n">material</span><span class="p">)</span>
+<span class="n">SetSample</span><span class="p">(</span><span class="s">&#39;sample_50K&#39;</span><span class="p">,</span> <span class="n">geometry</span><span class="p">,</span> <span class="n">material</span><span class="p">)</span>
+<span class="c"># Self-shielding corrections need to be calculated only once.</span>
+<span class="n">DirectILLSelfShielding</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;sample_1.5K&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;corrections&#39;</span><span class="p">,</span>
+    <span class="n">NumberOfSimulatedWavelengths</span><span class="o">=</span><span class="mi">10</span>
+<span class="p">)</span>
+<span class="n">DirectILLApplySelfShielding</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;sample_1.5K&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;corrected_1.5K&#39;</span><span class="p">,</span>
+    <span class="n">SelfShieldingCorrectionWorkspace</span><span class="o">=</span><span class="s">&#39;corrections&#39;</span><span class="p">,</span>
+    <span class="n">EmptyContainerWorkspace</span><span class="o">=</span><span class="s">&#39;container_1.5K&#39;</span>
+<span class="p">)</span>
+<span class="c"># Need to interpolate container to 50K</span>
+<span class="n">T0</span> <span class="o">=</span> <span class="mf">1.5</span>
+<span class="n">T1</span> <span class="o">=</span> <span class="mf">100.0</span>
+<span class="n">DT</span> <span class="o">=</span> <span class="n">T1</span> <span class="o">-</span> <span class="n">T0</span>
+<span class="n">Ts</span> <span class="o">=</span> <span class="mf">50.0</span> <span class="c"># Target T</span>
+<span class="n">container_50K</span> <span class="o">=</span> <span class="p">(</span><span class="n">T1</span> <span class="o">-</span> <span class="n">Ts</span><span class="p">)</span> <span class="o">/</span> <span class="n">DT</span> <span class="o">*</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&#39;container_1.5K&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">Ts</span> <span class="o">-</span> <span class="n">T0</span><span class="p">)</span> <span class="o">/</span> <span class="n">DT</span> <span class="o">*</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&#39;container_100K&#39;</span><span class="p">]</span>
+<span class="n">DirectILLApplySelfShielding</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;sample_50K&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;corrected_50K&#39;</span><span class="p">,</span>
+    <span class="n">SelfShieldingCorrectionWorkspace</span><span class="o">=</span><span class="s">&#39;corrections&#39;</span><span class="p">,</span>
+    <span class="n">EmptyContainerWorkspace</span><span class="o">=</span><span class="n">container_50K</span>
+<span class="p">)</span>
+<span class="n">DirectILLReduction</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;corrected_1.5K&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;SofQW_1.5K&#39;</span><span class="p">,</span>
+    <span class="n">IntegratedVanadiumWorkspace</span><span class="o">=</span><span class="s">&#39;integrated&#39;</span><span class="p">,</span>
+    <span class="n">DiagnosticsWorkspace</span><span class="o">=</span><span class="s">&#39;diagnostics&#39;</span>
+<span class="p">)</span>
+<span class="n">DirectILLReduction</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;corrected_50K&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;SofQW_50K&#39;</span><span class="p">,</span>
+    <span class="n">IntegratedVanadiumWorkspace</span><span class="o">=</span><span class="s">&#39;integrated&#39;</span><span class="p">,</span>
+    <span class="n">DiagnosticsWorkspace</span><span class="o">=</span><span class="s">&#39;diagnostics&#39;</span>
+<span class="p">)</span>
+<span class="n">outputs</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;SofQW_1.5K&#39;</span><span class="p">,</span> <span class="s">&#39;SofQW_50K&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
+    <span class="n">SofQW</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="n">output</span><span class="p">]</span>
+    <span class="n">qAxis</span> <span class="o">=</span> <span class="n">SofQW</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c"># Vertical axis</span>
+    <span class="n">eAxis</span> <span class="o">=</span> <span class="n">SofQW</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c"># Horizontal axis</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&#39;{}: Q range: {:.3}...{:.3}A; W range {:.3}...{:.3}meV&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">output</span><span class="p">,</span> <span class="n">qAxis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qAxis</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">eAxis</span><span class="o">.</span><span class="n">getMin</span><span class="p">(),</span> <span class="n">eAxis</span><span class="o">.</span><span class="n">getMax</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>SofQW_1.5K: Q range: 0.0...9.18A; W range -96.3...7.62meV
+SofQW_50K: Q range: 0.0...9.18A; W range -96.3...7.62meV
+</pre></div>
+</div>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Techniques.html">Techniques</a></p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Calibration_implementation.html" title="Previous Chapter: Calibration Implementation Details"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Calibration Impl...</span>
+    </a>
+  </li>
+  <li>
+    <a href="DirecttoolsPythonModule.html" title="Next Chapter: directtools"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">directtools &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2019-07-22.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

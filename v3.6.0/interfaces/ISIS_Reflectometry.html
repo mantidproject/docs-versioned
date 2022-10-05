@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ISIS Reflectometry (Polref) Interface</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Interfaces" href="index.html" />
+    <link rel="next" title="Indirect Bayes" href="Indirect_Bayes.html" />
+    <link rel="prev" title="HFIR Single Crystal Reduction Interface" href="HFIR_4Circle_Reduction.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.6</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="isis-reflectometry-polref-interface">
+<h1>ISIS Reflectometry (Polref) Interface<a class="headerlink" href="#isis-reflectometry-polref-interface" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#purpose" id="id2">Purpose</a></li>
+<li><a class="reference internal" href="#example-workflow" id="id3">Example Workflow</a></li>
+<li><a class="reference internal" href="#layout" id="id4">Layout</a><ul>
+<li><a class="reference internal" href="#menu-bar" id="id5">Menu bar</a></li>
+<li><a class="reference internal" href="#processing-table" id="id6">Processing Table</a></li>
+<li><a class="reference internal" href="#tool-bar" id="id7">Tool Bar</a></li>
+<li><a class="reference internal" href="#columns" id="id8">Columns</a></li>
+<li><a class="reference internal" href="#search-interface" id="id9">Search Interface</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="purpose">
+<h2><a class="toc-backref" href="#id2">Purpose</a><a class="headerlink" href="#purpose" title="Permalink to this headline">¶</a></h2>
+<p>This user interface allows for batch processing of data reduction for
+reflectometry data. The actual data reduction is performed with
+<a class="reference internal" href="../algorithms/ReflectometryReductionOne-v1.html#algm-reflectometryreductionone"><em>ReflectometryReductionOne</em></a>.
+Wherever possible, this interface attempts to use reasonable defaults,
+either loaded from the instruments&#8217; parameter files, or calculated from
+the provided data, to minimise the amount of user input required.
+This interface also strives to be transparent, making it clear how your
+data is being processed, and easy to adjust any of the options used.</p>
+<p>Integration with data archives is also provided, allowing for data to
+be located and prepared for reduction automatically.</p>
+<p>IPython notebooks which document the processing steps and output
+relevant plots can also be produced from the interface.</p>
+<p>Information on how to resolve common problems can be found in the
+<a class="reference internal" href="#troubleshooting">Troubleshooting</a> section of this document.</p>
+</div>
+<div class="section" id="example-workflow">
+<h2><a class="toc-backref" href="#id3">Example Workflow</a><a class="headerlink" href="#example-workflow" title="Permalink to this headline">¶</a></h2>
+<p>To follow this example you will need the ISIS reflectometry example materials:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">INTER_NR_test2.tbl</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">INTER00013460.nxs</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">INTER00013462.nxs</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">INTER00013463.nxs</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">INTER00013464.nxs</span></tt></li>
+</ul>
+<p>These can be downloaded as part of the <a class="reference external" href="http://download.mantidproject.org/">ISIS example data</a>.</p>
+<p>Once they are downloaded, place the nxs files in one of Mantid&#8217;s user directories.
+To see a list of directories, click on <strong>File -&gt; Manage User Directories</strong>.
+<tt class="docutils literal"><span class="pre">INTER_NR_test2.tbl</span></tt> can be saved anywhere you like, as long as you know where it is.</p>
+<p>Open MantidPlot, and open the ISIS Reflectometry (Polref) interface.
+<strong>Interfaces -&gt; Reflectometry -&gt; ISIS Reflectometry (Polref)</strong></p>
+<p>Within the interface, we first want to import the tbl file as a TableWorkspace.
+To do this, click on <strong>Reflectometry -&gt; Import .TBL</strong>. A <a class="reference internal" href="../algorithms/LoadReflTBL-v1.html#algm-loadrefltbl"><em>LoadReflTBL</em></a>
+dialog will open. Select <tt class="docutils literal"><span class="pre">INTER_NR_test2.tbl</span></tt> as the file, and enter <tt class="docutils literal"><span class="pre">MyTable</span></tt>
+as the output workspace.</p>
+<p>A table workspace called <tt class="docutils literal"><span class="pre">MyTable</span></tt> should now exist in the ADS (<a class="reference internal" href="../concepts/AnalysisDataService.html#analysis-data-service"><em>Analysis Data Service</em></a>).
+To open the table workspace go to <strong>Reflectometry -&gt; Open Table -&gt; MyTable</strong>.
+The processing table (shown below) should now contain four rows (13460, 13462, 13469, 13470).</p>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/ISIS_Reflectometry_(Polref)_viewTable_widget.png"><img alt="../_images/ISIS_Reflectometry_(Polref)_viewTable_widget.png" class="screenshot" src="../_images/ISIS_Reflectometry_(Polref)_viewTable_widget.png" style="width: 685px;" /></a>
+</div>
+<p>Let&#8217;s process the first group, which consists of the first two rows of the
+table (13460 and 13462). The simplest way to do this is simply to select the
+two rows we want to process, and then click on <strong>Process</strong>.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">If you receive an error, consult the <a class="reference internal" href="#troubleshooting">Troubleshooting</a> section of this document for guidance on fixing it.</p>
+</div>
+<p>You should now have eleven workspaces in the ADS.</p>
+<p>Amongst them should be:</p>
+<dl class="docutils">
+<dt>TOF_13460</dt>
+<dd>This is the data before processing. The X axis is time of flight in µs.</dd>
+<dt>TRANS_13463_13464</dt>
+<dd>This is a transmission run, created by running <a class="reference internal" href="../algorithms/CreateTransmissionWorkspace-v1.html#algm-createtransmissionworkspace"><em>CreateTransmissionWorkspace</em></a>
+on <tt class="docutils literal"><span class="pre">TOF_13463</span></tt> and <tt class="docutils literal"><span class="pre">TOF_13464</span></tt>. The X axis is wavelength in Å.</dd>
+<dt>IvsQ_13460</dt>
+<dd>This is the output workspace of <a class="reference internal" href="../algorithms/ReflectometryReductionOne-v1.html#algm-reflectometryreductionone"><em>ReflectometryReductionOne</em></a>. The X
+axis is momentum transfer in Å<sup>-1</sup>.</dd>
+<dt>IvsLam_13460</dt>
+<dd>This is the wavelength output workspace of <a class="reference internal" href="../algorithms/ReflectometryReductionOne-v1.html#algm-reflectometryreductionone"><em>ReflectometryReductionOne</em></a>.
+The X axis is wavelength in Å.</dd>
+<dt>IvsQ_13460_13462</dt>
+<dd>This workspace is the result of stitching <tt class="docutils literal"><span class="pre">IvsQ_13460</span></tt> and <tt class="docutils literal"><span class="pre">IvsQ_13462</span></tt> together using
+<a class="reference internal" href="../algorithms/Stitch1D-v3.html#algm-stitch1d"><em>Stitch1D</em></a>. The X axis is momentum transfer in Å<sup>-1</sup>.</dd>
+</dl>
+</div>
+<div class="section" id="layout">
+<h2><a class="toc-backref" href="#id4">Layout</a><a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h2>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/ISIS_Reflectometry_(Polref)_interface.png"><img alt="../_images/ISIS_Reflectometry_(Polref)_interface.png" class="screenshot" src="../_images/ISIS_Reflectometry_(Polref)_interface.png" style="width: 526px;" /></a>
+</div>
+<div class="section" id="menu-bar">
+<h3><a class="toc-backref" href="#id5">Menu bar</a><a class="headerlink" href="#menu-bar" title="Permalink to this headline">¶</a></h3>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/ISIS_Reflectometry_(Polref)_menuBar_widget.png"><img alt="../_images/ISIS_Reflectometry_(Polref)_menuBar_widget.png" class="screenshot" src="../_images/ISIS_Reflectometry_(Polref)_menuBar_widget.png" style="width: 959px;" /></a>
+</div>
+<p>The <strong>Reflectometry</strong> menu provides access to the following functionality:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Action</th>
+<th class="head">Effect</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Open Table</td>
+<td>Opens a valid <em>TableWorkspace</em> in the <a class="reference internal" href="#processing-table">Processing Table</a>
+for processing.</td>
+</tr>
+<tr class="row-odd"><td>New Table</td>
+<td>Discards the current contents of the <a class="reference internal" href="#processing-table">Processing Table</a>,
+presenting a blank table.</td>
+</tr>
+<tr class="row-even"><td>Save Table</td>
+<td>Saves the current contents of the <a class="reference internal" href="#processing-table">Processing Table</a> to
+the <em>TableWorkspace</em> it came from. If no such workspace
+already exists, a new one can be created.</td>
+</tr>
+<tr class="row-odd"><td>Save Table As</td>
+<td>Saves the current contents of the <a class="reference internal" href="#processing-table">Processing Table</a> to
+a new <em>TableWorkspace</em>.</td>
+</tr>
+<tr class="row-even"><td>Import .TBL</td>
+<td>Opens a <a class="reference internal" href="../algorithms/LoadReflTBL-v1.html#algm-loadrefltbl"><em>LoadReflTBL</em></a> dialog,
+enabling you to load a <tt class="docutils literal"><span class="pre">.tbl</span></tt> file into a
+<em>TableWorkspace</em>.</td>
+</tr>
+<tr class="row-odd"><td>Export .TBL</td>
+<td>Opens a <a class="reference internal" href="../algorithms/SaveReflTBL-v1.html#algm-saverefltbl"><em>SaveReflTBL</em></a> dialog,
+enabling you to save a <em>TableWorkspace</em> to a <tt class="docutils literal"><span class="pre">.tbl</span></tt>
+file.</td>
+</tr>
+<tr class="row-even"><td>Slit Calculator</td>
+<td>Opens the slit calculator: a tool to help calculate the
+correct geometry for the instruments&#8217; slits. It&#8217;s powered
+by the <a class="reference internal" href="../algorithms/CalculateSlits-v1.html#algm-calculateslits"><em>CalculateSlits</em></a>
+algorithm.</td>
+</tr>
+<tr class="row-odd"><td>Options</td>
+<td>Opens the <a class="reference external" href="ISIS_Reflectomety-Options">Options</a> menu.</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>Edit</strong> menu provides access to the same actions found in the tool bar.
+These are documented in the <a class="reference internal" href="#tool-bar">Tool Bar</a> section of this document.</p>
+</div>
+<div class="section" id="processing-table">
+<h3><a class="toc-backref" href="#id6">Processing Table</a><a class="headerlink" href="#processing-table" title="Permalink to this headline">¶</a></h3>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/ISIS_Reflectometry_(Polref)_groupProcessPane_widget.png"><img alt="../_images/ISIS_Reflectometry_(Polref)_groupProcessPane_widget.png" class="screenshot" src="../_images/ISIS_Reflectometry_(Polref)_groupProcessPane_widget.png" style="width: 691px;" /></a>
+</div>
+<p>The processing table is where the bulk of the work takes place. It is used to
+specify which runs to process, the properties that should be used to process
+them, and how the different runs should be joined together.</p>
+<p>Each row represents a single reduction (i.e. execution of
+<a class="reference internal" href="../algorithms/ReflectometryReductionOne-v1.html#algm-reflectometryreductionone"><em>ReflectometryReductionOne</em></a>).
+Rows may be grouped together by setting their <strong>Group</strong> column to the same
+value. Rows that are grouped together will have their output stitched
+together using <a class="reference internal" href="../algorithms/Stitch1D-v3.html#algm-stitch1d"><em>Stitch1D</em></a>.</p>
+<p>Above the processing table is a tool bar containing various actions for
+manipulating the processing table.</p>
+<p>Below the table is a progress bar, which shows the current progress of any
+processing that is in progress. And at the bottom, near the <strong>Process</strong>
+button is the processing instrument selector. The processing instrument is
+used to help identify the correct data to load when processing runs.</p>
+<p>Next to the <strong>Process</strong> button there is a checkbox which allows enabling and
+disabling output to an ipython notebook. If the checkbox is enabled, a dialog
+window will ask for a save location for the notebook after processing is
+complete. A generated notebook contains python code to repeat the processing
+steps and output relevant plots.</p>
+</div>
+<div class="section" id="tool-bar">
+<h3><a class="toc-backref" href="#id7">Tool Bar</a><a class="headerlink" href="#tool-bar" title="Permalink to this headline">¶</a></h3>
+<p>This table details the behaviour of the actions in the tool bar, from left to right.</p>
+<div class="figure">
+<a class="screenshot reference internal image-reference" href="../_images/ISIS_Reflectometry_(Polref)_rowToolBar_widget.png"><img alt="../_images/ISIS_Reflectometry_(Polref)_rowToolBar_widget.png" class="screenshot" src="../_images/ISIS_Reflectometry_(Polref)_rowToolBar_widget.png" style="width: 685px;" /></a>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Action</th>
+<th class="head">Effect</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Process</td>
+<td>Processes the selected runs, or, if no runs are selected,
+all of the runs in the table.</td>
+</tr>
+<tr class="row-odd"><td>Expand Selection</td>
+<td>Expands your selection such that any rows in the same
+group as a row you have selected are added to your
+selection.</td>
+</tr>
+<tr class="row-even"><td>Plot Selected
+Rows</td>
+<td>Creates a plot of the IvsQ workspaces generated by any of
+the selected rows.</td>
+</tr>
+<tr class="row-odd"><td>Plot Selected
+Groups</td>
+<td>Creates a plot of the stitched IvsQ workspaces generated
+by any of the selected groups.</td>
+</tr>
+<tr class="row-even"><td>Insert Row</td>
+<td>Adds a new row after the first selected row, or at the
+end of the table if no rows are selected.</td>
+</tr>
+<tr class="row-odd"><td>Delete Row</td>
+<td>Deletes any selected rows. If no rows are selected,
+nothing happens.</td>
+</tr>
+<tr class="row-even"><td>Group Rows</td>
+<td>Takes all the selected rows and places them in a group
+together, separate from any other group.</td>
+</tr>
+<tr class="row-odd"><td>Copy Rows</td>
+<td>Copies the selected rows to the clipboard. In the
+clipboard, each column&#8217;s value is separated by a tab, and
+each row is placed on a new line.</td>
+</tr>
+<tr class="row-even"><td>Cut Rows</td>
+<td>Copies the selected rows, and then deletes them.</td>
+</tr>
+<tr class="row-odd"><td>Paste Rows</td>
+<td>Pastes the contents of the clipboard into the selected
+rows. If no rows are selected, new rows are inserted.</td>
+</tr>
+<tr class="row-even"><td>Clear Rows</td>
+<td>Resets the cells in any selected rows to their initial
+value, in other words, blank.</td>
+</tr>
+<tr class="row-odd"><td>Help</td>
+<td>Opens this documentation for viewing.</td>
+</tr>
+<tr class="row-even"><td>What&#8217;s This</td>
+<td>Provides guidance on what various parts of the interface
+are for.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="columns">
+<h3><a class="toc-backref" href="#id8">Columns</a><a class="headerlink" href="#columns" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="14%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Column Title</th>
+<th class="head">Required?</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Run(s)</td>
+<td><strong>Yes</strong></td>
+<td><p class="first">Contains the sample runs to be processed.
+Runs may be given as run numbers or workspace
+names. Multiple runs may be added together by
+separating them with a &#8216;+&#8217;.</p>
+<p class="last">Example: <tt class="docutils literal"><span class="pre">1234+1235+1236</span></tt></p>
+</td>
+</tr>
+<tr class="row-odd"><td>Angle</td>
+<td>No</td>
+<td><p class="first">Contains the angle used during the run, in
+degrees. If left blank, this is set to the
+last value for <tt class="docutils literal"><span class="pre">THETA</span></tt> in the run&#8217;s sample
+log. If multiple runs were given in the Run(s)
+column, the first listed run&#8217;s sample log will
+be used.</p>
+<p class="last">Example: <tt class="docutils literal"><span class="pre">0.7</span></tt></p>
+</td>
+</tr>
+<tr class="row-even"><td>Transmission Run(s)</td>
+<td>No</td>
+<td><p class="first">Contains the transmission run(s) used to
+normalise the sample runs. To specify two
+transmission runs, separate them with a comma.
+If left blank, the sample runs will be
+normalised by monitor only.</p>
+<p class="last">Example: <tt class="docutils literal"><span class="pre">1234,1235</span></tt></p>
+</td>
+</tr>
+<tr class="row-odd"><td>Q min</td>
+<td>No</td>
+<td><p class="first">Contains the minimum value of Q to be used in
+Å<sup>−1</sup>. Data with a value of Q lower
+than this will be discarded. If left blank,
+this is set to the lowest Q value found. This
+is useful for discarding noisy data.</p>
+<p class="last">Example: <tt class="docutils literal"><span class="pre">0.1</span></tt></p>
+</td>
+</tr>
+<tr class="row-even"><td>Q max</td>
+<td>No</td>
+<td><p class="first">Contains the maximum value of Q to be used in
+Å<sup>−1</sup>. Data with a value of Q higher
+than this will be discarded. If left blank,
+this is set to the highest Q value found. This
+is useful for discarding noisy data.</p>
+<p class="last">Example: <tt class="docutils literal"><span class="pre">0.9</span></tt></p>
+</td>
+</tr>
+<tr class="row-odd"><td>dQ/Q</td>
+<td>No</td>
+<td><p class="first">Contains the resolution used when rebinning
+output workspaces. If left blank, this is
+calculated for you using the
+CalculateResolution algorithm.</p>
+<p class="last">Example: <tt class="docutils literal"><span class="pre">0.9</span></tt></p>
+</td>
+</tr>
+<tr class="row-even"><td>Scale</td>
+<td><strong>Yes</strong></td>
+<td><p class="first">Contains the factor used to scale output
+IvsQ workspaces. The IvsQ workspaces are
+scaled by <tt class="docutils literal"><span class="pre">1/i</span></tt> where i is the value of
+this column.</p>
+<p class="last">Example: <tt class="docutils literal"><span class="pre">1.0</span></tt></p>
+</td>
+</tr>
+<tr class="row-odd"><td>Group</td>
+<td><strong>Yes</strong></td>
+<td>Contains the group number used for stitching
+output workspaces. The value of this column
+determines which other rows this row&#8217;s output
+will be stitched with. All rows with the same
+group number are stitched together.</td>
+</tr>
+<tr class="row-even"><td>Options</td>
+<td>No</td>
+<td><p class="first">Contains options that allow you to override
+ReflectometryReductionOne&#8217;s properties. To
+override a property, just use the property&#8217;s
+name as a key, and the desired value as the
+value.
+Options are specified in <tt class="docutils literal"><span class="pre">key=value</span></tt> pairs,
+separated by commas. Values containing commas
+must be quoted.</p>
+<p class="last">Example: <tt class="docutils literal"><span class="pre">StrictSpectrumChecking=0,</span></tt>
+<tt class="docutils literal"><span class="pre">RegionOfDirectBeam=&quot;0,2&quot;,</span> <span class="pre">Params=&quot;1,2,3&quot;</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="search-interface">
+<h3><a class="toc-backref" href="#id9">Search Interface</a><a class="headerlink" href="#search-interface" title="Permalink to this headline">¶</a></h3>
+<div class="figure align-right">
+<a class="screenshot reference internal image-reference" href="../_images/ISIS_Reflectometry_(Polref)_groupSearchPane_widget.png"><img alt="../_images/ISIS_Reflectometry_(Polref)_groupSearchPane_widget.png" class="screenshot" src="../_images/ISIS_Reflectometry_(Polref)_groupSearchPane_widget.png" style="width: 266px;" /></a>
+</div>
+<p>To search for runs, select the instrument the runs are from, enter the id of
+the investigation the runs are part of, and click on <strong>Search</strong>.</p>
+<p>In the table below, valid runs and their descriptions will be listed. You
+can then transfer runs to the processing table by selecting the runs you
+wish to transfer, and click the <strong>Transfer</strong> button. You can also right-click
+on one of the selected runs and select <em>Transfer</em> in the context menu that
+appears.</p>
+</div>
+</div>
+</div>
+<div class="section" id="description-based-search-transfer">
+<h1>Description Based Search Transfer<a class="headerlink" href="#description-based-search-transfer" title="Permalink to this headline">¶</a></h1>
+<p>Description based search transfer uses the descriptions associated with raw files from the experiment.</p>
+<p>If a run&#8217;s description contains the text <tt class="docutils literal"><span class="pre">in</span> <span class="pre">0.7</span> <span class="pre">theta</span></tt>, or <tt class="docutils literal"><span class="pre">th=0.7</span></tt>, or
+<tt class="docutils literal"><span class="pre">th:0.7</span></tt>, then the interface will deduce that the run&#8217;s angle (also known
+as theta), was <tt class="docutils literal"><span class="pre">0.7</span></tt>, and enter this value into the angle column for you.
+This holds true for any numeric value.</p>
+<p>When multiple runs are selected and transferred simultaneously, the interface
+will attempt to organise them appropriately in the processing table. The exact
+behaviour of this is as follows:</p>
+<ul class="simple">
+<li>Any runs with the same description, excluding their theta value, will be
+placed into the same group.</li>
+<li>Any runs with the same description, including their theta value, will be
+merged into a single row, with all the runs listed in the <strong>Run(s)</strong> column
+in the format, <tt class="docutils literal"><span class="pre">123+124+125</span></tt>.</li>
+</ul>
+</div>
+<div class="section" id="measure-based-search-transfer">
+<h1>Measure Based Search Transfer<a class="headerlink" href="#measure-based-search-transfer" title="Permalink to this headline">¶</a></h1>
+<p>Measure based search transfer uses the log-values within nexus files from the experiment to assemble the batch. Since the files themselves are required, not just the overview metadata, the files must be accessible by mantid. One way of doing this is to mount the archive and set the user property <tt class="docutils literal"><span class="pre">icatDownload.mountPoint</span></tt> to your mount point. It may end up looking something like this <tt class="docutils literal"><span class="pre">icatDownload.mountPoint=/Volumes/inst$</span></tt>. Alternately, you can download the files to your local disk and simply add that directory to the managed search directories in <tt class="docutils literal"><span class="pre">Manage</span> <span class="pre">User</span> <span class="pre">Directories</span></tt>.</p>
+<ul class="simple">
+<li>Any runs with the measurement_id log, will be
+placed into the same group.</li>
+<li>Any runs with the <tt class="docutils literal"><span class="pre">same</span> <span class="pre">measurement_id</span></tt> and the same <tt class="docutils literal"><span class="pre">measurement_subid</span></tt> logs, will be merged into a single row, with all the runs listed in the <strong>Run(s)</strong> column in the format, <tt class="docutils literal"><span class="pre">123+124+125</span></tt>.</li>
+</ul>
+</div>
+<div class="section" id="failed-transfers">
+<h1>Failed transfers<a class="headerlink" href="#failed-transfers" title="Permalink to this headline">¶</a></h1>
+<p>When transferring a run from the Search table to the Processing table there may exist invalid runs. For example, if a Measure-based run has an invalid measurement id.
+In the image below we select two runs from the Search table that we wish to transfer to the processing table.</p>
+<div class="figure">
+<img alt="Selecting runs from search table to transfer to processing table" src="../_images/ISISReflectometryPolref_selecting_transfer_runs.JPG" />
+</div>
+<p>Attempting to transfer an invalid run will result in that run not being transferred to the processing table. If the transfer was not successful then that specific
+run will be highlighted in the Search table.</p>
+<div class="figure">
+<img alt="Failed transfer will be highlighted in orange, successful transfer is put into processing table" src="../_images/ISISReflectometryPolref_failed_transfer_run.JPG" />
+</div>
+<p>Hovering over the highlighted run with your cursor will allow you to see why the run was invalid.</p>
+<div class="figure">
+<img alt="Showing tooltip from failed transfer." src="../_images/ISISReflectometryPolref_tooltip_failed_run.jpg" />
+</div>
+<div class="section" id="isis-reflectomety-options">
+<span id="id1"></span><h2>Options<a class="headerlink" href="#isis-reflectomety-options" title="Permalink to this headline">¶</a></h2>
+<p>Through the options menu, a small number of options may be configured to adjust
+the behaviour of the interface.</p>
+<p>To open the options menu, click on <strong>Reflectometry -&gt; Options</strong>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="36%" />
+<col width="64%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Warn when processing all rows</td>
+<td>When the <strong>Process</strong> button is pressed with no rows
+selected, all rows will be processed.
+If this is enabled, you will be asked if you&#8217;re sure
+you want to process all rows first.</td>
+</tr>
+<tr class="row-odd"><td>Warn when processing only
+part of a group</td>
+<td>If this is enabled and you press <strong>Process</strong> with
+only a subset of a group&#8217;s rows selected, you will be
+asked if you&#8217;re sure you that&#8217;s what you intended to
+do.</td>
+</tr>
+<tr class="row-even"><td>Warn when discarding unsaved
+changes</td>
+<td>If this is enabled and you try to open an existing
+table, or start a new table, with unsaved changes to
+the current table, you will be asked if you&#8217;re sure
+you want to discard the current table.</td>
+</tr>
+<tr class="row-odd"><td>Rounding</td>
+<td>When a column is left blank, the Reflectometry
+interface will try to fill it with a sensible value
+for you. This option allows you to configure whether
+the value should be rounded, and if so, to how many
+decimal places.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="when-i-try-to-process-i-get-an-error-invalid-value-for-property-filename-list-of-str-lists">
+<h3>When I try to process I get an error: &#8220;Invalid value for property Filename (list of str lists) ...&#8221;<a class="headerlink" href="#when-i-try-to-process-i-get-an-error-invalid-value-for-property-filename-list-of-str-lists" title="Permalink to this headline">¶</a></h3>
+<p>This occurs when Mantid is unable to load a run. If the run was given as a
+workspace name, check the spelling. If the run was given as a number, check
+that the run number is correct. If the run number is incorrect, check the
+number given in the <strong>Run(s)</strong> or <strong>Transmission Run(s)</strong> columns. If the run
+number is correct, check the instrument named in the error message is correct.
+If the instrument is incorrect, check that the processing instrument selector
+(at the bottom right of the interface) is correct.</p>
+<p>If the run still isn&#8217;t loading check Mantid&#8217;s user directories are set
+correctly, and that the desired run is in one of the given directories. To
+manage the user directories, open <strong>File -&gt; Manage User Directories</strong>.</p>
+</div>
+<div class="section" id="when-i-try-to-process-i-get-an-error-invalid-key-value-pair">
+<h3>When I try to process I get an error: &#8220;Invalid key value pair, &#8216;...&#8217;&#8221;<a class="headerlink" href="#when-i-try-to-process-i-get-an-error-invalid-key-value-pair" title="Permalink to this headline">¶</a></h3>
+<p>This occurs when the contents of the options column are invalid.
+Key value pairs must be given in the form <tt class="docutils literal"><span class="pre">key</span> <span class="pre">=</span> <span class="pre">value</span></tt>, and if the value
+contains commas it <strong>must</strong> be quoted, like so: <tt class="docutils literal"><span class="pre">key</span> <span class="pre">=</span> <span class="pre">&quot;v,a,l,u,e&quot;</span></tt>.</p>
+</div>
+<div class="section" id="the-open-table-menu-doesn-t-do-anything">
+<h3>The <em>Open Table</em> menu doesn&#8217;t do anything<a class="headerlink" href="#the-open-table-menu-doesn-t-do-anything" title="Permalink to this headline">¶</a></h3>
+<p>The <strong>Open Table</strong> menu contains a list of valid table workspaces to open in the
+processing table. If a workspace is not compatible, it will not be listed. So,
+if there are no compatible workspaces the <strong>Open Table</strong> menu will be empty.</p>
+</div>
+<div class="section" id="my-ivsq-workspaces-are-not-being-stitched-correctly">
+<h3>My IvsQ workspaces are not being stitched correctly<a class="headerlink" href="#my-ivsq-workspaces-are-not-being-stitched-correctly" title="Permalink to this headline">¶</a></h3>
+<p>Stitching is controlled by the group a row is in. For stitching to occur, the
+rows must be in the same group, and be processed simultaneously.</p>
+<p>An easy way to check the runs are in the same group is to select one of the
+rows you want stitched, and then in the menu bar select <strong>Edit -&gt; Expand Selection</strong>.
+All the rows in that group will be selected. If you have another row that you
+would like to add to the group, you can do this easily by adding it to the
+selection, and then in the menu bar selecting <strong>Edit -&gt; Group Selected</strong>.</p>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/Interfaces.html">Interfaces</a> | <a class="reference external" href="../algorithms/categories/Reflectometry.html">Reflectometry</a></p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="HFIR_4Circle_Reduction.html" title="Previous Chapter: HFIR Single Crystal Reduction Interface"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; HFIR Single Crys...</span>
+    </a>
+  </li>
+  <li>
+    <a href="Indirect_Bayes.html" title="Next Chapter: Indirect Bayes"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Indirect Bayes &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

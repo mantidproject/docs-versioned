@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HFIR Single Crystal Reduction Interface</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.1.0/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.8.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="up" title="Interfaces" href="index.html" />
+    <link rel="next" title="ISIS Reflectometry (Polref) Interface" href="ISIS_Reflectometry.html" />
+    <link rel="prev" title="HFIR Powder Reduction Interface" href="HFIRPowderReduction.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.8</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      
+  <div class="section" id="hfir-single-crystal-reduction-interface">
+<h1>HFIR Single Crystal Reduction Interface<a class="headerlink" href="#hfir-single-crystal-reduction-interface" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#overview" id="id1">Overview</a></li>
+<li><a class="reference internal" href="#introduction-of-tabs" id="id2">Introduction of Tabs</a></li>
+<li><a class="reference internal" href="#converting-spice-ub-matrix-to-mantid-ub-matrix" id="id3">Converting SPICE UB matrix to Mantid UB matrix</a><ul>
+<li><a class="reference internal" href="#peak-integration-normalization" id="id4">Peak Integration: Normalization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#peak-integration-with-automatic-background-subtraction-by-integrateellipsoids" id="id5">Peak Integration with automatic background subtraction by IntegrateEllipsoids</a><ul>
+<li><a class="reference internal" href="#simple-cuboid-integration" id="id6">Simple cuboid integration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#estimating-background" id="id7">Estimating background</a></li>
+<li><a class="reference internal" href="#integrating-a-peak-in-cuboid" id="id8">Integrating a peak in cuboid</a><ul>
+<li><a class="reference internal" href="#peak-integration-with-automatic-background-subtraction-by-approximation" id="id9">Peak Integration with automatic background subtraction by approximation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#use-cases" id="id10">Use Cases</a><ul>
+<li><a class="reference internal" href="#set-up-reduction" id="id11">Set up reduction</a></li>
+<li><a class="reference internal" href="#survey-experiment" id="id12">Survey experiment</a></li>
+<li><a class="reference internal" href="#workflow-to-calculate-and-refine-ub-matrix" id="id13">Workflow to calculate and refine UB matrix</a></li>
+<li><a class="reference internal" href="#workflow-to-merge-measurements-in-scan" id="id14">Workflow to merge measurements in scan</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#limitation" id="id15">Limitation</a></li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id1">Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>HFIR single crystalreduction interface is a GUI to download, view and reduce data from
+HFIR&#8217;s four-circle single crystal diffractometer in SPICE format.</p>
+</div>
+<div class="section" id="introduction-of-tabs">
+<h2><a class="toc-backref" href="#id2">Introduction of Tabs</a><a class="headerlink" href="#introduction-of-tabs" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ol class="arabic simple">
+<li><strong>Setup and Data Access</strong>: Configure the instrument name, data server URL and directories.</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Configure the instrument name;</li>
+<li>Set up and test HB3A data server&#8217;s URL;</li>
+<li>Configure the directory to save raw data;</li>
+<li>Configure the directory to save working result;</li>
+<li>Download data from server;</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><strong>View Raw Data</strong>: View 2D image of counts on detector of one measurement.</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Plot the counts of the 256 by 256 2D detector;</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><strong>Calculate UB</strong>: Calculate UB matrix.</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Find peak in one measurement;</li>
+<li>Option to load Miller index directly from SPICE file;</li>
+<li>Calculate UB matrix;</li>
+<li>Re-index the peaks;</li>
+<li>Refine UB matrix with more than two peaks.</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li><strong>Merge Scan</strong>: Merge all the measurements in a scan.</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Merge all measuring points in a scan to an MDEventWorkspace in HKL-frame or Q-sample-frame;</li>
+<li>Allow various ways to set up UB matrix</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li><strong>Peak Integration</strong>: Integrate peaks</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Still in developmenet</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li><strong>Survey</strong>: Get experiments runs&#8217; information by scanning through all SPICE files in an experiment</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>For selected scans in an experiment, list the run (i.e., Pt.) with maximum detector counts in a specific scan;</li>
+<li>For each listed run, the information show includes detector counts and HKL</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</div>
+<div class="section" id="converting-spice-ub-matrix-to-mantid-ub-matrix">
+<h2><a class="toc-backref" href="#id3">Converting SPICE UB matrix to Mantid UB matrix</a><a class="headerlink" href="#converting-spice-ub-matrix-to-mantid-ub-matrix" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Assuming that SPICE UB matrix (3 x 3) is composed as</dt>
+<dd><ul class="first last simple">
+<li>R11, R12, R13</li>
+<li>R21, R22, R23</li>
+<li>R31, R32, R33</li>
+</ul>
+</dd>
+<dt>Then, converted to UB matrix in Mantid, it is like</dt>
+<dd><ul class="first last simple">
+<li>R11,  R12,  R13</li>
+<li>R31,  R32,  R33</li>
+<li>-R21, -R22, -R23</li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="peak-integration-normalization">
+<h3><a class="toc-backref" href="#id4">Peak Integration: Normalization</a><a class="headerlink" href="#peak-integration-normalization" title="Permalink to this headline">¶</a></h3>
+<p>Counts of neutron on any detector shall be normalized by its corresponding monitor
+count and then be multiplied by a constant specified by user.</p>
+</div>
+</div>
+<div class="section" id="peak-integration-with-automatic-background-subtraction-by-integrateellipsoids">
+<h2><a class="toc-backref" href="#id5">Peak Integration with automatic background subtraction by IntegrateEllipsoids</a><a class="headerlink" href="#peak-integration-with-automatic-background-subtraction-by-integrateellipsoids" title="Permalink to this headline">¶</a></h2>
+<p>There is no existing algorithm in Mantid to integrate ellipsoid because1
+algorithm <em>IntegrateEllipsoids</em> works only for event in unit as time-of-flight.</p>
+<p>So far, there is only one algorithm is implemented to integrate peaks for HB3A.</p>
+<div class="section" id="simple-cuboid-integration">
+<h3><a class="toc-backref" href="#id6">Simple cuboid integration</a><a class="headerlink" href="#simple-cuboid-integration" title="Permalink to this headline">¶</a></h3>
+<p>This is a simple algorithm for approximate the integrated peak intensity.</p>
+<p>Measuring one peak usually contains around 20 Pt. in a same scan.
+In most of the cases, the first and last several measurements (called as <em>Pt</em> in SPICE) are
+background.
+Therefore, the background for per measurement can be estimated by averaging the
+summed number of counts normalized by either monitor counts or measuring time.</p>
+</div>
+</div>
+<div class="section" id="estimating-background">
+<h2><a class="toc-backref" href="#id7">Estimating background</a><a class="headerlink" href="#estimating-background" title="Permalink to this headline">¶</a></h2>
+<p>For each measurment, the background <img class="math" src="../_images/math/28a803a718d3617ce885ba8198f2b27f990473c0.png" alt="B_i" style="vertical-align: -3px"/> is calculated as</p>
+<p>..math.. B_i = frac{sum^{(pt)}_{{d_i}}n_{d_i}}{F^{(a)}_{d_i}}</p>
+<p>where <img class="math" src="../_images/math/344a33f3125920fa7b1422319a2e7e802ecfd741.png" alt="F^{(a)}" style="vertical-align: 0px"/> is the normlization of either time or beam monitor counts,
+and <img class="math" src="../_images/math/2626da0fb5b6ec4234fd68b6dccd80da74beb0bd.png" alt="n_{d_i}" style="vertical-align: -5px"/> is the neutron counts of measumrent <img class="math" src="../_images/math/b47e54d961f07bb0f32a36d342618e4fb6e04072.png" alt="d_i" style="vertical-align: -3px"/>.</p>
+<p>Then the estimation of the normalized background for each measurement is</p>
+<p>..math.. B^{(e)} = sum_{{P_i}}frac{B_i}{N}</p>
+<p>where <img class="math" src="../_images/math/8c45b38d633fb6de83fc7087c4db116a5565752a.png" alt="N" style="vertical-align: 0px"/> is the number of measurements used to calculated background.</p>
+</div>
+<div class="section" id="integrating-a-peak-in-cuboid">
+<h2><a class="toc-backref" href="#id8">Integrating a peak in cuboid</a><a class="headerlink" href="#integrating-a-peak-in-cuboid" title="Permalink to this headline">¶</a></h2>
+<p>In the Q-space, by masking each measurement, it is assumed that the peak&#8217;s intensity
+is very close to the number of counts in the unmasked cuboid normalized either by
+measuring time or beam monitor counts with background removed.</p>
+<p>..math.. I = sum_{i} frac{n_i}{F_i} - B^{(e)}</p>
+<p>where <img class="math" src="../_images/math/fefcc06af35e5164063c3dad0bab21e1bda8c362.png" alt="n_i" style="vertical-align: -3px"/> is the counts of Pt i in the region of interest,
+<img class="math" src="../_images/math/b0780a259904b474ca97f290548b5a91ce9be48c.png" alt="F_i" style="vertical-align: -3px"/> is the normalization factor of Pt i,
+and <cite>B^{(e)}</cite> is the estimated background per Pt with the same
+normalization type of <img class="math" src="../_images/math/b0780a259904b474ca97f290548b5a91ce9be48c.png" alt="F_i" style="vertical-align: -3px"/>.</p>
+<div class="section" id="peak-integration-with-automatic-background-subtraction-by-approximation">
+<h3><a class="toc-backref" href="#id9">Peak Integration with automatic background subtraction by approximation</a><a class="headerlink" href="#peak-integration-with-automatic-background-subtraction-by-approximation" title="Permalink to this headline">¶</a></h3>
+<p>TODO/NOW - Polish this section!</p>
+<p>This is an easy approximation to integrate a peak with background subtraction
+by specified region of interest.</p>
+<p>The pre-requisit is that all events are normalized by monitor counts
+and scaled up by same factor (e.g, 1500).</p>
+<ol class="arabic simple">
+<li>Set up region of interest
+Define region of interest on the detector.</li>
+<li>Mask detectors
+Mask all the detectors out of the region of interest, which is defined by the pixel ID of its upper-left corner and lower-right corner.</li>
+<li>Integrate counts inside region of interest
+Bla bla bla</li>
+<li>Estimate background</li>
+<li>Background subtraction
+Subtract the background from detector&#8217;s count.  If the result is negative, keep it as negative.</li>
+</ol>
+</div>
+</div>
+<div class="section" id="use-cases">
+<h2><a class="toc-backref" href="#id10">Use Cases</a><a class="headerlink" href="#use-cases" title="Permalink to this headline">¶</a></h2>
+<p>Here are some use cases that can be used as examples.</p>
+<div class="section" id="set-up-reduction">
+<h3><a class="toc-backref" href="#id11">Set up reduction</a><a class="headerlink" href="#set-up-reduction" title="Permalink to this headline">¶</a></h3>
+<p>The first step to reduce data with 4-Circle GUI is to set up the reduction environment.
+Reduction cannot work correctly if this step is <strong>SKIPPED</strong>.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Go to tab <em>Setup &amp; Data Access</em>;</li>
+<li>Set up <em>Data Directory</em> and <em>Working Directory</em>;</li>
+<li>An alternative way to step 2 is to push button <em>Load Default</em>;</li>
+<li>Push button <em>Apply</em>.  Mantid thus checks whether the setup, including source data file&#8217;s URL, data directory and working directory are valid. Be noticed that the check of URL may return <strong>timeout</strong> error.  It might be a false alarm.  You might push the <em>Apply</em> button few more times.</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="survey-experiment">
+<h3><a class="toc-backref" href="#id12">Survey experiment</a><a class="headerlink" href="#survey-experiment" title="Permalink to this headline">¶</a></h3>
+<p>Usually if it is the first time to reduce data for an experiment, it is
+recommended to go through the whole experiment to gather some information.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Go to tab <em>Survey</em>;</li>
+<li>Set up experiment number on the top of application window;</li>
+<li>Input the range of the scan numbers for survey. Leaving them blank will result in going through all scans of the experiment;</li>
+<li>Click button <em>Survey</em>;</li>
+<li>It might take a while to load and scan all the SPICE files belonged to an individual experiment.  After it is finished, the result will be shown in the table.</li>
+<li>Save the survey result for future by clicking button <em>Save</em>;</li>
+<li>Select a row, and click button <em>View Peak</em>, application will switch to tab <em>View Raw Data</em> automatically and set the scan and Pt number from the selected row.</li>
+</ol>
+</div></blockquote>
+</div>
+<div class="section" id="workflow-to-calculate-and-refine-ub-matrix">
+<h3><a class="toc-backref" href="#id13">Workflow to calculate and refine UB matrix</a><a class="headerlink" href="#workflow-to-calculate-and-refine-ub-matrix" title="Permalink to this headline">¶</a></h3>
+<p>Here is a typical use case to calculate UB matrix after initial setup.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>User specifies <em>Experiment</em> and pushes button <em>Set</em></li>
+<li>Users may do a new survey or load a survey result file in tab <em>Survey</em>;</li>
+<li>User enters tab <em>View Raw Data</em> and inputs scan number and list all the measuring points (Pt.)</li>
+<li>User views all the measurements</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>User finds out the measurement with the strongest reflection and push button use</li>
+<li>Alternatively, user can use the survey result to find out the Pt. with the maximum counts of the scan</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li>GUI shifts to tab <em>Calculate UB</em> automatically</li>
+<li>User pushes button <em>Find Peak</em> with checking <em>Load HKL from file</em></li>
+<li>GUI finds the peak center and load HKL</li>
+<li>User pushes button <em>Add peak</em> to add the peak to table</li>
+<li>User repeats step 2 to 9 to add other peaks</li>
+<li>User select the peaks that are linearly independent and pushes <em>Calcualte UB</em></li>
+<li>GUI calculates UB matrix and show the result</li>
+<li>User may push <em>Index peak</em> to use the calculated UB matrix to index peaks in the table to check UB matrix;</li>
+<li>User may refine the UB matrix and thus lattice parameters</li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li>user adds more peaks to the UB peak table;</li>
+<li>user selects at least 3 non-degenerate peaks;</li>
+<li>user clicks button <em>Refine</em>;</li>
+<li>application refines UB matrix and outputs the refined UB matrix, refined lattice parameters and their error.</li>
+</ol>
+</div></blockquote>
+</div></blockquote>
+</div>
+<div class="section" id="workflow-to-merge-measurements-in-scan">
+<h3><a class="toc-backref" href="#id14">Workflow to merge measurements in scan</a><a class="headerlink" href="#workflow-to-merge-measurements-in-scan" title="Permalink to this headline">¶</a></h3>
+<p>Here is a typical use case to merge all the measuring points (Pt.) in a scan</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>User specifies <em>Experiment</em> and pushes button <em>Set</em></li>
+<li>User enters tab <em>Merge Scan</em></li>
+<li>User specifies the UB matrix either by <em>From tab Calculate UB</em> or by entering the values to text editor</li>
+<li>User pushes button <em>Set</em></li>
+<li>User specifies the frame in which the merged data will be in. If the target frame is Q-Sample-Sapce, then there is no need to specify UB matrix</li>
+<li>User specifies the scan numbers and push button <em>Add</em></li>
+<li>User specifies the base name for the output MDEventWorkspaces</li>
+<li>User pushes button <em>Process</em></li>
+<li>User goes to MantidPlot to view the merged scan by SliceView or Vates.</li>
+</ol>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="limitation">
+<h2><a class="toc-backref" href="#id15">Limitation</a><a class="headerlink" href="#limitation" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>HFIR single crystal reduction GUI supports for instrument HB3A only from release 3.5.0 and nightly.</li>
+</ul>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="HFIRPowderReduction.html" title="Previous Chapter: HFIR Powder Reduction Interface"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; HFIR Powder Redu...</span>
+    </a>
+  </li>
+  <li>
+    <a href="ISIS_Reflectometry.html" title="Next Chapter: ISIS Reflectometry (Polref) Interface"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">ISIS Reflectomet... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ConvertCWSDExpToMomentum v1</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.11.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../index.html" />
+    <link rel="next" title="ConvertCWSDMDtoHKL v1" href="ConvertCWSDMDtoHKL-v1.html" />
+    <link rel="prev" title="ConvertCWPDMDToSpectra v1" href="ConvertCWPDMDToSpectra-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>3.11</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://www.mantidproject.org/Documentation">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="convertcwsdexptomomentum-v1">
+<span id="algm-convertcwsdexptomomentum"></span><span id="algm-convertcwsdexptomomentum-v1"></span><h1>ConvertCWSDExpToMomentum v1<a class="headerlink" href="#convertcwsdexptomomentum-v1" title="Permalink to this headline">¶</a></h1>
+<div class="figure align-right" id="index-0">
+<a class="screenshot reference internal image-reference" href="../_images/ConvertCWSDExpToMomentum-v1_dlg.png"><img alt="../_images/ConvertCWSDExpToMomentum-v1_dlg.png" class="screenshot" src="../_images/ConvertCWSDExpToMomentum-v1_dlg.png" style="width: 256px;" /></a>
+<p class="caption"><strong>ConvertCWSDExpToMomentum</strong> dialog.</p>
+</div>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#summary" id="id1">Summary</a></li>
+<li><a class="reference internal" href="#properties" id="id2">Properties</a></li>
+<li><a class="reference internal" href="#description" id="id3">Description</a><ul>
+<li><a class="reference internal" href="#outline-of-algorithm" id="id4">Outline of algorithm</a></li>
+<li><a class="reference internal" href="#input-workspaces" id="id5">Input Workspaces</a></li>
+<li><a class="reference internal" href="#outputs" id="id6">Outputs</a><ul>
+<li><a class="reference internal" href="#mdevent" id="id7">MDEvent</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#combine-experiment-into-one-mdeventworkspace" id="id8">Combine Experiment Into One MDEventWorkspace</a><ul>
+<li><a class="reference internal" href="#virtual-instrument" id="id9">Virtual instrument</a></li>
+<li><a class="reference internal" href="#mdeventworkspace" id="id10">MDEventWorkspace</a></li>
+<li><a class="reference internal" href="#inconsistency-between-using-virtual-instrument-and-copying-instrument" id="id11">Inconsistency between using virtual instrument and copying instrument</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#use-cases" id="id12">Use cases</a></li>
+<li><a class="reference internal" href="#usage" id="id13">Usage</a></li>
+<li><a class="reference internal" href="#source" id="id14">Source</a></li>
+</ul>
+</div>
+<div class="section" id="summary">
+<h2><a class="toc-backref" href="#id1">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Load and convert a set of files in an HB3A experiment.</p>
+</div>
+<div class="section" id="properties">
+<h2><a class="toc-backref" href="#id2">Properties</a><a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="3%" />
+<col width="20%" />
+<col width="6%" />
+<col width="58%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Direction</th>
+<th class="head">Type</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>InputWorkspace</td>
+<td>Input</td>
+<td><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><em>TableWorkspace</em></a></td>
+<td><em>Mandatory</em></td>
+<td>Name of table workspace for data file names in the experiment.</td>
+</tr>
+<tr class="row-odd"><td>InstrumentFilename</td>
+<td>Input</td>
+<td>string</td>
+<td>&nbsp;</td>
+<td>Allowed extensions: [&#8216;.xml&#8217;]</td>
+</tr>
+<tr class="row-even"><td>DetectorSampleDistanceShift</td>
+<td>Input</td>
+<td>number</td>
+<td>0</td>
+<td>Amount of shift in sample-detector distance from 0.3750 meter.</td>
+</tr>
+<tr class="row-odd"><td>DetectorCenterXShift</td>
+<td>Input</td>
+<td>number</td>
+<td>0</td>
+<td>Amount of shift of detector center in X-direction from (115, 128).</td>
+</tr>
+<tr class="row-even"><td>DetectorCenterYShift</td>
+<td>Input</td>
+<td>number</td>
+<td>0</td>
+<td>Amount of shift of detector center in Y-direction from (115, 128).</td>
+</tr>
+<tr class="row-odd"><td>UserDefinedWavelength</td>
+<td>Input</td>
+<td>number</td>
+<td><em>Optional</em></td>
+<td>User defined wave length if it is specified.</td>
+</tr>
+<tr class="row-even"><td>CreateVirtualInstrument</td>
+<td>Input</td>
+<td>boolean</td>
+<td>False</td>
+<td>Flag to create virtual instrument.</td>
+</tr>
+<tr class="row-odd"><td>DetectorTableWorkspace</td>
+<td>Input</td>
+<td><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><em>TableWorkspace</em></a></td>
+<td>&nbsp;</td>
+<td>Name of table workspace containing all the detectors.</td>
+</tr>
+<tr class="row-even"><td>OutputWorkspace</td>
+<td>Output</td>
+<td><a class="reference internal" href="../concepts/MDWorkspace.html#mdworkspace"><em>MDEventWorkspace</em></a></td>
+<td><em>Mandatory</em></td>
+<td>Name of MDEventWorkspace containing all experimental data.</td>
+</tr>
+<tr class="row-odd"><td>SourcePosition</td>
+<td>Input</td>
+<td>dbl list</td>
+<td>&nbsp;</td>
+<td>A vector of 3 doubles for position of source.</td>
+</tr>
+<tr class="row-even"><td>SamplePosition</td>
+<td>Input</td>
+<td>dbl list</td>
+<td>&nbsp;</td>
+<td>A vector of 3 doubles for position of sample.</td>
+</tr>
+<tr class="row-odd"><td>PixelDimension</td>
+<td>Input</td>
+<td>dbl list</td>
+<td>&nbsp;</td>
+<td>A vector of 8 doubles to determine a cubic pixel&#8217;s size.</td>
+</tr>
+<tr class="row-even"><td>IsBaseName</td>
+<td>Input</td>
+<td>boolean</td>
+<td>True</td>
+<td>It is specified as true if the data file names listed in InputWorkspace are base name without directory.</td>
+</tr>
+<tr class="row-odd"><td>BackgroundWorkspace</td>
+<td>Input</td>
+<td><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><em>MatrixWorkspace</em></a></td>
+<td>&nbsp;</td>
+<td>Name of optional background workspace.</td>
+</tr>
+<tr class="row-even"><td>Directory</td>
+<td>Input</td>
+<td>string</td>
+<td>&nbsp;</td>
+<td>Directory where data files are if InputWorkspace gives data file name as the base file name as indicated by &#8216;IsBaseName&#8217;.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="description">
+<h2><a class="toc-backref" href="#id3">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>This algorithms is to convert an experiment done on reactor-based four-circle instrument
+(such as HFIR HB3A) to a MDEventWorkspace with each MDEvent in momentum space.</p>
+<p>In this algorithm&#8217;s name, ConvertCWSDToMomentum, <em>CW</em> stands for constant wave
+(reactor-source instrument); <em>SD</em> stands for single crystal diffraction.</p>
+<p>This algorithm takes ??? as inputs.</p>
+<p>Futhermore, the unit of the output matrix workspace can be converted to
+momentum transfer (Q).</p>
+<div class="section" id="outline-of-algorithm">
+<h3><a class="toc-backref" href="#id4">Outline of algorithm</a><a class="headerlink" href="#outline-of-algorithm" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Create output workspace</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Build a virtual instrument, requiring<ul>
+<li>position of source</li>
+<li>position of sample</li>
+<li>detector ID, position, detector size of pixels</li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Read in data via table workspace</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>From each row, (1) file name and (2) starting detector ID are read in.</li>
+<li>Detector position in (virtual) instrument of MDEventWorkspace is compared with the position in MatrixWorkspace</li>
+<li>Momentum is calcualted by goniometry values</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="input-workspaces">
+<h3><a class="toc-backref" href="#id5">Input Workspaces</a><a class="headerlink" href="#input-workspaces" title="Permalink to this headline">¶</a></h3>
+<p>Two TableWorkspaces, which contain experiment information, are required.</p>
+<p><strong>InputWorkspace</strong> is a TableWorkspace containing the data files names to be loaded for the experiment.
+It is required to have 4 columns.
+They are <em>Scan</em>, <em>Pt</em>, <em>Filename</em> and <em>StartDetID</em> respectively.</p>
+<p>A typical HB3A experiment consists of multiple scans, each of which contains multiple measurement point (i.e., Pt).
+<em>FileName</em> is the XML data file for 2D detector information for a specific Scan/Pt pair.
+<em>StartDetID</em> is the starting detector ID of a specific Scan/Pt mapped to the virtual instrument.</p>
+<p><strong>DetectorTableWorkspace</strong> is a TableWorkspace that list the parameters of all detector pixels belonged
+to the virtual instrument.
+The parameters include detector ID in virtual instrument, detector&#8217;s position in cartesian coordinate,
+and detector&#8217;s original detector ID.</p>
+</div>
+<div class="section" id="outputs">
+<h3><a class="toc-backref" href="#id6">Outputs</a><a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h3>
+<p>The output is an MDEventWorkspace that stores the data of an HB3A experiment.
+Every non-zero count recorded by detector is converted to an MDEvent in the
+output workspace.</p>
+<div class="section" id="mdevent">
+<h4><a class="toc-backref" href="#id7">MDEvent</a><a class="headerlink" href="#mdevent" title="Permalink to this headline">¶</a></h4>
+<p>Each MDEvent in output MDEventWorkspace contain
+* <em>Kx</em>
+* <em>Ky</em>
+* <em>Kz</em>
+* Signal
+* Error
+* Detector ID
+* Run Number</p>
+</div>
+</div>
+</div>
+<div class="section" id="combine-experiment-into-one-mdeventworkspace">
+<h2><a class="toc-backref" href="#id8">Combine Experiment Into One MDEventWorkspace</a><a class="headerlink" href="#combine-experiment-into-one-mdeventworkspace" title="Permalink to this headline">¶</a></h2>
+<p>One typical HB3A (reactor-based four-circle diffractometer) experiment consists of
+a set of scans, each of which contains multiple experiment point (labeled as <em>Pt.</em> in SPICE).</p>
+<p>Each experiment point is independent to the others.
+They can have various detector positions, goniometer setup and even sample environment setup.</p>
+<p>In order to integrate them into an organized data structure, i.e., <em>MDEventWorkspace</em>,
+a virtual instrument is built in the algorithm.</p>
+<div class="section" id="virtual-instrument">
+<h3><a class="toc-backref" href="#id9">Virtual instrument</a><a class="headerlink" href="#virtual-instrument" title="Permalink to this headline">¶</a></h3>
+<p>A virtual instrument is built in the algorithm.
+In this virtual instrument, the number of detectors and their position are determined
+by the number of individual detector&#8217;s positions in the <em>experiment</em>.</p>
+</div>
+<div class="section" id="mdeventworkspace">
+<h3><a class="toc-backref" href="#id10">MDEventWorkspace</a><a class="headerlink" href="#mdeventworkspace" title="Permalink to this headline">¶</a></h3>
+<p>There is only one <em>virtual</em> instrument and <em>N</em> ExperimentInfo.
+<em>N</em> is the total number of experiment points in the <em>experiment</em>.</p>
+</div>
+<div class="section" id="inconsistency-between-using-virtual-instrument-and-copying-instrument">
+<h3><a class="toc-backref" href="#id11">Inconsistency between using virtual instrument and copying instrument</a><a class="headerlink" href="#inconsistency-between-using-virtual-instrument-and-copying-instrument" title="Permalink to this headline">¶</a></h3>
+<p>It is found that the results, i.e., the peak&#8217;s position in sample-momentum
+space, by FindPeaksMD, are different betweent the MDEventWorkspaces
+output by this algorithm with copying instrument or creating virtual instrument.</p>
+<p>It is caused by the difference of the instruments in the MDEventWorkspace.
+The native HB3A&#8217;s detector is of type <em>RectangularDetector</em>,
+while the virtual instrument&#8217;s detector is just of class <em>ComAssembly</em>.</p>
+<p>FindPeaksMD calculates the centre of the mass for peak centre,
+and then locates the nearest pixel of the peak center
+and re-define the position of the pixel as peak center.</p>
+<p>For virtual instrument, CompAssembly::testIntersectionWithChildren()
+is used to find the pixel&#8217;s position;
+while for rectangular detector, RectangularDetector::testIntersectionWithChildren()
+is used.
+Due to the difference in algorithm, there is slightly difference between
+the position of the pixel found.</p>
+</div>
+</div>
+<div class="section" id="use-cases">
+<h2><a class="toc-backref" href="#id12">Use cases</a><a class="headerlink" href="#use-cases" title="Permalink to this headline">¶</a></h2>
+<p>It is found that creating an instrument with tens of thousands detectors is very
+time consuming in Mantid.
+It is caused by creating a map upon these detectors.
+With this generation of Mantid, there is no simple solution for it.</p>
+<p>For HB3A, there are usually <img class="math" src="../_images/math/8e9bb7fd3766daf063d69d9836ac5185a40a45a7.png" alt="2\theta" style="vertical-align: 0px"/> scan, <img class="math" src="../_images/math/2250acb05b0e6780be4be1a2effa3670e4c8f882.png" alt="\omega" style="vertical-align: 0px"/> scan and <img class="math" src="../_images/math/31474b06c59f21db91bcb3c8a425561a2e44a583.png" alt="\phi" style="vertical-align: -4px"/>.
+Only the <img class="math" src="../_images/math/8e9bb7fd3766daf063d69d9836ac5185a40a45a7.png" alt="2\theta" style="vertical-align: 0px"/> scan requires to create virtual instrument,
+while the MDEventWorkspace can be created by copying instrument instance
+from parent MatrixWorkspace for the other type of scans.</p>
+<p>Therefore, it is suggested to do <img class="math" src="../_images/math/2250acb05b0e6780be4be1a2effa3670e4c8f882.png" alt="\omega" style="vertical-align: 0px"/> and <img class="math" src="../_images/math/31474b06c59f21db91bcb3c8a425561a2e44a583.png" alt="\phi" style="vertical-align: -4px"/> scans for HB3A
+with 2D angular detector.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id13">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p><strong>Example - convert an HB3A&#8217;s experiment to MDWorkspace in sample momentum workspae and creating virtual instrument</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Create input table workspaces for experiment information and virtual instrument parameters</span>
+<span class="n">CollectHB3AExperimentInfo</span><span class="p">(</span><span class="n">ExperimentNumber</span><span class="o">=</span><span class="s">&#39;355&#39;</span><span class="p">,</span> <span class="n">ScanList</span><span class="o">=</span><span class="s">&#39;11&#39;</span><span class="p">,</span> <span class="n">PtLists</span><span class="o">=</span><span class="s">&#39;-1,11&#39;</span><span class="p">,</span>
+    <span class="n">DataDirectory</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">GenerateVirtualInstrument</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;ExpInfoTable&#39;</span><span class="p">,</span> <span class="n">DetectorTableWorkspace</span><span class="o">=</span><span class="s">&#39;VirtualInstrumentTable&#39;</span><span class="p">)</span>
+
+<span class="c"># Convert to MDWorkspace</span>
+<span class="n">ConvertCWSDExpToMomentum</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;ExpInfoTable&#39;</span><span class="p">,</span> <span class="n">DetectorTableWorkspace</span><span class="o">=</span><span class="s">&#39;VirtualInstrumentTable&#39;</span><span class="p">,</span>
+    <span class="n">CreateVirtualInstrument</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;QSampleMD&#39;</span><span class="p">,</span> <span class="n">SourcePosition</span><span class="o">=</span><span class="s">&#39;0,0,2&#39;</span><span class="p">,</span> <span class="n">SamplePosition</span><span class="o">=</span><span class="s">&#39;0,0,0&#39;</span><span class="p">,</span> <span class="n">PixelDimension</span><span class="o">=</span><span class="s">&#39;1,2,2,3,3,4,3,3&#39;</span><span class="p">,</span>
+    <span class="n">Directory</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+
+<span class="c"># Find peak in the MDEventWorkspace</span>
+<span class="n">FindPeaksMD</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;QSampleMD&#39;</span><span class="p">,</span> <span class="n">DensityThresholdFactor</span><span class="o">=</span><span class="mf">0.10000000000000001</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;PeakTable&#39;</span><span class="p">)</span>
+
+<span class="c"># Examine</span>
+<span class="n">mdws</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&#39;QSampleMD&#39;</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&#39;Output MDEventWorkspace has </span><span class="si">%d</span><span class="s"> events.&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">mdws</span><span class="o">.</span><span class="n">getNEvents</span><span class="p">())</span>
+<span class="n">peakws</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&#39;PeakTable&#39;</span><span class="p">]</span>
+<span class="k">print</span>  <span class="s">&#39;There are </span><span class="si">%d</span><span class="s"> peaks found in output MDWorkspace&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">peakws</span><span class="o">.</span><span class="n">getNumberPeaks</span><span class="p">())</span>
+<span class="n">peak</span> <span class="o">=</span> <span class="n">peakws</span><span class="o">.</span><span class="n">getPeak</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">qsample</span> <span class="o">=</span> <span class="n">peak</span><span class="o">.</span><span class="n">getQSampleFrame</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&#39;In Q-sample frame, center of peak 0 is at (</span><span class="si">%.5f</span><span class="s">, </span><span class="si">%.5f</span><span class="s">, </span><span class="si">%.5f</span><span class="s">) at detector with ID </span><span class="si">%d</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span>
+    <span class="n">qsample</span><span class="o">.</span><span class="n">X</span><span class="p">(),</span> <span class="n">qsample</span><span class="o">.</span><span class="n">Y</span><span class="p">(),</span> <span class="n">qsample</span><span class="o">.</span><span class="n">Z</span><span class="p">(),</span> <span class="n">peak</span><span class="o">.</span><span class="n">getDetectorID</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>Output MDEventWorkspace has 397 events.
+There are 1 peaks found in output MDWorkspace
+In Q-sample frame, center of peak 0 is at (-6.93624, -0.08360, 8.16733) at detector with ID 35723
+</pre></div>
+</div>
+<p><strong>Example - convert an HB3A experiment to MDEventWorkspace by copying instrument.:</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Create input table workspaces for experiment information and virtual instrument parameters</span>
+<span class="n">CollectHB3AExperimentInfo</span><span class="p">(</span><span class="n">ExperimentNumber</span><span class="o">=</span><span class="s">&#39;355&#39;</span><span class="p">,</span> <span class="n">ScanList</span><span class="o">=</span><span class="s">&#39;11&#39;</span><span class="p">,</span> <span class="n">PtLists</span><span class="o">=</span><span class="s">&#39;-1,11&#39;</span><span class="p">,</span>
+    <span class="n">DataDirectory</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="n">GenerateVirtualInstrument</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;ExpInfoTable&#39;</span><span class="p">,</span> <span class="n">DetectorTableWorkspace</span><span class="o">=</span><span class="s">&#39;VirtualInstrumentTable&#39;</span><span class="p">)</span>
+
+<span class="c"># Convert to MDWorkspace</span>
+<span class="n">ConvertCWSDExpToMomentum</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;ExpInfoTable&#39;</span><span class="p">,</span>
+    <span class="n">CreateVirtualInstrument</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;QSampleMD&#39;</span><span class="p">,</span> <span class="n">Directory</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+
+<span class="c"># Find peak in the MDEventWorkspace</span>
+<span class="n">FindPeaksMD</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s">&#39;QSampleMD&#39;</span><span class="p">,</span> <span class="n">DensityThresholdFactor</span><span class="o">=</span><span class="mf">0.10000000000000001</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s">&#39;PeakTable&#39;</span><span class="p">)</span>
+
+<span class="c"># Examine</span>
+<span class="n">mdws</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&#39;QSampleMD&#39;</span><span class="p">]</span>
+<span class="k">print</span> <span class="s">&#39;Output MDEventWorkspace has </span><span class="si">%d</span><span class="s"> events.&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">mdws</span><span class="o">.</span><span class="n">getNEvents</span><span class="p">())</span>
+<span class="n">peakws</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s">&#39;PeakTable&#39;</span><span class="p">]</span>
+<span class="k">print</span>  <span class="s">&#39;There are </span><span class="si">%d</span><span class="s"> peaks found in output MDWorkspace&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">peakws</span><span class="o">.</span><span class="n">getNumberPeaks</span><span class="p">())</span>
+<span class="n">peak</span> <span class="o">=</span> <span class="n">peakws</span><span class="o">.</span><span class="n">getPeak</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">qsample</span> <span class="o">=</span> <span class="n">peak</span><span class="o">.</span><span class="n">getQSampleFrame</span><span class="p">()</span>
+<span class="k">print</span> <span class="s">&#39;In Q-sample frame, center of peak 0 is at (</span><span class="si">%.5f</span><span class="s">, </span><span class="si">%.5f</span><span class="s">, </span><span class="si">%.5f</span><span class="s">) at detector with ID </span><span class="si">%d</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span>
+    <span class="n">qsample</span><span class="o">.</span><span class="n">X</span><span class="p">(),</span> <span class="n">qsample</span><span class="o">.</span><span class="n">Y</span><span class="p">(),</span> <span class="n">qsample</span><span class="o">.</span><span class="n">Z</span><span class="p">(),</span> <span class="n">peak</span><span class="o">.</span><span class="n">getDetectorID</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none"><div class="highlight"><pre>Output MDEventWorkspace has 397 events.
+There are 1 peaks found in output MDWorkspace
+In Q-sample frame, center of peak 0 is at (-3.58246, -4.40802, -3.06320) at detector with ID 32881
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/Algorithms.html">Algorithms</a> | <a class="reference external" href="categories/Diffraction/ConstantWavelength.html">Diffraction\ConstantWavelength</a> | <a class="reference external" href="categories/DataHandling/Text.html">DataHandling\Text</a></p>
+</div>
+<div class="section" id="source">
+<h2><a class="toc-backref" href="#id14">Source</a><a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/2f15ec50de5065d8b6a032a915ac44d99f4a8835/Framework/MDAlgorithms/src/ConvertCWSDExpToMomentum.cpp">ConvertCWSDExpToMomentum.cpp</a></p>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/2f15ec50de5065d8b6a032a915ac44d99f4a8835/Framework/MDAlgorithms/inc/MantidMDAlgorithms/ConvertCWSDExpToMomentum.h">ConvertCWSDExpToMomentum.h</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="ConvertCWPDMDToSpectra-v1.html" title="Previous Chapter: ConvertCWPDMDToSpectra v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; ConvertCWPDMDToS...</span>
+    </a>
+  </li>
+  <li>
+    <a href="ConvertCWSDMDtoHKL-v1.html" title="Next Chapter: ConvertCWSDMDtoHKL v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">ConvertCWSDMDtoH... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

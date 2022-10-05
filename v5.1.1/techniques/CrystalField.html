@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Crystal Field</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '5.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Data reduction for ILL’s direct geometry instruments" href="DirectILL.html" />
+    <link rel="prev" title="Calibration Implementation Details" href="Calibration_implementation.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>5.1</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="crystal-field">
+<h1>Crystal Field<a class="headerlink" href="#crystal-field" title="Permalink to this headline">¶</a></h1>
+<p>Mantid supports the calculation and fitting of inelastic neutron scattering (INS) measurements of transitions between crystal field (or crystalline electric field) energy levels. The scientific background is summarised in the <a class="reference internal" href="../concepts/CrystalStructureAndReflections.html#crystal-structure-and-reflections"><span class="std std-ref">concept page</span></a> whilst the syntax of the Python commands used is described in the <a class="reference internal" href="../interfaces/Crystal Field Python Interface.html#crystal-field-python-interface"><span class="std std-ref">interface page</span></a></p>
+<p>This page contains specific worked examples. The data files can be found <a class="reference external" href="https://github.com/mducle/cf_examples/raw/master/cf_examples_data.zip">here</a>. Please download and unzip this into a folder which is on your Mantid path (set using the “Manage User Directories” menu item).</p>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#fitting-ins-spectrum" id="id1">Fitting INS spectrum</a></li>
+<li><a class="reference internal" href="#fitting-with-resolution-function" id="id2">Fitting with resolution function</a></li>
+<li><a class="reference internal" href="#fitting-magnetic-susceptibility" id="id3">Fitting magnetic susceptibility</a></li>
+<li><a class="reference internal" href="#fitting-multiple-ins-spectra" id="id4">Fitting multiple INS spectra</a></li>
+</ul>
+</div>
+<div class="section" id="fitting-ins-spectrum">
+<h2><a class="toc-backref" href="#id1">Fitting INS spectrum</a><a class="headerlink" href="#fitting-ins-spectrum" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">CrystalField</span> <span class="kn">import</span> <span class="n">CrystalField</span><span class="p">,</span> <span class="n">CrystalFieldFit</span>
+
+<span class="n">data_ws1</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;NdOs2Al10_5K35meV_Ecut_0to3ang_bp15V1.xye&#39;</span><span class="p">)</span>
+
+<span class="c1"># Set up the crystal field model.</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s1">&#39;Nd&#39;</span><span class="p">,</span> <span class="s1">&#39;C2v&#39;</span><span class="p">,</span> <span class="n">Temperature</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">FWHM</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">B20</span><span class="o">=</span><span class="mf">0.19</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">0.11</span><span class="p">,</span> <span class="n">B40</span><span class="o">=-</span><span class="mf">0.0004</span><span class="p">,</span> <span class="n">B42</span><span class="o">=-</span><span class="mf">0.002</span><span class="p">,</span> <span class="n">B44</span><span class="o">=-</span><span class="mf">0.012</span><span class="p">,</span> <span class="n">B60</span><span class="o">=</span><span class="mf">5.e-05</span><span class="p">,</span> <span class="n">B62</span><span class="o">=</span><span class="mf">0.00054</span><span class="p">,</span> <span class="n">B64</span><span class="o">=-</span><span class="mf">0.0006</span><span class="p">,</span> <span class="n">B66</span><span class="o">=</span><span class="mf">0.0008</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">PeakShape</span> <span class="o">=</span> <span class="s1">&#39;Lorentzian&#39;</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">IntensityScaling</span> <span class="o">=</span> <span class="mi">2</span>   <span class="c1"># Scale factor if data is not in absolute units (mbarn/sr/f.u./meV), will be fitted.</span>
+
+<span class="c1"># Runs the fit</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">data_ws1</span><span class="p">,</span><span class="n">MaxIterations</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">fit</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Plots the data and print fitted parameters</span>
+<span class="n">plotSpectrum</span><span class="p">(</span><span class="s1">&#39;fit_Workspace&#39;</span><span class="p">,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">error_bars</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">30</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">parnames</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;B20&#39;</span><span class="p">,</span> <span class="s1">&#39;B22&#39;</span><span class="p">,</span><span class="s1">&#39;B40&#39;</span><span class="p">,</span><span class="s1">&#39;B42&#39;</span><span class="p">,</span> <span class="s1">&#39;B44&#39;</span><span class="p">,</span> <span class="s1">&#39;B60&#39;</span><span class="p">,</span><span class="s1">&#39;B62&#39;</span><span class="p">,</span><span class="s1">&#39;B64&#39;</span><span class="p">,</span><span class="s1">&#39;B66&#39;</span><span class="p">]:</span>
+    <span class="k">print</span> <span class="p">(</span><span class="n">parnames</span><span class="o">+</span><span class="s1">&#39; = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">parnames</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; meV&#39;</span><span class="p">)</span>
+
+<span class="n">table</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;fit_Parameters&#39;</span><span class="p">]</span>
+<span class="k">print</span> <span class="p">(</span><span class="s1">&#39;Cost function value = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="s1">&#39;Value&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p><img alt="FittingINSSpectrum.png" src="../_images/FittingINSSpectrum.png" /></p>
+</div>
+<div class="section" id="fitting-with-resolution-function">
+<h2><a class="toc-backref" href="#id2">Fitting with resolution function</a><a class="headerlink" href="#fitting-with-resolution-function" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">CrystalField</span> <span class="kn">import</span> <span class="n">CrystalField</span><span class="p">,</span> <span class="n">CrystalFieldFit</span><span class="p">,</span> <span class="n">Background</span><span class="p">,</span> <span class="n">Function</span><span class="p">,</span> <span class="n">ResolutionModel</span>
+<span class="kn">from</span> <span class="nn">PyChop</span> <span class="kn">import</span> <span class="n">PyChop2</span>
+
+<span class="c1"># load the data</span>
+<span class="n">data_ws1</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;MER38435_10p22meV.txt&#39;</span><span class="p">)</span>
+<span class="n">data_ws2</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;MER38436_10p22meV.txt&#39;</span><span class="p">)</span>
+
+<span class="c1"># Sets up a resolution function</span>
+<span class="n">merlin</span> <span class="o">=</span> <span class="n">PyChop2</span><span class="p">(</span><span class="s1">&#39;MERLIN&#39;</span><span class="p">,</span> <span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="mf">250.</span><span class="p">)</span>
+<span class="n">merlin</span><span class="o">.</span><span class="n">setEi</span><span class="p">(</span><span class="mf">10.</span><span class="p">)</span>
+<span class="n">resmod</span> <span class="o">=</span> <span class="n">ResolutionModel</span><span class="p">(</span><span class="n">merlin</span><span class="o">.</span><span class="n">getResolution</span><span class="p">,</span> <span class="n">xstart</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">xend</span><span class="o">=</span><span class="mf">9.0</span><span class="p">,</span> <span class="n">accuracy</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="n">Kelvin_to_meV</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="mf">11.6</span>
+
+<span class="c1"># Parameters from https://doi.org/10.1016/0921-4526(91)90575-Y</span>
+<span class="n">lit_par</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;B20&#39;</span><span class="p">:</span> <span class="o">-.</span><span class="mi">27</span><span class="p">,</span> <span class="s1">&#39;B22&#39;</span><span class="p">:</span> <span class="o">-.</span><span class="mi">34</span><span class="p">,</span> <span class="s1">&#39;B40&#39;</span><span class="p">:</span><span class="mf">1e-6</span><span class="p">,</span> <span class="s1">&#39;B42&#39;</span><span class="p">:</span><span class="mf">0.04158</span><span class="p">,</span> <span class="s1">&#39;B44&#39;</span><span class="p">:</span><span class="mf">0.01369</span><span class="p">,</span> <span class="s1">&#39;B60&#39;</span><span class="p">:</span><span class="mf">0.112e-3</span><span class="p">,</span> <span class="s1">&#39;B62&#39;</span><span class="p">:</span><span class="mf">0.4185e-3</span><span class="p">,</span> <span class="s1">&#39;B64&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.555e-3</span><span class="p">,</span> <span class="s1">&#39;B66&#39;</span><span class="p">:</span><span class="mf">0.588e-3</span><span class="p">}</span> <span class="c1"># K</span>
+<span class="k">for</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">lit_par</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+   <span class="n">lit_par</span><span class="p">[</span><span class="n">parameter</span><span class="p">]</span> <span class="o">*=</span> <span class="n">Kelvin_to_meV</span>
+
+<span class="c1"># Set up the crystal field model.</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s1">&#39;Ho&#39;</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="n">Temperature</span><span class="o">=</span><span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="n">FWHM</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="o">**</span><span class="n">lit_par</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">PeakShape</span> <span class="o">=</span> <span class="s1">&#39;Lorentzian&#39;</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">IntensityScaling</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span>   <span class="c1"># Scale factor if data is not in absolute units (mbarn/sr/f.u./meV), will be fitted.</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">ResolutionModel</span> <span class="o">=</span> <span class="p">[</span><span class="n">resmod</span><span class="p">,</span> <span class="n">resmod</span><span class="p">]</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="n">Background</span><span class="p">(</span><span class="n">peak</span><span class="o">=</span><span class="n">Function</span><span class="p">(</span><span class="s1">&#39;Gaussian&#39;</span><span class="p">,</span> <span class="n">Height</span><span class="o">=</span><span class="mi">1200</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.4</span><span class="o">/</span><span class="mf">2.3</span><span class="p">))</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">background</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">peak</span><span class="o">.</span><span class="n">ties</span><span class="p">(</span><span class="n">Height</span><span class="o">=</span><span class="mi">1400</span><span class="p">,</span> <span class="n">PeakCentre</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.4</span><span class="o">/</span><span class="mf">2.3</span><span class="p">)</span>
+
+<span class="c1"># Runs the fit</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="p">[</span><span class="n">data_ws1</span><span class="p">,</span> <span class="n">data_ws2</span><span class="p">],</span> <span class="n">MaxIterations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">Output</span><span class="o">=</span><span class="s1">&#39;Fit&#39;</span><span class="p">)</span>
+<span class="n">fit</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Plots the fit</span>
+<span class="n">res_ws</span> <span class="o">=</span> <span class="p">[</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;Fit_Workspace_0&#39;</span><span class="p">],</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;Fit_Workspace_1&#39;</span><span class="p">]]</span>
+<span class="n">titles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;20K&#39;</span><span class="p">,</span> <span class="s1">&#39;50K&#39;</span><span class="p">]</span>
+<span class="n">titley</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">1300</span><span class="p">]</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">res_ws</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span> <span class="s1">&#39;rs&#39;</span><span class="p">,</span> <span class="n">wkspIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Data&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">res_ws</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">wkspIndex</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Fit&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Intensity (arb. units)&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">&#39;in&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">titles</span><span class="p">[</span><span class="n">ii</span><span class="p">],</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="n">titley</span><span class="p">[</span><span class="n">ii</span><span class="p">]))</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="FittingWithResolutionFunction.png" src="../_images/FittingWithResolutionFunction.png" /></p>
+</div>
+<div class="section" id="fitting-magnetic-susceptibility">
+<h2><a class="toc-backref" href="#id3">Fitting magnetic susceptibility</a><a class="headerlink" href="#fitting-magnetic-susceptibility" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">CrystalField</span> <span class="kn">import</span> <span class="n">CrystalField</span><span class="p">,</span> <span class="n">CrystalFieldFit</span><span class="p">,</span> <span class="n">PhysicalProperties</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="n">sus_a</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;NdOs2Al10_sus_a.txt&#39;</span><span class="p">)</span>
+<span class="n">sus_b</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;NdOs2Al10_sus_b.txt&#39;</span><span class="p">)</span>
+<span class="n">sus_c</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;NdOs2Al10_sus_c.txt&#39;</span><span class="p">)</span>
+
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s1">&#39;Nd&#39;</span><span class="p">,</span> <span class="s1">&#39;C2v&#39;</span><span class="p">,</span>
+     <span class="n">B20</span><span class="o">=</span><span class="mf">0.19</span><span class="p">,</span> <span class="n">B22</span><span class="o">=</span><span class="mf">0.11</span><span class="p">,</span> <span class="n">B40</span><span class="o">=-</span><span class="mf">0.0004</span><span class="p">,</span> <span class="n">B42</span><span class="o">=-</span><span class="mf">0.002</span><span class="p">,</span> <span class="n">B44</span><span class="o">=-</span><span class="mf">0.012</span><span class="p">,</span> <span class="n">B60</span><span class="o">=</span><span class="mf">5.e-05</span><span class="p">,</span> <span class="n">B62</span><span class="o">=</span><span class="mf">0.00054</span><span class="p">,</span> <span class="n">B64</span><span class="o">=-</span><span class="mf">0.0006</span><span class="p">,</span> <span class="n">B66</span><span class="o">=</span><span class="mf">0.0008</span><span class="p">)</span>
+
+<span class="c1"># Simultaneously fit data measured in a, b and c directions</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">PhysicalProperty</span> <span class="o">=</span> <span class="p">[</span>
+     <span class="n">PhysicalProperties</span><span class="p">(</span><span class="s1">&#39;susc&#39;</span><span class="p">,</span> <span class="n">Hdir</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">Inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">Unit</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">),</span>
+     <span class="n">PhysicalProperties</span><span class="p">(</span><span class="s1">&#39;susc&#39;</span><span class="p">,</span> <span class="n">Hdir</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">Inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">Unit</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">),</span>
+     <span class="n">PhysicalProperties</span><span class="p">(</span><span class="s1">&#39;susc&#39;</span><span class="p">,</span> <span class="n">Hdir</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">Inverse</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">Unit</span><span class="o">=</span><span class="s1">&#39;cgs&#39;</span><span class="p">)]</span>
+
+<span class="n">fit</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="p">[</span><span class="n">sus_a</span><span class="p">,</span> <span class="n">sus_b</span><span class="p">,</span> <span class="n">sus_c</span><span class="p">],</span> <span class="n">MaxIterations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">Output</span><span class="o">=</span><span class="s1">&#39;fit_susc&#39;</span><span class="p">)</span>
+<span class="n">fit</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Print fitted parameters and plot results</span>
+<span class="n">blm</span><span class="o">=</span><span class="p">{}</span>
+<span class="k">for</span> <span class="n">parname</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;B20&#39;</span><span class="p">,</span><span class="s1">&#39;B22&#39;</span><span class="p">,</span> <span class="s1">&#39;B40&#39;</span><span class="p">,</span> <span class="s1">&#39;B42&#39;</span><span class="p">,</span> <span class="s1">&#39;B44&#39;</span><span class="p">,</span><span class="s1">&#39;B60&#39;</span><span class="p">,</span><span class="s1">&#39;B62&#39;</span><span class="p">,</span><span class="s1">&#39;B64&#39;</span><span class="p">,</span><span class="s1">&#39;B66&#39;</span><span class="p">]:</span>
+    <span class="n">blm</span><span class="p">[</span><span class="n">parname</span><span class="p">]</span> <span class="o">=</span> <span class="n">cf</span><span class="p">[</span><span class="n">parname</span><span class="p">]</span>
+    <span class="k">print</span> <span class="n">parname</span><span class="o">+</span><span class="s2">&quot;=&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">cf</span><span class="p">[</span><span class="n">parname</span><span class="p">])</span>
+<span class="n">calc_a</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;fit_susc_Workspaces&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">calc_b</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;fit_susc_Workspaces&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">calc_c</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;fit_susc_Workspaces&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">calc_a</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">calc_a</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="s1">&#39;-k&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$\chi^a$ Fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;sus_a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;sus_a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="s1">&#39;ok&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$\chi^a$ Data&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">calc_b</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">calc_b</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="s1">&#39;-b&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$\chi^b$ Fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;sus_b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;sus_b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="s1">&#39;ob&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$\chi^b$ Data&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">calc_c</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">calc_c</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$\chi^c$ Fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;sus_c&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;sus_c&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="s1">&#39;or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$\chi^c$ Data&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Temperature (K)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Inverse Susceptibility (mol/emu)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="FittingMagneticSusceptibility.png" src="../_images/FittingMagneticSusceptibility.png" /></p>
+</div>
+<div class="section" id="fitting-multiple-ins-spectra">
+<h2><a class="toc-backref" href="#id4">Fitting multiple INS spectra</a><a class="headerlink" href="#fitting-multiple-ins-spectra" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">CrystalField</span> <span class="kn">import</span> <span class="n">CrystalField</span><span class="p">,</span> <span class="n">CrystalFieldFit</span>
+
+<span class="n">datadir</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="n">data_ws1</span><span class="o">=</span><span class="n">Load</span><span class="p">(</span><span class="n">datadir</span><span class="o">+</span><span class="s1">&#39;cecuga3Mlacuga3_15meV5K0to2p5angbp2V1.xye&#39;</span><span class="p">)</span>
+<span class="n">data_ws2</span><span class="o">=</span><span class="n">Load</span><span class="p">(</span><span class="n">datadir</span><span class="o">+</span><span class="s1">&#39;cecuga3Mlacuga3fp824_15meV50K0to2p5angbp2V1.xye&#39;</span><span class="p">)</span>
+<span class="n">data_ws3</span><span class="o">=</span><span class="n">Load</span><span class="p">(</span><span class="n">datadir</span><span class="o">+</span><span class="s1">&#39;cecuga3Mlacuga3fp824_15meV100K0to2p5angbp2V1.xye&#39;</span><span class="p">)</span>
+
+<span class="c1"># Set up the crystal field model for multiple spectra.</span>
+<span class="c1"># This is indicated by the number of elements in the list of temperatures.</span>
+<span class="c1"># Optionally other parameters like FWHM and IntensityScaling can be lists if these initial parameters for each</span>
+<span class="c1">#    spectra should differ.</span>
+<span class="n">cf</span> <span class="o">=</span> <span class="n">CrystalField</span><span class="p">(</span><span class="s1">&#39;Ce&#39;</span><span class="p">,</span> <span class="s1">&#39;C4v&#39;</span><span class="p">,</span> <span class="n">Temperature</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">100</span><span class="p">],</span> <span class="n">FWHM</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">B20</span><span class="o">=</span><span class="mf">0.0633</span><span class="p">,</span> <span class="n">B40</span><span class="o">=</span><span class="mf">0.01097</span><span class="p">,</span> <span class="n">B44</span><span class="o">=</span><span class="mf">0.09985</span><span class="p">)</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">PeakShape</span> <span class="o">=</span> <span class="s1">&#39;Lorentzian&#39;</span>
+<span class="n">cf</span><span class="o">.</span><span class="n">IntensityScaling</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>   <span class="c1"># Scale factor if data is not in absolute units (mbarn/sr/f.u./meV), will be fitted.</span>
+
+<span class="c1"># Runs the fit</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">CrystalFieldFit</span><span class="p">(</span><span class="n">Model</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="p">[</span><span class="n">data_ws1</span><span class="p">,</span> <span class="n">data_ws2</span><span class="p">,</span> <span class="n">data_ws3</span><span class="p">],</span> <span class="n">MaxIterations</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">fit</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Plots the data and print fitted parameters</span>
+<span class="n">plotSpectrum</span><span class="p">(</span><span class="s1">&#39;fit_Workspace_0&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">error_bars</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">])</span>
+<span class="n">plotSpectrum</span><span class="p">(</span><span class="s1">&#39;fit_Workspace_1&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">error_bars</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">])</span>
+<span class="n">plotSpectrum</span><span class="p">(</span><span class="s1">&#39;fit_Workspace_2&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">error_bars</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">15</span><span class="p">])</span>
+
+<span class="c1"># Prints output parameters and cost function.</span>
+<span class="k">for</span> <span class="n">parnames</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;B20&#39;</span><span class="p">,</span> <span class="s1">&#39;B40&#39;</span><span class="p">,</span><span class="s1">&#39;B44&#39;</span><span class="p">]:</span>
+    <span class="k">print</span> <span class="p">(</span><span class="n">parnames</span><span class="o">+</span><span class="s1">&#39; = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="n">parnames</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39; meV&#39;</span><span class="p">)</span>
+<span class="n">table</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;fit_Parameters&#39;</span><span class="p">]</span>
+<span class="k">print</span> <span class="p">(</span><span class="s1">&#39;Cost function value = &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="s1">&#39;Value&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../_images/FittingMultipleINSSpectra_0.png"><img alt="FittingMultipleINSSpectra_0.png" src="../_images/FittingMultipleINSSpectra_0.png" style="width: 33%;" /></a> <a class="reference internal" href="../_images/FittingMultipleINSSpectra_1.png"><img alt="FittingMultipleINSSpectra_1.png" src="../_images/FittingMultipleINSSpectra_1.png" style="width: 33%;" /></a> <a class="reference internal" href="../_images/FittingMultipleINSSpectra_2.png"><img alt="FittingMultipleINSSpectra_2.png" src="../_images/FittingMultipleINSSpectra_2.png" style="width: 33%;" /></a></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">B20</span> <span class="o">=</span> <span class="mf">0.101723272944</span> <span class="n">meV</span>
+<span class="n">B40</span> <span class="o">=</span> <span class="mf">0.012725904646</span> <span class="n">meV</span>
+<span class="n">B44</span> <span class="o">=</span> <span class="mf">0.0890276949598</span> <span class="n">meV</span>
+<span class="n">Cost</span> <span class="n">function</span> <span class="n">value</span> <span class="o">=</span> <span class="mf">1.79652249577</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Calibration_implementation.html" title="Previous Chapter: Calibration Implementation Details"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Calibration I...</span>
+    </a>
+  </li>
+  <li>
+    <a href="DirectILL.html" title="Next Chapter: Data reduction for ILL’s direct geometry instruments"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Data reductio... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2020-10-23.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

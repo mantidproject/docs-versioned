@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>IkedaCarpenterPV</title>
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '6.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="InelasticDiffRotDiscreteCircle" href="InelasticDiffRotDiscreteCircle.html" />
+    <link rel="prev" title="IkedaCarpenterConvoluted" href="IkedaCarpenterConvoluted.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.3</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <p><span class="math">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<div class="section" id="ikedacarpenterpv">
+<span id="func-ikedacarpenterpv"></span><h1>IkedaCarpenterPV<a class="headerlink" href="#ikedacarpenterpv" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<span id="index-0"></span><h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>This peakshape function is designed to be used to fit time-of-flight
+peaks. In particular this function is the convolution of the
+Ikeda-Carpenter function (Ref [1]), which aims to model the neutron pulse shape
+from a moderator, and a pseudo-Voigt that models any broadening to the peak
+due to sample properties etc.</p>
+<p>The convolution of the Ikeda-Carpenter function with psuedo-Voigt is (Ref [3])</p>
+<div class="math">
+\[N \left[ (1-\eta)\Omega_G + \eta \Omega_L \right]\]</div>
+<p>where <span class="math">\(\Omega_G\)</span> and <span class="math">\(\Omega_L\)</span> are the Gaussian and Lorentzian parts of the function, respectively:</p>
+<div class="math">
+\[\Omega_G = N_u e^u erfc(y_u) + N_v e^v erfc(y_v) + N_s e^s erfc(y_s) + N_r e^r erfc(y_r)\]</div>
+<div class="math">
+\[\Omega_L = -\frac{2}{\pi} \left[ N_u Im[e^{z_u}E_1(z_u)] + N_v Im[e^{z_v}E_1(z_v)] + N_s Im[e^{z_s}E_1(z_s)] + N_r Im[e^{z_r}E_1(z_r)]  \right]\]</div>
+<p><span class="math">\(erfc\)</span> is the complementary error function, <span class="math">\(E_1\)</span> is the complex exponential integral, and <span class="math">\(Im\)</span> is the imaginary component.</p>
+<p>The parameters used above are defined as (from Panel 13 of Ref [3]):</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="25%" />
+<col width="21%" />
+<col width="18%" />
+<col width="24%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><div class="first math">
+\[k = 0.05\]</div>
+<div class="math">
+\[\alpha^- = \alpha(1 - k)\]</div>
+<div class="math">
+\[\alpha^+ = \alpha(1 + k)\]</div>
+<div class="math">
+\[x = \alpha^- - \beta\]</div>
+<div class="math">
+\[y = \alpha - \beta\]</div>
+<div class="last math">
+\[z = \alpha^+ - \beta\]</div>
+</td>
+<td><div class="first math">
+\[z_s = -\alpha dt + i\frac{1}{2} \alpha \gamma\]</div>
+<div class="math">
+\[z_u = -\alpha^- dt + i\frac{1}{2} \alpha^- \gamma = (1-k)z_s\]</div>
+<div class="math">
+\[z_v = -\alpha^+ dt + i\frac{1}{2} \alpha^+ \gamma = (1+k)z_s\]</div>
+<div class="last math">
+\[z_r = -\beta dt + i\frac{1}{2} \beta \gamma\]</div>
+</td>
+<td><div class="first math">
+\[u = \frac{1}{2} \alpha^- (\alpha^- \sigma^2 - 2dt)\]</div>
+<div class="math">
+\[v = \frac{1}{2} \alpha^+ (\alpha^+ \sigma^2 - 2dt)\]</div>
+<div class="math">
+\[s = \frac{1}{2} \alpha (\alpha \sigma^2 - 2dt)\]</div>
+<div class="last math">
+\[r = \frac{1}{2} \beta (\beta \sigma^2 - 2dt)\]</div>
+</td>
+<td><div class="first math">
+\[N = \frac{1}{4} \alpha \frac{(1-k^2)}{k^2}\]</div>
+<div class="math">
+\[N_u = 1 - R \frac{\alpha^-}{x}\]</div>
+<div class="math">
+\[N_v = 1 - R \frac{\alpha^+}{z}\]</div>
+<div class="math">
+\[N_s = -2(1 - R\frac{\alpha}{y})\]</div>
+<div class="last math">
+\[N_r = 2R\alpha^2\beta \frac{k^2}{xyz}\]</div>
+</td>
+<td><div class="first math">
+\[y_u = \frac{ (\alpha^- \sigma^2 - dt) }{\sqrt{2\sigma^2}}\]</div>
+<div class="math">
+\[y_v = \frac{ (\alpha^+ \sigma^2 - dt) }{\sqrt{2\sigma^2}}\]</div>
+<div class="math">
+\[y_s = \frac{ (\alpha \sigma^2 - dt) }{\sqrt{2\sigma^2}}\]</div>
+<div class="last math">
+\[y_r = \frac{ (\beta \sigma^2 - dt) }{\sqrt{2\sigma^2}}\]</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>where <span class="math">\(dt = T_i - T_h\)</span> is the shift in microseconds with respect to the Bragg position,
+<span class="math">\(\alpha\)</span> and <span class="math">\(\beta\)</span> are the fast and slow neutron
+decay constants respectively, and <span class="math">\(R\)</span> is a maxing coefficient that
+relates to the moderator temperature.
+<span class="math">\(\alpha\)</span> and <span class="math">\(R\)</span> are further modelled to depend on
+wavelength and using the notation in the Fullprof manual (Ref [2]). The
+refineable Ikeda-Carpenter parameters are Alpha0, Alpha1, Beta0 and
+Kappa and these are defined as</p>
+<div class="math">
+\[\alpha=1/(\mbox{Alpha0}+\lambda*\mbox{Alpha1})\]</div>
+<div class="math">
+\[\beta = 1/\mbox{Beta0}\]</div>
+<div class="math">
+\[R = \exp (-81.799/(\mbox{Kappa}*\lambda^2))\]</div>
+<p>, where <span class="math">\(\lambda\)</span> is the neutron wavelength. <em>In general when
+fitting a single peak it is not recommended to refine both Alpha0 and
+Alpha1 at the same time since these two parameters will effectively be
+100% correlated because the wavelength over a single peak is likely
+effectively constant</em>. All parameters are constrained to be non-negative.</p>
+<p>The pseudo-Voigt function is defined as a linear combination of a
+Lorentzian and Gaussian and is a computational efficient way of
+calculation a Voigt function. The Voigt parameters are related to the
+pseudo-Voigt parameters through a relation (see Fullprof manual eq.
+(3.16) which in revision July2001 is missing a power 1/5). It is the two
+Voigt parameters which you can refine with this peakshape function:
+SigmaSquared (for the Gaussian part) and Gamma (for the Lorentzian
+part). Notice the Voigt Gaussian FWHM=SigmaSquared*8*ln(2) and the
+Voigt Lorentzian FWHM=Gamma.</p>
+<p>For information about how to create instrument specific values for the
+parameters of this fitting function see
+<a class="reference external" href="http://www.mantidproject.org/CreateIkedaCarpenterParameters">CreateIkedaCarpenterParameters</a>.</p>
+<p>The implementation of the IkedaCarpenterPV peakshape function here
+follows the analytical expression for this function as presented in Panels 13-17
+of Ref[3].</p>
+<p>References:</p>
+<ol class="arabic simple">
+<li>S. Ikeda and J. M. Carpenter, <a class="reference external" href="http://dx.doi.org/10.1016/0168-9002(85)90033-6">Nuclear Inst. and Meth. in Phys. Res.
+A239, 536 (1985)</a></li>
+<li>Fullprof manual, see <a class="reference external" href="http://www.ill.eu/sites/fullprof/">http://www.ill.eu/sites/fullprof/</a></li>
+<li>J. Rodriguez-Carvajal, <a class="reference external" href="http://mill2.chem.ucl.ac.uk/ccp/web-mirrors/plotr/Tutorials&amp;Documents/TOF_FullProf.pdf">Using FullProf to analyze Time of Flight
+Neutron Powder Diffraction data</a></li>
+</ol>
+<p>The figure below illustrate this peakshape function fitted to a TOF
+peak:</p>
+<div class="figure">
+<img alt="IkedaCarpenterPVwithBackground.png" src="../../_images/IkedaCarpenterPVwithBackground.png" />
+</div>
+</div>
+<div class="section" id="properties-fitting-parameters">
+<h2>Properties (fitting parameters)<a class="headerlink" href="#properties-fitting-parameters" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="5%" />
+<col width="84%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>I</td>
+<td>0.0</td>
+<td>The integrated intensity of the peak. I.e. approximately equal to HWHM times height of peak</td>
+</tr>
+<tr class="row-odd"><td>Alpha0</td>
+<td>1.6</td>
+<td>Used to model fast decay constant</td>
+</tr>
+<tr class="row-even"><td>Alpha1</td>
+<td>1.5</td>
+<td>Used to model fast decay constant</td>
+</tr>
+<tr class="row-odd"><td>Beta0</td>
+<td>31.9</td>
+<td>Inverse of slow decay constant</td>
+</tr>
+<tr class="row-even"><td>Kappa</td>
+<td>46.0</td>
+<td>Controls contribution of slow decay term</td>
+</tr>
+<tr class="row-odd"><td>SigmaSquared</td>
+<td>1.0</td>
+<td>standard deviation squared (Voigt Guassian broadening)</td>
+</tr>
+<tr class="row-even"><td>Gamma</td>
+<td>1.0</td>
+<td>Voigt Lorentzian broadening</td>
+</tr>
+<tr class="row-odd"><td>X0</td>
+<td>0.0</td>
+<td>Peak position</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/FitFunctions.html">FitFunctions</a> | <a class="reference external" href="categories/Peak.html">Peak</a></p>
+</div>
+<div class="section" id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/c7a0e2338713fd338893c4f24ed76cd968f52b11/Framework/CurveFitting/inc/MantidCurveFitting/Functions/IkedaCarpenterPV.h">IkedaCarpenterPV.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/c7a0e2338713fd338893c4f24ed76cd968f52b11/Framework/CurveFitting/src/Functions/IkedaCarpenterPV.cpp">IkedaCarpenterPV.cpp</a></p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="IkedaCarpenterConvoluted.html" title="Previous Chapter: IkedaCarpenterConvoluted"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; IkedaCarpente...</span>
+    </a>
+  </li>
+  <li>
+    <a href="InelasticDiffRotDiscreteCircle.html" title="Next Chapter: InelasticDiffRotDiscreteCircle"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">InelasticDiff... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

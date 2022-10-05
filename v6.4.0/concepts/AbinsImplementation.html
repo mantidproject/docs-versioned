@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Abins: Implementation details</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '6.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Abins: Fast approximate broadening with “interpolate”" href="AbinsInterpolatedBroadening.html" />
+    <link rel="prev" title="Concepts" href="index.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.4</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Concepts</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Abins: Implementation details</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <p><span class="math">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<div class="section" id="abins-implementation-details">
+<span id="abinsimplementation"></span><h1><a class="toc-backref" href="#id1">Abins: Implementation details</a><a class="headerlink" href="#abins-implementation-details" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#abins-implementation-details" id="id1">Abins: Implementation details</a><ul>
+<li><a class="reference internal" href="#introduction" id="id2">Introduction</a></li>
+<li><a class="reference internal" href="#deprecation-plans" id="id3">Deprecation plans</a></li>
+<li><a class="reference internal" href="#sampling" id="id4">Sampling</a></li>
+<li><a class="reference internal" href="#broadening" id="id5">Broadening</a></li>
+<li><a class="reference internal" href="#testing" id="id6">Testing</a><ul>
+<li><a class="reference internal" href="#unit-tests" id="id7">Unit tests</a></li>
+<li><a class="reference internal" href="#algorithm-tests" id="id8">Algorithm tests</a></li>
+<li><a class="reference internal" href="#system-tests" id="id9">System tests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Abins is a relatively complex algorithm with some unique
+infrastructure and built-in design decisions. Details are collected
+here: this is primarily for the benefit of those developing or
+hacking Abins.</p>
+</div>
+<div class="section" id="deprecation-plans">
+<h2><a class="toc-backref" href="#id3">Deprecation plans</a><a class="headerlink" href="#deprecation-plans" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Support for VASP OUTCAR files is currently included for validation
+and troubleshooting purposes. Users are recommended to use the
+vasprun.xml file input.</li>
+<li>The <em>pkt_per_peak</em> and <em>fwhm</em> parameters in
+<code class="docutils literal"><span class="pre">abins.parameters.sampling</span></code> are no longer in use and should be
+removed in a future release.</li>
+<li>The <em>frequencies_threshold</em> parameter in
+<code class="docutils literal"><span class="pre">abins.parameters.sampling</span></code> is currently non-functional and should
+be removed until it <em>is</em> functional.</li>
+</ul>
+</div>
+<div class="section" id="sampling">
+<h2><a class="toc-backref" href="#id4">Sampling</a><a class="headerlink" href="#sampling" title="Permalink to this headline">¶</a></h2>
+<p>While the scattering cross-sections are calculated for individual
+events and enumerated combinations of events, the output spectra are
+histograms which have been resampled and broadened on a finite grid.</p>
+<p>The data range is determined by three parameters:</p>
+<ul class="simple">
+<li><em>min_wavenumber</em>, set in <code class="docutils literal"><span class="pre">abins.parameters.sampling</span></code></li>
+<li><em>max_wavenumber</em>, set in <code class="docutils literal"><span class="pre">abins.parameters.sampling</span></code></li>
+<li><em>bin_width</em>, a parameter set in the main Abins algorithm interface
+and passed as an argument to internal functions as appropriate. This
+parameter is more exposed than the energy range, as a convenient to
+the user. However, it should be applied consistently within a single
+application of Abins and functions may assume that this value was
+also used elsewhere.</li>
+</ul>
+<p>These parameters are used to establish the edges of the sample <em>bins</em>;
+the largest value is rounded up from <em>max_wavenumber</em> to contain a
+whole number of <em>bin_width</em>.</p>
+<p>The histogram of data sampled in these N bins has N-1 “points”, which
+should be aligned with the corresponding bin centres if plotted as a
+line. In the code this array of frequency coordinates is generally
+named <em>freq_points</em>.</p>
+</div>
+<div class="section" id="broadening">
+<h2><a class="toc-backref" href="#id5">Broadening</a><a class="headerlink" href="#broadening" title="Permalink to this headline">¶</a></h2>
+<p>Instrumental broadening in Abins involves an energy-dependent
+resolution function; in the implemented case (the TOSCA instrument)
+this is convolution with a Gaussian kernel with the energy-dependent
+width parameter (sigma) determined by a quadratic polynomial.
+Convolution with a varying kernel is not a common operation and is
+implemented within abins.</p>
+<p>Earlier versions of Abins implemented a Gaussian kernel with a
+fixed number of points spread over a range scaled to the peak width,
+set by <em>pkt_per_peak</em> and <em>fwhm</em> parameters in
+<code class="docutils literal"><span class="pre">abins.parameters.sampling</span></code>.
+This method leads to aliasing when the x-coordinates are
+incommensurate with the histogram spacing, and an uneven number of
+samples falls into each bin.</p>
+<img alt="../_images/gaussian_aliasing.png" class="align-center" src="../_images/gaussian_aliasing.png" />
+<p>The safest way to avoid such trouble is for all broadening methods to
+output onto the regular <em>freq_points</em> grid. A number of broadening
+implementations have been provided in
+<code class="docutils literal"><span class="pre">abins.instruments.broadening</span></code>. It is up to the Instrument
+logic to dispatch broadening calls to the requested implementation,
+and it is up to specific Instruments to select an appropriate scheme
+for their needs.
+The advanced parameter <em>abins.parameters.sampling[‘broadening_scheme’]</em>
+is made available so that this can be overruled, but it is up to the
+Instrument to interpret this information. ‘auto’ should select an
+intelligent scheme and inappropriate methods can be forbidden.</p>
+<p>A fast, possibly-novel method of frequency-dependent broadening has
+been implemented as the ‘interpolate’ method. For notes on this method
+and its limitations see <a class="reference internal" href="AbinsInterpolatedBroadening.html#abinsinterpolatedbroadening"><span class="std std-ref">Abins: Fast approximate broadening with “interpolate”</span></a>.</p>
+</div>
+<div class="section" id="testing">
+<h2><a class="toc-backref" href="#id6">Testing</a><a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>Tests for Abins are located in a few places:</p>
+<div class="section" id="unit-tests">
+<h3><a class="toc-backref" href="#id7">Unit tests</a><a class="headerlink" href="#unit-tests" title="Permalink to this headline">¶</a></h3>
+<p>Unit tests for the Python abins modules are in <em>scripts/test/Abins</em>.
+These are set up with the other unit tests (<code class="docutils literal"><span class="pre">cmake</span> <span class="pre">--build</span> <span class="pre">.</span> <span class="pre">--target</span> <span class="pre">AllTests</span></code>)
+and can be run by filtering for Abins (<code class="docutils literal"><span class="pre">ctest</span> <span class="pre">-R</span> <span class="pre">Abins</span></code>).
+This will also run the Algorithm tests (next section).</p>
+<p>Some of these tests load input data and check that the
+structure/vibration data has been read correctly. There is a
+consistent framework for this type of test established in
+<code class="docutils literal"><span class="pre">abins.input.tester</span></code> and inherited by
+code-specific tests e.g. <em>AbinsLoadGAUSSIANTest</em>.  To create a new
+reference data file with a specific build of Abins, instantiate a
+Loader and pass it to <em>save_ab_initio_test_data</em>. This takes two lines of Python, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">reader</span> <span class="o">=</span> <span class="n">abins</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">CRYSTALLoader</span><span class="p">(</span><span class="n">input_ab_initio_filename</span><span class="o">=</span><span class="s1">&#39;my_calc.out&#39;</span><span class="p">)</span>
+<span class="n">abins</span><span class="o">.</span><span class="n">input</span><span class="o">.</span><span class="n">Tester</span><span class="o">.</span><span class="n">save_ab_initio_test_data</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="s1">&#39;my_new_test&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which will write the necessary <em>my_new_test_data.txt</em> file and
+<em>my_new_test_atomic_displacements_data_{k}.txt</em> files for each phonon wavevector.</p>
+</div>
+<div class="section" id="algorithm-tests">
+<h3><a class="toc-backref" href="#id8">Algorithm tests</a><a class="headerlink" href="#algorithm-tests" title="Permalink to this headline">¶</a></h3>
+<p>Tests of the main Abins algorithm and of the advanced parameter
+settings are in
+<em>Framework/PythonInterface/test/python/plugins/algorithms</em>. These
+mostly cover input sanity-checking, and check the consistency of
+result scaling and splitting into atomic contributions.</p>
+</div>
+<div class="section" id="system-tests">
+<h3><a class="toc-backref" href="#id9">System tests</a><a class="headerlink" href="#system-tests" title="Permalink to this headline">¶</a></h3>
+<p>System tests are defined in <em>Testing/SystemTests/tests/framework/AbinsTest.py</em>.
+These tests compare the output workspaces of Abins runs with reference Nexus files,
+using the standard setup described in
+<a class="reference external" href="http://developer.mantidproject.org/SystemTests.html">the main developer docs</a>.
+The reference data will need to be changed when major updates to Abins
+impact the output results; the simplest way to obtain the new
+reference files is to run the system tests, which will save Nexus
+files from the failed system tests. These should be inspected to
+verify that all changes were expected and understood as consequences
+of changes to Abins.</p>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="index.html" title="Previous Chapter: Concepts"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Concepts</span>
+    </a>
+  </li>
+  <li>
+    <a href="AbinsInterpolatedBroadening.html" title="Next Chapter: Abins: Fast approximate broadening with “interpolate”"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Abins: Fast a... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

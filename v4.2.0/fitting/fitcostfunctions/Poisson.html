@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Poisson Cost Function</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '4.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="" href="../../index.html" />
+    <link rel="next" title="Fit Functions" href="../fitfunctions/index.html" />
+    <link rel="prev" title="Poisson Cost Function" href="" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>4.2</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="poisson-cost-function">
+<span id="poisson"></span><h1>Poisson Cost Function<a class="headerlink" href="#poisson-cost-function" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<span id="index-0"></span><h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>The Poisson cost function is designed to be applied to data, which has a low number of counts/events.
+In this scenario a fit is being performed using a model (function) to some low stats data.</p>
+<p>The number of counts/events in bin <img class="math" src="../../_images/math/4cc7324e0d6c8c591e4d865a21144bda81fd3011.png" alt="i" style="vertical-align: 0px"/> is given by <img class="math" src="../../_images/math/62117283dadeb1279e6cde69c9ec465cf07ecdf1.png" alt="y_i" style="vertical-align: -4px"/> and the corresponding value for the model is <img class="math" src="../../_images/math/ffcfedf2ff916713b02229383993db234f49605f.png" alt="\mu_i" style="vertical-align: -4px"/>.
+Where the values of <img class="math" src="../../_images/math/62117283dadeb1279e6cde69c9ec465cf07ecdf1.png" alt="y_i" style="vertical-align: -4px"/> and <img class="math" src="../../_images/math/ffcfedf2ff916713b02229383993db234f49605f.png" alt="\mu_i" style="vertical-align: -4px"/> are strictly positive.</p>
+<p>The quality of the fit can be represented numerically by the deviance (<img class="math" src="../../_images/math/38c3f1bb635d72c20480efe631525d3464136e24.png" alt="D" style="vertical-align: 0px"/>)</p>
+<div class="math">
+<p><img src="../../_images/math/f2433b0fc99c2f0025192de31ad047b7e2bb77f5.png" alt="2\sum_{i}^{N} \left\{ y_{i} \log(y_i) -y_{i} \log(\mu_i)  - (y_{i} - \mu_i) \right\},"/></p>
+</div><p>where the first two terms provide a measure for small variations between <img class="math" src="../../_images/math/62117283dadeb1279e6cde69c9ec465cf07ecdf1.png" alt="y_i" style="vertical-align: -4px"/> and <img class="math" src="../../_images/math/ffcfedf2ff916713b02229383993db234f49605f.png" alt="\mu_i" style="vertical-align: -4px"/>, whereas the third term provides a measure of large variations.
+Therefore, by minimizing the deviance the best fit can be identified.
+This method is also known as the Poisson deviance or Poisson log-linear model.</p>
+<p>When performing a fit on Poisson distributed data care needs to be taken when selecting the cost function.
+For a large number of events/counts the least squares cost function can be used to minimize Poisson distributed data.
+This is because in the limit of large numbers of events/counts the Poisson and Gaussian distributions are approximately equal.
+In the limits of low events/counts using a least squares cost function can lead to biased results.</p>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Given a workspace with low counts, a fit can be done in a script as follows:
+<tt class="docutils literal"><span class="pre">Fit(Function=f,InputWorkspace=workspace,Output=&quot;outputName&quot;,CreateOutput=True,CostFunction=&quot;Poisson&quot;,Minimizer=&quot;Levenberg-MarquardtMD&quot;)</span></tt></p>
+<p>The plot below demonstrates the difference between using the Poisson and Least Squares cost functions for a given
+parameter over a series of fits to data with different number of counts.
+The Poisson model gives a much more consistent result and means no special treatment is required for zero counts.</p>
+<img alt="Poisson cost function compared with least squares cost function" src="../../_images/Poisson.png" />
+</div>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p>[1]  <a class="reference external" href="https://data.princeton.edu/wws509/notes/c4.pdf">Rodríguez, G. (2007). Lecture Notes on Generalized Linear Models</a>.</p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="" title="Previous Chapter: Poisson Cost Function"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Poisson Cost Fun...</span>
+    </a>
+  </li>
+  <li>
+    <a href="../fitfunctions/index.html" title="Next Chapter: Fit Functions"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Fit Functions &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+      Last updated on 2019-11-18.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Python in Mantid: Solution 1</title>
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '6.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Python in Mantid: Solution 2" href="02_pim_sol.html" />
+    <link rel="prev" title="Python in Mantid: Solutions" href="index.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head>
+  <body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.3</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <p><span class="math">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<div class="section" id="python-in-mantid-solution-1">
+<span id="pim-sol"></span><h1>Python in Mantid: Solution 1<a class="headerlink" href="#python-in-mantid-solution-1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="a-using-isis-data">
+<h2>A - Using ISIS Data<a class="headerlink" href="#a-using-isis-data" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># The input data set</span>
+<span class="n">inputData</span> <span class="o">=</span> <span class="s2">&quot;HRP39182&quot;</span>
+<span class="c1"># Load the file</span>
+<span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="n">inputData</span><span class="o">+</span><span class="s2">&quot;.RAW&quot;</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="n">inputData</span><span class="p">,</span><span class="n">Cache</span><span class="o">=</span><span class="s2">&quot;If Slow&quot;</span><span class="p">)</span>
+
+<span class="c1"># First do the analysis without prompt pulse removal so that we can compare the difference</span>
+<span class="c1"># Align the detectors (incoporates unit conversion to d-Spacing)</span>
+<span class="n">cal_file</span> <span class="o">=</span> <span class="s2">&quot;hrpd_new_072_01_corr.cal&quot;</span>
+<span class="n">AlignDetectors</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">inputData</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s2">&quot;aligned-withpulse&quot;</span><span class="p">,</span><span class="n">CalibrationFile</span><span class="o">=</span><span class="n">cal_file</span><span class="p">)</span>
+<span class="c1"># Focus the data</span>
+<span class="n">DiffractionFocussing</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s2">&quot;aligned-withpulse&quot;</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s2">&quot;focussed-withpulse&quot;</span><span class="p">,</span><span class="n">GroupingFileName</span><span class="o">=</span><span class="n">cal_file</span><span class="p">)</span>
+
+<span class="c1"># Remove the prompt pulse, which occurs at at 20,000 microsecond intervals. The bin width comes from a quick look at the data</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">):</span>
+  <span class="nb">min</span> <span class="o">=</span> <span class="mi">19990</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="mi">20000</span><span class="p">)</span>
+  <span class="nb">max</span> <span class="o">=</span> <span class="mi">20040</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="mi">20000</span><span class="p">)</span>
+  <span class="n">MaskBins</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">inputData</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="n">inputData</span><span class="p">,</span><span class="n">XMin</span><span class="o">=</span><span class="nb">min</span><span class="p">,</span><span class="n">XMax</span><span class="o">=</span><span class="nb">max</span><span class="p">)</span>
+
+<span class="c1"># Align the detectors (on the data with the pulse removed incoporates unit conversion to d-Spacing)</span>
+<span class="n">AlignDetectors</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">inputData</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s2">&quot;aligned-withoutpulse&quot;</span><span class="p">,</span><span class="n">CalibrationFile</span><span class="o">=</span><span class="n">cal_file</span><span class="p">)</span>
+<span class="c1"># Focus the data</span>
+<span class="n">DiffractionFocussing</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s2">&quot;aligned-withoutpulse&quot;</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s2">&quot;focussed-withoutpulse&quot;</span><span class="p">,</span><span class="n">GroupingFileName</span><span class="o">=</span><span class="n">cal_file</span><span class="p">)</span>
+<span class="c1"># Subract the processed data with and without pulse from eachother</span>
+<span class="n">Minus</span><span class="p">(</span><span class="n">LHSWorkspace</span><span class="o">=</span><span class="s2">&quot;focussed-withpulse&quot;</span><span class="p">,</span> <span class="n">RHSWorkspace</span><span class="o">=</span><span class="s2">&quot;focussed-withoutpulse&quot;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s2">&quot;difference&quot;</span><span class="p">)</span>
+
+<span class="c1"># Now plot a focussed spectrum with and without prompt peak removal so that you can see the difference</span>
+<span class="n">plotSpectrum</span><span class="p">([</span><span class="s2">&quot;focussed-withoutpulse&quot;</span><span class="p">,</span><span class="s2">&quot;difference&quot;</span><span class="p">,</span> <span class="s2">&quot;focussed-withpulse&quot;</span><span class="p">],</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../../tutorials/python_in_mantid/solutions/01_pim_sol-1.py">Source code</a>, <a class="reference external" href="../../../tutorials/python_in_mantid/solutions/01_pim_sol-1.png">png</a>, <a class="reference external" href="../../../tutorials/python_in_mantid/solutions/01_pim_sol-1.hires.png">hires.png</a>, <a class="reference external" href="../../../tutorials/python_in_mantid/solutions/01_pim_sol-1.pdf">pdf</a>)</p>
+<div class="figure">
+<img alt="../../../_images/01_pim_sol-1.png" src="../../../_images/01_pim_sol-1.png" />
+</div>
+</div>
+<div class="section" id="b-sns-data">
+<h2>B - SNS Data<a class="headerlink" href="#b-sns-data" title="Permalink to this headline">¶</a></h2>
+<p>Right-click in the Messages toolbox and check that the log level is set to “Notice” (or lower, such as “Information” and “Debug”).</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">run</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;PG3_4871_event&#39;</span><span class="p">)</span>
+<span class="n">nevents</span> <span class="o">=</span> <span class="n">run</span><span class="o">.</span><span class="n">getNumberEvents</span><span class="p">()</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">notice</span><span class="p">(</span><span class="s1">&#39;Number of Events Before = {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">nevents</span><span class="p">)))</span>
+<span class="n">filtered</span> <span class="o">=</span> <span class="n">FilterBadPulses</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">LowerCutoff</span><span class="o">=</span><span class="mf">99.5</span><span class="p">)</span>
+<span class="n">aligned</span> <span class="o">=</span> <span class="n">AlignDetectors</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">filtered</span><span class="p">,</span> <span class="n">CalibrationFile</span><span class="o">=</span><span class="s1">&#39;PG3_golden.cal&#39;</span><span class="p">)</span>
+<span class="n">rebinned</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">aligned</span><span class="p">,</span> <span class="n">Params</span><span class="o">=</span><span class="p">[</span><span class="mf">1.4</span><span class="p">,</span><span class="o">-</span><span class="mf">0.0004</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
+<span class="n">focused</span> <span class="o">=</span> <span class="n">DiffractionFocussing</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">rebinned</span><span class="p">,</span> <span class="n">GroupingFileName</span><span class="o">=</span><span class="s1">&#39;PG3_golden.cal&#39;</span><span class="p">)</span>
+<span class="n">compressed</span> <span class="o">=</span> <span class="n">CompressEvents</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">focused</span><span class="p">)</span>
+<span class="n">nevents</span> <span class="o">=</span> <span class="n">compressed</span><span class="o">.</span><span class="n">getNumberEvents</span><span class="p">()</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">notice</span><span class="p">(</span><span class="s1">&#39;Number of Events After = {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">nevents</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Number</span> <span class="n">of</span> <span class="n">Events</span> <span class="n">Before</span> <span class="o">=</span> <span class="mi">22065736</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">Events</span> <span class="n">After</span> <span class="o">=</span> <span class="mi">555305</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="c-ill-data">
+<h2>C - ILL Data<a class="headerlink" href="#c-ill-data" title="Permalink to this headline">¶</a></h2>
+<p>For point 5., you are expected to open the docs page for <a class="reference internal" href="../../../algorithms/ConvertUnits-v1.html#algm-convertunits"><span class="std std-ref">ConvertUnits v1</span></a> and notice that <cite>EFixed</cite> should be set to the Ei value (Found in Show Sample Logs). This docs page also mentions that for Ei, the parameter EMode=’Direct’ is required. These parameters are required by the target of the unit conversion - DeltaE.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># You can load each file individually, e.g.</span>
+<span class="c1"># 164198 = Load(Filename=164198)</span>
+<span class="c1"># ... for each file</span>
+
+<span class="c1"># Or you can Load data in a loop, but you may need to import the workspaces to Python</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">164198</span><span class="p">,</span><span class="mi">164201</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span> <span class="s1">&#39;{}.nxs&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span> <span class="o">=</span> <span class="s1">&#39;{}.nxs&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">OutputWorkspace</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+<span class="n">mtd</span><span class="o">.</span><span class="n">importAll</span><span class="p">()</span>
+
+<span class="n">data_merged</span> <span class="o">=</span> <span class="n">MergeRuns</span><span class="p">([</span><span class="mi">164198</span><span class="p">,</span><span class="mi">164199</span><span class="p">,</span><span class="mi">164200</span><span class="p">])</span>
+<span class="n">bad_spectra</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">69</span><span class="p">,</span><span class="mi">90</span><span class="p">,</span><span class="mi">93</span><span class="p">,</span><span class="mi">95</span><span class="p">,</span><span class="mi">97</span><span class="p">,</span><span class="mi">175</span><span class="p">,</span><span class="mi">184</span><span class="p">,</span><span class="mi">190</span><span class="p">,</span><span class="mi">215</span><span class="p">,</span><span class="mi">216</span><span class="p">,</span><span class="mi">217</span><span class="p">,</span><span class="mi">251</span><span class="p">,</span><span class="mi">252</span><span class="p">,</span><span class="mi">253</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">289</span><span class="p">,</span><span class="mi">317</span><span class="p">,</span><span class="mi">335</span><span class="p">,</span><span class="mi">337</span><span class="p">]</span>
+<span class="n">MaskDetectors</span><span class="p">(</span><span class="n">Workspace</span> <span class="o">=</span> <span class="n">data_merged</span><span class="p">,</span> <span class="n">SpectraList</span> <span class="o">=</span> <span class="n">bad_spectra</span><span class="p">)</span>
+<span class="n">scaled</span> <span class="o">=</span> <span class="n">MultiplyRange</span><span class="p">(</span><span class="n">data_merged</span><span class="p">,</span> <span class="n">Factor</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">)</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">scaled</span><span class="p">,</span> <span class="n">Target</span> <span class="o">=</span> <span class="s1">&#39;DeltaE&#39;</span><span class="p">,</span> <span class="n">EFixed</span> <span class="o">=</span> <span class="mf">4.7728189558864003</span><span class="p">,</span> <span class="n">EMode</span> <span class="o">=</span> <span class="s1">&#39;Direct&#39;</span><span class="p">)</span> <span class="c1"># See explanation above</span>
+<span class="n">wsCorrected</span> <span class="o">=</span> <span class="n">DetectorEfficiencyCorUser</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s2">&quot;The corrected value in spectrum with ws index {}, bin {} is {:.2f} compared to {:.2f}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="n">wsCorrected</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">6</span><span class="p">)[</span><span class="mi">4</span><span class="p">],</span><span class="n">ws</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">6</span><span class="p">)[</span><span class="mi">4</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">corrected</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">spectrum</span> <span class="n">number</span> <span class="mi">6</span><span class="p">,</span> <span class="nb">bin</span> <span class="mi">4</span> <span class="ow">is</span> <span class="mf">278.85</span> <span class="n">compared</span> <span class="n">to</span> <span class="mf">0.95</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="index.html" title="Previous Chapter: Python in Mantid: Solutions"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Python in Man...</span>
+    </a>
+  </li>
+  <li>
+    <a href="02_pim_sol.html" title="Next Chapter: Python in Mantid: Solution 2"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Python in Man... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
