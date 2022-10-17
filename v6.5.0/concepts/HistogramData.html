@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Transition to the HistogramData module</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="How To Define Geometric Shape" href="HowToDefineGeometricShape.html" />
+    <link rel="prev" title="Geometry of Shape" href="GeometryofShape.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.5</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Concepts</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Transition to the HistogramData module</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="transition-to-the-histogramdata-module">
+<span id="histogramdata"></span><h1>Transition to the HistogramData module<a class="headerlink" href="#transition-to-the-histogramdata-module" title="Permalink to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id5">Introduction</a></p>
+<ul>
+<li><p><a class="reference internal" href="#motivation" id="id6">Motivation</a></p></li>
+<li><p><a class="reference internal" href="#concepts" id="id7">Concepts</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#the-new-histogram-type" id="id8">The new <code class="docutils literal notranslate"><span class="pre">Histogram</span></code> type</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id2" id="id9">Motivation</a></p></li>
+<li><p><a class="reference internal" href="#overview" id="id10">Overview</a></p></li>
+<li><p><a class="reference internal" href="#histogram" id="id11"><code class="docutils literal notranslate"><span class="pre">Histogram</span></code></a></p></li>
+<li><p><a class="reference internal" href="#histogramx-histogramy-and-histograme" id="id12"><code class="docutils literal notranslate"><span class="pre">HistogramX</span></code>, <code class="docutils literal notranslate"><span class="pre">HistogramY</span></code>, and <code class="docutils literal notranslate"><span class="pre">HistogramE</span></code></a></p></li>
+<li><p><a class="reference internal" href="#binedges" id="id13"><code class="docutils literal notranslate"><span class="pre">BinEdges</span></code></a></p></li>
+<li><p><a class="reference internal" href="#points" id="id14"><code class="docutils literal notranslate"><span class="pre">Points</span></code></a></p></li>
+<li><p><a class="reference internal" href="#counts" id="id15"><code class="docutils literal notranslate"><span class="pre">Counts</span></code></a></p></li>
+<li><p><a class="reference internal" href="#frequencies" id="id16"><code class="docutils literal notranslate"><span class="pre">Frequencies</span></code></a></p></li>
+<li><p><a class="reference internal" href="#countvariances-countstandarddeviations-frequencyvariances-and-frequencystandarddeviations" id="id17"><code class="docutils literal notranslate"><span class="pre">CountVariances</span></code>, <code class="docutils literal notranslate"><span class="pre">CountStandardDeviations</span></code>, <code class="docutils literal notranslate"><span class="pre">FrequencyVariances</span></code>, and <code class="docutils literal notranslate"><span class="pre">FrequencyStandardDeviations</span></code></a></p></li>
+<li><p><a class="reference internal" href="#code-examples" id="id18">Code examples</a></p>
+<ul>
+<li><p><a class="reference internal" href="#working-with-bin-edges-and-counts" id="id19">Working with bin edges and counts</a></p></li>
+<li><p><a class="reference internal" href="#working-with-points" id="id20">Working with points</a></p></li>
+<li><p><a class="reference internal" href="#working-with-histograms" id="id21">Working with histograms</a></p></li>
+<li><p><a class="reference internal" href="#working-with-the-new-matrixworkspace-interface" id="id22">Working with the new <code class="docutils literal notranslate"><span class="pre">MatrixWorkspace</span></code> interface</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#legacy-interface" id="id23">Legacy interface</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#rollout-status" id="id24">Rollout status</a></p></li>
+<li><p><a class="reference internal" href="#dealing-with-problems" id="id25">Dealing with problems</a></p></li>
+</ul>
+</nav>
+<p>HistogramData is a new Mantid module dealing with histograms.
+This is <strong>not</strong> a replacement for <code class="docutils literal notranslate"><span class="pre">Histogram1D</span></code> or <code class="docutils literal notranslate"><span class="pre">ISpectrum</span></code>, but rather deals with the <strong>histogram</strong> part of the data stored in those classes.
+This document is intended for Mantid developers.
+It informs about the transition to the new way of dealing with histograms, and explains the new interfaces.</p>
+<section id="introduction">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
+<section id="motivation">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Motivation</a><a class="headerlink" href="#motivation" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Make working with histograms <strong>easier</strong>.</p></li>
+<li><p>Provide a <strong>safer</strong> way of working with histograms.</p></li>
+<li><p>Details can be found in the <a class="reference external" href="https://github.com/mantidproject/documents/blob/master/Design/histogram_type.md">design document</a>.</p></li>
+</ul>
+</section>
+<section id="concepts">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Concepts</a><a class="headerlink" href="#concepts" title="Permalink to this heading">¶</a></h3>
+<figure class="align-center" id="id4" style="width: 50%">
+<img alt="../_images/Histogram.png" src="../_images/Histogram.png" />
+<figcaption>
+<p><span class="caption-text">The histogram concept and nomenclature in Mantid.
+The expressions commonly used in Mantid to refer to these concepts are given in quotation marks.
+Details can be found in the text below.
+The CamelCase keywords are new types and will be introduced later.</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Histogram data in Mantid is stored in a number of different ways that reflect the way it was produced, or the way algorithms deal with the data:</p>
+<ul class="simple">
+<li><p>The x-data (typically corresponding to TOF or units derived from TOF) can represent bin edges (1 more than y-values), or points (1 for each y-value).
+Conversions between the two cases are done with the algorithms <code class="docutils literal notranslate"><span class="pre">ConvertToPointData</span></code> and <code class="docutils literal notranslate"><span class="pre">ConvertToHistogram</span></code>.</p></li>
+<li><p>The y-data can be counts or counts divided by bin-width.
+In the latter case a workspace is said to contain <em>distribution data</em>.
+Conversions between the two cases are done with the algorithms <code class="docutils literal notranslate"><span class="pre">ConvertToDistribution</span></code> and <code class="docutils literal notranslate"><span class="pre">ConvertFromDistribution</span></code>.</p></li>
+<li><p>The e-data (uncertainties) follows the same distinction as y-data.
+It typically stores the standard-deviation, but is sometimes (internally and temporarily) converted to a variance, i.e., the square of the standard-deviation.</p></li>
+</ul>
+<p>The new histogram type described below is designed to follow the needs of the current way Mantid deals with histograms (the following description is mainly for x-data, but the same applies to y-data):</p>
+<ol class="arabic simple">
+<li><p>Some algorithms work with bin edges, some with points, and many do not care.</p></li>
+<li><p>We need to share data, e.g., when the bin edges of all histograms in a workspace are identical. This is currently handled in <code class="docutils literal notranslate"><span class="pre">ISpectrum</span></code>, <code class="docutils literal notranslate"><span class="pre">Histogram1D</span></code>, and <code class="docutils literal notranslate"><span class="pre">EventList</span></code>, which store a copy-on-write pointer (<code class="docutils literal notranslate"><span class="pre">Kernel::cow_ptr</span></code>) to a <code class="docutils literal notranslate"><span class="pre">std::vector&lt;double&gt;</span></code>.</p></li>
+</ol>
+<p>Mantid developers are all familiar with these two facts:</p>
+<ol class="arabic">
+<li><p>Algorithms that “do not care” access the data and simply work with it. All other algorithms attempt to determine whether the x-data corresponds bin edges or points by comparing its length to that of the y-data (or alternatively use <code class="docutils literal notranslate"><span class="pre">MatrixWorkspace::isHistogramData()</span></code>). Based on the result they may convert, e.g., bin edges to points.</p></li>
+<li><p>The copy-on-write mechanism is reflected in the interface of <code class="docutils literal notranslate"><span class="pre">ISpectrum</span></code> and <code class="docutils literal notranslate"><span class="pre">MatrixWorkspace</span></code>:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">using</span><span class="w"> </span><span class="n">MantidVec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="k">using</span><span class="w"> </span><span class="n">MantidVecPtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Kernel</span><span class="o">::</span><span class="n">cow_ptr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1">// Current ISpectrum interface:</span>
+<span class="linenos"> 5</span><span class="kt">void</span><span class="w"> </span><span class="nf">setX</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">MantidVec</span><span class="w"> </span><span class="o">&amp;</span><span class="n">X</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="kt">void</span><span class="w"> </span><span class="nf">setX</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">MantidVecPtr</span><span class="w"> </span><span class="o">&amp;</span><span class="n">X</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="kt">void</span><span class="w"> </span><span class="nf">setX</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">MantidVecPtr</span><span class="o">::</span><span class="n">ptr_type</span><span class="w"> </span><span class="o">&amp;</span><span class="n">X</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="n">MantidVec</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">dataX</span><span class="p">();</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="k">const</span><span class="w"> </span><span class="n">MantidVec</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">dataX</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">10</span><span class="k">const</span><span class="w"> </span><span class="n">MantidVec</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">readX</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">11</span><span class="n">MantidVecPtr</span><span class="w"> </span><span class="nf">ptrX</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"> </span><span class="c1">// renamed to refX() in MatrixWorkspace</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Non-<code class="docutils literal notranslate"><span class="pre">const</span></code> access to data in a spectrum will trigger a copy.</p></li>
+<li><p>To avoid triggering the copy we use <code class="docutils literal notranslate"><span class="pre">readX()</span></code>.</p></li>
+<li><p>When we want to share data we use <code class="docutils literal notranslate"><span class="pre">setX()</span></code> with a <code class="docutils literal notranslate"><span class="pre">shared_ptr</span></code> or <code class="docutils literal notranslate"><span class="pre">cow_ptr</span></code> (can be obtained with <code class="docutils literal notranslate"><span class="pre">ptrX()</span></code> or <code class="docutils literal notranslate"><span class="pre">refX()</span></code>).</p></li>
+</ul>
+</li>
+</ol>
+<p>The shortcomings of the current implementation are mostly obvious and can also be found in the <a class="reference external" href="https://github.com/mantidproject/documents/blob/master/Design/histogram_type.md">design document</a>.</p>
+</section>
+</section>
+<section id="the-new-histogram-type">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">The new <code class="docutils literal notranslate"><span class="pre">Histogram</span></code> type</a><a class="headerlink" href="#the-new-histogram-type" title="Permalink to this heading">¶</a></h2>
+<section id="id2">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Motivation</a><a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<p>In its final form, we will be able to do things like the following (things not implemented yet are marked with an asterisk (*)):</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="n">BinEdges</span><span class="w"> </span><span class="n">edges</span><span class="p">{</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="mf">4.0</span><span class="p">,</span><span class="w"> </span><span class="mf">8.0</span><span class="p">};</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="n">Counts</span><span class="w"> </span><span class="n">counts1</span><span class="p">{</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">};</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="n">Counts</span><span class="w"> </span><span class="n">counts2</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span><span class="w"></span>
+<span class="linenos"> 4</span><span class="n">Histogram</span><span class="w"> </span><span class="nf">histogram1</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span><span class="w"> </span><span class="n">counts1</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="n">Histogram</span><span class="w"> </span><span class="nf">histogram2</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span><span class="w"> </span><span class="n">counts2</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="c1">// x-data in histogram1 and histogram2 is shared</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="c1">// Uncertainties are auto-generated, unless specified explicitly</span>
+<span class="linenos"> 9</span><span class="k">auto</span><span class="w"> </span><span class="n">errors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram1</span><span class="p">.</span><span class="n">countStandardDeviations</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">10</span><span class="n">errors</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w"> </span><span class="c1">// 2.0</span>
+<span class="linenos">11</span><span class="n">errors</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span><span class="w"> </span><span class="c1">// 10.0</span>
+<span class="linenos">12</span><span class="n">errors</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="c1">// 2.0</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span><span class="c1">// Arithmetics with histograms (*)</span>
+<span class="linenos">15</span><span class="n">histogram1</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">histogram2</span><span class="p">;</span><span class="w"> </span><span class="c1">// Checks size, throws if mismatched!</span>
+<span class="linenos">16</span><span class="k">auto</span><span class="w"> </span><span class="n">counts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram1</span><span class="p">.</span><span class="n">counts</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">17</span><span class="n">counts</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w"> </span><span class="c1">// 4.0</span>
+<span class="linenos">18</span><span class="n">counts</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span><span class="w"> </span><span class="c1">// 200.0</span>
+<span class="linenos">19</span><span class="n">counts</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="c1">// 4.0</span>
+<span class="linenos">20</span><span class="c1">// Deals with errors as well!</span>
+<span class="linenos">21</span><span class="n">errors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram1</span><span class="p">.</span><span class="n">countStandardDeviations</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">22</span><span class="n">errors</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w"> </span><span class="c1">// 2.0</span>
+<span class="linenos">23</span><span class="n">errors</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span><span class="w"> </span><span class="c1">// sqrt(200.0)</span>
+<span class="linenos">24</span><span class="n">errors</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="c1">// 2.0</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="c1">// Need bin centers (point data) instead of bin edges?</span>
+<span class="linenos">27</span><span class="k">auto</span><span class="w"> </span><span class="n">points</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram</span><span class="p">.</span><span class="n">points</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">28</span><span class="c1">// Need variance instead of standard deviation?</span>
+<span class="linenos">29</span><span class="k">auto</span><span class="w"> </span><span class="n">variances</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram</span><span class="p">.</span><span class="n">countVariances</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">30</span><span class="c1">// Need frequencies (distribution data) instead of counts?</span>
+<span class="linenos">31</span><span class="k">auto</span><span class="w"> </span><span class="n">frequencies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram</span><span class="p">.</span><span class="n">frequencies</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">32</span><span class="k">auto</span><span class="w"> </span><span class="n">variances</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram</span><span class="p">.</span><span class="n">frequencyVariances</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="c1">// Type-safe operations</span>
+<span class="linenos">35</span><span class="n">CountStandardDeviations</span><span class="w"> </span><span class="n">sigmas</span><span class="p">{</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">};</span><span class="w"></span>
+<span class="linenos">36</span><span class="n">histogram</span><span class="p">.</span><span class="n">setCountVariances</span><span class="p">(</span><span class="n">sigmas</span><span class="p">);</span><span class="w"> </span><span class="c1">// Ok, squares internally</span>
+<span class="linenos">37</span><span class="n">sigmas</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">CountVariances</span><span class="p">{</span><span class="mf">0.01</span><span class="p">,</span><span class="w"> </span><span class="mf">0.01</span><span class="p">};</span><span class="w"> </span><span class="c1">// Ok, takes sqrt before adding (*)</span>
+<span class="linenos">38</span><span class="n">sigmas</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w"> </span><span class="c1">// 0.2</span>
+<span class="linenos">39</span><span class="n">sigmas</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span><span class="w"> </span><span class="c1">// 0.2</span>
+</pre></div>
+</div>
+<p>Further planned features:</p>
+<ul class="simple">
+<li><p>Arithmetics will all sub-types (<code class="docutils literal notranslate"><span class="pre">BinEdges</span></code>, <code class="docutils literal notranslate"><span class="pre">Points</span></code>, <code class="docutils literal notranslate"><span class="pre">Counts</span></code>, and <code class="docutils literal notranslate"><span class="pre">Frequencies</span></code>, and also their respective <code class="docutils literal notranslate"><span class="pre">Variances</span></code> and <code class="docutils literal notranslate"><span class="pre">StandardDeviations</span></code>).</p></li>
+<li><p>Generating bin edges (linear, logarithmic, …).</p></li>
+<li><p>Extend the <code class="docutils literal notranslate"><span class="pre">Histogram</span></code> interface with more common operations.</p></li>
+<li><p>Non-member functions for more complex operations on histograms such as rebinning.</p></li>
+<li><p>Validation of data, e.g., non-zero bin widths and positivity of uncertainties.</p></li>
+</ul>
+<p><strong>Any feedback on additional capabilities of the new data types is highly appreciated.
+I will happily consider adding more features as long as they fit the overall design.
+Please get in</strong> <a class="reference external" href="mailto:simon&#46;heybrock&#37;&#52;&#48;esss&#46;se">contact</a> <strong>with me!</strong></p>
+<p>Basic changes have been merged (soon after the 3.7 release).
+We will then work on reducing the use of the old interface (<code class="docutils literal notranslate"><span class="pre">readX()</span></code>, <code class="docutils literal notranslate"><span class="pre">dataX()</span></code>, <code class="docutils literal notranslate"><span class="pre">readY()</span></code>, …) as much as possible.
+After that, more features will follow.</p>
+<p>We also want to expose most parts of the <code class="docutils literal notranslate"><span class="pre">HistogramData</span></code> module to Python, but no schedule has been decided yet.
+Parts of the old interface will be kept alive for now, in particular to maintain support for the old Python interface.</p>
+</section>
+<section id="overview">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>A new module <code class="docutils literal notranslate"><span class="pre">HistogramData</span></code> has been added.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Histogram1D</span></code> and <code class="docutils literal notranslate"><span class="pre">EventList</span></code> now store their histogram data in the new type <code class="docutils literal notranslate"><span class="pre">HistogramData::Histogram</span></code>.</p></li>
+<li><p>The public interface of <code class="docutils literal notranslate"><span class="pre">ISpectrum</span></code> and <code class="docutils literal notranslate"><span class="pre">MatrixWorkspace</span></code> gives access to <code class="docutils literal notranslate"><span class="pre">Histogram</span></code> and its components, in a fashion similar to <code class="docutils literal notranslate"><span class="pre">readX()</span></code>, <code class="docutils literal notranslate"><span class="pre">dataX()</span></code>, etc.</p></li>
+<li><p>The old <code class="docutils literal notranslate"><span class="pre">readX()</span></code>/<code class="docutils literal notranslate"><span class="pre">dataX()</span></code> interface is still available for the time being, but its use is unsafe (as before) and it should not be used anymore.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">MatrixWorkspace</span></code> thus has a number of new public methods (details follow below):</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span><span class="w"> </span><span class="nc">MatrixWorkspace</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="c1">// Note return by value (see below)</span>
+<span class="linenos"> 4</span><span class="w">  </span><span class="n">Histogram</span><span class="w"> </span><span class="n">histogram</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setHistogram</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="c1">// Note return by value (see below)</span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="n">BinEdges</span><span class="w"> </span><span class="nf">binEdges</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="n">Points</span><span class="w"> </span><span class="nf">points</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setBinEdges</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">12</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setPoints</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">13</span>
+<span class="linenos">14</span><span class="w">  </span><span class="c1">// Note return by value (see below)</span>
+<span class="linenos">15</span><span class="w">  </span><span class="n">Counts</span><span class="w"> </span><span class="nf">counts</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">16</span><span class="w">  </span><span class="n">CountVariances</span><span class="w"> </span><span class="nf">countVariances</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">17</span><span class="w">  </span><span class="n">CountStandardDeviations</span><span class="w"> </span><span class="nf">countStandardDeviations</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">18</span><span class="w">  </span><span class="n">Frequencies</span><span class="w"> </span><span class="nf">frequencies</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">19</span><span class="w">  </span><span class="n">FrequencyVariances</span><span class="w"> </span><span class="nf">frequencyVariances</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">20</span><span class="w">  </span><span class="n">FrequencyStandardDeviations</span><span class="w"> </span><span class="nf">frequencyStandardDeviations</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setCounts</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+<span class="linenos">23</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setCountVariances</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+<span class="linenos">24</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setCountStandardDeviations</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+<span class="linenos">25</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setFrequencies</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+<span class="linenos">26</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setFrequencyVariances</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+<span class="linenos">27</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setFrequencyStandardDeviations</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+<span class="linenos">28</span>
+<span class="linenos">29</span><span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">HistogramX</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">x</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">30</span><span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">HistogramY</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">y</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">31</span><span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">HistogramE</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">e</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="w">  </span><span class="n">HistogramX</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">mutableX</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">34</span><span class="w">  </span><span class="n">HistogramY</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">mutableY</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">35</span><span class="w">  </span><span class="n">HistogramE</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">mutableE</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">36</span>
+<span class="linenos">37</span><span class="w">  </span><span class="n">Kernel</span><span class="o">::</span><span class="n">cow_ptr</span><span class="o">&lt;</span><span class="n">HistogramX</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sharedX</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">38</span><span class="w">  </span><span class="n">Kernel</span><span class="o">::</span><span class="n">cow_ptr</span><span class="o">&lt;</span><span class="n">HistogramY</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sharedY</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">39</span><span class="w">  </span><span class="n">Kernel</span><span class="o">::</span><span class="n">cow_ptr</span><span class="o">&lt;</span><span class="n">HistogramE</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sharedE</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">40</span>
+<span class="linenos">41</span><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setSharedX</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Kernel</span><span class="o">::</span><span class="n">cow_ptr</span><span class="o">&lt;</span><span class="n">HistogramX</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">42</span><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setSharedY</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Kernel</span><span class="o">::</span><span class="n">cow_ptr</span><span class="o">&lt;</span><span class="n">HistogramY</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">43</span><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setSharedE</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Kernel</span><span class="o">::</span><span class="n">cow_ptr</span><span class="o">&lt;</span><span class="n">HistogramE</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">44</span><span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="histogram">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">Histogram</span></code></a><a class="headerlink" href="#histogram" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Contains copy-on-write pointers (<code class="docutils literal notranslate"><span class="pre">cow_ptr</span></code>) to the x-data, y-data, and e-data.</p></li>
+<li><p>Therefore: <strong>copying</strong> and return-by-value (see <code class="docutils literal notranslate"><span class="pre">Histogram</span> <span class="pre">MatrixWorkspace::histogram(size_t)</span></code>) <strong>is cheap</strong>!</p></li>
+<li><p>The interface gives access to the data as well as the pointer:</p></li>
+</ul>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span><span class="w"> </span><span class="nc">Histogram</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="c1">// ...</span>
+<span class="linenos"> 4</span><span class="w">  </span><span class="c1">// Replacement for readX() and dataX() const</span>
+<span class="linenos"> 5</span><span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">HistogramX</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">HistogramY</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">y</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">HistogramE</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">e</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="c1">// Replacement for dataX()</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="n">HistogramX</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">mutableX</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">  </span><span class="n">HistogramY</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">mutableY</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">11</span><span class="w">  </span><span class="n">HistogramE</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">mutableE</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="w">  </span><span class="c1">// Replacement for refX()</span>
+<span class="linenos">14</span><span class="w">  </span><span class="n">Kernel</span><span class="o">::</span><span class="n">cow_ptr</span><span class="o">&lt;</span><span class="n">HistogramX</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sharedX</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">15</span><span class="w">  </span><span class="n">Kernel</span><span class="o">::</span><span class="n">cow_ptr</span><span class="o">&lt;</span><span class="n">HistogramY</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sharedY</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">16</span><span class="w">  </span><span class="n">Kernel</span><span class="o">::</span><span class="n">cow_ptr</span><span class="o">&lt;</span><span class="n">HistogramE</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sharedE</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">17</span><span class="w">  </span><span class="c1">// Replacement for setX()</span>
+<span class="linenos">18</span><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setSharedX</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Kernel</span><span class="o">::</span><span class="n">cow_ptr</span><span class="o">&lt;</span><span class="n">HistogramX</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">19</span><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setSharedY</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Kernel</span><span class="o">::</span><span class="n">cow_ptr</span><span class="o">&lt;</span><span class="n">HistogramY</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">20</span><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setSharedE</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Kernel</span><span class="o">::</span><span class="n">cow_ptr</span><span class="o">&lt;</span><span class="n">HistogramE</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">21</span><span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Note that there is also Dx-data, but it is not widely used and thus omitted from this documentation.
+The interface for Dx is mostly equivalent to that for E.</p>
+</section>
+<section id="histogramx-histogramy-and-histograme">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">HistogramX</span></code>, <code class="docutils literal notranslate"><span class="pre">HistogramY</span></code>, and <code class="docutils literal notranslate"><span class="pre">HistogramE</span></code></a><a class="headerlink" href="#histogramx-histogramy-and-histograme" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The current fundamental type for x-data, <code class="docutils literal notranslate"><span class="pre">std::vector&lt;double&gt;</span></code>, is replaced by <code class="docutils literal notranslate"><span class="pre">HistogramX</span></code>.</p></li>
+<li><p>The current fundamental type for y-data, <code class="docutils literal notranslate"><span class="pre">std::vector&lt;double&gt;</span></code>, is replaced by <code class="docutils literal notranslate"><span class="pre">HistogramY</span></code>.</p></li>
+<li><p>The current fundamental type for e-data, <code class="docutils literal notranslate"><span class="pre">std::vector&lt;double&gt;</span></code>, is replaced by <code class="docutils literal notranslate"><span class="pre">HistogramE</span></code>.</p></li>
+<li><p>Internally these are also a <code class="docutils literal notranslate"><span class="pre">std::vector&lt;double&gt;</span></code> and the interface is almost identical.</p></li>
+<li><p>However, they do not allow for size modifications, since that could bring a histogram into an inconsistent state, e.g., by resizing the x-data without also resizing the y-data.</p></li>
+</ul>
+</section>
+<section id="binedges">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">BinEdges</span></code></a><a class="headerlink" href="#binedges" title="Permalink to this heading">¶</a></h3>
+<ul>
+<li><p>For algorithms that work with bin edges, <code class="docutils literal notranslate"><span class="pre">Histogram</span></code> provides an interface for accessing and modifying the x-data as if it were stored as bin edges:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">class</span><span class="w"> </span><span class="nc">Histogram</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">2</span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">3</span><span class="w">  </span><span class="c1">// Returns by value!</span>
+<span class="linenos">4</span><span class="w">  </span><span class="n">BinEdges</span><span class="w"> </span><span class="n">binEdges</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">5</span><span class="w">  </span><span class="c1">// Accepts any arguments that can be used to construct BinEdges</span>
+<span class="linenos">6</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setBinEdges</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">7</span><span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>If the histogram stores point data, <code class="docutils literal notranslate"><span class="pre">Histogram::binEdges()</span></code> will automatically compute the bin edges from the points.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BinEdges</span></code> contains a <code class="docutils literal notranslate"><span class="pre">cow_ptr</span></code> to <code class="docutils literal notranslate"><span class="pre">HistogramX</span></code>. If the histogram stores bin edges, the <code class="docutils literal notranslate"><span class="pre">BinEdges</span></code> object returned by <code class="docutils literal notranslate"><span class="pre">Histogram::binEdges()</span></code> references the same <code class="docutils literal notranslate"><span class="pre">HistogramX</span></code>, i.e., there is <strong>no expensive copy</strong> involved.</p></li>
+<li><p>Setting the same <code class="docutils literal notranslate"><span class="pre">BinEdges</span></code> object on several histograms will share the underlying data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Histogram::setBinEdges()</span></code> includes a size check and throws if the histogram is incompatible with the size defined by the method arguments.</p></li>
+</ul>
+</section>
+<section id="points">
+<h3><a class="toc-backref" href="#id14" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">Points</span></code></a><a class="headerlink" href="#points" title="Permalink to this heading">¶</a></h3>
+<ul>
+<li><p>For algorithms that work with points, <code class="docutils literal notranslate"><span class="pre">Histogram</span></code> provides an interface for accessing and modifying the x-data as if it were stored as points:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">class</span><span class="w"> </span><span class="nc">Histogram</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">2</span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">3</span><span class="w">  </span><span class="c1">// Returns by value!</span>
+<span class="linenos">4</span><span class="w">  </span><span class="n">Points</span><span class="w"> </span><span class="n">points</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">5</span><span class="w">  </span><span class="c1">// Accepts any arguments that can be used to construct Points</span>
+<span class="linenos">6</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setPoints</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">7</span><span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>If the histogram stores bin edges, <code class="docutils literal notranslate"><span class="pre">Histogram::points()</span></code> will automatically compute the points from the bin edges.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Points</span></code> contains a <code class="docutils literal notranslate"><span class="pre">cow_ptr</span></code> to <code class="docutils literal notranslate"><span class="pre">HistogramX</span></code>. If the histogram stores points, the <code class="docutils literal notranslate"><span class="pre">Points</span></code> object returned by <code class="docutils literal notranslate"><span class="pre">Histogram::points()</span></code> references the same <code class="docutils literal notranslate"><span class="pre">HistogramX</span></code>, i.e., there is <strong>no expensive copy</strong> involved.</p></li>
+<li><p>Setting the same <code class="docutils literal notranslate"><span class="pre">Points</span></code> object on several histograms will share the underlying data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Histogram::setPoints()</span></code> includes a size check and throws if the histogram is incompatible with the size defined by the method arguments.</p></li>
+</ul>
+</section>
+<section id="counts">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">Counts</span></code></a><a class="headerlink" href="#counts" title="Permalink to this heading">¶</a></h3>
+<ul>
+<li><p>For algorithms that work with counts, <code class="docutils literal notranslate"><span class="pre">Histogram</span></code> provides an interface for accessing and modifying the y-data as if it were stored as counts:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">class</span><span class="w"> </span><span class="nc">Histogram</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">2</span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">3</span><span class="w">  </span><span class="c1">// Returns by value!</span>
+<span class="linenos">4</span><span class="w">  </span><span class="n">Counts</span><span class="w"> </span><span class="n">counts</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">5</span><span class="w">  </span><span class="c1">// Accepts any arguments that can be used to construct Counts</span>
+<span class="linenos">6</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setCounts</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">7</span><span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>Currently the histogram stores counts directly. If this were ever not the case, <code class="docutils literal notranslate"><span class="pre">Histogram::counts()</span></code> will automatically compute the counts from the frequencies.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Counts</span></code> contains a <code class="docutils literal notranslate"><span class="pre">cow_ptr</span></code> to <code class="docutils literal notranslate"><span class="pre">HistogramY</span></code>. If the histogram stores counts (as in the current implementation), the <code class="docutils literal notranslate"><span class="pre">Counts</span></code> object returned by <code class="docutils literal notranslate"><span class="pre">Histogram::counts()</span></code> references the same <code class="docutils literal notranslate"><span class="pre">HistogramY</span></code>, i.e., there is <strong>no expensive copy</strong> involved.</p></li>
+<li><p>Setting the same <code class="docutils literal notranslate"><span class="pre">Counts</span></code> object on several histograms will share the underlying data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Histogram::setCounts()</span></code> includes a size check and throws if the histogram is incompatible with the size defined by the method arguments.</p></li>
+</ul>
+</section>
+<section id="frequencies">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">Frequencies</span></code></a><a class="headerlink" href="#frequencies" title="Permalink to this heading">¶</a></h3>
+<ul>
+<li><p>For algorithms that work with frequencies (defined as counts divided by the bin width), <code class="docutils literal notranslate"><span class="pre">Histogram</span></code> provides an interface for accessing and modifying the y-data as if it were stored as frequencies:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">class</span><span class="w"> </span><span class="nc">Histogram</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">2</span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">3</span><span class="w">  </span><span class="c1">// Returns by value!</span>
+<span class="linenos">4</span><span class="w">  </span><span class="n">Frequencies</span><span class="w"> </span><span class="n">frequencies</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">5</span><span class="w">  </span><span class="c1">// Accepts any arguments that can be used to construct Frequencies</span>
+<span class="linenos">6</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setFrequencies</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">7</span><span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>Currently the histogram stores counts. <code class="docutils literal notranslate"><span class="pre">Histogram::counts()</span></code> will automatically compute the frequencies from the counts.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Frequencies</span></code> contains a <code class="docutils literal notranslate"><span class="pre">cow_ptr</span></code> to <code class="docutils literal notranslate"><span class="pre">HistogramY</span></code>.</p></li>
+<li><p>Setting the same <code class="docutils literal notranslate"><span class="pre">Frequencies</span></code> object on several histograms <strong>will not share</strong> the underlying data since a conversion is required. This is in contrast to <code class="docutils literal notranslate"><span class="pre">BinEdges</span></code> and <code class="docutils literal notranslate"><span class="pre">Points</span></code> where the internal storage mode is changed when setters are used. This is currently not the case for <code class="docutils literal notranslate"><span class="pre">Counts</span></code> and <code class="docutils literal notranslate"><span class="pre">Frequencies</span></code>, i.e., y-data is always stored as counts.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Histogram::setFrequencies()</span></code> includes a size check and throws if the histogram is incompatible with the size defined by the method arguments.</p></li>
+</ul>
+</section>
+<section id="countvariances-countstandarddeviations-frequencyvariances-and-frequencystandarddeviations">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">CountVariances</span></code>, <code class="docutils literal notranslate"><span class="pre">CountStandardDeviations</span></code>, <code class="docutils literal notranslate"><span class="pre">FrequencyVariances</span></code>, and <code class="docutils literal notranslate"><span class="pre">FrequencyStandardDeviations</span></code></a><a class="headerlink" href="#countvariances-countstandarddeviations-frequencyvariances-and-frequencystandarddeviations" title="Permalink to this heading">¶</a></h3>
+<ul>
+<li><p>For algorithms that work with counts or frequencies, <code class="docutils literal notranslate"><span class="pre">Histogram</span></code> provides an interface for accessing and modifying the e-data as if it were stored as variances or standard deviations of counts or frequencies:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">class</span><span class="w"> </span><span class="nc">Histogram</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos"> 2</span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="w">  </span><span class="c1">// Return by value!</span>
+<span class="linenos"> 4</span><span class="w">  </span><span class="n">CountVariances</span><span class="w"> </span><span class="n">countVariances</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="w">  </span><span class="n">CountStandardDeviations</span><span class="w"> </span><span class="nf">countStandardDeviations</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="n">FrequencyVariances</span><span class="w"> </span><span class="nf">frequencyVariances</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="n">FrequencyStandardDeviations</span><span class="w"> </span><span class="nf">frequencyStandardDeviations</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="w">  </span><span class="c1">// Accept any arguments that can be used to construct the respectivy object</span>
+<span class="linenos"> 9</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setCountVariances</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">10</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setCountStandardDeviations</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">11</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setFrequencyVariances</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">12</span><span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">setFrequencyStandardDeviations</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="w"> </span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">13</span><span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>Currently the histogram stores the standard deviations of the counts. When accessing the uncertainties via any of the other 3 types the above interface methods, <code class="docutils literal notranslate"><span class="pre">Histogram</span></code> will automatically compute the requested type from the standard deviations of the counts.</p></li>
+<li><p>Each of the 4 types for uncertainties contains a <code class="docutils literal notranslate"><span class="pre">cow_ptr</span></code> to <code class="docutils literal notranslate"><span class="pre">HistogramE</span></code>. In the current implementation the <code class="docutils literal notranslate"><span class="pre">CountStandardDeviations</span></code> object returned by <code class="docutils literal notranslate"><span class="pre">Histogram::countStandardDeviations()</span></code> references the same <code class="docutils literal notranslate"><span class="pre">HistogramE</span></code> as stored in the histogram, i.e., there is no expensive copy involved.</p></li>
+<li><p>Setting the same <code class="docutils literal notranslate"><span class="pre">CountStandardDeviations</span></code> object on several histograms will share the underlying data.</p></li>
+<li><p>Setting any of the other 3 uncertantity objects on several histograms will not share the underlying data, since a conversion needs to take place.</p></li>
+<li><p>All <code class="docutils literal notranslate"><span class="pre">Histogram</span></code> setters for uncertainties includes a size check and throw if the histogram is incompatible with the size defined by the method arguments.</p></li>
+</ul>
+</section>
+<section id="code-examples">
+<h3><a class="toc-backref" href="#id18" role="doc-backlink">Code examples</a><a class="headerlink" href="#code-examples" title="Permalink to this heading">¶</a></h3>
+<p>All new classes and functions described here are part of the module <code class="docutils literal notranslate"><span class="pre">HistogramData</span></code>. The following code examples assume <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">namespace</span> <span class="pre">HistogramData;</span></code>.</p>
+<section id="working-with-bin-edges-and-counts">
+<h4><a class="toc-backref" href="#id19" role="doc-backlink">Working with bin edges and counts</a><a class="headerlink" href="#working-with-bin-edges-and-counts" title="Permalink to this heading">¶</a></h4>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos"> 2</span><span class="c1">// Construct like std::vector&lt;double&gt;:</span>
+<span class="linenos"> 3</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos"> 4</span><span class="n">Counts</span><span class="w"> </span><span class="nf">counts</span><span class="p">(</span><span class="n">length</span><span class="p">);</span><span class="w"> </span><span class="c1">// initialized to 0.0</span>
+<span class="linenos"> 5</span><span class="n">Counts</span><span class="w"> </span><span class="nf">counts</span><span class="p">(</span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="mf">42.0</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 6</span><span class="n">Counts</span><span class="w"> </span><span class="n">counts</span><span class="p">{</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4</span><span class="p">,</span><span class="w"> </span><span class="mf">0.8</span><span class="p">};</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">data</span><span class="p">(...);</span><span class="w"></span>
+<span class="linenos"> 8</span><span class="n">Counts</span><span class="w"> </span><span class="nf">counts</span><span class="p">(</span><span class="n">data</span><span class="p">);</span><span class="w"></span>
+<span class="linenos"> 9</span><span class="n">Counts</span><span class="w"> </span><span class="nf">counts</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">end</span><span class="p">());</span><span class="w"></span>
+<span class="linenos">10</span><span class="n">Counts</span><span class="w"> </span><span class="nf">counts</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">data</span><span class="p">));</span><span class="w"></span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos">13</span><span class="c1">// Iterators:</span>
+<span class="linenos">14</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos">15</span><span class="n">BinEdges</span><span class="w"> </span><span class="n">edges</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="mf">4.0</span><span class="p">};</span><span class="w"></span>
+<span class="linenos">16</span><span class="k">if</span><span class="p">(</span><span class="n">edges</span><span class="p">.</span><span class="n">cbegin</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">edges</span><span class="p">.</span><span class="n">cend</span><span class="p">())</span><span class="w"></span>
+<span class="linenos">17</span><span class="w">  </span><span class="o">*</span><span class="p">(</span><span class="n">edges</span><span class="p">.</span><span class="n">begin</span><span class="p">())</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">18</span><span class="c1">// Range-based for works thanks to iterators:</span>
+<span class="linenos">19</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">edge</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">edges</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">20</span><span class="w">  </span><span class="n">edge</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos">23</span><span class="c1">// Index operator:</span>
+<span class="linenos">24</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos">25</span><span class="n">BinEdges</span><span class="w"> </span><span class="n">edges</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="mf">4.0</span><span class="p">};</span><span class="w"></span>
+<span class="linenos">26</span><span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w"> </span><span class="c1">// 1.0</span>
+<span class="linenos">27</span><span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span><span class="w"> </span><span class="c1">// 2.0</span>
+<span class="linenos">28</span><span class="n">edges</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="c1">// 4.0</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span><span class="c1">// Only const! This is not possible:</span>
+<span class="linenos">31</span><span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span><span class="w"> </span><span class="c1">// DOES NOT COMPILE</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="c1">// REASON: BinEdges contains a copy-on-write pointer to data, dereferencing in</span>
+<span class="linenos">34</span><span class="c1">// tight loop is expensive, so interface prevents things like this:</span>
+<span class="linenos">35</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">edges</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">36</span><span class="w">  </span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span><span class="w"> </span><span class="c1">// does not compile</span>
+<span class="linenos">37</span>
+<span class="linenos">38</span><span class="c1">// If you need write access via index, use:</span>
+<span class="linenos">39</span><span class="k">auto</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">edges</span><span class="p">.</span><span class="n">mutableData</span><span class="p">();</span><span class="w"> </span><span class="c1">// works similar to current dataX()</span>
+<span class="linenos">40</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">x</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
+<span class="linenos">41</span><span class="w">  </span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mf">0.1</span><span class="o">*</span><span class="n">i</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">42</span>
+<span class="linenos">43</span><span class="c1">// Better (for simple cases):</span>
+<span class="linenos">44</span><span class="n">edges</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="working-with-points">
+<h4><a class="toc-backref" href="#id20" role="doc-backlink">Working with points</a><a class="headerlink" href="#working-with-points" title="Permalink to this heading">¶</a></h4>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// Works identically to BinEdges</span>
+<span class="linenos"> 2</span><span class="n">Points</span><span class="w"> </span><span class="n">points</span><span class="p">{</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4</span><span class="p">};</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="c1">// ...</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1">// Type safe!</span>
+<span class="linenos"> 6</span><span class="n">BinEdges</span><span class="w"> </span><span class="nf">edges</span><span class="p">(...);</span><span class="w"></span>
+<span class="linenos"> 7</span><span class="n">points</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">edges</span><span class="p">;</span><span class="w"> </span><span class="c1">// DOES NOT COMPILE</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="c1">// Can convert</span>
+<span class="linenos">10</span><span class="n">points</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Points</span><span class="p">(</span><span class="n">edges</span><span class="p">);</span><span class="w"> </span><span class="c1">// Points are defined as mid-points between edges</span>
+<span class="linenos">11</span><span class="n">edges</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">BinEdges</span><span class="p">(</span><span class="n">points</span><span class="p">);</span><span class="w"> </span><span class="c1">// Note that this is lossy, see ConvertToHistogram</span>
+</pre></div>
+</div>
+</section>
+<section id="working-with-histograms">
+<h4><a class="toc-backref" href="#id21" role="doc-backlink">Working with histograms</a><a class="headerlink" href="#working-with-histograms" title="Permalink to this heading">¶</a></h4>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos"> 2</span><span class="c1">// Construct Histogram:</span>
+<span class="linenos"> 3</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos"> 4</span><span class="n">Histogram</span><span class="w"> </span><span class="nf">histogram</span><span class="p">(</span><span class="n">BinEdges</span><span class="p">{</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4</span><span class="p">},</span><span class="w"> </span><span class="n">Counts</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="n">histogram</span><span class="p">.</span><span class="n">xMode</span><span class="p">();</span><span class="w"> </span><span class="c1">// returns Histogram::XMode::BinEdges</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos"> 8</span><span class="c1">// Assignment:</span>
+<span class="linenos"> 9</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos">10</span><span class="n">histogram2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram1</span><span class="p">;</span><span class="w"> </span><span class="c1">// Data is automatically shared</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos">13</span><span class="c1">// Basic access:</span>
+<span class="linenos">14</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos">15</span><span class="k">auto</span><span class="w"> </span><span class="n">edges</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram</span><span class="p">.</span><span class="n">binEdges</span><span class="p">();</span><span class="w"> </span><span class="c1">// size 3, references Histogram::x()</span>
+<span class="linenos">16</span><span class="k">auto</span><span class="w"> </span><span class="n">points</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram</span><span class="p">.</span><span class="n">points</span><span class="p">();</span><span class="w"> </span><span class="c1">// size 2, computed on the fly</span>
+<span class="linenos">17</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span><span class="w"> </span><span class="c1">// 0.15</span>
+<span class="linenos">18</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span><span class="w"> </span><span class="c1">// 0.3</span>
+<span class="linenos">19</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram</span><span class="p">.</span><span class="n">x</span><span class="p">();</span><span class="w"> </span><span class="c1">// size 3</span>
+<span class="linenos">20</span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram</span><span class="p">.</span><span class="n">mutableX</span><span class="p">();</span><span class="w"> </span><span class="c1">// size 3</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos">23</span><span class="c1">// Modify bin edges:</span>
+<span class="linenos">24</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos">25</span><span class="k">auto</span><span class="w"> </span><span class="n">edges</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram</span><span class="p">.</span><span class="n">binEdges</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">26</span><span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">27</span><span class="n">histogram</span><span class="p">.</span><span class="n">setBinEdges</span><span class="p">(</span><span class="n">edges</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">28</span>
+<span class="linenos">29</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos">30</span><span class="c1">// Outlook (not implemented yet):</span>
+<span class="linenos">31</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos">32</span><span class="n">histogram2</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">histogram1</span><span class="p">;</span><span class="w"> </span><span class="c1">// Checks for compatible x, adds y and e</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos">35</span><span class="c1">// Side remark -- bin edges and points:</span>
+<span class="linenos">36</span><span class="c1">/////////////////////////////////////////////////////</span>
+<span class="linenos">37</span><span class="n">Histogram</span><span class="w"> </span><span class="nf">histogram</span><span class="p">(</span><span class="n">BinEdges</span><span class="p">{</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4</span><span class="p">});</span><span class="w"></span>
+<span class="linenos">38</span><span class="n">histogram</span><span class="p">.</span><span class="n">xMode</span><span class="p">();</span><span class="w"> </span><span class="c1">// returns Histogram::XMode::BinEdges</span>
+<span class="linenos">39</span><span class="k">auto</span><span class="w"> </span><span class="n">edges</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram</span><span class="p">.</span><span class="n">binEdges</span><span class="p">();</span><span class="w"> </span><span class="c1">// size 3, references Histogram::x()</span>
+<span class="linenos">40</span><span class="k">auto</span><span class="w"> </span><span class="n">points</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram</span><span class="p">.</span><span class="n">points</span><span class="p">();</span><span class="w"> </span><span class="c1">// size 2, computed on the fly</span>
+<span class="linenos">41</span><span class="c1">// XMode::BinEdges, size 3 is compatible with Points of size 2, so:</span>
+<span class="linenos">42</span><span class="n">histogram</span><span class="p">.</span><span class="n">setPoints</span><span class="p">(</span><span class="n">points</span><span class="p">);</span><span class="w"> </span><span class="c1">// size check passes</span>
+<span class="linenos">43</span><span class="n">histogram</span><span class="p">.</span><span class="n">xMode</span><span class="p">();</span><span class="w"> </span><span class="c1">// returns Histogram::XMode::Points</span>
+<span class="linenos">44</span><span class="n">edges</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram</span><span class="p">.</span><span class="n">binEdges</span><span class="p">();</span><span class="w"> </span><span class="c1">// size 3, computed on the fly</span>
+<span class="linenos">45</span><span class="n">points</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">histogram</span><span class="p">.</span><span class="n">points</span><span class="p">();</span><span class="w"> </span><span class="c1">// size 2, references Histogram::x()</span>
+<span class="linenos">46</span><span class="c1">// Note that edges is now different from its initial values (same</span>
+<span class="linenos">47</span><span class="c1">// behavior as ConvertToPointData followed by ConvertToHistogram).</span>
+</pre></div>
+</div>
+</section>
+<section id="working-with-the-new-matrixworkspace-interface">
+<h4><a class="toc-backref" href="#id22" role="doc-backlink">Working with the new <code class="docutils literal notranslate"><span class="pre">MatrixWorkspace</span></code> interface</a><a class="headerlink" href="#working-with-the-new-matrixworkspace-interface" title="Permalink to this heading">¶</a></h4>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="c1">// Setting Histograms</span>
+<span class="linenos"> 2</span><span class="n">outputWS</span><span class="o">-&gt;</span><span class="n">setHistogram</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">inputWS</span><span class="o">-&gt;</span><span class="n">histogram</span><span class="p">(</span><span class="n">i</span><span class="p">));</span><span class="w"></span>
+<span class="linenos"> 3</span><span class="n">outputWS</span><span class="o">-&gt;</span><span class="n">setHistogram</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">eventWS</span><span class="o">-&gt;</span><span class="n">histogram</span><span class="p">(</span><span class="n">i</span><span class="p">));</span><span class="w"> </span><span class="c1">// ok, histogram data computed based on events</span>
+<span class="linenos"> 4</span><span class="n">outputWS</span><span class="o">-&gt;</span><span class="n">setHistogram</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">BinEdges</span><span class="p">{</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4</span><span class="p">},</span><span class="w"> </span><span class="n">Counts</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">));</span><span class="w"></span>
+<span class="linenos"> 5</span><span class="n">eventWS</span><span class="o">-&gt;</span><span class="n">setHistogram</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">Points</span><span class="p">{</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4</span><span class="p">});</span><span class="w"> </span><span class="c1">// throws, EventWorkspace needs bin edges</span>
+<span class="linenos"> 6</span><span class="n">eventWS</span><span class="o">-&gt;</span><span class="n">setHistogram</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">BinEdges</span><span class="p">{</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4</span><span class="p">},</span><span class="w"> </span><span class="n">Counts</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">));</span><span class="w"> </span><span class="c1">// throws, cannot have Y data</span>
+<span class="linenos"> 7</span><span class="n">eventWS</span><span class="o">-&gt;</span><span class="n">setHistogram</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">BinEdges</span><span class="p">{</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w"> </span><span class="mf">0.4</span><span class="p">});</span><span class="w"> </span><span class="c1">// ok</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="c1">// Setting BinEdges , Counts, ...</span>
+<span class="linenos">10</span><span class="n">outputWS</span><span class="o">-&gt;</span><span class="n">setCounts</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">11</span><span class="n">outputWS</span><span class="o">-&gt;</span><span class="n">setCounts</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">end</span><span class="p">());</span><span class="w"></span>
+<span class="linenos">12</span>
+<span class="linenos">13</span><span class="c1">// Preserve sharing</span>
+<span class="linenos">14</span><span class="n">outputWS</span><span class="o">-&gt;</span><span class="n">setSharedY</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">inputWS</span><span class="o">-&gt;</span><span class="n">sharedY</span><span class="p">(</span><span class="n">i</span><span class="p">));</span><span class="w"></span>
+<span class="linenos">15</span><span class="n">outputWS</span><span class="o">-&gt;</span><span class="n">setCounts</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">inputWS</span><span class="o">-&gt;</span><span class="n">counts</span><span class="p">(</span><span class="n">i</span><span class="p">));</span><span class="w"> </span><span class="c1">// also shares, &#39;Counts&#39; wraps a cow_ptr</span>
+<span class="linenos">16</span><span class="n">outputWS</span><span class="o">-&gt;</span><span class="n">setBinEdges</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">inputWS</span><span class="o">-&gt;</span><span class="n">binEdges</span><span class="p">(</span><span class="n">i</span><span class="p">));</span><span class="w"> </span><span class="c1">// shares if input storage mode is &#39;XMode::BinEdges&#39;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="legacy-interface">
+<h3><a class="toc-backref" href="#id23" role="doc-backlink">Legacy interface</a><a class="headerlink" href="#legacy-interface" title="Permalink to this heading">¶</a></h3>
+<p>For compatibility reasons an interface to the internal data, equivalent to the old interface, is still available. Using it is discouraged, since it cannot enforce size checks!</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="k">class</span><span class="w"> </span><span class="nc">Histogram</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="linenos">2</span><span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="linenos">3</span><span class="w">  </span><span class="n">MantidVec</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dataX</span><span class="p">();</span><span class="w"></span>
+<span class="linenos">4</span><span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">MantidVec</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">dataX</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">5</span><span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">MantidVec</span><span class="w"> </span><span class="o">&amp;</span><span class="nf">readX</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">6</span><span class="w">  </span><span class="c1">// Pointer access is slightly modified, holding a HistogramX:</span>
+<span class="linenos">7</span><span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setX</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Kernel</span><span class="o">::</span><span class="n">cow_ptr</span><span class="o">&lt;</span><span class="n">HistogramX</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">X</span><span class="p">);</span><span class="w"></span>
+<span class="linenos">8</span><span class="w">  </span><span class="n">Kernel</span><span class="o">::</span><span class="n">cow_ptr</span><span class="o">&lt;</span><span class="n">HistogramX</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ptrX</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span><span class="w"></span>
+<span class="linenos">9</span><span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="rollout-status">
+<h2><a class="toc-backref" href="#id24" role="doc-backlink">Rollout status</a><a class="headerlink" href="#rollout-status" title="Permalink to this heading">¶</a></h2>
+<p>In principle, <code class="docutils literal notranslate"><span class="pre">Histogram</span></code> removes the need for conversions between storage types of Y and E data, i.e., the algorithms <code class="docutils literal notranslate"><span class="pre">ConvertToDistribution</span></code> and <code class="docutils literal notranslate"><span class="pre">ConvertFromDistribution</span></code>, and manual conversions between standard deviations and variances.</p>
+<ul class="simple">
+<li><p>We have not progressed far enough with refactoring to do this.</p></li>
+<li><p>Just as before the introduction of <code class="docutils literal notranslate"><span class="pre">Histogram</span></code>, converting the data and accessing it in the wrong way will create nonsensical results.
+For example:</p>
+<ul>
+<li><p>Converting a workspace with <code class="docutils literal notranslate"><span class="pre">ConvertToDistribution</span></code> and then running another algorithm that interprets <code class="docutils literal notranslate"><span class="pre">readY()</span></code> as counts does not make sense.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Histogram</span></code> does not yet protect us from that in its current state. Running <code class="docutils literal notranslate"><span class="pre">ConvertToDistribution</span></code> and then accessing data as <code class="docutils literal notranslate"><span class="pre">counts()</span></code> or <code class="docutils literal notranslate"><span class="pre">frequencies()</span></code> will not convert correctly, since the <code class="docutils literal notranslate"><span class="pre">Histogram</span></code> does not know that an external conversion algorithm has been run on its data.</p></li>
+</ul>
+</li>
+<li><p>It is essential to fix this as a next step, there are two options:</p>
+<ul>
+<li><p>Option A: Remove all such conversions from Mantid, if data is required as one type or another use <code class="docutils literal notranslate"><span class="pre">counts()</span></code> or <code class="docutils literal notranslate"><span class="pre">frequencies()</span></code>.</p></li>
+<li><p>Option B: Make changing the storage type of Y and E data in <code class="docutils literal notranslate"><span class="pre">Histogram</span></code> possible. This implies that we cannot use <code class="docutils literal notranslate"><span class="pre">Histogram::y()</span></code> in algorithms that require <code class="docutils literal notranslate"><span class="pre">Counts</span></code>, since this is not guaranteed anymore.</p></li>
+</ul>
+</li>
+</ul>
+<p>Storing the uncertainties as standard deviations vs. storing them as variances suffers from a very similar problem.</p>
+<p>Both options have shortcomings and I have currently not made up my mind about the best solution.
+In any case this will be a major change and is thus not part of the initial introduction of the <code class="docutils literal notranslate"><span class="pre">HistogramData</span></code> module.
+I would be happy about feedback or other ideas.</p>
+</section>
+<section id="dealing-with-problems">
+<h2><a class="toc-backref" href="#id25" role="doc-backlink">Dealing with problems</a><a class="headerlink" href="#dealing-with-problems" title="Permalink to this heading">¶</a></h2>
+<p>There are two issues you might encounter when implementing new algorithms or when running existing scripts that are not part of our automated testing:</p>
+<ol class="arabic simple">
+<li><p>Exceptions to due size mismatch.
+The <code class="docutils literal notranslate"><span class="pre">Histogram</span></code> type validates the size of X, Y, and E data in (non-legacy) setters.
+The best solution is to determine the correct size at creation time of the workspace.
+Alternatively, you can simply set a new histogram with different size via <code class="docutils literal notranslate"><span class="pre">MatrixWorkspace::setHistogram()</span></code> (not yet available in Python).</p></li>
+<li><p>Exceptions about the storage mode of the X data, <code class="docutils literal notranslate"><span class="pre">Histogram::Xmode</span></code>.
+This happens rarely, typically by creating a workspace that contains histogram data (bin edges) and modifying the size via the legacy interface to store point data (or vice versa).
+These size modifications are only possible via the legacy interface.
+The best solution is to determine the storage mode at creation time of the workspace, by specifying the correct length of the X data.
+If that is not possible, use the new setters such as <code class="docutils literal notranslate"><span class="pre">setBinEdges()</span></code>, they will trigger a conversion of the internal storage mode (not yet available in Python).</p></li>
+</ol>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="GeometryofShape.html" title="Previous Chapter: Geometry of Shape"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Geometry of Shape</span>
+    </a>
+  </li>
+  <li>
+    <a href="HowToDefineGeometricShape.html" title="Next Chapter: How To Define Geometric Shape"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">How To Define... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

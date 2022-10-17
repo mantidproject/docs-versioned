@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Python in Mantid: Exercise 1</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Script Generation" href="../script_generation/index.html" />
+    <link rel="prev" title="Algorithm Help" href="06_alg_help.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.5</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../../index.html" >Training</a> &#187;</li>
+          
+            <li class="nav-item nav-item-2"><a href="../index.html" >Python In Mantid</a> &#187;</li>
+          
+            <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Algorithms and Workspaces with Python</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Python in Mantid: Exercise 1</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="python-in-mantid-exercise-1">
+<span id="pim-ex-1"></span><h1>Python in Mantid: Exercise 1<a class="headerlink" href="#python-in-mantid-exercise-1" title="Permalink to this heading">¶</a></h1>
+<p>The aim of this exercise is to show some simple examples of data exploration</p>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#a-isis-data" id="id1">A - ISIS Data</a></p></li>
+<li><p><a class="reference internal" href="#b-sns-data" id="id2">B - SNS Data</a></p></li>
+<li><p><a class="reference internal" href="#c-ill-data" id="id3">C - ILL Data</a></p></li>
+</ul>
+</nav>
+<section id="a-isis-data">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">A - ISIS Data</a><a class="headerlink" href="#a-isis-data" title="Permalink to this heading">¶</a></h2>
+<p>The HRPD data contains a spike (pulse) every 20 milliseconds. While this is nicely localized in time-of-flight, it is not the case upon conversion to d-spacing.</p>
+<p>The aim of this exercise is to use Mantid to write a script, which excludes this contribution from the pulse.</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="../../../algorithms/Load-v1.html#algm-load"><span class="std std-ref">Load v1</span></a> - Load the given HRPD data set, HRP39182.RAW into a workspace called ‘HRP39182’</p></li>
+<li><p><a class="reference internal" href="../../../algorithms/MaskBins-v1.html#algm-maskbins"><span class="std std-ref">MaskBins v1</span></a> - Mask out the bins corresponding to the pulse with XMin=19990 and XMax=20040</p></li>
+<li><p>Repeat the previous step for the other 4 pulses, each of which is 20000 microseconds after the previous. <em>All MaskBins executions should happen on the same InputWorkspace so that all 5 pulses are masked from the same workspace. Hint: A loop might be useful.</em></p></li>
+<li><p><a class="reference internal" href="../../../algorithms/AlignDetectors-v1.html#algm-aligndetectors"><span class="std std-ref">AlignDetectors v1</span></a> - Correct the masked workspace for small variations in detector position, using the calibration file <cite>hrpd_new_072_01_corr.cal</cite>. (Note: This performs an explicit conversion to dSpacing)</p></li>
+<li><p><a class="reference internal" href="../../../algorithms/DiffractionFocussing-v2.html#algm-diffractionfocussing"><span class="std std-ref">DiffractionFocussing v2</span></a> - Focus the data in the masked workspace using the same cal file as the previous step (called a grouping file here)</p></li>
+</ol>
+<p>Bonus: Can you run the Align-Focus process on the original, unmasked data and <a class="reference internal" href="../../../algorithms/Minus-v1.html#algm-minus"><span class="std std-ref">Minus v1</span></a> the final workspace processed without the pulse from the final workspace processed with the pulse? Plot the difference workspace with the final processed data to compare.</p>
+</section>
+<section id="b-sns-data">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">B - SNS Data</a><a class="headerlink" href="#b-sns-data" title="Permalink to this heading">¶</a></h2>
+<p>Filter, process and compress event data.</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="../../../algorithms/LoadEventNexus-v1.html#algm-loadeventnexus"><span class="std std-ref">LoadEventNexus v1</span></a> - Load the given POWGEN data set, PG3_4871. If you need to reduce the number of events loaded, select only the first 4000 seconds of the run.</p></li>
+<li><p>Log the number of events in the Messages Box with the command <cite>logger.notice(“message”)</cite> (The function to get the number of events from a workspace called <cite>ws</cite> is <cite>ws.getNumberEvents()</cite>.</p></li>
+<li><p><a class="reference internal" href="../../../algorithms/FilterBadPulses-v1.html#algm-filterbadpulses"><span class="std std-ref">FilterBadPulses v1</span></a> - Remove events that occurred while the accelerator was resetting, by setting the LowerCutoff to 99.5 % of the average beam proton charge.</p></li>
+<li><p><a class="reference internal" href="../../../algorithms/AlignDetectors-v1.html#algm-aligndetectors"><span class="std std-ref">AlignDetectors v1</span></a> - Convert to d-spacing using the supplied calibration file called PG3_golden.cal</p></li>
+<li><p><a class="reference internal" href="../../../algorithms/Rebin-v1.html#algm-rebin"><span class="std std-ref">Rebin v1</span></a> - Bin the data in d-spacing from 1.4 to 8 angstroms using logarithmic binning of .0004.</p></li>
+<li><p><a class="reference internal" href="../../../algorithms/DiffractionFocussing-v2.html#algm-diffractionfocussing"><span class="std std-ref">DiffractionFocussing v2</span></a> - Focus the data in the workspace using the same cal file as the previous step (PG3_golden.cal).</p></li>
+<li><p><a class="reference internal" href="../../../algorithms/CompressEvents-v1.html#algm-compressevents"><span class="std std-ref">CompressEvents v1</span></a> - Saves some memory. Again, extract and log the number of events.</p></li>
+</ol>
+</section>
+<section id="c-ill-data">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">C - ILL Data</a><a class="headerlink" href="#c-ill-data" title="Permalink to this heading">¶</a></h2>
+<p>Merge, mask, correct and compare.</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="../../../algorithms/Load-v1.html#algm-load"><span class="std std-ref">Load v1</span></a> - Load the given IN6 data sets, ‘164198.nxs’, ‘164199.nxs’ and ‘164200.nxs’ into workspaces named after the filename.</p></li>
+<li><p><a class="reference internal" href="../../../algorithms/MergeRuns-v1.html#algm-mergeruns"><span class="std std-ref">MergeRuns v1</span></a> - Merge all the previously loaded data sets into a single workspaced called ‘data_merged’.</p></li>
+<li><p><a class="reference internal" href="../../../algorithms/MaskDetectors-v1.html#algm-maskdetectors"><span class="std std-ref">MaskDetectors v1</span></a> - Remove bad spectra indices : 1,2,3,4,5,6,11,14,30,69,90,93,95,97,175,184,190,215,216,217,251,252,253,255,289,317,335 and 337.</p></li>
+<li><p><a class="reference internal" href="../../../algorithms/MultiplyRange-v1.html#algm-multiplyrange"><span class="std std-ref">MultiplyRange v1</span></a> - Calculate sample transmission of 95%.</p></li>
+<li><p><a class="reference internal" href="../../../algorithms/ConvertUnits-v1.html#algm-convertunits"><span class="std std-ref">ConvertUnits v1</span></a> - Convert the data from TOF to Delta Energy. (Find the Efixed value as Ei in the Sample Logs for the workspace)</p></li>
+<li><p><a class="reference internal" href="../../../algorithms/DetectorEfficiencyCorUser-v1.html#algm-detectorefficiencycoruser"><span class="std std-ref">DetectorEfficiencyCorUser v1</span></a> - Correct the data with the detector efficiency for this instrument.</p></li>
+<li><p>Compare the corrected with the unccorrected data, say bin 4 of spectrum number 7 (workspace index 6).</p></li>
+</ol>
+<p><a class="reference internal" href="../solutions/01_pim_sol.html#pim-sol"><span class="std std-ref">Solutions</span></a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="06_alg_help.html" title="Previous Chapter: Algorithm Help"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Algorithm Help</span>
+    </a>
+  </li>
+  <li>
+    <a href="../script_generation/index.html" title="Next Chapter: Script Generation"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Script Generation &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Python in Mantid: Solution 3</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Python in Mantid: Solution 4" href="04_pim_sol.html" />
+    <link rel="prev" title="Python in Mantid: Solution 2" href="02_pim_sol.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.5</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../../index.html" >Training</a> &#187;</li>
+          
+            <li class="nav-item nav-item-2"><a href="../index.html" >Python In Mantid</a> &#187;</li>
+          
+            <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Python in Mantid: Solutions</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Python in Mantid: Solution 3</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="python-in-mantid-solution-3">
+<span id="pim-sol"></span><h1>Python in Mantid: Solution 3<a class="headerlink" href="#python-in-mantid-solution-3" title="Permalink to this heading">¶</a></h1>
+<section id="a-direct-matplotlib-with-sns-data">
+<h2>A - Direct Matplotlib with SNS Data<a class="headerlink" href="#a-direct-matplotlib-with-sns-data" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import mantid algorithms, numpy and matplotlib</span>
+<span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Load the data</span>
+<span class="n">run</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;Training_Exercise3a_SNS.nxs&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+
+<span class="c1"># Choose legend labels and colors for each curve</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;sp-1&quot;</span><span class="p">,</span> <span class="s2">&quot;sp-2&quot;</span><span class="p">,</span> <span class="s2">&quot;sp-3&quot;</span><span class="p">,</span> <span class="s2">&quot;sp-4&quot;</span><span class="p">,</span> <span class="s2">&quot;sp-5&quot;</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;#FFCFC4&#39;</span><span class="p">,</span> <span class="s1">&#39;#FE886F&#39;</span><span class="p">,</span><span class="s1">&#39;#FE4A23&#39;</span><span class="p">,</span> <span class="s1">&#39;#B82405&#39;</span><span class="p">,</span> <span class="s1">&#39;#6A1300&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot the first 5 spectra</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">wkspIndex</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+<span class="c1"># Plot the 9th spectrum with errorbars</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">run</span><span class="p">,</span> <span class="n">specNum</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Peak of Interest&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+<span class="c1"># Set the X-axis limts and the Y-axis scale</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+
+<span class="c1"># Give the plot a title</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Peak Evolution&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># Add a legend with the chosen labels and show the plot</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="c1">#plt.show() #uncomment to show the plot</span>
+
+<span class="c1"># Note with the Direct Matplotlib method,</span>
+<span class="c1"># there are many more options for formatting the plot</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../../tutorials/python_in_mantid/solutions/03_pim_sol-1.py">Source code</a>, <a class="reference external" href="../../../tutorials/python_in_mantid/solutions/03_pim_sol-1.png">png</a>, <a class="reference external" href="../../../tutorials/python_in_mantid/solutions/03_pim_sol-1.hires.png">hires.png</a>, <a class="reference external" href="../../../tutorials/python_in_mantid/solutions/03_pim_sol-1.pdf">pdf</a>)</p>
+<figure class="align-default">
+<img alt="../../../_images/03_pim_sol-1.png" class="plot-directive" src="../../../_images/03_pim_sol-1.png" />
+</figure>
+</section>
+<section id="b-plotspectrum-with-isis-data">
+<h2>B - plotSpectrum with ISIS Data<a class="headerlink" href="#b-plotspectrum-with-isis-data" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import mantid algorithms, numpy and matplotlib</span>
+<span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">mantid.plots._compatability</span> <span class="kn">import</span> <span class="n">plotSpectrum</span> <span class="c1">#import needed outside Workbench</span>
+
+<span class="sd">&#39;&#39;&#39;Processing&#39;&#39;&#39;</span>
+
+<span class="c1"># Load the spectral range of the interest of the data</span>
+<span class="n">ws</span><span class="o">=</span><span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s2">&quot;GEM40979.raw&quot;</span><span class="p">,</span> <span class="n">SpectrumMin</span><span class="o">=</span><span class="mi">431</span><span class="p">,</span> <span class="n">SpectrumMax</span><span class="o">=</span><span class="mi">750</span><span class="p">)</span>
+
+<span class="c1"># Convert to dSpacing</span>
+<span class="n">ws</span><span class="o">=</span><span class="n">ConvertUnits</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span> <span class="s2">&quot;dSpacing&quot;</span><span class="p">)</span>
+
+<span class="c1"># Smooth the data</span>
+<span class="n">ws</span><span class="o">=</span><span class="n">SmoothData</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">NPoints</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;Plotting&#39;&#39;&#39;</span>
+
+<span class="c1"># Plot three spectra</span>
+<span class="n">PLOT_WINDOW</span> <span class="o">=</span> <span class="n">plotSpectrum</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+
+<span class="c1"># Get Figure and Axes for formatting</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">(),</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+
+<span class="c1"># Set the scales on the x- and y-axes</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">5e3</span><span class="p">)</span>
+
+<span class="c1"># Plot index 5</span>
+<span class="n">plotSpectrum</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span> <span class="n">PLOT_WINDOW</span><span class="p">,</span> <span class="n">clearWindow</span><span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Alter the Y label</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Neutron Counts ($\AA$)$^{-1}$&#39;</span><span class="p">)</span>
+
+<span class="c1"># Optionally rename the curve titles</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;bank2 sp-431&quot;</span><span class="p">,</span> <span class="s2">&quot;bank2 sp-432&quot;</span><span class="p">,</span> <span class="s2">&quot;bank2 sp-433&quot;</span><span class="p">,</span> <span class="s2">&quot;bank2 sp-436&quot;</span><span class="p">])</span>
+
+<span class="c1"># Give the plot a title</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Oscillations&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../../tutorials/python_in_mantid/solutions/03_pim_sol-2.py">Source code</a>, <a class="reference external" href="../../../tutorials/python_in_mantid/solutions/03_pim_sol-2.png">png</a>, <a class="reference external" href="../../../tutorials/python_in_mantid/solutions/03_pim_sol-2.hires.png">hires.png</a>, <a class="reference external" href="../../../tutorials/python_in_mantid/solutions/03_pim_sol-2.pdf">pdf</a>)</p>
+<figure class="align-default">
+<img alt="../../../_images/03_pim_sol-2.png" class="plot-directive" src="../../../_images/03_pim_sol-2.png" />
+</figure>
+</section>
+<section id="c-2d-and-3d-plot-ill-data">
+<h2>C - 2D and 3D Plot ILL Data<a class="headerlink" href="#c-2d-and-3d-plot-ill-data" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import mantid algorithms, numpy and matplotlib</span>
+<span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Load the data and extract the region of interest</span>
+<span class="n">data</span><span class="o">=</span><span class="n">Load</span><span class="p">(</span><span class="s1">&#39;164198.nxs&#39;</span><span class="p">)</span>
+<span class="n">data</span><span class="o">=</span><span class="n">ExtractSpectra</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">XMin</span><span class="o">=</span><span class="mi">470</span><span class="p">,</span> <span class="n">XMax</span><span class="o">=</span><span class="mi">490</span><span class="p">,</span> <span class="n">StartWorkspaceIndex</span><span class="o">=</span><span class="mi">199</span><span class="p">,</span> <span class="n">EndWorkspaceIndex</span><span class="o">=</span><span class="mi">209</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;2D Plotting - Colorfill and Contour&#39;&#39;&#39;</span>
+
+<span class="c1"># Get a figure and axes for</span>
+<span class="n">figC</span><span class="p">,</span><span class="n">axC</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">},</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="c1"># Plot the data as a 2D colorfill: IMPORTANT to set origin to lower</span>
+<span class="n">c</span><span class="o">=</span><span class="n">axC</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">origin</span> <span class="o">=</span> <span class="s1">&#39;lower&#39;</span><span class="p">)</span>
+
+<span class="c1"># Change the title</span>
+<span class="n">axC</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Colorfill&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot the data as a 2D colorfill: IMPORTANT to set origin to lower</span>
+<span class="n">c</span><span class="o">=</span><span class="n">axC</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">origin</span> <span class="o">=</span> <span class="s1">&#39;lower&#39;</span><span class="p">)</span>
+
+<span class="c1"># Overlay Contour lines</span>
+<span class="n">axC</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1"># Change the title</span>
+<span class="n">axC</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Contour&quot;</span><span class="p">)</span>
+
+<span class="c1"># Add a Colorbar with a label</span>
+<span class="n">cbar</span><span class="o">=</span><span class="n">figC</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Counts ($\mu s$)$^{-1}$&#39;</span><span class="p">)</span>
+
+<span class="sd">&#39;&#39;&#39;3D Plotting - Surface and Wireframe&#39;&#39;&#39;</span>
+
+<span class="c1"># Get a different set of figure and axes with 3 subplots for 3D plotting</span>
+<span class="n">fig3d</span><span class="p">,</span><span class="n">ax3d</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid3d&#39;</span><span class="p">},</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="c1"># 3D plot the data, and choose colormaps and colors</span>
+<span class="n">ax3d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;summer&#39;</span><span class="p">)</span>
+<span class="n">ax3d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot_wireframe</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkmagenta&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add titles to the 3D plots</span>
+<span class="n">ax3d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Surface&quot;</span><span class="p">)</span>
+<span class="n">ax3d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Wireframe&quot;</span><span class="p">)</span>
+
+<span class="c1">#plt.show()# uncomment to show the plots</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../../tutorials/python_in_mantid/solutions/03_pim_sol-3.py">Source code</a>)</p>
+<figure class="align-default" id="id1">
+<img alt="../../../_images/03_pim_sol-3_00.png" class="plot-directive" src="../../../_images/03_pim_sol-3_00.png" />
+<figcaption>
+<p><span class="caption-text">(<a class="reference external" href="../../../tutorials/python_in_mantid/solutions/03_pim_sol-3_00.png">png</a>, <a class="reference external" href="../../../tutorials/python_in_mantid/solutions/03_pim_sol-3_00.hires.png">hires.png</a>, <a class="reference external" href="../../../tutorials/python_in_mantid/solutions/03_pim_sol-3_00.pdf">pdf</a>)</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id2">
+<img alt="../../../_images/03_pim_sol-3_01.png" class="plot-directive" src="../../../_images/03_pim_sol-3_01.png" />
+<figcaption>
+<p><span class="caption-text">(<a class="reference external" href="../../../tutorials/python_in_mantid/solutions/03_pim_sol-3_01.png">png</a>, <a class="reference external" href="../../../tutorials/python_in_mantid/solutions/03_pim_sol-3_01.hires.png">hires.png</a>, <a class="reference external" href="../../../tutorials/python_in_mantid/solutions/03_pim_sol-3_01.pdf">pdf</a>)</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="02_pim_sol.html" title="Previous Chapter: Python in Mantid: Solution 2"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Python in Man...</span>
+    </a>
+  </li>
+  <li>
+    <a href="04_pim_sol.html" title="Next Chapter: Python in Mantid: Solution 4"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Python in Man... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
