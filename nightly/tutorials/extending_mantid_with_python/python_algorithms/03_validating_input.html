@@ -1,35 +1,23 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
     <title>Validating Input</title>
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
     <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '6.4.20220909.1939',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Main Algorithm Body" href="04_main_algorithm_body.html" />
@@ -47,8 +35,7 @@
 </script>
 
 
-  </head>
-  <body>
+  </head><body>
 
 
 
@@ -66,7 +53,7 @@
         </button>
         <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../../_static/Mantid_Logo_Transparent.png">
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>6.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>6.5</b></span>
       </div>
 
       
@@ -122,38 +109,38 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+    <div class="body col-md-12 content" role="main">
       
-  <p><span class="math">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
-<div class="section" id="validating-input">
-<span id="id1"></span><h1>Validating Input<a class="headerlink" href="#validating-input" title="Permalink to this headline">¶</a></h1>
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="validating-input">
+<span id="id1"></span><h1>Validating Input<a class="headerlink" href="#validating-input" title="Permalink to this heading">¶</a></h1>
 <p>By default there is no validation performed for input properties so any
 default value will be accepted by the algorithm.</p>
-<p>Property validation can be added using the <code class="docutils literal"><span class="pre">validator</span></code> keyword within
-the <code class="docutils literal"><span class="pre">declareProperty</span></code> method. The validation is performed by an object
-and due to the restrictions placed on us by <code class="docutils literal"><span class="pre">C++</span></code> we must know the type
+<p>Property validation can be added using the <code class="docutils literal notranslate"><span class="pre">validator</span></code> keyword within
+the <code class="docutils literal notranslate"><span class="pre">declareProperty</span></code> method. The validation is performed by an object
+and due to the restrictions placed on us by <code class="docutils literal notranslate"><span class="pre">C++</span></code> we must know the type
 and pick the appropriate class for the job.</p>
-<p>For the basic python types (<code class="docutils literal"><span class="pre">int</span></code>, <code class="docutils literal"><span class="pre">float</span></code>, <code class="docutils literal"><span class="pre">string</span></code>) the following
+<p>For the basic python types (<code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">string</span></code>) the following
 validators are defined:</p>
 <ul class="simple">
-<li><a class="reference internal" href="../../../api/python/mantid/kernel/IntBoundedValidator.html#mantid-kernel-intboundedvalidator"><span class="std std-ref">IntBoundedValidator</span></a> - Restricts an integer to be
-bounded by either lower, upper or both limits</li>
-<li><a class="reference internal" href="../../../api/python/mantid/kernel/IntMandatoryValidator.html#mantid-kernel-intmandatoryvalidator"><span class="std std-ref">IntMandatoryValidator</span></a> - Requires a value for the
-int property</li>
-<li><a class="reference internal" href="../../../api/python/mantid/kernel/IntListValidator.html#mantid-kernel-intlistvalidator"><span class="std std-ref">IntListValidator</span></a> - The value must be one of a given
-list of integers</li>
-<li><a class="reference internal" href="../../../api/python/mantid/kernel/FloatBoundedValidator.html#mantid-kernel-floatboundedvalidator"><span class="std std-ref">FloatBoundedValidator</span></a> - Restricts a float to be
-bounded by by either lower, upper or both limits</li>
-<li><a class="reference internal" href="../../../api/python/mantid/kernel/FloatMandatoryValidator.html#mantid-kernel-floatmandatoryvalidator"><span class="std std-ref">FloatMandatoryValidator</span></a> - Requires a value for
-the float property</li>
-<li><a class="reference internal" href="../../../api/python/mantid/kernel/StringMandatoryValidator.html#mantid-kernel-stringmandatoryvalidator"><span class="std std-ref">StringMandatoryValidator</span></a> - Requires a value for
-the string property</li>
-<li><a class="reference internal" href="../../../api/python/mantid/kernel/StringListValidator.html#mantid-kernel-stringlistvalidator"><span class="std std-ref">StringListValidator</span></a> - The value must be one of a
-given list of strings</li>
+<li><p><a class="reference internal" href="../../../api/python/mantid/kernel/IntBoundedValidator.html#mantid-kernel-intboundedvalidator"><span class="std std-ref">IntBoundedValidator</span></a> - Restricts an integer to be
+bounded by either lower, upper or both limits</p></li>
+<li><p><a class="reference internal" href="../../../api/python/mantid/kernel/IntMandatoryValidator.html#mantid-kernel-intmandatoryvalidator"><span class="std std-ref">IntMandatoryValidator</span></a> - Requires a value for the
+int property</p></li>
+<li><p><a class="reference internal" href="../../../api/python/mantid/kernel/IntListValidator.html#mantid-kernel-intlistvalidator"><span class="std std-ref">IntListValidator</span></a> - The value must be one of a given
+list of integers</p></li>
+<li><p><a class="reference internal" href="../../../api/python/mantid/kernel/FloatBoundedValidator.html#mantid-kernel-floatboundedvalidator"><span class="std std-ref">FloatBoundedValidator</span></a> - Restricts a float to be
+bounded by by either lower, upper or both limits</p></li>
+<li><p><a class="reference internal" href="../../../api/python/mantid/kernel/FloatMandatoryValidator.html#mantid-kernel-floatmandatoryvalidator"><span class="std std-ref">FloatMandatoryValidator</span></a> - Requires a value for
+the float property</p></li>
+<li><p><a class="reference internal" href="../../../api/python/mantid/kernel/StringMandatoryValidator.html#mantid-kernel-stringmandatoryvalidator"><span class="std std-ref">StringMandatoryValidator</span></a> - Requires a value for
+the string property</p></li>
+<li><p><a class="reference internal" href="../../../api/python/mantid/kernel/StringListValidator.html#mantid-kernel-stringlistvalidator"><span class="std std-ref">StringListValidator</span></a> - The value must be one of a
+given list of strings</p></li>
 </ul>
 <p>To use a validator, create it with the appropriate code as discussed above
-and pass it as the validator argument of <code class="docutils literal"><span class="pre">declareProperty</span></code> e.g.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">PyInit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+and pass it as the validator argument of <code class="docutils literal notranslate"><span class="pre">declareProperty</span></code> e.g.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">PyInit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="c1"># Force the value to be positive or zero</span>
 <span class="bp">self</span><span class="o">.</span><span class="n">declareProperty</span><span class="p">(</span><span class="s2">&quot;Parameter&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">FloatBoundedValidator</span><span class="p">(</span><span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 
@@ -167,12 +154,12 @@ and pass it as the validator argument of <code class="docutils literal"><span cl
 </div>
 <p>Validation can also be done when executing the algorithm by raising an
 exception if the value is invalid.</p>
-<p>It should be preferred to validate in <code class="docutils literal"><span class="pre">PyInit</span></code> if possible as:</p>
+<p>It should be preferred to validate in <code class="docutils literal notranslate"><span class="pre">PyInit</span></code> if possible as:</p>
 <ol class="arabic simple">
-<li>The execution section can assume the values are valid.</li>
-<li>The GUI can flag up errors sooner.</li>
+<li><p>The execution section can assume the values are valid.</p></li>
+<li><p>The GUI can flag up errors sooner.</p></li>
 </ol>
-</div>
+</section>
 
 
     </div>

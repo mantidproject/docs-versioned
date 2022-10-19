@@ -1,35 +1,23 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
     <title>Extracting Algorithm Properties</title>
-    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
     <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../',
-        VERSION:     '6.4.20220909.1939',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Generating a Script for Plotting" href="03_plot_script_generation.html" />
@@ -47,8 +35,7 @@
 </script>
 
 
-  </head>
-  <body>
+  </head><body>
 
 
 
@@ -66,7 +53,7 @@
         </button>
         <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../../_static/Mantid_Logo_Transparent.png">
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>6.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>6.5</b></span>
       </div>
 
       
@@ -122,30 +109,30 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+    <div class="body col-md-12 content" role="main">
       
-  <p><span class="math">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
-<div class="section" id="extracting-algorithm-properties">
-<span id="extracting-alg-prop"></span><h1>Extracting Algorithm Properties<a class="headerlink" href="#extracting-algorithm-properties" title="Permalink to this headline">¶</a></h1>
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="extracting-algorithm-properties">
+<span id="extracting-alg-prop"></span><h1>Extracting Algorithm Properties<a class="headerlink" href="#extracting-algorithm-properties" title="Permalink to this heading">¶</a></h1>
 <p>After an algorithm has been executed, the properties remain accessible for as long as the output workspace exists.
 Algorithms return their output properties as a tuple, which python can unpack automatically, for example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sample</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;MAR11015.raw&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sample</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;MAR11015.raw&#39;</span><span class="p">)</span>
 <span class="n">ei</span><span class="p">,</span> <span class="n">mon_peak</span><span class="p">,</span> <span class="n">mon_index</span><span class="p">,</span> <span class="n">tzero</span> <span class="o">=</span> <span class="n">GetEi</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">Monitor1Spec</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Monitor2Spec</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">EnergyEstimate</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
 <span class="n">sample</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s1">&#39;DeltaE&#39;</span><span class="p">,</span> <span class="n">Emode</span><span class="o">=</span><span class="s1">&#39;Direct&#39;</span><span class="p">,</span><span class="n">EFixed</span><span class="o">=</span><span class="n">ei</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>To access input properties, use the <a class="reference internal" href="../../../concepts/WorkingWithWorspaces.html#workspace-workspace-history"><span class="std std-ref">workspace history</span></a>. Using this handle allows the properties to be extracted by their name using the <cite>getPropertyValue()</cite> function:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">sample</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;MAR11015.raw&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sample</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;MAR11015.raw&#39;</span><span class="p">)</span>
 <span class="n">algorithm</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">getHistory</span><span class="p">()</span><span class="o">.</span><span class="n">lastAlgorithm</span><span class="p">()</span>
 <span class="n">filename</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">getPropertyValue</span><span class="p">(</span><span class="s2">&quot;Filename&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>For some algorithms, such as <a class="reference internal" href="../../../algorithms/Rebin-v1.html#algm-rebin"><span class="std std-ref">Rebin v1</span></a>, you can get properties without accessing algorithm history.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">rebin_alg</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="s1">&#39;input_ws&#39;</span><span class="p">,</span><span class="n">Params</span><span class="o">=</span><span class="s1">&#39;1,5,100&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rebin_alg</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="s1">&#39;input_ws&#39;</span><span class="p">,</span><span class="n">Params</span><span class="o">=</span><span class="s1">&#39;1,5,100&#39;</span><span class="p">)</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">rebin_alg</span><span class="o">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s1">&#39;Params&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
 </pre></div>
 </div>
-</div>
+</section>
 
 
     </div>

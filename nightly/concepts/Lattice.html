@@ -1,35 +1,23 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
     <title>Lattice</title>
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
     <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '6.4.20220909.1939',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Theory of Le Bail Fit" href="LeBailFit.html" />
@@ -47,8 +35,7 @@
 </script>
 
 
-  </head>
-  <body>
+  </head><body>
 
 
 
@@ -66,7 +53,7 @@
         </button>
         <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
            </a>
-        <span class="navbar-text navbar-version pull-left"><b>6.4</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>6.5</b></span>
       </div>
 
       
@@ -118,113 +105,113 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-12 content">
+    <div class="body col-md-12 content" role="main">
       
-  <p><span class="math">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
-<div class="section" id="lattice">
-<span id="id1"></span><h1>Lattice<a class="headerlink" href="#lattice" title="Permalink to this headline">¶</a></h1>
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="lattice">
+<span id="id1"></span><h1>Lattice<a class="headerlink" href="#lattice" title="Permalink to this heading">¶</a></h1>
 <p>The purpose of this document is to explain how Mantid is using
 information about unit cells and their orientation with respect to the
 laboratory frame. For a detailed description, see the
 <a class="reference external" href="http://github.com/mantidproject/documents/blob/master/Design/UBMatriximplementationnotes.pdf">UB matrix implementation notes</a>.</p>
-<div class="section" id="theory">
-<h2>Theory<a class="headerlink" href="#theory" title="Permalink to this headline">¶</a></h2>
+<section id="theory">
+<h2>Theory<a class="headerlink" href="#theory" title="Permalink to this heading">¶</a></h2>
 <p>The physics of a system studied by neutron scattering is described by
 the conservation of energy and momentum. In the laboratory frame:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[Q_l=  \hbar \mathbf{k}_i^{} -  \hbar \mathbf{k}_f\]</div>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\Delta E_l= \frac{\hbar^2}{2m} (k_i^2 -  k_f^2)\]</div>
 <p>Note that the left side in the above equations refer to what is
 happening to the lattice, not to the neutron.</p>
 <p>Let’s assume that we have a periodic lattice, described by lattice
-parameters <span class="math">\(a,\ b,\ c,\ \alpha,\ \beta,\ \gamma\)</span>. The reciprocal
+parameters <span class="math notranslate nohighlight">\(a,\ b,\ c,\ \alpha,\ \beta,\ \gamma\)</span>. The reciprocal
 lattice will be described by parameters
-<span class="math">\(a^*,\ b^*,\ c^*,\ \alpha^*,\ \beta^*,\  \gamma^*\)</span>. Note that
-Mantid uses <span class="math">\(a^*=\frac{1}{a}\)</span> type of notation, like in
+<span class="math notranslate nohighlight">\(a^*,\ b^*,\ c^*,\ \alpha^*,\ \beta^*,\  \gamma^*\)</span>. Note that
+Mantid uses <span class="math notranslate nohighlight">\(a^*=\frac{1}{a}\)</span> type of notation, like in
 crystallography.</p>
 <p>For such a lattice, the physics will be described in terms of reciprocal
 lattice parameters by</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\begin{split}Q= 2 \pi\left(h \mathbf{a}^* + k \mathbf{b}^* +l \mathbf{c}^* \right) = \left(\begin{array}{c}
                                                         h \\
                                                         k \\
                                                         l
                                                       \end{array}\right)\end{split}\]</div>
-<p>The <span class="math">\(UB_{}^{}\)</span> matrix formalism relates <span class="math">\(Q_l^{}\)</span> and
-<span class="math">\(Q_{}^{}\)</span> with the following equation:</p>
-<div class="math">
+<p>The <span class="math notranslate nohighlight">\(UB_{}^{}\)</span> matrix formalism relates <span class="math notranslate nohighlight">\(Q_l^{}\)</span> and
+<span class="math notranslate nohighlight">\(Q_{}^{}\)</span> with the following equation:</p>
+<div class="math notranslate nohighlight">
 \[\begin{split}Q_l = 2 \pi R \cdot U \cdot B \left(\begin{array}{c}
                                                         h \\
                                                         k \\
                                                         l
                                                       \end{array}\right)\end{split}\]</div>
-<p>The <span class="math">\(B_{}^{}\)</span> matrix transforms the <span class="math">\(h^{}_{}, k, l\)</span> triplet
+<p>The <span class="math notranslate nohighlight">\(B_{}^{}\)</span> matrix transforms the <span class="math notranslate nohighlight">\(h^{}_{}, k, l\)</span> triplet
 into a Cartesian system, with the first axis along
-<span class="math">\(\ \mathbf{a}^*\)</span>, the second in the plane defined by
-<span class="math">\(\ \mathbf{a}^*\)</span> and <span class="math">\(\ \mathbf{b}^*\)</span>, and the third axis
+<span class="math notranslate nohighlight">\(\ \mathbf{a}^*\)</span>, the second in the plane defined by
+<span class="math notranslate nohighlight">\(\ \mathbf{a}^*\)</span> and <span class="math notranslate nohighlight">\(\ \mathbf{b}^*\)</span>, and the third axis
 perpendicular to this plane. In the Busing and Levi convention (W. R.
 Busing and H. A. Levy, Angle calculations for 3- and 4-circle X-ray and
 neutron diffractometers - Acta Cryst. (1967). 22, 457-464):</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\begin{split}B = \left( \begin{array}{ccc}
     a^* &amp; b^*\cos(\gamma^*) &amp; c^*\cos(\beta^*) \\
     0 &amp; b^*\sin(\gamma^*) &amp; -c^*\sin(\beta^*)\cos(\alpha) \\
     0 &amp; 0 &amp; 1/c \end{array} \right)\end{split}\]</div>
-<p>The <span class="math">\(U_{}^{}\)</span> matrix represents the rotation from this Cartesian
+<p>The <span class="math notranslate nohighlight">\(U_{}^{}\)</span> matrix represents the rotation from this Cartesian
 coordinate frame to the Cartesian coordinate frame attached to the
 innermost axis of the goniometer that holds the sample.</p>
-<p>The <span class="math">\(R_{}^{}\)</span> matrix is the rotation matrix of the goniometer</p>
+<p>The <span class="math notranslate nohighlight">\(R_{}^{}\)</span> matrix is the rotation matrix of the goniometer</p>
 <p>Other useful equations:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\begin{split}G^* = (UB)^T UB = B^T B = \left( \begin{array}{ccc}
     a^*a^* &amp; a^*b^*\cos(\gamma^*) &amp; a^*c^*\cos(\beta^*) \\
     a^*b^*\cos(\gamma^*) &amp; b^*b^* &amp; b^*c^*\cos(\alpha^*) \\
     a^*c^*\cos(\beta^*) &amp; b^*c^*\cos(\alpha^*) &amp; c^*c^* \end{array} \right)\end{split}\]</div>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\begin{split}G=(G^*)^{-1}=\left( \begin{array}{ccc}
     aa &amp; ab\cos(\gamma) &amp; ac\cos(\beta) \\
     ab\cos(\gamma) &amp; bb &amp; bc\cos(\alpha) \\
     ac\cos(\beta) &amp; bc\cos(\alpha) &amp; cc \end{array} \right)\end{split}\]</div>
-<p>The distance in reciprocal space to the <span class="math">\(\left(h,k,l\right)\)</span> plane
+<p>The distance in reciprocal space to the <span class="math notranslate nohighlight">\(\left(h,k,l\right)\)</span> plane
 is given by</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\begin{split}d^* =\left| B \left(\begin{array}{c}
                                                         h \\
                                                         k \\
                                                         l
                                                       \end{array}\right)\right|\end{split}\]</div>
-<p>The distance in real space to the <span class="math">\(\left(h,k,l\right)\)</span> plane is
-given by <span class="math">\(d=\frac{1}{d^*}\)</span></p>
-<p>The angle between <span class="math">\(Q_1^{}\)</span> and <span class="math">\(Q_2^{}\)</span> is given by
-<span class="math">\(\cos( Q_1^{}, Q_2^{})=\frac{(BQ_1)(BQ_2)}{|(BQ_1)| |(BQ_2)|}\)</span></p>
-</div>
-<div class="section" id="unit-cells">
-<h2>Unit cells<a class="headerlink" href="#unit-cells" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference internal" href="../api/python/mantid/geometry/UnitCell.html#mantid.geometry.UnitCell" title="mantid.geometry.UnitCell"><code class="xref py py-class docutils literal"><span class="pre">UnitCell</span></code></a> class provides the functions to access direct and
+<p>The distance in real space to the <span class="math notranslate nohighlight">\(\left(h,k,l\right)\)</span> plane is
+given by <span class="math notranslate nohighlight">\(d=\frac{1}{d^*}\)</span></p>
+<p>The angle between <span class="math notranslate nohighlight">\(Q_1^{}\)</span> and <span class="math notranslate nohighlight">\(Q_2^{}\)</span> is given by
+<span class="math notranslate nohighlight">\(\cos( Q_1^{}, Q_2^{})=\frac{(BQ_1)(BQ_2)}{|(BQ_1)| |(BQ_2)|}\)</span></p>
+</section>
+<section id="unit-cells">
+<h2>Unit cells<a class="headerlink" href="#unit-cells" title="Permalink to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="../api/python/mantid/geometry/UnitCell.html#mantid.geometry.UnitCell" title="mantid.geometry.UnitCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCell</span></code></a> class provides the functions to access direct and
 reciprocal lattices.</p>
-</div>
-<div class="section" id="oriented-lattices">
-<h2>Oriented lattices<a class="headerlink" href="#oriented-lattices" title="Permalink to this headline">¶</a></h2>
-<p>All the functions defined for <a class="reference internal" href="../api/python/mantid/geometry/UnitCell.html#mantid.geometry.UnitCell" title="mantid.geometry.UnitCell"><code class="xref py py-class docutils literal"><span class="pre">UnitCell</span></code></a> are inherited by the
-<a class="reference internal" href="../api/python/mantid/geometry/OrientedLattice.html#mantid.geometry.OrientedLattice" title="mantid.geometry.OrientedLattice"><code class="xref py py-class docutils literal"><span class="pre">OrientedLattice</span></code></a> objects. In addition, functions for manipulating
-the <span class="math">\(U\)</span> and <span class="math">\(UB\)</span> matricies are also provided.</p>
-</div>
-<div class="section" id="note-about-orientation">
-<h2>Note about orientation<a class="headerlink" href="#note-about-orientation" title="Permalink to this headline">¶</a></h2>
-<p>Most of the instruments have incident beam along the <span class="math">\(\mathbf{z}\)</span>
-direction. For an orthogonal lattice with <span class="math">\(\mathbf{a}^*\)</span> along
-<span class="math">\(\mathbf{z}\)</span>, <span class="math">\(\mathbf{b}^*\)</span> along <span class="math">\(\mathbf{x}\)</span>, and
-<span class="math">\(\mathbf{c}^*\)</span> along <span class="math">\(\mathbf{y}\)</span>, the <span class="math">\(U^{}_{}\)</span>
+</section>
+<section id="oriented-lattices">
+<h2>Oriented lattices<a class="headerlink" href="#oriented-lattices" title="Permalink to this heading">¶</a></h2>
+<p>All the functions defined for <a class="reference internal" href="../api/python/mantid/geometry/UnitCell.html#mantid.geometry.UnitCell" title="mantid.geometry.UnitCell"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnitCell</span></code></a> are inherited by the
+<a class="reference internal" href="../api/python/mantid/geometry/OrientedLattice.html#mantid.geometry.OrientedLattice" title="mantid.geometry.OrientedLattice"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrientedLattice</span></code></a> objects. In addition, functions for manipulating
+the <span class="math notranslate nohighlight">\(U\)</span> and <span class="math notranslate nohighlight">\(UB\)</span> matricies are also provided.</p>
+</section>
+<section id="note-about-orientation">
+<h2>Note about orientation<a class="headerlink" href="#note-about-orientation" title="Permalink to this heading">¶</a></h2>
+<p>Most of the instruments have incident beam along the <span class="math notranslate nohighlight">\(\mathbf{z}\)</span>
+direction. For an orthogonal lattice with <span class="math notranslate nohighlight">\(\mathbf{a}^*\)</span> along
+<span class="math notranslate nohighlight">\(\mathbf{z}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{b}^*\)</span> along <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>, and
+<span class="math notranslate nohighlight">\(\mathbf{c}^*\)</span> along <span class="math notranslate nohighlight">\(\mathbf{y}\)</span>, the <span class="math notranslate nohighlight">\(U^{}_{}\)</span>
 matrix has the form:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\begin{split}U =  \left( \begin{array}{ccc}
     0 &amp; 1 &amp; 0 \\
     0 &amp; 0 &amp; 1 \\
     1 &amp; 0 &amp; 0 \end{array} \right)\end{split}\]</div>
 <p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
-</div>
-</div>
+</section>
+</section>
 
 
     </div>
