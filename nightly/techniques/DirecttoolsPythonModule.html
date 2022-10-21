@@ -119,54 +119,108 @@
 <section id="plotsofqw">
 <h3><cite>plotSofQW</cite><a class="headerlink" href="#plotsofqw" title="Permalink to this heading">¶</a></h3>
 <p>The default parameters for <a class="reference internal" href="#directtools.plotSofQW" title="directtools.plotSofQW"><code class="xref py py-func docutils literal notranslate"><span class="pre">directtools.plotSofQW()</span></code></a> give a view of the <span class="math notranslate nohighlight">\(S(Q,E)\)</span> workspace around the elastic peak with sensible limits for the axes and intensity:</p>
-<figure class="align-default" id="id1">
-<a class="screenshot reference internal image-reference" href="../_images/ImageNotFound.png"><img alt="../_images/ImageNotFound.png" class="screenshot" src="../_images/ImageNotFound.png" style="width: 200px;" /></a>
-<figcaption>
-<p><span class="caption-text">Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">directtools</span> <span class="k">as</span> <span class="nn">dt</span>
+<span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">DirectILLCollectData</span><span class="p">(</span><span class="n">Run</span><span class="o">=</span><span class="s1">&#39;ILL/IN4/084447.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">DirectILLReduction</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;SofQW&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">plotSofQW</span><span class="p">(</span><span class="s1">&#39;SofQW&#39;</span><span class="p">)</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../techniques/DirecttoolsPythonModule-1.py">Source code</a>)</p>
 <p>The <span class="math notranslate nohighlight">\(Q\)</span>, <span class="math notranslate nohighlight">\(E\)</span> and intensity limits can be changed using the optional parameters. The utility functions <a class="reference internal" href="#directtools.validQ" title="directtools.validQ"><code class="xref py py-func docutils literal notranslate"><span class="pre">directtools.validQ()</span></code></a> and <a class="reference internal" href="#directtools.nanminmax" title="directtools.nanminmax"><code class="xref py py-func docutils literal notranslate"><span class="pre">directtools.nanminmax()</span></code></a> might be helpful when determining suitable ranges:</p>
-<figure class="align-default" id="id2">
-<a class="screenshot reference internal image-reference" href="../_images/ImageNotFound.png"><img alt="../_images/ImageNotFound.png" class="screenshot" src="../_images/ImageNotFound.png" style="width: 200px;" /></a>
-<figcaption>
-<p><span class="caption-text">Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">directtools</span> <span class="k">as</span> <span class="nn">dt</span>
+<span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">DirectILLCollectData</span><span class="p">(</span><span class="n">Run</span><span class="o">=</span><span class="s1">&#39;ILL/IN4/084447.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">DirectILLReduction</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;SofQW&#39;</span><span class="p">)</span>
+
+<span class="n">EMin</span> <span class="o">=</span> <span class="o">-</span><span class="mf">20.</span>
+<span class="n">QMax</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">validQ</span><span class="p">(</span><span class="s1">&#39;SofQW&#39;</span><span class="p">,</span> <span class="n">EMin</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">VMax</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span><span class="o">.</span><span class="n">nanminmax</span><span class="p">(</span><span class="s1">&#39;SofQW&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">plotSofQW</span><span class="p">(</span><span class="s1">&#39;SofQW&#39;</span><span class="p">,</span> <span class="n">QMax</span><span class="o">=</span><span class="n">QMax</span><span class="p">,</span> <span class="n">EMin</span><span class="o">=</span><span class="n">EMin</span><span class="p">,</span> <span class="n">VMax</span><span class="o">=</span><span class="n">VMax</span><span class="p">)</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../techniques/DirecttoolsPythonModule-2.py">Source code</a>)</p>
 </section>
 <section id="cuts-in-s-q-e">
 <h3>Cuts in <span class="math notranslate nohighlight">\(S(Q,E)\)</span><a class="headerlink" href="#cuts-in-s-q-e" title="Permalink to this heading">¶</a></h3>
 <p>An important aspect of examining the <span class="math notranslate nohighlight">\(S(Q,E)\)</span> workspace is to plot cuts at constant <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(E\)</span>. This can be done by <a class="reference internal" href="#directtools.plotconstQ" title="directtools.plotconstQ"><code class="xref py py-func docutils literal notranslate"><span class="pre">directtools.plotconstQ()</span></code></a> and <a class="reference internal" href="#directtools.plotconstE" title="directtools.plotconstE"><code class="xref py py-func docutils literal notranslate"><span class="pre">directtools.plotconstE()</span></code></a>:</p>
-<figure class="align-default" id="id3">
-<a class="screenshot reference internal image-reference" href="../_images/ImageNotFound.png"><img alt="../_images/ImageNotFound.png" class="screenshot" src="../_images/ImageNotFound.png" style="width: 200px;" /></a>
-<figcaption>
-<p><span class="caption-text">Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">directtools</span> <span class="k">as</span> <span class="nn">dt</span>
+<span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="n">DirectILLCollectData</span><span class="p">(</span><span class="n">Run</span><span class="o">=</span><span class="s1">&#39;ILL/IN4/084447.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">DirectILLReduction</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;SofQW&#39;</span><span class="p">)</span>
+
+<span class="n">Q</span> <span class="o">=</span> <span class="mf">2.</span>
+<span class="n">dQ</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="c1"># plotconstQ produces a warning on some versions of numpy.</span>
+<span class="c1"># The &quot;with&quot; statement catches this warning so that the automated</span>
+<span class="c1"># builds don&#39;t fail.</span>
+<span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">cuts</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">plotconstQ</span><span class="p">(</span><span class="s1">&#39;SofQW&#39;</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">dQ</span><span class="p">)</span>
+    <span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../techniques/DirecttoolsPythonModule-3.py">Source code</a>)</p>
 <p>Any of the workspace, cut centre or cut width arguments can be a <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> instead. This enables data comparison:</p>
-<figure class="align-default" id="id4">
-<a class="screenshot reference internal image-reference" href="../_images/ImageNotFound.png"><img alt="../_images/ImageNotFound.png" class="screenshot" src="../_images/ImageNotFound.png" style="width: 200px;" /></a>
-<figcaption>
-<p><span class="caption-text">Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">directtools</span> <span class="k">as</span> <span class="nn">dt</span>
+<span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">DirectILLCollectData</span><span class="p">(</span><span class="n">Run</span><span class="o">=</span><span class="s1">&#39;ILL/IN4/084447.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">DirectILLReduction</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;SofQW&#39;</span><span class="p">)</span>
+
+<span class="n">Q1</span> <span class="o">=</span> <span class="mf">2.</span>
+<span class="n">Q2</span> <span class="o">=</span> <span class="mf">3.</span>
+<span class="n">dQ</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span><span class="p">,</span> <span class="n">cuts</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">plotconstQ</span><span class="p">(</span><span class="s1">&#39;SofQW&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">Q1</span><span class="p">,</span> <span class="n">Q2</span><span class="p">],</span> <span class="n">dQ</span><span class="p">)</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../techniques/DirecttoolsPythonModule-4.py">Source code</a>)</p>
 <p>The <a class="reference internal" href="#directtools.plotconstQ" title="directtools.plotconstQ"><code class="xref py py-func docutils literal notranslate"><span class="pre">directtools.plotconstQ()</span></code></a> and <a class="reference internal" href="#directtools.plotconstE" title="directtools.plotconstE"><code class="xref py py-func docutils literal notranslate"><span class="pre">directtools.plotconstE()</span></code></a> functions use <a class="reference internal" href="#directtools.plotcuts" title="directtools.plotcuts"><code class="xref py py-func docutils literal notranslate"><span class="pre">directtools.plotcuts()</span></code></a> to do the actual line profiles and plotting. The profiles are made by the <a class="reference internal" href="../algorithms/LineProfile-v1.html#algm-lineprofile"><span class="std std-ref">LineProfile v1</span></a> algorithm, and all three plotting functions return a list of the produced line profile workspace names.</p>
 <p>If a line profile already exists, it can be plotted using <a class="reference internal" href="#directtools.plotprofiles" title="directtools.plotprofiles"><code class="xref py py-func docutils literal notranslate"><span class="pre">directtools.plotprofiles()</span></code></a>. This also accepts either a single line profile workspace or a list of workspaces enabling comparison:</p>
-<figure class="align-default" id="id5">
-<a class="screenshot reference internal image-reference" href="../_images/ImageNotFound.png"><img alt="../_images/ImageNotFound.png" class="screenshot" src="../_images/ImageNotFound.png" style="width: 200px;" /></a>
-<figcaption>
-<p><span class="caption-text">Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">directtools</span> <span class="k">as</span> <span class="nn">dt</span>
+<span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">DirectILLCollectData</span><span class="p">(</span><span class="n">Run</span><span class="o">=</span><span class="s1">&#39;ILL/IN4/084447.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">DirectILLReduction</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;SofQW&#39;</span><span class="p">)</span>
+
+<span class="n">E1</span> <span class="o">=</span> <span class="mf">8.</span>
+<span class="n">dE</span> <span class="o">=</span> <span class="mf">2.</span>
+<span class="n">cut1</span> <span class="o">=</span> <span class="n">LineProfile</span><span class="p">(</span><span class="s1">&#39;SofQW&#39;</span><span class="p">,</span> <span class="n">E1</span><span class="p">,</span> <span class="n">dE</span><span class="p">,</span> <span class="s1">&#39;Horizontal&#39;</span><span class="p">)</span>
+<span class="n">label1</span> <span class="o">=</span> <span class="s1">&#39;At E = </span><span class="si">{}</span><span class="s1"> meV&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">E1</span><span class="p">)</span>
+<span class="n">E2</span> <span class="o">=</span> <span class="n">E1</span> <span class="o">-</span> <span class="mf">4.</span>
+<span class="n">cut2</span> <span class="o">=</span> <span class="n">LineProfile</span><span class="p">(</span><span class="s1">&#39;SofQW&#39;</span><span class="p">,</span> <span class="n">E2</span><span class="p">,</span> <span class="n">dE</span><span class="p">,</span> <span class="s1">&#39;Horizontal&#39;</span><span class="p">)</span>
+<span class="n">label2</span> <span class="o">=</span> <span class="s1">&#39;At E = </span><span class="si">{}</span><span class="s1"> meV&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">E2</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">plotprofiles</span><span class="p">([</span><span class="n">cut1</span><span class="p">,</span> <span class="n">cut2</span><span class="p">],</span> <span class="p">[</span><span class="n">label1</span><span class="p">,</span> <span class="n">label2</span><span class="p">],</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../techniques/DirecttoolsPythonModule-5.py">Source code</a>)</p>
 </section>
 <section id="plotting-density-of-states">
 <h3>Plotting density of states<a class="headerlink" href="#plotting-density-of-states" title="Permalink to this heading">¶</a></h3>
 <p>The density of states data calculated by <a class="reference internal" href="../algorithms/ComputeIncoherentDOS-v1.html#algm-computeincoherentdos"><span class="std std-ref">ComputeIncoherentDOS</span></a> can be plotted by the <a class="reference internal" href="#directtools.plotDOS" title="directtools.plotDOS"><code class="xref py py-func docutils literal notranslate"><span class="pre">directtools.plotDOS()</span></code></a> function. The function accepts a single workspace or a list of workspaces as its arguments. The example below shows a comparison of densities of states calculated from <span class="math notranslate nohighlight">\(S(Q,E)\)</span> and <span class="math notranslate nohighlight">\(S(2\theta,E)\)</span>:</p>
-<figure class="align-default" id="id6">
-<a class="screenshot reference internal image-reference" href="../_images/ImageNotFound.png"><img alt="../_images/ImageNotFound.png" class="screenshot" src="../_images/ImageNotFound.png" style="width: 200px;" /></a>
-<figcaption>
-<p><span class="caption-text">Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">directtools</span> <span class="k">as</span> <span class="nn">dt</span>
+<span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">DirectILLCollectData</span><span class="p">(</span><span class="n">Run</span><span class="o">=</span><span class="s1">&#39;ILL/IN4/084447.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">DirectILLReduction</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;SofQW&#39;</span><span class="p">,</span> <span class="n">OutputSofThetaEnergyWorkspace</span><span class="o">=</span><span class="s1">&#39;SofTW&#39;</span><span class="p">)</span>
+<span class="n">dosFromStw</span> <span class="o">=</span> <span class="n">ComputeIncoherentDOS</span><span class="p">(</span><span class="s1">&#39;SofTW&#39;</span><span class="p">)</span>
+<span class="n">dosFromSqw</span> <span class="o">=</span> <span class="n">ComputeIncoherentDOS</span><span class="p">(</span><span class="s1">&#39;SofQW&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">plotDOS</span><span class="p">([</span><span class="n">dosFromStw</span><span class="p">,</span> <span class="n">dosFromSqw</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="sa">r</span><span class="s1">&#39;from $S(2\theta, E)$&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;from $S(Q,E)$&#39;</span><span class="p">])</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../techniques/DirecttoolsPythonModule-6.py">Source code</a>)</p>
 </section>
 <section id="convenience-tools">
 <h3>Convenience tools<a class="headerlink" href="#convenience-tools" title="Permalink to this heading">¶</a></h3>

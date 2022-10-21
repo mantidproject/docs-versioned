@@ -181,41 +181,98 @@
 <section id="d-colourfill-and-contour-plots">
 <h2>2D Colourfill and Contour Plots<a class="headerlink" href="#d-colourfill-and-contour-plots" title="Permalink to this heading">¶</a></h2>
 <p>2D plots can be produced as an <a class="reference external" href="https://matplotlib.org/3.2.1/api/_as_gen/matplotlib.pyplot.imshow.html">image</a> or a <a class="reference external" href="https://matplotlib.org/3.2.1/api/_as_gen/matplotlib.pyplot.pcolormesh.html">pseudocolormesh</a> (for a non-regular grid):</p>
-<figure class="align-default" id="id1">
-<a class="screenshot reference internal image-reference" href="../../../_images/ImageNotFound.png"><img alt="../../../_images/ImageNotFound.png" class="screenshot" src="../../../_images/ImageNotFound.png" style="width: 200px;" /></a>
-<figcaption>
-<p><span class="caption-text">Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
-<figure class="align-default" id="id2">
-<a class="screenshot reference internal image-reference" href="../../../_images/ImageNotFound.png"><img alt="../../../_images/ImageNotFound.png" class="screenshot" src="../../../_images/ImageNotFound.png" style="width: 200px;" /></a>
-<figcaption>
-<p><span class="caption-text">Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&#39;&#39;&#39; ----------- Image &gt; imshow() ----------- &#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">LogNorm</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;MAR11060&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+
+<span class="c1"># IMPORTANT to set origin to lower</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">origin</span> <span class="o">=</span> <span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">LogNorm</span><span class="p">())</span>
+<span class="n">cbar</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Counts ($\mu s$)$^{-1}$&#39;</span><span class="p">)</span> <span class="c1">#add text to colorbar</span>
+<span class="c1">#plt.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../../tutorials/python_in_mantid/plotting/01_basic_plot_scripting-1.py">Source code</a>)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&#39;&#39;&#39; ----------- Pseudocolormesh &gt; pcolormesh() ----------- &#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">LogNorm</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;CNCS_7860&#39;</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">data</span><span class="p">,</span><span class="n">Target</span><span class="o">=</span><span class="s1">&#39;DeltaE&#39;</span><span class="p">,</span> <span class="n">EMode</span><span class="o">=</span><span class="s1">&#39;Direct&#39;</span><span class="p">,</span> <span class="n">EFixed</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">Params</span><span class="o">=</span><span class="s1">&#39;-3,0.025,3&#39;</span><span class="p">,</span> <span class="n">PreserveEvents</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">ConvertToMD</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">data</span><span class="p">,</span><span class="n">QDimensions</span><span class="o">=</span><span class="s1">&#39;|Q|&#39;</span><span class="p">,</span><span class="n">dEAnalysisMode</span><span class="o">=</span><span class="s1">&#39;Direct&#39;</span><span class="p">)</span>
+<span class="n">sqw</span> <span class="o">=</span> <span class="n">BinMD</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">md</span><span class="p">,</span><span class="n">AlignedDim0</span><span class="o">=</span><span class="s1">&#39;|Q|,0,3,100&#39;</span><span class="p">,</span><span class="n">AlignedDim1</span><span class="o">=</span><span class="s1">&#39;DeltaE,-3,3,100&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">sqw</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">LogNorm</span><span class="p">())</span>
+<span class="n">cbar</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Intensity (arb. units)&#39;</span><span class="p">)</span> <span class="c1">#add text to colorbar</span>
+<span class="c1">#plt.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../../tutorials/python_in_mantid/plotting/01_basic_plot_scripting-2.py">Source code</a>)</p>
 <p><a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.axes.Axes.contour.html">Contour lines</a> can be overlayed on a 2D colorfill:</p>
-<figure class="align-default" id="id3">
-<a class="screenshot reference internal image-reference" href="../../../_images/ImageNotFound.png"><img alt="../../../_images/ImageNotFound.png" class="screenshot" src="../../../_images/ImageNotFound.png" style="width: 200px;" /></a>
-<figcaption>
-<p><span class="caption-text">Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&#39;&#39;&#39; ----------- Contour overlay ----------- &#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;SANSLOQCan2D.nxs&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+
+<span class="c1"># IMPORTANT to set origin to lower</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">origin</span> <span class="o">=</span> <span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+
+<span class="c1"># Overlay contours</span>
+<span class="n">axes</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">levels</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">cbar</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Counts ($\mu s$)$^{-1}$&#39;</span><span class="p">)</span> <span class="c1">#add text to colorbar</span>
+<span class="c1">#plt.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../../tutorials/python_in_mantid/plotting/01_basic_plot_scripting-3.py">Source code</a>)</p>
 </section>
 <section id="d-surface-and-wireframe-plots">
 <h2>3D Surface and Wireframe Plots<a class="headerlink" href="#d-surface-and-wireframe-plots" title="Permalink to this heading">¶</a></h2>
 <p><a class="reference external" href="https://matplotlib.org/mpl_toolkits/mplot3d/tutorial.html">3D plots</a> <a class="reference external" href="https://matplotlib.org/mpl_toolkits/mplot3d/tutorial.html#surface-plots">Surface</a> and <a class="reference external" href="https://matplotlib.org/mpl_toolkits/mplot3d/tutorial.html#wireframe-plots">Wireframe</a> plots can also be created:</p>
-<figure class="align-default" id="id4">
-<a class="screenshot reference internal image-reference" href="../../../_images/ImageNotFound.png"><img alt="../../../_images/ImageNotFound.png" class="screenshot" src="../../../_images/ImageNotFound.png" style="width: 200px;" /></a>
-<figcaption>
-<p><span class="caption-text">Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
-<figure class="align-default" id="id5">
-<a class="screenshot reference internal image-reference" href="../../../_images/ImageNotFound.png"><img alt="../../../_images/ImageNotFound.png" class="screenshot" src="../../../_images/ImageNotFound.png" style="width: 200px;" /></a>
-<figcaption>
-<p><span class="caption-text">Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&#39;&#39;&#39; ----------- Surface plot ----------- &#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;MUSR00015189.nxs&#39;</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;data_1&#39;</span><span class="p">]</span> <span class="c1"># Extract individual workspace from group</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid3d&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="c1">#plt.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../../tutorials/python_in_mantid/plotting/01_basic_plot_scripting-4.py">Source code</a>)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&#39;&#39;&#39; ----------- Wireframe plot ----------- &#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;PG3_733.nxs&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid3d&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_wireframe</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="c1">#plt.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../../tutorials/python_in_mantid/plotting/01_basic_plot_scripting-5.py">Source code</a>)</p>
 <ul class="simple">
 <li><p>See <a class="reference internal" href="../../../plotting/index.html#plotting"><span class="std std-ref">here</span></a> for custom color cycles and colormaps</p></li>
 </ul>

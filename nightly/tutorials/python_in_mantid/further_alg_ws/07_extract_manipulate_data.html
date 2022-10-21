@@ -188,12 +188,32 @@ If you need x,y,e data to persist longer than the workspace, use the <em>extract
 <h3>Creating a MatrixWorkspace<a class="headerlink" href="#creating-a-matrixworkspace" title="Permalink to this heading">¶</a></h3>
 <p>Use <a class="reference internal" href="../../../algorithms/CreateWorkspace-v1.html#algm-createworkspace"><span class="std std-ref">CreateWorkspace v1</span></a>, with the correct input arrays.</p>
 <p>E.g. Change the x-axis for TOF from microseconds to milliseconds:</p>
-<figure class="align-default" id="id1">
-<a class="screenshot reference internal image-reference" href="../../../_images/ImageNotFound.png"><img alt="../../../_images/ImageNotFound.png" class="screenshot" src="../../../_images/ImageNotFound.png" style="width: 200px;" /></a>
-<figcaption>
-<p><span class="caption-text">Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
-</figcaption>
-</figure>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">mantid.plots._compatability</span> <span class="kn">import</span> <span class="n">plotSpectrum</span>
+
+<span class="c1"># Load and Read data</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s2">&quot;HRP39182.RAW&quot;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">readE</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Alter the x data</span>
+<span class="n">new_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="mf">1e-3</span>
+
+<span class="c1"># Create a new Matrix Workspace with the altered data</span>
+<span class="n">new_ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span><span class="o">=</span><span class="n">new_x</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">DataE</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">NSpec</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">UnitX</span><span class="o">=</span><span class="s1">&#39;Label&#39;</span><span class="p">)</span>
+
+<span class="c1"># Set the Label for the AxisUnit</span>
+<span class="n">unit</span> <span class="o">=</span> <span class="n">new_ws</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">getUnit</span><span class="p">()</span>
+<span class="n">unit</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s2">&quot;Time-of-flight&quot;</span><span class="p">,</span> <span class="s2">&quot;Milliseconds&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plot the new workspace</span>
+<span class="n">plotSpectrum</span><span class="p">(</span><span class="n">new_ws</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference external" href="../../../tutorials/python_in_mantid/further_alg_ws/07_extract_manipulate_data-1.py">Source code</a>)</p>
 </section>
 <section id="creating-a-tableworkspace">
 <h3>Creating a TableWorkspace<a class="headerlink" href="#creating-a-tableworkspace" title="Permalink to this heading">¶</a></h3>
