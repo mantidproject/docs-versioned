@@ -9,7 +9,8 @@ Load(Filename=inputData+".RAW",OutputWorkspace=inputData,Cache="If Slow")
 # First do the analysis without prompt pulse removal so that we can compare the difference
 # Align the detectors (incoporates unit conversion to d-Spacing)
 cal_file = "hrpd_new_072_01_corr.cal"
-AlignDetectors(InputWorkspace=inputData,OutputWorkspace="aligned-withpulse",CalibrationFile=cal_file)
+ApplyDiffCal(InstrumentWorkspace=inputData, CalibrationFile=cal_file)
+ConvertUnits(InputWorkspace=inputData, OutputWorkspace="aligned-withpulse", Target="dSpacing")
 # Focus the data
 DiffractionFocussing(InputWorkspace="aligned-withpulse",OutputWorkspace="focussed-withpulse",GroupingFileName=cal_file)
 
@@ -20,7 +21,8 @@ for i in range(0,5):
   MaskBins(InputWorkspace=inputData,OutputWorkspace=inputData,XMin=min,XMax=max)
 
 # Align the detectors (on the data with the pulse removed incoporates unit conversion to d-Spacing)
-AlignDetectors(InputWorkspace=inputData,OutputWorkspace="aligned-withoutpulse",CalibrationFile=cal_file)
+ApplyDiffCal(InstrumentWorkspace=inputData, CalibrationFile=cal_file)
+ConvertUnits(InputWorkspace=inputData, OutputWorkspace="aligned-withoutpulse", Target="dSpacing")
 # Focus the data
 DiffractionFocussing(InputWorkspace="aligned-withoutpulse",OutputWorkspace="focussed-withoutpulse",GroupingFileName=cal_file)
 # Subract the processed data with and without pulse from eachother
