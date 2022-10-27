@@ -183,9 +183,9 @@
 </tr>
 <tr class="row-odd"><td><p>ScaleRHSWorkspace</p></td>
 <td><p>Input</p></td>
-<td><p>boolean</p></td>
-<td><p>True</p></td>
-<td><p>Scaling either with respect to first (first hand side, LHS) or second (right hand side, RHS) workspace.</p></td>
+<td><p>optional boolean</p></td>
+<td><p>Unset</p></td>
+<td><p>Scaling either with respect to first (first hand side, LHS) or second (right hand side, RHS) workspace. This property no longer has an effect, please use the IndexOfReference property instead. Allowed values: [‘Unset’, ‘True’, ‘False’]</p></td>
 </tr>
 <tr class="row-even"><td><p>UseManualScaleFactors</p></td>
 <td><p>Input</p></td>
@@ -215,7 +215,7 @@
 <td><p>Input</p></td>
 <td><p>number</p></td>
 <td><p>0</p></td>
-<td><p>Index of the workspace to be used as reference for scaling.</p></td>
+<td><p>Index of the workspace to be used as reference for scaling, or -1 to choose the last workspace as the reference.</p></td>
 </tr>
 </tbody>
 </table>
@@ -241,8 +241,7 @@ from multiple workspace groups. In this case, each group must contain the
 same number of workspaces. The algorithm will stitch together the workspaces
 in the first group before stitching workspaces from the next group on top
 of the previous ones.</p>
-<p>When stitching the workspaces, either the RHS or LHS workspaces can be scaled.
-We can specify manual scale factors to use by setting
+<p>When stitching the workspaces, we can specify manual scale factors to use by setting
 <code class="docutils literal notranslate"><span class="pre">UseManualScaleFactors</span></code> true and passing values to
 <code class="docutils literal notranslate"><span class="pre">ManualScaleFactors</span></code>. For group workspaces, we can also use
 <code class="docutils literal notranslate"><span class="pre">ScaleFactorFromPeriod</span></code> to select a period which will obtain a vector
@@ -251,7 +250,8 @@ to all other periods when stitching.</p>
 <p>The workspace that provides the scale for stitching output can be chosen by
 specifying the desired index through <code class="docutils literal notranslate"><span class="pre">IndexOfReference</span></code> property.
 The reference workspace will not be scaled, and the other workspaces will be scaled
-to match the reference.</p>
+to match the reference. Note that this property should be used instead of
+<code class="docutils literal notranslate"><span class="pre">ScaleRHSWorkspace</span></code>, which no longer has any effect and will eventually be removed.</p>
 </section>
 <section id="workflow">
 <h2><a class="toc-backref" href="#id6" role="doc-backlink">Workflow</a><a class="headerlink" href="#workflow" title="Permalink to this heading">¶</a></h2>
@@ -261,10 +261,10 @@ to match the reference.</p>
 workspaces or not. The algorithm handles matrix workspaces differently from
 group workspaces.</p></li>
 <li><p>If matrix workspaces are supplied, the algorithm simply iterates over each
-workspace and calls the <code class="docutils literal notranslate"><span class="pre">Stitch1D</span></code> algorithm. This stitches each RHS
-workspace to the LHS workspace to form a single stitched workspace (LHS to
-RHS if ScaleRHSWorkspace is set to false). The resultant workspace and its
-scale factor are outputted.</p></li>
+workspace and calls the <code class="docutils literal notranslate"><span class="pre">Stitch1D</span></code> algorithm. This stitches each pair
+of workspaces together, with either the RHS or LHS workspace being scaled
+depending on the chosen reference workspace (given by <code class="docutils literal notranslate"><span class="pre">IndexOfReference</span></code>).
+The resultant workspace and its scale factor are outputted.</p></li>
 <li><p>If group workspaces are supplied, the algorithm checks whether or not to
 scale workspaces using scale factors from a specific period (given by
 <code class="docutils literal notranslate"><span class="pre">ScaleFactorFromPeriod</span></code>). This is done only if
@@ -361,8 +361,8 @@ omitted as they do not serve any purpose other than to be passed to the
 </section>
 <section id="source">
 <h2><a class="toc-backref" href="#id8" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Permalink to this heading">¶</a></h2>
-<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/aeb61550a4f509c1ca5ca885811d3e10520a2079/Framework/Algorithms/inc/MantidAlgorithms/Stitch1DMany.h">Stitch1DMany.h</a></p>
-<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/aeb61550a4f509c1ca5ca885811d3e10520a2079/Framework/Algorithms/src/Stitch1DMany.cpp">Stitch1DMany.cpp</a></p>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/b68ce1ea7e71489e59bbcabd31a49d5e36170bef/Framework/Algorithms/inc/MantidAlgorithms/Stitch1DMany.h">Stitch1DMany.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/b68ce1ea7e71489e59bbcabd31a49d5e36170bef/Framework/Algorithms/src/Stitch1DMany.cpp">Stitch1DMany.cpp</a></p>
 </section>
 </section>
 
