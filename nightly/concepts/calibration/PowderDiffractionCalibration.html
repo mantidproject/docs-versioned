@@ -16,7 +16,6 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -248,7 +247,7 @@ cross-correlation are combined using <a class="reference internal" href="../../a
 <li><p>PDCalibration the combined spectrum to determine a conversion constant <span class="math notranslate nohighlight">\(DIFC_{PD}\)</span></p></li>
 <li><p>Use <a class="reference internal" href="../../algorithms/CombineDiffCal-v1.html#algm-combinediffcal"><span class="std std-ref">CombineDiffCal</span></a> to combine <span class="math notranslate nohighlight">\(DIFC_{CC}\)</span>, <span class="math notranslate nohighlight">\(DIFC_{arb}\)</span>, and <span class="math notranslate nohighlight">\(DIFC_{PD}\)</span> into a new calibration constant, <span class="math notranslate nohighlight">\(DIFC_{eff}\)</span></p></li>
 </ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a fake starting workspace in d-spacing then convert to TOF for calibration</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a fake starting workspace in d-spacing then convert to TOF for calibration</span>
 <span class="n">myFunc</span> <span class="o">=</span> <span class="s2">&quot;name=Gaussian, PeakCentre=1, Height=100, Sigma=0.01;name=Gaussian, PeakCentre=2, Height=100, Sigma=0.01;name=Gaussian, PeakCentre=3, Height=100, Sigma=0.01&quot;</span>
 <span class="n">ws_d</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="s2">&quot;Event&quot;</span><span class="p">,</span><span class="s2">&quot;User Defined&quot;</span><span class="p">,</span> <span class="n">myFunc</span><span class="p">,</span> <span class="n">BankPixelWidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">XUnit</span><span class="o">=</span><span class="s1">&#39;dSpacing&#39;</span><span class="p">,</span> <span class="n">XMax</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">BinWidth</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">NumEvents</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">NumBanks</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">):</span>
@@ -283,7 +282,7 @@ cross-correlation are combined using <a class="reference internal" href="../../a
     6 2208.3
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Calibration.tofpd.group_calibration</span> <span class="kn">import</span> <span class="n">cc_calibrate_groups</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Calibration.tofpd.group_calibration</span> <span class="kn">import</span> <span class="n">cc_calibrate_groups</span>
 
 <span class="n">cc_diffcal</span><span class="p">,</span> <span class="n">to_skip</span> <span class="o">=</span> <span class="n">cc_calibrate_groups</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span>
                                           <span class="n">groups</span><span class="p">,</span>
@@ -306,7 +305,7 @@ cross-correlation are combined using <a class="reference internal" href="../../a
     6 2163.0
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In this case, cycling through cross correlation until offset converges.</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In this case, cycling through cross correlation until offset converges.</span>
 <span class="n">cc_diffcal</span><span class="p">,</span> <span class="n">to_skip</span> <span class="o">=</span> <span class="n">cc_calibrate_groups</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span>
                                           <span class="n">groups</span><span class="p">,</span>
                                           <span class="n">DReference</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
@@ -328,7 +327,7 @@ cross-correlation are combined using <a class="reference internal" href="../../a
     6 2165.0
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Turn on cross correlation cycling but skip cross correlation for group-1.</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Turn on cross correlation cycling but skip cross correlation for group-1.</span>
 <span class="n">cc_diffcal</span><span class="p">,</span> <span class="n">to_skip</span> <span class="o">=</span> <span class="n">cc_calibrate_groups</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span>
                                           <span class="n">groups</span><span class="p">,</span>
                                           <span class="n">DReference</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
@@ -351,7 +350,7 @@ cross-correlation are combined using <a class="reference internal" href="../../a
     6 2165.0
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Calibration.tofpd.group_calibration</span> <span class="kn">import</span> <span class="n">pdcalibration_groups</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Calibration.tofpd.group_calibration</span> <span class="kn">import</span> <span class="n">pdcalibration_groups</span>
 
 <span class="n">diffcal</span> <span class="o">=</span> <span class="n">pdcalibration_groups</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span>
                                <span class="n">groups</span><span class="p">,</span>
@@ -412,7 +411,7 @@ cross-correlation are combined using <a class="reference internal" href="../../a
 </figure>
 <p>The same complete calibration can just be run with just
 <code class="docutils literal notranslate"><span class="pre">group_calibration.do_group_calibration</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Calibration.tofpd.group_calibration</span> <span class="kn">import</span> <span class="n">do_group_calibration</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Calibration.tofpd.group_calibration</span> <span class="kn">import</span> <span class="n">do_group_calibration</span>
 
 <span class="n">diffcal</span> <span class="o">=</span> <span class="n">do_group_calibration</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span>
                                <span class="n">groups</span><span class="p">,</span>

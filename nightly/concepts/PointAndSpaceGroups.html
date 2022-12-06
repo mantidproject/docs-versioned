@@ -16,7 +16,6 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -170,7 +169,7 @@
 <section id="using-point-groups-in-mantid">
 <h2>Using point groups in Mantid<a class="headerlink" href="#using-point-groups-in-mantid" title="Permalink to this heading">¶</a></h2>
 <p>Point groups are represented in Mantid by the <code class="docutils literal notranslate"><span class="pre">PointGroup</span></code>-class, which is constructed for each actual point group using generators. The interface of the class consists of two parts, one for providing information about the point group and one for working with <span class="math notranslate nohighlight">\(hkl\)</span>-indices. Just as in the case of <code class="docutils literal notranslate"><span class="pre">SymmetryOperation</span></code>, <code class="docutils literal notranslate"><span class="pre">PointGroup</span></code>-objects are created using a factory, this time by supplying the short Hermann-Mauguin symbol <a class="footnote-reference brackets" href="#f1" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> :</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span>
 
 <span class="n">pg</span> <span class="o">=</span> <span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">createPointGroup</span><span class="p">(</span><span class="s2">&quot;-1&quot;</span><span class="p">)</span>
 
@@ -186,7 +185,7 @@ Crystal system: Triclinic
 </pre></div>
 </div>
 <p>It’s possible to query the factory about available point groups. One option returns a list of all available groups, while another possibility is to get only groups from a certain crystal system:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span><span class="p">,</span> <span class="n">PointGroup</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span><span class="p">,</span> <span class="n">PointGroup</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All point groups: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">getAllPointGroupSymbols</span><span class="p">()))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cubic point groups: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">getPointGroupSymbols</span><span class="p">(</span><span class="n">PointGroup</span><span class="o">.</span><span class="n">CrystalSystem</span><span class="o">.</span><span class="n">Cubic</span><span class="p">)))</span>
@@ -201,7 +200,7 @@ Tetragonal point groups: [&#39;-4&#39;,&#39;-42m&#39;,&#39;-4m2&#39;,&#39;4&#39;
 </div>
 <p>The point groups with an extra <code class="docutils literal notranslate"><span class="pre">r</span></code> at the end are trigonal point groups with rhombohedral axes. Trigonal point groups without that additional letter use the hexagonal coordinate system. For some of them there are two different axis choices, for example <span class="math notranslate nohighlight">\(\bar{3}m\)</span>, which can be defined as <span class="math notranslate nohighlight">\(\bar{3}m1\)</span> or <span class="math notranslate nohighlight">\(\bar{3}1m\)</span>. Creating it by the symbol <code class="docutils literal notranslate"><span class="pre">-3m</span></code> defaults to <span class="math notranslate nohighlight">\(\bar{3}m1\)</span>.</p>
 <p>After having obtained a <code class="docutils literal notranslate"><span class="pre">PointGroup</span></code>-object, it can be used for working with reflection data, more specifically <span class="math notranslate nohighlight">\(hkl\)</span>-indices. It’s possible to check whether two reflections are equivalent in a certain point group:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span>
 
 <span class="n">pg</span> <span class="o">=</span> <span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">createPointGroup</span><span class="p">(</span><span class="s2">&quot;m-3m&quot;</span><span class="p">)</span>
 
@@ -218,7 +217,7 @@ Are [2,0,0] and [0,1,2] equivalent? False
 </pre></div>
 </div>
 <p>Another common task is to find all symmetry equivalents of a reflection, for example to determine its multiplicity. <code class="docutils literal notranslate"><span class="pre">PointGroup</span></code> has a method for this purpose which returns the set of non-identical symmetry equivalents for a given <span class="math notranslate nohighlight">\(hkl\)</span> (including <span class="math notranslate nohighlight">\(hkl\)</span> itself):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span>
 
 <span class="n">pg</span> <span class="o">=</span> <span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">createPointGroup</span><span class="p">(</span><span class="s2">&quot;m-3m&quot;</span><span class="p">)</span>
 
@@ -244,7 +243,7 @@ Equivalents: [[1,1,1], [1,1,-1], [1,-1,1], [1,-1,-1], [-1,1,1], [-1,1,-1], [-1,-
 </pre></div>
 </div>
 <p>Sometimes, a list of reflections needs to be reduced to a set of symmetry independent reflections only. That means it should not contain any two reflections that are symmetry equivalents according to the point group symmetry. To achieve this, <code class="docutils literal notranslate"><span class="pre">PointGroup</span></code> offers a method that returns the same <span class="math notranslate nohighlight">\(hkl'\)</span> for all symmetry equivalents.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span>
 
 <span class="n">pg</span> <span class="o">=</span> <span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">createPointGroup</span><span class="p">(</span><span class="s2">&quot;m-3m&quot;</span><span class="p">)</span>
 
@@ -267,7 +266,7 @@ Reflections: [...]
 </pre></div>
 </div>
 <p>Symmetry imposes restrictions on the metric of the unit cell. Cubic symmetry for example implies that all cell edges have the same length and all angles are 90 degrees. The <code class="docutils literal notranslate"><span class="pre">Group</span></code>-class (and thus, by inheritance also <code class="docutils literal notranslate"><span class="pre">PointGroup</span></code>) provides a method that checks is a metric tensor is compatible with the symmetry operations of the group:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span><span class="p">,</span> <span class="n">UnitCell</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span><span class="p">,</span> <span class="n">UnitCell</span>
 
 <span class="n">cell</span> <span class="o">=</span> <span class="n">UnitCell</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 
@@ -290,7 +289,7 @@ Is the cell compatible with tetragonal symmetry? True
 <h2>Using space groups in Mantid<a class="headerlink" href="#using-space-groups-in-mantid" title="Permalink to this heading">¶</a></h2>
 <p>Space group representation in Mantid is very similar to the point group representation, there is a <code class="docutils literal notranslate"><span class="pre">SpaceGroup</span></code>-class that contains some information about the group, but also a method to generate equivalent positions from a coordinate triplet.</p>
 <p>Exactly like point groups, space groups are also created using a factory:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span>
 
 <span class="n">sg</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;P -1&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hermann-Mauguin symbol: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">getHMSymbol</span><span class="p">()))</span>
@@ -303,7 +302,7 @@ ITA number: 2
 </pre></div>
 </div>
 <p>For some space group types there is more than one setting, so the factory supports querying the available symbols for a given number:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Space group no. 26: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">subscribedSpaceGroupSymbols</span><span class="p">(</span><span class="mi">26</span><span class="p">)))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total subscribed space group types: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">getAllSpaceGroupNumbers</span><span class="p">())))</span>
@@ -315,7 +314,7 @@ Total subscribed space group types: 230
 </pre></div>
 </div>
 <p>Besides containing some very basic information, the most important functionality is the ability to generate equivalent coordinates. The following example generates all coordinates for the <span class="math notranslate nohighlight">\(4h\)</span> position in space group <span class="math notranslate nohighlight">\(P6/m\)</span> (No. 175):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span>
 
 <span class="n">sg</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;P 6/m&quot;</span><span class="p">)</span>
 
@@ -338,7 +337,7 @@ Coordinates:
 </pre></div>
 </div>
 <p>Closely related to the generation of equivalent coordinates is the site symmetry group, which leaves a point unchanged:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span><span class="p">,</span> <span class="n">SymmetryElementFactory</span><span class="p">,</span> <span class="n">SymmetryElement</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span><span class="p">,</span> <span class="n">SymmetryElementFactory</span><span class="p">,</span> <span class="n">SymmetryElement</span>
 
 <span class="k">def</span> <span class="nf">getFullElementSymbol</span><span class="p">(</span><span class="n">symmetryElement</span><span class="p">):</span>
 <span class="c1"># Dictionary for mapping enum values to short strings</span>
@@ -377,7 +376,7 @@ Group elements:
 </div>
 <p>An extended example below shows an algorithm to derive the site symmetry group.</p>
 <p>Furthermore, it is possible to create a PointGroup-object from a SpaceGroup object in order to obtain information about the crystal system and to perform the Miller index operations provided by PointGroup. For this, PointGroupFactory has a special method, but the point group can also be conveniently created directly from the space group object:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span><span class="p">,</span> <span class="n">SpaceGroupFactory</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span><span class="p">,</span> <span class="n">SpaceGroupFactory</span>
 
 <span class="c1"># Create space group Fd-3m (for example silicon or diamond)</span>
 <span class="n">sg_diamond</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;F d -3 m&quot;</span><span class="p">)</span>
@@ -398,7 +397,7 @@ Space group no. 216 has point group: -43m
 </pre></div>
 </div>
 <p>Sometimes it’s useful to reverse the above process - which is not exactly possible, because several space groups may map to the same point group. The space group factory does however provide a way to get all space group symbols that belong to a certain point group:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span><span class="p">,</span> <span class="n">SpaceGroupFactory</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span><span class="p">,</span> <span class="n">SpaceGroupFactory</span>
 
 <span class="n">pg</span> <span class="o">=</span> <span class="n">PointGroupFactory</span><span class="o">.</span><span class="n">createPointGroup</span><span class="p">(</span><span class="s2">&quot;m-3&quot;</span><span class="p">)</span>
 
@@ -410,7 +409,7 @@ Space group no. 216 has point group: -43m
 </pre></div>
 </div>
 <p>While PointGroup offers useful methods to handle reflections, some information can only be obtained from the space group. The presence of translational symmetry causes the contributions from symmetrically equivalent atoms to the structure factor of certain reflections to cancel out completely so that it can not be observed. These systematically absent reflections are characteristic for each space group, a fact that can be used to determine the space group from measured reflection intensities. The following script shows how to check a few reflections:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.kernel</span> <span class="kn">import</span> <span class="n">V3D</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.kernel</span> <span class="kn">import</span> <span class="n">V3D</span>
 <span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span>
 
 <span class="n">sg</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;F d d d&quot;</span><span class="p">)</span>
@@ -430,7 +429,7 @@ Space group no. 216 has point group: -43m
 </div>
 <p><a class="reference internal" href="#spacegroupcheck"><span class="std std-ref">Below</span></a> is a more elaborate example which shows one possibility to find a likely candidate space group for a list of reflections. Please note that these reflection conditions only covers the ones listed for the “general position” in ITA. When atoms are located on special positions, there may be additional conditions that need to be fulfilled. A notable example is the <span class="math notranslate nohighlight">\(222\)</span>-reflection in Silicon. It is forbidden because the silicon atom is located on the <span class="math notranslate nohighlight">\(8a\)</span> position, which introduces additional reflection conditions.</p>
 <p>As mentioned above, <code class="docutils literal notranslate"><span class="pre">SpaceGroup</span></code> provides a function that verifies whether the metric of a unit cell is compatible with the space group’s symmetry:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span><span class="p">,</span> <span class="n">UnitCell</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span><span class="p">,</span> <span class="n">UnitCell</span>
 
 <span class="c1"># An arbitrary cell with hexagonal metric</span>
 <span class="n">cell</span> <span class="o">=</span> <span class="n">UnitCell</span><span class="p">(</span><span class="mf">4.402</span><span class="p">,</span> <span class="mf">4.402</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">120</span><span class="p">)</span>
@@ -455,7 +454,7 @@ Is the cell allowed in R-3m (hexagonal setting)? True
 <section id="retrieving-information-about-space-group-symmetry">
 <h3>Retrieving information about space group symmetry<a class="headerlink" href="#retrieving-information-about-space-group-symmetry" title="Permalink to this heading">¶</a></h3>
 <p>The previous two sections demonstrated how to perform common tasks using point and space groups in Mantid. With the available Python tools it is however possible to obtain other information as well. One useful method that both PointGroup and SpaceGroup expose is to query the symmetry operations of the group, although in string format:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span>
 
 <span class="n">sg</span> <span class="o">=</span> <span class="n">SpaceGroupFactory</span><span class="o">.</span><span class="n">createSpaceGroup</span><span class="p">(</span><span class="s2">&quot;P 6/m&quot;</span><span class="p">)</span>
 <span class="n">symOpStrings</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">getSymmetryOperationStrings</span><span class="p">())</span>
@@ -470,7 +469,7 @@ Symmetry operations: [&#39;-x+y,-x,-z&#39;, &#39;-x+y,-x,z&#39;, &#39;-x,-y,-z&#
 </pre></div>
 </div>
 <p>While this can be interesting for informational purposes, it’s more useful to obtain the symmetry operations directly as objects to use them for new purposes. This script for example sorts the contained symmetry operations according to their order:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span>
 
 <span class="k">def</span> <span class="nf">getMaximumOrderOperation</span><span class="p">(</span><span class="n">spaceGroup</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">spaceGroup</span><span class="o">.</span><span class="n">getSymmetryOperations</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">getOrder</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -492,7 +491,7 @@ The symmetry operation with highest order in space group no. 207 is: z,y,-x (k=4
 </pre></div>
 </div>
 <p>Another way to extract more information about the symmetry in a space group is to obtain the symmetry elements and arrange them by their characteristic axis:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.kernel</span> <span class="kn">import</span> <span class="n">V3D</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.kernel</span> <span class="kn">import</span> <span class="n">V3D</span>
 <span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">PointGroupFactory</span><span class="p">,</span> <span class="n">SpaceGroupFactory</span><span class="p">,</span> <span class="n">SymmetryElementFactory</span>
 
 <span class="k">def</span> <span class="nf">getSymmetryElementsFromOperations</span><span class="p">(</span><span class="n">symmetryOperations</span><span class="p">):</span>
@@ -547,7 +546,7 @@ Symmetry in each direction:
 <section id="extracting-the-site-symmetry-group">
 <h3>Extracting the site symmetry group<a class="headerlink" href="#extracting-the-site-symmetry-group" title="Permalink to this heading">¶</a></h3>
 <p>With the space group information it’s also possible to derive information about site symmetry at specific coordinates and construct the site symmetry group, which is the sub-group of the point group that contains the symmetry operations of the space group that leave the point unchanged. In the following script, the site symmetry group of the <span class="math notranslate nohighlight">\(6h\)</span> position (coordinates <span class="math notranslate nohighlight">\(x, 2x, 1/4\)</span>) in space group <span class="math notranslate nohighlight">\(P6_3/mmc\)</span> (no. 194) is determined:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.kernel</span> <span class="kn">import</span> <span class="n">V3D</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.kernel</span> <span class="kn">import</span> <span class="n">V3D</span>
 <span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span><span class="p">,</span> <span class="n">Group</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -597,7 +596,7 @@ Site multiplicity: 6
 <section id="checking-a-list-of-unique-reflections-for-possible-space-groups">
 <span id="spacegroupcheck"></span><h3>Checking a list of unique reflections for possible space groups<a class="headerlink" href="#checking-a-list-of-unique-reflections-for-possible-space-groups" title="Permalink to this heading">¶</a></h3>
 <p>Building on the example above which showed how to check whether a reflection is allowed by the symmetry operations contained in the space group, the next script goes a bit further. The starting point is a list of symmetry independent reflections with the information whether it’s observed or not. A list like can usually be obtained at some point during data reduction after intensities have been determined, which allows for the derivation of the Laue class (and thus, merging the reflections so only unique reflections are available) and decision if a reflection is observed or not (for example <span class="math notranslate nohighlight">\(I/\sigma(I) &gt; 3\)</span>). Covering all these steps is beyond the scope of this document, so it’s assumed that a list with pairs of HKL and a boolean value (<cite>True</cite> for “observed” and <cite>False</cite> for “not observed”) is available. Furthermore it’s assumed that the space group belongs to Laue class <span class="math notranslate nohighlight">\(m\bar{3}m\)</span>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span><span class="p">,</span> <span class="n">PointGroupFactory</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">SpaceGroupFactory</span><span class="p">,</span> <span class="n">PointGroupFactory</span>
 
 <span class="c1"># Small helper function that distinguishes three cases:</span>
 <span class="c1">#   0: The reflection is observed and allowed or not observed and not allowed</span>
