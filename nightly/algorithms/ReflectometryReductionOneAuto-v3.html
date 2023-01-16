@@ -542,13 +542,21 @@ transmission runs are provided as matrix workspaces the specified runs will be
 used for all members of the input workspace group.</p>
 <section id="polarization-analysis">
 <h4><a class="toc-backref" href="#id8" role="doc-backlink">Polarization Analysis</a><a class="headerlink" href="#polarization-analysis" title="Permalink to this heading">¶</a></h4>
-<p>If <code class="docutils literal notranslate"><span class="pre">PolarizationAnalysis</span></code> is set to false the reduction stops. If it
-is set to true, the reduction continues and polarization corrections will be
-applied to the workspace that was output in wavelength. This uses the method
-and values specified in the parameters file to run
-<a class="reference internal" href="PolarizationCorrectionFredrikze-v1.html#algm-polarizationcorrectionfredrikze"><span class="std std-ref">PolarizationCorrectionFredrikze v1</span></a> or
-<a class="reference internal" href="PolarizationCorrectionWildes-v1.html#algm-polarizationcorrectionwildes"><span class="std std-ref">PolarizationCorrectionWildes v1</span></a> as appropriate.</p>
-<p>The result will be a new workspace in wavelength, which will override the
+<p>If <code class="docutils literal notranslate"><span class="pre">PolarizationAnalysis</span></code> is set to false the reduction stops. This is
+regardless of whether or not a value has been provided for the <code class="docutils literal notranslate"><span class="pre">PolarizationEfficiencies</span></code>
+parameter. If <code class="docutils literal notranslate"><span class="pre">PolarizationAnalysis</span></code> is set to true, the reduction continues
+and polarization corrections will be applied to the workspace that was output in wavelength.</p>
+<p>If a <code class="docutils literal notranslate"><span class="pre">PolarizationEfficiencies</span></code> workspace is provided then the values from this workspace
+are used to run either the <a class="reference internal" href="PolarizationCorrectionFredrikze-v1.html#algm-polarizationcorrectionfredrikze"><span class="std std-ref">PolarizationCorrectionFredrikze v1</span></a> or <a class="reference internal" href="PolarizationCorrectionWildes-v1.html#algm-polarizationcorrectionwildes"><span class="std std-ref">PolarizationCorrectionWildes v1</span></a>
+methods. The method to run is determined from the efficiency factor axes labels specified in
+the workspace. Providing an efficiencies workspace is only supported where the input workspace
+is a group of size 2 or 4. For the Fredrikze algorithm, the polarization mode will be PNR if the
+input workspace group has a size of 2 and PA if the size is 4. For Wildes, a workspace group of
+size 2 will use flipper configuration <code class="docutils literal notranslate"><span class="pre">'0,</span> <span class="pre">1'</span></code>, while a group of size 4 will use configuration
+<code class="docutils literal notranslate"><span class="pre">'00,</span> <span class="pre">01,</span> <span class="pre">10,</span> <span class="pre">11'</span></code>.</p>
+<p>If a workspace is not provided for the <code class="docutils literal notranslate"><span class="pre">PolarizationEfficiencies</span></code> parameter then the
+method and values specified in the parameters file are used instead.</p>
+<p>The result of polarization analysis is a new workspace in wavelength, which will override the
 previous one. This will then be used as an input to re-run
 <a class="reference internal" href="ReflectometryReductionOne-v2.html#algm-reflectometryreductionone"><span class="std std-ref">ReflectometryReductionOne v2</span></a> to calculate the new output workspaces in
 Q, which in turn will override the existing workspaces in Q. Note that when run
@@ -627,8 +635,8 @@ and add these to your path. In Mantid this is done using <a class="reference ext
 </section>
 <section id="source">
 <h2><a class="toc-backref" href="#id11" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Permalink to this heading">¶</a></h2>
-<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/f52c3fc6ea20c23c55449815c6cde8e713ad6e0a/Framework/Reflectometry/inc/MantidReflectometry/ReflectometryReductionOneAuto3.h">ReflectometryReductionOneAuto3.h</a></p>
-<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/f52c3fc6ea20c23c55449815c6cde8e713ad6e0a/Framework/Reflectometry/src/ReflectometryReductionOneAuto3.cpp">ReflectometryReductionOneAuto3.cpp</a></p>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/d01b3431ef42c8e811acf3df5a3cc0503656d488/Framework/Reflectometry/inc/MantidReflectometry/ReflectometryReductionOneAuto3.h">ReflectometryReductionOneAuto3.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/d01b3431ef42c8e811acf3df5a3cc0503656d488/Framework/Reflectometry/src/ReflectometryReductionOneAuto3.cpp">ReflectometryReductionOneAuto3.cpp</a></p>
 </section>
 </section>
 
