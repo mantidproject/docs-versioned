@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Direct Geometry Changes" href="direct_geometry.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="34847.html" />
+    <link rel="prev" title="Mantid 6.6.0 Release Notes" href="index.html" />
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -141,6 +141,7 @@
 <ul class="simple">
 <li><p>Increase the speed of the fourier filter in the POLARIS total scattering reduction by reducing the Rmax parameter used in the pair of (forward and backward) PDFFourierTransform calls and optimising the integration code inside <a class="reference internal" href="../../algorithms/PDFFourierTransform-v2.html#algm-pdffouriertransform-v2"><span class="std std-ref">PDFFourierTransform v2</span></a></p></li>
 <li><p>Added support for ILL D4C instrument, a liquid diffractometer. This adds a new algorithm responsible for the reduction stage: <a class="reference internal" href="../../algorithms/D4ILLReduction-v1.html#algm-d4illreduction"><span class="std std-ref">D4ILLReduction</span></a>, which handles calling the loader, correcting for dead time, bank position offsets, relative efficiency, and normalisation to monitor or time.</p></li>
+<li><p>For ILL/D2B instrument, only calibrated data are loaded from the nexus file.</p></li>
 <li><p>Introduce an input parameter in <a class="reference internal" href="../../algorithms/WANDPowderReduction-v1.html#algm-wandpowderreduction"><span class="std std-ref">WANDPowderReduction</span></a> to specify that the input workspaces are from event filtering. In such a situation, the overall reduction time could be reduced significantly.</p></li>
 </ul>
 </section>
@@ -158,13 +159,8 @@
 <section id="id1">
 <h3><a class="toc-backref" href="#id9" role="doc-backlink">New features</a><a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
-<li><p>On the GSASII tab, when a successful refinement is run, the output table workspace for the lattice parameters
-now includes the Microstrain value and the column title is marked when this parameter has been refined.
-A similar instrument parameter table workspace is now also generated which includes Sigma-1 and Gamma(Y),
-with a refined flag, and the fitting range. The Pawley reflections are output to a separate table workspace
-if they are available.</p></li>
-<li><p>An indeterminate progress bar has been added below the FitPropertyBrowser on the Engineering Diffraction Fitting tab.
-This will display when the fit is in progress and whether the recent fit status was success or fail.</p></li>
+<li><p>On the GSASII tab, when a successful refinement is run, the output table workspace for the lattice parameters now includes the Microstrain value and the column title is marked when this parameter has been refined. A similar instrument parameter table workspace is now also generated which includes Sigma-1 and Gamma(Y), with a refined flag, and the fitting range. The Pawley reflections are output to a separate table workspace if they are available.</p></li>
+<li><p>An indeterminate progress bar has been added below the FitPropertyBrowser on the Engineering Diffraction Fitting tab. This will display when the fit is in progress and whether the recent fit status was success or fail.</p></li>
 </ul>
 </section>
 <section id="id2">
@@ -185,30 +181,27 @@ This will display when the fit is in progress and whether the recent fit status 
 <li><p>New algorithm <a class="reference internal" href="../../algorithms/SaveINS-v1.html#algm-saveins"><span class="std std-ref">SaveINS</span></a> to write a .ins input file for SHELX</p></li>
 <li><p>Added new option to <a class="reference internal" href="../../algorithms/IntegratePeaksSkew-v1.html#algm-integratepeaksskew"><span class="std std-ref">IntegratePeaksSkew</span></a>: to get initial TOF window from back-to-back exponential coefficients if specified in the instrument parameters.xml</p></li>
 <li><p>Added back-to-back exponential coefficients to SXD parameters.xml file</p></li>
+<li><p>Simplified input arguments to <a class="reference internal" href="../../algorithms/IntegratePeaksSkew-v1.html#algm-integratepeaksskew"><span class="std std-ref">IntegratePeaksSkew</span></a>: the parameter <cite>FractionalTOFWindow</cite> has been removed, if a user wants to integrate with an initial window dTOF/TOF = constant for all peaks then this can be achieved by setting ThetaWidth = 0 - note this is technically a breaking change.</p></li>
+<li><p>Parallelize loop over peaks in IntegratePEaksMD which provides significant speed-up for ellipsoid integration.</p></li>
+<li><p>Exposed indexing tolerance for <a class="reference internal" href="../../algorithms/SCDCalibratePanels-v2.html#algm-scdcalibratepanels"><span class="std std-ref">SCDCalibratePanels</span></a> when using <cite>RecalculateUB</cite> option.</p></li>
 <li><p>Added two options to <a class="reference internal" href="../../algorithms/IntegratePeaksSkew-v1.html#algm-integratepeaksskew"><span class="std std-ref">IntegratePeaksSkew</span></a>: to scale angular resolution parameter (<code class="docutils literal notranslate"><span class="pre">ThetaWidth</span></code>) by wavelength, and to specify minimum number of TOF bins in a valid peak (<code class="docutils literal notranslate"><span class="pre">NTOFBinsMin</span></code>).</p></li>
+<li><p>Improve estimation of resolution parameters in <a class="reference internal" href="../../algorithms/IntegratePeaksSkew-v1.html#algm-integratepeaksskew"><span class="std std-ref">IntegratePeaksSkew</span></a> (more robust to outliers).</p></li>
+<li><p>Made Lorentz correction in <a class="reference internal" href="../../algorithms/IntegratePeaksSkew-v1.html#algm-integratepeaksskew"><span class="std std-ref">IntegratePeaksSkew</span></a> optional.</p></li>
 <li><p>Added back bank 14 to TOPAZ for a total of 20 banks</p></li>
 </ul>
 </section>
 <section id="id4">
 <h3><a class="toc-backref" href="#id13" role="doc-backlink">Bugfixes</a><a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h3>
 <ul class="simple">
-<li><p>Replaced deprecated NumPy <cite>np.int</cite> type in <span class="xref std std-ref">ConvertWANDSCDtoQ</span>.</p></li>
-</ul>
-<ul class="simple">
+<li><p>Replaced deprecated NumPy <cite>np.int</cite> type in <a class="reference internal" href="../../algorithms/ConvertWANDSCDtoQ-v1.html#algm-convertwandscdtoq"><span class="std std-ref">ConvertWANDSCDtoQ</span></a>.</p></li>
 <li><p><a class="reference internal" href="../../algorithms/IntegratePeaksProfileFitting-v1.html#algm-integratepeaksprofilefitting"><span class="std std-ref">IntegratePeaksProfileFitting</span></a> library <cite>ICCFitTools</cite> module updated to support more recent versions of SciPy where the factorial function moved from <cite>scipy.misc.factorial</cite> to <cite>scipy.special.factorial</cite>. On newer versions of SciPy, the algorithm previously failed.</p></li>
 <li><p><a class="reference internal" href="../../algorithms/SaveReflections-v1.html#algm-savereflections"><span class="std std-ref">SaveReflections</span></a> now warns if an empty peak table is saved and doesn’t fail with an error</p></li>
-</ul>
-<ul class="simple">
-<li><p>Several bug fixes to <a class="reference internal" href="../../algorithms/IntegratePeaksSkew-v1.html#algm-integratepeaksskew"><span class="std std-ref">IntegratePeaksSkew</span></a> including
-* Ensuring colorscale max &gt; min (found for weak peaks with pixels having 0 intensity)
-* Close generated figure if an error occured while trying to write to file (e.g. file of same name was already open)
-* Fix bug that didn’t set HKL of peak if <code class="docutils literal notranslate"><span class="pre">UpdatePeakPosition</span> <span class="pre">=</span> <span class="pre">True</span></code></p></li>
-</ul>
-<ul class="simple">
+<li><p>Replaced deprecated Matplotlib <cite>bivariate_normal</cite> function in <cite>BVGFitTools.py</cite></p></li>
+<li><p>Ensuring colorscale max &gt; min (found for weak peaks with pixels having 0 intensity) in <a class="reference internal" href="../../algorithms/IntegratePeaksSkew-v1.html#algm-integratepeaksskew"><span class="std std-ref">IntegratePeaksSkew</span></a>.</p></li>
+<li><p><a class="reference internal" href="../../algorithms/IntegratePeaksSkew-v1.html#algm-integratepeaksskew"><span class="std std-ref">IntegratePeaksSkew</span></a> will now close a generated figure if an error occured while trying to write to file (e.g. file of same name was already open)</p></li>
+<li><p>Fix bug that didn’t set HKL of peak if <code class="docutils literal notranslate"><span class="pre">UpdatePeakPosition</span> <span class="pre">=</span> <span class="pre">True</span></code> in <a class="reference internal" href="../../algorithms/IntegratePeaksSkew-v1.html#algm-integratepeaksskew"><span class="std std-ref">IntegratePeaksSkew</span></a></p></li>
 <li><p>Fix bugs in <a class="reference internal" href="../../algorithms/SelectCellWithForm-v1.html#algm-selectcellwithform"><span class="std std-ref">SelectCellWithForm</span></a> and ref:<cite>SelectCellOfType &lt;algm-SelectCellOfType&gt;</cite> that incorrectly transform modulation vectors.</p></li>
 <li><p>Fix bug where modulation vectors are not transformed in <a class="reference internal" href="../../algorithms/TransformHKL-v1.html#algm-transformhkl"><span class="std std-ref">TransformHKL</span></a>.</p></li>
-</ul>
-<ul class="simple">
 <li><p>Fix issue where <a class="reference internal" href="../../algorithms/LoadIsawPeaks-v1.html#algm-loadisawpeaks"><span class="std std-ref">LoadIsawPeaks</span></a> fails when loading peaks with modulation vectors that cannot recover modulated UB matrix.</p></li>
 </ul>
 <p><a class="reference internal" href="index.html#v6-6-0"><span class="std std-ref">Release 6.6.0</span></a></p>
@@ -229,7 +222,7 @@ This will display when the fit is in progress and whether the recent fit status 
           
             
   <li>
-    <a href="34847.html" title="Previous Chapter: <no title>"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; <no title></span>
+    <a href="index.html" title="Previous Chapter: Mantid 6.6.0 Release Notes"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Mantid 6.6.0 ...</span>
     </a>
   </li>
   <li>
