@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>LoadMuonNexus v1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="LoadMuonNexus v2" href="LoadMuonNexus-v2.html" />
+    <link rel="prev" title="LoadMuonLog v1" href="LoadMuonLog-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.6</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">LoadMuonNexus v1</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="loadmuonnexus-v1">
+<span id="algm-loadmuonnexus-v1"></span><h1>LoadMuonNexus v1<a class="headerlink" href="#loadmuonnexus-v1" title="Permalink to this heading">¶</a></h1>
+<figure class="align-right" id="id1">
+<span id="index-0"></span><a class="screenshot reference internal image-reference" href="../_images/LoadMuonNexus-v1_dlg.png"><img alt="../_images/LoadMuonNexus-v1_dlg.png" class="screenshot" src="../_images/LoadMuonNexus-v1_dlg.png" style="width: 349px;" /></a>
+<figcaption>
+<p><span class="caption-text"><strong>LoadMuonNexus</strong> dialog.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id2">Summary</a></p></li>
+<li><p><a class="reference internal" href="#properties" id="id3">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id4">Description</a></p>
+<ul>
+<li><p><a class="reference internal" href="#spectra-detector-mapping" id="id5">Spectra-detector mapping</a></p></li>
+<li><p><a class="reference internal" href="#time-series-data" id="id6">Time series data</a></p></li>
+<li><p><a class="reference internal" href="#errors" id="id7">Errors</a></p></li>
+<li><p><a class="reference internal" href="#time-bin-data" id="id8">Time bin data</a></p></li>
+<li><p><a class="reference internal" href="#multiperiod-data" id="id9">Multiperiod data</a></p></li>
+<li><p><a class="reference internal" href="#dead-times-and-detector-grouping" id="id10">Dead times and detector grouping</a></p></li>
+<li><p><a class="reference internal" href="#details-of-data-loaded" id="id11">Details of data loaded</a></p>
+<ul>
+<li><p><a class="reference internal" href="#run-object" id="id12">Run Object</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#childalgorithms-used" id="id13">ChildAlgorithms used</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#source" id="id14">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h2>
+<p>The LoadMuonNexus algorithm will read the given NeXus Muon data file Version 1 and use the results to populate the named workspace. LoadMuonNexus may be invoked by LoadNexus if it is given a NeXus file of this type.</p>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Filename</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>The name of the Nexus file to load. Allowed extensions: [‘.nxs’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/Workspace.html#workspace"><span class="std std-ref">Workspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>The name of the workspace to be created as the output of the algorithm. For multiperiod files, one workspace will be generated for each period</p></td>
+</tr>
+<tr class="row-even"><td><p>SpectrumMin</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>Index number of the first spectrum to read</p></td>
+</tr>
+<tr class="row-odd"><td><p>SpectrumMax</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>Index of last spectrum to read (default the last spectrum)</p></td>
+</tr>
+<tr class="row-even"><td><p>SpectrumList</p></td>
+<td><p>Input</p></td>
+<td><p>int list</p></td>
+<td></td>
+<td><p>Array, or comma separated list, of indexes of spectra to load. If a range and a list of spectra are both supplied, all the specified spectra will be loaded.</p></td>
+</tr>
+<tr class="row-odd"><td><p>AutoGroup</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Determines whether the spectra are automatically grouped together based on the groupings in the NeXus file, only for single period data (default no). Version 1 only.</p></td>
+</tr>
+<tr class="row-even"><td><p>EntryNumber</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>0 indicates that every entry is loaded, into a separate workspace within a group. A positive number identifies one entry to be loaded, into one workspace</p></td>
+</tr>
+<tr class="row-odd"><td><p>MainFieldDirection</p></td>
+<td><p>Output</p></td>
+<td><p>string</p></td>
+<td></td>
+<td><p>Output the main field direction if specified in Nexus file (run/instrument/detector/orientation, default longitudinal). Version 1 only. Allowed values: [‘Transverse’, ‘Longitudinal’]</p></td>
+</tr>
+<tr class="row-even"><td><p>TimeZero</p></td>
+<td><p>Output</p></td>
+<td><p>number</p></td>
+<td></td>
+<td><p>Time zero in units of micro-seconds (default to 0.0)</p></td>
+</tr>
+<tr class="row-odd"><td><p>FirstGoodData</p></td>
+<td><p>Output</p></td>
+<td><p>number</p></td>
+<td></td>
+<td><p>First good data in units of micro-seconds (default to 0.0)</p></td>
+</tr>
+<tr class="row-even"><td><p>LastGoodData</p></td>
+<td><p>Output</p></td>
+<td><p>number</p></td>
+<td></td>
+<td><p>Last good data in the OutputWorkspace’s spectra</p></td>
+</tr>
+<tr class="row-odd"><td><p>TimeZeroList</p></td>
+<td><p>Output</p></td>
+<td><p>dbl list</p></td>
+<td></td>
+<td><p>A vector of time zero values</p></td>
+</tr>
+<tr class="row-even"><td><p>TimeZeroTable</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/Workspace.html#workspace"><span class="std std-ref">Workspace</span></a></p></td>
+<td></td>
+<td><p>TableWorkspace containing time zero values per spectra.</p></td>
+</tr>
+<tr class="row-odd"><td><p>CorrectTime</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>Boolean flag controlling whether time should be corrected by timezero.</p></td>
+</tr>
+<tr class="row-even"><td><p>DeadTimeTable</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/Workspace.html#workspace"><span class="std std-ref">Workspace</span></a></p></td>
+<td></td>
+<td><p>Table or a group of tables containing detector dead times. Version 1 only.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DetectorGroupingTable</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/Workspace.html#workspace"><span class="std std-ref">Workspace</span></a></p></td>
+<td></td>
+<td><p>Table or a group of tables with information about the detector grouping stored in the file (if any). Version 1 only.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Permalink to this heading">¶</a></h2>
+<p>The algorithm LoadMuonNexus will read a Muon Nexus data file (original
+format) and place the data into the named workspace. The file name can
+be an absolute or relative path and should have the extension .nxs or
+.NXS. If the file contains data for more than one period, a separate
+workspace will be generated for each. After the first period the
+workspace names will have “_2”, “_3”, and so on, appended to the given
+workspace name. The optional parameters can be
+used to control which spectra are loaded into the workspace. If
+SpectrumMin and SpectrumMax are given, then only that range of data
+will be loaded. If a SpectrumList is given, then those values will be
+loaded. If a range and a list are supplied, the algorithm will
+load all the specified spectra.</p>
+<ul class="simple">
+<li><p>TODO get XML descriptions of Muon instruments. This data is not in
+existing Muon Nexus files.</p></li>
+</ul>
+<section id="spectra-detector-mapping">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Spectra-detector mapping</a><a class="headerlink" href="#spectra-detector-mapping" title="Permalink to this heading">¶</a></h3>
+<p>For all v1 muon Nexus files, there is a one-to-one mapping between spectrum
+number and detector ID.</p>
+</section>
+<section id="time-series-data">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Time series data</a><a class="headerlink" href="#time-series-data" title="Permalink to this heading">¶</a></h3>
+<p>The log data in the Nexus file (NX_LOG sections) will be loaded as
+TimeSeriesProperty data within the workspace. Time (stored as seconds
+from the Unix epoch in the Nexus file) is corrected relative to the start
+time found in <code class="docutils literal notranslate"><span class="pre">run/start_time</span></code>.</p>
+<p>This time series data comprises various values logged by SECI and includes
+magnetic fields, temperatures, status codes, count rate and beam logs.</p>
+<p>See <a class="reference internal" href="LoadMuonLog-v1.html#algm-loadmuonlog"><span class="std std-ref">LoadMuonLog v1</span></a> for more details.</p>
+</section>
+<section id="errors">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Errors</a><a class="headerlink" href="#errors" title="Permalink to this heading">¶</a></h3>
+<p>The error for each histogram count is set as the square root of the
+number of counts.</p>
+</section>
+<section id="time-bin-data">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Time bin data</a><a class="headerlink" href="#time-bin-data" title="Permalink to this heading">¶</a></h3>
+<p>The <em>corrected_times</em> field of the Nexus file is used to provide time
+bin data and the bin edge values are calculated from these bin centre
+times.</p>
+</section>
+<section id="multiperiod-data">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Multiperiod data</a><a class="headerlink" href="#multiperiod-data" title="Permalink to this heading">¶</a></h3>
+<p>To determine if a file contains data from more than one period the field
+<em>switching_states</em> is read from the Nexus file. If this value is
+greater than one it is taken to be the number of periods, <span class="math notranslate nohighlight">\(N_p\)</span> of
+the data. In this case the <span class="math notranslate nohighlight">\(N_s\)</span> spectra in the <em>histogram_data</em>
+field are split with <span class="math notranslate nohighlight">\(N_s/N_p\)</span> assigned to each period.</p>
+</section>
+<section id="dead-times-and-detector-grouping">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Dead times and detector grouping</a><a class="headerlink" href="#dead-times-and-detector-grouping" title="Permalink to this heading">¶</a></h3>
+<p>Muon Nexus v1 files might contain dead time and detector grouping
+information. These are loaded as TableWorkspaces of the format accepted
+by <a class="reference internal" href="ApplyDeadTimeCorr-v1.html#algm-applydeadtimecorr"><span class="std std-ref">ApplyDeadTimeCorr v1</span></a> and <a class="reference internal" href="MuonGroupDetectors-v1.html#algm-muongroupdetectors"><span class="std std-ref">MuonGroupDetectors v1</span></a> accordingly. These are
+returned if and only if names are specified for the properties. For
+multi-period data workspace groups might be returned, if information in
+the Nexus files contains this information for each period.</p>
+<p>If the file contains no grouping entry (or the entry is full of zeros), the
+grouping will be loaded from the IDF instead. If this also fails, a dummy
+grouping will be created. In either case, a message will be displayed
+in the log to explain this.</p>
+</section>
+<section id="details-of-data-loaded">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">Details of data loaded</a><a class="headerlink" href="#details-of-data-loaded" title="Permalink to this heading">¶</a></h3>
+<p>Here are more details of data loaded from the Nexus file.
+Conventionally, the first NX_ENTRY is called <code class="docutils literal notranslate"><span class="pre">run</span></code> and the first NX_DATA under this is
+called <code class="docutils literal notranslate"><span class="pre">histogram_data_1</span></code>, and these names are used below.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Description of Data</p></th>
+<th class="head"><p>Found in Nexus file</p></th>
+<th class="head"><p>Placed in Workspace (Workspace2D)
+or output</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Detector data</p></td>
+<td><ul class="simple">
+<li><p>Times (X): <code class="docutils literal notranslate"><span class="pre">run/histogram_data_1/corrected_time</span></code></p></li>
+<li><p>Counts (Y): <code class="docutils literal notranslate"><span class="pre">run/histogram_data_1/counts</span></code>
+(2D array of counts in each time bin per
+detector)</p></li>
+<li><p>Errors: square root of counts</p></li>
+</ul>
+</td>
+<td><p>Histogram data of workspace</p></td>
+</tr>
+<tr class="row-odd"><td><p>Instrument</p></td>
+<td><p>Name from <code class="docutils literal notranslate"><span class="pre">run/instrument/name</span></code></p>
+<p>Uses child algorithm LoadInstrument to load
+the instrument of that name</p>
+</td>
+<td><p>Workspace instrument</p>
+<p>(as loaded by LoadInstrument from IDF)</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>Title (optional)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">run/title</span></code></p></td>
+<td><p>Workspace title</p></td>
+</tr>
+<tr class="row-odd"><td><p>Comment (optional)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">run/notes</span></code></p></td>
+<td><p>Workspace comment</p></td>
+</tr>
+<tr class="row-even"><td><p>Time zero (optional)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">run/histogram_data_1/time_zero</span></code></p></td>
+<td><p><em>TimeZero</em> property</p></td>
+</tr>
+<tr class="row-odd"><td><p>First good data (optional)</p></td>
+<td><p>Calculated from first good bin and bin size.</p>
+<ul class="simple">
+<li><p>First good bin: <code class="docutils literal notranslate"><span class="pre">run/histogram_data_1/counts</span></code>
+(attribute <code class="docutils literal notranslate"><span class="pre">first_good_bin</span></code>)</p></li>
+<li><p>Bin size: <code class="docutils literal notranslate"><span class="pre">run/histogram_data_1/resolution</span></code></p></li>
+</ul>
+</td>
+<td><p><em>FirstGoodData</em> property</p>
+<p>(First good data - time zero) also goes in
+run object under the name <code class="docutils literal notranslate"><span class="pre">FirstGoodData</span></code></p>
+</td>
+</tr>
+<tr class="row-even"><td><p>Detector grouping table (optional)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">run/histogram_data_1/grouping</span></code></p>
+<p>If not present, or invalid, loads from IDF.</p>
+<p>If that also fails, creates dummy grouping
+(all detectors in one group).</p>
+</td>
+<td><p><em>DetectorGroupingTable</em> property</p></td>
+</tr>
+<tr class="row-odd"><td><p>Dead time table (optional)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">run/instrument/detector/deadtimes</span></code></p></td>
+<td><p><em>DeadTimeTable</em> property</p></td>
+</tr>
+<tr class="row-even"><td><p>Main field direction (optional)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">run/instrument/detector/orientation</span></code></p>
+<p>Assumed to be longitudinal if not present</p>
+</td>
+<td><p><em>MainFieldDirection</em> property</p>
+<p>Also in run object as <code class="docutils literal notranslate"><span class="pre">main_field_direction</span></code></p>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Sample name</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">run/sample/name</span></code></p></td>
+<td><p>Name of sample object</p></td>
+</tr>
+<tr class="row-even"><td><p>Run</p></td>
+<td><p>See below</p></td>
+<td><p>Run object (see below)</p></td>
+</tr>
+</tbody>
+</table>
+<section id="run-object">
+<h4><a class="toc-backref" href="#id12" role="doc-backlink">Run Object</a><a class="headerlink" href="#run-object" title="Permalink to this heading">¶</a></h4>
+<p>Log values are loaded into the workspace run object as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Nexus</p></th>
+<th class="head"><p>Workspace run object</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">run/title</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">run_title</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>(data)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nspectra</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">run/start_time</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">run_start</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">run/stop_time</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">run_end</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">run/duration</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dur</span></code>, <code class="docutils literal notranslate"><span class="pre">dur_secs</span></code> (same),
+<code class="docutils literal notranslate"><span class="pre">durunits</span></code> = 1 (seconds)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">run/number</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">run_number</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">run/sample/temperature</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sample_temp</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">run/sample/magnetic_field</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sample_magn_field</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">run/instrument/beam/frames_good</span></code>
+(for single-period data)</p>
+<p>(If <code class="docutils literal notranslate"><span class="pre">frames_good</span></code> not present, use
+<code class="docutils literal notranslate"><span class="pre">frames</span></code> instead.)</p>
+</td>
+<td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">goodfrm</span></code> (number of good
+frames)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">run/instrument/beam/frames_period_daq</span></code>
+(for multi-period data)</p></td>
+</tr>
+<tr class="row-even"><td><p>Other NX_LOG entries under <code class="docutils literal notranslate"><span class="pre">run</span></code></p></td>
+<td><p>time series (via LoadMuonLog)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="childalgorithms-used">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">ChildAlgorithms used</a><a class="headerlink" href="#childalgorithms-used" title="Permalink to this heading">¶</a></h3>
+<p>The ChildAlgorithms used by LoadMuonNexus are:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="LoadMuonLog-v1.html#algm-loadmuonlog"><span class="std std-ref">LoadMuonLog v1</span></a> - this reads log information from the Nexus file and uses
+it to create TimeSeriesProperty entries in the workspace.</p></li>
+<li><p><a class="reference internal" href="LoadInstrument-v1.html#algm-loadinstrument"><span class="std std-ref">LoadInstrument v1</span></a> - this algorithm looks for an XML description of the
+instrument and if found reads it.</p></li>
+<li><p><a class="reference internal" href="LoadInstrumentFromNexus-v1.html#algm-loadinstrumentfromnexus"><span class="std std-ref">LoadInstrumentFromNexus v1</span></a> - this is called if the normal
+LoadInstrument fails. As the Nexus file has limited instrument data,
+this only populates a few fields.</p></li>
+</ul>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/DataHandling/Nexus.html">DataHandling\Nexus</a> | <a class="reference external" href="categories/Muon/DataHandling.html">Muon\DataHandling</a></p>
+</section>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Permalink to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/54a39e0a58206de8c1730bb3d0bdf337c05a00a9/Framework/DataHandling/inc/MantidDataHandling/LoadMuonNexus.h">LoadMuonNexus.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/54a39e0a58206de8c1730bb3d0bdf337c05a00a9/Framework/DataHandling/src/LoadMuonNexus.cpp">LoadMuonNexus.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="LoadMuonLog-v1.html" title="Previous Chapter: LoadMuonLog v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; LoadMuonLog v1</span>
+    </a>
+  </li>
+  <li>
+    <a href="LoadMuonNexus-v2.html" title="Next Chapter: LoadMuonNexus v2"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">LoadMuonNexus v2 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Extracting Algorithm Properties</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Generating a Script for Plotting" href="03_plot_script_generation.html" />
+    <link rel="prev" title="Automatic Script Generation" href="01_auto_generation.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.6</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../../index.html" >Training</a> &#187;</li>
+          
+            <li class="nav-item nav-item-2"><a href="../index.html" >Python In Mantid</a> &#187;</li>
+          
+            <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Script Generation</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Extracting Algorithm Properties</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="extracting-algorithm-properties">
+<span id="extracting-alg-prop"></span><h1>Extracting Algorithm Properties<a class="headerlink" href="#extracting-algorithm-properties" title="Permalink to this heading">¶</a></h1>
+<p>After an algorithm has been executed, the properties remain accessible for as long as the output workspace exists.
+Algorithms return their output properties as a tuple, which python can unpack automatically, for example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sample</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;MAR11015.raw&#39;</span><span class="p">)</span>
+<span class="n">ei</span><span class="p">,</span> <span class="n">mon_peak</span><span class="p">,</span> <span class="n">mon_index</span><span class="p">,</span> <span class="n">tzero</span> <span class="o">=</span> <span class="n">GetEi</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">Monitor1Spec</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">Monitor2Spec</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">EnergyEstimate</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s1">&#39;DeltaE&#39;</span><span class="p">,</span> <span class="n">Emode</span><span class="o">=</span><span class="s1">&#39;Direct&#39;</span><span class="p">,</span><span class="n">EFixed</span><span class="o">=</span><span class="n">ei</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To access input properties, use the <a class="reference internal" href="../../../concepts/WorkingWithWorspaces.html#workspace-workspace-history"><span class="std std-ref">workspace history</span></a>. Using this handle allows the properties to be extracted by their name using the <cite>getPropertyValue()</cite> function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sample</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;MAR11015.raw&#39;</span><span class="p">)</span>
+<span class="n">algorithm</span> <span class="o">=</span> <span class="n">sample</span><span class="o">.</span><span class="n">getHistory</span><span class="p">()</span><span class="o">.</span><span class="n">lastAlgorithm</span><span class="p">()</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">getPropertyValue</span><span class="p">(</span><span class="s2">&quot;Filename&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For some algorithms, such as <a class="reference internal" href="../../../algorithms/Rebin-v1.html#algm-rebin"><span class="std std-ref">Rebin v1</span></a>, you can get properties without accessing algorithm history.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rebin_alg</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="s1">&#39;input_ws&#39;</span><span class="p">,</span><span class="n">Params</span><span class="o">=</span><span class="s1">&#39;1,5,100&#39;</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">rebin_alg</span><span class="o">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s1">&#39;Params&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+</pre></div>
+</div>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="01_auto_generation.html" title="Previous Chapter: Automatic Script Generation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Automatic Scr...</span>
+    </a>
+  </li>
+  <li>
+    <a href="03_plot_script_generation.html" title="Next Chapter: Generating a Script for Plotting"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Generating a ... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Indirect Bayes</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Indirect Corrections" href="Indirect%20Corrections.html" />
+    <link rel="prev" title="SimpleScanViewer Interface" href="../ILL/SimpleScanViewer.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.6</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="http://www.mantidproject.org">Home</a></li>
+                <li><a href="http://download.mantidproject.org">Download</a></li>
+                <li><a href="http://docs.mantidproject.org/nightly/">Documentation</a></li>
+                <li><a href="http://www.mantidproject.org/Contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Interfaces</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Indirect Bayes</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="indirect-bayes">
+<span id="interface-indirect-bayes"></span><h1>Indirect Bayes<a class="headerlink" href="#indirect-bayes" title="Permalink to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#overview" id="id3">Overview</a></p></li>
+<li><p><a class="reference internal" href="#action-buttons" id="id4">Action Buttons</a></p></li>
+<li><p><a class="reference internal" href="#resnorm" id="id5">ResNorm</a></p>
+<ul>
+<li><p><a class="reference internal" href="#options" id="id6">Options</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#quasi" id="id7">Quasi</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id8">Options</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#stretch" id="id9">Stretch</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id2" id="id10">Options</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="overview">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<p>Provides Bayesian analysis routines primarily for use with QENS data.</p>
+<figure class="align-right">
+<a class="screenshot reference internal image-reference" href="../../_images/Bayes_interface.png"><img alt="../../_images/Bayes_interface.png" class="screenshot" src="../../_images/Bayes_interface.png" style="width: 350px;" /></a>
+</figure>
+</section>
+<section id="action-buttons">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Action Buttons</a><a class="headerlink" href="#action-buttons" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>Settings</dt><dd><p>Opens the <a class="reference internal" href="Indirect%20Settings.html#interface-indirect-settings"><span class="std std-ref">Settings</span></a> GUI which allows you to
+customize the settings for the Indirect interfaces.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>?</dt><dd><p>Opens this help page.</p>
+</dd>
+<dt>Manage Directories</dt><dd><p>Opens the Manage Directories dialog allowing you to change your search directories
+and default save directory and enable/disable data archive search.</p>
+</dd>
+</dl>
+</section>
+<section id="resnorm">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">ResNorm</a><a class="headerlink" href="#resnorm" title="Permalink to this heading">¶</a></h2>
+<p>This tab creates a group ‘normalisation’ file by taking a resolution file and
+fitting it to all the groups in the resolution (vanadium) data file which has
+the same grouping as the sample data of interest.</p>
+<p>The routine fits the width of the resolution file to give a ‘stretch factor’
+and the area provides an intensity normalisation factor.</p>
+<p>The fitted parameters are in the group workspace with suffix <em>_ResNorm</em> with
+additional suffices of <em>_Intensity</em> &amp; <em>_Stretch</em>.</p>
+<p>The processing on this tab is provided by the <a class="reference internal" href="../../algorithms/ResNorm-v2.html#algm-resnorm"><span class="std std-ref">ResNorm</span></a>
+algorithm.</p>
+<figure class="align-default">
+<a class="screenshot reference internal image-reference" href="../../_images/Bayes_ResNorm_widget.png"><img alt="../../_images/Bayes_ResNorm_widget.png" class="screenshot" src="../../_images/Bayes_ResNorm_widget.png" style="width: 404px;" /></a>
+</figure>
+<section id="options">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Options</a><a class="headerlink" href="#options" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Vanadium File</dt><dd><p>Either a reduced file created using the Energy Transfer tab or an
+<span class="math notranslate nohighlight">\(S(Q, \omega)\)</span> file.</p>
+</dd>
+<dt>Resolution File</dt><dd><p>A resolution file created using the Calibrtion tab.</p>
+</dd>
+<dt>EMin &amp; EMax</dt><dd><p>The energy range to perform fitting within.</p>
+</dd>
+<dt>Preview Spectrum</dt><dd><p>Changes the spectrum displayed in the preview plot.</p>
+</dd>
+<dt>Plot Current Preview</dt><dd><p>Plots the currently selected preview plot in a separate external window</p>
+</dd>
+<dt>Run</dt><dd><p>Runs the processing configured on the current tab.</p>
+</dd>
+<dt>Plot</dt><dd><p>Plots the selected parameter stored in the result workspaces.</p>
+</dd>
+<dt>Save Result</dt><dd><p>Saves the result in the default save directory.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="quasi">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Quasi</a><a class="headerlink" href="#quasi" title="Permalink to this heading">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This interface is only available on Windows</p>
+</div>
+<p>The model that is being fitted is that of a <span class="math notranslate nohighlight">\(\delta\)</span>-function (elastic component)
+of amplitude <span class="math notranslate nohighlight">\(A(0)\)</span> and Lorentzians of amplitude <span class="math notranslate nohighlight">\(A(j)\)</span> and HWHM
+<span class="math notranslate nohighlight">\(W(j)\)</span> where <span class="math notranslate nohighlight">\(j=1,2,3\)</span>. The whole function is then convolved with
+the resolution function. The -function and Lorentzians are intrinsically
+normalised to unity so that the amplitudes represent their integrated areas.</p>
+<p>For a Lorentzian, the Fourier transform does the conversion:
+<span class="math notranslate nohighlight">\(1/(x^{2}+\delta^{2}) \Leftrightarrow exp[-2\pi(\delta k)]\)</span>.  If <span class="math notranslate nohighlight">\(x\)</span>
+is identified with energy <span class="math notranslate nohighlight">\(E\)</span> and <span class="math notranslate nohighlight">\(2\pi k\)</span> with <span class="math notranslate nohighlight">\(t/\hbar\)</span>
+where t is time then: <span class="math notranslate nohighlight">\(1/[E^{2}+(\hbar / \tau)^{2}] \Leftrightarrow exp[-t
+/\tau]\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span> is identified with <span class="math notranslate nohighlight">\(\hbar / \tau\)</span>.  The program
+estimates the quasielastic components of each of the groups of spectra and
+requires the resolution file and optionally the normalisation file created by
+ResNorm.</p>
+<p>For a Stretched Exponential, the choice of several Lorentzians is replaced with
+a single function with the shape : <span class="math notranslate nohighlight">\(\psi\beta(x) \Leftrightarrow
+exp[-2\pi(\sigma k)\beta]\)</span>. This, in the energy to time FT transformation, is
+<span class="math notranslate nohighlight">\(\psi\beta(E) \Leftrightarrow exp[-(t/\tau)\beta]\)</span>. So <span class="math notranslate nohighlight">\(\sigma\)</span> is
+identified with <span class="math notranslate nohighlight">\((2\pi)\beta\hbar/\tau\)</span> .  The model that is fitted is
+that of an elastic component and the stretched exponential and the program gives
+the best estimate for the <span class="math notranslate nohighlight">\(\beta\)</span> parameter and the width for each group
+of spectra.</p>
+<figure class="align-default">
+<a class="screenshot reference internal image-reference" href="../../_images/Bayes_Quasi_widget.png"><img alt="../../_images/Bayes_Quasi_widget.png" class="screenshot" src="../../_images/Bayes_Quasi_widget.png" style="width: 900px;" /></a>
+</figure>
+<section id="id1">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Options</a><a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Sample</dt><dd><p>Either a reduced file created using the Energy Transfer tab or an
+<span class="math notranslate nohighlight">\(S(Q, \omega)\)</span> file.</p>
+</dd>
+<dt>Resolution</dt><dd><p>A resolution file created using the Calibration tab.</p>
+</dd>
+<dt>Program</dt><dd><p>The curve fitting program to use.</p>
+</dd>
+<dt>Background</dt><dd><p>The background fitting program to use.</p>
+</dd>
+<dt>Elastic Peak</dt><dd><p>If an elastic peak should be used.</p>
+</dd>
+<dt>Sequential Fit</dt><dd><p>Enables multiple fitting iterations.</p>
+</dd>
+<dt>Fix Width</dt><dd><p>Allows selection of a width file.</p>
+</dd>
+<dt>Use ResNorm</dt><dd><p>Allows selection of a ResNorm output file or workspace to use with fitting.</p>
+</dd>
+<dt>EMin &amp; EMax</dt><dd><p>The energy range to perform fitting within.</p>
+</dd>
+<dt>Sample Binning</dt><dd><p>Sample binning to use.</p>
+</dd>
+<dt>Resolution Binning</dt><dd><p>Resolution binning to use.</p>
+</dd>
+<dt>Preview Spectrum</dt><dd><p>Changes the spectrum displayed in the preview plot.</p>
+</dd>
+<dt>Plot Current Preview</dt><dd><p>Plots the currently selected preview plot in a separate external window</p>
+</dd>
+<dt>Run</dt><dd><p>Runs the processing configured on the current tab.</p>
+</dd>
+<dt>Plot</dt><dd><p>Plots the selected parameter stored in the result workspaces.</p>
+</dd>
+<dt>Save Result</dt><dd><p>Saves the result in the default save directory.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="stretch">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Stretch</a><a class="headerlink" href="#stretch" title="Permalink to this heading">¶</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This interface is only available on Windows</p>
+</div>
+<p>This is a variation of the stretched exponential option of Quasi. For each
+spectrum, a fit is performed for a grid of β and σ values. The distribution of
+goodness of fit values is plotted.</p>
+<figure class="align-default">
+<a class="screenshot reference internal image-reference" href="../../_images/Bayes_Stretch_widget.png"><img alt="../../_images/Bayes_Stretch_widget.png" class="screenshot" src="../../_images/Bayes_Stretch_widget.png" style="width: 900px;" /></a>
+</figure>
+<section id="id2">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Options</a><a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Sample</dt><dd><p>Either a reduced file created using the Energy Transfer tab or an
+<span class="math notranslate nohighlight">\(S(Q, \omega)\)</span> file.</p>
+</dd>
+<dt>Resolution</dt><dd><p>A resolution file created using the Calibration tab.</p>
+</dd>
+<dt>Background</dt><dd><p>The background fitting program to use.</p>
+</dd>
+<dt>Elastic Peak</dt><dd><p>If an elastic peak should be used.</p>
+</dd>
+<dt>Sequential Fit</dt><dd><p>Enables multiple fitting iterations.</p>
+</dd>
+<dt>EMin &amp; EMax</dt><dd><p>The energy range to perform fitting within.</p>
+</dd>
+<dt>Sample Binning</dt><dd><p>Sample binning to use.</p>
+</dd>
+<dt>Sigma</dt><dd><p>Value of Sigma to use.</p>
+</dd>
+<dt>Beta</dt><dd><p>Value of Beta to use.</p>
+</dd>
+<dt>Preview Spectrum</dt><dd><p>Changes the spectrum displayed in the preview plot.</p>
+</dd>
+<dt>Plot Current Preview</dt><dd><p>Plots the currently selected preview plot in a separate external window</p>
+</dd>
+<dt>Run</dt><dd><p>Runs the processing configured on the current tab.</p>
+</dd>
+<dt>Plot</dt><dd><p>Plots the selected parameter stored in the result workspaces.</p>
+</dd>
+<dt>Plot Contour</dt><dd><p>Produces a contour plot of the selected workspace.</p>
+</dd>
+<dt>Save Result</dt><dd><p>Saves the result in the default save directory.</p>
+</dd>
+</dl>
+<p><strong>Categories</strong>: <a class="reference external" href="../ILL/categories/Interfaces.html">Interfaces</a> | <a class="reference external" href="categories/Indirect.html">Indirect</a></p>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="../ILL/SimpleScanViewer.html" title="Previous Chapter: SimpleScanViewer Interface"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; SimpleScanVie...</span>
+    </a>
+  </li>
+  <li>
+    <a href="Indirect%20Corrections.html" title="Next Chapter: Indirect Corrections"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Indirect Corrections &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
