@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>HFIR Single Crystal Reduction Interface</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="SCD Event Data Reduction interface(MantidEV)" href="SCD%20Event%20Data%20Reduction.html" />
+    <link rel="prev" title="Engineering Diffraction" href="Engineering%20Diffraction.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.7</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Interfaces</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">HFIR Single Crystal Reduction Interface</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="hfir-single-crystal-reduction-interface">
+<span id="interface-hfir-single-crystal-reduction"></span><h1>HFIR Single Crystal Reduction Interface<a class="headerlink" href="#hfir-single-crystal-reduction-interface" title="Permalink to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#overview" id="id2">Overview</a></p></li>
+<li><p><a class="reference internal" href="#introduction-of-tabs" id="id3">Introduction of Tabs</a></p></li>
+<li><p><a class="reference internal" href="#use-cases" id="id4">Use Cases</a></p>
+<ul>
+<li><p><a class="reference internal" href="#set-up-reduction" id="id5">Set up reduction</a></p></li>
+<li><p><a class="reference internal" href="#experiment-overview" id="id6">Experiment overview</a></p></li>
+<li><p><a class="reference internal" href="#workflow-to-calculate-and-refine-ub-matrix" id="id7">Workflow to calculate and refine UB matrix</a></p></li>
+<li><p><a class="reference internal" href="#workflow-to-merge-measurements-in-scan" id="id8">Workflow to merge measurements in scan</a></p></li>
+<li><p><a class="reference internal" href="#workflow-to-calculate-peak-intensity-of-a-single-measurement-scan" id="id9">Workflow to calculate peak intensity of a single measurement scan</a></p></li>
+<li><p><a class="reference internal" href="#peak-integration-with-automatic-background-subtraction-by-approximation" id="id10">Peak Integration with automatic background subtraction by approximation</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#ub-matrix-calculation-and-refinement" id="id11">UB Matrix Calculation and Refinement</a></p>
+<ul>
+<li><p><a class="reference internal" href="#converting-spice-ub-matrix-to-mantid-ub-matrix" id="id12">Converting SPICE UB matrix to Mantid UB matrix</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#peak-integration" id="id13">Peak Integration</a></p>
+<ul>
+<li><p><a class="reference internal" href="#normalization" id="id14">Normalization</a></p></li>
+<li><p><a class="reference internal" href="#region-of-interest" id="id15">Region of interest</a></p></li>
+<li><p><a class="reference internal" href="#integration-algorithm-1-simple-counts-summation" id="id16">Integration algorithm 1: simple counts summation</a></p>
+<ul>
+<li><p><a class="reference internal" href="#estimating-background" id="id17">Estimating background</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#integration-algorithm-2-simple-counts-summation-with-fitted-background" id="id18">Integration algorithm 2: simple counts summation with fitted background</a></p></li>
+<li><p><a class="reference internal" href="#integration-algorithm-3-calculate-intensity-from-fitted-model" id="id19">Integration algorithm 3: calculate intensity from fitted model</a></p>
+<ul>
+<li><p><a class="reference internal" href="#issue" id="id20">Issue</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#other-peak-integration-algorithms-in-consideration" id="id21">Other peak integration algorithms in consideration</a></p>
+<ul>
+<li><p><a class="reference internal" href="#peak-integration-with-automatic-background-subtraction-by-integrateellipsoids" id="id22">Peak Integration with automatic background subtraction by IntegrateEllipsoids</a></p></li>
+<li><p><a class="reference internal" href="#integrating-a-peak-in-cuboid-in-q-space" id="id23">Integrating a peak in cuboid in Q-space</a></p></li>
+<li><p><a class="reference internal" href="#id1" id="id24">Estimating background</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="overview">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<p>HFIR single crystalreduction interface is a GUI to download, view and reduce data from
+HFIR’s four-circle single crystal diffractometer in SPICE format.</p>
+</section>
+<section id="introduction-of-tabs">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Introduction of Tabs</a><a class="headerlink" href="#introduction-of-tabs" title="Permalink to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Setup and Data Access</strong>: Configure the instrument name, data server URL and directories.</p>
+<ul class="simple">
+<li><p>Configure the instrument name;</p></li>
+<li><p>Set up and test HB3A data server’s URL;</p></li>
+<li><p>Configure the directory to save raw data;</p></li>
+<li><p>Configure the directory to save working result;</p></li>
+<li><p>Download data from server;</p></li>
+</ul>
+</li>
+<li><p><strong>View Raw Data</strong>: View 2D image of counts on detector of one measurement.</p>
+<ul class="simple">
+<li><p>Plot the counts of the 256 by 256 2D detector;</p></li>
+</ul>
+</li>
+<li><p><strong>Calculate UB</strong>: Calculate UB matrix.</p>
+<ul class="simple">
+<li><p>Find peak in one measurement;</p></li>
+<li><p>Option to load Miller index directly from SPICE file;</p></li>
+<li><p>Calculate UB matrix;</p></li>
+<li><p>Re-index the peaks;</p></li>
+<li><p>Refine UB matrix with more than two peaks.</p></li>
+</ul>
+</li>
+<li><p><strong>Merge Scan</strong>: Merge all the measurements in a scan.</p>
+<ul class="simple">
+<li><p>Merge all measuring points in a scan to an MDEventWorkspace in HKL-frame or Q-sample-frame;</p></li>
+<li><p>Allow various ways to set up UB matrix</p></li>
+</ul>
+</li>
+<li><p><strong>Peak Integration</strong>: Integrate peaks</p>
+<ul class="simple">
+<li><p>Still in developmenet</p></li>
+</ul>
+</li>
+<li><p><strong>Survey</strong>: Get experiments runs’ information by scanning through all SPICE files in an experiment</p>
+<ul class="simple">
+<li><p>For selected scans in an experiment, list the run (i.e., Pt.) with maximum detector counts in a specific scan;</p></li>
+<li><p>For each listed run, the information show includes detector counts and HKL</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="use-cases">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Use Cases</a><a class="headerlink" href="#use-cases" title="Permalink to this heading">¶</a></h2>
+<p>Here are some use cases that can be used as examples.</p>
+<section id="set-up-reduction">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Set up reduction</a><a class="headerlink" href="#set-up-reduction" title="Permalink to this heading">¶</a></h3>
+<p>The first step to reduce data with 4-Circle GUI is to set up the reduction environment.
+Reduction cannot work correctly if this step is <strong>SKIPPED</strong>.</p>
+<ol class="arabic simple">
+<li><p>Go to tab <em>Setup &amp; Data Access</em>;</p></li>
+<li><p>Set up <em>Data Directory</em> and <em>Working Directory</em>;</p></li>
+<li><p>An alternative way to step 2 is to push button <em>Load Default</em>;</p></li>
+<li><p>Push button <em>Apply</em>.  Mantid thus checks whether the setup, including source data file’s URL, data directory and working directory are valid. Be noticed that the check of URL may return <strong>timeout</strong> error.  It might be a false alarm.  You might push the <em>Apply</em> button few more times.</p></li>
+</ol>
+</section>
+<section id="experiment-overview">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Experiment overview</a><a class="headerlink" href="#experiment-overview" title="Permalink to this heading">¶</a></h3>
+<p>Usually if it is the first time to reduce data for an experiment, it is
+recommended to go through the whole experiment to gather some information.</p>
+<ol class="arabic simple">
+<li><p>Go to tab <em>Survey</em>;</p></li>
+<li><p>Set up experiment number on the top of application window;</p></li>
+<li><p>Input the range of the scan numbers for survey. Leaving them blank will result in going through all scans of the experiment;</p></li>
+<li><p>Click button <em>Survey</em>;</p></li>
+<li><p>It might take a while to load and scan all the SPICE files belonged to an individual experiment.  After it is finished, the result will be shown in the table.</p></li>
+<li><p>Save the survey result for future by clicking button <em>Save</em>;</p></li>
+<li><p>Select a row, and click button <em>View Peak</em>, application will switch to tab <em>View Raw Data</em> automatically and set the scan and Pt number from the selected row.</p></li>
+</ol>
+</section>
+<section id="workflow-to-calculate-and-refine-ub-matrix">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Workflow to calculate and refine UB matrix</a><a class="headerlink" href="#workflow-to-calculate-and-refine-ub-matrix" title="Permalink to this heading">¶</a></h3>
+<p>Here is a typical use case to calculate UB matrix after initial setup.</p>
+<ol class="arabic simple">
+<li><p>User specifies <em>Experiment</em> and pushes button <em>Set</em></p></li>
+<li><p>Users may do a new survey or load a survey result file in tab <em>Survey</em>;</p></li>
+<li><p>User enters tab <em>View Raw Data</em> and inputs scan number and list all the measuring points (Pt.)</p></li>
+<li><p>User views all the measurements</p>
+<ul class="simple">
+<li><p>User finds out the measurement with the strongest reflection and push button use</p></li>
+<li><p>Alternatively, user can use the survey result to find out the Pt. with the maximum counts of the scan</p></li>
+</ul>
+</li>
+<li><p>GUI shifts to tab <em>Calculate UB</em> automatically</p></li>
+<li><p>User pushes button <em>Find Peak</em> with checking <em>Load HKL from file</em></p></li>
+<li><p>GUI finds the peak center and load HKL</p></li>
+<li><p>User pushes button <em>Add peak</em> to add the peak to table</p></li>
+<li><p>User repeats step 2 to 9 to add other peaks</p></li>
+<li><p>User select the peaks that are linearly independent and pushes <em>Calculate UB</em></p></li>
+<li><p>GUI calculates UB matrix and show the result</p></li>
+<li><p>User may push <em>Index peak</em> to use the calculated UB matrix to index peaks in the table to check UB matrix;</p></li>
+<li><p>User may refine the UB matrix and thus lattice parameters</p>
+<ol class="loweralpha simple">
+<li><p>user adds more peaks to the UB peak table;</p></li>
+<li><p>user selects at least 3 non-degenerate peaks;</p></li>
+<li><p>user clicks button <em>Refine</em>;</p></li>
+<li><p>application refines UB matrix and outputs the refined UB matrix, refined lattice parameters and their error.</p></li>
+</ol>
+</li>
+</ol>
+</section>
+<section id="workflow-to-merge-measurements-in-scan">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Workflow to merge measurements in scan</a><a class="headerlink" href="#workflow-to-merge-measurements-in-scan" title="Permalink to this heading">¶</a></h3>
+<p>Here is a typical use case to merge all the measuring points (Pt.) in a scan</p>
+<ol class="arabic simple">
+<li><p>User specifies <em>Experiment</em> and pushes button <em>Set</em></p></li>
+<li><p>User enters tab <em>Merge Scan</em></p></li>
+<li><p>User specifies the UB matrix either by <em>From tab Calculate UB</em> or by entering the values to text editor</p></li>
+<li><p>User pushes button <em>Set</em></p></li>
+<li><p>User specifies the frame in which the merged data will be in. If the target frame is Q-Sample-Sapce, then there is no need to specify UB matrix</p></li>
+<li><p>User specifies the scan numbers and push button <em>Add</em></p></li>
+<li><p>User specifies the base name for the output MDEventWorkspaces</p></li>
+<li><p>User pushes button <em>Process</em></p></li>
+<li><p>User goes to MantidWorkbench to view the merged scan by SliceView</p></li>
+</ol>
+</section>
+<section id="workflow-to-calculate-peak-intensity-of-a-single-measurement-scan">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Workflow to calculate peak intensity of a single measurement scan</a><a class="headerlink" href="#workflow-to-calculate-peak-intensity-of-a-single-measurement-scan" title="Permalink to this heading">¶</a></h3>
+<p>It is a common practice to have one measurement in a scan for a peak.  The only reason to do so is that the signal is too weak for users to have enough beam time to have multiple measurements in a single peak’s scan.  Therefore, it is not straight forward to calculate peak intensity from this type of measurement.</p>
+<ol class="arabic simple">
+<li><p>A user specifies the range of scan numbers that include all the neutron peaks regardless whether they are single-point measurement or multiple-points measurement.</p></li>
+<li><p>The user pushes button <em>Survey</em>.  Mantid will load all the SPICE files of the scans.</p></li>
+<li><p>The users selects <em>All</em> single-point-measurement scans by checking <em>Single Pt Scans</em>.</p></li>
+<li><p>The user launches single-point peak integration window from menu <em>Peak Integraton</em> and sub menu <em>Single Pt Integration</em>. Mantid will add all the single-point scans to the popped out window.</p></li>
+<li><p>The user will be prompted with the information about how to map single-point scan to a complete nuclear peak scan with same 2theta.</p></li>
+<li><p>The user may load a CSV file to which integrated peak table was exported previously.</p></li>
+<li><p>The user pushes button <em>Retrieve FWHM</em>. Mantid then will gather FWHM value from integrated peak.</p></li>
+<li><p>The user add mapped scans for each single-pt scan to peak processint tab, and integrate peaks.</p></li>
+<li><p>The user pushes <em>Retrieve FHWHM</em> again to make sure every scan to have an FWHM.</p></li>
+<li><p>The user pushes <em>Integrate</em> to integrate peaks.</p></li>
+<li><p>The user pushes <em>Export to Table</em> to add the integrated peaks to peak processing table for final output.</p></li>
+</ol>
+</section>
+<section id="peak-integration-with-automatic-background-subtraction-by-approximation">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Peak Integration with automatic background subtraction by approximation</a><a class="headerlink" href="#peak-integration-with-automatic-background-subtraction-by-approximation" title="Permalink to this heading">¶</a></h3>
+<p>This is an easy approximation to integrate a peak with background subtraction
+by specified region of interest.</p>
+<p>The pre-requisit is that all events are normalized by monitor counts
+and scaled up by same factor (e.g, 1500).</p>
+<ol class="arabic simple">
+<li><p>Set up region of interest</p>
+<ul class="simple">
+<li><p>define region of interest on the detector</p></li>
+<li><p>check whether the ROI does not exclude any peak</p></li>
+</ul>
+</li>
+<li><p>Specify background Pts.</p>
+<ul class="simple">
+<li><p>specify the Pts. in the scan that are used to estimate background</p></li>
+</ul>
+</li>
+<li><p>Integrate peaks</p>
+<ul class="simple">
+<li><p>select peaks to integrate</p></li>
+<li><p>integrate peaks</p></li>
+</ul>
+</li>
+<li><p>Review the integration result</p></li>
+<li><p>Export to Fullprof peak integration (.int) file.</p></li>
+</ol>
+</section>
+</section>
+<section id="ub-matrix-calculation-and-refinement">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">UB Matrix Calculation and Refinement</a><a class="headerlink" href="#ub-matrix-calculation-and-refinement" title="Permalink to this heading">¶</a></h2>
+<section id="converting-spice-ub-matrix-to-mantid-ub-matrix">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">Converting SPICE UB matrix to Mantid UB matrix</a><a class="headerlink" href="#converting-spice-ub-matrix-to-mantid-ub-matrix" title="Permalink to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Assuming that SPICE UB matrix (3 x 3) is composed as</dt><dd><ul class="simple">
+<li><p>R11, R12, R13</p></li>
+<li><p>R21, R22, R23</p></li>
+<li><p>R31, R32, R33</p></li>
+</ul>
+</dd>
+<dt>Then, converted to UB matrix in Mantid, it is like</dt><dd><ul class="simple">
+<li><p>R11,  R12,  R13</p></li>
+<li><p>R31,  R32,  R33</p></li>
+<li><p>-R21, -R22, -R23</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+</section>
+<section id="peak-integration">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink">Peak Integration</a><a class="headerlink" href="#peak-integration" title="Permalink to this heading">¶</a></h2>
+<p>Unlike TOF single crystal diffractometer, HB3A uses a different method to integrate diffraction peaks.</p>
+<p>Presently, HB3A reduction interface supports 3 types of integrations.</p>
+<section id="normalization">
+<h3><a class="toc-backref" href="#id14" role="doc-backlink">Normalization</a><a class="headerlink" href="#normalization" title="Permalink to this heading">¶</a></h3>
+<p>Counts of neutron on any detector shall be normalized by its corresponding monitor
+count and then be multiplied by a constant specified by user.</p>
+<p>But for HB3A, the normalization to counting <em>time</em> is more reliable because the
+beam monitor may be unstable.</p>
+</section>
+<section id="region-of-interest">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink">Region of interest</a><a class="headerlink" href="#region-of-interest" title="Permalink to this heading">¶</a></h3>
+<p>A region of interest (ROI) on the detector can be defined for each scan.
+The signals in the ROI of each Pt. in a scan construct a 3-dimensional diffraction peak.</p>
+<p>The purpose to define the region of interest on detector is to reduce the affect of background noise.</p>
+</section>
+<section id="integration-algorithm-1-simple-counts-summation">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink">Integration algorithm 1: simple counts summation</a><a class="headerlink" href="#integration-algorithm-1-simple-counts-summation" title="Permalink to this heading">¶</a></h3>
+<p>This algorithm is also called <em>simple cuboid integration</em>,
+which is to approximate the integrated peak intensity.</p>
+<p>Measuring one peak usually contains around 20 Pt. in a same scan.
+In most of the cases, the first and last several measurements (called as <em>Pt</em> in SPICE) are
+background.
+Therefore, the background for per measurement can be estimated by averaging the
+summed number of counts normalized by either monitor counts or measuring time.</p>
+<p>The integrated peak intensity is</p>
+<div class="math notranslate nohighlight">
+\[I = \sum_i (C_i - B_i) \times \Delta X\]</div>
+<dl class="simple">
+<dt>where</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(C_i\)</span> is the normalized detector counts in ROI of measurement <em>i</em></p></li>
+<li><p><span class="math notranslate nohighlight">\(\Delta X\)</span> is the motor step</p></li>
+<li><p><span class="math notranslate nohighlight">\(B_i\)</span> is the estimated background</p></li>
+</ul>
+</dd>
+</dl>
+<p>The error can be calculated as</p>
+<div class="math notranslate nohighlight">
+\[\sigma = \sum_i \sqrt{C_i} \cdot \Delta X\]</div>
+<section id="estimating-background">
+<h4><a class="toc-backref" href="#id17" role="doc-backlink">Estimating background</a><a class="headerlink" href="#estimating-background" title="Permalink to this heading">¶</a></h4>
+<p>For each measurement, the background <span class="math notranslate nohighlight">\(B_i\)</span> is calculated as</p>
+<div class="math notranslate nohighlight">
+\[B^{(e)} = \frac{\sum_i^{&lt;pt&gt;}C_i}{|&lt;pt&gt;|}\]</div>
+<p>where <span class="math notranslate nohighlight">\(&lt;pt&gt;\)</span> is a set of measurement points that are specified by users.
+Usually they are the first and last several measurements in a scan.</p>
+<p>Then this estimated <strong>normalized</strong> background value can be applied to each measuremnt, whose counts are normalized.</p>
+</section>
+</section>
+<section id="integration-algorithm-2-simple-counts-summation-with-fitted-background">
+<h3><a class="toc-backref" href="#id18" role="doc-backlink">Integration algorithm 2: simple counts summation with fitted background</a><a class="headerlink" href="#integration-algorithm-2-simple-counts-summation-with-fitted-background" title="Permalink to this heading">¶</a></h3>
+<p>This algorithm is based on previous algorithm.
+It is assumed that if the statistic of the diffraction peak is good enough, then
+the curve, i.e., moving motor position against normalized counts, can be
+fitted with a Gaussian plus flat background.</p>
+<div class="math notranslate nohighlight">
+\[C = A\times e^{-(x - x_0)^2/(2s^2)} - B\]</div>
+<dl class="simple">
+<dt>where</dt><dd><ul class="simple">
+<li><p><em>x</em> is the (moving) motor position</p></li>
+<li><p><em>C</em> is the normalized counts in ROI when the moving motor is at <em>x</em></p></li>
+</ul>
+</dd>
+</dl>
+<p>The integrated peak intensity and its error will be calculated as</p>
+<div class="math notranslate nohighlight">
+\[I = \sum_i^{&lt;pt&gt;} (C_i - B) \times \Delta X\]</div>
+<dl class="simple">
+<dt>where</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(C_i\)</span> is the normalized detector counts in ROI of measurement <em>i</em></p></li>
+<li><p><span class="math notranslate nohighlight">\(\Delta X\)</span> is the motor step</p></li>
+<li><p><span class="math notranslate nohighlight">\(B_i\)</span> is the estimated background</p></li>
+<li><p>the set of measurements <em>&lt;pt&gt;</em> is defined by the motor positions in the range of <span class="math notranslate nohighlight">\(x_0 \pm \frac{N}{2}FWHM\)</span>.</p>
+<ul>
+<li><p>usually the default value of <em>N</em> is set to 2.</p></li>
+<li><p><span class="math notranslate nohighlight">\(FWHM = 2\sqrt{2\ln2}s \approx 2.3548s\)</span></p></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+<p>The error can be calculated as</p>
+<div class="math notranslate nohighlight">
+\[\sigma = \sum_i \sqrt{C_i} \cdot \Delta X\]</div>
+</section>
+<section id="integration-algorithm-3-calculate-intensity-from-fitted-model">
+<h3><a class="toc-backref" href="#id19" role="doc-backlink">Integration algorithm 3: calculate intensity from fitted model</a><a class="headerlink" href="#integration-algorithm-3-calculate-intensity-from-fitted-model" title="Permalink to this heading">¶</a></h3>
+<p>It is assumed that for a well measured diffraction peak, in 3D,
+the counts in ROI of each measurement from the edge of the peak to the other edge of peak
+against the moving motor’s positions should be represented by a Gaussian function with
+flat background</p>
+<div class="math notranslate nohighlight">
+\[C = A\times e^{-(x - x_0)^2/(2s^2)} - B\]</div>
+<p>Then the peak intensity should be the integral of the Gaussian from <span class="math notranslate nohighlight">\(-\inf\)</span> to <span class="math notranslate nohighlight">\(+\inf\)</span>,
+i.e.,</p>
+<div class="math notranslate nohighlight">
+\[I = A\times s\times\sqrt{2\pi}\]</div>
+<p>The error of the intensity should be calculated by the propagation of fitted error of <em>A</em> and <em>s</em>.</p>
+<div class="math notranslate nohighlight">
+\[\sigma_I^2 = 2\pi (A^2\cdot \sigma_s^2 + \sigma_A^2\cdot s^2 + 2\cdot A\cdot s\cdot \sigma_{As})\]</div>
+<section id="issue">
+<h4><a class="toc-backref" href="#id20" role="doc-backlink">Issue</a><a class="headerlink" href="#issue" title="Permalink to this heading">¶</a></h4>
+<p>It is found that the standard deviation of <em>A</em> from covariance matrix calculated from <strong>scipy.curve_fit</strong> library
+is very large, which causes an unreasonably large estimated error on integrated intensity <em>I</em>.</p>
+</section>
+</section>
+<section id="other-peak-integration-algorithms-in-consideration">
+<h3><a class="toc-backref" href="#id21" role="doc-backlink">Other peak integration algorithms in consideration</a><a class="headerlink" href="#other-peak-integration-algorithms-in-consideration" title="Permalink to this heading">¶</a></h3>
+<p>There are some other peak integration algorithms that we discussed.
+None of them has been implemented.
+But it is still worth to document them here.</p>
+<section id="peak-integration-with-automatic-background-subtraction-by-integrateellipsoids">
+<h4><a class="toc-backref" href="#id22" role="doc-backlink">Peak Integration with automatic background subtraction by IntegrateEllipsoids</a><a class="headerlink" href="#peak-integration-with-automatic-background-subtraction-by-integrateellipsoids" title="Permalink to this heading">¶</a></h4>
+<p>There is no existing algorithm in Mantid to integrate ellipsoid because1
+algorithm <em>IntegrateEllipsoids</em> works only for event in unit as time-of-flight.</p>
+<p>So far, there is only one algorithm is implemented to integrate peaks for HB3A.</p>
+</section>
+<section id="integrating-a-peak-in-cuboid-in-q-space">
+<h4><a class="toc-backref" href="#id23" role="doc-backlink">Integrating a peak in cuboid in Q-space</a><a class="headerlink" href="#integrating-a-peak-in-cuboid-in-q-space" title="Permalink to this heading">¶</a></h4>
+<p>In the Q-space, by masking each measurement, it is assumed that the peak’s intensity
+is very close to the number of counts in the unmasked cuboid normalized either by
+measuring time or beam monitor counts with background removed.</p>
+<div class="math notranslate nohighlight">
+\[I = \sum_{i} \frac{n_i}{F_i} - B^{(e)}\]</div>
+<p>where <span class="math notranslate nohighlight">\(n_i\)</span> is the counts of Pt i in the region of interest,
+<span class="math notranslate nohighlight">\(F_i\)</span> is the normalization factor of Pt i,
+and <cite>B^{(e)}</cite> is the estimated background per Pt with the same
+normalization type of <span class="math notranslate nohighlight">\(F_i\)</span>.</p>
+</section>
+<section id="id1">
+<h4><a class="toc-backref" href="#id24" role="doc-backlink">Estimating background</a><a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h4>
+<p>For each measurement, the background <span class="math notranslate nohighlight">\(B_i\)</span> is calculated as</p>
+<div class="math notranslate nohighlight">
+\[B_i = \frac{\sum^{(pt)}_{\{d_i\}}n_{d_i}}{F^{(a)}_{d_i}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(F^{(a)}\)</span> is the normlization of either time or beam monitor counts,
+and <span class="math notranslate nohighlight">\(n_{d_i}\)</span> is the neutron counts of measumrent <span class="math notranslate nohighlight">\(d_i\)</span>.</p>
+<p>Then the estimation of the normalized background for each measurement is</p>
+<div class="math notranslate nohighlight">
+\[B^{(e)} = \sum_{\{P_i\}}\frac{B_i}{N}\]</div>
+<p>where <span class="math notranslate nohighlight">\(N\)</span> is the number of measurements used to calculated background.</p>
+<p><strong>Category</strong>: <a class="reference external" href="../ILL/categories/Interfaces.html">Interfaces</a></p>
+</section>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Engineering%20Diffraction.html" title="Previous Chapter: Engineering Diffraction"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Engineering D...</span>
+    </a>
+  </li>
+  <li>
+    <a href="SCD%20Event%20Data%20Reduction.html" title="Next Chapter: SCD Event Data Reduction interface(MantidEV)"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">SCD Event Dat... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

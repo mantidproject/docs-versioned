@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Exercise 3</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Expanding Data Interaction" href="../expanding_data_interaction/index.html" />
+    <link rel="prev" title="Using Mantid Algorithms" href="05_using_mantid_algorithms.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.7</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../../index.html" >Training</a> &#187;</li>
+          
+            <li class="nav-item nav-item-2"><a href="../index.html" >Extending Mantid With Python</a> &#187;</li>
+          
+            <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Python Algorithms And Workspaces</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Exercise 3</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="exercise-3">
+<span id="id1"></span><h1>Exercise 3<a class="headerlink" href="#exercise-3" title="Permalink to this heading">¶</a></h1>
+<p>The aim of this exercise is to write a small algorithm that wraps a small
+script that focuses some powder diffraction data.</p>
+<p>Write an algorithm called <code class="docutils literal notranslate"><span class="pre">PowderDiffractionReduce</span></code>. The algorithm should
+have 3 properties:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Filename</span></code>: A FileProperty for a TOF data file to load (ignore extensions)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CalFilename</span></code>: A FileProperty for a cal file (ignore extensions)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">OutputWorkspace</span></code>: An output WorkspaceProperty to hold the final result.</p></li>
+</ul>
+<p>The steps the algorithm should perform are:</p>
+<ol class="arabic simple">
+<li><p>Use the <a class="reference internal" href="../../../algorithms/Load-v1.html#algm-load-v1"><span class="std std-ref">Load</span></a> algorithm to load the TOF
+data</p></li>
+<li><p>Apply the calibration file using
+<a class="reference internal" href="../../../algorithms/ApplyDiffCal-v1.html#algm-applydiffcal-v1"><span class="std std-ref">ApplyDiffCal</span></a></p></li>
+<li><p>Run <a class="reference internal" href="../../../algorithms/ConvertUnits-v1.html#algm-convertunits-v1"><span class="std std-ref">ConvertUnits</span></a> on the TOF data
+to convert to <code class="docutils literal notranslate"><span class="pre">dSpacing</span></code></p></li>
+<li><p>Run <a class="reference internal" href="../../../algorithms/DiffractionFocussing-v2.html#algm-diffractionfocussing-v2"><span class="std std-ref">DiffractionFocussing</span></a>
+on the previous output &amp; focus the data using
+the same cal file from the earlier step (called a grouping file here)</p></li>
+<li><p>Set the output from the <code class="docutils literal notranslate"><span class="pre">DiffractionFocussing</span></code> algorithm as the output of
+<code class="docutils literal notranslate"><span class="pre">PowderDiffractionReduce</span></code></p></li>
+<li><p>Delete the temporary reference using
+<a class="reference internal" href="../../../algorithms/DeleteWorkspace-v1.html#algm-deleteworkspace-v1"><span class="std std-ref">DeleteWorkspace</span></a></p></li>
+</ol>
+<p>To test the algorithm, execute the script that contains the algorithm to
+register it with Mantid. It will then show up in the list of algorithms.
+Use the following inputs:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Filename</span></code>: <em>HRP39182.RAW</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CalFilename</span></code>: <em>hrpd_new_072_01_corr.cal</em></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">OutputWorkspace</span></code>: <em>focussed</em></p></li>
+</ul>
+<p>When plotting the output workspace it should look like this:</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../../_images/exercise_3_solution_plot.png"><img alt="Plot with 3 spectra" src="../../../_images/exercise_3_solution_plot.png" style="width: 750px; height: 500px;" /></a>
+</figure>
+<p>Once finished check your answer with the provided <a class="reference internal" href="../solutions_to_the_exercises/03_emwp_sol.html#emwp-sol"><span class="std std-ref">Exercise 3 Solutions</span></a></p>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="05_using_mantid_algorithms.html" title="Previous Chapter: Using Mantid Algorithms"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Using Mantid ...</span>
+    </a>
+  </li>
+  <li>
+    <a href="../expanding_data_interaction/index.html" title="Next Chapter: Expanding Data Interaction"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Expanding Dat... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

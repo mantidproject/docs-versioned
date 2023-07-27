@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Exercise 3 Solutions</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Exercise 4 Solutions" href="04_emwp_sol.html" />
+    <link rel="prev" title="Exercise 2 Solutions" href="02_emwp_sol.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.7</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../../index.html" >Training</a> &#187;</li>
+          
+            <li class="nav-item nav-item-2"><a href="../index.html" >Extending Mantid With Python</a> &#187;</li>
+          
+            <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Solutions To The Exercises</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Exercise 3 Solutions</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="exercise-3-solutions">
+<span id="emwp-sol"></span><h1>Exercise 3 Solutions<a class="headerlink" href="#exercise-3-solutions" title="Permalink to this heading">¶</a></h1>
+<p>The aim of this exercise is to write a small algorithm that wraps a small
+script that focuses some powder diffraction data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Write an algorithm called PowerDiffractionReduce</span>
+<span class="c1">#  - The algorithm should have 3 properties:</span>
+<span class="c1">#  - Filename: A FileProperty for a TOF data file to load (ignore extensions)</span>
+<span class="c1">#  - CalFilename: A FileProperty for a cal file (ignore extensions)</span>
+<span class="c1">#  - OutputWorkspace: An output WorkspaceProperty to hold the final result.</span>
+
+
+<span class="c1"># The steps the algorithm should perform are</span>
+<span class="c1">#  - Use the Load algorithm to load the TOF data</span>
+<span class="c1">#  - Apply the calibration file using ApplyDiffCalc</span>
+<span class="c1">#  - Run ConvertUnits on the TOF data to convert to dSpacing</span>
+<span class="c1">#  - Run DiffractionFocusing on the previous output &amp; focus the data using the same cal file from the earlier step</span>
+<span class="c1">#   (called a grouping file here)</span>
+<span class="c1">#  - Set the output from the DiffractionFocussing algorithm as the output of PowerDiffractionReduce.</span>
+<span class="c1">#  - Delete the temporary reference using DeleteWorkspace</span>
+
+
+<span class="c1"># To test the algorithm, execute the script that contains the algorithm to register it with Mantid. It will then</span>
+<span class="c1"># show up in the list of algorithms. Use the following inputs:</span>
+<span class="c1">#  - Filename: HRP39182.RAW</span>
+<span class="c1">#  - CalFilename: hrpd_new_072_01_corr.cal</span>
+<span class="c1">#  - OutputWorkspace: focussed</span>
+
+<span class="kn">from</span> <span class="nn">mantid.kernel</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">mantid.api</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Class definition</span>
+<span class="k">class</span> <span class="nc">DiffractionPowderReduce</span><span class="p">(</span><span class="n">PythonAlgorithm</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">category</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Examples&quot;</span>
+
+    <span class="k">def</span> <span class="nf">PyInit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 2 input properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declareProperty</span><span class="p">(</span><span class="n">FileProperty</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Filename&quot;</span><span class="p">,</span> <span class="n">defaultValue</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="n">FileAction</span><span class="o">.</span><span class="n">Load</span><span class="p">),</span>
+                             <span class="n">doc</span><span class="o">=</span><span class="s2">&quot;TOF data filename&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declareProperty</span><span class="p">(</span><span class="n">FileProperty</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;CalFilename&quot;</span><span class="p">,</span> <span class="n">defaultValue</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="n">FileAction</span><span class="o">.</span><span class="n">Load</span><span class="p">),</span>
+                             <span class="n">doc</span><span class="o">=</span><span class="s2">&quot;TOF data filename&quot;</span><span class="p">)</span>
+
+        <span class="c1"># 1 Output property</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declareProperty</span><span class="p">(</span><span class="n">WorkspaceProperty</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;OutputWorkspace&quot;</span><span class="p">,</span> <span class="n">defaultValue</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                                               <span class="n">direction</span><span class="o">=</span><span class="n">Direction</span><span class="o">.</span><span class="n">Output</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">PyExec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="n">Load</span><span class="p">,</span> <span class="n">ApplyDiffCal</span><span class="p">,</span> <span class="n">ConvertUnits</span><span class="p">,</span> <span class="n">DiffractionFocussing</span><span class="p">,</span> <span class="n">DeleteWorkspace</span>
+
+        <span class="c1"># Load file to workspace</span>
+        <span class="n">_tmpws</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getPropertyValue</span><span class="p">(</span><span class="s2">&quot;Filename&quot;</span><span class="p">))</span>
+
+        <span class="c1"># Apply Calibration and Convert Units</span>
+        <span class="n">calfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s2">&quot;CalFilename&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">ApplyDiffCal</span><span class="p">(</span><span class="n">InstrumentWorkspace</span><span class="o">=</span><span class="n">_tmpws</span><span class="p">,</span> <span class="n">CalibrationFile</span><span class="o">=</span><span class="n">calfile</span><span class="p">)</span>
+        <span class="n">_tmpws</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">_tmpws</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s2">&quot;dSpacing&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Focus</span>
+        <span class="n">_tmpws</span> <span class="o">=</span> <span class="n">DiffractionFocussing</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">_tmpws</span><span class="p">,</span> <span class="n">GroupingFileName</span><span class="o">=</span><span class="n">calfile</span><span class="p">)</span>
+
+        <span class="c1"># Store reference after algorithm has gone</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setProperty</span><span class="p">(</span><span class="s2">&quot;OutputWorkspace&quot;</span><span class="p">,</span> <span class="n">_tmpws</span><span class="p">)</span>
+
+        <span class="n">DeleteWorkspace</span><span class="p">(</span><span class="n">_tmpws</span><span class="p">)</span>
+
+<span class="c1"># Register algorithm with Mantid</span>
+<span class="n">AlgorithmFactory</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">DiffractionPowderReduce</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="02_emwp_sol.html" title="Previous Chapter: Exercise 2 Solutions"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Exercise 2 Solutions</span>
+    </a>
+  </li>
+  <li>
+    <a href="04_emwp_sol.html" title="Next Chapter: Exercise 4 Solutions"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Exercise 4 Solutions &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

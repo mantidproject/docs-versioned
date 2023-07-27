@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Comparison of minimizers for individual test problems</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Comparison of minimizers, with weighted least squares" href="FittingMinimizersWeightedComparisonDetailed.html" />
+    <link rel="prev" title="Which minimizers to use with Mantid" href="FittingMinimizers.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.7</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Concepts</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Comparison of minimizers for individual test problems</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<span class="target" id="fittingminimizerscomparisondetailed"></span><script type="text/javascript" src="../_static/color_ranking_definitions.js"></script>
+<style>
+  .ranking-top-1-parent {background-color:#fef0d9;}
+  .ranking-top-2-parent {background-color:#fdcc8a;}
+  .ranking-med-3-parent {background-color:#fc8d59;}
+  .ranking-low-4-parent {background-color:#e34a33;}
+  .ranking-low-5-parent {background-color:#b30000;}
+</style><section id="comparison-of-minimizers-for-individual-test-problems">
+<span id="minimizers-individual-comparison"></span><h1>Comparison of minimizers for individual test problems<a class="headerlink" href="#comparison-of-minimizers-for-individual-test-problems" title="Permalink to this heading">¶</a></h1>
+<p>As in the summarized results (<a class="reference internal" href="FittingMinimizers.html#fittingminimizers"><span class="std std-ref">Which minimizers to use with Mantid</span></a>), the best
+possible results with Mantid minimizers are given a top score “1”
+(lowest error, or lowest run time).</p>
+<p>The following color codes are used to distinguish different levels of
+performance, note the irregular (increasing) difference between level
+boundaries):</p>
+<ul class="simple">
+<li><p><span class="ranking-top-1">best or within 10%</span> (ranking &lt; 1.1)</p></li>
+<li><p><span class="ranking-top-2">within 33% over the best</span> (1.1 &lt; ranking &lt; 1.33)</p></li>
+<li><p><span class="ranking-med-3">within 75% over the best</span> (1.33 &lt; ranking &lt; 1.75)</p></li>
+<li><p><span class="ranking-low-4">within 200% over the best</span> (1.75 &lt; ranking &lt; 3)</p></li>
+<li><p><span class="ranking-low-5">over 200% of best</span> (ranking &gt; 3)</p></li>
+</ul>
+<p>The integer numbers 1 and 2 next to the problem names denote the
+starting point (all NIST problems are usually tested for two different
+starting points). By clicking on the names of the test problems
+(leftmost column) you can see the original definition of the problem.</p>
+<section id="comparison-in-terms-of-accuracy">
+<span id="minimizers-unweighted-comparison-in-terms-of-accuracy"></span><h2>Comparison in terms of accuracy<a class="headerlink" href="#comparison-in-terms-of-accuracy" title="Permalink to this heading">¶</a></h2>
+<p>For details on the ranking approach and the color codes see
+<a class="reference internal" href="#minimizers-individual-comparison"><span class="std std-ref">above</span></a> and <a class="reference internal" href="FittingMinimizers.html#fittingminimizers"><span class="std std-ref">the
+summarized results</span></a>. When interpreting these
+results note that the median shown in the summarized results is
+calculated excluding undefined values. Undefined accuracy values are
+obtained when the minimizers fail to produce any result and are shown
+in the detailed results as “nan”. For the more difficult groups of
+problems the proportion of undefined values is higher for some
+minimizers. This can bias the statistics shown in the summary table in
+favor of the minimizers that fail more often, as some of the the hard
+problems are excluded from the median instead of contributing to a
+higher median (lower ranking).</p>
+<p>Alternatively, see the <a class="reference internal" href="FittingMinimizersWeightedComparisonDetailed.html#minimizers-weighted-comparison-in-terms-of-accuracy"><span class="std std-ref">summary and detailed results when using
+weighted least squares as cost function</span></a>.</p>
+<section id="accuracy-for-individual-nist-problems-lower-difficulty">
+<h3>Accuracy for individual NIST problems, “lower” difficulty<a class="headerlink" href="#accuracy-for-individual-nist-problems-lower-difficulty" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default" id="minimizers-unweighted-comparison-in-terms-of-accuracy-nist-lower">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>BFGS</p></th>
+<th class="head"><p>Conjugate gradient (Fletcher-Reeves imp.)</p></th>
+<th class="head"><p>Conjugate gradient (Polak-Ribiere imp.)</p></th>
+<th class="head"><p>Damping</p></th>
+<th class="head"><p>Levenberg-Marquardt</p></th>
+<th class="head"><p>Levenberg-MarquardtMD</p></th>
+<th class="head"><p>Simplex</p></th>
+<th class="head"><p>SteepestDescent</p></th>
+<th class="head"><p>Trust Region</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1a.shtml">Misra1a 1</a></p></td>
+<td><p><span class="ranking-low-5">156.5</span></p></td>
+<td><p><span class="ranking-low-5">156.7</span></p></td>
+<td><p><span class="ranking-low-5">156.7</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">156.7</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1a.shtml">Misra1a 2</a></p></td>
+<td><p><span class="ranking-low-4">1.829</span></p></td>
+<td><p><span class="ranking-low-4">2.253</span></p></td>
+<td><p><span class="ranking-low-4">2.253</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">2.253</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/chwirut2.shtml">Chwirut2 1</a></p></td>
+<td><p><span class="ranking-top-1">1.067</span></p></td>
+<td><p><span class="ranking-top-1">1.013</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.068</span></p></td>
+<td><p><span class="ranking-top-1">1.066</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/chwirut2.shtml">Chwirut2 2</a></p></td>
+<td><p><span class="ranking-top-1">1.049</span></p></td>
+<td><p><span class="ranking-top-1">1.002</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.197</span></p></td>
+<td><p><span class="ranking-top-1">1.004</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/chwirut1.shtml">Chwirut1 1</a></p></td>
+<td><p><span class="ranking-top-1">1.097</span></p></td>
+<td><p><span class="ranking-top-1">1.001</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.112</span></p></td>
+<td><p><span class="ranking-top-1">1.097</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/chwirut1.shtml">Chwirut1 2</a></p></td>
+<td><p><span class="ranking-top-1">1.017</span></p></td>
+<td><p><span class="ranking-top-1">1.007</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.109</span></p></td>
+<td><p><span class="ranking-top-1">1.017</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/lanczos3.shtml">Lanczos3 1</a></p></td>
+<td><p><span class="ranking-low-5">7.683e+06</span></p></td>
+<td><p><span class="ranking-low-5">5.433e+04</span></p></td>
+<td><p><span class="ranking-low-5">4.963e+04</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">973.7</span></p></td>
+<td><p><span class="ranking-low-5">7.797e+04</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/lanczos3.shtml">Lanczos3 2</a></p></td>
+<td><p><span class="ranking-low-5">2.652e+05</span></p></td>
+<td><p><span class="ranking-low-5">6.206e+04</span></p></td>
+<td><p><span class="ranking-low-5">6.264e+04</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">1.807e+04</span></p></td>
+<td><p><span class="ranking-low-5">1.285e+05</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/gauss1.shtml">Gauss1 1</a></p></td>
+<td><p><span class="ranking-low-5">5.6</span></p></td>
+<td><p><span class="ranking-med-3">1.745</span></p></td>
+<td><p><span class="ranking-top-1">1.044</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">5.6</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/gauss1.shtml">Gauss1 2</a></p></td>
+<td><p><span class="ranking-med-3">1.655</span></p></td>
+<td><p><span class="ranking-low-5">9.182</span></p></td>
+<td><p><span class="ranking-low-5">9.182</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">9.168</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/gauss2.shtml">Gauss2 1</a></p></td>
+<td><p><span class="ranking-low-5">7.272</span></p></td>
+<td><p><span class="ranking-low-5">7.341</span></p></td>
+<td><p><span class="ranking-low-5">7.341</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.022</span></p></td>
+<td><p><span class="ranking-low-5">7.272</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/gauss2.shtml">Gauss2 2</a></p></td>
+<td><p><span class="ranking-low-4">2.081</span></p></td>
+<td><p><span class="ranking-low-5">3.754</span></p></td>
+<td><p><span class="ranking-low-5">3.754</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">3.393</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/danwood.shtml">DanWood 1</a></p></td>
+<td><p><span class="ranking-low-5">72.41</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.011</span></p></td>
+<td><p><span class="ranking-low-5">55.52</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/danwood.shtml">DanWood 2</a></p></td>
+<td><p><span class="ranking-top-2">1.244</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.031</span></p></td>
+<td><p><span class="ranking-low-4">1.97</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1b.shtml">Misra1b 1</a></p></td>
+<td><p><span class="ranking-low-5">96.76</span></p></td>
+<td><p><span class="ranking-low-5">96.97</span></p></td>
+<td><p><span class="ranking-low-5">96.97</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">96.97</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1b.shtml">Misra1b 2</a></p></td>
+<td><p><span class="ranking-low-5">8.521</span></p></td>
+<td><p><span class="ranking-low-5">16.43</span></p></td>
+<td><p><span class="ranking-low-5">16.43</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">16.43</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="accuracy-for-individual-nist-problems-average-difficulty">
+<h3>Accuracy for individual NIST problems, “average” difficulty<a class="headerlink" href="#accuracy-for-individual-nist-problems-average-difficulty" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default" id="minimizers-unweighted-comparison-in-terms-of-accuracy-nist-average">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>BFGS</p></th>
+<th class="head"><p>Conjugate gradient (Fletcher-Reeves imp.)</p></th>
+<th class="head"><p>Conjugate gradient (Polak-Ribiere imp.)</p></th>
+<th class="head"><p>Damping</p></th>
+<th class="head"><p>Levenberg-Marquardt</p></th>
+<th class="head"><p>Levenberg-MarquardtMD</p></th>
+<th class="head"><p>Simplex</p></th>
+<th class="head"><p>SteepestDescent</p></th>
+<th class="head"><p>Trust Region</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/kirby2.shtml">Kirby2 1</a></p></td>
+<td><p><span class="ranking-low-5">423</span></p></td>
+<td><p><span class="ranking-low-5">25.07</span></p></td>
+<td><p><span class="ranking-low-5">25.37</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">956.3</span></p></td>
+<td><p><span class="ranking-low-5">510.9</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/kirby2.shtml">Kirby2 2</a></p></td>
+<td><p><span class="ranking-low-4">2.554</span></p></td>
+<td><p><span class="ranking-med-3">1.717</span></p></td>
+<td><p><span class="ranking-med-3">1.68</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.396</span></p></td>
+<td><p><span class="ranking-low-5">121</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/hahn1.shtml">Hahn1 1</a></p></td>
+<td><p><span class="ranking-low-5">4.508e+04</span></p></td>
+<td><p><span class="ranking-low-5">45.51</span></p></td>
+<td><p><span class="ranking-low-5">217</span></p></td>
+<td><p><span class="ranking-low-5">69.31</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">200.6</span></p></td>
+<td><p><span class="ranking-low-5">4962</span></p></td>
+<td><p><span class="ranking-low-5">17.97</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/hahn1.shtml">Hahn1 2</a></p></td>
+<td><p><span class="ranking-low-5">4000</span></p></td>
+<td><p><span class="ranking-low-5">35.48</span></p></td>
+<td><p><span class="ranking-low-5">211.6</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">157.2</span></p></td>
+<td><p><span class="ranking-low-5">4896</span></p></td>
+<td><p><span class="ranking-low-5">226.2</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/mgh17.shtml">MGH17 1</a></p></td>
+<td><p><span class="ranking-low-5">1.419e+04</span></p></td>
+<td><p><span class="ranking-low-5">1.42e+04</span></p></td>
+<td><p><span class="ranking-low-5">1.42e+04</span></p></td>
+<td><p><span class="ranking-low-5">nan</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">754.5</span></p></td>
+<td><p><span class="ranking-low-5">1.421e+04</span></p></td>
+<td><p><span class="ranking-low-5">1.413e+04</span></p></td>
+<td><p><span class="ranking-low-5">1.421e+04</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/mgh17.shtml">MGH17 2</a></p></td>
+<td><p><span class="ranking-low-5">2473</span></p></td>
+<td><p><span class="ranking-med-3">1.414</span></p></td>
+<td><p><span class="ranking-med-3">1.422</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">4179</span></p></td>
+<td><p><span class="ranking-low-5">1762</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/lanczos1.shtml">Lanczos1 1</a></p></td>
+<td><p><span class="ranking-low-5">1.561e+18</span></p></td>
+<td><p><span class="ranking-low-5">1.107e+16</span></p></td>
+<td><p><span class="ranking-low-5">1.01e+16</span></p></td>
+<td><p><span class="ranking-low-5">151.7</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">21.29</span></p></td>
+<td><p><span class="ranking-low-5">2.182e+15</span></p></td>
+<td><p><span class="ranking-low-5">1.583e+16</span></p></td>
+<td><p><span class="ranking-low-5">9.922e+08</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/lanczos1.shtml">Lanczos1 2</a></p></td>
+<td><p><span class="ranking-low-5">1.559e+17</span></p></td>
+<td><p><span class="ranking-low-5">3.652e+16</span></p></td>
+<td><p><span class="ranking-low-5">3.687e+16</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">28.59</span></p></td>
+<td><p><span class="ranking-low-5">1.064e+16</span></p></td>
+<td><p><span class="ranking-low-5">7.518e+16</span></p></td>
+<td><p><span class="ranking-low-5">2.033e+06</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/lanczos2.shtml">Lanczos2 1</a></p></td>
+<td><p><span class="ranking-low-5">5.553e+09</span></p></td>
+<td><p><span class="ranking-low-5">3.939e+07</span></p></td>
+<td><p><span class="ranking-low-5">3.591e+07</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">7.765e+06</span></p></td>
+<td><p><span class="ranking-low-5">5.631e+07</span></p></td>
+<td><p><span class="ranking-low-5">3.949</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/lanczos2.shtml">Lanczos2 2</a></p></td>
+<td><p><span class="ranking-low-5">1.917e+08</span></p></td>
+<td><p><span class="ranking-low-5">4.491e+07</span></p></td>
+<td><p><span class="ranking-low-5">4.533e+07</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">1.308e+07</span></p></td>
+<td><p><span class="ranking-low-5">9.22e+07</span></p></td>
+<td><p><span class="ranking-top-1">1.002</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/gauss3.shtml">Gauss3 1</a></p></td>
+<td><p><span class="ranking-low-5">15.19</span></p></td>
+<td><p><span class="ranking-low-4">1.815</span></p></td>
+<td><p><span class="ranking-med-3">1.568</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.036</span></p></td>
+<td><p><span class="ranking-low-5">15.19</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/gauss3.shtml">Gauss3 2</a></p></td>
+<td><p><span class="ranking-low-5">3.147</span></p></td>
+<td><p><span class="ranking-low-4">2.44</span></p></td>
+<td><p><span class="ranking-low-4">2.763</span></p></td>
+<td><p><span class="ranking-low-5">7.912</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.25</span></p></td>
+<td><p><span class="ranking-low-5">8.944</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1c.shtml">Misra1c 1</a></p></td>
+<td><p><span class="ranking-low-5">115</span></p></td>
+<td><p><span class="ranking-low-5">115.8</span></p></td>
+<td><p><span class="ranking-low-5">115.8</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">115.8</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1c.shtml">Misra1c 2</a></p></td>
+<td><p><span class="ranking-low-5">6.595</span></p></td>
+<td><p><span class="ranking-low-5">6.702</span></p></td>
+<td><p><span class="ranking-low-5">6.702</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">6.702</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1d.shtml">Misra1d 1</a></p></td>
+<td><p><span class="ranking-low-5">12.67</span></p></td>
+<td><p><span class="ranking-low-5">19.62</span></p></td>
+<td><p><span class="ranking-low-5">19.62</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">19.62</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1d.shtml">Misra1d 2</a></p></td>
+<td><p><span class="ranking-top-1">1.03</span></p></td>
+<td><p><span class="ranking-low-4">1.939</span></p></td>
+<td><p><span class="ranking-low-4">1.939</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">1.939</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/enso.shtml">ENSO 1</a></p></td>
+<td><p><span class="ranking-top-2">1.264</span></p></td>
+<td><p><span class="ranking-top-1">1.029</span></p></td>
+<td><p><span class="ranking-top-1">1.028</span></p></td>
+<td><p><span class="ranking-med-3">1.529</span></p></td>
+<td><p><span class="ranking-top-1">1.004</span></p></td>
+<td><p><span class="ranking-med-3">1.529</span></p></td>
+<td><p><span class="ranking-top-1">1.018</span></p></td>
+<td><p><span class="ranking-top-2">1.207</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/enso.shtml">ENSO 2</a></p></td>
+<td><p><span class="ranking-top-1">1.033</span></p></td>
+<td><p><span class="ranking-top-1">1.018</span></p></td>
+<td><p><span class="ranking-top-1">1.029</span></p></td>
+<td><p><span class="ranking-top-1">1.087</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.087</span></p></td>
+<td><p><span class="ranking-top-1">1.029</span></p></td>
+<td><p><span class="ranking-top-1">1.052</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="accuracy-for-individual-nist-problems-higher-difficulty">
+<h3>Accuracy for individual NIST problems, “higher” difficulty<a class="headerlink" href="#accuracy-for-individual-nist-problems-higher-difficulty" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default" id="minimizers-unweighted-comparison-in-terms-of-accuracy-nist-higher">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>BFGS</p></th>
+<th class="head"><p>Conjugate gradient (Fletcher-Reeves imp.)</p></th>
+<th class="head"><p>Conjugate gradient (Polak-Ribiere imp.)</p></th>
+<th class="head"><p>Damping</p></th>
+<th class="head"><p>Levenberg-Marquardt</p></th>
+<th class="head"><p>Levenberg-MarquardtMD</p></th>
+<th class="head"><p>Simplex</p></th>
+<th class="head"><p>SteepestDescent</p></th>
+<th class="head"><p>Trust Region</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/mgh09.shtml">MGH09 1</a></p></td>
+<td><p><span class="ranking-low-5">7.705</span></p></td>
+<td><p><span class="ranking-low-5">25.02</span></p></td>
+<td><p><span class="ranking-low-5">25.02</span></p></td>
+<td><p><span class="ranking-low-5">1.817e+04</span></p></td>
+<td><p><span class="ranking-low-5">3.342</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">20.62</span></p></td>
+<td><p><span class="ranking-low-5">24.19</span></p></td>
+<td><p><span class="ranking-low-5">3.347</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/mgh09.shtml">MGH09 2</a></p></td>
+<td><p><span class="ranking-med-3">1.62</span></p></td>
+<td><p><span class="ranking-med-3">1.621</span></p></td>
+<td><p><span class="ranking-med-3">1.62</span></p></td>
+<td><p><span class="ranking-low-5">256.6</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.025</span></p></td>
+<td><p><span class="ranking-med-3">1.604</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/thurber.shtml">Thurber 1</a></p></td>
+<td><p><span class="ranking-low-5">228.3</span></p></td>
+<td><p><span class="ranking-low-5">175.3</span></p></td>
+<td><p><span class="ranking-low-5">173.2</span></p></td>
+<td><p><span class="ranking-low-4">2.693</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">176.5</span></p></td>
+<td><p><span class="ranking-low-5">177.2</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/thurber.shtml">Thurber 2</a></p></td>
+<td><p><span class="ranking-low-5">422.3</span></p></td>
+<td><p><span class="ranking-low-5">20.02</span></p></td>
+<td><p><span class="ranking-low-5">40.38</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">4.43</span></p></td>
+<td><p><span class="ranking-low-5">368.9</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/boxbod.shtml">BoxBOD 1</a></p></td>
+<td><p><span class="ranking-low-5">8.366</span></p></td>
+<td><p><span class="ranking-low-5">8.366</span></p></td>
+<td><p><span class="ranking-low-5">8.366</span></p></td>
+<td><p><span class="ranking-low-5">nan</span></p></td>
+<td><p><span class="ranking-low-5">8.366</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">8.366</span></p></td>
+<td><p><span class="ranking-med-3">1.515</span></p></td>
+<td><p><span class="ranking-low-5">8.366</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/boxbod.shtml">BoxBOD 2</a></p></td>
+<td><p><span class="ranking-low-5">33.46</span></p></td>
+<td><p><span class="ranking-low-5">8.366</span></p></td>
+<td><p><span class="ranking-low-5">8.366</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">8.366</span></p></td>
+<td><p><span class="ranking-low-5">6.177</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/rat42.shtml">Rat42 1</a></p></td>
+<td><p><span class="ranking-low-5">13.33</span></p></td>
+<td><p><span class="ranking-low-5">13.27</span></p></td>
+<td><p><span class="ranking-low-5">13.27</span></p></td>
+<td><p><span class="ranking-low-5">4.759e+06</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">16.48</span></p></td>
+<td><p><span class="ranking-low-5">193.6</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/rat42.shtml">Rat42 2</a></p></td>
+<td><p><span class="ranking-med-3">1.331</span></p></td>
+<td><p><span class="ranking-top-2">1.213</span></p></td>
+<td><p><span class="ranking-top-2">1.302</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.429</span></p></td>
+<td><p><span class="ranking-med-3">1.449</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/mgh10.shtml">MGH10 1</a></p></td>
+<td><p><span class="ranking-low-5">6.367e+05</span></p></td>
+<td><p><span class="ranking-low-5">6.362e+05</span></p></td>
+<td><p><span class="ranking-low-5">6.344e+05</span></p></td>
+<td><p><span class="ranking-low-5">2.984e+47</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">5.306e+05</span></p></td>
+<td><p><span class="ranking-low-5">6.422e+05</span></p></td>
+<td><p><span class="ranking-low-5">6.37e+05</span></p></td>
+<td><p><span class="ranking-low-5">6.271e+05</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/mgh10.shtml">MGH10 2</a></p></td>
+<td><p><span class="ranking-low-5">7.834e+04</span></p></td>
+<td><p><span class="ranking-low-5">1275</span></p></td>
+<td><p><span class="ranking-low-5">1275</span></p></td>
+<td><p><span class="ranking-low-5">2.677e+51</span></p></td>
+<td><p><span class="ranking-low-4">1.92</span></p></td>
+<td><p><span class="ranking-low-5">79.76</span></p></td>
+<td><p><span class="ranking-low-5">8.385e+04</span></p></td>
+<td><p><span class="ranking-low-5">7.934e+04</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/eckerle4.shtml">Eckerle4 1</a></p></td>
+<td><p><span class="ranking-low-5">478.1</span></p></td>
+<td><p><span class="ranking-low-5">478.1</span></p></td>
+<td><p><span class="ranking-low-5">478.1</span></p></td>
+<td><p><span class="ranking-low-5">366</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">478.1</span></p></td>
+<td><p><span class="ranking-low-5">478.1</span></p></td>
+<td><p><span class="ranking-low-5">340.6</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/eckerle4.shtml">Eckerle4 2</a></p></td>
+<td><p><span class="ranking-low-5">31.01</span></p></td>
+<td><p><span class="ranking-top-1">1.02</span></p></td>
+<td><p><span class="ranking-top-1">1.026</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.003</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/rat43.shtml">Rat43 1</a></p></td>
+<td><p><span class="ranking-low-5">93.81</span></p></td>
+<td><p><span class="ranking-low-4">2.441</span></p></td>
+<td><p><span class="ranking-low-4">2.44</span></p></td>
+<td><p><span class="ranking-low-5">nan</span></p></td>
+<td><p><span class="ranking-low-4">2.717</span></p></td>
+<td><p><span class="ranking-low-4">2.393</span></p></td>
+<td><p><span class="ranking-low-5">122.5</span></p></td>
+<td><p><span class="ranking-low-5">52.15</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/rat43.shtml">Rat43 2</a></p></td>
+<td><p><span class="ranking-top-1">1.07</span></p></td>
+<td><p><span class="ranking-top-1">1.001</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.001</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/bennett5.shtml">Bennett5 1</a></p></td>
+<td><p><span class="ranking-low-5">1294</span></p></td>
+<td><p><span class="ranking-low-5">648.7</span></p></td>
+<td><p><span class="ranking-top-1">1.028</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">1646</span></p></td>
+<td><p><span class="ranking-low-5">1307</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/bennett5.shtml">Bennett5 2</a></p></td>
+<td><p><span class="ranking-low-5">690.3</span></p></td>
+<td><p><span class="ranking-low-5">3.347</span></p></td>
+<td><p><span class="ranking-top-2">1.165</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.065</span></p></td>
+<td><p><span class="ranking-low-5">1572</span></p></td>
+<td><p><span class="ranking-low-5">698.8</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="accuracy-for-individual-cutest-problems">
+<h3>Accuracy for individual “CUTEst” problems<a class="headerlink" href="#accuracy-for-individual-cutest-problems" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default" id="minimizers-unweighted-comparison-in-terms-of-accuracy-cutest">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>BFGS</p></th>
+<th class="head"><p>Conjugate gradient (Fletcher-Reeves imp.)</p></th>
+<th class="head"><p>Conjugate gradient (Polak-Ribiere imp.)</p></th>
+<th class="head"><p>Damping</p></th>
+<th class="head"><p>Levenberg-Marquardt</p></th>
+<th class="head"><p>Levenberg-MarquardtMD</p></th>
+<th class="head"><p>Simplex</p></th>
+<th class="head"><p>SteepestDescent</p></th>
+<th class="head"><p>Trust Region</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PALMER6C</p></td>
+<td><p><span class="ranking-low-5">372.9</span></p></td>
+<td><p><span class="ranking-low-5">156</span></p></td>
+<td><p><span class="ranking-low-5">179.2</span></p></td>
+<td><p><span class="ranking-low-5">1.367e+06</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">1.367e+06</span></p></td>
+<td><p><span class="ranking-low-5">373</span></p></td>
+<td><p><span class="ranking-low-5">491.7</span></p></td>
+<td><p><span class="ranking-low-5">nan</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>PALMER7C</p></td>
+<td><p><span class="ranking-low-5">67.84</span></p></td>
+<td><p><span class="ranking-low-5">14.16</span></p></td>
+<td><p><span class="ranking-low-5">16.92</span></p></td>
+<td><p><span class="ranking-low-5">4.478e+05</span></p></td>
+<td><p><span class="ranking-low-5">2415</span></p></td>
+<td><p><span class="ranking-low-5">4.478e+05</span></p></td>
+<td><p><span class="ranking-low-5">74.4</span></p></td>
+<td><p><span class="ranking-low-5">115.4</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p>PALMER8C</p></td>
+<td><p><span class="ranking-low-5">224.5</span></p></td>
+<td><p><span class="ranking-low-5">20.27</span></p></td>
+<td><p><span class="ranking-low-5">20.86</span></p></td>
+<td><p><span class="ranking-low-5">3.601e+05</span></p></td>
+<td><p><span class="ranking-low-5">338</span></p></td>
+<td><p><span class="ranking-low-5">3.601e+05</span></p></td>
+<td><p><span class="ranking-low-5">118.8</span></p></td>
+<td><p><span class="ranking-low-5">345.2</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>YFITU</p></td>
+<td><p><span class="ranking-low-5">4.981e+14</span></p></td>
+<td><p><span class="ranking-low-5">1.495e+14</span></p></td>
+<td><p><span class="ranking-low-5">2.976e+13</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">4.094e+04</span></p></td>
+<td><p><span class="ranking-low-5">3.382e+14</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p>VESUVIOLS</p></td>
+<td><p><span class="ranking-med-3">1.613</span></p></td>
+<td><p><span class="ranking-med-3">1.611</span></p></td>
+<td><p><span class="ranking-med-3">1.611</span></p></td>
+<td><p><span class="ranking-med-3">1.508</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.423</span></p></td>
+<td><p><span class="ranking-low-5">4.669</span></p></td>
+<td><p><span class="ranking-med-3">1.611</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>DMN15102LS</p></td>
+<td><p><span class="ranking-low-5">8.623</span></p></td>
+<td><p><span class="ranking-low-5">4.69</span></p></td>
+<td><p><span class="ranking-low-5">4.412</span></p></td>
+<td><p><span class="ranking-low-5">556.8</span></p></td>
+<td><p><span class="ranking-low-5">4.822</span></p></td>
+<td><p><span class="ranking-med-3">1.336</span></p></td>
+<td><p><span class="ranking-low-5">6.504</span></p></td>
+<td><p><span class="ranking-low-5">4.911</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="accuracy-for-individual-neutron-data-problems">
+<h3>Accuracy for individual Neutron Data problems<a class="headerlink" href="#accuracy-for-individual-neutron-data-problems" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default" id="minimizers-unweighted-comparison-in-terms-of-accuracy-neutron-data">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>BFGS</p></th>
+<th class="head"><p>Conjugate gradient (Fletcher-Reeves imp.)</p></th>
+<th class="head"><p>Conjugate gradient (Polak-Ribiere imp.)</p></th>
+<th class="head"><p>Damping</p></th>
+<th class="head"><p>Levenberg-Marquardt</p></th>
+<th class="head"><p>Levenberg-MarquardtMD</p></th>
+<th class="head"><p>Simplex</p></th>
+<th class="head"><p>SteepestDescent</p></th>
+<th class="head"><p>Trust Region</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ENGINX 193749 calibration, spectrum 651, peak 19</p></td>
+<td><p><span class="ranking-top-1">1.047</span></p></td>
+<td><p><span class="ranking-top-1">1.047</span></p></td>
+<td><p><span class="ranking-top-1">1.047</span></p></td>
+<td><p><span class="ranking-low-5">2.532e+09</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.024</span></p></td>
+<td><p><span class="ranking-top-1">1.045</span></p></td>
+<td><p><span class="ranking-med-3">1.399</span></p></td>
+<td><p><span class="ranking-top-1">1.001</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>ENGINX 193749 calibration, spectrum 651, peak 20</p></td>
+<td><p><span class="ranking-med-3">1.478</span></p></td>
+<td><p><span class="ranking-med-3">1.459</span></p></td>
+<td><p><span class="ranking-med-3">1.469</span></p></td>
+<td><p><span class="ranking-low-5">nan</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.48</span></p></td>
+<td><p><span class="ranking-med-3">1.457</span></p></td>
+<td><p><span class="ranking-low-5">6.097</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p>ENGINX 193749 calibration, spectrum 651, peak 23</p></td>
+<td><p><span class="ranking-top-1">1.079</span></p></td>
+<td><p><span class="ranking-top-1">1.096</span></p></td>
+<td><p><span class="ranking-top-1">1.064</span></p></td>
+<td><p><span class="ranking-low-5">nan</span></p></td>
+<td><p><span class="ranking-top-2">1.146</span></p></td>
+<td><p><span class="ranking-top-1">1.089</span></p></td>
+<td><p><span class="ranking-top-1">1.055</span></p></td>
+<td><p><span class="ranking-low-5">11.32</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>ENGINX 193749 calibration, spectrum 651, peak 5</p></td>
+<td><p><span class="ranking-top-2">1.286</span></p></td>
+<td><p><span class="ranking-top-2">1.225</span></p></td>
+<td><p><span class="ranking-top-2">1.224</span></p></td>
+<td><p><span class="ranking-low-4">2.34</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.003</span></p></td>
+<td><p><span class="ranking-top-2">1.204</span></p></td>
+<td><p><span class="ranking-med-3">1.454</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p>ENGINX 193749 calibration, spectrum 651, peak 6</p></td>
+<td><p><span class="ranking-top-1">1.047</span></p></td>
+<td><p><span class="ranking-top-1">1.004</span></p></td>
+<td><p><span class="ranking-top-1">1.005</span></p></td>
+<td><p><span class="ranking-low-5">nan</span></p></td>
+<td><p><span class="ranking-top-1">1.094</span></p></td>
+<td><p><span class="ranking-top-2">1.222</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.481</span></p></td>
+<td><p><span class="ranking-top-1">1.093</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>ENGINX 236516 vanadium, bank 1, 10 brk</p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.138</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.138</span></p></td>
+<td><p><span class="ranking-top-1">1.023</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p>ENGINX 236516 vanadium, bank 1, 30 brk</p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.138</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.138</span></p></td>
+<td><p><span class="ranking-top-2">1.106</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>EVS14188-90_processed Gaussian peaks 1</p></td>
+<td><p><span class="ranking-med-3">1.634</span></p></td>
+<td><p><span class="ranking-med-3">1.63</span></p></td>
+<td><p><span class="ranking-med-3">1.63</span></p></td>
+<td><p><span class="ranking-low-4">2.261</span></p></td>
+<td><p><span class="ranking-med-3">1.723</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">2.396</span></p></td>
+<td><p><span class="ranking-low-4">2.4</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p>EVS14188-90_processed Gaussian peaks 1</p></td>
+<td><p><span class="ranking-med-3">1.538</span></p></td>
+<td><p><span class="ranking-med-3">1.538</span></p></td>
+<td><p><span class="ranking-med-3">1.538</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.063</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">2.337</span></p></td>
+<td><p><span class="ranking-low-4">2.344</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>GEM 13 IC peaks</p></td>
+<td><p><span class="ranking-low-5">38.01</span></p></td>
+<td><p><span class="ranking-low-5">5.84</span></p></td>
+<td><p><span class="ranking-low-5">3.141</span></p></td>
+<td><p><span class="ranking-low-5">nan</span></p></td>
+<td><p><span class="ranking-top-1">1.06</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">14.9</span></p></td>
+<td><p><span class="ranking-low-5">37.32</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p>WISH17701 tube 3 calibration, peak 1</p></td>
+<td><p><span class="ranking-top-1">1.005</span></p></td>
+<td><p><span class="ranking-low-5">5.036</span></p></td>
+<td><p><span class="ranking-low-5">5.081</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">13.44</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">5.281</span></p></td>
+<td><p><span class="ranking-low-5">7.485</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>WISH17701 tube 3 calibration, peak 2</p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.267</span></p></td>
+<td><p><span class="ranking-top-2">1.189</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.511</span></p></td>
+<td><p><span class="ranking-low-5">3.546</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p>WISH17701 tube 3 calibration, peak 3</p></td>
+<td><p><span class="ranking-low-4">2.604</span></p></td>
+<td><p><span class="ranking-low-5">10.96</span></p></td>
+<td><p><span class="ranking-low-5">9.291</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">11.54</span></p></td>
+<td><p><span class="ranking-low-5">21.39</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>WISH17701 tube 3 calibration, peak 4</p></td>
+<td><p><span class="ranking-low-5">16.21</span></p></td>
+<td><p><span class="ranking-low-5">16.31</span></p></td>
+<td><p><span class="ranking-low-5">17.19</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">18.63</span></p></td>
+<td><p><span class="ranking-low-5">36.03</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p>WISH17701 tube 3 calibration, peak 5</p></td>
+<td><p><span class="ranking-med-3">1.667</span></p></td>
+<td><p><span class="ranking-low-4">1.871</span></p></td>
+<td><p><span class="ranking-med-3">1.643</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">2.334</span></p></td>
+<td><p><span class="ranking-low-5">3.402</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>WISH17701 tube 3 calibration, peak 6</p></td>
+<td><p><span class="ranking-low-5">3.922</span></p></td>
+<td><p><span class="ranking-low-5">3.822</span></p></td>
+<td><p><span class="ranking-low-5">3.923</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">5.876</span></p></td>
+<td><p><span class="ranking-low-5">16.78</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p>WISH17701 tube 3 calibration, peak 7</p></td>
+<td><p><span class="ranking-low-5">4.736</span></p></td>
+<td><p><span class="ranking-med-3">1.344</span></p></td>
+<td><p><span class="ranking-low-5">4.82</span></p></td>
+<td><p><span class="ranking-low-5">2.948e+06</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">5.245</span></p></td>
+<td><p><span class="ranking-low-5">6.1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>WISH17701 tube 3 calibration, peak 8</p></td>
+<td><p><span class="ranking-low-4">2.154</span></p></td>
+<td><p><span class="ranking-low-4">2.198</span></p></td>
+<td><p><span class="ranking-low-4">1.992</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">2.799</span></p></td>
+<td><p><span class="ranking-low-5">3.845</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p>WISH17701 tube 3 calibration, peak 9</p></td>
+<td><p><span class="ranking-top-2">1.133</span></p></td>
+<td><p><span class="ranking-top-2">1.132</span></p></td>
+<td><p><span class="ranking-top-2">1.28</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.283</span></p></td>
+<td><p><span class="ranking-med-3">1.594</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="comparison-in-terms-of-run-time">
+<span id="minimizers-unweighted-comparison-in-terms-of-run-time"></span><h2>Comparison in terms of run time<a class="headerlink" href="#comparison-in-terms-of-run-time" title="Permalink to this heading">¶</a></h2>
+<p>For details on the ranking approach and the color codes see
+<a class="reference internal" href="#minimizers-individual-comparison"><span class="std std-ref">above</span></a> and <a class="reference internal" href="FittingMinimizers.html#fittingminimizers"><span class="std std-ref">the
+summarized results</span></a>. Note that this comparison is
+approximate and was performed on a particular platform (Ubuntu) and
+machine.</p>
+<p>Alternatively, see the <a class="reference internal" href="FittingMinimizersWeightedComparisonDetailed.html#minimizers-weighted-comparison-in-terms-of-run-time"><span class="std std-ref">summary and detailed results when using
+weighted least squares as cost function</span></a>.</p>
+<section id="run-time-for-individual-nist-problems-lower-difficulty">
+<h3>Run time for individual NIST problems, “lower” difficulty<a class="headerlink" href="#run-time-for-individual-nist-problems-lower-difficulty" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default" id="minimizers-unweighted-comparison-in-terms-of-runtime-nist-lower">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>BFGS</p></th>
+<th class="head"><p>Conjugate gradient (Fletcher-Reeves imp.)</p></th>
+<th class="head"><p>Conjugate gradient (Polak-Ribiere imp.)</p></th>
+<th class="head"><p>Damping</p></th>
+<th class="head"><p>Levenberg-Marquardt</p></th>
+<th class="head"><p>Levenberg-MarquardtMD</p></th>
+<th class="head"><p>Simplex</p></th>
+<th class="head"><p>SteepestDescent</p></th>
+<th class="head"><p>Trust Region</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1a.shtml">Misra1a 1</a></p></td>
+<td><p><span class="ranking-low-5">3.309</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.123</span></p></td>
+<td><p><span class="ranking-top-1">1.037</span></p></td>
+<td><p><span class="ranking-top-2">1.157</span></p></td>
+<td><p><span class="ranking-top-1">1.06</span></p></td>
+<td><p><span class="ranking-med-3">1.552</span></p></td>
+<td><p><span class="ranking-med-3">1.605</span></p></td>
+<td><p><span class="ranking-top-2">1.254</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1a.shtml">Misra1a 2</a></p></td>
+<td><p><span class="ranking-top-1">1.037</span></p></td>
+<td><p><span class="ranking-top-2">1.116</span></p></td>
+<td><p><span class="ranking-top-2">1.187</span></p></td>
+<td><p><span class="ranking-top-1">1.01</span></p></td>
+<td><p><span class="ranking-top-1">1.079</span></p></td>
+<td><p><span class="ranking-top-1">1.011</span></p></td>
+<td><p><span class="ranking-top-2">1.182</span></p></td>
+<td><p><span class="ranking-med-3">1.692</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/chwirut2.shtml">Chwirut2 1</a></p></td>
+<td><p><span class="ranking-low-4">2.904</span></p></td>
+<td><p><span class="ranking-low-5">12.18</span></p></td>
+<td><p><span class="ranking-low-5">12.32</span></p></td>
+<td><p><span class="ranking-top-1">1.004</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.017</span></p></td>
+<td><p><span class="ranking-top-2">1.226</span></p></td>
+<td><p><span class="ranking-low-5">6.411</span></p></td>
+<td><p><span class="ranking-low-5">10.04</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/chwirut2.shtml">Chwirut2 2</a></p></td>
+<td><p><span class="ranking-top-2">1.144</span></p></td>
+<td><p><span class="ranking-low-5">14.81</span></p></td>
+<td><p><span class="ranking-low-5">14.24</span></p></td>
+<td><p><span class="ranking-top-1">1.001</span></p></td>
+<td><p><span class="ranking-top-1">1.077</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.132</span></p></td>
+<td><p><span class="ranking-low-5">6.965</span></p></td>
+<td><p><span class="ranking-low-5">10.61</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/chwirut1.shtml">Chwirut1 1</a></p></td>
+<td><p><span class="ranking-low-4">2.805</span></p></td>
+<td><p><span class="ranking-low-5">35.57</span></p></td>
+<td><p><span class="ranking-low-5">9.038</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.042</span></p></td>
+<td><p><span class="ranking-top-2">1.169</span></p></td>
+<td><p><span class="ranking-top-2">1.185</span></p></td>
+<td><p><span class="ranking-low-5">15.05</span></p></td>
+<td><p><span class="ranking-low-5">20.69</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/chwirut1.shtml">Chwirut1 2</a></p></td>
+<td><p><span class="ranking-med-3">1.511</span></p></td>
+<td><p><span class="ranking-low-5">6.314</span></p></td>
+<td><p><span class="ranking-low-5">17.72</span></p></td>
+<td><p><span class="ranking-top-1">1.059</span></p></td>
+<td><p><span class="ranking-top-2">1.206</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.413</span></p></td>
+<td><p><span class="ranking-low-5">17.15</span></p></td>
+<td><p><span class="ranking-low-5">25.93</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/lanczos3.shtml">Lanczos3 1</a></p></td>
+<td><p><span class="ranking-low-4">1.997</span></p></td>
+<td><p><span class="ranking-low-4">2.014</span></p></td>
+<td><p><span class="ranking-low-4">2.13</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.56</span></p></td>
+<td><p><span class="ranking-low-4">2.577</span></p></td>
+<td><p><span class="ranking-low-4">2.396</span></p></td>
+<td><p><span class="ranking-low-5">5.87</span></p></td>
+<td><p><span class="ranking-med-3">1.522</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/lanczos3.shtml">Lanczos3 2</a></p></td>
+<td><p><span class="ranking-med-3">1.358</span></p></td>
+<td><p><span class="ranking-low-5">3.221</span></p></td>
+<td><p><span class="ranking-low-4">2.311</span></p></td>
+<td><p><span class="ranking-top-1">1.013</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.04</span></p></td>
+<td><p><span class="ranking-med-3">1.593</span></p></td>
+<td><p><span class="ranking-low-5">9.186</span></p></td>
+<td><p><span class="ranking-top-2">1.126</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/gauss1.shtml">Gauss1 1</a></p></td>
+<td><p><span class="ranking-low-4">1.854</span></p></td>
+<td><p><span class="ranking-low-5">6.151</span></p></td>
+<td><p><span class="ranking-low-5">33.63</span></p></td>
+<td><p><span class="ranking-top-2">1.106</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.025</span></p></td>
+<td><p><span class="ranking-low-5">5.618</span></p></td>
+<td><p><span class="ranking-low-5">41.71</span></p></td>
+<td><p><span class="ranking-low-4">2.911</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/gauss1.shtml">Gauss1 2</a></p></td>
+<td><p><span class="ranking-low-4">2.692</span></p></td>
+<td><p><span class="ranking-top-1">1.021</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.275</span></p></td>
+<td><p><span class="ranking-med-3">1.471</span></p></td>
+<td><p><span class="ranking-top-2">1.302</span></p></td>
+<td><p><span class="ranking-low-5">7.81</span></p></td>
+<td><p><span class="ranking-low-5">58.05</span></p></td>
+<td><p><span class="ranking-low-4">1.899</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/gauss2.shtml">Gauss2 1</a></p></td>
+<td><p><span class="ranking-low-4">2.597</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.347</span></p></td>
+<td><p><span class="ranking-med-3">1.336</span></p></td>
+<td><p><span class="ranking-med-3">1.381</span></p></td>
+<td><p><span class="ranking-med-3">1.415</span></p></td>
+<td><p><span class="ranking-low-5">9.748</span></p></td>
+<td><p><span class="ranking-low-5">60.03</span></p></td>
+<td><p><span class="ranking-low-5">72.46</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/gauss2.shtml">Gauss2 2</a></p></td>
+<td><p><span class="ranking-low-4">2.251</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.263</span></p></td>
+<td><p><span class="ranking-top-2">1.296</span></p></td>
+<td><p><span class="ranking-med-3">1.399</span></p></td>
+<td><p><span class="ranking-med-3">1.366</span></p></td>
+<td><p><span class="ranking-low-5">9.315</span></p></td>
+<td><p><span class="ranking-low-5">60.99</span></p></td>
+<td><p><span class="ranking-low-5">71.38</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/danwood.shtml">DanWood 1</a></p></td>
+<td><p><span class="ranking-low-5">5.911</span></p></td>
+<td><p><span class="ranking-med-3">1.425</span></p></td>
+<td><p><span class="ranking-med-3">1.422</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.088</span></p></td>
+<td><p><span class="ranking-top-1">1.064</span></p></td>
+<td><p><span class="ranking-top-2">1.145</span></p></td>
+<td><p><span class="ranking-low-5">3.716</span></p></td>
+<td><p><span class="ranking-top-1">1.053</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/danwood.shtml">DanWood 2</a></p></td>
+<td><p><span class="ranking-top-1">1.056</span></p></td>
+<td><p><span class="ranking-med-3">1.44</span></p></td>
+<td><p><span class="ranking-med-3">1.367</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.007</span></p></td>
+<td><p><span class="ranking-top-1">1.016</span></p></td>
+<td><p><span class="ranking-top-2">1.126</span></p></td>
+<td><p><span class="ranking-low-5">3.488</span></p></td>
+<td><p><span class="ranking-low-5">6.863</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1b.shtml">Misra1b 1</a></p></td>
+<td><p><span class="ranking-low-5">3.567</span></p></td>
+<td><p><span class="ranking-top-2">1.107</span></p></td>
+<td><p><span class="ranking-top-2">1.116</span></p></td>
+<td><p><span class="ranking-top-1">1.004</span></p></td>
+<td><p><span class="ranking-top-2">1.243</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.27</span></p></td>
+<td><p><span class="ranking-low-4">1.79</span></p></td>
+<td><p><span class="ranking-top-2">1.221</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1b.shtml">Misra1b 2</a></p></td>
+<td><p><span class="ranking-top-1">1.04</span></p></td>
+<td><p><span class="ranking-top-1">1.023</span></p></td>
+<td><p><span class="ranking-top-1">1.08</span></p></td>
+<td><p><span class="ranking-top-1">1.024</span></p></td>
+<td><p><span class="ranking-med-3">1.475</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.242</span></p></td>
+<td><p><span class="ranking-low-4">2.032</span></p></td>
+<td><p><span class="ranking-low-5">7.078</span></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="run-time-for-individual-nist-problems-average-difficulty">
+<h3>Run time for individual NIST problems, “average” difficulty<a class="headerlink" href="#run-time-for-individual-nist-problems-average-difficulty" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default" id="minimizers-unweighted-comparison-in-terms-of-runtime-nist-average">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>BFGS</p></th>
+<th class="head"><p>Conjugate gradient (Fletcher-Reeves imp.)</p></th>
+<th class="head"><p>Conjugate gradient (Polak-Ribiere imp.)</p></th>
+<th class="head"><p>Damping</p></th>
+<th class="head"><p>Levenberg-Marquardt</p></th>
+<th class="head"><p>Levenberg-MarquardtMD</p></th>
+<th class="head"><p>Simplex</p></th>
+<th class="head"><p>SteepestDescent</p></th>
+<th class="head"><p>Trust Region</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/kirby2.shtml">Kirby2 1</a></p></td>
+<td><p><span class="ranking-low-4">1.904</span></p></td>
+<td><p><span class="ranking-low-5">26.47</span></p></td>
+<td><p><span class="ranking-low-5">26.83</span></p></td>
+<td><p><span class="ranking-top-1">1.01</span></p></td>
+<td><p><span class="ranking-top-1">1.089</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.725</span></p></td>
+<td><p><span class="ranking-low-5">15.63</span></p></td>
+<td><p><span class="ranking-top-2">1.106</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/kirby2.shtml">Kirby2 2</a></p></td>
+<td><p><span class="ranking-med-3">1.646</span></p></td>
+<td><p><span class="ranking-low-5">27.81</span></p></td>
+<td><p><span class="ranking-low-5">28.82</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.116</span></p></td>
+<td><p><span class="ranking-top-1">1.003</span></p></td>
+<td><p><span class="ranking-low-4">2.125</span></p></td>
+<td><p><span class="ranking-low-5">16.92</span></p></td>
+<td><p><span class="ranking-med-3">1.59</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/hahn1.shtml">Hahn1 1</a></p></td>
+<td><p><span class="ranking-low-4">2.561</span></p></td>
+<td><p><span class="ranking-low-5">39.16</span></p></td>
+<td><p><span class="ranking-low-5">20.65</span></p></td>
+<td><p><span class="ranking-low-4">2.061</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.242</span></p></td>
+<td><p><span class="ranking-med-3">1.556</span></p></td>
+<td><p><span class="ranking-low-5">21.35</span></p></td>
+<td><p><span class="ranking-low-5">24.92</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/hahn1.shtml">Hahn1 2</a></p></td>
+<td><p><span class="ranking-med-3">1.481</span></p></td>
+<td><p><span class="ranking-low-5">45.04</span></p></td>
+<td><p><span class="ranking-low-5">18.88</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.15</span></p></td>
+<td><p><span class="ranking-top-2">1.197</span></p></td>
+<td><p><span class="ranking-low-5">4.776</span></p></td>
+<td><p><span class="ranking-low-5">24.01</span></p></td>
+<td><p><span class="ranking-low-5">27.06</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/mgh17.shtml">MGH17 1</a></p></td>
+<td><p><span class="ranking-low-4">2.589</span></p></td>
+<td><p><span class="ranking-top-1">1.054</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.195</span></p></td>
+<td><p><span class="ranking-low-5">7.081</span></p></td>
+<td><p><span class="ranking-low-5">3.388</span></p></td>
+<td><p><span class="ranking-top-2">1.175</span></p></td>
+<td><p><span class="ranking-low-5">6.162</span></p></td>
+<td><p><span class="ranking-low-4">1.996</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/mgh17.shtml">MGH17 2</a></p></td>
+<td><p><span class="ranking-top-2">1.179</span></p></td>
+<td><p><span class="ranking-low-5">9.803</span></p></td>
+<td><p><span class="ranking-low-5">10.13</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.175</span></p></td>
+<td><p><span class="ranking-top-2">1.301</span></p></td>
+<td><p><span class="ranking-top-2">1.276</span></p></td>
+<td><p><span class="ranking-low-5">8.077</span></p></td>
+<td><p><span class="ranking-top-2">1.2</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/lanczos1.shtml">Lanczos1 1</a></p></td>
+<td><p><span class="ranking-low-4">2.886</span></p></td>
+<td><p><span class="ranking-low-4">2.828</span></p></td>
+<td><p><span class="ranking-low-4">2.975</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">2.054</span></p></td>
+<td><p><span class="ranking-low-5">3.892</span></p></td>
+<td><p><span class="ranking-low-5">3.054</span></p></td>
+<td><p><span class="ranking-low-5">8.937</span></p></td>
+<td><p><span class="ranking-low-4">1.962</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/lanczos1.shtml">Lanczos1 2</a></p></td>
+<td><p><span class="ranking-top-2">1.275</span></p></td>
+<td><p><span class="ranking-low-5">3.053</span></p></td>
+<td><p><span class="ranking-low-4">2.171</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.045</span></p></td>
+<td><p><span class="ranking-top-1">1.004</span></p></td>
+<td><p><span class="ranking-med-3">1.472</span></p></td>
+<td><p><span class="ranking-low-5">8.765</span></p></td>
+<td><p><span class="ranking-top-1">1.008</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/lanczos2.shtml">Lanczos2 1</a></p></td>
+<td><p><span class="ranking-low-5">4.376</span></p></td>
+<td><p><span class="ranking-low-4">2.982</span></p></td>
+<td><p><span class="ranking-low-4">2.967</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">2.098</span></p></td>
+<td><p><span class="ranking-low-5">4.038</span></p></td>
+<td><p><span class="ranking-low-5">3.033</span></p></td>
+<td><p><span class="ranking-low-5">8.663</span></p></td>
+<td><p><span class="ranking-low-4">2.11</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/lanczos2.shtml">Lanczos2 2</a></p></td>
+<td><p><span class="ranking-top-2">1.289</span></p></td>
+<td><p><span class="ranking-low-5">3.112</span></p></td>
+<td><p><span class="ranking-low-4">2.005</span></p></td>
+<td><p><span class="ranking-top-1">1.035</span></p></td>
+<td><p><span class="ranking-top-1">1.006</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">1.923</span></p></td>
+<td><p><span class="ranking-low-5">8.702</span></p></td>
+<td><p><span class="ranking-top-1">1.057</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/gauss3.shtml">Gauss3 1</a></p></td>
+<td><p><span class="ranking-low-4">1.817</span></p></td>
+<td><p><span class="ranking-low-5">44.7</span></p></td>
+<td><p><span class="ranking-low-5">39.07</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.096</span></p></td>
+<td><p><span class="ranking-top-1">1.007</span></p></td>
+<td><p><span class="ranking-low-5">6.95</span></p></td>
+<td><p><span class="ranking-low-5">40.6</span></p></td>
+<td><p><span class="ranking-med-3">1.479</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/gauss3.shtml">Gauss3 2</a></p></td>
+<td><p><span class="ranking-med-3">1.622</span></p></td>
+<td><p><span class="ranking-low-5">38.18</span></p></td>
+<td><p><span class="ranking-low-5">10.42</span></p></td>
+<td><p><span class="ranking-low-5">38.51</span></p></td>
+<td><p><span class="ranking-top-2">1.199</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">6.354</span></p></td>
+<td><p><span class="ranking-low-5">38.78</span></p></td>
+<td><p><span class="ranking-low-5">45.31</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1c.shtml">Misra1c 1</a></p></td>
+<td><p><span class="ranking-low-5">3.003</span></p></td>
+<td><p><span class="ranking-top-1">1.054</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.023</span></p></td>
+<td><p><span class="ranking-top-1">1.024</span></p></td>
+<td><p><span class="ranking-top-1">1.029</span></p></td>
+<td><p><span class="ranking-med-3">1.358</span></p></td>
+<td><p><span class="ranking-low-4">2.201</span></p></td>
+<td><p><span class="ranking-top-2">1.15</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1c.shtml">Misra1c 2</a></p></td>
+<td><p><span class="ranking-top-1">1.066</span></p></td>
+<td><p><span class="ranking-med-3">1.531</span></p></td>
+<td><p><span class="ranking-top-1">1.053</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.065</span></p></td>
+<td><p><span class="ranking-top-1">1.095</span></p></td>
+<td><p><span class="ranking-top-2">1.244</span></p></td>
+<td><p><span class="ranking-low-4">2.17</span></p></td>
+<td><p><span class="ranking-top-1">1.03</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1d.shtml">Misra1d 1</a></p></td>
+<td><p><span class="ranking-low-5">3.291</span></p></td>
+<td><p><span class="ranking-top-2">1.162</span></p></td>
+<td><p><span class="ranking-top-2">1.215</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.114</span></p></td>
+<td><p><span class="ranking-top-2">1.154</span></p></td>
+<td><p><span class="ranking-top-2">1.308</span></p></td>
+<td><p><span class="ranking-low-4">2.02</span></p></td>
+<td><p><span class="ranking-low-5">7.472</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/misra1d.shtml">Misra1d 2</a></p></td>
+<td><p><span class="ranking-top-1">1.067</span></p></td>
+<td><p><span class="ranking-top-1">1.035</span></p></td>
+<td><p><span class="ranking-top-1">1.006</span></p></td>
+<td><p><span class="ranking-top-1">1.01</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.501</span></p></td>
+<td><p><span class="ranking-top-2">1.253</span></p></td>
+<td><p><span class="ranking-med-3">1.581</span></p></td>
+<td><p><span class="ranking-low-5">6.866</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/enso.shtml">ENSO 1</a></p></td>
+<td><p><span class="ranking-low-5">3.148</span></p></td>
+<td><p><span class="ranking-low-5">122.2</span></p></td>
+<td><p><span class="ranking-low-5">114.2</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">86.69</span></p></td>
+<td><p><span class="ranking-top-2">1.139</span></p></td>
+<td><p><span class="ranking-low-5">12.49</span></p></td>
+<td><p><span class="ranking-low-5">80.31</span></p></td>
+<td><p><span class="ranking-low-5">111.8</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/enso.shtml">ENSO 2</a></p></td>
+<td><p><span class="ranking-low-5">3.918</span></p></td>
+<td><p><span class="ranking-low-5">123</span></p></td>
+<td><p><span class="ranking-low-5">75.31</span></p></td>
+<td><p><span class="ranking-top-1">1.013</span></p></td>
+<td><p><span class="ranking-low-5">95.06</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">10.85</span></p></td>
+<td><p><span class="ranking-low-5">79.66</span></p></td>
+<td><p><span class="ranking-low-5">117.9</span></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="run-time-for-individual-nist-problems-higher-difficulty">
+<h3>Run time for individual NIST problems, “higher” difficulty<a class="headerlink" href="#run-time-for-individual-nist-problems-higher-difficulty" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default" id="minimizers-unweighted-comparison-in-terms-of-runtime-nist-higher">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>BFGS</p></th>
+<th class="head"><p>Conjugate gradient (Fletcher-Reeves imp.)</p></th>
+<th class="head"><p>Conjugate gradient (Polak-Ribiere imp.)</p></th>
+<th class="head"><p>Damping</p></th>
+<th class="head"><p>Levenberg-Marquardt</p></th>
+<th class="head"><p>Levenberg-MarquardtMD</p></th>
+<th class="head"><p>Simplex</p></th>
+<th class="head"><p>SteepestDescent</p></th>
+<th class="head"><p>Trust Region</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/mgh09.shtml">MGH09 1</a></p></td>
+<td><p><span class="ranking-low-5">3.377</span></p></td>
+<td><p><span class="ranking-top-1">1.047</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.462</span></p></td>
+<td><p><span class="ranking-top-2">1.306</span></p></td>
+<td><p><span class="ranking-low-4">1.93</span></p></td>
+<td><p><span class="ranking-top-2">1.15</span></p></td>
+<td><p><span class="ranking-med-3">1.363</span></p></td>
+<td><p><span class="ranking-med-3">1.553</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/mgh09.shtml">MGH09 2</a></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.083</span></p></td>
+<td><p><span class="ranking-top-1">1.019</span></p></td>
+<td><p><span class="ranking-med-3">1.553</span></p></td>
+<td><p><span class="ranking-top-1">1.035</span></p></td>
+<td><p><span class="ranking-top-2">1.228</span></p></td>
+<td><p><span class="ranking-low-4">1.885</span></p></td>
+<td><p><span class="ranking-low-4">2.875</span></p></td>
+<td><p><span class="ranking-top-2">1.239</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/thurber.shtml">Thurber 1</a></p></td>
+<td><p><span class="ranking-low-4">2.309</span></p></td>
+<td><p><span class="ranking-low-5">4.403</span></p></td>
+<td><p><span class="ranking-low-5">16.13</span></p></td>
+<td><p><span class="ranking-top-2">1.172</span></p></td>
+<td><p><span class="ranking-top-1">1.004</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.045</span></p></td>
+<td><p><span class="ranking-low-5">7.911</span></p></td>
+<td><p><span class="ranking-low-4">1.906</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/thurber.shtml">Thurber 2</a></p></td>
+<td><p><span class="ranking-top-1">1.048</span></p></td>
+<td><p><span class="ranking-low-5">10.52</span></p></td>
+<td><p><span class="ranking-low-5">17.23</span></p></td>
+<td><p><span class="ranking-top-2">1.324</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.058</span></p></td>
+<td><p><span class="ranking-low-5">3.317</span></p></td>
+<td><p><span class="ranking-low-5">9.513</span></p></td>
+<td><p><span class="ranking-low-4">1.764</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/boxbod.shtml">BoxBOD 1</a></p></td>
+<td><p><span class="ranking-low-4">2.701</span></p></td>
+<td><p><span class="ranking-top-2">1.186</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.226</span></p></td>
+<td><p><span class="ranking-top-1">1.046</span></p></td>
+<td><p><span class="ranking-top-2">1.199</span></p></td>
+<td><p><span class="ranking-top-1">1.066</span></p></td>
+<td><p><span class="ranking-low-4">2.931</span></p></td>
+<td><p><span class="ranking-med-3">1.4</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/boxbod.shtml">BoxBOD 2</a></p></td>
+<td><p><span class="ranking-top-2">1.227</span></p></td>
+<td><p><span class="ranking-top-2">1.158</span></p></td>
+<td><p><span class="ranking-top-2">1.143</span></p></td>
+<td><p><span class="ranking-top-1">1.095</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.1</span></p></td>
+<td><p><span class="ranking-low-4">2.75</span></p></td>
+<td><p><span class="ranking-low-5">3.453</span></p></td>
+<td><p><span class="ranking-low-5">5.641</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/rat42.shtml">Rat42 1</a></p></td>
+<td><p><span class="ranking-low-5">3.106</span></p></td>
+<td><p><span class="ranking-top-2">1.28</span></p></td>
+<td><p><span class="ranking-top-2">1.269</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.113</span></p></td>
+<td><p><span class="ranking-top-2">1.119</span></p></td>
+<td><p><span class="ranking-top-2">1.173</span></p></td>
+<td><p><span class="ranking-low-5">3.64</span></p></td>
+<td><p><span class="ranking-low-5">5.789</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/rat42.shtml">Rat42 2</a></p></td>
+<td><p><span class="ranking-top-1">1.009</span></p></td>
+<td><p><span class="ranking-low-5">5.551</span></p></td>
+<td><p><span class="ranking-med-3">1.721</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.104</span></p></td>
+<td><p><span class="ranking-top-1">1.006</span></p></td>
+<td><p><span class="ranking-top-2">1.101</span></p></td>
+<td><p><span class="ranking-low-5">3.639</span></p></td>
+<td><p><span class="ranking-low-5">6.701</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/mgh10.shtml">MGH10 1</a></p></td>
+<td><p><span class="ranking-low-4">2.822</span></p></td>
+<td><p><span class="ranking-low-4">2.502</span></p></td>
+<td><p><span class="ranking-low-4">2.186</span></p></td>
+<td><p><span class="ranking-top-1">1.083</span></p></td>
+<td><p><span class="ranking-low-5">4.295</span></p></td>
+<td><p><span class="ranking-low-5">3.219</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">2.871</span></p></td>
+<td><p><span class="ranking-low-5">5.13</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/mgh10.shtml">MGH10 2</a></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.364</span></p></td>
+<td><p><span class="ranking-med-3">1.736</span></p></td>
+<td><p><span class="ranking-med-3">1.567</span></p></td>
+<td><p><span class="ranking-low-5">3.9</span></p></td>
+<td><p><span class="ranking-low-5">3.662</span></p></td>
+<td><p><span class="ranking-top-1">1.03</span></p></td>
+<td><p><span class="ranking-low-5">4.135</span></p></td>
+<td><p><span class="ranking-low-4">1.835</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/eckerle4.shtml">Eckerle4 1</a></p></td>
+<td><p><span class="ranking-low-4">2.676</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.021</span></p></td>
+<td><p><span class="ranking-top-1">1.083</span></p></td>
+<td><p><span class="ranking-top-2">1.114</span></p></td>
+<td><p><span class="ranking-low-5">3.506</span></p></td>
+<td><p><span class="ranking-top-1">1.007</span></p></td>
+<td><p><span class="ranking-top-2">1.157</span></p></td>
+<td><p><span class="ranking-med-3">1.431</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/eckerle4.shtml">Eckerle4 2</a></p></td>
+<td><p><span class="ranking-top-1">1.087</span></p></td>
+<td><p><span class="ranking-med-3">1.571</span></p></td>
+<td><p><span class="ranking-med-3">1.54</span></p></td>
+<td><p><span class="ranking-top-2">1.15</span></p></td>
+<td><p><span class="ranking-top-2">1.226</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.327</span></p></td>
+<td><p><span class="ranking-low-4">2.771</span></p></td>
+<td><p><span class="ranking-top-2">1.178</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/rat43.shtml">Rat43 1</a></p></td>
+<td><p><span class="ranking-low-4">2.515</span></p></td>
+<td><p><span class="ranking-low-5">11.4</span></p></td>
+<td><p><span class="ranking-low-5">3.306</span></p></td>
+<td><p><span class="ranking-med-3">1.477</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.127</span></p></td>
+<td><p><span class="ranking-top-2">1.245</span></p></td>
+<td><p><span class="ranking-low-5">5.629</span></p></td>
+<td><p><span class="ranking-top-2">1.269</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/rat43.shtml">Rat43 2</a></p></td>
+<td><p><span class="ranking-top-2">1.292</span></p></td>
+<td><p><span class="ranking-med-3">1.691</span></p></td>
+<td><p><span class="ranking-low-5">3.626</span></p></td>
+<td><p><span class="ranking-med-3">1.392</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.007</span></p></td>
+<td><p><span class="ranking-top-1">1.013</span></p></td>
+<td><p><span class="ranking-low-5">5.831</span></p></td>
+<td><p><span class="ranking-low-5">8.317</span></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/bennett5.shtml">Bennett5 1</a></p></td>
+<td><p><span class="ranking-low-4">2.454</span></p></td>
+<td><p><span class="ranking-low-5">29.53</span></p></td>
+<td><p><span class="ranking-low-5">3.52</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.004</span></p></td>
+<td><p><span class="ranking-low-5">10.75</span></p></td>
+<td><p><span class="ranking-top-1">1.08</span></p></td>
+<td><p><span class="ranking-low-5">10.47</span></p></td>
+<td><p><span class="ranking-top-2">1.227</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="http://www.itl.nist.gov/div898/strd/nls/data/bennett5.shtml">Bennett5 2</a></p></td>
+<td><p><span class="ranking-top-1">1.057</span></p></td>
+<td><p><span class="ranking-low-5">26.43</span></p></td>
+<td><p><span class="ranking-low-5">3.493</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">11.13</span></p></td>
+<td><p><span class="ranking-low-5">9.95</span></p></td>
+<td><p><span class="ranking-top-2">1.284</span></p></td>
+<td><p><span class="ranking-low-5">9.243</span></p></td>
+<td><p><span class="ranking-med-3">1.652</span></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="run-time-for-individual-cutest-problems">
+<h3>Run time for individual “CUTEst” problems<a class="headerlink" href="#run-time-for-individual-cutest-problems" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default" id="minimizers-unweighted-comparison-in-terms-of-runtime-cutest">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>BFGS</p></th>
+<th class="head"><p>Conjugate gradient (Fletcher-Reeves imp.)</p></th>
+<th class="head"><p>Conjugate gradient (Polak-Ribiere imp.)</p></th>
+<th class="head"><p>Damping</p></th>
+<th class="head"><p>Levenberg-Marquardt</p></th>
+<th class="head"><p>Levenberg-MarquardtMD</p></th>
+<th class="head"><p>Simplex</p></th>
+<th class="head"><p>SteepestDescent</p></th>
+<th class="head"><p>Trust Region</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PALMER6C</p></td>
+<td><p><span class="ranking-low-5">5.659</span></p></td>
+<td><p><span class="ranking-low-5">39.11</span></p></td>
+<td><p><span class="ranking-low-5">38.28</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">10.81</span></p></td>
+<td><p><span class="ranking-top-1">1.001</span></p></td>
+<td><p><span class="ranking-low-4">1.971</span></p></td>
+<td><p><span class="ranking-low-5">17.68</span></p></td>
+<td><p><span class="ranking-low-4">2.897</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>PALMER7C</p></td>
+<td><p><span class="ranking-low-5">3.822</span></p></td>
+<td><p><span class="ranking-low-5">22.58</span></p></td>
+<td><p><span class="ranking-low-5">20.15</span></p></td>
+<td><p><span class="ranking-top-2">1.192</span></p></td>
+<td><p><span class="ranking-low-4">2.506</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">1.899</span></p></td>
+<td><p><span class="ranking-low-5">20.01</span></p></td>
+<td><p><span class="ranking-low-5">30.98</span></p></td>
+</tr>
+<tr class="row-even"><td><p>PALMER8C</p></td>
+<td><p><span class="ranking-low-5">3.192</span></p></td>
+<td><p><span class="ranking-low-5">32.92</span></p></td>
+<td><p><span class="ranking-low-5">32.48</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">2.433</span></p></td>
+<td><p><span class="ranking-top-1">1.023</span></p></td>
+<td><p><span class="ranking-low-4">2.76</span></p></td>
+<td><p><span class="ranking-low-5">17.17</span></p></td>
+<td><p><span class="ranking-low-5">28.1</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>YFITU</p></td>
+<td><p><span class="ranking-low-4">2.88</span></p></td>
+<td><p><span class="ranking-low-5">8.55</span></p></td>
+<td><p><span class="ranking-low-5">7.987</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.032</span></p></td>
+<td><p><span class="ranking-top-2">1.22</span></p></td>
+<td><p><span class="ranking-low-4">1.979</span></p></td>
+<td><p><span class="ranking-low-5">4.444</span></p></td>
+<td><p><span class="ranking-top-1">1.08</span></p></td>
+</tr>
+<tr class="row-even"><td><p>VESUVIOLS</p></td>
+<td><p><span class="ranking-med-3">1.396</span></p></td>
+<td><p><span class="ranking-low-5">8.362</span></p></td>
+<td><p><span class="ranking-low-5">5.688</span></p></td>
+<td><p><span class="ranking-low-5">38.52</span></p></td>
+<td><p><span class="ranking-med-3">1.602</span></p></td>
+<td><p><span class="ranking-top-1">1.046</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">37.74</span></p></td>
+<td><p><span class="ranking-low-5">45.01</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>DMN15102LS</p></td>
+<td><p><span class="ranking-low-5">4.42</span></p></td>
+<td><p><span class="ranking-low-5">19.22</span></p></td>
+<td><p><span class="ranking-low-5">15.29</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">7.917</span></p></td>
+<td><p><span class="ranking-low-5">5.026</span></p></td>
+<td><p><span class="ranking-low-5">3.786</span></p></td>
+<td><p><span class="ranking-low-5">22.67</span></p></td>
+<td><p><span class="ranking-low-5">53.85</span></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="run-time-for-individual-neutron-data-problems">
+<h3>Run time for individual Neutron Data problems<a class="headerlink" href="#run-time-for-individual-neutron-data-problems" title="Permalink to this heading">¶</a></h3>
+<table class="docutils align-default" id="minimizers-unweighted-comparison-in-terms-of-runtime-neutron-data">
+<thead>
+<tr class="row-odd"><th class="head"></th>
+<th class="head"><p>BFGS</p></th>
+<th class="head"><p>Conjugate gradient (Fletcher-Reeves imp.)</p></th>
+<th class="head"><p>Conjugate gradient (Polak-Ribiere imp.)</p></th>
+<th class="head"><p>Damping</p></th>
+<th class="head"><p>Levenberg-Marquardt</p></th>
+<th class="head"><p>Levenberg-MarquardtMD</p></th>
+<th class="head"><p>Simplex</p></th>
+<th class="head"><p>SteepestDescent</p></th>
+<th class="head"><p>Trust Region</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ENGINX 193749 calibration, spectrum 651, peak 19</p></td>
+<td><p><span class="ranking-med-3">1.407</span></p></td>
+<td><p><span class="ranking-low-5">3.497</span></p></td>
+<td><p><span class="ranking-low-5">4.965</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">1.916</span></p></td>
+<td><p><span class="ranking-med-3">1.651</span></p></td>
+<td><p><span class="ranking-low-5">3.105</span></p></td>
+<td><p><span class="ranking-low-5">18.34</span></p></td>
+<td><p><span class="ranking-low-5">22.31</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>ENGINX 193749 calibration, spectrum 651, peak 20</p></td>
+<td><p><span class="ranking-top-2">1.26</span></p></td>
+<td><p><span class="ranking-low-5">5.343</span></p></td>
+<td><p><span class="ranking-low-5">5.152</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">1.958</span></p></td>
+<td><p><span class="ranking-top-2">1.267</span></p></td>
+<td><p><span class="ranking-med-3">1.457</span></p></td>
+<td><p><span class="ranking-low-5">15.92</span></p></td>
+<td><p><span class="ranking-low-5">21.66</span></p></td>
+</tr>
+<tr class="row-even"><td><p>ENGINX 193749 calibration, spectrum 651, peak 23</p></td>
+<td><p><span class="ranking-top-1">1.093</span></p></td>
+<td><p><span class="ranking-low-4">2.561</span></p></td>
+<td><p><span class="ranking-low-5">10.11</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-2">1.254</span></p></td>
+<td><p><span class="ranking-med-3">1.469</span></p></td>
+<td><p><span class="ranking-low-5">3.082</span></p></td>
+<td><p><span class="ranking-low-5">16.36</span></p></td>
+<td><p><span class="ranking-low-5">21.79</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>ENGINX 193749 calibration, spectrum 651, peak 5</p></td>
+<td><p><span class="ranking-low-4">2.439</span></p></td>
+<td><p><span class="ranking-low-5">16.67</span></p></td>
+<td><p><span class="ranking-low-5">7.301</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">2.653</span></p></td>
+<td><p><span class="ranking-low-4">2.675</span></p></td>
+<td><p><span class="ranking-low-5">3.366</span></p></td>
+<td><p><span class="ranking-low-5">25.02</span></p></td>
+<td><p><span class="ranking-low-5">49.29</span></p></td>
+</tr>
+<tr class="row-even"><td><p>ENGINX 193749 calibration, spectrum 651, peak 6</p></td>
+<td><p><span class="ranking-top-2">1.228</span></p></td>
+<td><p><span class="ranking-low-5">26.73</span></p></td>
+<td><p><span class="ranking-low-5">22.33</span></p></td>
+<td><p><span class="ranking-top-1">1.018</span></p></td>
+<td><p><span class="ranking-low-5">7.748</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.635</span></p></td>
+<td><p><span class="ranking-low-5">15.47</span></p></td>
+<td><p><span class="ranking-med-3">1.644</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>ENGINX 236516 vanadium, bank 1, 10 brk</p></td>
+<td><p><span class="ranking-low-5">14.89</span></p></td>
+<td><p><span class="ranking-low-5">21.38</span></p></td>
+<td><p><span class="ranking-low-5">21.23</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">7.994</span></p></td>
+<td><p><span class="ranking-top-1">1.017</span></p></td>
+<td><p><span class="ranking-low-5">14.5</span></p></td>
+<td><p><span class="ranking-low-5">180.5</span></p></td>
+<td><p><span class="ranking-low-5">4.503</span></p></td>
+</tr>
+<tr class="row-even"><td><p>ENGINX 236516 vanadium, bank 1, 30 brk</p></td>
+<td><p><span class="ranking-low-5">21.13</span></p></td>
+<td><p><span class="ranking-low-5">53.58</span></p></td>
+<td><p><span class="ranking-low-5">50.38</span></p></td>
+<td><p><span class="ranking-top-1">1.039</span></p></td>
+<td><p><span class="ranking-low-5">9.629</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">7.574</span></p></td>
+<td><p><span class="ranking-low-5">180.1</span></p></td>
+<td><p><span class="ranking-low-5">4.352</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>EVS14188-90_processed Gaussian peaks 1</p></td>
+<td><p><span class="ranking-low-5">31.98</span></p></td>
+<td><p><span class="ranking-low-5">40.88</span></p></td>
+<td><p><span class="ranking-low-5">38.89</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">1.83</span></p></td>
+<td><p><span class="ranking-low-5">7.479</span></p></td>
+<td><p><span class="ranking-top-2">1.271</span></p></td>
+<td><p><span class="ranking-low-5">24.95</span></p></td>
+<td><p><span class="ranking-low-5">4.362</span></p></td>
+</tr>
+<tr class="row-even"><td><p>EVS14188-90_processed Gaussian peaks 1</p></td>
+<td><p><span class="ranking-low-5">18.35</span></p></td>
+<td><p><span class="ranking-low-5">33.2</span></p></td>
+<td><p><span class="ranking-low-5">33.08</span></p></td>
+<td><p><span class="ranking-med-3">1.613</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-4">2.204</span></p></td>
+<td><p><span class="ranking-top-1">1.04</span></p></td>
+<td><p><span class="ranking-low-5">20.61</span></p></td>
+<td><p><span class="ranking-low-4">2.048</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>GEM 13 IC peaks</p></td>
+<td><p><span class="ranking-top-2">1.189</span></p></td>
+<td><p><span class="ranking-low-5">21.56</span></p></td>
+<td><p><span class="ranking-low-5">101.7</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-low-5">9.353</span></p></td>
+<td><p><span class="ranking-low-5">7.766</span></p></td>
+<td><p><span class="ranking-low-5">15.62</span></p></td>
+<td><p><span class="ranking-low-5">26.93</span></p></td>
+<td><p><span class="ranking-low-5">100.2</span></p></td>
+</tr>
+<tr class="row-even"><td><p>WISH17701 tube 3 calibration, peak 1</p></td>
+<td><p><span class="ranking-low-5">8.515</span></p></td>
+<td><p><span class="ranking-low-5">5.339</span></p></td>
+<td><p><span class="ranking-low-5">5.301</span></p></td>
+<td><p><span class="ranking-top-2">1.107</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.055</span></p></td>
+<td><p><span class="ranking-med-3">1.648</span></p></td>
+<td><p><span class="ranking-low-5">3.757</span></p></td>
+<td><p><span class="ranking-top-2">1.127</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>WISH17701 tube 3 calibration, peak 2</p></td>
+<td><p><span class="ranking-low-5">10.4</span></p></td>
+<td><p><span class="ranking-low-5">5.375</span></p></td>
+<td><p><span class="ranking-low-5">5.607</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.017</span></p></td>
+<td><p><span class="ranking-top-2">1.224</span></p></td>
+<td><p><span class="ranking-med-3">1.576</span></p></td>
+<td><p><span class="ranking-low-5">4.426</span></p></td>
+<td><p><span class="ranking-top-2">1.268</span></p></td>
+</tr>
+<tr class="row-even"><td><p>WISH17701 tube 3 calibration, peak 3</p></td>
+<td><p><span class="ranking-low-5">7.95</span></p></td>
+<td><p><span class="ranking-low-5">5.367</span></p></td>
+<td><p><span class="ranking-low-5">5.636</span></p></td>
+<td><p><span class="ranking-top-2">1.189</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.007</span></p></td>
+<td><p><span class="ranking-med-3">1.502</span></p></td>
+<td><p><span class="ranking-low-5">3.782</span></p></td>
+<td><p><span class="ranking-top-1">1.052</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>WISH17701 tube 3 calibration, peak 4</p></td>
+<td><p><span class="ranking-low-5">3.437</span></p></td>
+<td><p><span class="ranking-low-5">6.265</span></p></td>
+<td><p><span class="ranking-low-5">6.307</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.094</span></p></td>
+<td><p><span class="ranking-top-2">1.144</span></p></td>
+<td><p><span class="ranking-med-3">1.697</span></p></td>
+<td><p><span class="ranking-low-5">4.308</span></p></td>
+<td><p><span class="ranking-top-2">1.195</span></p></td>
+</tr>
+<tr class="row-even"><td><p>WISH17701 tube 3 calibration, peak 5</p></td>
+<td><p><span class="ranking-low-5">9.633</span></p></td>
+<td><p><span class="ranking-low-5">5.586</span></p></td>
+<td><p><span class="ranking-low-5">5.461</span></p></td>
+<td><p><span class="ranking-top-1">1.043</span></p></td>
+<td><p><span class="ranking-top-1">1.021</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.462</span></p></td>
+<td><p><span class="ranking-low-5">4.114</span></p></td>
+<td><p><span class="ranking-top-2">1.18</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>WISH17701 tube 3 calibration, peak 6</p></td>
+<td><p><span class="ranking-low-5">3.342</span></p></td>
+<td><p><span class="ranking-low-5">5.376</span></p></td>
+<td><p><span class="ranking-low-5">5.292</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.337</span></p></td>
+<td><p><span class="ranking-top-2">1.192</span></p></td>
+<td><p><span class="ranking-med-3">1.449</span></p></td>
+<td><p><span class="ranking-low-5">3.869</span></p></td>
+<td><p><span class="ranking-top-2">1.11</span></p></td>
+</tr>
+<tr class="row-even"><td><p>WISH17701 tube 3 calibration, peak 7</p></td>
+<td><p><span class="ranking-low-5">4.351</span></p></td>
+<td><p><span class="ranking-low-5">6.014</span></p></td>
+<td><p><span class="ranking-low-5">5.729</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.094</span></p></td>
+<td><p><span class="ranking-top-2">1.113</span></p></td>
+<td><p><span class="ranking-med-3">1.566</span></p></td>
+<td><p><span class="ranking-low-5">4.127</span></p></td>
+<td><p><span class="ranking-med-3">1.669</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>WISH17701 tube 3 calibration, peak 8</p></td>
+<td><p><span class="ranking-low-5">4.847</span></p></td>
+<td><p><span class="ranking-low-5">6.11</span></p></td>
+<td><p><span class="ranking-low-5">5.976</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-top-1">1.047</span></p></td>
+<td><p><span class="ranking-top-1">1.087</span></p></td>
+<td><p><span class="ranking-med-3">1.411</span></p></td>
+<td><p><span class="ranking-low-5">4.306</span></p></td>
+<td><p><span class="ranking-top-2">1.231</span></p></td>
+</tr>
+<tr class="row-even"><td><p>WISH17701 tube 3 calibration, peak 9</p></td>
+<td><p><span class="ranking-low-5">3.221</span></p></td>
+<td><p><span class="ranking-low-5">5.451</span></p></td>
+<td><p><span class="ranking-low-5">5.535</span></p></td>
+<td><p><span class="ranking-top-2">1.151</span></p></td>
+<td><p><span class="ranking-top-1">1.022</span></p></td>
+<td><p><span class="ranking-top-1">1</span></p></td>
+<td><p><span class="ranking-med-3">1.335</span></p></td>
+<td><p><span class="ranking-low-5">3.888</span></p></td>
+<td><p><span class="ranking-top-2">1.114</span></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="FittingMinimizers.html" title="Previous Chapter: Which minimizers to use with Mantid"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Which minimiz...</span>
+    </a>
+  </li>
+  <li>
+    <a href="FittingMinimizersWeightedComparisonDetailed.html" title="Next Chapter: Comparison of minimizers, with weighted least squares"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Comparison of... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

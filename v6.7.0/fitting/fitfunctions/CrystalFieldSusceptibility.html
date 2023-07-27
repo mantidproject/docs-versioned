@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>CrystalFieldSusceptibility</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="CubicSpline" href="CubicSpline.html" />
+    <link rel="prev" title="CrystalFieldSpectrum" href="CrystalFieldSpectrum.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.7</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Fit Functions</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">CrystalFieldSusceptibility</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="crystalfieldsusceptibility">
+<span id="func-crystalfieldsusceptibility"></span><h1>CrystalFieldSusceptibility<a class="headerlink" href="#crystalfieldsusceptibility" title="Permalink to this heading">¶</a></h1>
+<section id="description">
+<span id="index-0"></span><h2>Description<a class="headerlink" href="#description" title="Permalink to this heading">¶</a></h2>
+<p>This function calculates the crystal field contribution to the <em>molar</em> magnetic susceptibility using the Van Vleck formula.
+The function outputs the results by default in <em>cgs</em> units of cm<sup>3</sup>/mol == “emu/mol”.
+There are also options to output the result in SI (m<sup>3</sup>/mol) or “atomic” units (<span class="math notranslate nohighlight">\(\mu_B\)</span>/Tesla/ion).</p>
+</section>
+<section id="theory">
+<h2>Theory<a class="headerlink" href="#theory" title="Permalink to this heading">¶</a></h2>
+<p>The magnetic susceptibility can be calculated by treating the magnetic field (Zeeman interaction) as a perturbation on the crystal
+field energy. To second order, the susceptibility per mole of magnetic ion is given by:</p>
+<div class="math notranslate nohighlight">
+\[\chi(T) = \frac{N_A}{Z} \sum_n \left[ \frac{| \langle V_n | g_J \mu_B \mathbf{J} | V_n \rangle | ^2}{k_B T}
+- 2 \sum_{m \neq n} \frac{| \langle V_n | g_J \mu_B \mathbf{J} | V_m \rangle | ^2}{E_n - E_m} \right] \exp(-\beta E_n)\]</div>
+<p>where <span class="math notranslate nohighlight">\(N_A\)</span> is Avogadro’s constant, <span class="math notranslate nohighlight">\(k_B\)</span> is Boltzmann’s constant, <span class="math notranslate nohighlight">\(Z\)</span> is the partition sum, and
+<span class="math notranslate nohighlight">\(V_n\)</span> and <span class="math notranslate nohighlight">\(E_n\)</span> are the n-th wavefunction (eigenvector) and energy level (eigenvalue) of the unperturbed
+crystal field Hamiltonian. <span class="math notranslate nohighlight">\(g_J\)</span> is the Landé g-factor, <span class="math notranslate nohighlight">\(\mu_B\)</span> is the Bohr magneton and the moment operator
+is defined as <span class="math notranslate nohighlight">\(\mathbf{J} = \hat{J}_x B_x + \hat{J}_y B_y + \hat{J}_z B_z\)</span> where <span class="math notranslate nohighlight">\(\hat{J}_x\)</span>, <span class="math notranslate nohighlight">\(\hat{J}_y\)</span>,
+and <span class="math notranslate nohighlight">\(\hat{J}_z\)</span> are the angular momentum operators in Cartesian coordinates, with <span class="math notranslate nohighlight">\(z\)</span> defined to
+be along the quantisation axis of the crystal field (which is usually defined to be the highest symmetry rotation axis).
+<span class="math notranslate nohighlight">\(B_x\)</span>, <span class="math notranslate nohighlight">\(B_y\)</span>, and <span class="math notranslate nohighlight">\(B_z\)</span> are the components of the unit vector pointing in the direction of the applied
+magnetic field in this coordinate system.</p>
+<p>Finally, in order to account for the effect of any exchange interactions in the system which will shift the susceptiblity curve
+up or down (analogous to the Curie-Weiss temperature), and any residual (background) susceptibility in the sample (perhaps from
+an impurity), the actual magnetic susceptibility calculated by this function is:</p>
+<div class="math notranslate nohighlight">
+\[\chi^{\mathrm{eff}} = \frac{\chi(T)}{1 - \lambda \chi(T)} + \chi_0\]</div>
+<p>where <span class="math notranslate nohighlight">\(\lambda\)</span> parameterises an effective exchange interaction with <span class="math notranslate nohighlight">\(\chi\)</span> the bare (paramagnetic Crystal Field)
+susceptibility, and <span class="math notranslate nohighlight">\(\chi_0\)</span> the residual susceptibility. A negative <span class="math notranslate nohighlight">\(\lambda\)</span> indicates overall antiferromagnetic
+interactions, whilst a positive <span class="math notranslate nohighlight">\(\lambda\)</span> corresponds to overall ferromagnetic interactions.</p>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h2>
+<p>Here is an example of how to the crystal field parameters to a susceptibility dataset. All parameters disallowed by symmetry are fixed automatically.
+The “data” here is generated from the function itself, for a field along the [111] direction with respects to the crystal field parameters (not necessarily the [111] crystallographic direction).</p>
+<p>The <cite>x</cite>-axis is given in Kelvin, and the susceptibility (<cite>y</cite>-axis) is in cgs units of cm<sup>3</sup>/mol (==emu/mol).</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Build a reference data set</span>
+<span class="n">fun</span> <span class="o">=</span> <span class="s1">&#39;name=CrystalFieldSusceptibility,Ion=Ce,B20=0.37737,B22=0.039770,B40=-0.031787,B42=-0.11611,B44=-0.12544,&#39;</span>
+<span class="n">fun</span> <span class="o">+=</span> <span class="s1">&#39;Hdir=(1,1,1), Unit=cgs, inverse=1,&#39;</span>
+
+<span class="c1"># This creates a (empty) workspace to use with EvaluateFunction</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">0</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+
+<span class="c1"># The calculated data will be in &#39;data&#39;, WorkspaceIndex=1</span>
+<span class="n">EvaluateFunction</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="n">ws</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+
+ <span class="c1"># Change parameters slightly and fit to the reference data</span>
+<span class="n">fun</span> <span class="o">=</span> <span class="s1">&#39;name=CrystalFieldSusceptibility,Ion=Ce,Symmetry=C2v,B20=0.4,B22=0.04,B40=-0.03,B42=-0.1,B44=-0.1,&#39;</span>
+<span class="n">fun</span> <span class="o">+=</span> <span class="s1">&#39;Hdir=(1,1,1), Unit=cgs, inverse=1,&#39;</span>
+<span class="n">fun</span> <span class="o">+=</span> <span class="s1">&#39;ties=(B60=0,B62=0,B64=0,B66=0,BmolX=0,BmolY=0,BmolZ=0,BextX=0,BextY=0,BextZ=0)&#39;</span>
+
+<span class="c1"># (set MaxIterations=0 to see the starting point)</span>
+<span class="n">Fit</span><span class="p">(</span><span class="n">fun</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">WorkspaceIndex</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Output</span><span class="o">=</span><span class="s1">&#39;fit&#39;</span><span class="p">,</span><span class="n">MaxIterations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">CostFunction</span><span class="o">=</span><span class="s1">&#39;Unweighted least squares&#39;</span><span class="p">)</span>
+<span class="c1"># Using Unweighted least squares fit because the data has no errors.</span>
+
+<span class="c1"># Extract fitted parameters</span>
+<span class="n">parws</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;fit_Parameters&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">parws</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()):</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">parws</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;Value&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%7s</span><span class="s2"> = </span><span class="si">% 7.5g</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;Value&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output (the numbers you see on your machine may vary):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">B20</span> <span class="o">=</span>  <span class="mf">0.37737</span>
+    <span class="n">B22</span> <span class="o">=</span>  <span class="mf">0.039788</span>
+    <span class="n">B40</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.031787</span>
+    <span class="n">B42</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.11611</span>
+    <span class="n">B44</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.12544</span>
+<span class="n">Cost</span> <span class="n">function</span> <span class="n">value</span> <span class="o">=</span>  <span class="mf">1.0921e-14</span>
+</pre></div>
+</div>
+</section>
+<section id="attributes-non-fitting-parameters">
+<h2>Attributes (non-fitting parameters)<a class="headerlink" href="#attributes-non-fitting-parameters" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Ion</p></td>
+<td><p>String</p></td>
+<td><p>Mandatory</p></td>
+<td><p>An element name for a rare earth ion. Possible values are: Ce, Pr, Nd, Pm, Sm, Eu, Gd, Tb, Dy, Ho, Er, Tm, Yb.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Symmetry</p></td>
+<td><p>String</p></td>
+<td><p>C1</p></td>
+<td><p>A symbol for a symmetry group. Setting <cite>Symmetry</cite> automatically zeros and fixes all forbidden parameters. Possible values are: C1, Ci, C2, Cs, C2h, C2v, D2, D2h, C4, S4, C4h, D4, C4v, D2d, D4h, C3, S6, D3, C3v, D3d, C6, C3h, C6h, D6, C6v, D3h, D6h, T, Td, Th, O, Oh</p></td>
+</tr>
+<tr class="row-even"><td><p>powder</p></td>
+<td><p>Boolean</p></td>
+<td><p>false</p></td>
+<td><p>Whether to calculate the powder averaged magnetisation or not.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hdir</p></td>
+<td><p>Vector</p></td>
+<td><p>(0.,0.,1.)</p></td>
+<td><p>The direction of the applied field w.r.t. the crystal field parameters</p></td>
+</tr>
+<tr class="row-even"><td><p>Unit</p></td>
+<td><p>String</p></td>
+<td><p>‘bohr’</p></td>
+<td><p>The desired units of the output, either: ‘bohr’ (muB/T/ion), ‘SI’ (m^3/mol) or ‘cgs’ (cm^3/mol).</p></td>
+</tr>
+<tr class="row-odd"><td><p>inverse</p></td>
+<td><p>Boolean</p></td>
+<td><p>false</p></td>
+<td><p>Whether to output 1/chi(T) instead of chi(T).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="properties-fitting-parameters">
+<h2>Properties (fitting parameters)<a class="headerlink" href="#properties-fitting-parameters" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>BmolX</p></td>
+<td><p>0.0</p></td>
+<td><p>The x-component of the molecular field.</p></td>
+</tr>
+<tr class="row-odd"><td><p>BmolY</p></td>
+<td><p>0.0</p></td>
+<td><p>The y-component of the molecular field.</p></td>
+</tr>
+<tr class="row-even"><td><p>BmolZ</p></td>
+<td><p>0.0</p></td>
+<td><p>The z-component of the molecular field.</p></td>
+</tr>
+<tr class="row-odd"><td><p>BextX</p></td>
+<td><p>0.0</p></td>
+<td><p>The x-component of the external field.</p></td>
+</tr>
+<tr class="row-even"><td><p>BextY</p></td>
+<td><p>0.0</p></td>
+<td><p>The y-component of the external field.</p></td>
+</tr>
+<tr class="row-odd"><td><p>BextZ</p></td>
+<td><p>0.0</p></td>
+<td><p>The z-component of the external field.</p></td>
+</tr>
+<tr class="row-even"><td><p>B20</p></td>
+<td><p>0.0</p></td>
+<td><p>Real part of the B20 field parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>B21</p></td>
+<td><p>0.0</p></td>
+<td><p>Real part of the B21 field parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p>B22</p></td>
+<td><p>0.0</p></td>
+<td><p>Real part of the B22 field parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>B40</p></td>
+<td><p>0.0</p></td>
+<td><p>Real part of the B40 field parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p>B41</p></td>
+<td><p>0.0</p></td>
+<td><p>Real part of the B41 field parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>B42</p></td>
+<td><p>0.0</p></td>
+<td><p>Real part of the B42 field parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p>B43</p></td>
+<td><p>0.0</p></td>
+<td><p>Real part of the B43 field parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>B44</p></td>
+<td><p>0.0</p></td>
+<td><p>Real part of the B44 field parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p>B60</p></td>
+<td><p>0.0</p></td>
+<td><p>Real part of the B60 field parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>B61</p></td>
+<td><p>0.0</p></td>
+<td><p>Real part of the B61 field parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p>B62</p></td>
+<td><p>0.0</p></td>
+<td><p>Real part of the B62 field parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>B63</p></td>
+<td><p>0.0</p></td>
+<td><p>Real part of the B63 field parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p>B64</p></td>
+<td><p>0.0</p></td>
+<td><p>Real part of the B64 field parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>B65</p></td>
+<td><p>0.0</p></td>
+<td><p>Real part of the B65 field parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p>B66</p></td>
+<td><p>0.0</p></td>
+<td><p>Real part of the B66 field parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>IB21</p></td>
+<td><p>0.0</p></td>
+<td><p>Imaginary part of the B21 field parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p>IB22</p></td>
+<td><p>0.0</p></td>
+<td><p>Imaginary part of the B22 field parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>IB41</p></td>
+<td><p>0.0</p></td>
+<td><p>Imaginary part of the B41 field parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p>IB42</p></td>
+<td><p>0.0</p></td>
+<td><p>Imaginary part of the B42 field parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>IB43</p></td>
+<td><p>0.0</p></td>
+<td><p>Imaginary part of the B43 field parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p>IB44</p></td>
+<td><p>0.0</p></td>
+<td><p>Imaginary part of the B44 field parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>IB61</p></td>
+<td><p>0.0</p></td>
+<td><p>Imaginary part of the B61 field parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p>IB62</p></td>
+<td><p>0.0</p></td>
+<td><p>Imaginary part of the B62 field parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>IB63</p></td>
+<td><p>0.0</p></td>
+<td><p>Imaginary part of the B63 field parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p>IB64</p></td>
+<td><p>0.0</p></td>
+<td><p>Imaginary part of the B64 field parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>IB65</p></td>
+<td><p>0.0</p></td>
+<td><p>Imaginary part of the B65 field parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p>IB66</p></td>
+<td><p>0.0</p></td>
+<td><p>Imaginary part of the B66 field parameter.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Lambda</p></td>
+<td><p>0.0</p></td>
+<td><p>Effective exchange interaction</p></td>
+</tr>
+<tr class="row-even"><td><p>Chi0</p></td>
+<td><p>0.0</p></td>
+<td><p>Background or remnant susceptibility</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/FitFunctions.html">FitFunctions</a> | <a class="reference external" href="categories/General.html">General</a></p>
+</section>
+<section id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/291276d1b3f92d519f399310a3ef5f5d4a7c3d7f/Framework/CurveFitting/inc/MantidCurveFitting/Functions/CrystalFieldSusceptibility.h">CrystalFieldSusceptibility.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/291276d1b3f92d519f399310a3ef5f5d4a7c3d7f/Framework/CurveFitting/src/Functions/CrystalFieldSusceptibility.cpp">CrystalFieldSusceptibility.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="CrystalFieldSpectrum.html" title="Previous Chapter: CrystalFieldSpectrum"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; CrystalFieldSpectrum</span>
+    </a>
+  </li>
+  <li>
+    <a href="CubicSpline.html" title="Next Chapter: CubicSpline"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">CubicSpline &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
