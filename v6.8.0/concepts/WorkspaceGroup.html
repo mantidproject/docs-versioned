@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Workspace Group</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Calibration" href="calibration/index.html" />
+    <link rel="prev" title="Workspace2D" href="Workspace2D.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.8</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Concepts</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Workspace Group</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="workspace-group">
+<span id="workspacegroup"></span><h1>Workspace Group<a class="headerlink" href="#workspace-group" title="Permalink to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#working-with-group-workspaces-in-python" id="id1">Working with Group Workspaces in Python</a></p>
+<ul>
+<li><p><a class="reference internal" href="#creating-and-splitting-groups" id="id2">Creating and splitting groups</a></p></li>
+<li><p><a class="reference internal" href="#accessing-workspace-groups" id="id3">Accessing Workspace Groups</a></p>
+<ul>
+<li><p><a class="reference internal" href="#looping-over-all-of-the-members-of-a-group" id="id4">Looping over all of the members of a group</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#using-workspace-groups-in-algorithms" id="id5">Using Workspace Groups in Algorithms</a></p></li>
+<li><p><a class="reference internal" href="#final-words-of-warning" id="id6">Final words of warning:</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#other-information-on-workspaces" id="id7">Other Information on Workspaces</a></p></li>
+</ul>
+</nav>
+<p>A WorkspaceGroup is a group of workspaces. The WorkspaceGroup object does not hold any data itself, but instead holds a list of Workspace objects. They appear as an expandable list of workspaces in the <a class="reference internal" href="../tutorials/mantid_basic_course/getting_started/main_window.html#main-window"><span class="std std-ref">Workspaces Toolbox</span></a> in the main window (the list of workspaces is also called the ADS or <em>AnalysisDataService</em>). Thus, workspace groups add structure to the ADS and make it more readable and also allow algorithms to be executed over a list of workspaces contained within the group but passing the group to the algorithm.</p>
+<p>Most algorithms can be passed a WorkspaceGroup in place of a normal workspace input, and will simply execute the algorithm on each workspace contained within the group.</p>
+<section id="working-with-group-workspaces-in-python">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Working with Group Workspaces in Python</a><a class="headerlink" href="#working-with-group-workspaces-in-python" title="Permalink to this heading">¶</a></h2>
+<section id="creating-and-splitting-groups">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink">Creating and splitting groups</a><a class="headerlink" href="#creating-and-splitting-groups" title="Permalink to this heading">¶</a></h3>
+<p>Workspace groups can be created through the MantidWorkbench interface;</p>
+<ul class="simple">
+<li><p>Select a few workspaces from the Workspaces Toolbox in the main window and click the “Group” button above the list of workspaces. The group will be named “NewGroup”.</p></li>
+</ul>
+<p>Workspace groups can be created in a more flexible way in the Python script window using the Python API. Groups may be created via the <a class="reference internal" href="../algorithms/GroupWorkspaces-v1.html#algm-groupworkspaces"><span class="std std-ref">GroupWorkspaces</span></a> algorithm,  This will place a workspace group directly into the ADS, and requires at least one workspace to be added to the group.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">ws1</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">ws2</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">ws3</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+
+
+<span class="c1"># Create a group workpace</span>
+<span class="n">wsList</span> <span class="o">=</span> <span class="p">[</span><span class="n">ws1</span><span class="p">,</span><span class="n">ws2</span><span class="p">,</span><span class="n">ws3</span><span class="p">]</span>
+<span class="n">wsGroup</span> <span class="o">=</span> <span class="n">GroupWorkspaces</span><span class="p">(</span><span class="n">wsList</span><span class="p">)</span>
+<span class="c1"># or</span>
+<span class="n">wsGroup</span> <span class="o">=</span> <span class="n">GroupWorkspaces</span><span class="p">(</span><span class="s2">&quot;ws1,ws2,ws3&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">wsGroup</span><span class="o">.</span><span class="n">getNames</span><span class="p">())</span>
+
+<span class="c1"># Remove the group</span>
+<span class="c1"># The child workspaces will be preserved</span>
+<span class="n">UnGroupWorkspace</span><span class="p">(</span><span class="n">wsGroup</span><span class="p">)</span>
+<span class="c1"># Using wsGroup now will cause a runtime error</span>
+<span class="c1"># RuntimeError: Variable invalidated, data has been deleted.</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;ws1&#39;,&#39;ws2&#39;,&#39;ws3&#39;]
+</pre></div>
+</div>
+<p>To avoid interaction with the ADS, a <cite>WorkspaceGroup</cite> object can be instantiated using</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mantid.api</span> <span class="k">as</span> <span class="nn">api</span>
+
+<span class="n">ws_group</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">WorkspaceGroup</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This <strong>will not</strong> be automatically added to the ADS, to do so, use the following line</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AnalysisDataService</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">ws_group</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>the group should then appear in the ADS with the given name. Using direct instantiation; groups can be added to the ADS and then workspaces added to the group via their name and the <cite>add</cite> method;</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.api</span> <span class="kn">import</span> <span class="n">WorkspaceGroup</span>
+
+<span class="n">ws1</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">ws2</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">ws3</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+
+<span class="c1"># Create a group workspace and add to the ADS</span>
+<span class="n">ws_group</span> <span class="o">=</span> <span class="n">WorkspaceGroup</span><span class="p">()</span>
+<span class="n">mtd</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;group1&quot;</span><span class="p">,</span> <span class="n">ws_group</span><span class="p">)</span>
+
+<span class="n">ws_group</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;ws1&quot;</span><span class="p">)</span>
+<span class="n">ws_group</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;ws2&quot;</span><span class="p">)</span>
+<span class="n">ws_group</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;ws3&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ws_group</span><span class="o">.</span><span class="n">getNames</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;ws1&#39;,&#39;ws2&#39;,&#39;ws3&#39;]
+</pre></div>
+</div>
+<p>Alternatively, workspace group objects can be fed workspaces which are not in the ADS (in this case the <cite>addWorkspace</cite> method is used rather than <cite>add</cite> because <cite>add</cite> requires a name, and since the workspaces are not in the ADS they may not have a name)</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.api</span> <span class="kn">import</span> <span class="n">WorkspaceGroup</span>
+
+<span class="n">ws1</span> <span class="o">=</span> <span class="n">WorkspaceFactory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;Workspace2D&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ws2</span> <span class="o">=</span> <span class="n">WorkspaceFactory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;Workspace2D&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ws3</span> <span class="o">=</span> <span class="n">WorkspaceFactory</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s2">&quot;Workspace2D&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Create a group workspace</span>
+<span class="n">ws_group</span> <span class="o">=</span> <span class="n">WorkspaceGroup</span><span class="p">()</span>
+
+<span class="n">ws_group</span><span class="o">.</span><span class="n">addWorkspace</span><span class="p">(</span><span class="n">ws1</span><span class="p">)</span>
+<span class="n">ws_group</span><span class="o">.</span><span class="n">addWorkspace</span><span class="p">(</span><span class="n">ws2</span><span class="p">)</span>
+<span class="n">ws_group</span><span class="o">.</span><span class="n">addWorkspace</span><span class="p">(</span><span class="n">ws3</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ws_group</span><span class="o">.</span><span class="n">getNames</span><span class="p">())</span>
+
+<span class="n">mtd</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;group1&quot;</span><span class="p">,</span> <span class="n">ws_group</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ws_group</span><span class="o">.</span><span class="n">getNames</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;&#39;,&#39;&#39;,&#39;&#39;]
+[&#39;group1_1&#39;,&#39;group1_2&#39;,&#39;group1_3&#39;]
+</pre></div>
+</div>
+<p>when adding the group to the ADS, the workspaces will also be added, and given default names. It is not recommended to add workspace to groups in this way, as much of the functionality of groups depends on workspaces having names; for example the “in” keyword.</p>
+</section>
+<section id="accessing-workspace-groups">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">Accessing Workspace Groups</a><a class="headerlink" href="#accessing-workspace-groups" title="Permalink to this heading">¶</a></h3>
+<p>The methods for getting a variable to a WorkspaceGroup is the same as shown in the <a class="reference internal" href="WorkingWithWorspaces.html#workspace-accessing-workspaces"><span class="std std-ref">Workspace</span></a> help page.</p>
+<p>If you want to check if a variable points to something that is a Workspace Group you can use this:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.api</span> <span class="kn">import</span> <span class="n">WorkspaceGroup</span>
+
+<span class="n">ws1</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">ws2</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">wsGroup</span> <span class="o">=</span> <span class="n">GroupWorkspaces</span><span class="p">(</span><span class="s2">&quot;ws1,ws2&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wsGroup</span><span class="p">,</span> <span class="n">WorkspaceGroup</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">wsGroup</span><span class="o">.</span><span class="n">name</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; is an &quot;</span> <span class="o">+</span> <span class="n">wsGroup</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>wsGroup is an WorkspaceGroup
+</pre></div>
+</div>
+<section id="looping-over-all-of-the-members-of-a-group">
+<h4><a class="toc-backref" href="#id4" role="doc-backlink">Looping over all of the members of a group</a><a class="headerlink" href="#looping-over-all-of-the-members-of-a-group" title="Permalink to this heading">¶</a></h4>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">ws1</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">ws2</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">wsGroup</span> <span class="o">=</span> <span class="n">GroupWorkspaces</span><span class="p">(</span><span class="s2">&quot;ws1,ws2&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of members: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">wsGroup</span><span class="o">.</span><span class="n">getNumberOfEntries</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;List of names: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">wsGroup</span><span class="o">.</span><span class="n">getNames</span><span class="p">()))</span>
+
+<span class="c1"># Get the member workspaces in a loop</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">wsGroup</span><span class="o">.</span><span class="n">getNumberOfEntries</span><span class="p">()):</span>
+    <span class="n">wsLoop</span> <span class="o">=</span> <span class="n">wsGroup</span><span class="o">.</span><span class="n">getItem</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Member </span><span class="si">{0}</span><span class="s2"> </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">wsLoop</span><span class="o">.</span><span class="n">name</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Number of members: 2
+List of names: [&#39;ws1&#39;,&#39;ws2&#39;]
+Member 0 ws1
+Member 1 ws2
+</pre></div>
+</div>
+</section>
+</section>
+<section id="using-workspace-groups-in-algorithms">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Using Workspace Groups in Algorithms</a><a class="headerlink" href="#using-workspace-groups-in-algorithms" title="Permalink to this heading">¶</a></h3>
+<p>You can pass workspace groups into any algorithm and Mantid will run that algorithm for each member of the workspace group.</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">ws1</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">ws2</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">wsGroup</span> <span class="o">=</span> <span class="n">GroupWorkspaces</span><span class="p">(</span><span class="s2">&quot;ws1,ws2&quot;</span><span class="p">)</span>
+<span class="n">wsGroup2</span> <span class="o">=</span> <span class="n">GroupWorkspaces</span><span class="p">(</span><span class="s2">&quot;ws2,ws1&quot;</span><span class="p">)</span>
+
+<span class="c1">#  This will add the member workspaces in a pair like manner</span>
+<span class="n">wsGroup3</span> <span class="o">=</span> <span class="n">wsGroup</span> <span class="o">+</span> <span class="n">wsGroup2</span>
+
+<span class="c1"># Rebin all of wsGroup</span>
+<span class="n">wsRebinned</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">wsGroup</span><span class="p">,</span> <span class="n">Params</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="c1"># You can still of course refer to members of a group directly</span>
+<span class="n">ws1</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">ws1</span><span class="p">,</span> <span class="n">Params</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="final-words-of-warning">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Final words of warning:</a><a class="headerlink" href="#final-words-of-warning" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>It is best to add all workspaces to the ADS before configuring the grouping structure (as in the above code); otherwise you will only be able to name the top level group when you add the structure to the ADS. All the sub-groups and workspaces not already in the ADS will be given default names which you will then have to change manually, it is much easier to name them as you go (and putting them in the ADS is the only way to name them).</p></li>
+<li><p>When iterating over a WorkspaceGroup to delete its workspaces, then iterate over a list, such as:</p></li>
+</ul>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">ws1</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">ws2</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">wsGroup</span> <span class="o">=</span> <span class="n">GroupWorkspaces</span><span class="p">(</span><span class="s2">&quot;ws1,ws2&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">ws</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">wsGroup</span><span class="p">):</span>
+    <span class="n">DeleteWorkspace</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>otherwise indexing will be confused by each deletion.</p>
+<ul class="simple">
+<li><p>To Delete an entire group, just run:</p></li>
+</ul>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">ws1</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">ws2</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">wsGroup</span> <span class="o">=</span> <span class="n">GroupWorkspaces</span><span class="p">(</span><span class="s2">&quot;ws1,ws2&quot;</span><span class="p">)</span>
+
+<span class="n">DeleteWorkspace</span><span class="p">(</span><span class="n">wsGroup</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="other-information-on-workspaces">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Other Information on Workspaces</a><a class="headerlink" href="#other-information-on-workspaces" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference internal" href="Workspace.html#workspace"><span class="std std-ref">Workspace</span></a> - Overview of workspaces, which include the following classes:</dt><dd><ul>
+<li><p><a class="reference internal" href="MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a> - A base class that contains
+among others:</p>
+<ul>
+<li><p>WorkspaceSingleValue - Holds a single number (and X &amp; error value,
+if desired). Mainly used for workspace algebra, e.g. to divide all
+bins in a 2D workspace by a single value.</p></li>
+<li><p><a class="reference internal" href="Workspace2D.html#workspace2d"><span class="std std-ref">Workspace2D</span></a> - A workspace for holding two
+dimensional data in memory, this is the most commonly used
+workspace.</p></li>
+<li><p><a class="reference internal" href="EventWorkspace.html#eventworkspace"><span class="std std-ref">EventWorkspace</span></a> - A workspace that retains the
+individual neutron event data.</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a> - A workspace holding data in
+rows of columns having a particular type (e.g. text, integer, …).</p></li>
+<li><p><a class="reference internal" href="#workspacegroup"><span class="std std-ref">WorkspaceGroup</span></a> - A container for a collection of
+workspaces. Algorithms given a group as input run sequentially on
+each member of the group.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Workspace2D.html" title="Previous Chapter: Workspace2D"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Workspace2D</span>
+    </a>
+  </li>
+  <li>
+    <a href="calibration/index.html" title="Next Chapter: Calibration"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Calibration &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

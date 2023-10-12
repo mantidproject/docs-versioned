@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Fit Constraint</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Fit Functions In Python" href="FitFunctionsInPython.html" />
+    <link rel="prev" title="Facilities File" href="FacilitiesFile.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.8</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Concepts</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Fit Constraint</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="fit-constraint">
+<span id="fitconstraint"></span><h1>Fit Constraint<a class="headerlink" href="#fit-constraint" title="Permalink to this heading">¶</a></h1>
+<section id="how-constraints-on-parameters-work">
+<h2>How constraints on parameters work<a class="headerlink" href="#how-constraints-on-parameters-work" title="Permalink to this heading">¶</a></h2>
+<p>Consider the scenario where the aim is to fit a lorenzian function to a
+1D dataset but a constraint applied on the peak centre parameter. Assume
+the 1D dataset consists of <span class="math notranslate nohighlight">\(N\)</span> data points
+<span class="math notranslate nohighlight">\((x_1,y_1^{obs}), (x_2,y_2^{obs}), ... (x_N,y_N^{obs})\)</span>, where
+<span class="math notranslate nohighlight">\(x_i\)</span> is the ith x-value and <span class="math notranslate nohighlight">\(y_i^{obs}\)</span> is the ith observed
+value for that x-value. Write the lorentzian function as:</p>
+<div class="math notranslate nohighlight">
+\[y_i^{cal}(h, x0, w) = h \left( \frac{w^2}{(x_i-x0)^2+w^2} \right)\]</div>
+<p>where he lorentzian fitting parameters here are</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(h\)</span> - height of peak (at maximum)</p></li>
+<li><p><span class="math notranslate nohighlight">\(x0\)</span> - centre of peak</p></li>
+<li><p><span class="math notranslate nohighlight">\(w\)</span> - half-width at half-maximum</p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(x_i\)</span> is the x-value of the ith data point and <span class="math notranslate nohighlight">\(y_i^{cal}\)</span>
+is the lorentzian calculated value at that data point.</p>
+<p>We want to apply a constraint on the x0 parameter, i.e. the centre of
+the peak. For example, apply the constraint that <span class="math notranslate nohighlight">\(x0\)</span> should be in
+between <span class="math notranslate nohighlight">\(x0_{min}\)</span> and <span class="math notranslate nohighlight">\(x0_{max}\)</span>. If this is not satisfied
+we then add the following penalty function to <span class="math notranslate nohighlight">\(y_i^{cal}\)</span> if
+<span class="math notranslate nohighlight">\(x0 &lt; x0_{min}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[p_i = C(x0_{min}-x0)\]</div>
+<p>where <span class="math notranslate nohighlight">\(C\)</span> is a constant (default 1000). The penalty function when
+<span class="math notranslate nohighlight">\(x0 &gt; x0_{max}\)</span> takes the form:</p>
+<div class="math notranslate nohighlight">
+\[p_i = C(x0-x0_{max})\]</div>
+<p>.</p>
+<p>If more than one constraint is defined, then for each violated
+constraint a penalty of the type defined above is added to the
+calculated fitting function.</p>
+<p>If the penalty C is not the default value of 1000, then the
+constraint penalty value will be included whenever the function
+is converted to a string.  For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="n">myFunction</span> <span class="o">=</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">Height</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">PeakCentre</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">myFunction</span><span class="o">.</span><span class="n">constrain</span><span class="p">(</span><span class="s2">&quot;PeakCentre &lt; 6&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">myFunction</span><span class="p">)</span>
+<span class="n">myFunction</span><span class="o">.</span><span class="n">setConstraintPenaltyFactor</span><span class="p">(</span><span class="s2">&quot;PeakCentre&quot;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">myFunction</span><span class="p">)</span>
+<span class="n">myFunction</span><span class="o">.</span><span class="n">constrain</span><span class="p">(</span><span class="s1">&#39;Sigma &gt; 0&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">myFunction</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>name=Gaussian,Height=1,PeakCentre=3,Sigma=1,constraints=(PeakCentre&lt;6)
+name=Gaussian,Height=1,PeakCentre=3,Sigma=1,constraints=(PeakCentre&lt;6,penalty=10)
+name=Gaussian,Height=1,PeakCentre=3,Sigma=1,constraints=(PeakCentre&lt;6,penalty=10,0&lt;Sigma)`
+</pre></div>
+</div>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="FacilitiesFile.html" title="Previous Chapter: Facilities File"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Facilities File</span>
+    </a>
+  </li>
+  <li>
+    <a href="FitFunctionsInPython.html" title="Next Chapter: Fit Functions In Python"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Fit Functions... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

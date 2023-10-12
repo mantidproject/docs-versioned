@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>ALFView</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Crystal Field Python Interface" href="Crystal%20Field%20Python%20Interface.html" />
+    <link rel="prev" title="SCD Event Data Reduction interface(MantidEV)" href="../diffraction/SCD%20Event%20Data%20Reduction.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.8</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Interfaces</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">ALFView</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="alfview">
+<span id="alfview-ref"></span><h1>ALFView<a class="headerlink" href="#alfview" title="Permalink to this heading">¶</a></h1>
+<a class="reference internal image-reference" href="../../_images/ALFView_Interface.PNG"><img alt="../../_images/ALFView_Interface.PNG" class="align-right" src="../../_images/ALFView_Interface.PNG" style="height: 400px;" /></a>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#interface-overview" id="id1">Interface Overview</a></p></li>
+<li><p><a class="reference internal" href="#loading-data" id="id2">Loading Data</a></p></li>
+<li><p><a class="reference internal" href="#selecting-tubes" id="id3">Selecting Tubes</a></p></li>
+<li><p><a class="reference internal" href="#calculating-rotation" id="id4">Calculating Rotation</a></p></li>
+</ul>
+</nav>
+<section id="interface-overview">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Interface Overview</a><a class="headerlink" href="#interface-overview" title="Permalink to this heading">¶</a></h2>
+<p>The ALF instrument requires frequent manual adjustments after each run to realign the single crystal(s). These adjustments require
+us to know how much we should rotate the sample by (<code class="code docutils literal notranslate"><span class="pre">R</span></code>). This can be calculated from the out of plane angle, <code class="code docutils literal notranslate"><span class="pre">V</span></code>, and
+two theta, <code class="code docutils literal notranslate"><span class="pre">2θ</span></code>, obtained from the ALFView interface.</p>
+<div class="math notranslate nohighlight">
+\[R = V / (2\sin(\theta))\]</div>
+<p>The Out of Plane Angle is the vertical position of the detectors as viewed from the sample.</p>
+<p>The interface can be accessed from the main menu of MantidWorkbench, in <em>Interfaces → Direct → ALFView</em>.</p>
+</section>
+<section id="loading-data">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Loading Data</a><a class="headerlink" href="#loading-data" title="Permalink to this heading">¶</a></h2>
+<p>The loading section is used to load a Sample dataset, and optionally a Vanadium dataset. This can be achieved by either typing the
+run number or browsing to the file of interest.</p>
+<p>The Sample and Vanadium datasets are first <a class="reference internal" href="../../algorithms/NormaliseByCurrent-v1.html#algm-normalisebycurrent"><span class="std std-ref">normalised by current</span></a> and then converted to units of
+dSpacing. The Sample is then normalised by dividing it by the Vanadium (if a Vanadium run is provided).</p>
+<p>Note that the Sample and Vanadium x arrays must be the same for this normalisation to work.</p>
+</section>
+<section id="selecting-tubes">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Selecting Tubes</a><a class="headerlink" href="#selecting-tubes" title="Permalink to this heading">¶</a></h2>
+<p>The normalised data should now be plotted on a custom version of the <a class="reference internal" href="../../workbench/instrumentviewer.html#instrumentviewer"><span class="std std-ref">Instrument View</span></a>, which only contains the ‘Render’ and ‘Pick’ tabs.</p>
+<p>In the ‘Pick’ tab, you have several options for selecting one or more tubes.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Tool</p></th>
+<th class="head"><p>Effect</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Select whole tube</p></td>
+<td><p>Select a tube by clicking on it. Click on more than one
+tube to select multiple. This tool remains selected
+until you click a different tool in the ‘Pick’ tab.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Draw a rectangle</p></td>
+<td><p>Select one or more tubes by drawing a rectangular region.
+If any part of a tube, no matter how small, is contained
+within the region, it is selected. The Edit Shape tool is
+selected after this has been used.</p></td>
+</tr>
+<tr class="row-even"><td><p>Edit a shape</p></td>
+<td><p>Allows you to select a shape drawn on the plot so you can
+move, resize or delete it. Use the <code class="docutils literal notranslate"><span class="pre">Delete</span></code> key to
+delete the selected shape.</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following keyboard shortcuts are available when a shape is selected.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Shortcut</p></th>
+<th class="head"><p>Action</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Ctrl+C</span></code></p></td>
+<td><p>Copies the selected shape(s)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Ctrl+V</span></code></p></td>
+<td><p>Pastes the selected shape(s)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Delete</span></code></p></td>
+<td><p>Deletes the selected shape(s)</p></td>
+</tr>
+</tbody>
+</table>
+<p>Once you have selected a tube, a plot of the out of plane angle vs counts is plotted on the right hand side of the interface.</p>
+</section>
+<section id="calculating-rotation">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Calculating Rotation</a><a class="headerlink" href="#calculating-rotation" title="Permalink to this heading">¶</a></h2>
+<p>At the top of the right hand pane is a preview plot showing the out of plane angle vs counts for the selected tubes. A Fit
+of a Flat Background + Gaussian composite function is required to determine the centre of the peak on this plot.</p>
+<p>Above the plot are several options which are not necessary for the main workflow.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><img alt="export" src="../../_images/download.png" /> Generate workspace from plot</p></td>
+<td><p>This option will export the data displayed on the plot to a workspace named ‘ALFView_exported’.</p></td>
+</tr>
+<tr class="row-odd"><td><p><img alt="externalplot" src="../../_images/open-in-new.png" /> Open plot in new window</p></td>
+<td><p>This option will open the plot in a separate window. This provides more plotting options.</p></td>
+</tr>
+<tr class="row-even"><td><p><img alt="reset" src="../../_images/replay.png" /> Reset extracted plot</p></td>
+<td><p>This option will remove the Fit on the plot and reset the peak centre and rotation angle.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Underneath the plot are the following values.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Two theta, <code class="code docutils literal notranslate"><span class="pre">2θ</span></code></p></td>
+<td><p>The average two theta of the extracted tubes, in degrees. The two theta of a tube
+is taken to be the two theta at which the out of plane angle is closest to zero.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fit range</p></td>
+<td><p>The range within which the fit should be performed, in degrees.</p></td>
+</tr>
+<tr class="row-even"><td><p>Peak centre, <code class="code docutils literal notranslate"><span class="pre">V</span></code></p></td>
+<td><p>The centre of a Flat Background + Gaussian composite function, in degrees.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rotation angle, <code class="code docutils literal notranslate"><span class="pre">R</span></code></p></td>
+<td><p>The rotation angle defined by the equation above, in units of degrees.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Click on the <cite>Fit</cite> button to find a value for the peak centre. Repeated Fits will attempt to refine the Peak Centre value
+further. The resulting fit is added to the preview plot.</p>
+<p>The Rotation angle, <code class="code docutils literal notranslate"><span class="pre">R</span></code>, will also be calculated automatically in units of degrees.</p>
+<p><strong>Categories</strong>: <a class="reference external" href="../ILL/categories/Interfaces.html">Interfaces</a> | <a class="reference external" href="categories/Direct.html">Direct</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="../diffraction/SCD%20Event%20Data%20Reduction.html" title="Previous Chapter: SCD Event Data Reduction interface(MantidEV)"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; SCD Event Dat...</span>
+    </a>
+  </li>
+  <li>
+    <a href="Crystal%20Field%20Python%20Interface.html" title="Next Chapter: Crystal Field Python Interface"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Crystal Field... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

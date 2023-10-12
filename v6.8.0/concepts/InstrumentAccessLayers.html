@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Instrument Access via SpectrumInfo, DetectorInfo, ComponentInfo</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Instrument Data Service" href="InstrumentDataService.html" />
+    <link rel="prev" title="Instrument" href="Instrument.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.8</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Concepts</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Instrument Access via SpectrumInfo, DetectorInfo, ComponentInfo</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="instrument-access-via-spectruminfo-detectorinfo-componentinfo">
+<span id="instrumentaccesslayers"></span><h1>Instrument Access via SpectrumInfo, DetectorInfo, ComponentInfo<a class="headerlink" href="#instrument-access-via-spectruminfo-detectorinfo-componentinfo" title="Permalink to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id2">Introduction</a></p>
+<ul>
+<li><p><a class="reference internal" href="#current-status" id="id3">Current Status</a></p>
+<ul>
+<li><p><a class="reference internal" href="#spectruminfo" id="id4">SpectrumInfo</a></p></li>
+<li><p><a class="reference internal" href="#detectorinfo" id="id5">DetectorInfo</a></p></li>
+<li><p><a class="reference internal" href="#componentinfo" id="id6">ComponentInfo</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#changes-for-rollout" id="id7">Changes for Rollout</a></p>
+<ul>
+<li><p><a class="reference internal" href="#performance-tests" id="id8">Performance Tests</a></p></li>
+<li><p><a class="reference internal" href="#id1" id="id9">ComponentInfo</a></p>
+<ul>
+<li><p><a class="reference internal" href="#basics" id="id10">Basics</a></p></li>
+<li><p><a class="reference internal" href="#access-to-components-and-working-with-detectors" id="id11">Access to Components and working with Detectors</a></p></li>
+<li><p><a class="reference internal" href="#mutable-componentinfo" id="id12">Mutable ComponentInfo</a></p></li>
+<li><p><a class="reference internal" href="#useful-tips" id="id13">Useful Tips</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#dealing-with-problems" id="id14">Dealing with problems</a></p></li>
+</ul>
+</nav>
+<section id="introduction">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
+<p>There are three layers to access instrument information, <a class="reference internal" href="../api/python/mantid/api/SpectrumInfo.html#mantid.api.SpectrumInfo" title="mantid.api.SpectrumInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpectrumInfo</span></code></a>, <a class="reference internal" href="../api/python/mantid/geometry/DetectorInfo.html#mantid.geometry.DetectorInfo" title="mantid.geometry.DetectorInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DetectorInfo</span></code></a>, and <a class="reference internal" href="../api/python/mantid/geometry/ComponentInfo.html#mantid.geometry.ComponentInfo" title="mantid.geometry.ComponentInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComponentInfo</span></code></a>, which are introduced to Mantid as part of Instrument 2.0. These classes  store all commonly accessed information about spectra and detectors, components, and the relationships between them. Masking, monitor flags, L1, L2, 2-theta and position are stored as part of <a class="reference internal" href="../api/python/mantid/geometry/DetectorInfo.html#mantid.geometry.DetectorInfo" title="mantid.geometry.DetectorInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DetectorInfo</span></code></a>. In addition, <a class="reference internal" href="../api/python/mantid/geometry/ComponentInfo.html#mantid.geometry.ComponentInfo" title="mantid.geometry.ComponentInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComponentInfo</span></code></a> provides the API to tree and shape related operations historically performed by <a class="reference internal" href="Instrument.html#instrument"><span class="std std-ref">Instrument</span></a> type.</p>
+<p>A spectrum corresponds to (a group of) one or more detectors. Most algorithms work with spectra and thus <a class="reference internal" href="../api/python/mantid/api/SpectrumInfo.html#mantid.api.SpectrumInfo" title="mantid.api.SpectrumInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SpectrumInfo</span></code></a> would be used. Some algorithms work on a lower level (with individual detectors) and thus <a class="reference internal" href="../api/python/mantid/geometry/DetectorInfo.html#mantid.geometry.DetectorInfo" title="mantid.geometry.DetectorInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DetectorInfo</span></code></a> would be used.</p>
+<p>The legacy <a class="reference internal" href="Instrument.html#instrument"><span class="std std-ref">Instrument</span></a> largely consists of <code class="docutils literal notranslate"><span class="pre">Detectors</span></code> and <code class="docutils literal notranslate"><span class="pre">Components</span></code> - all detectors are also components. <a class="reference internal" href="../api/python/mantid/geometry/DetectorInfo.html#mantid.geometry.DetectorInfo" title="mantid.geometry.DetectorInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DetectorInfo</span></code></a> and <a class="reference internal" href="../api/python/mantid/geometry/ComponentInfo.html#mantid.geometry.ComponentInfo" title="mantid.geometry.ComponentInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComponentInfo</span></code></a> are the respective replacements for these. <a class="reference internal" href="../api/python/mantid/geometry/ComponentInfo.html#mantid.geometry.ComponentInfo" title="mantid.geometry.ComponentInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComponentInfo</span></code></a> introduces a <strong>component index</strong> for access, and <code class="xref py py-obj docutils literal notranslate"><span class="pre">geometry:DetectorInfo</span></code> introduces a <strong>detector index</strong>, these will be discussed further below. <a class="reference internal" href="../api/python/mantid/geometry/DetectorInfo.html#mantid.geometry.DetectorInfo" title="mantid.geometry.DetectorInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DetectorInfo</span></code></a> and <a class="reference internal" href="../api/python/mantid/geometry/ComponentInfo.html#mantid.geometry.ComponentInfo" title="mantid.geometry.ComponentInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComponentInfo</span></code></a> share in-memory data. The difference between the two is best thought about in terms of their interfaces. The interface for <a class="reference internal" href="../api/python/mantid/geometry/DetectorInfo.html#mantid.geometry.DetectorInfo" title="mantid.geometry.DetectorInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DetectorInfo</span></code></a> is designed for working with detectors, and the interface for <a class="reference internal" href="../api/python/mantid/geometry/ComponentInfo.html#mantid.geometry.ComponentInfo" title="mantid.geometry.ComponentInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComponentInfo</span></code></a> is designed for working with generic components.</p>
+<p>In many cases direct access to legacy <a class="reference internal" href="Instrument.html#instrument"><span class="std std-ref">Instrument</span></a> can be removed by using these layers. This will also help in moving to using indexes for enumeration, and only working with IDs for user-facing input.</p>
+<section id="current-status">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">Current Status</a><a class="headerlink" href="#current-status" title="Permalink to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">SpectrumInfo</span></code>, <code class="docutils literal notranslate"><span class="pre">DetectorInfo</span></code> and <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code>  are largely complete, with a diminishing number of cases where any legacy direct <code class="docutils literal notranslate"><span class="pre">Instrument</span></code> access is still necessary. However, using the new interfaces everywhere now will help with the eventual complete rollout of Instrument 2.0.</p>
+<section id="spectruminfo">
+<h4><a class="toc-backref" href="#id4" role="doc-backlink">SpectrumInfo</a><a class="headerlink" href="#spectruminfo" title="Permalink to this heading">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">SpectrumInfo</span></code> can be obtained from a call to <a class="reference internal" href="../api/python/mantid/api/MatrixWorkspace.html#mantid.api.MatrixWorkspace.spectrumInfo" title="mantid.api.MatrixWorkspace.spectrumInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace.spectrumInfo()</span></code></a>. The wrapper class holds a reference to a <code class="docutils literal notranslate"><span class="pre">DetectorInfo</span></code> object and calls through to this for access to information on masking, monitor flags etc.</p>
+</section>
+<section id="detectorinfo">
+<h4><a class="toc-backref" href="#id5" role="doc-backlink">DetectorInfo</a><a class="headerlink" href="#detectorinfo" title="Permalink to this heading">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">DetectorInfo</span></code> can be obtained from a call to <a class="reference internal" href="../api/python/mantid/api/ExperimentInfo.html#mantid.api.ExperimentInfo.detectorInfo" title="mantid.api.ExperimentInfo.detectorInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mantid.api.ExperimentInfo.detectorInfo()</span></code></a> (usually this method would be called on <code class="docutils literal notranslate"><span class="pre">MatrixWorkspace</span></code>). The wrapper class holds a reference to the parametrised instrument for retrieving the relevant information.</p>
+<p>There is also a near-complete implementation of the “real” <code class="docutils literal notranslate"><span class="pre">DetectorInfo</span></code> class, in the <code class="docutils literal notranslate"><span class="pre">Beamline</span></code> namespace. The wrapper <code class="docutils literal notranslate"><span class="pre">DetectorInfo</span></code> class (which you get from <a class="reference internal" href="../api/python/mantid/api/ExperimentInfo.html#mantid.api.ExperimentInfo.detectorInfo" title="mantid.api.ExperimentInfo.detectorInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">detectorInfo()</span></code></a>) holds a reference to the real class. This does not affect the rollout, where the wrapper class should still be used in all cases.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ExperimentInfo</span></code> now also provides a method <code class="docutils literal notranslate"><span class="pre">mutableDetectorInfo()</span></code> so that non-const access to the DetectorInfo is possible for purposes of writing detector related information such as positions or rotations.</p>
+<p>The python interface to <code class="docutils literal notranslate"><span class="pre">DetectorInfo</span></code> has matured, and includes widespread immutable access via iterators. The iterators can also be used to set masking flags.</p>
+<p>See <a class="reference internal" href="DetectorInfo.html#detectorinfo"><span class="std std-ref">DetectorInfo</span></a> for more information.</p>
+</section>
+<section id="componentinfo">
+<h4><a class="toc-backref" href="#id6" role="doc-backlink">ComponentInfo</a><a class="headerlink" href="#componentinfo" title="Permalink to this heading">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> can be obtatined from a call to <code class="docutils literal notranslate"><span class="pre">ExperimentInfo::componentInfo()</span></code> (usually this method would be called on <code class="docutils literal notranslate"><span class="pre">MatrixWorkspace</span></code>). Much like <code class="docutils literal notranslate"><span class="pre">DetectorInfo</span></code>, the <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> yielded from this method call is a wrapper, which contains shape and index information, that cannot yet be moved in to the real <code class="docutils literal notranslate"><span class="pre">Beamline::ComponentInfo</span></code>. However, replacing existing usage of <code class="docutils literal notranslate"><span class="pre">IComponent</span></code> and <code class="docutils literal notranslate"><span class="pre">IObjComponent</span></code> wherever possible with <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> across the framework will represent a major step forwards.</p>
+<p>For writing to the component tree. You can extract a non-const <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> via <code class="docutils literal notranslate"><span class="pre">ExperimentInfo::mutableComponentInfo</span></code>.</p>
+<p>The python interface to <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> has matured, and now provides equal, if not better support than the <code class="docutils literal notranslate"><span class="pre">Instrument</span></code> API for navigating the high-level instrument. Iterator support has also been provided for <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code>.</p>
+<p>See <a class="reference internal" href="ComponentInfo.html#componentinfo"><span class="std std-ref">ComponentInfo</span></a> for more information.</p>
+</section>
+</section>
+</section>
+<section id="changes-for-rollout">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Changes for Rollout</a><a class="headerlink" href="#changes-for-rollout" title="Permalink to this heading">¶</a></h2>
+<section id="performance-tests">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Performance Tests</a><a class="headerlink" href="#performance-tests" title="Permalink to this heading">¶</a></h3>
+<p>Before starting the refactoring work please take a look at the state of any performance tests that exist for the algorithms. If they exist they should be run to get the “before” timings. If they do not exist please add performance test for any algorithms that are widely used, or might be expected to have a performance increase. See <a class="reference external" href="https://github.com/mantidproject/mantid/pull/18189/files#diff-5695221d30495359738f90b83ceb0ba3">this performance test</a> added for the previous <code class="docutils literal notranslate"><span class="pre">SpectrumInfo</span></code> rollout phase for an example of adding such a test.</p>
+<p>Each PR should include the runtime metrics for the algorithms changed, so that improvements can be captured for the release notes.</p>
+</section>
+<section id="id1">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">ComponentInfo</a><a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
+<section id="basics">
+<h4><a class="toc-backref" href="#id10" role="doc-backlink">Basics</a><a class="headerlink" href="#basics" title="Permalink to this heading">¶</a></h4>
+<p>The conversion is similar to that for <code class="docutils literal notranslate"><span class="pre">DetectorInfo</span></code>, which is already largely complete in the framework. For <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> all instances of <code class="docutils literal notranslate"><span class="pre">Instrument::getComponentByID(const</span> <span class="pre">ComponentID</span> <span class="pre">id)</span></code> should be replaced using calls to the <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> object obtained from <code class="docutils literal notranslate"><span class="pre">MatrixWorkspace::componentInfo()</span></code>. The methods below can then be called on <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> instead of on the component.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">isDetector(componentIndex)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">detectorsInSubtree(componentIndex)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">componentsInSubtree(componentIndex)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">position(componentIndex)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rotation(componentIndex)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hasParent(componentIndex)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parent(componentIndex)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">position(componentIndex)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">solidAngle(componentIndex)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scaleFactor(componentIndex)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sourcePosition()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">samplePosition()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">l1()</span></code></p></li>
+</ul>
+<p>The following methods are useful helpers on <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> that allow the extraction of the <strong>component index</strong> for key components</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">root()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">source()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sample()</span></code></p></li>
+</ul>
+<p><strong>Indexing</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> object is accessed by an index going from 0 to the number of components (including the instrument iteself). <strong>The component index for a detector is EQUAL to the detector index</strong>, this is an important point to understand. In other words, a detector with a Detector Index of 5, for the purposes of working with a <code class="docutils literal notranslate"><span class="pre">DetectorInfo</span></code> and  will have a Component Index of 5, when working with a <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code>. Explained in yet another way: The first 0 - n components referenced in the <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> are detectors, where n is the total number of detectors. This guarantee can be leveraged to provide speedups, as some of the examples will show.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">ComponentID</span></code> for compatibility with older code, and be extracted from <code class="docutils literal notranslate"><span class="pre">ComponentInfo::componentID(componentIndex)</span></code>, but such calls should be avoided where possible.</p>
+<p>It is also possible to use the method <code class="docutils literal notranslate"><span class="pre">componentInfo.indexOf(componentID)</span></code> to get the index for a particular component ID. However, this is a call to a lookup in an unordered map, so is an expensive calculation which should be avoided where possible.</p>
+<p><strong>One should NEVER expose a Component Index or Detector Index through a user facing interface, such an algorithm or fit function.</strong>. Detector Index and Component Indexes are internal concepts for fast enumeration. It is however desirable to translate from a <code class="docutils literal notranslate"><span class="pre">ComponentIndex</span></code> via <code class="docutils literal notranslate"><span class="pre">ComponentInfo::indexOf</span></code> to as early as possible and in such a way to avoid repeated calls to this method, as stated above. Likewise, conversion back to a <code class="docutils literal notranslate"><span class="pre">ComponentIndex</span></code>, if so required, should be done as infrequently and, as late as possible.</p>
+<p>Below is an example refactoring.</p>
+<p><strong>Before refactoring</strong></p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">instrument</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ws</span><span class="o">-&gt;</span><span class="n">getInstrument</span><span class="p">();</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">IComponent_const_sptr</span><span class="o">&gt;</span><span class="w"> </span><span class="n">children</span><span class="p">;</span><span class="w"></span>
+<span class="n">instrument</span><span class="o">-&gt;</span><span class="n">getChildren</span><span class="p">(</span><span class="n">children</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="w"> </span><span class="cm">/*Get all sub-children too*/</span><span class="p">);</span><span class="w"></span>
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">IComponent_const_sptr</span><span class="o">&gt;::</span><span class="n">const_iterator</span><span class="w"> </span><span class="n">it</span><span class="p">;</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">children</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">children</span><span class="p">.</span><span class="n">end</span><span class="p">();</span><span class="w"> </span><span class="o">++</span><span class="n">it</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">ObjComponent</span><span class="o">*</span><span class="w"> </span><span class="n">obj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">dynamic_cast</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">ObjComponent</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">it</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="c1">// Do something with the obj component</span>
+<span class="w">    </span><span class="n">obj</span><span class="p">.</span><span class="n">solidAngle</span><span class="p">(</span><span class="n">observer</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p><strong>After - looping over index</strong></p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;MantidGeometry/Instrument/ComponentInfo.h&quot;</span><span class="cp"></span>
+
+<span class="p">...</span><span class="w"></span>
+
+<span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">componentInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ws</span><span class="o">-&gt;</span><span class="n">componentInfo</span><span class="p">();</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">componentInfo</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="n">componentInfo</span><span class="p">.</span><span class="n">solidAngle</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">observer</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="access-to-components-and-working-with-detectors">
+<h4><a class="toc-backref" href="#id11" role="doc-backlink">Access to Components and working with Detectors</a><a class="headerlink" href="#access-to-components-and-working-with-detectors" title="Permalink to this heading">¶</a></h4>
+<p>Detector Indices are the same as the corresponding Component Indices. Note that there are no dynamic casts. The following examples are for illustration purposes only.</p>
+<p><strong>Combining DetectorInfo and ComponentInfo</strong></p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;MantidGeometry/Instrument/ComponentInfo.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;MantidGeometry/Instrument/DetectorInfo.h&quot;</span><span class="cp"></span>
+
+<span class="p">...</span><span class="w"></span>
+
+<span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">componentInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ws</span><span class="o">-&gt;</span><span class="n">componentInfo</span><span class="p">();</span><span class="w"></span>
+<span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">detectorInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ws</span><span class="o">-&gt;</span><span class="n">componentInfo</span><span class="p">();</span><span class="w"></span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">solidAnglesForDetectors</span><span class="p">(</span><span class="n">detectorInfo</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="mf">-1.0</span><span class="p">);</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">componentInfo</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">componentInfo</span><span class="p">.</span><span class="n">isDetector</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">detectorInfo</span><span class="p">.</span><span class="n">isMasked</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"></span>
+<span class="w">   </span><span class="n">solidAnglesForDetectors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">componentInfo</span><span class="p">.</span><span class="n">solidAngle</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">observer</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> can give quick access to parent and sub-tree component and detector indices.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;MantidGeometry/Instrument/ComponentInfo.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;MantidGeometry/Instrument/DetectorInfo.h&quot;</span><span class="cp"></span>
+
+<span class="kt">size_t</span><span class="w"> </span><span class="n">bank0Index</span><span class="p">;</span><span class="w"> </span><span class="c1">// Component index for bank 0</span>
+<span class="p">...</span><span class="w"></span>
+
+<span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="o">&amp;</span><span class="n">componentInfo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ws</span><span class="o">-&gt;</span><span class="n">componentInfo</span><span class="p">();</span><span class="w"></span>
+<span class="k">auto</span><span class="w"> </span><span class="n">bankComponents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">componentInfo</span><span class="p">.</span><span class="n">componentsInSubtree</span><span class="p">(</span><span class="n">bank0Index</span><span class="p">);</span><span class="w"></span>
+<span class="k">auto</span><span class="w"> </span><span class="n">bankDetectors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">componentInfo</span><span class="p">.</span><span class="n">detectorsInSubtree</span><span class="p">(</span><span class="n">bank0Index</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+<section id="mutable-componentinfo">
+<h4><a class="toc-backref" href="#id12" role="doc-backlink">Mutable ComponentInfo</a><a class="headerlink" href="#mutable-componentinfo" title="Permalink to this heading">¶</a></h4>
+<p>The method <code class="docutils literal notranslate"><span class="pre">ExperimentInfo::mutableComponentInfo()</span></code> returns a non-const <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> object. This allows the methods below to be used.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">setPosition(const</span> <span class="pre">size_t</span> <span class="pre">index,</span> <span class="pre">const</span> <span class="pre">Kernel::V3D</span> <span class="pre">&amp;position);</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setRotation(const</span> <span class="pre">size_t</span> <span class="pre">index,</span> <span class="pre">const</span> <span class="pre">Kernel::Quat</span> <span class="pre">&amp;rotation);</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setScaleFactor(const</span> <span class="pre">size_t</span> <span class="pre">index,</span> <span class="pre">const</span> <span class="pre">Kernel::V3D</span> <span class="pre">&amp;scaleFactor);</span></code></p></li>
+</ul>
+</section>
+<section id="useful-tips">
+<h4><a class="toc-backref" href="#id13" role="doc-backlink">Useful Tips</a><a class="headerlink" href="#useful-tips" title="Permalink to this heading">¶</a></h4>
+<ul class="simple">
+<li><p>Creation of <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> is not cheap enough to perform uncessarily inside loops. For const access, <code class="docutils literal notranslate"><span class="pre">ws.componentInfo()</span></code> should be called outside of loops that enumerate over all components.</p></li>
+<li><p>If a <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> object is required for more than one workspace, include the workspace name in the variable name to avoid confusion.</p></li>
+<li><p>Get the <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> object as a const-ref and use <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">auto</span> <span class="pre">&amp;componentInfo</span> <span class="pre">=</span> <span class="pre">ws-&gt;componentInfo();</span></code>, do not get a non-const reference unless you really do need to modify the object, and ensure that the <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> is always included to prevent accidental copies.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> is widely forward declared. Ensure that you import - <code class="docutils literal notranslate"><span class="pre">#include</span> <span class="pre">&quot;MantidGeometry/Instrument/ComponentInfo.h&quot;</span></code></p></li>
+<li><p>As explained above, a detector index is the same thing as a component index. No translation necessary. The fact that the first 0-n component indexes are for detectors is a feature that can be leveraged.</p></li>
+<li><p>A bank always has a higher component index than any of its nested components. The root is the highest component index of all. This feature can be leveraged. Consider reverse iterating through component indexes when performing operations that involve higher-level components.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="dealing-with-problems">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Dealing with problems</a><a class="headerlink" href="#dealing-with-problems" title="Permalink to this heading">¶</a></h2>
+<p>Join #instrument-2_0 on Slack if you need help or have questions. Please also feel free to get in touch with Owen Arnold, Simon Heybrock or Lamar Moore directly for any questions about the <code class="docutils literal notranslate"><span class="pre">ComponentInfo</span></code> rollout.</p>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Instrument.html" title="Previous Chapter: Instrument"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Instrument</span>
+    </a>
+  </li>
+  <li>
+    <a href="InstrumentDataService.html" title="Next Chapter: Instrument Data Service"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Instrument Da... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

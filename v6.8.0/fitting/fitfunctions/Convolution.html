@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Convolution</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="CriticalPeakRelaxationRate" href="CriticalPeakRelaxationRate.html" />
+    <link rel="prev" title="ComptonScatteringCountRate" href="ComptonScatteringCountRate.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.8</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Fit Functions</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Convolution</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="convolution">
+<span id="func-convolution"></span><h1>Convolution<a class="headerlink" href="#convolution" title="Permalink to this heading">¶</a></h1>
+<section id="description">
+<span id="index-0"></span><h2>Description<a class="headerlink" href="#description" title="Permalink to this heading">¶</a></h2>
+<p>Convolution is an extension of <a class="reference internal" href="CompositeFunction.html#func-compositefunction"><span class="std std-ref">CompositeFunction</span></a>
+which performs convolution of its members using either the
+Fast Fourier Transform (symmetric domain) or the direct
+formula (asymmetric domain).</p>
+<div class="math notranslate nohighlight">
+\[f(x)=\int\limits_{A}^{B}R(x-\xi)F(\xi)\mbox{d}\xi\]</div>
+<p>Here <span class="math notranslate nohighlight">\(R\)</span> is the first member function and <span class="math notranslate nohighlight">\(F\)</span> is the second
+member. A Convolution must have exactly two member functions. The
+members can be composite if necessary. Interval <span class="math notranslate nohighlight">\([A,B]\)</span> is the
+fitting interval.</p>
+<section id="fft-mode">
+<h3>FFT mode<a class="headerlink" href="#fft-mode" title="Permalink to this heading">¶</a></h3>
+<p>if <span class="math notranslate nohighlight">\(|A|\)</span> similar to <span class="math notranslate nohighlight">\(|B|\)</span> or <span class="math notranslate nohighlight">\(AB &gt; 0\)</span>, the function is evaluated
+by first transforming <span class="math notranslate nohighlight">\(R\)</span> and <span class="math notranslate nohighlight">\(F\)</span> to the Fourier domain,
+multiplying the transforms, then transforming back to the original domain.
+The GSL FFT routines are used to do the actual transformations.</p>
+<p>It should be noted that the two functions (<span class="math notranslate nohighlight">\(R\)</span> and <span class="math notranslate nohighlight">\(F\)</span>) are
+evaluated on different intervals. <span class="math notranslate nohighlight">\(F\)</span> is computed on <span class="math notranslate nohighlight">\([A,B]\)</span>
+while <span class="math notranslate nohighlight">\(R\)</span> is computed on <span class="math notranslate nohighlight">\([-\Delta/2, \Delta/2]\)</span>, where
+<span class="math notranslate nohighlight">\(\Delta=B-A\)</span>.</p>
+<p>In the following example a <a class="reference internal" href="Gaussian.html#func-gaussian"><span class="std std-ref">Gaussian</span></a> is convolved with a
+box function:</p>
+<figure class="align-default">
+<img alt="Convolution.png" src="../../_images/Convolution.png" />
+</figure>
+<p>Note that the box function is defined on interval [-5, 5]:</p>
+<figure class="align-default">
+<img alt="Box.png" src="../../_images/Box.png" />
+</figure>
+</section>
+<section id="direct-mode">
+<h3>Direct mode<a class="headerlink" href="#direct-mode" title="Permalink to this heading">¶</a></h3>
+<p>If <span class="math notranslate nohighlight">\(|A|\)</span> and <span class="math notranslate nohighlight">\(|B|\)</span> differ, the convolution is performed
+with the direct formula. <span class="math notranslate nohighlight">\(F\)</span> is computed on <span class="math notranslate nohighlight">\([A-B,B-A]\)</span>
+and <span class="math notranslate nohighlight">\(R\)</span> is computed on <span class="math notranslate nohighlight">\([A,B]\)</span>. This setting guarantees
+that <span class="math notranslate nohighlight">\(F\)</span> overlaps completely <span class="math notranslate nohighlight">\(R\)</span> in the domain <span class="math notranslate nohighlight">\([A,B]\)</span>
+when performing the convolution.</p>
+<p>In the following example a QENS signal is fitted to a two-Lorentzian
+model, convolved with the experimental resolution, in the
+asymmetric energy range <span class="math notranslate nohighlight">\([A,B]=[-0.12, 0.52]\)</span>.</p>
+<figure class="align-default">
+<img alt="ConvolutionAsymmetric.png" src="../../_images/ConvolutionAsymmetric.png" />
+</figure>
+</section>
+</section>
+<section id="attributes-non-fitting-parameters">
+<h2>Attributes (non-fitting parameters)<a class="headerlink" href="#attributes-non-fitting-parameters" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>FixResolution</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>NumDeriv</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/FitFunctions.html">FitFunctions</a> | <a class="reference external" href="categories/General.html">General</a></p>
+</section>
+<section id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/b75cfaae9218e7d59662138c22a81da96e2235c1/Framework/CurveFitting/inc/MantidCurveFitting/Functions/Convolution.h">Convolution.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/b75cfaae9218e7d59662138c22a81da96e2235c1/Framework/CurveFitting/src/Functions/Convolution.cpp">Convolution.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="ComptonScatteringCountRate.html" title="Previous Chapter: ComptonScatteringCountRate"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; ComptonScatte...</span>
+    </a>
+  </li>
+  <li>
+    <a href="CriticalPeakRelaxationRate.html" title="Next Chapter: CriticalPeakRelaxationRate"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">CriticalPeakR... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

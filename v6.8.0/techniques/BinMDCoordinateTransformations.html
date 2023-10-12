@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>BinMD Coordinate Transformations</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Calibration" href="Calibration.html" />
+    <link rel="prev" title="Techniques" href="index.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org"><img src="../_static/Mantid_Logo_Transparent.png">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.8</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Techniques</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">BinMD Coordinate Transformations</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="binmd-coordinate-transformations">
+<span id="binmdcoordinatetransformations"></span><h1>BinMD Coordinate Transformations<a class="headerlink" href="#binmd-coordinate-transformations" title="Permalink to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id1">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#binning-an-mdworkspace" id="id2">Binning an MDWorkspace</a></p></li>
+<li><p><a class="reference internal" href="#binning-a-line-from-an-mdhistoworkspace" id="id3">Binning a Line From an MDHistoWorkspace</a></p></li>
+</ul>
+</nav>
+<section id="introduction">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
+<p>The algorithms <a class="reference internal" href="../algorithms/BinMD-v1.html#algm-binmd"><span class="std std-ref">BinMD v1</span></a> and <a class="reference internal" href="../algorithms/SliceMD-v1.html#algm-slicemd"><span class="std std-ref">SliceMD v1</span></a> allow an <a class="reference internal" href="../concepts/MDWorkspace.html#mdworkspace"><span class="std std-ref">MD Workspace</span></a> to be binned into a new coordinate
+system. This guide describes the coordinate transformations and relations between binned workspaces.</p>
+</section>
+<section id="binning-an-mdworkspace">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Binning an MDWorkspace</a><a class="headerlink" href="#binning-an-mdworkspace" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Begin with an initial <a class="reference internal" href="../concepts/MDWorkspace.html#mdworkspace"><span class="std std-ref">MD Workspace</span></a> called <code class="docutils literal notranslate"><span class="pre">original_ws</span></code> with two dimensions, <code class="docutils literal notranslate"><span class="pre">Qx</span></code> and <code class="docutils literal notranslate"><span class="pre">Qy</span></code>.</p></li>
+<li><p>The <a class="reference internal" href="../algorithms/BinMD-v1.html#algm-binmd"><span class="std std-ref">BinMD v1</span></a> algorithm can transform these coordinates into a new coordinate space with, for example, a
+rotation and a translation:</p></li>
+</ul>
+<figure class="align-center">
+<img alt="Coordinate transform line example" src="../_images/BinMD_Coordinate_Transforms.png" />
+</figure>
+<ul class="simple">
+<li><p>The output <a class="reference internal" href="../concepts/MDHistoWorkspace.html#mdhistoworkspace"><span class="std std-ref">MD Histogram Workspace</span></a>, called <code class="docutils literal notranslate"><span class="pre">binned_ws</span></code> still has two dimensions, now called <code class="docutils literal notranslate"><span class="pre">H</span></code> and <code class="docutils literal notranslate"><span class="pre">K</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">binned_ws</span></code> workspace holds a reference to the original workspace.</p>
+<ul>
+<li><p>This can be seen in the details of the workspace in the Workspaces widget (<code class="docutils literal notranslate"><span class="pre">Binned</span> <span class="pre">from</span> <span class="pre">'original_ws'</span></code>).</p></li>
+<li><p>In C++, calling <code class="docutils literal notranslate"><span class="pre">binned_ws-&gt;getOriginalWorkspace(0)</span></code> will return a pointer to <code class="docutils literal notranslate"><span class="pre">original_ws</span></code>.</p></li>
+</ul>
+</li>
+<li><p>It also holds the coordinate transformations between workspaces:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">(H,</span> <span class="pre">K)</span> <span class="pre">-&gt;</span> <span class="pre">(Qx,</span> <span class="pre">Qy)</span></code> : Binned coordinates back to original coordinates.</p>
+<ul>
+<li><p>In C++, this can be accessed via <code class="docutils literal notranslate"><span class="pre">binned_ws-&gt;getTransformToOriginal(0)</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(Qx,</span> <span class="pre">Qy)</span> <span class="pre">-&gt;</span> <span class="pre">(H,</span> <span class="pre">K)</span></code> : original coordinates to the binned coordinates.</p>
+<ul>
+<li><p>In C++, this is accessible via <code class="docutils literal notranslate"><span class="pre">binned_ws-&gt;getTransformFromOriginal(0)</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>When moving the mouse in the <a class="reference internal" href="../workbench/sliceviewer.html#sliceviewer"><span class="std std-ref">Sliceviewer</span></a>, for example, the coordinates in BOTH spaces will be displayed.</p></li>
+</ul>
+</section>
+<section id="binning-a-line-from-an-mdhistoworkspace">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Binning a Line From an MDHistoWorkspace</a><a class="headerlink" href="#binning-a-line-from-an-mdhistoworkspace" title="Permalink to this heading">¶</a></h2>
+<p>It is possible to call <a class="reference internal" href="../algorithms/BinMD-v1.html#algm-binmd"><span class="std std-ref">BinMD v1</span></a> on an <a class="reference internal" href="../concepts/MDHistoWorkspace.html#mdhistoworkspace"><span class="std std-ref">MD Histogram Workspace</span></a> that has already been binned.
+For example, if you are viewing <code class="docutils literal notranslate"><span class="pre">binned_ws</span></code> in the <a class="reference internal" href="../workbench/sliceviewer.html#sliceviewer"><span class="std std-ref">Sliceviewer</span></a>, you can use the
+<a class="reference internal" href="../workbench/sliceviewer.html#sliceviewer-nonaxiscuts"><span class="std std-ref">Non-axis aligned cutting tool</span></a> to bin a line from that.</p>
+<figure class="align-center">
+<img alt="Coordinate transform example" src="../_images/BinMD_Coordinate_Transforms_withLine1.png" />
+</figure>
+<ul class="simple">
+<li><p>Say you bin <code class="docutils literal notranslate"><span class="pre">binned_ws</span></code> to a line with a width: <code class="docutils literal notranslate"><span class="pre">line_ws</span></code>.</p>
+<ul>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">line_ws</span></code> workspace has 2 dimensions (since it has a width).</p></li>
+<li><p>The dimensions of <code class="docutils literal notranslate"><span class="pre">line_ws</span></code> have the generic names: <code class="docutils literal notranslate"><span class="pre">(X,Y)</span></code>.</p></li>
+<li><p>Only the <code class="docutils literal notranslate"><span class="pre">X</span></code> dimension has more than one bin, but the <code class="docutils literal notranslate"><span class="pre">Y</span></code> dimension still exists.</p></li>
+<li><p>Each point in <code class="docutils literal notranslate"><span class="pre">(X,Y)</span></code> space has an equivalent in <code class="docutils literal notranslate"><span class="pre">(H,K)</span></code> and in <code class="docutils literal notranslate"><span class="pre">(Qx,Qy)</span></code> space.</p></li>
+</ul>
+</li>
+<li><p>The integration will actually be performed on the event data in the <code class="docutils literal notranslate"><span class="pre">original_ws</span></code>.</p></li>
+<li><p>There are then two ‘original’ workspaces recorded in ‘line_ws’:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">line_ws-&gt;getOriginalWorkspace(0)</span></code> returns the <code class="docutils literal notranslate"><span class="pre">original_ws</span></code> (the event data).</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">line_ws-&gt;getTransformToOriginal(0)</span></code> returns the <code class="docutils literal notranslate"><span class="pre">(X,Y)</span> <span class="pre">-&gt;</span> <span class="pre">(Qx,Qy)</span></code> transform.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">line_ws-&gt;getTransformFromOriginal(0)</span></code> returns the <code class="docutils literal notranslate"><span class="pre">(Qx,Qy)</span> <span class="pre">-&gt;</span> <span class="pre">(X,Y)</span></code> transform.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">line_ws-&gt;getOriginalWorkspace(1)</span></code> returns the <strong>intermediate</strong> workspace <code class="docutils literal notranslate"><span class="pre">binned_ws</span></code> (the 2D histogram data).</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">line_ws-&gt;getTransformToOriginal(1)</span></code> returns the <code class="docutils literal notranslate"><span class="pre">(X,Y)</span> <span class="pre">-&gt;</span> <span class="pre">(H,K)</span></code> transform.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">line_ws-&gt;getTransformFromOriginal(1)</span></code> returns the <code class="docutils literal notranslate"><span class="pre">(H,K)</span> <span class="pre">-&gt;</span> <span class="pre">(X,Y)</span></code> transform.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>When using the <code class="docutils literal notranslate"><span class="pre">Plot</span> <span class="pre">MD</span></code> menu on the <code class="docutils literal notranslate"><span class="pre">line_ws</span></code>, you can display the plot as the coordinates of the intermediate
+workspace.</p>
+<ul>
+<li><p>In this example, this would be the <code class="docutils literal notranslate"><span class="pre">(H,K)</span></code> coordinates.</p></li>
+</ul>
+</li>
+</ul>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Techniques.html">Techniques</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="index.html" title="Previous Chapter: Techniques"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Techniques</span>
+    </a>
+  </li>
+  <li>
+    <a href="Calibration.html" title="Next Chapter: Calibration"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Calibration &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
