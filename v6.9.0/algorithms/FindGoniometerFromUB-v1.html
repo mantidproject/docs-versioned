@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>FindGoniometerFromUB v1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=5b08953a"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindPeakBackground v1" href="FindPeakBackground-v1.html" />
+    <link rel="prev" title="FindGlobalBMatrix v1" href="FindGlobalBMatrix-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">FindGoniometerFromUB v1</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="findgoniometerfromub-v1">
+<span id="algm-findgoniometerfromub"></span><span id="algm-findgoniometerfromub-v1"></span><h1>FindGoniometerFromUB v1<a class="headerlink" href="#findgoniometerfromub-v1" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id2">Summary</a></p>
+<ul>
+<li><p><a class="reference internal" href="#see-also" id="id3">See Also</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#properties" id="id4">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id5">Description</a></p></li>
+<li><p><a class="reference internal" href="#useage" id="id6">Useage</a></p></li>
+<li><p><a class="reference internal" href="#source" id="id7">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Takes a series of exported UB (from SaveISawUB) and using the first UB supplied as a reference saves UB files that share common indexing (i.e. no inversion or swapping of crystallographic axes relative to the reference UB) in the default save directory and produces a table of the goniometer angle (phi) and the unit vector of the goniometer axis for each run (excl. the reference).</p>
+<section id="see-also">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="SetGoniometer-v1.html#algm-setgoniometer"><span class="std std-ref">SetGoniometer</span></a>, <a class="reference internal" href="CalculateUMatrix-v1.html#algm-calculateumatrix"><span class="std std-ref">CalculateUMatrix</span></a></p>
+</section>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>UBfiles</p></td>
+<td><p>Input</p></td>
+<td><p>list of str lists</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Files with exported UB (from SaveISawUB). The filename must have .mat extension and only contain the run number as would be supplied to Load (e.g. WISH00043350.mat). The first UB will be the reference (typically, but not necessarily, omega = phi = 0) and a consistent UB will be made for each of the subsequent runs. Allowed extensions: [‘.mat’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>Chi</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>45</p></td>
+<td><p>Angle of the goniometer axis from +ve Z (vertical up).</p></td>
+</tr>
+<tr class="row-even"><td><p>ChiTol</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>5</p></td>
+<td><p>Tolerance of chi angle to test for consistency.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PhiTol</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>15</p></td>
+<td><p>Tolerance of phi angle to test for consistency (due to uncertainty on the gonio axis at omega=0this tol might need to be quite large).</p></td>
+</tr>
+<tr class="row-even"><td><p>PhiHand</p></td>
+<td><p>Input</p></td>
+<td><p>long</p></td>
+<td><p>1</p></td>
+<td><p>Handedness for the phi angles (rotation around goniometer axis) in the log file (1 for ccw/RH, -1 for cw/LH). Allowed values: [‘-1’, ‘1’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>PhiLogName</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>ewald_pos</p></td>
+<td><p>Name of log entry that records angle of rotation about goniometer axis</p></td>
+</tr>
+<tr class="row-even"><td><p>DOmega</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>omega rotation between component of goniometer axis in XY-plane from +ve Y-axis(perpendicular to ki)</p></td>
+</tr>
+<tr class="row-odd"><td><p>OmegaHand</p></td>
+<td><p>Input</p></td>
+<td><p>long</p></td>
+<td><p>1</p></td>
+<td><p>Handedness for the omega angles (rotation around +ve Z) in the log file (1 for ccw/RH, -1 for cw/LH). Allowed values: [‘-1’, ‘1’]</p></td>
+</tr>
+<tr class="row-even"><td><p>OmegaLogName</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>ccr_pos</p></td>
+<td><p>Name of log entry that records angle of rotation about vertical axis</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputTable</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Output table to display goniometer axis and angles for runs with UBs that can share common indexing</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>Takes a list of exported UB files (from SaveISawUB) and saves (in the default save directory) UB files that are consistent with the first UB file specified such that the same reflection in different runs has the same index (i.e. no inversion or swapping of crystallographic axes relative to the reference UB). Note this algorithm assume the sample is perfectly on the centre of rotation.</p>
+<figure class="align-default" id="id1">
+<img alt="FindGoniometerFromUB_schematic.PNG" src="../_images/FindGoniometerFromUB_schematic.PNG" />
+<figcaption>
+<p><span class="caption-text">Fig.1: Schematic of the coordinate system used and definition of the goniometer axes. The arrow associated with an angle denote the counter clockwise rotation which corresponds to a handedness of +1 (right-handed). If the log file angles are for a clockwise rotation then the corresponding handedness shuold be specified as -1 in the input to the algroithm.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The algorithm uses the right-hand coordinate system where X is the beam direction and Z is vertically upward (IPNS convention). The algorithm considers two rotation axes: rotation about the Z-axis, <span class="math notranslate nohighlight">\(\Omega\)</span> ,and rotation of <span class="math notranslate nohighlight">\(\phi\)</span> around the goniometer axis. The angles <span class="math notranslate nohighlight">\(\Omega\)</span> and <span class="math notranslate nohighlight">\(\phi\)</span> for each run are read from the first value of the specified log entry in the run log files.
+The goniometer axis is defined by the angle from the vertical, <span class="math notranslate nohighlight">\(\chi\)</span>, and the angle between the component of the goniometer axis in the scattering plane (XY) from the positive Y-axis, <span class="math notranslate nohighlight">\(d\Omega\)</span>, defined when <span class="math notranslate nohighlight">\(\Omega=0\)</span> - for which nominal/best-guess values need to be supplied as arguments.</p>
+<p>The test for consistency requires some tolerances to be supplied on <span class="math notranslate nohighlight">\(\chi\)</span> and <span class="math notranslate nohighlight">\(\phi\)</span>, if the nominal goniometer axis is not within those tolerances the most likely permutation of the axes is tried (see <a class="reference internal" href="FindPeaksMD-v1.html#algm-findpeaksmd"><span class="std std-ref">FindPeaksMD v1</span></a>) and the consistency is checked again. The algorithm displays a table with the actual <span class="math notranslate nohighlight">\(\chi\)</span> and <span class="math notranslate nohighlight">\(\phi\)</span> and the unit vector of the goniometer axis for each run for which a consistent UB was found</p>
+</section>
+<section id="useage">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Useage</a><a class="headerlink" href="#useage" title="Link to this heading">¶</a></h2>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">ubList</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;WISH00043350&#39;</span><span class="p">,</span> <span class="s1">&#39;WISH00043351&#39;</span><span class="p">,</span> <span class="s1">&#39;WISH00043352&#39;</span><span class="p">,</span><span class="s1">&#39;WISH00043353&#39;</span><span class="p">,</span><span class="s1">&#39;WISH00043354&#39;</span><span class="p">]</span>
+<span class="n">tab</span> <span class="o">=</span> <span class="n">FindGoniometerFromUB</span><span class="p">(</span><span class="n">UBfiles</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ubList</span><span class="p">),</span> <span class="n">chi</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">chiTol</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">phiTol</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                           <span class="n">phiHand</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dOmega</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">omegaHand</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/Diffraction/Reduction.html">Diffraction\Reduction</a></p>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>Python: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/66c74f87d9b779695dc85b538bc48767c5975b19/Framework/PythonInterface/plugins/algorithms/FindGoniometerFromUB.py">FindGoniometerFromUB.py</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="FindGlobalBMatrix-v1.html" title="Previous Chapter: FindGlobalBMatrix v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; FindGlobalBMatrix v1</span>
+    </a>
+  </li>
+  <li>
+    <a href="FindPeakBackground-v1.html" title="Next Chapter: FindPeakBackground v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">FindPeakBackground v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

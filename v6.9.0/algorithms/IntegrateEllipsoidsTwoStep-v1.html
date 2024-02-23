@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>IntegrateEllipsoidsTwoStep v1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=5b08953a"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="IntegrateFlux v1" href="IntegrateFlux-v1.html" />
+    <link rel="prev" title="IntegrateEllipsoids v3" href="IntegrateEllipsoids-v3.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">IntegrateEllipsoidsTwoStep v1</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="integrateellipsoidstwostep-v1">
+<span id="algm-integrateellipsoidstwostep"></span><span id="algm-integrateellipsoidstwostep-v1"></span><h1>IntegrateEllipsoidsTwoStep v1<a class="headerlink" href="#integrateellipsoidstwostep-v1" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id2">Summary</a></p>
+<ul>
+<li><p><a class="reference internal" href="#see-also" id="id3">See Also</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#properties" id="id4">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id5">Description</a></p>
+<ul>
+<li><p><a class="reference internal" href="#overview-and-similar-algorithms" id="id6">Overview and similar algorithms</a></p></li>
+<li><p><a class="reference internal" href="#explanation-of-inputs" id="id7">Explanation of Inputs</a></p></li>
+<li><p><a class="reference internal" href="#detailed-algorithm-description" id="id8">Detailed Algorithm Description</a></p></li>
+<li><p><a class="reference internal" href="#integrateifonedge-false-option" id="id9">IntegrateIfOnEdge=False option</a></p></li>
+<li><p><a class="reference internal" href="#sigma-from-the-background" id="id10">Sigma from the background</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#usage" id="id11">Usage</a></p></li>
+<li><p><a class="reference internal" href="#source" id="id12">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Integrate Single Crystal Diffraction Bragg peaks using 3D ellipsoids.</p>
+<section id="see-also">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="IntegrateEllipsoids-v3.html#algm-integrateellipsoids"><span class="std std-ref">IntegrateEllipsoids</span></a></p>
+</section>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>InputWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>An input MatrixWorkspace with time-of-flight units along X-axis and defined instrument with defined sample</p></td>
+</tr>
+<tr class="row-odd"><td><p>PeaksWorkspace</p></td>
+<td><p>InOut</p></td>
+<td><p>PeaksWorkspace</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Workspace with peaks to be integrated</p></td>
+</tr>
+<tr class="row-even"><td><p>RegionRadius</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0.35</p></td>
+<td><p>Only events at most this distance from a peak will be considered when integrating</p></td>
+</tr>
+<tr class="row-odd"><td><p>SpecifySize</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If true, use the following for the major axis sizes, else use 3-sigma</p></td>
+</tr>
+<tr class="row-even"><td><p>PeakSize</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0.18</p></td>
+<td><p>Half-length of major axis for peak ellipsoid</p></td>
+</tr>
+<tr class="row-odd"><td><p>BackgroundInnerSize</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0.18</p></td>
+<td><p>Half-length of major axis for inner ellipsoidal surface of background region</p></td>
+</tr>
+<tr class="row-even"><td><p>BackgroundOuterSize</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0.23</p></td>
+<td><p>Half-length of major axis for outer ellipsoidal surface of background region</p></td>
+</tr>
+<tr class="row-odd"><td><p>IntegrateInHKL</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If true, integrate in HKL space not Q space.</p></td>
+</tr>
+<tr class="row-even"><td><p>IntegrateIfOnEdge</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>Set to false to not integrate if peak radius is off edge of detector.Background will be scaled if background radius is off edge.</p></td>
+</tr>
+<tr class="row-odd"><td><p>AdaptiveQBackground</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Default is false.   If true, BackgroundOuterRadius + AdaptiveQMultiplier * <strong>|Q|</strong> and BackgroundInnerRadius + AdaptiveQMultiplier * <strong>|Q|</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>AdaptiveQMultiplier</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>PeakRadius + AdaptiveQMultiplier * <strong>|Q|</strong> so each peak has a different integration radius.  Q includes the 2*pi factor.</p></td>
+</tr>
+<tr class="row-odd"><td><p>WeakPeakThreshold</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>1</p></td>
+<td><p>Intensity threshold use to classify a peak as weak.</p></td>
+</tr>
+<tr class="row-even"><td><p>UseOnePercentBackgroundCorrection</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>If this options is enabled, then the top 1% of the background will be removedbefore the background subtraction.</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p>PeaksWorkspace</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>The output PeaksWorkspace will be a copy of the input PeaksWorkspace with the peaks’ integrated intensities.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<section id="overview-and-similar-algorithms">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Overview and similar algorithms</a><a class="headerlink" href="#overview-and-similar-algorithms" title="Link to this heading">¶</a></h3>
+<p>This algorithm will integrate disjoint single crystal Bragg peaks by
+summing the number of raw or weighted events in a 3D ellipsoidal peak region in
+reciprocal space (See <em>IntegrateInHKL</em> option for integrating in HKL)
+and subtracting an estimate of the background obtained
+from an ellipsoidal shell. In some ways it is similar to the
+<a class="reference internal" href="IntegratePeaksMD-v2.html#algm-integratepeaksmd"><span class="std std-ref">IntegratePeaksMD v2</span></a> algorithm. In particular the size parameters to
+this algorithm are also specified in inverse Angstroms and the
+background subtraction is done in the same way for both the intensity
+and the estimated standard deviations. However, this algorithm differs
+from <a class="reference internal" href="IntegratePeaksMD-v2.html#algm-integratepeaksmd"><span class="std std-ref">IntegratePeaksMD v2</span></a> in several critical ways.</p>
+<ul class="simple">
+<li><p>This algorithm works directly with raw or weighted events
+while <a class="reference internal" href="IntegratePeaksMD-v2.html#algm-integratepeaksmd"><span class="std std-ref">IntegratePeaksMD v2</span></a> uses <strong>MDEvents</strong> from
+<a class="reference internal" href="../concepts/MDWorkspace.html#mdworkspace"><span class="std std-ref">MDEventWorkspace</span></a>.</p></li>
+<li><p>This algorithm uses 3D ellipsoidal regions with aspect ratios that
+are adapted to the set of events that are near the peak center, while
+<a class="reference internal" href="IntegratePeaksMD-v2.html#algm-integratepeaksmd"><span class="std std-ref">IntegratePeaksMD v2</span></a> uses spherical regions.</p></li>
+<li><p>This algorithm includes an option to automatically choose the size of
+the ellipsoidal regions based on the statistics of the set of events
+near the peak.</p></li>
+<li><p>This algorithm only applies to peaks with integral HKL values and as
+currently implemented it cannot be used to integrate ellipsoidal
+regions at other locations in reciprocal space.</p></li>
+</ul>
+<p>This algorithm is very similar to the <a class="reference internal" href="IntegrateEllipsoids-v3.html#algm-integrateellipsoids"><span class="std std-ref">IntegrateEllipsoids v3</span></a> algorithm.
+But differs in how it treats weak peaks. Whether a peaks is classified as weak
+or strong is based on computing a rough estimate for the signal to noise ratio
+for each peak. The <em>WeakPeakThreshold</em> parameter is used to control this
+threshold.</p>
+<p>For strong peaks the algorithm calculates the three principal axes of the events
+near a peak, and uses the standard deviations in the directions of the principal
+axes to determine the aspect ratio of ellipsoids used for the peak and
+background regions. This is identical to the method used in
+<a class="reference internal" href="IntegrateEllipsoids-v3.html#algm-integrateellipsoids"><span class="std std-ref">IntegrateEllipsoids v3</span></a>.</p>
+<p>For weak peaks the nearest strong peak is found and the ellipsoid used to
+integrate the strong peak is used instead. After the integration has been
+performed the calculated intensity is modified by a fraction of a standard unit
+contour computed for the strong peak.</p>
+<p>The method is based on the ILL program Racer and the following paper:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Wilkinson, C., et al. “Integration of single-crystal reflections using area
+multidetectors.” <em>Journal of Applied Crystallography</em> 21.5 (1988): 471-478.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="explanation-of-inputs">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Explanation of Inputs</a><a class="headerlink" href="#explanation-of-inputs" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The event data to be integrated is obtained from an ordinary
+<a class="reference internal" href="../concepts/EventWorkspace.html#eventworkspace"><span class="std std-ref">EventWorkspace</span></a>
+with an X-axis in time-of-flight, as loaded from a
+NeXus event file. This algorithm maps the events to reciprocal space
+using <em>PeaksWorkwpace</em> with indexed peaks to determine the parameters
+of the transformation into the reciprocal space (<a class="reference internal" href="../concepts/Lattice.html#lattice"><span class="std std-ref">UB matrix</span></a>)</p></li>
+<li><p>The peaks to be integrated are are also obtained from a <em>PeaksWorkspace</em>. The
+peaks must be indexed, and any peaks indexed as (0,0,0) will be
+ignored. The HKL values for valid peaks should all be integers, to
+make this check for unindexed peaks reliable.</p></li>
+<li><p>Only events that are near a peak are considered when constructing the
+ellipsoids. The <em>RegionRadius</em> specifies the maximum distance from the
+peak center to an event in reciprocal space, for that event to used.
+See the figure below. Also, each event will be counted for at most
+one peak, the one with the nearest HKL value. The RegionRadius should
+be specified to be just slightly larger than the expected peak region
+to avoid overlap with other peaks, and to avoid including excessive
+background. As the size of the <em>RegionRadius</em> increases, the ellipsoids
+will become more spherical and less well adapted to the actual shape
+of the peak.</p></li>
+</ul>
+<figure class="align-default" id="id1">
+<img alt="IntegrateEllipsoids.png" src="../_images/IntegrateEllipsoids.png" />
+<figcaption>
+<p><span class="caption-text">IntegrateEllipsoidsTwoStep algorithm regions map.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<ul class="simple">
+<li><p>If the <em>SpecifySize</em> option is selected, then the user MUST specify the
+<em>PeakSize</em>, <em>BackgroundInnerSize</em> and <em>BackgroundOuterSize</em>. In this mode, the
+algorithm is similar to the <a class="reference internal" href="IntegratePeaksMD-v2.html#algm-integratepeaksmd"><span class="std std-ref">IntegratePeaksMD v2</span></a> algorithm. As shown
+in the figure, these values determine the length of the major axis for the
+ellipsoidal peak region, and of the inner and outer ellipsoids bounding the
+background region. The same major axis lengths are used for all peaks, but the
+lengths of the other two axes of the ellipsoids are adjusted based on the
+standard deviations of the events in those directions. If <em>SpecifySize</em> is
+false, then the major axis length for each peak will be set to include a range
+of plus or minus three times the standard deviation of the events in that
+direction. That is, <em>PeakSize</em> is set to three times the standard deviation in
+the direction of the first principal axis. Also, in this case the
+<em>BackgroundInnerSize</em> is set to the <em>PeakSize</em> and the <em>BackgroundOuterSize</em>
+is set so that the background ellipsoidal shell has the same volume as the
+peak ellipsoidal region. If specified by the user, these parameters must be
+ordered correctly with: <span class="math notranslate nohighlight">\(0 &lt; PeakSize \leq BackgroundInnerSize\)</span> and
+<span class="math notranslate nohighlight">\(BackgroundInnerSize &lt; BackgroundOuterSize \leq RegionRadius\)</span></p></li>
+<li><p>If <em>UseOnePercentBackgroundCorrection</em> is enabled, then the top 1% of the
+background events are removed so that there are no intensity spikes near the
+edges. This is enabled by default.</p></li>
+<li><p><em>AdaptiveQMultiplier</em> can be used with <em>SpecifySize</em> for the radius to vary
+as a function of the modulus of Q. If the <em>AdaptiveQBackground</em> option is set
+to True, the background radius also changes so each peak has a different
+integration radius.  Q includes the 2*pi factor.</p></li>
+<li><p>PeakRadius + AdaptiveQMultiplier * <strong>|Q|</strong> -  BackgroundOuterRadius +
+AdaptiveQMultiplier * <strong>|Q|</strong> -  BackgroundInnerRadius +
+AdaptiveQMultiplier * <strong>|Q|</strong></p></li>
+<li><p>If the <em>IntegrateInHKL</em> option is selected, then HKL space is used for the
+integration instead of reciprocal space.  This option may be useful for large
+unit cells where the radius of integration needs to be very different for
+peaks at low Q and high Q.  With this option the <em>PeakSize</em>,
+<em>BackgroundInnerSize</em> and <em>BackgroundOuterSize</em> are specified in HKL and they
+just need to be smaller than 0.5.</p></li>
+<li><p>The <em>WeakPeakThreshold</em> parameter controls the signal to noise threshold used
+to classify peaks as either strong or weak.</p></li>
+<li><p>The integrated intensities will be set in the specified <em>OutputWorkspace</em>. If
+this is different from the input <em>PeaksWorkspace</em>, the input peaks workspace
+will be copied to the <em>OutputWorkspace</em> before setting the integrated
+intensities.</p></li>
+</ul>
+</section>
+<section id="detailed-algorithm-description">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Detailed Algorithm Description</a><a class="headerlink" href="#detailed-algorithm-description" title="Link to this heading">¶</a></h3>
+<p>This algorithm will integrate a list of indexed single-crystal diffraction peaks
+from a <em>PeaksWorkspace</em>, using events from an ( <a class="reference internal" href="../concepts/EventWorkspace.html#eventworkspace"><span class="std std-ref">EventWorkspace</span></a> ).  The indexed peaks are first used to determine a <a class="reference internal" href="../concepts/Lattice.html#lattice"><span class="std std-ref">UB matrix</span></a>.
+The inverse of that <a class="reference internal" href="../concepts/Lattice.html#lattice"><span class="std std-ref">UB matrix</span></a> is then used to form lists of events that are
+close to peaks in reciprocal space. An event will be added to the list of events
+for a peak provided that the fractional <span class="math notranslate nohighlight">\(h,k,l\)</span> value of that event
+(obtained by applying UB-inverse to the <span class="math notranslate nohighlight">\(Q\)</span> -vector) is closer to the
+<span class="math notranslate nohighlight">\(h,k,l\)</span> of that peak, than to the <span class="math notranslate nohighlight">\(h,k,l\)</span> of any other peak AND the
+<span class="math notranslate nohighlight">\(Q\)</span> -vector for that event is within the specified radius of the <span class="math notranslate nohighlight">\(Q\)</span>
+-vector for that peak. This technique makes the algorithm suitable for nuclear
+peaks, but may not be suitable for magnetic peaks.</p>
+<p>When the lists of events near the peaks have been built, the algorithm will
+estimate the signal to noise ratio for each peak using the parameters provided.
+The <em>WeakPeakThreshold</em> parameter will be used to threshold which peaks are
+classed as strong as which are weak.</p>
+<p>Strong peaks will then be integrated. The three principal axes of the set of
+events near each peak are found, and the standard deviations of the projections
+of the events on each of the three principal axes are calculated. The principal
+axes and standard deviations for the events around a peak in the directions of
+the principal axes are used to determine an ellipsoidal region for the peak and
+an ellipsoidal shell region for the background. The number of events in the peak
+ellipsoid and background ellipsoidal shell are counted and used to determine the
+net integrated intensity of the peak.</p>
+<p>The ellipsoidal regions used for the peak and background can be obtained in two
+ways. First, the user may specify the size of the peak ellipsoid and the inner
+and outer size of the background ellipsoid. If these are specified, the values
+will be used for half the length of the major axis of an ellipsoid centered on
+the peak. The major axis is in the direction of the principal axis for which the
+standard deviation in that direction is largest. The other two axes for the
+ellipsoid are in the direction of the other two principal axes and are scaled
+relative to the major axes in proportion to their standard deviations. For
+example if the standard deviations in the direction of the other two principal
+axes are .8 and .7 times the standard deviation in the direction of the major
+axis, then the ellipse will extend only .8 and .7 times as far in the direction
+of those axes, as in the direction of the major axis. Overall, the user
+specified sizes for the <em>PeakSize</em>, <em>BackgroundInnerSize</em> and
+<em>BackgroundOuterSize</em> are similar to the <em>PeakRadius</em>, <em>BackgroundInnerRadius</em>
+and <em>BackgrounOuterRadius</em> for the <a class="reference internal" href="IntegratePeaksMD-v2.html#algm-integratepeaksmd"><span class="std std-ref">IntegratePeaksMD v2</span></a> algorithm. The
+difference is that the regions used in this algorithm are not spherical, but are
+ellipsoidal with axis directions obtained from the principal axes of the events
+near a peak and the ellipsoid shape (relative axis lengths) is determined by the
+standard deviations in the directions of the principal axes.</p>
+<p>Second, if the user does not specify the size of the peak and background
+ellipsoids, then the three axes of the peak ellipsoid are again set to the
+principal axes of the set of nearby events but in this case their axis lengths
+are set to cover a range of plus or minus three standard deviations in the axis
+directions. In this case, the background ellipsoidal shell is chosen to have the
+same volume as the peak ellipsoid and it’s inner surface is the outer surface of
+the peak ellipsoid. The outer surface of the background ellipsoidal shell is an
+ellipsoidal surface with the same relative axis lengths as the inner surface.</p>
+<p>This algorithm uses principle component analysis to determine the principle axis
+for each peak. For the event list (QLab) associated with each peak, the
+algorithm determines a covariance matrix, and uses that to establish
+eigenvectors corresponding to the principle axis (all orthogonal). The sizes of
+each principle axis are used define the region of which events will be
+counted/integrated from those already associated with each peak.</p>
+<p>Once strong peaks have been integrated the algorithm uses the parameters derived
+from there integration to integrate the remaining weak peaks. For each weak peak
+the nearest strong peak is found using a nearest neighbour search. The shape and
+principal components of the strong peak are then used to integrate the weak peak
+in the same was as described for strong peaks above. A weight determined by the
+fraction of a unit contour contained within the total integration contour of the
+strong peak is used to weight the integrated intensity for the weak peak.</p>
+</section>
+<section id="integrateifonedge-false-option">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">IntegrateIfOnEdge=False option</a><a class="headerlink" href="#integrateifonedge-false-option" title="Link to this heading">¶</a></h3>
+<p>Edges for each bank or pack of tubes of the instrument are defined by masking
+the edges in the PeaksWorkspace instrument.  e.g. For CORELLI, tubes 1 and 16,
+and pixels 0 and 255.  Q in the lab frame for every peak is calculated, call it
+C For every point on the edge, the trajectory in reciprocal space is a straight
+line, going through:</p>
+<p><span class="math notranslate nohighlight">\(\vec{O}=(0,0,0)\)</span></p>
+<p>Calculate a point at a fixed momentum, say k=1.
+Q in the lab frame:</p>
+<p><span class="math notranslate nohighlight">\(\vec{E}=(-k*sin(\theta)*cos(\phi),-k*sin(\theta)*sin(\phi),k-k*cos(\phi))\)</span></p>
+<p>Normalize E to 1:</p>
+<p><span class="math notranslate nohighlight">\(\vec{E}=\vec{E}*(1./\left|\vec{E}\right|)\)</span></p>
+<p>The distance from C to OE is given by:</p>
+<p><span class="math notranslate nohighlight">\(dv=\vec{C}-\vec{E}*(\vec{C} \cdot \vec{E})\)</span></p>
+<p>If:</p>
+<p><span class="math notranslate nohighlight">\(\left|dv\right|&lt;PeakRadius\)</span></p>
+<p>for the integration, one of the detector trajectories on the edge is too close
+to the peak This method is also applied to all masked pixels.  If there are
+masked pixels trajectories inside an integration volume, the peak must be
+rejected.  If there are masked pixel trajectories inside the background volume,
+the background events are scaled by estimating the volume of the ellipsoid on
+the detector.</p>
+</section>
+<section id="sigma-from-the-background">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Sigma from the background</a><a class="headerlink" href="#sigma-from-the-background" title="Link to this heading">¶</a></h3>
+<p>The sigma from the background could be too small because the background contains
+events from other peaks. In an effort to reduce this, all the background events
+are sorted and the top 1% are removed. Note that this behaviour is optional and
+can be enabled if the property <em>UseOnePercentBackgroundCorrection</em> is enabled.
+It is enabled by default.</p>
+</section>
+</section>
+<section id="usage">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Usage</a><a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p><strong>Example - IntegrateEllipsoids:</strong></p>
+<p>User should provide their own event nexus file instead of <strong>TOPAZ_3132_event.nxs</strong>
+used within this example. The original <strong>TOPAZ_3132_event.nxs</strong> file is
+available in <a class="reference external" href="https://github.com/mantidproject/systemtests/tree/master/Data/TOPAZ_3132_event.nxs">Mantid system tests repository</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span> <span class="nf">print_tableWS</span><span class="p">(</span><span class="n">pTWS</span><span class="p">,</span><span class="n">nRows</span><span class="p">):</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="sd">&#39;&#39;&#39; Method to print part of the table workspace &#39;&#39;&#39;</span>
+<span class="linenos"> 3</span>    <span class="n">tab_names</span><span class="o">=</span><span class="n">pTWS</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="linenos"> 4</span>    <span class="n">row</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="linenos"> 5</span>    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">tab_names</span><span class="p">:</span>
+<span class="linenos"> 6</span>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">8</span><span class="p">:</span>
+<span class="linenos"> 7</span>           <span class="n">name</span><span class="o">=</span> <span class="n">name</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span>
+<span class="linenos"> 8</span>        <span class="n">row</span> <span class="o">+=</span> <span class="s2">&quot;| </span><span class="si">{:8}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="linenos"> 9</span>    <span class="nb">print</span><span class="p">(</span><span class="n">row</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span><span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nRows</span><span class="p">):</span>
+<span class="linenos">12</span>        <span class="n">row</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="linenos">13</span>        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">tab_names</span><span class="p">:</span>
+<span class="linenos">14</span>              <span class="n">col</span> <span class="o">=</span> <span class="n">pTWS</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+<span class="linenos">15</span>              <span class="n">data2pr</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="linenos">16</span>              <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data2pr</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
+<span class="linenos">17</span>                  <span class="n">row</span> <span class="o">+=</span> <span class="s2">&quot;| </span><span class="si">{:8.1f}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data2pr</span><span class="p">)</span>
+<span class="linenos">18</span>              <span class="k">else</span><span class="p">:</span>
+<span class="linenos">19</span>                  <span class="n">row</span> <span class="o">+=</span> <span class="s2">&quot;| </span><span class="si">{:8}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">data2pr</span><span class="p">))</span>
+<span class="linenos">20</span>        <span class="nb">print</span><span class="p">(</span><span class="n">row</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span><span class="p">)</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span><span class="c1"># load test workspace</span>
+<span class="linenos">24</span><span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;TOPAZ_3132_event.nxs&#39;</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;TOPAZ_3132_event&#39;</span><span class="p">,</span><span class="n">LoadMonitors</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span><span class="c1"># build peak workspace necessary for IntegrateEllipsoids algorithm to work</span>
+<span class="linenos">27</span><span class="n">ConvertToMD</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;TOPAZ_3132_event&#39;</span><span class="p">,</span><span class="n">QDimensions</span><span class="o">=</span><span class="s1">&#39;Q3D&#39;</span><span class="p">,</span><span class="n">dEAnalysisMode</span><span class="o">=</span><span class="s1">&#39;Elastic&#39;</span><span class="p">,</span><span class="n">Q3DFrames</span><span class="o">=</span><span class="s1">&#39;Q_sample&#39;</span><span class="p">,</span><span class="n">LorentzCorrection</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;TOPAZ_3132_md&#39;</span><span class="p">,</span>\
+<span class="linenos">28</span><span class="n">MinValues</span><span class="o">=</span><span class="s1">&#39;-25,-25,-25&#39;</span><span class="p">,</span><span class="n">MaxValues</span><span class="o">=</span><span class="s1">&#39;25,25,25&#39;</span><span class="p">,</span><span class="n">SplitInto</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="n">SplitThreshold</span><span class="o">=</span><span class="s1">&#39;50&#39;</span><span class="p">,</span><span class="n">MaxRecursionDepth</span><span class="o">=</span><span class="s1">&#39;13&#39;</span><span class="p">,</span><span class="n">MinRecursionDepth</span><span class="o">=</span><span class="s1">&#39;7&#39;</span><span class="p">)</span>
+<span class="linenos">29</span><span class="n">FindPeaksMD</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;TOPAZ_3132_md&#39;</span><span class="p">,</span><span class="n">PeakDistanceThreshold</span><span class="o">=</span><span class="s1">&#39;0.3768&#39;</span><span class="p">,</span><span class="n">MaxPeaks</span><span class="o">=</span><span class="s1">&#39;50&#39;</span><span class="p">,</span><span class="n">DensityThresholdFactor</span><span class="o">=</span><span class="s1">&#39;100&#39;</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;TOPAZ_3132_peaks&#39;</span><span class="p">)</span>
+<span class="linenos">30</span><span class="n">FindUBUsingFFT</span><span class="p">(</span><span class="n">PeaksWorkspace</span><span class="o">=</span><span class="s1">&#39;TOPAZ_3132_peaks&#39;</span><span class="p">,</span><span class="n">MinD</span><span class="o">=</span><span class="s1">&#39;3&#39;</span><span class="p">,</span><span class="n">MaxD</span><span class="o">=</span><span class="s1">&#39;15&#39;</span><span class="p">,</span><span class="n">Tolerance</span><span class="o">=</span><span class="s1">&#39;0.12&#39;</span><span class="p">)</span>
+<span class="linenos">31</span><span class="n">IndexPeaks</span><span class="p">(</span><span class="n">PeaksWorkspace</span><span class="o">=</span><span class="s1">&#39;TOPAZ_3132_peaks&#39;</span><span class="p">,</span><span class="n">Tolerance</span><span class="o">=</span><span class="s1">&#39;0.12&#39;</span><span class="p">)</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="c1"># integrate ellipsoids</span>
+<span class="linenos">34</span><span class="n">result</span><span class="o">=</span><span class="n">IntegrateEllipsoidsTwoStep</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;TOPAZ_3132_event&#39;</span><span class="p">,</span><span class="n">PeaksWorkspace</span><span class="o">=</span><span class="s1">&#39;TOPAZ_3132_peaks&#39;</span><span class="p">,</span>\
+<span class="linenos">35</span>      <span class="n">RegionRadius</span><span class="o">=</span><span class="s1">&#39;0.25&#39;</span><span class="p">,</span><span class="n">PeakSize</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">,</span><span class="n">BackgroundInnerSize</span><span class="o">=</span><span class="s1">&#39;0.2&#39;</span><span class="p">,</span><span class="n">BackgroundOuterSize</span><span class="o">=</span><span class="s1">&#39;0.25&#39;</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;TOPAZ_3132_peaks&#39;</span><span class="p">)</span>
+<span class="linenos">36</span>
+<span class="linenos">37</span><span class="c1"># print 10 rows of resulting table workspace</span>
+<span class="linenos">38</span><span class="n">print_tableWS</span><span class="p">(</span><span class="n">result</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output:</strong></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>| RunNumbe | DetID    | h        | k        | l        | Waveleng | Energy   | TOF      | DSpacing | Intens   | SigInt   | BinCount | BankName | Row      | Col      | QLab     | QSample  | PeakNumb |
+<span class="linenos"> 2</span>| 3132     | 1124984  |     -2.0 |     -1.0 |      2.0 |      3.1 |      8.5 |  14482.3 |      2.0 | 120486.0 |    375.8 |   1668.0 | bank17   |    120.0 |     42.0 | [1.57771,1.21779,2.37854] | [2.99396,0.815958,0.00317344] | 1        |
+<span class="linenos"> 3</span>| 3132     | 1156753  |     -3.0 |     -2.0 |      3.0 |      2.1 |     18.8 |   9725.7 |      1.3 | 149543.0 |    393.0 |   1060.0 | bank17   |    145.0 |    166.0 | [2.48964,1.45725,3.88666] | [4.52618,1.71025,0.129461] | 2        |
+<span class="linenos"> 4</span>| 3132     | 1141777  |     -4.0 |     -2.0 |      3.0 |      1.7 |     28.1 |   7963.2 |      1.0 |   8744.0 |    106.3 |     96.0 | bank17   |     17.0 |    108.0 | [2.60836,2.31423,4.86391] | [5.69122,1.79492,-0.452799] | 3        |
+<span class="linenos"> 5</span>| 3132     | 1125241  |     -4.0 |     -2.0 |      4.0 |      1.6 |     33.9 |   7252.2 |      1.0 |  19740.0 |    146.2 |     83.0 | bank17   |    121.0 |     43.0 | [3.15504,2.42573,4.75121] | [5.97829,1.63473,0.0118744] | 4        |
+<span class="linenos"> 6</span>| 3132     | 1170598  |     -4.0 |     -3.0 |      4.0 |      1.5 |     34.1 |   7224.6 |      0.9 |  15914.0 |    131.4 |     73.0 | bank17   |    166.0 |    220.0 | [3.43363,1.70178,5.39301] | [6.07726,2.59962,0.281759] | 5        |
+<span class="linenos"> 7</span>| 3132     | 1214951  |     -2.0 |     -1.0 |      4.0 |      1.9 |     22.8 |   8839.5 |      1.7 | 121852.0 |    352.9 |    719.0 | bank18   |    231.0 |    137.0 | [2.73683,1.43808,2.11574] | [3.5786,0.470838,1.00329] | 6        |
+<span class="linenos"> 8</span>| 3132     | 1207827  |     -3.0 |     -1.0 |      4.0 |      1.7 |     27.9 |   7991.7 |      1.3 |  64593.0 |    257.7 |    447.0 | bank18   |     19.0 |    110.0 | [2.80324,2.29519,3.09134] | [4.71517,0.554412,0.37714] | 7        |
+<span class="linenos"> 9</span>| 3132     | 1232949  |     -4.0 |     -2.0 |      6.0 |      1.2 |     53.3 |   5782.1 |      0.9 |  18247.0 |    139.3 |     45.0 | bank18   |     53.0 |    208.0 | [4.29033,2.63319,4.46168] | [6.52658,1.27985,1.00646] | 8        |
+<span class="linenos">10</span>| 3132     | 1189484  |     -4.0 |     -1.0 |      6.0 |      1.1 |     63.4 |   5299.3 |      1.0 |  13512.0 |    120.7 |     31.0 | bank18   |    108.0 |     38.0 | [4.02414,3.39659,3.83664] | [6.4679,0.298896,0.726133] | 9        |
+<span class="linenos">11</span>| 3132     | 1218337  |     -5.0 |     -2.0 |      7.0 |      1.0 |     79.8 |   4724.1 |      0.8 |   7411.0 |     88.3 |     15.0 | bank18   |     33.0 |    151.0 | [4.96622,3.61607,5.32554] | [7.99244,1.19363,0.892655] | 10       |
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/Crystal/Integration.html">Crystal\Integration</a></p>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/66c74f87d9b779695dc85b538bc48767c5975b19/Framework/MDAlgorithms/inc/MantidMDAlgorithms/IntegrateEllipsoidsTwoStep.h">IntegrateEllipsoidsTwoStep.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/66c74f87d9b779695dc85b538bc48767c5975b19/Framework/MDAlgorithms/src/IntegrateEllipsoidsTwoStep.cpp">IntegrateEllipsoidsTwoStep.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="IntegrateEllipsoids-v3.html" title="Previous Chapter: IntegrateEllipsoids v3"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; IntegrateElli...</span>
+    </a>
+  </li>
+  <li>
+    <a href="IntegrateFlux-v1.html" title="Next Chapter: IntegrateFlux v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">IntegrateFlux v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

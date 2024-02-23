@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Crystal structure and reflections</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=5b08953a"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Data Service" href="DataService.html" />
+    <link rel="prev" title="Crystal Field Theory" href="CrystalField.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Concepts</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Crystal structure and reflections</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="crystal-structure-and-reflections">
+<span id="id1"></span><h1>Crystal structure and reflections<a class="headerlink" href="#crystal-structure-and-reflections" title="Link to this heading">¶</a></h1>
+<p>This document describes how crystal structure data can be processed and used in Mantid. For the understanding of the
+concepts of <a class="reference internal" href="SymmetryGroups.html#symmetry-groups"><span class="std std-ref">symmetry</span></a> and <a class="reference internal" href="PointAndSpaceGroups.html#point-and-space-groups"><span class="std std-ref">space groups</span></a> in Mantid it may be
+useful to read those introductory articles before proceeding with this document. While there is a short introduction
+into theoretical aspects this page is not a replacement for proper introductory text books on the subject where all
+these principles are explained in great detail and on a much more general basis.</p>
+<section id="theoretical-aspects">
+<h2>Theoretical aspects<a class="headerlink" href="#theoretical-aspects" title="Link to this heading">¶</a></h2>
+<section id="crystal-structures">
+<h3>Crystal structures<a class="headerlink" href="#crystal-structures" title="Link to this heading">¶</a></h3>
+<p>A crystal is modelled as an infinitely repeating three-dimensional arrangement of scatterers, usually atoms. Due to
+the periodic nature of crystals, the entire object can be described by specifying the repeated unit and how
+it is repeated. These information are called “crystal structure” and comprise three components:</p>
+<ol class="arabic simple">
+<li><p>Lattice (describes the periodicity of the structure)</p></li>
+<li><p>Basis (distribution of scatterers in the unit cell)</p></li>
+<li><p>Space group (describes the symmetry of the arrangement of scatterers)</p></li>
+</ol>
+<p>The description of the basis depends on the model’s level of detail. In the simplest case it could be a list of
+point scatterers that are fully characterized by three coordinates (x, y and z in terms of the lattice vectors) and
+a scattering length. In reality however, the scatterers are usually atoms that fluctuate about their average position
+due to thermal agitation. A basic way to model this motion is to assume it to be an isotropic phenomenon, allowing the
+description with one single parameter that quantifies the radius of a sphere in which the scatterer oscillates
+harmonically. This so called Debye-Waller-factor will be introduced later on.</p>
+<p>Another important parameter for a basic description of the basis is the so called occupancy. It describes the fraction
+of the total number of scatterer-positions that is actually occupied. A common example where this is required are
+unordered binary metal mixtures where the same position in the crystal structure is partly filled with two different
+atoms in a randomly distributed manner.</p>
+<p>To summarize, a very basic model of the basis comprises a list of scatterers that are in turn characterized by
+six parameters:</p>
+<ol class="arabic simple">
+<li><p>Scattering length (known for each element)</p></li>
+<li><p>Fractional coordinate x</p></li>
+<li><p>Fractional coordinate y</p></li>
+<li><p>Fractional coordinate z</p></li>
+<li><p>Occupancy of the site</p></li>
+<li><p>Isotropic thermal displacement parameter</p></li>
+</ol>
+<p>Knowledge of the space group makes it possible to derive all scatterers in the entire unit cell. The symmetry operations
+of the space group map each scatterer-position onto a set of equivalent positions that are consequently occupied by the
+same type of scatterer as well. Since the unit cell is repeated infinitely in all three directions of space, it is
+enough to describe one unit cell. Finally, the lattice is described by six parameters as well, the lengths of the three
+lattice vectors (usually given in <span class="math notranslate nohighlight">\(\mathrm{\AA{}}\)</span>) and the three angles (in degree) between these vectors.</p>
+</section>
+<section id="reflections-and-structure-factors">
+<h3>Reflections and structure factors<a class="headerlink" href="#reflections-and-structure-factors" title="Link to this heading">¶</a></h3>
+<p>In a diffraction experiment the periodic arrangement of atoms is probed using radiation, in this case in the form of
+neutrons, of an appropriate wavelength (on the same scale of interatomic distances, typically between 0.5 and
+5 <span class="math notranslate nohighlight">\(\mathrm{\AA{}}\)</span>). The incident beam interacts with the scatterers and in certain orientations the beam is
+“reflected” by a flock of lattice planes, a phenomenon which is described by Bragg’s law:</p>
+<div class="math notranslate nohighlight">
+\[2d\sin\theta = \lambda\]</div>
+<p>In this equation :math: <cite>d</cite> is the spacing between the lattice planes, <span class="math notranslate nohighlight">\(\theta\)</span> is the angle of the incoming beam
+and the lattice plane, and lambda is the wavelength of the radiation. In an experiment theta and lambda are
+usually limited, thus they are limiting the range of interplanar spacings that can be probed. In Bragg’s law the lattice
+plane families are only described by one parameter, the interplanar distance. But each lattice plane family also has an
+orientation in space which can be described by the plane’s normal vector. Usually the vector is given in terms of the
+reciprocal lattice of the structure, where it is reduced to three integers H, K, L, the so called Miller indices. With
+knowledge of the <a class="reference internal" href="Lattice.html#lattice"><span class="std std-ref">unit cell</span></a> (and thus the <span class="math notranslate nohighlight">\(\mathbf{B}\)</span>-matrix), the interplanar spacing can also
+be computed like this:</p>
+<div class="math notranslate nohighlight">
+\[d = \frac{1}{\left|\mathbf{B}\cdot\mathbf{h}\right|}\]</div>
+<p>The parameters taken into account so far determine the geometric characteristics of Bragg-reflections, i.e. their
+position on a detector and their time of flight. But besides these, each reflection also has an intensity. The
+intensity is proportional to the squared structure factor, which depends on the kind and arrangement of scatterers in
+the unit cell. The structure factor is a complex number and can be calculated for a certain HKL by summing the
+contributions of all N atoms j in the unit cell:</p>
+<div class="math notranslate nohighlight">
+\[F_{\mathbf{h}} = \sum\limits_{j}^{N}b_j\exp\left(2\pi i \mathbf{h} \cdot \mathbf{x}_j\right)\]</div>
+<p>In the above equation <span class="math notranslate nohighlight">\(b\)</span> is the scattering length, <span class="math notranslate nohighlight">\(\mathbf{h}\)</span> is the Miller index triplet HKL and
+<span class="math notranslate nohighlight">\(\mathbf{x}\)</span> contains the fractional coordinates of the j-th atom. To take into account isotropic thermal
+motion of atoms, the term is multiplied with the Debye-Waller factor:</p>
+<div class="math notranslate nohighlight">
+\[F_{\mathbf{h}} = \sum\limits_{j}^{N}b_j\exp\left(2\pi i \mathbf{h} \cdot \mathbf{x}_j\right)
+                \exp\left(-2\pi^2 U/d_{\mathbf{h}}^2\right)\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(U\)</span> is the isotropic atomic displacement parameter, usually given in <span class="math notranslate nohighlight">\(\mathrm{\AA{}}^2\)</span> and
+<span class="math notranslate nohighlight">\(d\)</span> is the lattice spacing discussed above. There are other, more complex models to describe the movement of
+atoms, taking into account anisotropic movement and also anharmonic effects.</p>
+</section>
+</section>
+<section id="implementation-in-mantid">
+<h2>Implementation in Mantid<a class="headerlink" href="#implementation-in-mantid" title="Link to this heading">¶</a></h2>
+<p>The concepts described above are available through the Python interface of Mantid. Crystal structures are represented
+by a class that stores the three necessary pieces of information. Objects of that class can be created by supplying
+string representations of those three arguments.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">CrystalStructure</span>
+
+<span class="n">silicon</span> <span class="o">=</span> <span class="n">CrystalStructure</span><span class="p">(</span><span class="s2">&quot;5.431 5.431 5.431&quot;</span><span class="p">,</span> <span class="s2">&quot;F d -3 m&quot;</span><span class="p">,</span> <span class="s2">&quot;Si 0 0 0 1.0 0.05&quot;</span><span class="p">)</span>
+
+<span class="n">unitCell</span> <span class="o">=</span> <span class="n">silicon</span><span class="o">.</span><span class="n">getUnitCell</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Crystal structure of silicon:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  Unit cell: </span><span class="si">{0}</span><span class="s1"> </span><span class="si">{1}</span><span class="s1"> </span><span class="si">{2}</span><span class="s1"> </span><span class="si">{3}</span><span class="s1"> </span><span class="si">{4}</span><span class="s1"> </span><span class="si">{5}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unitCell</span><span class="o">.</span><span class="n">a</span><span class="p">(),</span> <span class="n">unitCell</span><span class="o">.</span><span class="n">b</span><span class="p">(),</span> <span class="n">unitCell</span><span class="o">.</span><span class="n">c</span><span class="p">(),</span> <span class="n">unitCell</span><span class="o">.</span><span class="n">alpha</span><span class="p">(),</span> <span class="n">unitCell</span><span class="o">.</span><span class="n">beta</span><span class="p">(),</span> <span class="n">unitCell</span><span class="o">.</span><span class="n">gamma</span><span class="p">()))</span>
+
+<span class="n">spaceGroup</span> <span class="o">=</span> <span class="n">silicon</span><span class="o">.</span><span class="n">getSpaceGroup</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  Space group: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spaceGroup</span><span class="o">.</span><span class="n">getHMSymbol</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  Point group: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">spaceGroup</span><span class="o">.</span><span class="n">getPointGroup</span><span class="p">()</span><span class="o">.</span><span class="n">getHMSymbol</span><span class="p">()))</span>
+
+<span class="n">scatterers</span> <span class="o">=</span> <span class="n">silicon</span><span class="o">.</span><span class="n">getScatterers</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;  Total number of scatterers: </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">scatterers</span><span class="p">)))</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">scatterer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scatterers</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;    </span><span class="si">{0}</span><span class="s1">: </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">scatterer</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The above script produces the following output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Crystal structure of silicon:
+  Unit cell: 5.431 5.431 5.431 90.0 90.0 90.0
+  Space group: F d -3 m
+  Point group: m-3m
+  Total number of scatterers: 1
+    0: Si 0 0 0 1 0.05
+</pre></div>
+</div>
+<p>In general, the unit cell must be specified using either 3 or 6 space-separated floating point numbers, representing
+the three axis lengths and the three angles between them. The list of scatterers is required to be a semi-colon
+separated list of strings which contain the following information: Element symbol, x, y, z (fractional coordinates),
+occupancy (between 0 and 1) and isotropic atomic displacement parameter. The fractional coordinates can also be given
+as fractions (for example <span class="math notranslate nohighlight">\(1/2\)</span> or <span class="math notranslate nohighlight">\(1/3\)</span>) and for giving the coordinates in hexagonal or trigonal structures
+this is highly recommended as there may be precision problems with decimal numbers.</p>
+<p>While the CrystalStructure class is storing information, there is another class that makes use of these information to
+generate reflections and calculate structure factors. This class is called ReflectionGenerator and can be constructed
+from a CrystalStructure-object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">CrystalStructure</span><span class="p">,</span> <span class="n">ReflectionGenerator</span>
+<span class="kn">from</span> <span class="nn">mantid.kernel</span> <span class="kn">import</span> <span class="n">V3D</span>
+
+<span class="n">silicon</span> <span class="o">=</span> <span class="n">CrystalStructure</span><span class="p">(</span><span class="s2">&quot;5.431 5.431 5.431&quot;</span><span class="p">,</span> <span class="s2">&quot;F d -3 m&quot;</span><span class="p">,</span> <span class="s2">&quot;Si 0 0 0 1.0 0.05&quot;</span><span class="p">)</span>
+<span class="n">generator</span> <span class="o">=</span> <span class="n">ReflectionGenerator</span><span class="p">(</span><span class="n">silicon</span><span class="p">)</span>
+
+<span class="c1"># Create list of unique reflections between 0.7 and 3.0 Angstrom</span>
+<span class="n">hkls</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">getUniqueHKLs</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;There are </span><span class="si">{}</span><span class="s1"> unique reflections for Si in the specified resolution range.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hkls</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The reflection [222] is&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39; not&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">V3D</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">in</span> <span class="n">hkls</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; contained in the list.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>There are 20 unique reflections for Si in the specified resolution range.
+The reflection [222] is contained in the list.
+</pre></div>
+</div>
+<p>Checking the reflection conditions of space group <span class="math notranslate nohighlight">\(Fd\bar{3}m\)</span> (origin choice 1) in the International Tables for
+Crystallography shows that if an atom is on the 8a position, additional conditions apply (<span class="math notranslate nohighlight">\(h=2n+1\)</span> or
+<span class="math notranslate nohighlight">\(h+k+l=4n\)</span> for general reflections). Using these additional conditions, the 222 reflection should in fact
+not be in the list. This can be verified by calculating structure factors for the list of reflections and check if
+there are very small values present.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">CrystalStructure</span><span class="p">,</span> <span class="n">ReflectionGenerator</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">silicon</span> <span class="o">=</span> <span class="n">CrystalStructure</span><span class="p">(</span><span class="s2">&quot;5.431 5.431 5.431&quot;</span><span class="p">,</span> <span class="s2">&quot;F d -3 m&quot;</span><span class="p">,</span> <span class="s2">&quot;Si 0 0 0 1.0 0.05&quot;</span><span class="p">)</span>
+<span class="n">generator</span> <span class="o">=</span> <span class="n">ReflectionGenerator</span><span class="p">(</span><span class="n">silicon</span><span class="p">)</span>
+
+<span class="c1"># Create list of unique reflections between 0.7 and 3.0 Angstrom</span>
+<span class="n">hkls</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">getUniqueHKLs</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+
+<span class="c1"># Calculate structure factors for those HKLs</span>
+<span class="n">fSquared</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">getFsSquared</span><span class="p">(</span><span class="n">hkls</span><span class="p">)</span>
+
+<span class="c1"># Find HKLs with very small structure factors:</span>
+<span class="n">zeroFSquared</span> <span class="o">=</span> <span class="p">[(</span><span class="n">hkl</span><span class="p">,</span> <span class="n">sf</span><span class="p">)</span> <span class="k">for</span> <span class="n">hkl</span><span class="p">,</span> <span class="n">sf</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">hkls</span><span class="p">,</span> <span class="n">fSquared</span><span class="p">)</span> <span class="k">if</span> <span class="n">sf</span> <span class="o">&lt;</span> <span class="mf">1e-9</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;HKL        F^2&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">hkl</span><span class="p">,</span> <span class="n">sf</span> <span class="ow">in</span> <span class="n">zeroFSquared</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">    </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">hkl</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">sf</span><span class="p">,</span> <span class="mi">2</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>The output of the above script should show three reflections with very small values for <span class="math notranslate nohighlight">\(F^2\)</span>. Their indices
+violate the special conditions mentioned in the previous paragraph, so the reflections are actually extinct:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>HKL        F^2
+[2,2,2]    0.0
+[4,4,2]    0.0
+[6,2,2]    0.0
+</pre></div>
+</div>
+<p>Those three reflections are included in the list of unique HKLs, because the standard method to determine whether a
+reflection is allowed or not uses the space group symmetry which only reflects the general conditions listed in ITA.
+It is however possible to exclude those reflections at the cost of more computations by making use of the structure
+factor calculation. This can either be done by passing an additional enum-value of the type ReflectionConditionFilter
+to the constructor of ReflectionGenerator or by passing it to the actual generator function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">CrystalStructure</span><span class="p">,</span> <span class="n">ReflectionGenerator</span><span class="p">,</span> <span class="n">ReflectionConditionFilter</span>
+<span class="kn">from</span> <span class="nn">mantid.kernel</span> <span class="kn">import</span> <span class="n">V3D</span>
+
+<span class="n">silicon</span> <span class="o">=</span> <span class="n">CrystalStructure</span><span class="p">(</span><span class="s2">&quot;5.431 5.431 5.431&quot;</span><span class="p">,</span> <span class="s2">&quot;F d -3 m&quot;</span><span class="p">,</span> <span class="s2">&quot;Si 0 0 0 1.0 0.05&quot;</span><span class="p">)</span>
+<span class="n">generator</span> <span class="o">=</span> <span class="n">ReflectionGenerator</span><span class="p">(</span><span class="n">silicon</span><span class="p">)</span>
+
+<span class="c1"># Create list of unique reflections between 0.7 and 3.0 Angstrom, use structure factors for filtering</span>
+<span class="n">hkls</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">getUniqueHKLsUsingFilter</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">ReflectionConditionFilter</span><span class="o">.</span><span class="n">StructureFactor</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;There are </span><span class="si">{}</span><span class="s1"> unique reflections for Si in the specified resolution range.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hkls</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The reflection [222] is&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39; not&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">V3D</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">in</span> <span class="n">hkls</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; contained in the list.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>With this option, the three reflections from the example above are missing and as an indicator, the [222] reflection
+is actually checked:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>There are 17 unique reflections for Si in the specified resolution range.
+The reflection [222] is not contained in the list.
+</pre></div>
+</div>
+<p>Other options for filtering are Centering and None. If the latter one is used the reflections are only filtered
+according to their <span class="math notranslate nohighlight">\(d\)</span>-value to fit the specified range.</p>
+<p>Another capability of ReflectionGenerator is the calculation of <span class="math notranslate nohighlight">\(d\)</span>-values for a list of HKLs, very similar
+to the process for <span class="math notranslate nohighlight">\(F^2\)</span>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.geometry</span> <span class="kn">import</span> <span class="n">CrystalStructure</span><span class="p">,</span> <span class="n">ReflectionGenerator</span><span class="p">,</span> <span class="n">ReflectionConditionFilter</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">silicon</span> <span class="o">=</span> <span class="n">CrystalStructure</span><span class="p">(</span><span class="s2">&quot;5.431 5.431 5.431&quot;</span><span class="p">,</span> <span class="s2">&quot;F d -3 m&quot;</span><span class="p">,</span> <span class="s2">&quot;Si 0 0 0 1.0 0.05&quot;</span><span class="p">)</span>
+<span class="n">generator</span> <span class="o">=</span> <span class="n">ReflectionGenerator</span><span class="p">(</span><span class="n">silicon</span><span class="p">)</span>
+
+<span class="c1"># Create list of unique reflections between 0.7 and 3.0 Angstrom</span>
+<span class="n">hkls</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">getUniqueHKLsUsingFilter</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="n">ReflectionConditionFilter</span><span class="o">.</span><span class="n">StructureFactor</span><span class="p">)</span>
+
+<span class="c1"># Calculate d and F^2</span>
+<span class="n">dValues</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">getDValues</span><span class="p">(</span><span class="n">hkls</span><span class="p">)</span>
+<span class="n">fSquared</span> <span class="o">=</span> <span class="n">generator</span><span class="o">.</span><span class="n">getFsSquared</span><span class="p">(</span><span class="n">hkls</span><span class="p">)</span>
+
+<span class="n">pg</span> <span class="o">=</span> <span class="n">silicon</span><span class="o">.</span><span class="n">getSpaceGroup</span><span class="p">()</span><span class="o">.</span><span class="n">getPointGroup</span><span class="p">()</span>
+
+<span class="c1"># Make list of tuples and sort by d-values, descending, include point group for multiplicity.</span>
+<span class="n">reflections</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([(</span><span class="n">hkl</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">fsq</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">pg</span><span class="o">.</span><span class="n">getEquivalents</span><span class="p">(</span><span class="n">hkl</span><span class="p">)))</span> <span class="k">for</span> <span class="n">hkl</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">fsq</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">hkls</span><span class="p">,</span> <span class="n">dValues</span><span class="p">,</span> <span class="n">fSquared</span><span class="p">)],</span>
+                                <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0:&lt;8}{1:&gt;8}{2:&gt;8}{3:&gt;4}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39;HKL&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;F^2&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">reflection</span> <span class="ow">in</span> <span class="n">reflections</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0!s:&lt;8}{1:&gt;8.5f}{2:&gt;8.2f}{3:&gt;4}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">reflection</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>This script will print a table with the reflections including their <span class="math notranslate nohighlight">\(d\)</span>-value, <span class="math notranslate nohighlight">\(F^2\)</span> and multiplicity due to point group
+symmetry:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>HKL            d     F^2   M
+[2,2,0]  1.92015  645.02  12
+[3,1,1]  1.63751  263.85  24
+[4,0,0]  1.35775  377.63   6
+[3,3,1]  1.24596  154.47  24
+[4,2,2]  1.10860  221.08  24
+[3,3,3]  1.04520   90.43   8
+[5,1,1]  1.04520   90.43  24
+[4,4,0]  0.96007  129.43  12
+[5,3,1]  0.91801   52.94  48
+[6,2,0]  0.85872   75.78  24
+[5,3,3]  0.82822   31.00  24
+[4,4,4]  0.78390   44.36   8
+[5,5,1]  0.76049   18.15  24
+[7,1,1]  0.76049   18.15  24
+[6,4,2]  0.72575   25.97  48
+[5,5,3]  0.70706   10.62  24
+[7,3,1]  0.70706   10.62  48
+</pre></div>
+</div>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading">¶</a></h2>
+<p>This concept page explains what’s available in the Python interface. Some underlying parts may be interesting for C++
+developers, as the concepts of generating and filtering HKLs are pretty much hidden behind the ReflectionGenerator class
+in the Python interface. More detail is available in the generated C++ documentation.</p>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="CrystalField.html" title="Previous Chapter: Crystal Field Theory"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Crystal Field Theory</span>
+    </a>
+  </li>
+  <li>
+    <a href="DataService.html" title="Next Chapter: Data Service"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Data Service &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

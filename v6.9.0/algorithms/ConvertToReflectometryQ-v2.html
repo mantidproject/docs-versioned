@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ConvertToReflectometryQ v2</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=5b08953a"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ConvertToYSpace v1" href="ConvertToYSpace-v1.html" />
+    <link rel="prev" title="ConvertToReflectometryQ v1" href="ConvertToReflectometryQ-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">ConvertToReflectometryQ v2</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="converttoreflectometryq-v2">
+<span id="algm-converttoreflectometryq"></span><span id="algm-converttoreflectometryq-v2"></span><h1>ConvertToReflectometryQ v2<a class="headerlink" href="#converttoreflectometryq-v2" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id1">Summary</a></p>
+<ul>
+<li><p><a class="reference internal" href="#see-also" id="id2">See Also</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#properties" id="id3">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id4">Description</a></p>
+<ul>
+<li><p><a class="reference internal" href="#prerequisites" id="id5">Prerequisites</a></p></li>
+<li><p><a class="reference internal" href="#transformations" id="id6">Transformations</a></p></li>
+<li><p><a class="reference internal" href="#after-transformation" id="id7">After Transformation</a></p></li>
+<li><p><a class="reference internal" href="#binning-methods" id="id8">Binning Methods</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#usage" id="id9">Usage</a></p>
+<ul>
+<li><p><a class="reference internal" href="#normalised-polygon-transformation" id="id10">Normalised Polygon Transformation</a></p>
+<ul>
+<li><p><a class="reference internal" href="#plot-of-the-signedtheta-vs-wavelength-workspace" id="id11">Plot of the SignedTheta vs Wavelength workspace:</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#patch-plot-with-dumped-vertexes" id="id12">Patch Plot with Dumped Vertexes</a></p></li>
+<li><p><a class="reference internal" href="#patch-plots-from-other-transformations" id="id13">Patch plots from other transformations</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#source" id="id14">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Transforms from real-space to Q or momentum space for reflectometry workspaces</p>
+<section id="see-also">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="ConvertUnits-v1.html#algm-convertunits"><span class="std std-ref">ConvertUnits</span></a>, <a class="reference internal" href="ReflectometryMomentumTransfer-v1.html#algm-reflectometrymomentumtransfer"><span class="std std-ref">ReflectometryMomentumTransfer</span></a></p>
+</section>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>InputWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>An input workspace in wavelength</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputDimensions</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Q (lab frame)</p></td>
+<td><p>What will be the dimensions of the output workspace?   Q (lab frame): Wave-vector change of the lattice in the lab frame.   P (lab frame): Momentum in the sample frame.   K initial and final vectors in the z plane. Allowed values: [‘Q (lab frame)’, ‘P (lab frame)’, ‘K (incident, final)’]</p></td>
+</tr>
+<tr class="row-even"><td><p>Method</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Centre</p></td>
+<td><p>What method should be used for the axis transformation?   Centre: Use center point rebinning.   NormalisedPolygon: Use normalised polygon rebinning. Allowed values: [‘Centre’, ‘NormalisedPolygon’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>OverrideIncidentTheta</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Use the provided incident theta value.</p></td>
+</tr>
+<tr class="row-even"><td><p>IncidentTheta</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>-1</p></td>
+<td><p>An input incident theta value specified in degrees.Optional input value for the incident theta specified in degrees.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Extents</p></td>
+<td><p>Input</p></td>
+<td><p>dbl list</p></td>
+<td><p>-50,50,-50,50</p></td>
+<td><p>A comma separated list of min, max for each dimension. Takes four values in the form dim_0_min, dim_0_max, dim_1_min, dim_1_max, specifying the extents of each dimension. Optional, default +-50 in each dimension.</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputAsMDWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>Generate the output as a MDWorkspace, otherwise a Workspace2D is returned.</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p>IMDWorkspace</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Output 2D Workspace.</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputVertexes</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Output TableWorkspace with vertex information. See DumpVertexes property.</p></td>
+</tr>
+<tr class="row-odd"><td><p>NumberBinsQx</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>100</p></td>
+<td><p>The number of bins along the qx axis. Optional and only applies to 2D workspaces. Defaults to 100.</p></td>
+</tr>
+<tr class="row-even"><td><p>NumberBinsQz</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>100</p></td>
+<td><p>The number of bins along the qx axis. Optional and only applies to 2D workspaces. Defaults to 100.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DumpVertexes</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If set, with 2D rebinning, the intermediate vertexes for each polygon will be written out for debugging purposes. Creates a second output table workspace.</p></td>
+</tr>
+<tr class="row-even"><td><p>SplitInto</p></td>
+<td><p>Input</p></td>
+<td><p>int list</p></td>
+<td><p>2,2</p></td>
+<td><p>A comma separated list of into how many sub-grid elements each dimension should split; or just one to split into the same number for all dimensions. Default 2,2.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SplitThreshold</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>50</p></td>
+<td><p>How many events in a box before it should be split. Default 50.</p></td>
+</tr>
+<tr class="row-even"><td><p>MaxRecursionDepth</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>10</p></td>
+<td><p>How many levels of box splitting recursion are allowed. The smallest box will have each side length <span class="math notranslate nohighlight">\(l = (extents) / (SplitInto^{MaxRecursionDepth}).\)</span> Default 10.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>This algorithm transforms an input workspace in wavelength to <span class="math notranslate nohighlight">\(Q_{x}, Q_{z}\)</span>
+or momentum space for reflectometry workspaces. Prior to the transformation, the
+algorithm corrects the detector position to an angle <span class="math notranslate nohighlight">\(\theta_f\)</span>, where
+<span class="math notranslate nohighlight">\(\theta_f\)</span> is extracted from the log value <code class="docutils literal notranslate"><span class="pre">stheta</span></code>, if it exists;
+otherwise, no correction is done, and detectors are assumed to be at <span class="math notranslate nohighlight">\(2\theta\)</span>.</p>
+<p>For conversion of single histogram workspaces to <span class="math notranslate nohighlight">\(Q_{z}\)</span>, see
+<a class="reference internal" href="ConvertUnits-v1.html#algm-convertunits"><span class="std std-ref">ConvertUnits</span></a> or
+<a class="reference internal" href="ReflectometryMomentumTransfer-v1.html#algm-reflectometrymomentumtransfer"><span class="std std-ref">ReflectometryMomentumTransfer</span></a>.</p>
+<p>This version of the algorithm takes <span class="math notranslate nohighlight">\(\theta_f\)</span> from <span class="math notranslate nohighlight">\(2\theta - \theta_i\)</span>,
+whereas version 2 takes <span class="math notranslate nohighlight">\(\theta_f\)</span> from <span class="math notranslate nohighlight">\(2\theta\)</span>.</p>
+<section id="prerequisites">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Prerequisites</a><a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h3>
+<p>The workspace spectrum axis should be converted to signed_theta using
+<a class="reference internal" href="ConvertSpectrumAxis-v2.html#algm-convertspectrumaxis"><span class="std std-ref">ConvertSpectrumAxis v2</span></a> and the x axis should be
+converted to Wavelength using <a class="reference internal" href="ConvertUnits-v1.html#algm-convertunits"><span class="std std-ref">ConvertUnits v1</span></a> before
+running this algorithm. Histogram input workspaces are expected.</p>
+<p>The algorithm will look for a specific log value called <code class="docutils literal notranslate"><span class="pre">stheta</span></code>, which
+contains the incident theta angle <span class="math notranslate nohighlight">\(\theta_i\)</span>. If the input
+workspace does not contain this value, or if you wish to override this
+value you can do so by providing your own <code class="docutils literal notranslate"><span class="pre">IncidentTheta</span></code> property and
+enabling <code class="docutils literal notranslate"><span class="pre">OverrideIncidentTheta</span></code>.</p>
+<p>The algorithm also has the ability to produce additional debugging information from the Tableworkspace
+that can be used to create a patch plot of results before any 2D fractional rebinning has happened.</p>
+<p>To create this table there are certain properties that must be present in the algorithm:</p>
+<ul class="simple">
+<li><p>The transform method must be NormalisedPolygon</p></li>
+<li><p>The option to Output as MD workspace must not be selected</p></li>
+<li><p>The option to DumpVertexes must be selected</p></li>
+</ul>
+</section>
+<section id="transformations">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Transformations</a><a class="headerlink" href="#transformations" title="Link to this heading">¶</a></h3>
+<p>Output workspaces are always 2D MD Histogram workspaces, but the
+algorithm will perform one of three possible transformations.</p>
+<ul class="simple">
+<li><p>Convert to <span class="math notranslate nohighlight">\(Q_x\)</span>, <span class="math notranslate nohighlight">\(Q_z\)</span></p></li>
+<li><p>Convert to <span class="math notranslate nohighlight">\(K_i\)</span>, <span class="math notranslate nohighlight">\(K_f\)</span></p></li>
+<li><p>Convert to <span class="math notranslate nohighlight">\(P_i-P_f\)</span>, <span class="math notranslate nohighlight">\(P_i+P_f\)</span>. Note that P and K are
+interchangeable.</p></li>
+</ul>
+<p>where</p>
+<p><span class="math notranslate nohighlight">\(Q_x = \frac{2\pi}{\lambda}(cos\theta_f - cos\theta_i)\)</span></p>
+<p><span class="math notranslate nohighlight">\(Q_z = \frac{2\pi}{\lambda}(sin\theta_f + sin\theta_i)\)</span></p>
+<p><span class="math notranslate nohighlight">\(K_i = \frac{2\pi}{\lambda}sin\theta_i\)</span></p>
+<p><span class="math notranslate nohighlight">\(K_f = \frac{2\pi}{\lambda}sin\theta_f\)</span></p>
+</section>
+<section id="after-transformation">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">After Transformation</a><a class="headerlink" href="#after-transformation" title="Link to this heading">¶</a></h3>
+<p>You will usually want to rebin using <a class="reference internal" href="BinMD-v1.html#algm-binmd"><span class="std std-ref">BinMD v1</span></a> or
+<a class="reference internal" href="SliceMD-v1.html#algm-slicemd"><span class="std std-ref">SliceMD v1</span></a> after transformation because the output workspaces
+are not regularly binned.</p>
+</section>
+<section id="binning-methods">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Binning Methods</a><a class="headerlink" href="#binning-methods" title="Link to this heading">¶</a></h3>
+<p>The <em>Method</em> property allows the binning method used when applying the
+coordinate transformations to be selected. The default method,
+<em>Centre</em>, takes center point of each input bin, and locates the
+corresponding output bin, adding the input bins value to it. Centre point rebinning is faster.</p>
+<p><em>NormalisedPolygon</em> is a more sophisticated approach. It constructs
+a polygon using the boundaries of the input bin, then transforms that polygon
+into the output coordinates, and then searches for intersections with the
+output bins. The value added to each output bin is proportional to size of the
+overlap with the input bin. The normalised polygon approach gives better accuracy.</p>
+</section>
+</section>
+<section id="usage">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Usage</a><a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<section id="normalised-polygon-transformation">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Normalised Polygon Transformation</a><a class="headerlink" href="#normalised-polygon-transformation" title="Link to this heading">¶</a></h3>
+<p><strong>Example - Normalised Polygon transformation</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">workspace_name</span> <span class="o">=</span> <span class="s2">&quot;POLREF4699&quot;</span>
+<span class="n">workspace_nexus_file</span> <span class="o">=</span> <span class="n">workspace_name</span> <span class="o">+</span> <span class="s2">&quot;.nxs&quot;</span>
+
+<span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="n">workspace_nexus_file</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="n">workspace_name</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="n">workspace_name</span><span class="p">]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">X</span><span class="p">,</span><span class="n">Target</span><span class="o">=</span><span class="s2">&quot;Wavelength&quot;</span><span class="p">,</span><span class="n">AlignBins</span><span class="o">=</span><span class="s2">&quot;1&quot;</span><span class="p">)</span>
+<span class="c1"># Reference intensity to normalise by</span>
+<span class="n">CropWorkspace</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">X</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;Io&#39;</span><span class="p">,</span><span class="n">XMin</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">XMax</span><span class="o">=</span><span class="mf">14.5</span><span class="p">,</span><span class="n">StartWorkspaceIndex</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">EndWorkspaceIndex</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># Crop out transmission and noisy data</span>
+<span class="n">CropWorkspace</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">X</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">,</span><span class="n">XMin</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">XMax</span><span class="o">=</span><span class="mf">14.5</span><span class="p">,</span><span class="n">StartWorkspaceIndex</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">Io</span><span class="o">=</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;Io&#39;</span><span class="p">]</span>
+<span class="n">D</span><span class="o">=</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;D&#39;</span><span class="p">]</span>
+
+<span class="c1"># Perform the normalisation step</span>
+<span class="n">Divide</span><span class="p">(</span><span class="n">LHSWorkspace</span><span class="o">=</span><span class="n">D</span><span class="p">,</span><span class="n">RHSWorkspace</span><span class="o">=</span><span class="n">Io</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;I&#39;</span><span class="p">,</span><span class="n">AllowDifferentNumberSpectra</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span><span class="n">ClearRHSWorkspace</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">I</span><span class="o">=</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;I&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Move the detector so that the detector channel matching the reflected beam is at 0,0</span>
+<span class="n">PIX</span> <span class="o">=</span> <span class="mf">1.1E-3</span> <span class="c1">#m</span>
+<span class="n">SC</span> <span class="o">=</span> <span class="mi">75</span>
+<span class="n">avgDB</span> <span class="o">=</span> <span class="mi">29</span>
+<span class="n">zOffset</span> <span class="o">=</span> <span class="o">-</span><span class="n">PIX</span> <span class="o">*</span> <span class="p">((</span><span class="n">SC</span> <span class="o">-</span> <span class="n">avgDB</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">+</span> <span class="n">avgDB</span><span class="p">)</span>
+<span class="n">MoveInstrumentComponent</span><span class="p">(</span><span class="n">Workspace</span> <span class="o">=</span> <span class="n">I</span><span class="p">,</span> <span class="n">ComponentName</span> <span class="o">=</span> <span class="s2">&quot;lineardetector&quot;</span><span class="p">,</span> <span class="n">X</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Z</span> <span class="o">=</span> <span class="n">zOffset</span><span class="p">)</span>
+
+<span class="c1"># Should now have signed theta vs Lambda</span>
+<span class="n">ConvertSpectrumAxis</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">I</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;SignedTheta_vs_Wavelength&#39;</span><span class="p">,</span><span class="n">Target</span><span class="o">=</span><span class="s1">&#39;signed_theta&#39;</span><span class="p">)</span>
+
+<span class="n">qxqy</span><span class="p">,</span> <span class="n">vertexes_qxqy</span> <span class="o">=</span> <span class="n">ConvertToReflectometryQ</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;SignedTheta_vs_Wavelength&#39;</span><span class="p">,</span> <span class="n">OutputDimensions</span><span class="o">=</span><span class="s1">&#39;Q (lab frame)&#39;</span><span class="p">,</span> <span class="n">Extents</span><span class="o">=</span><span class="s1">&#39;-0.0005,0.0005,0,0.12&#39;</span><span class="p">,</span> <span class="n">OutputAsMDWorkspace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">Method</span><span class="o">=</span><span class="s1">&#39;NormalisedPolygon&#39;</span><span class="p">)</span>
+
+<span class="n">kikf</span><span class="p">,</span> <span class="n">vertexes_kikf</span> <span class="o">=</span> <span class="n">ConvertToReflectometryQ</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;SignedTheta_vs_Wavelength&#39;</span><span class="p">,</span> <span class="n">OutputDimensions</span><span class="o">=</span><span class="s1">&#39;K (incident, final)&#39;</span><span class="p">,</span> <span class="n">Extents</span><span class="o">=</span><span class="s1">&#39;0,0.05,0,0.05&#39;</span><span class="p">,</span> <span class="n">OutputAsMDWorkspace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">Method</span><span class="o">=</span><span class="s1">&#39;NormalisedPolygon&#39;</span><span class="p">)</span>
+
+<span class="n">pipf</span><span class="p">,</span> <span class="n">vertexes_pipf</span> <span class="o">=</span> <span class="n">ConvertToReflectometryQ</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;SignedTheta_vs_Wavelength&#39;</span><span class="p">,</span> <span class="n">OutputDimensions</span><span class="o">=</span><span class="s1">&#39;P (lab frame)&#39;</span><span class="p">,</span> <span class="n">Extents</span><span class="o">=</span><span class="s1">&#39;0,0.1,-0.02,0.15&#39;</span><span class="p">,</span> <span class="n">OutputAsMDWorkspace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">Method</span><span class="o">=</span><span class="s1">&#39;NormalisedPolygon&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">qxqy</span><span class="o">.</span><span class="n">getDimension</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">qxqy</span><span class="o">.</span><span class="n">getDimension</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">kikf</span><span class="o">.</span><span class="n">getDimension</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">kikf</span><span class="o">.</span><span class="n">getDimension</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pipf</span><span class="o">.</span><span class="n">getDimension</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">pipf</span><span class="o">.</span><span class="n">getDimension</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Qx Qz
+Ki Kf
+Pz_i + Pz_f Pz_i - Pz_f
+</pre></div>
+</div>
+<section id="plot-of-the-signedtheta-vs-wavelength-workspace">
+<h4><a class="toc-backref" href="#id11" role="doc-backlink">Plot of the SignedTheta vs Wavelength workspace:</a><a class="headerlink" href="#plot-of-the-signedtheta-vs-wavelength-workspace" title="Link to this heading">¶</a></h4>
+<p>Before the ConvertToReflectometryQ algorithm is executed in the usage example above, the plot of the ‘SignedTheta_vs_Wavelength’ workspace should resemble this plot:</p>
+<figure class="align-default">
+<img alt="plot of Signed theta vs lambda." src="../_images/SignedThetaVSlam_plot.png" />
+</figure>
+</section>
+</section>
+<section id="patch-plot-with-dumped-vertexes">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">Patch Plot with Dumped Vertexes</a><a class="headerlink" href="#patch-plot-with-dumped-vertexes" title="Link to this heading">¶</a></h3>
+<p>ConvertToReflectometryQ has the functionality to produce a table of vertexes before they are
+fitted to a normalised polygon. The plotting of these vertexes results in a patch plot that can be
+achieved by running the algorithm below.</p>
+<p><strong>Example - Patch Plot using the Dumped vertexes from QxQy Transformation</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Polygon</span>
+<span class="kn">from</span> <span class="nn">matplotlib.collections</span> <span class="kn">import</span> <span class="n">PatchCollection</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">LogNorm</span>
+
+<span class="c1"># full reduction on workspace</span>
+<span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;data_th_lam.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;data_th_lam&#39;</span><span class="p">)</span>
+<span class="n">CropWorkspace</span><span class="p">(</span><span class="s1">&#39;data_th_lam&#39;</span><span class="p">,</span> <span class="n">StartWorkspaceIndex</span><span class="o">=</span><span class="mi">124</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;data_th_lam&#39;</span><span class="p">)</span>
+<span class="n">data_th_lam</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="s1">&#39;data_th_lam&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1e-2</span><span class="p">])</span>
+
+<span class="n">out_ws</span><span class="p">,</span> <span class="n">dump_vertexes</span> <span class="o">=</span> <span class="n">ConvertToReflectometryQ</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;data_th_lam&#39;</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;QxQy_poly&#39;</span><span class="p">,</span> <span class="n">OutputDimensions</span><span class="o">=</span><span class="s1">&#39;Q (lab frame)&#39;</span><span class="p">,</span>
+<span class="n">Extents</span><span class="o">=</span><span class="s1">&#39;-0.0005,0.0005,-0,0.2&#39;</span><span class="p">,</span> <span class="n">OutputAsMDWorkspace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">Method</span><span class="o">=</span><span class="s1">&#39;NormalisedPolygon&#39;</span><span class="p">,</span>  <span class="n">IncidentTheta</span><span class="o">=</span><span class="mf">0.44</span><span class="p">,</span> <span class="n">OverrideIncidentTheta</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">NumberBinsQx</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">NumberBinsQz</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">DumpVertexes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">OutputVertexes</span><span class="o">=</span><span class="s1">&#39;dump_vertexes&#39;</span><span class="p">)</span>
+
+<span class="c1">#plot the conversion</span>
+<span class="n">plotSlice</span><span class="p">(</span><span class="n">out_ws</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">patch_plot</span><span class="p">(</span><span class="n">vertex_table</span><span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+    <span class="n">patches</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="n">polygon_vertexes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">vertex_table</span><span class="p">:</span>
+        <span class="c1">#Column of vertex i.e &#39;Qx&#39; in this case, is dependent on the type of transform.</span>
+        <span class="c1">#&#39;Ki&#39; and &#39;Kf&#39; are used for the K transformation.</span>
+        <span class="c1">#&#39;Pi+Pf&#39; and &#39;Pi-Pf&#39; are used for the P transformation.</span>
+        <span class="n">polygon_vertexes</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">vertex</span><span class="p">[</span><span class="s1">&#39;Qx&#39;</span><span class="p">],</span> <span class="n">vertex</span><span class="p">[</span><span class="s1">&#39;Qy&#39;</span><span class="p">]</span> <span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">polygon_vertexes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">poly</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">polygon_vertexes</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">patches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+            <span class="n">colors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vertex</span><span class="p">[</span><span class="s1">&#39;CellSignal&#39;</span><span class="p">])</span>
+            <span class="n">polygon_vertexes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+    <span class="n">p</span> <span class="o">=</span> <span class="n">PatchCollection</span><span class="p">(</span><span class="n">patches</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">jet</span><span class="p">,</span><span class="n">norm</span><span class="o">=</span><span class="n">LogNorm</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1e5</span><span class="p">),</span><span class="n">linewidths</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,))</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">set_array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">colors</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+    <span class="n">axes</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mf">0.0004</span><span class="p">,</span><span class="mf">0.0004</span><span class="p">])</span>
+    <span class="n">axes</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.2</span><span class="p">])</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">threadsafe_call</span><span class="p">(</span><span class="n">patch_plot</span><span class="p">,</span> <span class="n">dump_vertexes</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output:</strong></p>
+<p>Patch plot for QxQy Transformation:</p>
+<figure class="align-default">
+<img alt="patch plot of dumped vertexes using Q transformation" src="../_images/ConvertToReflectometryQ_PatchPlotQ.png" />
+</figure>
+</section>
+<section id="patch-plots-from-other-transformations">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">Patch plots from other transformations</a><a class="headerlink" href="#patch-plots-from-other-transformations" title="Link to this heading">¶</a></h3>
+<p>Patch plots can also be produced using the other Transformations <span class="math notranslate nohighlight">\(K_i, K_f\)</span> and <span class="math notranslate nohighlight">\(P_i-P_f, P_i+P_f\)</span></p>
+<p><strong>Patch plot for KiKf Transformation:</strong></p>
+<figure class="align-default">
+<img alt="patch plot of dumped vertexes using K transformation" src="../_images/ConvertToReflectometryQ_PatchPlotK.PNG" />
+</figure>
+<p><strong>Patch plot for P Transformation:</strong></p>
+<figure class="align-default">
+<img alt="patch plot of dumped vertexes using P transformation" src="../_images/ConvertToReflectometryQ_PatchPlotP.PNG" />
+</figure>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/Reflectometry.html">Reflectometry</a></p>
+</section>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/66c74f87d9b779695dc85b538bc48767c5975b19/Framework/Reflectometry/inc/MantidReflectometry/ConvertToReflectometryQ2.h">ConvertToReflectometryQ2.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/66c74f87d9b779695dc85b538bc48767c5975b19/Framework/Reflectometry/src/ConvertToReflectometryQ2.cpp">ConvertToReflectometryQ2.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="ConvertToReflectometryQ-v1.html" title="Previous Chapter: ConvertToReflectometryQ v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; ConvertToRefl...</span>
+    </a>
+  </li>
+  <li>
+    <a href="ConvertToYSpace-v1.html" title="Next Chapter: ConvertToYSpace v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">ConvertToYSpace v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

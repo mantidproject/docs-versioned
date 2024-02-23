@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Algorithms And Workspaces</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <script src="../../../_static/documentation_options.js?v=5b08953a"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Workspace Validators" href="02_workspace_validators.html" />
+    <link rel="prev" title="Python Algorithms And Workspaces" href="index.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../../index.html" >Training</a> &#187;</li>
+          
+            <li class="nav-item nav-item-2"><a href="../index.html" >Extending Mantid With Python</a> &#187;</li>
+          
+            <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Python Algorithms And Workspaces</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Algorithms And Workspaces</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="algorithms-and-workspaces">
+<span id="id1"></span><h1>Algorithms And Workspaces<a class="headerlink" href="#algorithms-and-workspaces" title="Link to this heading">¶</a></h1>
+<section id="declaring-workspace-properties">
+<h2>Declaring Workspace Properties<a class="headerlink" href="#declaring-workspace-properties" title="Link to this heading">¶</a></h2>
+<p>Workspaces are the main source of data for input and most algorithms output another data workspace.
+Workspace properties are required in order to either provide input data for an algorithm or store data at the end of execution.
+Mantid has a variety of different workspace types, for example <a class="reference internal" href="../../../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a>, <a class="reference internal" href="../../../concepts/EventWorkspace.html#eventworkspace"><span class="std std-ref">EventWorkspace</span></a> or <a class="reference internal" href="../../../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a>.
+A generic Workspace type also exists which can refer to any of these.</p>
+<p>Declaring input workspace properties restricts the types of workspace that will be accepted when a user wants to pass a workspace into the algorithm.
+The example below declares a <code class="docutils literal notranslate"><span class="pre">WorkspaceProperty</span></code> which means that any workspace type will be accepted as input.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.kernel</span> <span class="kn">import</span> <span class="n">Direction</span>
+<span class="kn">from</span> <span class="nn">mantid.api</span> <span class="kn">import</span> <span class="n">WorkspaceProperty</span>
+
+<span class="k">class</span> <span class="nc">WorkspaceProperties</span><span class="p">(</span><span class="n">PythonAlgorithm</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">PyInit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declareProperty</span><span class="p">(</span><span class="n">WorkspaceProperty</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;InputWorkspace&quot;</span><span class="p">,</span>
+                                               <span class="n">defaultValue</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                                               <span class="n">direction</span><span class="o">=</span><span class="n">Direction</span><span class="o">.</span><span class="n">Input</span><span class="p">),</span>
+                                               <span class="n">doc</span><span class="o">=</span><span class="s2">&quot;Documentation for this property&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">PyExec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="other-workspace-types">
+<h2>Other Workspace Types<a class="headerlink" href="#other-workspace-types" title="Link to this heading">¶</a></h2>
+<p>As discussed above there are many different types of workspace.
+The above declarations allow any workspace type to be passed in to an algorithm.
+It is possible to restrict the type that can be accepted, for example to disallow table workspace types, by simply using a different class in the <code class="docutils literal notranslate"><span class="pre">self.declareProperty</span></code> method.</p>
+<p>As an example, consider the definition above using <code class="docutils literal notranslate"><span class="pre">WorkspaceProperty</span></code>.
+If we wanted to restrict the type to a <code class="docutils literal notranslate"><span class="pre">MatrixWorkspace</span></code> type then we can simply replace <code class="docutils literal notranslate"><span class="pre">WorkspaceProperty</span></code> with <code class="docutils literal notranslate"><span class="pre">MatrixWorkspaceProperty</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.kernel</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">mantid.api</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">class</span> <span class="nc">MatrixWorkspaceProperties</span><span class="p">(</span><span class="n">PythonAlgorithm</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">PyInit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declareProperty</span><span class="p">(</span><span class="n">MatrixWorkspaceProperty</span><span class="p">(</span><span class="s2">&quot;InputWorkspace&quot;</span><span class="p">,</span>
+                                                     <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                                                     <span class="n">Direction</span><span class="o">.</span><span class="n">Input</span><span class="p">),</span>
+                                                     <span class="s2">&quot;Documentation for this property&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">PyExec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Any workspace passed as input to this algorithm must now be of type <code class="docutils literal notranslate"><span class="pre">MatrixWorkspace</span></code>.
+In general, using a specific workspace type reduces users passing an invalid input workspace.</p>
+<p>Some of the currently available types of property are:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../../api/python/mantid/api/WorkspaceProperty.html#mantid.api.WorkspaceProperty" title="mantid.api.WorkspaceProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">WorkspaceProperty</span></code></a> for specifying <a class="reference internal" href="../../../concepts/Workspace.html#workspace"><span class="std std-ref">Workspace</span></a></p></li>
+<li><p><a class="reference internal" href="../../../api/python/mantid/api/MatrixWorkspaceProperty.html#mantid.api.MatrixWorkspaceProperty" title="mantid.api.MatrixWorkspaceProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">MatrixWorkspaceProperty</span></code></a> for specifying <a class="reference internal" href="../../../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a> as input or output</p></li>
+<li><p><a class="reference internal" href="../../../api/python/mantid/api/IEventWorkspaceProperty.html#mantid.api.IEventWorkspaceProperty" title="mantid.api.IEventWorkspaceProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">IEventWorkspaceProperty</span></code></a> for specifying <a class="reference internal" href="../../../concepts/EventWorkspace.html#eventworkspace"><span class="std std-ref">EventWorkspace</span></a></p></li>
+<li><p><a class="reference internal" href="../../../api/python/mantid/api/IPeaksWorkspaceProperty.html#mantid.api.IPeaksWorkspaceProperty" title="mantid.api.IPeaksWorkspaceProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPeaksWorkspaceProperty</span></code></a> for specifying <a class="reference internal" href="../../../concepts/PeaksWorkspace.html#peaksworkspace"><span class="std std-ref">PeaksWorkspace</span></a></p></li>
+<li><p><a class="reference internal" href="../../../api/python/mantid/api/ITableWorkspaceProperty.html#mantid.api.ITableWorkspaceProperty" title="mantid.api.ITableWorkspaceProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">ITableWorkspaceProperty</span></code></a> for specifying <a class="reference internal" href="../../../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="index.html" title="Previous Chapter: Python Algorithms And Workspaces"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Python Algori...</span>
+    </a>
+  </li>
+  <li>
+    <a href="02_workspace_validators.html" title="Next Chapter: Workspace Validators"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Workspace Validators &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>GaussianComptonProfile</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <script src="../../_static/documentation_options.js?v=5b08953a"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="GramCharlier" href="GramCharlier.html" />
+    <link rel="prev" title="Gaussian" href="Gaussian.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Fit Functions</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">GaussianComptonProfile</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="gaussiancomptonprofile">
+<span id="func-gaussiancomptonprofile"></span><h1>GaussianComptonProfile<a class="headerlink" href="#gaussiancomptonprofile" title="Link to this heading">¶</a></h1>
+<section id="description">
+<span id="index-0"></span><h2>Description<a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>The GaussianComptonProfile function describes the Compton profile of a nucleus using a
+Gaussian approximation convoluted with an instrument resolution function,
+that is approximated by a Voigt function. The function approximates the Count rate, <span class="math notranslate nohighlight">\(C(t)\)</span> as [1],</p>
+<div class="math notranslate nohighlight">
+\[C(t) = \left[\frac{E_0I(E_0)}{q}\right](t) A_m J_M(y_M)\otimes R_M(t)  \label{a}\]</div>
+<p>for the given mass, M, <span class="math notranslate nohighlight">\(J_M\)</span> is approximated using a Gaussian and <span class="math notranslate nohighlight">\(R_M\)</span> is the resolution function.
+In Equation <span class="math notranslate nohighlight">\(\ref{a}\)</span>, the term <span class="math notranslate nohighlight">\(A_M\)</span> is proportional to the scattering intensity and <span class="math notranslate nohighlight">\(\left[\frac{E_0I(E_0)}{q}\right](t)\)</span>
+depends on the incident neutron spectrum, which are both obtained the input workspace to the fit.</p>
+<p>The Gaussian approximation, <span class="math notranslate nohighlight">\(J_M\)</span>, takes two input parameters,</p>
+<ul class="simple">
+<li><p>Width: <span class="math notranslate nohighlight">\(\sigma\)</span></p></li>
+<li><p>Intensity: <span class="math notranslate nohighlight">\(I\)</span></p></li>
+</ul>
+<p>The instrument resolution, <span class="math notranslate nohighlight">\(R_M\)</span>, is approximated by a Voigt function using the <a class="reference internal" href="../../algorithms/VesuvioResolution-v1.html#algm-vesuvioresolution"><span class="std std-ref">VesuvioResolution</span></a>
+function.</p>
+</section>
+<section id="properties-fitting-parameters">
+<h2>Properties (fitting parameters)<a class="headerlink" href="#properties-fitting-parameters" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Mass</p></td>
+<td><p>0.0</p></td>
+<td><p>Atomic mass (amu)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Width</p></td>
+<td><p>1.0</p></td>
+<td><p>Gaussian width parameter</p></td>
+</tr>
+<tr class="row-even"><td><p>Intensity</p></td>
+<td><p>1.0</p></td>
+<td><p>Gaussian intensity parameter</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<p>[1] Mayers J, Abdul-Redah T. The measurement of anomalous neutron inelastic cross-sections at electronvolt energy transfers.
+J Phys: Condens Matter 2004;16:4811–32. <a class="reference external" href="https://doi.org/10.1088/0953-8984/16/28/005">https://doi.org/10.1088/0953-8984/16/28/005</a></p>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/FitFunctions.html">FitFunctions</a> | <a class="reference external" href="categories/General.html">General</a></p>
+</section>
+<section id="source">
+<h2>Source<a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/66c74f87d9b779695dc85b538bc48767c5975b19/Framework/CurveFitting/inc/MantidCurveFitting/Functions/GaussianComptonProfile.h">GaussianComptonProfile.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/66c74f87d9b779695dc85b538bc48767c5975b19/Framework/CurveFitting/src/Functions/GaussianComptonProfile.cpp">GaussianComptonProfile.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Gaussian.html" title="Previous Chapter: Gaussian"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Gaussian</span>
+    </a>
+  </li>
+  <li>
+    <a href="GramCharlier.html" title="Next Chapter: GramCharlier"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">GramCharlier &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>MD Workspace</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=5b08953a"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Materials" href="Materials.html" />
+    <link rel="prev" title="Multi dimensional neutron scattering data normalization" href="MDNorm.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Concepts</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">MD Workspace</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="md-workspace">
+<span id="mdworkspace"></span><h1>MD Workspace<a class="headerlink" href="#md-workspace" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#description-of-mdworkspace" id="id2">Description of MDWorkspace</a></p>
+<ul>
+<li><p><a class="reference internal" href="#structure" id="id3">Structure</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#creating-a-mdworkspace" id="id4">Creating a MDWorkspace</a></p></li>
+<li><p><a class="reference internal" href="#file-backed-mdworkspaces" id="id5">File-Backed MDWorkspaces</a></p></li>
+<li><p><a class="reference internal" href="#viewing-mdworkspaces" id="id6">Viewing MDWorkspaces</a></p></li>
+<li><p><a class="reference internal" href="#working-with-table-workspaces-in-python" id="id7">Working with Table Workspaces in Python</a></p>
+<ul>
+<li><p><a class="reference internal" href="#accessing-workspaces" id="id8">Accessing Workspaces</a></p></li>
+<li><p><a class="reference internal" href="#md-workspace-properties" id="id9">MD Workspace Properties</a></p>
+<ul>
+<li><p><a class="reference internal" href="#dimensions" id="id10">Dimensions</a></p></li>
+<li><p><a class="reference internal" href="#accessing-the-data" id="id11">Accessing the Data</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<p>The MD Workspace [MDWorkspace] (short for “Multi-Dimensional” Workspace) is a generic
+data structure holdings points (MDEvents) that are defined by their
+position in several dimensions.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="MDHistoWorkspace.html#mdhistoworkspace"><span class="std std-ref">MDHistoWorkspace</span></a></p>
+</div>
+<section id="description-of-mdworkspace">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Description of MDWorkspace</a><a class="headerlink" href="#description-of-mdworkspace" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Dimensions</strong>: A MDWorkspace can have between 1 and 9 dimensions.</p>
+<ul>
+<li><p>Each dimension is defined with a name, units, and minimum/maximum
+extents.</p></li>
+</ul>
+</li>
+<li><p><strong>MDEvent</strong>: A MDEvent is simply a point in space defined by its
+coordinates, plus a signal (weight) and error.</p>
+<ul>
+<li><p>The MDLeanEvent type contains only coordinates, signal and error.</p></li>
+<li><p>The MDEvent type also contains a run index (for multiple runs
+summed into one workspace) and a detector ID, allowing for more
+information to be extracted.</p></li>
+</ul>
+</li>
+<li><p>The class is named MDEventWorkspace.</p></li>
+</ul>
+<section id="structure">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">Structure</a><a class="headerlink" href="#structure" title="Link to this heading">¶</a></h3>
+<p>The MDWorkspace is a container that can hold a large number of MDEvents.
+The events are organized into “boxes”: types are MDBox and MDGridBox. At
+the simplest level, an MDWorkspace will be a single MDBox with an
+unsorted bunch of events.</p>
+<p>In order to allow for efficient searching and binning of these events,
+the boxes are organized into a recursive boxing structure (adaptive mesh
+refinement). During MDWorkspace construction, if a MDBox is found to
+contain too many events, it will be split into smaller boxes.</p>
+<figure class="align-default" id="id1">
+<img alt="MDWorkspace_structure.png" src="../_images/MDWorkspace_structure.png" />
+<figcaption>
+<p><span class="caption-text">MDWorkspace_structure.png</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The threshold for splitting is defined in
+<a class="reference internal" href="../algorithms/CreateMDWorkspace-v1.html#algm-createmdworkspace"><span class="std std-ref">CreateMDWorkspace</span></a> as the SplitThreshold
+parameter. Each parent box will get split into N sub-boxes in each
+dimension. For example, in a 2D workspace, you might split a parent box
+into 4x4 sub-boxes, creating 16 MDBoxes under the parent box (which
+becomes a MDGridBox). The level of splitting is defined in the SplitInto
+parameter.</p>
+</section>
+</section>
+<section id="creating-a-mdworkspace">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Creating a MDWorkspace</a><a class="headerlink" href="#creating-a-mdworkspace" title="Link to this heading">¶</a></h2>
+<p>There are several algorithms that will create a MDWorkspace:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../algorithms/CreateMDWorkspace-v1.html#algm-createmdworkspace"><span class="std std-ref">CreateMDWorkspace</span></a> creates a blank MDWorkspace
+with any arbitrary set of dimensions.</p></li>
+<li><p><a class="reference internal" href="../algorithms/CreateMD-v1.html#algm-createmd"><span class="std std-ref">CreateMD</span></a> Creates an MDWorkspace in the Q3D, HKL frame.</p></li>
+<li><p><a class="reference internal" href="../algorithms/ConvertToDiffractionMDWorkspace-v3.html#algm-converttodiffractionmdworkspace"><span class="std std-ref">ConvertToDiffractionMDWorkspace</span></a>
+converts an <a class="reference internal" href="EventWorkspace.html#eventworkspace"><span class="std std-ref">EventWorkspace</span></a> or
+<a class="reference internal" href="Workspace2D.html#workspace2d"><span class="std std-ref">Workspace2D</span></a> from detector space to reciprocal
+space, for elastic single-crystal or powder diffraction experiments.</p></li>
+<li><p><a class="reference internal" href="../algorithms/ConvertToMD-v1.html#algm-converttomd"><span class="std std-ref">ConvertToMD</span></a> converts workspaces for
+inelastic experiments.</p></li>
+<li><p><a class="reference internal" href="../algorithms/SliceMD-v1.html#algm-slicemd"><span class="std std-ref">SliceMD</span></a> takes a slice out of a MDWorkspace to create a
+new one.</p></li>
+<li><p><a class="reference internal" href="../algorithms/LoadSQW-v2.html#algm-loadsqw"><span class="std std-ref">LoadSQW</span></a> converts from the SQW format.</p></li>
+</ul>
+</section>
+<section id="file-backed-mdworkspaces">
+<span id="mdworkspace-file-backed"></span><h2><a class="toc-backref" href="#id5" role="doc-backlink">File-Backed MDWorkspaces</a><a class="headerlink" href="#file-backed-mdworkspaces" title="Link to this heading">¶</a></h2>
+<p>For workspaces with a large number of events that would not fit in
+memory, it is possible to use a NXS file back-end as a data store. The
+box structure will always remain in memory, but the underlying events
+will be stored in a file and retrieved only when required. This can be
+set at creation (<a class="reference internal" href="../algorithms/CreateMDWorkspace-v1.html#algm-createmdworkspace"><span class="std std-ref">CreateMDWorkspace</span></a>) or when
+loading from a file, or an in-memory MDWorkspace can be converted to
+file-backed with the <a class="reference internal" href="../algorithms/SaveMD-v2.html#algm-savemd"><span class="std std-ref">SaveMD</span></a> algorithm.</p>
+<p>Because of disk IO, file-backed MDWorkspaces are slower to process for
+some operations (e.g. binning or slicing). Some types of visualization
+and analysis, however, are just as fast with file-backed MDWorkspaces as
+their in-memory equivalent.</p>
+</section>
+<section id="viewing-mdworkspaces">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Viewing MDWorkspaces</a><a class="headerlink" href="#viewing-mdworkspaces" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Right-click on a MDWorkspace and select:</p>
+<ul>
+<li><p><strong>Show Slice Viewer</strong>: to open the <a class="reference internal" href="../workbench/sliceviewer.html#sliceviewer"><span class="std std-ref">Sliceviewer</span></a>, which shows 2D slices of the
+multiple-dimensional workspace.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="working-with-table-workspaces-in-python">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Working with Table Workspaces in Python</a><a class="headerlink" href="#working-with-table-workspaces-in-python" title="Link to this heading">¶</a></h2>
+<section id="accessing-workspaces">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Accessing Workspaces</a><a class="headerlink" href="#accessing-workspaces" title="Link to this heading">¶</a></h3>
+<p>The methods for getting a variable to an MDWorkspace is the same as shown in the <a class="reference internal" href="WorkingWithWorspaces.html#workspace-accessing-workspaces"><span class="std std-ref">Workspace</span></a> help page.</p>
+<p>If you want to check if a variable points to something that is an MDWorkspace Workspace you can use this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.api</span> <span class="kn">import</span> <span class="n">IMDEventWorkspace</span>
+
+<span class="n">mdws</span> <span class="o">=</span> <span class="n">CreateMDWorkspace</span><span class="p">(</span><span class="n">Dimensions</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">Extents</span><span class="o">=</span><span class="s1">&#39;-10,10,-10,10,-10,10&#39;</span><span class="p">,</span> <span class="n">Names</span><span class="o">=</span><span class="s1">&#39;A,B,C&#39;</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="s1">&#39;U,U,U&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mdws</span><span class="p">,</span> <span class="n">IMDEventWorkspace</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">mdws</span><span class="o">.</span><span class="n">name</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; is a &quot;</span> <span class="o">+</span> <span class="n">mdws</span><span class="o">.</span><span class="n">id</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mdws is a MDEventWorkspace&lt;MDLeanEvent,3&gt;
+</pre></div>
+</div>
+</section>
+<section id="md-workspace-properties">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">MD Workspace Properties</a><a class="headerlink" href="#md-workspace-properties" title="Link to this heading">¶</a></h3>
+<p>For a full list of the available properties and operation look at the <a class="reference internal" href="../api/python/mantid/api/IMDEventWorkspace.html#mantid.api.IMDEventWorkspace" title="mantid.api.IMDEventWorkspace"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IMDEventWorkspace</span> <span class="pre">api</span> <span class="pre">page</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ws</span> <span class="o">=</span> <span class="n">CreateMDWorkspace</span><span class="p">(</span><span class="n">Dimensions</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="n">EventType</span><span class="o">=</span><span class="s1">&#39;MDEvent&#39;</span><span class="p">,</span> <span class="n">Extents</span><span class="o">=</span><span class="s1">&#39;-10,10,-10,10&#39;</span><span class="p">,</span>
+                      <span class="n">Names</span><span class="o">=</span><span class="s1">&#39;Q_lab_x,Q_lab_y&#39;</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="s1">&#39;A,B&#39;</span><span class="p">)</span>
+<span class="n">FakeMDEventData</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">UniformParams</span><span class="o">=</span><span class="s2">&quot;1000000&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of events = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">getNEvents</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of dimensions = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">getNumDims</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Normalization = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">displayNormalization</span><span class="p">()))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">getNumDims</span><span class="p">()):</span>
+    <span class="n">dimension</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getDimension</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Dimension </span><span class="si">{0}</span><span class="s2"> Name: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+       <span class="n">dimension</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+
+<span class="n">bc</span> <span class="o">=</span><span class="n">ws</span><span class="o">.</span><span class="n">getBoxController</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Is the workspace using a file back end? </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bc</span><span class="o">.</span><span class="n">isFileBacked</span><span class="p">()))</span>
+<span class="n">backEndFilename</span> <span class="o">=</span> <span class="n">bc</span><span class="o">.</span><span class="n">getFilename</span><span class="p">()</span>
+</pre></div>
+</div>
+<section id="dimensions">
+<h4><a class="toc-backref" href="#id10" role="doc-backlink">Dimensions</a><a class="headerlink" href="#dimensions" title="Link to this heading">¶</a></h4>
+<p>As a generic multi dimensional container being able to access information about the dimensions is very important.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ws</span> <span class="o">=</span> <span class="n">CreateMDWorkspace</span><span class="p">(</span><span class="n">Dimensions</span><span class="o">=</span><span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="n">EventType</span><span class="o">=</span><span class="s1">&#39;MDEvent&#39;</span><span class="p">,</span> <span class="n">Extents</span><span class="o">=</span><span class="s1">&#39;-10,10,-5,5,-1,1&#39;</span><span class="p">,</span>
+                     <span class="n">Names</span><span class="o">=</span><span class="s1">&#39;Q_lab_x,Q_lab_y,Q_lab_z&#39;</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="s1">&#39;1\A,1\A,1\A&#39;</span><span class="p">)</span>
+<span class="n">FakeMDEventData</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">UniformParams</span><span class="o">=</span><span class="s2">&quot;1000000&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of dimensions = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">getNumDims</span><span class="p">()))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">getNumDims</span><span class="p">()):</span>
+   <span class="n">dimension</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getDimension</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Dimension </span><span class="si">{0}</span><span class="s2"> Name: </span><span class="si">{1}</span><span class="s2"> id: </span><span class="si">{2}</span><span class="s2"> Range: </span><span class="si">{3}</span><span class="s2">-</span><span class="si">{4}</span><span class="s2"> </span><span class="si">{5}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+       <span class="n">dimension</span><span class="o">.</span><span class="n">getDimensionId</span><span class="p">(),</span>
+       <span class="n">dimension</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+       <span class="n">dimension</span><span class="o">.</span><span class="n">getMinimum</span><span class="p">(),</span>
+       <span class="n">dimension</span><span class="o">.</span><span class="n">getMaximum</span><span class="p">(),</span>
+       <span class="n">dimension</span><span class="o">.</span><span class="n">getUnits</span><span class="p">()))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The dimension assigned to X = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">getXDimension</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The dimension assigned to Y = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">getYDimension</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="k">try</span><span class="p">:</span>
+   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The dimension assigned to Z = </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">getZDimension</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+<span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+    <span class="c1"># if the dimension does not exist you will get a RuntimeError</span>
+   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Workspace does not have a Z dimension&quot;</span><span class="p">)</span>
+
+<span class="c1"># you can also get a dimension by it&#39;s id</span>
+<span class="n">dim</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getDimensionIndexById</span><span class="p">(</span><span class="s2">&quot;Q_lab_x&quot;</span><span class="p">)</span>
+<span class="c1"># or name</span>
+<span class="n">dim</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getDimensionIndexByName</span><span class="p">(</span><span class="s2">&quot;Q_lab_x&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="accessing-the-data">
+<h4><a class="toc-backref" href="#id11" role="doc-backlink">Accessing the Data</a><a class="headerlink" href="#accessing-the-data" title="Link to this heading">¶</a></h4>
+<p>To access the data of an MDWorkspace you need to convert it to a regular grid, or <a class="reference internal" href="MDHistoWorkspace.html#mdhistoworkspace"><span class="std std-ref">MD Histogram Workspace</span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup</span>
+<span class="n">mdWS</span> <span class="o">=</span> <span class="n">CreateMDWorkspace</span><span class="p">(</span><span class="n">Dimensions</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">Extents</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">],</span> <span class="n">Names</span><span class="o">=</span><span class="s2">&quot;H,K,L,E&quot;</span><span class="p">,</span> <span class="n">Units</span><span class="o">=</span><span class="s2">&quot;U,U,U,V&quot;</span><span class="p">)</span>
+<span class="n">FakeMDEventData</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">mdWS</span><span class="p">,</span> <span class="n">PeakParams</span><span class="o">=</span><span class="s1">&#39;500000,0,0,0,0,3&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create a histogrammed (binned) workspace with 100 bins in each of the H, K and L dimensions</span>
+<span class="n">histoWS</span> <span class="o">=</span> <span class="n">BinMD</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">mdWS</span><span class="p">,</span> <span class="n">AlignedDim0</span><span class="o">=</span><span class="s1">&#39;H,-1,1,100&#39;</span><span class="p">,</span> <span class="n">AlignedDim1</span><span class="o">=</span><span class="s1">&#39;K,-1,1,100&#39;</span><span class="p">,</span> <span class="n">AlignedDim2</span><span class="o">=</span><span class="s1">&#39;L,-1,1,100&#39;</span><span class="p">)</span>
+
+<span class="c1"># Or you can also use CutMD, to define bin widths and the cut projection</span>
+<span class="kn">from</span> <span class="nn">mantid.api</span> <span class="kn">import</span> <span class="n">Projection</span>
+<span class="n">SetUB</span><span class="p">(</span><span class="n">Workspace</span><span class="o">=</span><span class="n">mdWS</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">SetSpecialCoordinates</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">mdWS</span><span class="p">,</span> <span class="n">SpecialCoordinates</span><span class="o">=</span><span class="s1">&#39;HKL&#39;</span><span class="p">)</span>
+
+<span class="n">projection</span> <span class="o">=</span> <span class="n">Projection</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">proj_ws</span> <span class="o">=</span> <span class="n">projection</span><span class="o">.</span><span class="n">createWorkspace</span><span class="p">()</span>
+
+<span class="c1"># Apply the cut with bin widths of 0.1 in  H,K and L and integrating over -5 to +5 in E</span>
+<span class="n">out_md</span> <span class="o">=</span> <span class="n">CutMD</span><span class="p">(</span><span class="n">mdWS</span><span class="p">,</span> <span class="n">Projection</span><span class="o">=</span><span class="n">proj_ws</span><span class="p">,</span> <span class="n">PBins</span><span class="o">=</span><span class="p">([</span><span class="mf">0.1</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">]),</span> <span class="n">NoPix</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</section>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="MDNorm.html" title="Previous Chapter: Multi dimensional neutron scattering data normalization"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Multi dimensi...</span>
+    </a>
+  </li>
+  <li>
+    <a href="Materials.html" title="Next Chapter: Materials"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Materials &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
