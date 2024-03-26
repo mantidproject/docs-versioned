@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>SANSILLReduction v2</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=ff701123"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="SANSLoad v1" href="SANSLoad-v1.html" />
+    <link rel="prev" title="SANSILLReduction v1" href="SANSILLReduction-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">SANSILLReduction v2</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="sansillreduction-v2">
+<span id="algm-sansillreduction"></span><span id="algm-sansillreduction-v2"></span><h1>SANSILLReduction v2<a class="headerlink" href="#sansillreduction-v2" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id9">Summary</a></p>
+<ul>
+<li><p><a class="reference internal" href="#see-also" id="id10">See Also</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#properties" id="id11">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id12">Description</a></p></li>
+<li><p><a class="reference internal" href="#input-runs" id="id13">Input Runs</a></p></li>
+<li><p><a class="reference internal" href="#input-workspaces" id="id14">Input Workspaces</a></p></li>
+<li><p><a class="reference internal" href="#output-workspaces" id="id15">Output Workspaces</a></p></li>
+<li><p><a class="reference internal" href="#processas" id="id16">ProcessAs</a></p></li>
+<li><p><a class="reference internal" href="#flowcharts" id="id17">Flowcharts</a></p>
+<ul>
+<li><p><a class="reference internal" href="#darkcurrent" id="id18">DarkCurrent</a></p></li>
+<li><p><a class="reference internal" href="#emptybeam" id="id19">EmptyBeam</a></p></li>
+<li><p><a class="reference internal" href="#transmission" id="id20">Transmission</a></p></li>
+<li><p><a class="reference internal" href="#emptycontainer" id="id21">EmptyContainer</a></p></li>
+<li><p><a class="reference internal" href="#water" id="id22">Water</a></p></li>
+<li><p><a class="reference internal" href="#solvent" id="id23">Solvent</a></p></li>
+<li><p><a class="reference internal" href="#sample" id="id24">Sample</a></p></li>
+<li><p><a class="reference internal" href="#full-treatment" id="id25">Full Treatment</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#transmission-replicae" id="id26">Transmission Replicae</a></p></li>
+<li><p><a class="reference internal" href="#blank-samples" id="id27">Blank Samples</a></p></li>
+<li><p><a class="reference internal" href="#kinetic-mode" id="id28">Kinetic Mode</a></p></li>
+<li><p><a class="reference internal" href="#source" id="id29">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Performs SANS data reduction of a given process type.</p>
+<section id="see-also">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="SANSILLMultiProcess-v1.html#algm-sansillmultiprocess"><span class="std std-ref">SANSILLMultiProcess</span></a>, <a class="reference internal" href="SANSILLIntegration-v1.html#algm-sansillintegration"><span class="std std-ref">SANSILLIntegration</span></a></p>
+</section>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Runs</p></td>
+<td><p>Input</p></td>
+<td><p>list of str lists</p></td>
+<td></td>
+<td><p>File path of run(s). Allowed values: [‘nxs’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>ProcessAs</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Sample</p></td>
+<td><p>Choose the process type. Allowed values: [‘DarkCurrent’, ‘EmptyBeam’, ‘Transmission’, ‘EmptyContainer’, ‘Water’, ‘Solvent’, ‘Sample’]</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/Workspace.html#workspace"><span class="std std-ref">Workspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>The output workspace based on the value of ProcessAs.</p></td>
+</tr>
+<tr class="row-odd"><td><p>NormaliseBy</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Time</p></td>
+<td><p>Choose the normalisation type. Allowed values: [‘None’, ‘Time’, ‘Monitor’]</p></td>
+</tr>
+<tr class="row-even"><td><p>BeamRadius</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0.25</p></td>
+<td><p>Beam radius [m]; used for beam center search.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TransmissionBeamRadius</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0.1</p></td>
+<td><p>Beam radius [m]; used for flux and transmission calculations.</p></td>
+</tr>
+<tr class="row-even"><td><p>SampleThickness</p></td>
+<td><p>Input</p></td>
+<td><p>dbl list</p></td>
+<td><p>0.1</p></td>
+<td><p>Sample thickness [cm] (if -1, the value is taken from the nexus file).</p></td>
+</tr>
+<tr class="row-odd"><td><p>WaterCrossSection</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>1</p></td>
+<td><p>Provide water cross-section [cm-1]; used only if the absolute scale is performed by dividing to water.</p></td>
+</tr>
+<tr class="row-even"><td><p>TransmissionThetaDependent</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>Whether or not to use 2theta dependent transmission correction</p></td>
+</tr>
+<tr class="row-odd"><td><p>SampleWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>Input workspace containing already loaded sample data, used for parameter scans.</p></td>
+</tr>
+<tr class="row-even"><td><p>DarkCurrentWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>The name of the Cd/B4C input workspace.</p></td>
+</tr>
+<tr class="row-odd"><td><p>EmptyBeamWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>The name of the empty beam input workspace.</p></td>
+</tr>
+<tr class="row-even"><td><p>FluxWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>The name of the input empty beam flux workspace.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TransmissionWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>The name of the transmission input workspace.</p></td>
+</tr>
+<tr class="row-even"><td><p>EmptyContainerWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>The name of the container input workspace.</p></td>
+</tr>
+<tr class="row-odd"><td><p>FlatFieldWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>The name of the water input workspace.</p></td>
+</tr>
+<tr class="row-even"><td><p>SolventWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>The name of the solvent input workspace.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SensitivityWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>The name of the input sensitivity map workspace.</p></td>
+</tr>
+<tr class="row-even"><td><p>DefaultMaskWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>Workspace to copy the mask from; for example, the bad detector edges.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MaskWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>Workspace to copy the mask from; for example, the beam stop</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputSensitivityWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>The name of the output sensitivity workspace.</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputFluxWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>The name of the output empty beam flux workspace.</p></td>
+</tr>
+<tr class="row-even"><td><p>MinThreshold</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>Minimum threshold for calculated efficiency.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MaxThreshold</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>2</p></td>
+<td><p>Maximum threshold for calculated efficiency.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>This algorithm performs unary SANS data reduction for the ILL instruments.
+It can also be easily applied to other instruments at similar facilities.
+This algorithm performs all the instrumental corrections, but it does not perform azimuthal integration, which is a subsequent step in the full treatment.
+It is optimized for monochromatic and kinetic mode due to concatenation of many samples and frames into a single workspace along the x-axis.</p>
+</section>
+<section id="input-runs">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink">Input Runs</a><a class="headerlink" href="#input-runs" title="Link to this heading">¶</a></h2>
+<p>The main input is the <strong>Runs</strong>, which is a multiple file property.
+It supports summing which will be performed at the raw level; that is, right after loading.
+The acquisition times and the monitor counts will also be summed, so that the summed data can be correctly normalised.
+The acquisition times (in seconds) will be stored in the second, empty monitor spectrum.
+The listing dimension is supported only for monochromatic and kinetic modes, which signifies the concatenation of different samples into the same workspace.
+Note that, it is up to the user to make sure that samples that are being concatenated are measured with strictly <strong>identical</strong> beamline/detector configuration (i.e. distance, wavelength).
+When providing multiple runs, it is assumed that they are homogeneous; that is, they correspond to the same instrument, same acquisition mode and the same dimensionality (i.e. number of frames in case of kinetic, number of channels in case of TOF).
+There are no checks regarding this for the purposes of performance.</p>
+</section>
+<section id="input-workspaces">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Input Workspaces</a><a class="headerlink" href="#input-workspaces" title="Link to this heading">¶</a></h2>
+<p>The input workspaces do not have the word <em>input</em> in it, just to make the names shorter.</p>
+</section>
+<section id="output-workspaces">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">Output Workspaces</a><a class="headerlink" href="#output-workspaces" title="Link to this heading">¶</a></h2>
+<p>The main output, which will always be produced no matter the process type, is the <strong>OutputWorkspace</strong>, which is mandatory.
+Auxiliary, optional outputs are the <strong>OutputSensitivityWorkspace</strong>, which can be generated from water, and the <strong>OutputFluxWorkspace</strong> which is a second output when processing empty beam or flux runs.</p>
+</section>
+<section id="processas">
+<h2><a class="toc-backref" href="#id16" role="doc-backlink">ProcessAs</a><a class="headerlink" href="#processas" title="Link to this heading">¶</a></h2>
+<p><strong>ProcessAs</strong> is the main label, that governs how a certain run needs to be reduced and what we want to extract from it.
+Based on the value of that, different input workspaces can be passed and different output workspaces can be created.
+Below is the table summarizing the inputs per process type.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>ProcessAs</p></th>
+<th class="head"><p>Input Workspace Properties</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DarkCurrent</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>EmptyBeam</p></td>
+<td><ul class="simple">
+<li><p>DarkCurrentWorkspace</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>Transmission</p></td>
+<td><ul class="simple">
+<li><p>DarkCurrentWorkspace</p></li>
+<li><p>EmptyBeamWorkspace</p></li>
+<li><p><strong>FluxWorkspace</strong></p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>EmptyContainer</p></td>
+<td><ul class="simple">
+<li><p>DarkCurrentWorkspace</p></li>
+<li><p>EmptyBeamWorkspace</p></li>
+<li><p>TransmissionWorkspace</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>Water</p></td>
+<td><ul class="simple">
+<li><p>DarkCurrentWorkspace</p></li>
+<li><p>EmptyBeamWorkspace</p></li>
+<li><p>TransmissionWorkspace</p></li>
+<li><p>EmptyContainerWorkspace</p></li>
+<li><p>FluxWorkspace</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Solvent</p></td>
+<td><ul class="simple">
+<li><p>DarkCurrentWorkspace</p></li>
+<li><p>EmptyBeamWorkspace</p></li>
+<li><p>TransmissionWorkspace</p></li>
+<li><p>EmptyContainerWorkspace</p></li>
+<li><p>FluxWorkspace</p></li>
+<li><p>FlatFieldWorkspace</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p>Sample</p></td>
+<td><ul class="simple">
+<li><p>DarkCurrentWorkspace</p></li>
+<li><p>EmptyBeamWorkspace</p></li>
+<li><p>TransmissionWorkspace</p></li>
+<li><p>EmptyContainerWorkspace</p></li>
+<li><p>FluxWorkspace</p></li>
+<li><p>FlatFieldWorkspace</p></li>
+<li><p>SolventWorkspace</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>All the input workspace properties above are optional.
+For example, if processing as sample, if a container input is specified, subtraction will be performed, if not, the step will be skipped.
+The only exception is when processing as transmission, when <strong>FluxWorkspace</strong> is mandatory, as the transmission is calculated as a ratio wrt the empty beam flux.</p>
+</section>
+<section id="flowcharts">
+<h2><a class="toc-backref" href="#id17" role="doc-backlink">Flowcharts</a><a class="headerlink" href="#flowcharts" title="Link to this heading">¶</a></h2>
+<p>The flowcharts below explain the reduction steps performed for each process type.
+The yellow ovals represent the inputs, the grey parallelograms are the outputs for each process type.</p>
+<section id="darkcurrent">
+<h3><a class="toc-backref" href="#id18" role="doc-backlink">DarkCurrent</a><a class="headerlink" href="#darkcurrent" title="Link to this heading">¶</a></h3>
+<p>The dark current refers to the blocked beam measurement with cadmium or B4C.
+There is not much to do in this case, except time or monitor normalisation.</p>
+<figure class="align-default" id="id1">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="emptybeam">
+<h3><a class="toc-backref" href="#id19" role="doc-backlink">EmptyBeam</a><a class="headerlink" href="#emptybeam" title="Link to this heading">¶</a></h3>
+<p>The empty beam measurement can be used for 2 purposes: beam center finding and flux calculation.
+It produces 2 outputs respectively.
+The main one is the time or monitor normalized empty beam measurement, which has sample logs <em>BeamCenterX</em> and <em>BeamCenterY</em>.
+Those are the coordinates of the calculated center-of-mass of the beam footprint.
+<strong>BeamRadius</strong> parameter is used as the radius of the circle where to search for it.
+This workspace itself is corrected for the beam center and the dark current can be subtracted if provided.
+One should be able to inspect by eye that at this stage the Z axis (i.e. the beam) passes through the center-of-mass of the signal.
+The second output is the integrated flux workspace which sums the intensities in a given radius around the Z after having corrected for the beam center.
+Here, <strong>TransmissionBeamRadius</strong> is used for the integration circle.</p>
+<figure class="align-default" id="id2">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="transmission">
+<h3><a class="toc-backref" href="#id20" role="doc-backlink">Transmission</a><a class="headerlink" href="#transmission" title="Link to this heading">¶</a></h3>
+<p>Transmission calculation is a critical part of the reduction. Transmission refers to the central transmission value, which is calculated as the ratio of the integrated intensity transmitted through the sample and the empty beam flux.
+However, when applying the transmission correction, it is applied in a 2theta-dependent way, in order to account for flight path difference of the neutrons within the flat plate sample.
+For cylindrical samples, 2theta-dependence must be switched off.
+<strong>TransmissionBeamRadius</strong> governs the size of the circle to integrate the intensities within.
+Transmission runs can be concatenated, which can generate a single transmission workspace that can be later applied in a vectorized way.
+Of course, only transmissions measured at the same wavelength can be concatenated, as the transmission is wavelength dependent.
+Furthermore, the transmission runs are also allowed to be kinetic, in which case the transmissions will be calculated frame-by-frame, i.e. in a time-dependent fashion.
+Transmissions runs input can also have duplicated runs, in case the same transmission needs to be applied to more than one sample (see the dedicated section below).
+Transmission values must be positive and less than unity.</p>
+<figure class="align-default" id="id3">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="emptycontainer">
+<h3><a class="toc-backref" href="#id21" role="doc-backlink">EmptyContainer</a><a class="headerlink" href="#emptycontainer" title="Link to this heading">¶</a></h3>
+<p>This is the container the samples are measured in. Empty container must be provided with its own transmission, which is typically close to 1, but still it is needed to perform the subtraction correctly.
+The container workspace is the first process type that is also normalized by the solid angle. This is just to allow the containers to be measured at different distances if needed.
+However, typically they are measured at the same beamline configurations as the samples.</p>
+<figure class="align-default" id="id4">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="water">
+<h3><a class="toc-backref" href="#id22" role="doc-backlink">Water</a><a class="headerlink" href="#water" title="Link to this heading">¶</a></h3>
+<p>This refers to the incoherent isotropic standard sample, which is typically water, but can also be vanadium.
+This can be used for 2 purposes: correcting for relative inter-pixel detector efficiencies and, in case of water, calibrating the absolute scale.
+The water measurement can be used in 2 ways: dividing sample by the water, in which case it will effectively correct for both, or generating a sensitivity workspace.
+The latter only captures the detector efficiencies, but does not alter the absolute scale.
+The advantage of that is that it can be measured once, and reused in many experiments, at any distances and wavelengths.
+Furthermore, with D22 detector which can be moved laterally, one can perform water measurements with and without lateral offset to obtain the efficiency map without a beam stop shadow in the middle.
+When dividing sample by the water, they must be in the same units; that is, either both in absolute scale (already divided by the empty beam flux), or both not in absolute scale.
+Otherwise the algorithm will throw an error.
+In case they are not in absolute scale individually, they must be measured with the same distance.
+In the contrary, if both are already in absolute scale (so divided by the respective empty beam fluxes), the water normalisation can be safely done, even if the water is at a different distance.
+This is typically the case, as at large distances, water does not scatter enough to have a reasonable statistics in a short time.
+The absolute water cross-section must be relatively flat as a function of Q, and around 0.9 - 1.0 depending on the wavelength.
+Corrected water measurement is also referred to as flat field.</p>
+<figure class="align-default" id="id5">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id5" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="solvent">
+<h3><a class="toc-backref" href="#id23" role="doc-backlink">Solvent</a><a class="headerlink" href="#solvent" title="Link to this heading">¶</a></h3>
+<p>One can perform solvent (buffer) subtraction in 3 ways:</p>
+<ul class="simple">
+<li><p>Reducing both the solvent and the sample as samples, then subtracting the 1D curves I(Q). This is the recommended way if the solvent doesn’t have much statistics, in which case pixel-by-pixel subtraction in 2D might be tricky.</p></li>
+<li><p>Providing the solvent in the container as an empty container. In this case, when doing empty container subtraction, it will effectively subtract also the solvent. This is the recommended way, if the solvent and the sample are measured in the same empty container.</p></li>
+<li><p>Process the solvent as Solvent, then subtract it from the sample. In this case the subtraction will be done pixel-by-pixel in 2D. This is the only way if the solvent is measured in a different container than the sample.</p></li>
+</ul>
+<p>Therefore, this process type is useful only in the case 3 above.</p>
+<figure class="align-default" id="id6">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id6" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="sample">
+<h3><a class="toc-backref" href="#id24" role="doc-backlink">Sample</a><a class="headerlink" href="#sample" title="Link to this heading">¶</a></h3>
+<p>Below is the treatment of the samples. This is similar to the solvent diagram above (solvent is treated just as a sample), except that here one can also provide the solvent input for the subtraction.
+Sample runs can be standard monochromatic, or kinetic. It is not allowed to have a duplicated run number in the runs list.
+It will concatenate the runs along the a-axis of the workspace, corresponding to the listing dimension in the input files.
+Sample runs can have blanks corresponding to missing measurements, see the dedicated section below.</p>
+<figure class="align-default" id="id7">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id7" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="full-treatment">
+<h3><a class="toc-backref" href="#id25" role="doc-backlink">Full Treatment</a><a class="headerlink" href="#full-treatment" title="Link to this heading">¶</a></h3>
+<p>Full treatment is built by stacking up unary reductions with corresponding <strong>ProcessAs</strong>. The diagram below illustrates the flow of processing.
+Letters denote the dark current (Cd/B4C) (DC), empty beam (EB), transmission (TR), empty container (EC), flat field (water) (FF), solvent (buffer) (SB), and sample (SA).</p>
+<figure class="align-default" id="id8">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id8" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+<section id="transmission-replicae">
+<h2><a class="toc-backref" href="#id26" role="doc-backlink">Transmission Replicae</a><a class="headerlink" href="#transmission-replicae" title="Link to this heading">¶</a></h2>
+<p>As mentioned, the transmission runs can be repeated, in case the same run needs to be used for more than one sample.
+For example <strong>100500,100501,100501,100502</strong> will mean that the same <strong>100501</strong> will be used for the 2nd and 3rd samples.
+Technically speaking, since the transmission are applied in a vectorized way, the algorithm will duplicate the <strong>100501</strong> workspace in order to broadcast to the right dimension.
+Transmission runs cannot be blank.</p>
+</section>
+<section id="blank-samples">
+<h2><a class="toc-backref" href="#id27" role="doc-backlink">Blank Samples</a><a class="headerlink" href="#blank-samples" title="Link to this heading">¶</a></h2>
+<p>Unlike transmissions, the sample runs cannot be repeated as it makes no sense. In the contrary, the so-called blank runs are allowed.
+Run number <strong>0</strong> is the placeholder for the blanks; that is, for missing measurements.
+It is sometimes useful to fill a full table with many detector distances, but certain samples might not have measurements at each distance.
+This is when the blanks can be used, in order to keep the correspondence with the calibration measurements correct.
+For example, <strong>200600, 0, 200601, 200602</strong> means that at a given distance, sample 2 wasn’t measured, but to match the transmissions in the right way, we have to have a blank run.
+Technically speaking, the algorithm will generate a 0-count workspace and inject it in the position of the blank.
+It will have the same dimension as the real runs, so that after concatenation, the corrections can be applied in a vectorized way.</p>
+</section>
+<section id="kinetic-mode">
+<h2><a class="toc-backref" href="#id28" role="doc-backlink">Kinetic Mode</a><a class="headerlink" href="#kinetic-mode" title="Link to this heading">¶</a></h2>
+<p>Only sample and transmission runs are allowed to be kinetic numors, the calibration measurements are not.
+Kinetic measurements will also be concatenated, e.g. 10 samples with 100 frames each will produce a single workspace with 1000 frames.
+Transmissions can be kinetic only if the samples are kinetic. It is understood that in this case the number of frames must match.
+However, if the samples are kinetic, the transmissions might or might not be kinetic.
+Nonetheless, they cannot be mixed; that is, either all transmissions are standard or all are kinetic.</p>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/ILL/SANS.html">ILL\SANS</a></p>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id29" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>Python: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/171b44b29330a2303790637329340bb3b6de0d0a/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/SANSILLReduction2.py">SANSILLReduction2.py</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="SANSILLReduction-v1.html" title="Previous Chapter: SANSILLReduction v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; SANSILLReduction v1</span>
+    </a>
+  </li>
+  <li>
+    <a href="SANSLoad-v1.html" title="Next Chapter: SANSLoad v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">SANSLoad v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

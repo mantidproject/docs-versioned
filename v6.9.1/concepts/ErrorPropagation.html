@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Error Propagation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=ff701123"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Event Filtering" href="EventFiltering.html" />
+    <link rel="prev" title="Elemental analysis using negative muons" href="ElementalAnalysisUsingNegativeMuons.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Concepts</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Error Propagation</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="error-propagation">
+<span id="id1"></span><h1>Error Propagation<a class="headerlink" href="#error-propagation" title="Link to this heading">¶</a></h1>
+<p>The purpose of this document is to explain how Mantid deals with error
+propagation and how it is used in its algorithms.</p>
+<section id="theory">
+<h2>Theory<a class="headerlink" href="#theory" title="Link to this heading">¶</a></h2>
+<p>In order to deal with error propagation, Mantid treats errors as Gaussian
+probabilities (also known as a bell curve or normal probabilities) and each
+observation as independent. Meaning that if <span class="math notranslate nohighlight">\(X = 100 \pm 1\)</span> then it is still
+possible for a value of <span class="math notranslate nohighlight">\(102\)</span> to occur, but less likely than <span class="math notranslate nohighlight">\(101\)</span>
+or <span class="math notranslate nohighlight">\(99\)</span>, and a value of <span class="math notranslate nohighlight">\(105\)</span> is far less likely still than any of
+these values.</p>
+</section>
+<section id="plus-and-minus-algorithm">
+<h2>Plus and Minus Algorithm<a class="headerlink" href="#plus-and-minus-algorithm" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="../algorithms/Plus-v1.html#algm-plus"><span class="std std-ref">Plus v1</span></a> algorithm adds two datasets together, propagating the
+uncertainties. Mantid calculates the result of <span class="math notranslate nohighlight">\(X_1 + X_2\)</span> as</p>
+<p><span class="math notranslate nohighlight">\(X = X_1 + X_2\)</span></p>
+<p>with uncertainty</p>
+<p><span class="math notranslate nohighlight">\(\sigma_X = \sqrt{ \left( \sigma_{X_1} \right)^2 + \left( \sigma_{X_2} \right)^2 }\)</span>.</p>
+<p>Consider the example where <span class="math notranslate nohighlight">\(X_1 = 101 \pm 2\)</span> and <span class="math notranslate nohighlight">\(X_2 = 99 \pm 2\)</span>.
+Then for this algorithm:</p>
+<p><span class="math notranslate nohighlight">\(X = X_1 + X_2 = 101 + 99 = 200\)</span></p>
+<p><span class="math notranslate nohighlight">\(\sigma_X = \sqrt{ 2^2 + 2^2} = \sqrt{8} = 2.8284\)</span></p>
+<p>Hence the result of <a class="reference internal" href="../algorithms/Plus-v1.html#algm-plus"><span class="std std-ref">Plus v1</span></a> can be summarised as <span class="math notranslate nohighlight">\(X = 200 \pm \sqrt{8}\)</span>.</p>
+<p>Mantid deals with the <a class="reference internal" href="../algorithms/Minus-v1.html#algm-minus"><span class="std std-ref">Minus v1</span></a> algorithm similarly: the result of <span class="math notranslate nohighlight">\(X_1 - X_2\)</span> is</p>
+<p><span class="math notranslate nohighlight">\(X = X_1 - X_2\)</span></p>
+<p>with error</p>
+<p><span class="math notranslate nohighlight">\(\sigma_X = \sqrt{ \left( \sigma_{X_1} \right)^2 + \left( \sigma_{X_2} \right)^2 }\)</span>.</p>
+</section>
+<section id="multiply-and-divide-algorithm">
+<h2>Multiply and Divide Algorithm<a class="headerlink" href="#multiply-and-divide-algorithm" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="../algorithms/Multiply-v1.html#algm-multiply"><span class="std std-ref">Multiply v1</span></a> and <a class="reference internal" href="../algorithms/Divide-v1.html#algm-divide"><span class="std std-ref">Divide v1</span></a> algorithms propagate the uncertainties according
+to (see also <a class="reference external" href="http://en.wikipedia.org/wiki/Propagation_of_uncertainty">here</a>):</p>
+<p><span class="math notranslate nohighlight">\(\sigma_X = \left|X\right| \sqrt{ \left( \frac{\sigma_{X_1}}{X_1} \right)^2 + \left( \frac{\sigma_{X_2}}{X_2} \right)^2 }\)</span>,</p>
+<p>where <span class="math notranslate nohighlight">\(X\)</span> is the result of the multiplication, <span class="math notranslate nohighlight">\(X = X_1 \cdot X_2\)</span>, or the division, <span class="math notranslate nohighlight">\(X = X_1 / X_2\)</span>.</p>
+<p>Considering the example above where <span class="math notranslate nohighlight">\(X_1 = 101 \pm 2\)</span> and
+<span class="math notranslate nohighlight">\(X_2 = 99 \pm 2\)</span>. Mantid would calculate the result of <span class="math notranslate nohighlight">\(X_1 / X_2\)</span> as
+<span class="math notranslate nohighlight">\(X = 101 / 99 = 1.0202\)</span>, with uncertainty
+<span class="math notranslate nohighlight">\(\sigma_X = 1.0202 \sqrt{ \left(2/101\right)^2 + \left(2/99\right)^2} = 0.0288\)</span>.</p>
+<p>For <a class="reference internal" href="../algorithms/Multiply-v1.html#algm-multiply"><span class="std std-ref">Multiply v1</span></a>, the result of <span class="math notranslate nohighlight">\(X_1 \times X_2\)</span> is
+<span class="math notranslate nohighlight">\(X = 101 \times 99 = 9999\)</span>, with uncertainty
+<span class="math notranslate nohighlight">\(\sigma_X = 9999 \sqrt{ \left(2/101\right)^2 + \left(2/99\right)^2} = 282.8568\)</span>.</p>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="ElementalAnalysisUsingNegativeMuons.html" title="Previous Chapter: Elemental analysis using negative muons"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Elemental ana...</span>
+    </a>
+  </li>
+  <li>
+    <a href="EventFiltering.html" title="Next Chapter: Event Filtering"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Event Filtering &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

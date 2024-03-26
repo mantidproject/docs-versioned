@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>PDCalibration v1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=ff701123"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PDConvertRealSpace v1" href="PDConvertRealSpace-v1.html" />
+    <link rel="prev" title="OrMD v1" href="OrMD-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">PDCalibration v1</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="pdcalibration-v1">
+<span id="algm-pdcalibration"></span><span id="algm-pdcalibration-v1"></span><h1>PDCalibration v1<a class="headerlink" href="#pdcalibration-v1" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id1">Summary</a></p></li>
+<li><p><a class="reference internal" href="#properties" id="id2">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id3">Description</a></p></li>
+<li><p><a class="reference internal" href="#limiting-spectra-calibrated" id="id4">Limiting Spectra Calibrated</a></p></li>
+<li><p><a class="reference internal" href="#usage" id="id5">Usage</a></p></li>
+<li><p><a class="reference internal" href="#source" id="id6">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>This algorithm determines the diffractometer constants that convert diffraction spectra from time-of-flight (TOF) to d-spacing. The results are output to a calibration table.</p>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>InputWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Input workspace containing spectra as a function of TOF measured on a standard sample.</p></td>
+</tr>
+<tr class="row-odd"><td><p>StartWorkspaceIndex</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>Starting workspace index for fit</p></td>
+</tr>
+<tr class="row-even"><td><p>StopWorkspaceIndex</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>Last workspace index for fit is the smaller of this value and the workspace index of last spectrum.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TofBinning</p></td>
+<td><p>Input</p></td>
+<td><p>dbl list</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Min, Step, and Max of TOF bins. Logarithmic binning is used if Step is negative. Chosen binning should ensure sufficient datapoints across the peaks to be fitted, considering the number of parameters required by PeakFunction and BackgroundType.</p></td>
+</tr>
+<tr class="row-even"><td><p>PreviousCalibrationFile</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td></td>
+<td><p>An existent file to be loaded into a calibration table, which is used for converting PeakPositions from d-spacing to TOF. Allowed extensions: [‘.h5’, ‘.cal’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>PreviousCalibrationTable</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a></p></td>
+<td></td>
+<td><p>An existent calibration table used for converting PeakPositions from d-spacing to TOF. This property has precedence over PreviousCalibrationFile.</p></td>
+</tr>
+<tr class="row-even"><td><p>PeakFunction</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Gaussian</p></td>
+<td><p>Function to fit input peaks. Allowed values: [‘BackToBackExponential’, ‘Gaussian’, ‘Lorentzian’, ‘PseudoVoigt’, ‘IkedaCarpenterPV’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>BackgroundType</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Linear</p></td>
+<td><p>Function to fit input peaks background. Allowed values: [‘Flat’, ‘Linear’, ‘Quadratic’]</p></td>
+</tr>
+<tr class="row-even"><td><p>PeakPositions</p></td>
+<td><p>Input</p></td>
+<td><p>dbl list</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Comma-delimited positions (d-spacing) of reference peaks. Care should be taken to avoid using peaks whose predicted positions are too close considering their peak windows.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PeakWindow</p></td>
+<td><p>Input</p></td>
+<td><p>dbl list</p></td>
+<td><p>0.1</p></td>
+<td><p>Width of the window (d-spacing) over which to fit a peak. If a single value is supplied, it will be used as half the window width for all peaks. Otherwise, the expected input is a comma-delimited list of 2*N window boundaries, where N is the number of values in PeakPositions. The order of the window boundaries should match the order in PeakPositions.</p></td>
+</tr>
+<tr class="row-even"><td><p>PeakWidthPercent</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>Used for estimating peak width (an initial parameter for peak fitting) by multiplying peak’s value in PeakPositions by this factor.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MinimumPeakHeight</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>2</p></td>
+<td><p>Used for validating peaks before and after fitting. If a peak’s observed/estimated or fitted height is under this value, the peak will be marked as an error.</p></td>
+</tr>
+<tr class="row-even"><td><p>MaxChiSq</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>100</p></td>
+<td><p>Used for validating peaks after fitting. If the chi-squared value is higher than this value, the peak will be excluded from calibration. The recommended value is between 2 and 10.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ConstrainPeakPositions</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If true, a peak center being fit will be constrained by the estimated peak position +/- 0.5 * “estimated peak width”, where the estimated peak position is the highest Y-value position in the window,  and the estimated peak width is FWHM calculated over the window data.</p></td>
+</tr>
+<tr class="row-even"><td><p>HighBackground</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Flag whether the input data has high background compared to peaks’ heights. This option is recommended for data with peak-to-background ratios under ~5.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MinimumSignalToNoiseRatio</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>Used for validating peaks before fitting. If the signal-to-noise ratio is under this value, the peak will be excluded from fitting and calibration. This check does not apply to peaks for which the noise cannot be estimated. The minimum recommended value is 12.</p></td>
+</tr>
+<tr class="row-even"><td><p>CalibrationParameters</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>DIFC</p></td>
+<td><p>Select which diffractometer constants (GSAS convention) to determine. Allowed values: [‘DIFC’, ‘DIFC+TZERO’, ‘DIFC+TZERO+DIFA’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>TZEROrange</p></td>
+<td><p>Input</p></td>
+<td><p>dbl list</p></td>
+<td></td>
+<td><p>Range for allowable calibrated TZERO value. Default: no restriction.</p></td>
+</tr>
+<tr class="row-even"><td><p>DIFArange</p></td>
+<td><p>Input</p></td>
+<td><p>dbl list</p></td>
+<td></td>
+<td><p>Range for allowable calibrated DIFA value. Default: no restriction.</p></td>
+</tr>
+<tr class="row-odd"><td><p>UseChiSq</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Defines the weighting scheme used in the least-squares fit of the extracted peak centers that determines the diffractometer constants. If true, the peak weight will be the inverse square of the error on the fitted peak center. If false, the peak weight will be the square of the fitted peak height.</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputCalibrationTable</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Output table workspace containing the calibration.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MaskWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p>MaskWorkspace</p></td>
+<td><p>_empty_</p></td>
+<td><p>Mask workspace (optional input / output workspace):  when specified, if the workspace already exists, any incoming masked detectors will be combined  with any additional outgoing masked detectors detected by the algorithm</p></td>
+</tr>
+<tr class="row-even"><td><p>DiagnosticWorkspaces</p></td>
+<td><p>Output</p></td>
+<td><p>WorkspaceGroup</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Auxiliary workspaces containing extended information on the calibration results.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MinimumPeakTotalCount</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>Used for validating peaks before fitting. If the total peak window Y-value count is under this value, the peak will be excluded from fitting and calibration.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>This algorithm takes an <code class="docutils literal notranslate"><span class="pre">InputWorkspace</span></code> containing powder diffraction spectra from a standard sample with x-units of time-of-flight (TOF).
+These spectra are fitted to extract the Bragg peak positions. The extracted peak positions are then used to
+determine the diffractometer constants that convert diffraction spectra from TOF to d-spacing. These constants are described in detail
+in <a class="reference internal" href="AlignDetectors-v1.html#algm-aligndetectors"><span class="std std-ref">AlignDetectors v1</span></a>. The number of the constants being determined (1,2,or 3) is controlled by <code class="docutils literal notranslate"><span class="pre">CalibrationParameters</span></code>.
+The results are output to a <a class="reference internal" href="../concepts/DiffractionCalibrationWorkspace.html#diffractioncalibrationworkspace"><span class="std std-ref">diffraction calibration workspace</span></a>.</p>
+<p>Unlike other calibration algorithms (see <a class="reference external" href="../concepts/calibration/PowderDiffractionCalibration.html">Time-of-Flight Powder Diffraction Calibration</a>),
+peak fitting in <cite>PDCalibration</cite> is done in TOF, not d-spacing. Correspondingly, the input <code class="docutils literal notranslate"><span class="pre">PeakPositions</span></code> and <code class="docutils literal notranslate"><span class="pre">PeakWindow</span></code> values are converted
+from d-spacing to TOF. The conversion is based on either the old calibration (see <code class="docutils literal notranslate"><span class="pre">PreviousCalibrationFile</span></code> and <code class="docutils literal notranslate"><span class="pre">PreviousCalibrationTable</span></code>) or,
+if not provided, on the instrument geometry contained in the <code class="docutils literal notranslate"><span class="pre">InputWorkspace</span></code>.</p>
+<p>The peak fitting properties are explained in more detail in
+<a class="reference internal" href="FitPeaks-v1.html#algm-fitpeaks"><span class="std std-ref">FitPeaks v1</span></a>. This is used to perform a least-squares fitting of peaks
+using as much information as is provided as possible. Each input
+spectrum is calibrated separately following the same basic steps:</p>
+<ol class="arabic simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">PeakPositions</span></code> are used to determine fit windows in combination with <code class="docutils literal notranslate"><span class="pre">PeakWindow</span></code>. The windows are half the distance between the provided peak positions, with a maximum size of <code class="docutils literal notranslate"><span class="pre">PeakWindow</span></code>.</p></li>
+<li><p>The positions and windows are converted to TOF for the spectrum using either the previous calibration information or the instrument geometry.</p></li>
+<li><p>For each peak, the background is estimated from the first and last ten points in the fit window.</p></li>
+<li><p>For each peak, the nominal center is selected by locating the highest point near the expected position. The height is used as the initial guess as well.</p></li>
+<li><p>For each peak, the width is estimated by multiplying the peak center position with <code class="docutils literal notranslate"><span class="pre">PeakWidthPercent</span></code> or by calculating FWHM of the data in the window.</p></li>
+<li><p>For each peak, parameters (such as center, height, and width) are fitted with least-squares.</p></li>
+<li><p>All of the fitted peak centers, weighted according to <code class="docutils literal notranslate"><span class="pre">UseChiSq</span></code>, are used in a separate least-squares procedure to determine the diffractometer constants.</p></li>
+</ol>
+<p>If more than one constant is requested, the result that has the lowest
+<a class="reference external" href="https://en.wikipedia.org/wiki/Reduced_chi-squared_statistic">reduced chi-squared value</a> is
+returned. This favors using less parameters.</p>
+<p>When not specified using the <code class="docutils literal notranslate"><span class="pre">MaskWorkspace</span></code> parameter, the default name for the mask workspace will be the <code class="docutils literal notranslate"><span class="pre">OutputCalibrationTable</span></code> parameter + <code class="docutils literal notranslate"><span class="pre">_mask</span></code>.  If the mask workspace already exists, its masked values will be combined with those from any uncalibrated pixels detected during the algorithm’s execution.</p>
+<p>The resulting calibration table can be saved with
+<a class="reference internal" href="SaveDiffCal-v1.html#algm-savediffcal"><span class="std std-ref">SaveDiffCal v1</span></a>, loaded with <a class="reference internal" href="LoadDiffCal-v1.html#algm-loaddiffcal"><span class="std std-ref">LoadDiffCal v1</span></a> and
+applied to a workspace with <a class="reference internal" href="AlignDetectors-v1.html#algm-aligndetectors"><span class="std std-ref">AlignDetectors v1</span></a>. There are also
+three workspaces placed in the <code class="docutils literal notranslate"><span class="pre">DiagnosticWorkspace</span></code> group. They are:</p>
+<ul class="simple">
+<li><p>evaluated fit functions (<code class="docutils literal notranslate"><span class="pre">_fitted</span></code>) which is the <code class="docutils literal notranslate"><span class="pre">OutputPeakParametersWorkspace</span></code> from <a class="reference internal" href="FitPeaks-v1.html#algm-fitpeaks"><span class="std std-ref">FitPeaks</span></a></p></li>
+<li><p>raw peak fit values (<code class="docutils literal notranslate"><span class="pre">_fitparam</span></code>) which is the <code class="docutils literal notranslate"><span class="pre">FittedPeaksWorkspace</span></code> from <a class="reference internal" href="FitPeaks-v1.html#algm-fitpeaks"><span class="std std-ref">FitPeaks</span></a></p></li>
+<li><p>uncertainties in raw fit values (<code class="docutils literal notranslate"><span class="pre">_fiterror</span></code>) which is the <code class="docutils literal notranslate"><span class="pre">OutputParameterFitErrorsWorkspace</span></code> from <a class="reference internal" href="FitPeaks-v1.html#algm-fitpeaks"><span class="std std-ref">FitPeaks</span></a> when <code class="docutils literal notranslate"><span class="pre">UseChisSq=True</span></code> is set</p></li>
+<li><p>peak fitted positions in d-space ( <code class="docutils literal notranslate"><span class="pre">_dspacing</span></code>) derived from the effective peak parameters</p></li>
+<li><p>peak widths (<code class="docutils literal notranslate"><span class="pre">_width</span></code>) derived from the effective peak parameters</p></li>
+<li><p>peak heights (<code class="docutils literal notranslate"><span class="pre">_height</span></code>) derived from the effective peak parameters</p></li>
+<li><p>instrument resolution (delta-d/d <code class="docutils literal notranslate"><span class="pre">_resolution</span></code>) derived from the average of effective width/height of each peak.
+This is only correct for Gaussian and Lorentzian peak shapes</p></li>
+</ul>
+<p>Since multiple peak shapes can be used,
+see the documentation for the individual <a class="reference internal" href="../fitting/fitfunctions/index.html#fit-functions-list"><span class="std std-ref">fit functions</span></a> to see how they relate to the effective
+values displayed in the diagnostic tables. For <code class="docutils literal notranslate"><span class="pre">Gaussian</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Lorentzian</span></code>, the widths and resolution are converted to values that
+can be directly compared with the results of
+<a class="reference internal" href="EstimateResolutionDiffraction-v1.html#algm-estimateresolutiondiffraction"><span class="std std-ref">EstimateResolutionDiffraction v1</span></a>.</p>
+</section>
+<section id="limiting-spectra-calibrated">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Limiting Spectra Calibrated</a><a class="headerlink" href="#limiting-spectra-calibrated" title="Link to this heading">¶</a></h2>
+<p>Supplying <code class="docutils literal notranslate"><span class="pre">StartWorkspaceIndex</span></code> and/or <code class="docutils literal notranslate"><span class="pre">StopWorkspaceIndex</span></code> will limit the spectra that are fitted.
+Only those that are fitted will exist in the output table, <code class="docutils literal notranslate"><span class="pre">OutputCalibrationTable</span></code>.
+<a class="reference internal" href="CombineDiffCal-v1.html#algm-combinediffcal"><span class="std std-ref">CombineDiffCal</span></a> can accept input of partial instrument calibration as the <code class="docutils literal notranslate"><span class="pre">GroupedCalibration</span></code> and will copy all other values fom the <code class="docutils literal notranslate"><span class="pre">PixelCalibration</span></code>.
+In this mode, the <code class="docutils literal notranslate"><span class="pre">CalibrationWorkspace</span></code> supplied to <a class="reference internal" href="CombineDiffCal-v1.html#algm-combinediffcal"><span class="std std-ref">CombineDiffCal</span></a>  should still be the <code class="docutils literal notranslate"><span class="pre">InputWorkspace</span></code> supplied to <code class="docutils literal notranslate"><span class="pre">PDCalibration</span></code>.</p>
+</section>
+<section id="usage">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Usage</a><a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p><strong>Example - PDCalibration</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># If you have an old calibration it can be used as the starting point</span>
+<span class="n">oldCal</span> <span class="o">=</span> <span class="s1">&#39;NOM_calibrate_d72460_2016_05_23.h5&#39;</span>
+
+<span class="c1"># list of d values for diamond</span>
+<span class="n">dvalues</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.3117</span><span class="p">,</span><span class="mf">0.3257</span><span class="p">,</span><span class="mf">0.3499</span><span class="p">,</span><span class="mf">0.4205</span><span class="p">,</span><span class="mf">0.4645</span><span class="p">,</span><span class="mf">0.4768</span><span class="p">,</span><span class="mf">0.4996</span><span class="p">,</span><span class="mf">0.5150</span><span class="p">,</span><span class="mf">0.5441</span><span class="p">,</span><span class="mf">0.5642</span><span class="p">,</span><span class="mf">0.5947</span><span class="p">,</span><span class="mf">0.6307</span><span class="p">,</span><span class="mf">.6866</span><span class="p">,</span><span class="mf">.7283</span><span class="p">,</span><span class="mf">.8185</span><span class="p">,</span><span class="mf">.8920</span><span class="p">,</span><span class="mf">1.0758</span><span class="p">,</span><span class="mf">1.2615</span><span class="p">,</span><span class="mf">2.0599</span><span class="p">)</span>
+
+<span class="n">LoadEventNexus</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;NOM_72460&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;NOM_72460&#39;</span><span class="p">)</span>
+<span class="n">PDCalibration</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;NOM_72460&#39;</span><span class="p">,</span>
+              <span class="n">TofBinning</span><span class="o">=</span><span class="p">[</span><span class="mi">300</span><span class="p">,</span><span class="o">-</span><span class="mf">.001</span><span class="p">,</span><span class="mf">16666.7</span><span class="p">],</span>
+              <span class="n">PreviousCalibrationFile</span><span class="o">=</span><span class="n">oldCal</span><span class="p">,</span>
+              <span class="n">PeakPositions</span><span class="o">=</span><span class="n">dvalues</span><span class="p">,</span>
+              <span class="n">PeakWidthPercent</span><span class="o">=</span><span class="mf">.008</span><span class="p">,</span>
+              <span class="n">OutputCalibrationTable</span><span class="o">=</span><span class="s1">&#39;cal&#39;</span><span class="p">,</span>
+              <span class="n">DiagnosticWorkspaces</span><span class="o">=</span><span class="s1">&#39;diag&#39;</span><span class="p">)</span>
+
+<span class="c1"># Print the result</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The calibrated difc at detid </span><span class="si">{detid}</span><span class="s2"> is </span><span class="si">{difc}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;cal&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="mi">40000</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The calibrated difc at detid 40896 is 5523.060327692842
+</pre></div>
+</div>
+<p><strong>Example - PDCalibration with BackToBackExponential fit function</strong></p>
+<p>The following example shows how to use PDCalibration with the BackToBackExponential fit function. The fit works best if sensible initial values for the parameters are specified in an instrument definition or parameter file (for more details, see the <a class="reference internal" href="../concepts/InstrumentDefinitionFile.html#using-fitting-parameter"><span class="std std-ref">fitting parameters</span></a> documentation):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;ENGINX00193749.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;193749&#39;</span><span class="p">)</span>
+<span class="n">dpks</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.913220892</span><span class="p">,</span> <span class="mf">1.631600313</span><span class="p">,</span>
+        <span class="mf">1.562138267</span><span class="p">,</span> <span class="mf">1.352851554</span><span class="p">,</span> <span class="mf">1.104598643</span><span class="p">)</span>
+
+<span class="c1"># initial values for GSAS parameters A, B, S are in ENGINX parameters .xml</span>
+<span class="c1"># use log binning</span>
+<span class="n">PDCalibration</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;193749&#39;</span><span class="p">,</span>
+              <span class="n">TofBinning</span><span class="o">=</span><span class="p">[</span><span class="mi">10000</span><span class="p">,</span><span class="o">-</span><span class="mf">0.0005</span><span class="p">,</span><span class="mi">46000</span><span class="p">],</span>
+              <span class="n">PeakPositions</span><span class="o">=</span><span class="n">dpks</span><span class="p">,</span>
+              <span class="n">PeakWindow</span> <span class="o">=</span> <span class="mf">0.03</span><span class="p">,</span>
+              <span class="n">MinimumPeakHeight</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+              <span class="n">PeakFunction</span> <span class="o">=</span> <span class="s1">&#39;BackToBackExponential&#39;</span><span class="p">,</span>
+              <span class="n">CalibrationParameters</span> <span class="o">=</span> <span class="s1">&#39;DIFC&#39;</span><span class="p">,</span>
+              <span class="n">OutputCalibrationTable</span><span class="o">=</span><span class="s1">&#39;cal_B2B_DIFC_chisqTrue&#39;</span><span class="p">,</span>
+              <span class="n">DiagnosticWorkspaces</span> <span class="o">=</span> <span class="s1">&#39;diag_B2B_DIFC_chisqTrue&#39;</span><span class="p">,</span>
+              <span class="n">UseChiSq</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Print the result</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The calibrated difc at detid </span><span class="si">{detid}</span><span class="s2"> is </span><span class="si">{difc}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;cal_B2B_DIFC_chisqTrue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="mi">1000</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The calibrated difc at detid 108041 is 16834.952770921267
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/Diffraction/Calibration.html">Diffraction\Calibration</a></p>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/171b44b29330a2303790637329340bb3b6de0d0a/Framework/Algorithms/inc/MantidAlgorithms/PDCalibration.h">PDCalibration.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/171b44b29330a2303790637329340bb3b6de0d0a/Framework/Algorithms/src/PDCalibration.cpp">PDCalibration.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="OrMD-v1.html" title="Previous Chapter: OrMD v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; OrMD v1</span>
+    </a>
+  </li>
+  <li>
+    <a href="PDConvertRealSpace-v1.html" title="Next Chapter: PDConvertRealSpace v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">PDConvertRealSpace v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

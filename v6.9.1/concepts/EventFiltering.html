@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Event Filtering</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=ff701123"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Event Workspace" href="EventWorkspace.html" />
+    <link rel="prev" title="Error Propagation" href="ErrorPropagation.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.9</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Concepts</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Event Filtering</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="event-filtering">
+<span id="eventfiltering"></span><h1>Event Filtering<a class="headerlink" href="#event-filtering" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#how-to-generate-event-filters" id="id4">How to generate event filters</a></p>
+<ul>
+<li><p><a class="reference internal" href="#implicit-filters" id="id5">Implicit filters</a></p></li>
+<li><p><a class="reference internal" href="#explicit-filters" id="id6">Explicit filters</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#custom-event-filters" id="id7">Custom event filters</a></p>
+<ul>
+<li><p><a class="reference internal" href="#relative-time" id="id8">Relative time</a></p></li>
+<li><p><a class="reference internal" href="#absolute-time" id="id9">Absolute time</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#time-average-mean-and-stddev-of-logs" id="id10">Time average mean and stddev of logs</a></p>
+<ul>
+<li><p><a class="reference internal" href="#references" id="id11">References</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<p>Given an <code class="xref py py-class docutils literal notranslate"><span class="pre">EventWorkspace</span></code> (<a class="reference internal" href="EventWorkspace.html#eventworkspace"><span class="std std-ref">additional docs</span></a>)
+one will generally want to either remove events (commonly called filtering) or divide them into separate output workspaces (splitting).
+While the full list of algorithms can be found in the event filtering algorithm category, a high level summary of them is included here:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../algorithms/FilterByTime-v1.html#algm-filterbytime"><span class="std std-ref">FilterByTime</span></a> and <a class="reference internal" href="../algorithms/FilterByLogValue-v1.html#algm-filterbylogvalue"><span class="std std-ref">FilterByLogValue</span></a> which will create a filter and apply it in a single step</p></li>
+<li><p><a class="reference internal" href="../algorithms/GenerateEventsFilter-v1.html#algm-generateeventsfilter"><span class="std std-ref">GenerateEventsFilter</span></a> which can create an event filter to be used by <a class="reference internal" href="../algorithms/FilterEvents-v1.html#algm-filterevents"><span class="std std-ref">FilterEvents</span></a></p></li>
+<li><p><a class="reference internal" href="../algorithms/FilterEvents-v1.html#algm-filterevents"><span class="std std-ref">FilterEvents</span></a> which allows for a variety of workspaces to specify how an <a class="reference internal" href="EventWorkspace.html#eventworkspace"><span class="std std-ref">Event Workspace</span></a> is split.</p></li>
+</ul>
+<p>This document focuses on how to create workspaces for filtering and will largely
+ignore <a class="reference internal" href="../algorithms/FilterByTime-v1.html#algm-filterbytime"><span class="std std-ref">FilterByTime</span></a> and
+<a class="reference internal" href="../algorithms/FilterByLogValue-v1.html#algm-filterbylogvalue"><span class="std std-ref">FilterByLogValue</span></a>.</p>
+<section id="how-to-generate-event-filters">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">How to generate event filters</a><a class="headerlink" href="#how-to-generate-event-filters" title="Link to this heading">¶</a></h2>
+<section id="implicit-filters">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Implicit filters</a><a class="headerlink" href="#implicit-filters" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="../algorithms/FilterByTime-v1.html#algm-filterbytime"><span class="std std-ref">FilterByTime v1</span></a> and <a class="reference internal" href="../algorithms/FilterByLogValue-v1.html#algm-filterbylogvalue"><span class="std std-ref">FilterByLogValue v1</span></a> internally
+generate event filters during execution that are not exposed to the
+user. These algorithms can only split the neutron events by pulse
+time and do not provide the equivalent of a <code class="docutils literal notranslate"><span class="pre">FastLog=True</span></code> option.</p>
+</section>
+<section id="explicit-filters">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Explicit filters</a><a class="headerlink" href="#explicit-filters" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="../algorithms/FilterEvents-v1.html#algm-filterevents"><span class="std std-ref">FilterEvents v1</span></a> takes either a <a class="reference internal" href="../api/python/mantid/api/ISplittersWorkspace.html#mantid.api.ISplittersWorkspace" title="mantid.api.ISplittersWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">SplittersWorkspace</span></code></a>, <a class="reference internal" href="TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a>, or <a class="reference internal" href="MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a> as the
+<code class="docutils literal notranslate"><span class="pre">SplitterWorkspace</span></code>. The events are split into output workspaces
+according to their pulse times or the times they arrive at detectors.
+Note, times in <code class="docutils literal notranslate"><span class="pre">MatrixWorkspace</span></code> and <code class="docutils literal notranslate"><span class="pre">TableWorkspace</span></code> are in seconds,
+while times in <code class="docutils literal notranslate"><span class="pre">SplittersWorkspace</span></code> are in nanoseconds.</p>
+<p><a class="reference internal" href="../algorithms/GenerateEventsFilter-v1.html#algm-generateeventsfilter"><span class="std std-ref">GenerateEventsFilter</span></a> will create a
+<a class="reference internal" href="../api/python/mantid/api/ISplittersWorkspace.html#mantid.api.ISplittersWorkspace" title="mantid.api.ISplittersWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">SplittersWorkspace</span></code></a> based on
+its various options. This result can be supplied as the
+<code class="docutils literal notranslate"><span class="pre">SplitterWorkspace</span></code> input property of <a class="reference internal" href="../algorithms/FilterEvents-v1.html#algm-filterevents"><span class="std std-ref">FilterEvents</span></a>.
+It will also generate an <code class="docutils literal notranslate"><span class="pre">InformationWorkspace</span></code> which can be passed
+along to <a class="reference internal" href="../algorithms/FilterEvents-v1.html#algm-filterevents"><span class="std std-ref">FilterEvents</span></a>.
+Depending on the parameters in <a class="reference internal" href="../algorithms/GenerateEventsFilter-v1.html#algm-generateeventsfilter"><span class="std std-ref">GenerateEventsFilter</span></a>, the events will be filtered based on
+their pulse times or their absolute times.  A neutron event’s
+absolute time is the sum of its pulse time and TOF.</p>
+</section>
+</section>
+<section id="custom-event-filters">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Custom event filters</a><a class="headerlink" href="#custom-event-filters" title="Link to this heading">¶</a></h2>
+<p>Sometimes one wants to filter events based on arbitrary conditions. In
+this case, one needs to go beyond what existing algorithms can do. For
+this, one must generate their own splitters workspace. The workspace
+is generally 3 columns, with the first two being start and stop times
+and the third being the workspace index to put the events into. For
+filtering with time relative to the start of the run, the first two
+columns can be either integer or floating-point values. To specify the
+times as absolute, the first two columns should be of <code class="docutils literal notranslate"><span class="pre">long64</span></code> type.
+For both of the examples below, the filter workspaces are created using
+the following function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_table_workspace</span><span class="p">(</span><span class="n">table_ws_name</span><span class="p">,</span> <span class="n">column_def_list</span><span class="p">):</span>
+   <span class="n">CreateEmptyTableWorkspace</span><span class="p">(</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="n">table_ws_name</span><span class="p">)</span>
+   <span class="n">table_ws</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="n">table_ws_name</span><span class="p">]</span>
+   <span class="k">for</span> <span class="n">col_tup</span> <span class="ow">in</span> <span class="n">column_def_list</span><span class="p">:</span>
+       <span class="n">data_type</span> <span class="o">=</span> <span class="n">col_tup</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+       <span class="n">col_name</span> <span class="o">=</span> <span class="n">col_tup</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+       <span class="n">table_ws</span><span class="o">.</span><span class="n">addColumn</span><span class="p">(</span><span class="n">data_type</span><span class="p">,</span> <span class="n">col_name</span><span class="p">)</span>
+
+   <span class="k">return</span> <span class="n">table_ws</span>
+</pre></div>
+</div>
+<section id="relative-time">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Relative time</a><a class="headerlink" href="#relative-time" title="Link to this heading">¶</a></h3>
+<p>The easiest way to generate a custom event filter is to make one
+relative to the start time of the run. Note, the times in the
+table are in seconds.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">filter_rel</span> <span class="o">=</span> <span class="n">create_table_workspace</span><span class="p">(</span><span class="s1">&#39;custom_relative&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;stop&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">)])</span>
+<span class="n">filter_rel</span><span class="o">.</span><span class="n">addRow</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">9500</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">))</span>
+<span class="n">filter_rel</span><span class="o">.</span><span class="n">addRow</span><span class="p">((</span><span class="mi">9500</span><span class="p">,</span><span class="mi">19000</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">))</span>
+<span class="n">FilterEvents</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">SplitterWorkspace</span><span class="o">=</span><span class="n">filter_rel</span><span class="p">,</span>
+             <span class="n">GroupWorkspaces</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">OutputWorkspaceBaseName</span><span class="o">=</span><span class="s1">&#39;relative&#39;</span><span class="p">,</span> <span class="n">RelativeTime</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will generate an event filter relative to the start of the
+run. Specifying the <code class="docutils literal notranslate"><span class="pre">FilterStartTime</span></code> in <a class="reference internal" href="../algorithms/FilterEvents-v1.html#algm-filterevents"><span class="std std-ref">FilterEvents</span></a>, one can specify a different time that filtering
+will be relative to.</p>
+</section>
+<section id="absolute-time">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Absolute time</a><a class="headerlink" href="#absolute-time" title="Link to this heading">¶</a></h3>
+<p>If instead a custom filter is to be created with absolute time, the
+time must be processed somewhat to go into the table workspace:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">abs_times</span> <span class="o">=</span> <span class="p">[</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2014-12-12T09:11:22.538096666&#39;</span><span class="p">),</span> <span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2014-12-12T11:45:00&#39;</span><span class="p">),</span> <span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2014-12-12T14:14:00&#39;</span><span class="p">)]</span>
+<span class="c1"># convert to time relative to GPS epoch</span>
+<span class="n">abs_times</span> <span class="o">=</span> <span class="p">[</span><span class="n">time</span> <span class="o">-</span> <span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;1990-01-01T00:00&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">time</span> <span class="ow">in</span> <span class="n">abs_times</span><span class="p">]</span>
+<span class="c1"># convert to number of seconds</span>
+<span class="n">abs_times</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">time</span> <span class="o">/</span> <span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">time</span> <span class="ow">in</span> <span class="n">abs_times</span><span class="p">]</span>
+
+<span class="n">filter_abs</span> <span class="o">=</span> <span class="n">create_table_workspace</span><span class="p">(</span><span class="s1">&#39;custom_absolute&#39;</span><span class="p">,</span> <span class="p">[(</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;stop&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">)])</span>
+<span class="n">filter_abs</span><span class="o">.</span><span class="n">addRow</span><span class="p">((</span><span class="n">abs_times</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">abs_times</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;0&#39;</span><span class="p">))</span>
+<span class="n">filter_abs</span><span class="o">.</span><span class="n">addRow</span><span class="p">((</span><span class="n">abs_times</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">abs_times</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;1&#39;</span><span class="p">))</span>
+<span class="n">FilterEvents</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;PG3_21638&#39;</span><span class="p">,</span> <span class="n">SplitterWorkspace</span><span class="o">=</span><span class="n">filter_abs</span><span class="p">,</span>
+             <span class="n">GroupWorkspaces</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">OutputWorkspaceBaseName</span><span class="o">=</span><span class="s1">&#39;absolute&#39;</span><span class="p">,</span> <span class="n">RelativeTime</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Be warned that specifying <code class="docutils literal notranslate"><span class="pre">RelativeTime=True</span></code> with a table full of
+absolute times will almost certainly generate output workspaces
+without any events in them.</p>
+</section>
+</section>
+<section id="time-average-mean-and-stddev-of-logs">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Time average mean and stddev of logs</a><a class="headerlink" href="#time-average-mean-and-stddev-of-logs" title="Link to this heading">¶</a></h2>
+<p>In general, the simple mathematical mean of a log is not the value of interest.
+It is the mean weighted by time, referred to here as the time-average mean.
+The method for calculating the time-average mean and standard deviation is explained in detail in <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.
+We define that a log is represented by the right-continuous <a class="reference external" href="https://en.wikipedia.org/wiki/Step_function">multi-step function</a> <span class="math notranslate nohighlight">\(L(t)\)</span> (the <code class="docutils literal notranslate"><span class="pre">Kernel::TimeSeriesProperty</span></code> class) and a region of interest in time (the <code class="docutils literal notranslate"><span class="pre">Kernel::TimeROI</span></code> class) is represented by the function <span class="math notranslate nohighlight">\(M(t)\)</span> which is zero when the data should not be included and one when it should be.
+The time-average mean, <span class="math notranslate nohighlight">\(\mu_T\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[\mu_T = \frac{\int_0^T M(t) L(t) dt}{\int_0^T M(t) dt}\]</div>
+<p>The denominator is correctly observed to be the duration.
+The variance (standard deviation squared) is</p>
+<div class="math notranslate nohighlight">
+\[\sigma_T^2 = \frac{\int_0^T M(t) (L(t) - \mu_T)^2 dt}{\int_0^T M(t) dt}\]</div>
+<p>In the cases of properties (including time series) with only a single value, <span class="math notranslate nohighlight">\(L\)</span>, these values become <span class="math notranslate nohighlight">\(\mu_T = L\)</span> and <span class="math notranslate nohighlight">\(\sigma_T^2=0\)</span> independent of the time region of interest, as expected.
+When all data is to be used (i.e. <span class="math notranslate nohighlight">\(M(t) = 1\)</span>), the equations simplify to the values weighted by their observed durations, or</p>
+<div class="math notranslate nohighlight">
+\[\mu_T = \frac{\int_0^T L(t) dt}{\int_0^T dt} = \frac{1}{T} \int_0^T L(t) dt\]</div>
+<section id="references">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">References</a><a class="headerlink" href="#references" title="Link to this heading">¶</a></h3>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>P.F. Peterson, D. Olds, A.T. Savici, and W. Zhou <em>Advances in utilizing event based data structures for neutron scattering experiments</em> Review of Scientific Instruments <strong>89</strong> (2018) 093001. doi: <a class="reference external" href="https://doi.org/10.1063/1.5034782">10.1063/1.5034782</a></p>
+</aside>
+</aside>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="ErrorPropagation.html" title="Previous Chapter: Error Propagation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Error Propagation</span>
+    </a>
+  </li>
+  <li>
+    <a href="EventWorkspace.html" title="Next Chapter: Event Workspace"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Event Workspace &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
