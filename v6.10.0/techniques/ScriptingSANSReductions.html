@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Scripting SANS Reductions</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=770b529d"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API" href="../api/index.html" />
+    <link rel="prev" title="SANS TOML Files" href="SANS-Toml-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.10</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Techniques</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Scripting SANS Reductions</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="scripting-sans-reductions">
+<span id="scriptingsansreductions"></span><h1>Scripting SANS Reductions<a class="headerlink" href="#scripting-sans-reductions" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id1">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#loq-sans2d" id="id2"><code class="docutils literal notranslate"><span class="pre">LOQ()</span></code> <code class="docutils literal notranslate"><span class="pre">SANS2D()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#userpath-path" id="id3"><code class="docutils literal notranslate"><span class="pre">UserPath(path)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#datapath-path" id="id4"><code class="docutils literal notranslate"><span class="pre">DataPath(path)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#maskfile-file-name" id="id5"><code class="docutils literal notranslate"><span class="pre">MaskFile(file_name)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#assignsample-sample-run-reload-true-period" id="id6"><code class="docutils literal notranslate"><span class="pre">AssignSample(sample_run,</span> <span class="pre">reload=True,</span> <span class="pre">period)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#transmissionsample-sample-direct-reload-true-period-t-period-d" id="id7"><code class="docutils literal notranslate"><span class="pre">TransmissionSample(sample,</span> <span class="pre">direct,</span> <span class="pre">reload=True,</span> <span class="pre">period_t,</span> <span class="pre">period_d)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#assigncan-can-run-reload-true-period" id="id8"><code class="docutils literal notranslate"><span class="pre">AssignCan(can_run,</span> <span class="pre">reload=True,</span> <span class="pre">period)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#transmissioncan-can-direct-reload-true-period-t-period-d" id="id9"><code class="docutils literal notranslate"><span class="pre">TransmissionCan(can,</span> <span class="pre">direct,</span> <span class="pre">reload=True,</span> <span class="pre">period_t,</span> <span class="pre">period_d)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#setmonitorspectrum-specnum-interp-false" id="id10"><code class="docutils literal notranslate"><span class="pre">SetMonitorSpectrum(specNum,</span> <span class="pre">interp=False)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#transfit-mode-lambdamin-lambdamax" id="id11"><code class="docutils literal notranslate"><span class="pre">TransFit(mode,</span> <span class="pre">lambdamin,</span> <span class="pre">lambdamax)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#detector-det-name" id="id12"><code class="docutils literal notranslate"><span class="pre">Detector(det_name)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#setphilimit-phimin-phimax-use-mirror-true" id="id13"><code class="docutils literal notranslate"><span class="pre">SetPhiLimit(phimin,</span> <span class="pre">phimax,</span> <span class="pre">use_mirror=True)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#wavrangereduction-wav-start-wav-end-full-trans-wav-name-suffix" id="id14"><code class="docutils literal notranslate"><span class="pre">WavRangeReduction(wav_start,</span> <span class="pre">wav_end,</span> <span class="pre">full_trans_wav,</span> <span class="pre">name_suffix)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#batchreduce-filename-format-plotresults-false-savealgs-saverkh-txt-verbose-false-centreit-false" id="id15"><code class="docutils literal notranslate"><span class="pre">BatchReduce(filename,</span> <span class="pre">format,</span> <span class="pre">plotresults=False,</span> <span class="pre">saveAlgs={'SaveRKH':'txt'},verbose=False,</span> <span class="pre">centreit=False)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#addruns-runs-instrument-sans2d-saveasevent-false-binning-monitors-isoverlay-false-time-shifts-none-deftype-nxs-rawtypes-raw-s-add-raw-lowmem-false" id="id16"><code class="docutils literal notranslate"><span class="pre">AddRuns(runs,</span> <span class="pre">instrument</span> <span class="pre">='sans2d',</span> <span class="pre">saveAsEvent=False,</span> <span class="pre">binning</span> <span class="pre">=</span> <span class="pre">&quot;Monitors&quot;,</span> <span class="pre">isOverlay</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">time_shifts</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">defType='.nxs',</span> <span class="pre">rawTypes=('.raw',</span> <span class="pre">'.s*',</span> <span class="pre">'add','.RAW'),</span> <span class="pre">lowMem=False)</span></code></a></p></li>
+</ul>
+</nav>
+<section id="introduction">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>SANS data from ISIS can be analysed using <a class="reference internal" href="../tutorials/introduction_to_python/index.html#introduction-to-python"><span class="std std-ref">Python</span></a> commands. Below is an example of a basic reduction on LOQ.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ISISCommandInterface</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">LOQ</span><span class="p">()</span>
+<span class="n">MaskFile</span><span class="p">(</span><span class="s1">&#39;MASK.094AA&#39;</span><span class="p">)</span>
+
+<span class="n">AssignSample</span><span class="p">(</span><span class="s1">&#39;54431.raw&#39;</span><span class="p">)</span>
+<span class="n">TransmissionSample</span><span class="p">(</span><span class="s1">&#39;54435.raw&#39;</span><span class="p">,</span> <span class="s1">&#39;54433.raw&#39;</span><span class="p">)</span>
+<span class="n">AssignCan</span><span class="p">(</span><span class="s1">&#39;54432.raw&#39;</span><span class="p">)</span>
+<span class="n">TransmissionCan</span><span class="p">(</span><span class="s1">&#39;54434.raw&#39;</span><span class="p">,</span> <span class="s1">&#39;54433.raw&#39;</span><span class="p">)</span>
+
+<span class="n">WavRangeReduction</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To configure the reduction the following commands are available once the ISISCommandInterface module has been imported, using the following command:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ISISCommandInterface</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>These commands are given here in the order they are likely to be found in a script file although, except were stated, the order does not matter:</p>
+</section>
+<section id="loq-sans2d">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">LOQ()</span></code> <code class="docutils literal notranslate"><span class="pre">SANS2D()</span></code></a><a class="headerlink" href="#loq-sans2d" title="Link to this heading">¶</a></h2>
+<p>This specifies which instrument the data was collected from. Either <code class="docutils literal notranslate"><span class="pre">LOQ()</span></code> or <code class="docutils literal notranslate"><span class="pre">SANS2D()</span></code>.
+The layout of the detector banks and detector efficiency files are stored here.</p>
+<p><em>This line must be included and before the</em> <code class="docutils literal notranslate"><span class="pre">MaskFile()</span></code> <em>line.</em></p>
+</section>
+<section id="userpath-path">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">UserPath(path)</span></code></a><a class="headerlink" href="#userpath-path" title="Link to this heading">¶</a></h2>
+<p>Sets the directory in which Mantid should look for user settings file if a full path was not specified.</p>
+<p><em>This must be specified before the</em> <code class="docutils literal notranslate"><span class="pre">MaskFile()</span></code> <em>line to have any effect.</em></p>
+</section>
+<section id="datapath-path">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">DataPath(path)</span></code></a><a class="headerlink" href="#datapath-path" title="Link to this heading">¶</a></h2>
+<p>This can be used to specify an extra directory in which Mantid will look for run files.
+The directories that have been set in the <a class="reference internal" href="../interfaces/framework/ManageUserDirectories.html#manageuserdirectories"><span class="std std-ref">Manage User Directories</span></a> dialog,
+or equivalently the <a class="reference internal" href="../concepts/PropertiesFile.html#properties-file"><span class="std std-ref">Mantid.user.properties</span></a> file, are also checked.</p>
+</section>
+<section id="maskfile-file-name">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">MaskFile(file_name)</span></code></a><a class="headerlink" href="#maskfile-file-name" title="Link to this heading">¶</a></h2>
+<p>This settings file can be either a full path or a filename found in the <code class="docutils literal notranslate"><span class="pre">UserPath()</span></code>.
+The settings here are overridden by the commands listed below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">UserPath</span><span class="p">(</span><span class="s2">&quot;C:/SANS/masks&quot;</span><span class="p">)</span>
+<span class="n">MaskFile</span><span class="p">(</span><span class="s2">&quot;MASK.09A&quot;</span><span class="p">)</span> <span class="c1"># or MaskFile(&quot;C:/SANS/masks/MASK.09A&quot;)</span>
+</pre></div>
+</div>
+</section>
+<section id="assignsample-sample-run-reload-true-period">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">AssignSample(sample_run,</span> <span class="pre">reload=True,</span> <span class="pre">period)</span></code></a><a class="headerlink" href="#assignsample-sample-run-reload-true-period" title="Link to this heading">¶</a></h2>
+<p>Specifies the run to analyse using the format <code class="docutils literal notranslate"><span class="pre">InstRun#.extension</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">SANS2D7777.nxs</span></code>.
+This is one of the few commands that executes <a class="reference internal" href="../concepts/Algorithm.html#algorithm"><span class="std std-ref">Mantid algorithms</span></a> when called,
+the effects of most commands are only felt after the reduction starts.
+On calling this function the experimental run is <a class="reference internal" href="../algorithms/Load-v1.html#algm-load"><span class="std std-ref">loaded</span></a> and component positions are <a class="reference internal" href="../algorithms/MoveInstrumentComponent-v1.html#algm-moveinstrumentcomponent"><span class="std std-ref">changed</span></a>
+(normally the detector bank and sample).
+Currently only <code class="docutils literal notranslate"><span class="pre">reload=true</span></code> is supported.</p>
+</section>
+<section id="transmissionsample-sample-direct-reload-true-period-t-period-d">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">TransmissionSample(sample,</span> <span class="pre">direct,</span> <span class="pre">reload=True,</span> <span class="pre">period_t,</span> <span class="pre">period_d)</span></code></a><a class="headerlink" href="#transmissionsample-sample-direct-reload-true-period-t-period-d" title="Link to this heading">¶</a></h2>
+<p>Specifies the runs that will be used to calculate the transmission fraction for the sample run.
+<code class="docutils literal notranslate"><span class="pre">sample</span></code> contains transmission monitor counts data for the sample when the sample is present,
+<code class="docutils literal notranslate"><span class="pre">direct</span></code> contains similar counts data when the sample position is empty (direct beam).
+The workspaces are loaded and the transmission <a class="reference internal" href="../concepts/InstrumentDefinitionFile.html#instrumentdefinitionfile"><span class="std std-ref">IDF</span></a>, if one exists for the instrument,
+is loaded into the workspaces when this command is encountered. The transmission fraction is calculated later.
+The <code class="docutils literal notranslate"><span class="pre">period_t</span></code> and <code class="docutils literal notranslate"><span class="pre">period_d</span></code> are used when there are multi-period files and specify the period to use for the sample and direct run respectively.</p>
+</section>
+<section id="assigncan-can-run-reload-true-period">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">AssignCan(can_run,</span> <span class="pre">reload=True,</span> <span class="pre">period)</span></code></a><a class="headerlink" href="#assigncan-can-run-reload-true-period" title="Link to this heading">¶</a></h2>
+<p>The can is a scattering run made under the same conditions as the experimental run but only the sample container is in the sample position.
+Hence allowing the effect of the container to be removed. The run is specified using <code class="docutils literal notranslate"><span class="pre">instrumentrunnumber.extension</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">SANS2D7777.nxs</span></code>.
+On calling this function the run is loaded to a workspace and the detector banks and other components are moved as applicable.
+Currently only <code class="docutils literal notranslate"><span class="pre">reload=true</span></code> is supported.</p>
+</section>
+<section id="transmissioncan-can-direct-reload-true-period-t-period-d">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">TransmissionCan(can,</span> <span class="pre">direct,</span> <span class="pre">reload=True,</span> <span class="pre">period_t,</span> <span class="pre">period_d)</span></code></a><a class="headerlink" href="#transmissioncan-can-direct-reload-true-period-t-period-d" title="Link to this heading">¶</a></h2>
+<p>Specify the transmission and direct beam runs that will be used for the analysis of the can run.
+The runs are loaded and with transmission <a class="reference internal" href="../concepts/InstrumentDefinitionFile.html#instrumentdefinitionfile"><span class="std std-ref">IDF</span></a>, if applicable, when Python encounters this command.</p>
+</section>
+<section id="setmonitorspectrum-specnum-interp-false">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">SetMonitorSpectrum(specNum,</span> <span class="pre">interp=False)</span></code></a><a class="headerlink" href="#setmonitorspectrum-specnum-interp-false" title="Link to this heading">¶</a></h2>
+<p>Specifies the number of the TOF spectrum that will be used to for monitor normalisation.
+This value will be used in the next reduction that is called (e.g. with <a class="reference internal" href="#sansscriptingwavrangereduction"><span class="std std-ref">WavRangeReduction()</span></a>).</p>
+</section>
+<section id="transfit-mode-lambdamin-lambdamax">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">TransFit(mode,</span> <span class="pre">lambdamin,</span> <span class="pre">lambdamax)</span></code></a><a class="headerlink" href="#transfit-mode-lambdamin-lambdamax" title="Link to this heading">¶</a></h2>
+<p>Sets the method and range over which to calculate a fit for the variation of transmission fraction with wavelength.
+These arguments are passed to the algorithm <a class="reference internal" href="../algorithms/CalculateTransmission-v1.html#algm-calculatetransmission"><span class="std std-ref">CalculateTransmission v1</span></a>.
+There is an extra fit mode <code class="docutils literal notranslate"><span class="pre">Off</span></code> which causes the unfitted workspace produced by <a class="reference internal" href="../algorithms/CalculateTransmission-v1.html#algm-calculatetransmission"><span class="std std-ref">CalculateTransmission v1</span></a>
+to be used and <code class="docutils literal notranslate"><span class="pre">lambdamin</span></code> or <code class="docutils literal notranslate"><span class="pre">lambdamax</span></code> then have no effect.</p>
+</section>
+<section id="detector-det-name">
+<h2><a class="toc-backref" href="#id12" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">Detector(det_name)</span></code></a><a class="headerlink" href="#detector-det-name" title="Link to this heading">¶</a></h2>
+<p>Sets the detector bank to use for the reduction e.g. <code class="docutils literal notranslate"><span class="pre">front-detector</span></code>.
+The lowest angle detector is assumed if this line is not given.</p>
+</section>
+<section id="setphilimit-phimin-phimax-use-mirror-true">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">SetPhiLimit(phimin,</span> <span class="pre">phimax,</span> <span class="pre">use_mirror=True)</span></code></a><a class="headerlink" href="#setphilimit-phimin-phimax-use-mirror-true" title="Link to this heading">¶</a></h2>
+<p>Call this function to restrict the analysis to sectors of the detector.
+<code class="docutils literal notranslate"><span class="pre">Phimin</span></code> and <code class="docutils literal notranslate"><span class="pre">phimax</span></code> define the limits of the sector where <code class="docutils literal notranslate"><span class="pre">phi=0</span></code> is the x-axis and <code class="docutils literal notranslate"><span class="pre">phi=90</span></code> is the y-axis.
+Setting <code class="docutils literal notranslate"><span class="pre">use_mirror</span></code> to true causes the mirror sector to be included.</p>
+</section>
+<section id="wavrangereduction-wav-start-wav-end-full-trans-wav-name-suffix">
+<span id="sansscriptingwavrangereduction"></span><h2><a class="toc-backref" href="#id14" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">WavRangeReduction(wav_start,</span> <span class="pre">wav_end,</span> <span class="pre">full_trans_wav,</span> <span class="pre">name_suffix)</span></code></a><a class="headerlink" href="#wavrangereduction-wav-start-wav-end-full-trans-wav-name-suffix" title="Link to this heading">¶</a></h2>
+<p>Assuming the mask file contains the correct analysis details one can proceed to calculate <span class="math notranslate nohighlight">\(I(Q)\)</span> using the
+<code class="docutils literal notranslate"><span class="pre">WavRangeReduction()</span></code> function, which can be executed with no arguments.
+The return value of <code class="docutils literal notranslate"><span class="pre">WavRangeReduction()</span></code> is the name of the final reduced workspace.
+This function calls many algorithms ending with a call to <a class="reference internal" href="../algorithms/Q1D-v2.html#algm-q1d"><span class="std std-ref">Q1D v2</span></a> or <a class="reference internal" href="../algorithms/Qxy-v1.html#algm-qxy"><span class="std std-ref">Qxy v1</span></a>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">wav_start</span></code>: the first wavelength to be in the output data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wav_end</span></code>: the last wavelength in the output data.</p></li>
+</ul>
+</section>
+<section id="batchreduce-filename-format-plotresults-false-savealgs-saverkh-txt-verbose-false-centreit-false">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">BatchReduce(filename,</span> <span class="pre">format,</span> <span class="pre">plotresults=False,</span> <span class="pre">saveAlgs={'SaveRKH':'txt'},verbose=False,</span> <span class="pre">centreit=False)</span></code></a><a class="headerlink" href="#batchreduce-filename-format-plotresults-false-savealgs-saverkh-txt-verbose-false-centreit-false" title="Link to this heading">¶</a></h2>
+<p>This analyses a list of files to analyse from a file, it calls <a class="reference internal" href="#sansscriptingwavrangereduction"><span class="std std-ref">WavRangeReduction</span></a>.
+The function is available after the following import:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">SANSBatchMode</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>The first argument is the name of a CSV file, where each line specifies the data for a single reduction (<a class="reference internal" href="../interfaces/isis_sans/Batch%20File%20Format.html#isis-sans-batch-file-ref"><span class="std std-ref">in this format</span></a>).
+The <code class="docutils literal notranslate"><span class="pre">format</span></code> argument is used to specify whether to load raw or nexus files and
+<code class="docutils literal notranslate"><span class="pre">saveAlgs</span></code> is a Python dictionary that contains the name of the save algorithm to use and the extension that it should have.
+<strong>If two algorithms in the dictionary use the same extension the first file will be overwritten!</strong></p>
+</section>
+<section id="addruns-runs-instrument-sans2d-saveasevent-false-binning-monitors-isoverlay-false-time-shifts-none-deftype-nxs-rawtypes-raw-s-add-raw-lowmem-false">
+<h2><a class="toc-backref" href="#id16" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">AddRuns(runs,</span> <span class="pre">instrument</span> <span class="pre">='sans2d',</span> <span class="pre">saveAsEvent=False,</span> <span class="pre">binning</span> <span class="pre">=</span> <span class="pre">&quot;Monitors&quot;,</span> <span class="pre">isOverlay</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">time_shifts</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">defType='.nxs',</span> <span class="pre">rawTypes=('.raw',</span> <span class="pre">'.s*',</span> <span class="pre">'add','.RAW'),</span> <span class="pre">lowMem=False)</span></code></a><a class="headerlink" href="#addruns-runs-instrument-sans2d-saveasevent-false-binning-monitors-isoverlay-false-time-shifts-none-deftype-nxs-rawtypes-raw-s-add-raw-lowmem-false" title="Link to this heading">¶</a></h2>
+<p>This file adds a list of run files. The <code class="docutils literal notranslate"><span class="pre">runs</span></code> variable holds a list of runs which are to be added.
+The variable <code class="docutils literal notranslate"><span class="pre">instrument</span></code> specifies which instrument is currently being used.
+The variable <code class="docutils literal notranslate"><span class="pre">saveAsEvent</span></code> allows the user to add multiple event files in a combined event file.
+The <code class="docutils literal notranslate"><span class="pre">isOverlay</span></code> flag determines if the times of the events and sample logs should be placed on top of each other.
+This is only applied if <code class="docutils literal notranslate"><span class="pre">saveAsEvent</span></code> was selected.
+The <code class="docutils literal notranslate"><span class="pre">time_shifts</span></code> variable is a list of additional time shifts which will be applied if <code class="docutils literal notranslate"><span class="pre">isOverlay</span></code> is selected.
+<em>Note that there has to be exactly one less time time shift than files to be added.</em></p>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Techniques.html">Techniques</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="SANS-Toml-v1.html" title="Previous Chapter: SANS TOML Files"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; SANS TOML Files</span>
+    </a>
+  </li>
+  <li>
+    <a href="../api/index.html" title="Next Chapter: API"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">API &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

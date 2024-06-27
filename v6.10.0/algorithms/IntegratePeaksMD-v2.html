@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>IntegratePeaksMD v2</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=770b529d"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="IntegratePeaksMDHKL v1" href="IntegratePeaksMDHKL-v1.html" />
+    <link rel="prev" title="IntegratePeaksMD v1" href="IntegratePeaksMD-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.10</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">IntegratePeaksMD v2</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="integratepeaksmd-v2">
+<span id="algm-integratepeaksmd"></span><span id="algm-integratepeaksmd-v2"></span><h1>IntegratePeaksMD v2<a class="headerlink" href="#integratepeaksmd-v2" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id3">Summary</a></p>
+<ul>
+<li><p><a class="reference internal" href="#see-also" id="id4">See Also</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#properties" id="id5">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id6">Description</a></p>
+<ul>
+<li><p><a class="reference internal" href="#similar-algorithms" id="id7">Similar algorithms</a></p></li>
+<li><p><a class="reference internal" href="#inputs" id="id8">Inputs</a></p></li>
+<li><p><a class="reference internal" href="#calculations" id="id9">Calculations</a></p></li>
+<li><p><a class="reference internal" href="#background-subtraction" id="id10">Background Subtraction</a></p></li>
+<li><p><a class="reference internal" href="#if-backgroundinnerradius-is-omitted" id="id11">If BackgroundInnerRadius is Omitted</a></p></li>
+<li><p><a class="reference internal" href="#integrateifonedge-option" id="id12">IntegrateIfOnEdge option</a></p></li>
+<li><p><a class="reference internal" href="#correctifonedge-option" id="id13">CorrectIfOnEdge option</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#usage" id="id14">Usage</a></p></li>
+<li><p><a class="reference internal" href="#source" id="id15">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Integrate single-crystal peaks in reciprocal space, for MDEventWorkspaces.</p>
+<p>Sphere is the default shape: tick Ellipsoid or Cylinder to change shape.</p>
+<section id="see-also">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="CentroidPeaksMD-v2.html#algm-centroidpeaksmd"><span class="std std-ref">CentroidPeaksMD</span></a>, <a class="reference internal" href="IntegratePeaksHybrid-v1.html#algm-integratepeakshybrid"><span class="std std-ref">IntegratePeaksHybrid</span></a>, <a class="reference internal" href="IntegratePeaksMDHKL-v1.html#algm-integratepeaksmdhkl"><span class="std std-ref">IntegratePeaksMDHKL</span></a>, <a class="reference internal" href="IntegratePeaksUsingClusters-v1.html#algm-integratepeaksusingclusters"><span class="std std-ref">IntegratePeaksUsingClusters</span></a>, <a class="reference internal" href="IntegratePeaksCWSD-v1.html#algm-integratepeakscwsd"><span class="std std-ref">IntegratePeaksCWSD</span></a></p>
+</section>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>InputWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MDWorkspace.html#mdworkspace"><span class="std std-ref">MDEventWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>An input MDEventWorkspace.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PeakRadius</p></td>
+<td><p>Input</p></td>
+<td><p>dbl list</p></td>
+<td><p>1</p></td>
+<td><p>Fixed radius around each peak position in which to integrate, or the semi-axis lengths (a,b,c) describing an ellipsoid shape used for integration (in the same units as the workspace).</p></td>
+</tr>
+<tr class="row-even"><td><p>BackgroundInnerRadius</p></td>
+<td><p>Input</p></td>
+<td><p>dbl list</p></td>
+<td><p>0</p></td>
+<td><p>Inner radius, or three values for semi-axis lengths (a,b,c) of the ellipsoid shape, used to evaluate the background of the peak. If smaller than PeakRadius, then we assume BackgroundInnerRadius = PeakRadius.</p></td>
+</tr>
+<tr class="row-odd"><td><p>BackgroundOuterRadius</p></td>
+<td><p>Input</p></td>
+<td><p>dbl list</p></td>
+<td><p>0</p></td>
+<td><p>Outer radius, or three values for semi-axis lengths (a,b,c) of the ellipsoid shape, to use to evaluate the background of the peak. The signal density around the peak (BackgroundInnerRadius &lt; r &lt; BackgroundOuterRadius) is used to estimate the background under the peak. If smaller than PeakRadius, no background measurement is done.</p></td>
+</tr>
+<tr class="row-even"><td><p>PeaksWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p>IPeaksWorkspace</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>A PeaksWorkspace containing the peaks to integrate.</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p>IPeaksWorkspace</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>The output PeaksWorkspace will be a copy of the input PeaksWorkspace with the peaks’ integrated intensities.</p></td>
+</tr>
+<tr class="row-even"><td><p>ReplaceIntensity</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>Always replace intensity in PeaksWorkspacem (default). If false, then do not replace intensity if calculated value is 0 (used for SNSSingleCrystalReduction)</p></td>
+</tr>
+<tr class="row-odd"><td><p>IntegrateIfOnEdge</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>Only warning if all of peak outer radius is not on detector (default). If false, do not integrate if the outer radius is not on a detector.</p></td>
+</tr>
+<tr class="row-even"><td><p>AdaptiveQBackground</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Default is false.   If true, BackgroundOuterRadius + AdaptiveQMultiplier * <strong>|Q|</strong> and BackgroundInnerRadius + AdaptiveQMultiplier * <strong>|Q|</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>Ellipsoid</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Default is sphere.</p></td>
+</tr>
+<tr class="row-even"><td><p>FixQAxis</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Fix one axis of ellipsoid to be along direction of Q.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cylinder</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Default is sphere.  Use next five parameters for cylinder.</p></td>
+</tr>
+<tr class="row-even"><td><p>CylinderLength</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>Length of cylinder in which to integrate (in the same units as the workspace).</p></td>
+</tr>
+<tr class="row-odd"><td><p>PercentBackground</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>Percent of CylinderLength that is background (20 is 20%)</p></td>
+</tr>
+<tr class="row-even"><td><p>ProfileFunction</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Gaussian</p></td>
+<td><p>Fitting function for profile that is used only with Cylinder integration. Allowed values: [‘AsymmetricPearsonVII’, ‘BackToBackExponential’, ‘Bk2BkExpConvPV’, ‘DeltaFunction’, ‘ElasticDiffRotDiscreteCircle’, ‘ElasticDiffSphere’, ‘ElasticIsoRotDiff’, ‘ExamplePeakFunction’, ‘Gaussian’, ‘IkedaCarpenterPV’, ‘Lorentzian’, ‘PseudoVoigt’, ‘Voigt’, ‘NoFit’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>IntegrationOption</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>GaussianQuadrature</p></td>
+<td><p>Integration method for calculating intensity used only with Cylinder integration. Allowed values: [‘Sum’, ‘GaussianQuadrature’]</p></td>
+</tr>
+<tr class="row-even"><td><p>ProfilesFile</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td></td>
+<td><p>Save (Optionally) as Isaw peaks file with profiles included. Allowed values: [‘profiles’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>AdaptiveQMultiplier</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>PeakRadius + AdaptiveQMultiplier * <strong>|Q|</strong> so each peak has a different integration radius.  Q includes the 2*pi factor.</p></td>
+</tr>
+<tr class="row-even"><td><p>CorrectIfOnEdge</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Only warning if all of peak outer radius is not on detector (default). If false, correct for volume off edge for both background and intensity (the peak is assumed uniform Gaussian so this only applies to spherical integration).</p></td>
+</tr>
+<tr class="row-odd"><td><p>UseOnePercentBackgroundCorrection</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>If this options is enabled, then the top 1% of the background will be removedbefore the background subtraction.</p></td>
+</tr>
+<tr class="row-even"><td><p>FixMajorAxisLength</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>This option is ignored if all peak radii are specified. Otherwise, if True the ellipsoid radidi (proportional to the sqrt of the eigenvalues of the covariance matrix) are scaled such that the major axis radius is equal to the PeakRadius. If False then the ellipsoid radii are set to 3 times the sqrt of the eigenvalues of the covariance matrix</p></td>
+</tr>
+<tr class="row-odd"><td><p>UseCentroid</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Perform integration on estimated centroid not peak position (ignored if all three peak radii are specified).</p></td>
+</tr>
+<tr class="row-even"><td><p>MaxIterations</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>1</p></td>
+<td><p>Number of iterations in covariance estimation (ignored if all peak radii are specified). 2-3 should be sufficient.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MaskEdgeTubes</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>Mask tubes on the edge of all banks in the PeaksWorkspace instrument (note the edge pixels at top/bottom of all tubes will always be masked even if this property is False). Note the algorithm will treat any masked pixels as edges (including pixels already masked prior to the execution of this algorithm) - this means a custom mask can be applied to the PeaksWorkspace before integration.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>This algorithm performs integration of single-crystal peaks within a
+radius (with optional background subtraction) in reciprocal space.</p>
+<section id="similar-algorithms">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Similar algorithms</a><a class="headerlink" href="#similar-algorithms" title="Link to this heading">¶</a></h3>
+<p>See <a class="reference internal" href="IntegrateEllipsoids-v3.html#algm-integrateellipsoids"><span class="std std-ref">IntegrateEllipsoids v3</span></a> for a ways of integrating peaks from data collected in
+<a class="reference internal" href="../concepts/EventWorkspace.html#eventworkspace"><span class="std std-ref">EventWorkspace</span></a>. <a class="reference internal" href="PeakIntensityVsRadius-v1.html#algm-peakintensityvsradius"><span class="std std-ref">PeakIntensityVsRadius v1</span></a>
+is meant to help determine an appropriate value for <cite>PeakRadius</cite>.</p>
+</section>
+<section id="inputs">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Inputs</a><a class="headerlink" href="#inputs" title="Link to this heading">¶</a></h3>
+<p>The algorithms takes two input workspaces:</p>
+<ul class="simple">
+<li><p>A MDEventWorkspace containing the events in multi-dimensional space.
+This would be the output of
+<a class="reference internal" href="ConvertToDiffractionMDWorkspace-v3.html#algm-converttodiffractionmdworkspace"><span class="std std-ref">ConvertToDiffractionMDWorkspace v3</span></a>.</p></li>
+<li><p>As well as a PeaksWorkspace containing single-crystal peak locations.
+This could be the output of <a class="reference internal" href="FindPeaksMD-v1.html#algm-findpeaksmd"><span class="std std-ref">FindPeaksMD v1</span></a></p></li>
+<li><p>The OutputWorkspace will contain a copy of the input PeaksWorkspace,
+with the integrated intensity and error found being filled in.</p></li>
+</ul>
+</section>
+<section id="calculations">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Calculations</a><a class="headerlink" href="#calculations" title="Link to this heading">¶</a></h3>
+<p>Integration is performed by summing the weights of each MDEvent within
+the provided radii. Errors are also summed in quadrature.</p>
+<figure class="align-default" id="id1">
+<img alt="IntegratePeaksMD_graph1.png" src="../_images/IntegratePeaksMD_graph1.png" />
+<figcaption>
+<p><span class="caption-text">IntegratePeaksMD_graph1.png</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<ul class="simple">
+<li><p>All the Radii are specified in <span class="math notranslate nohighlight">\(\AA^{-1}\)</span></p></li>
+<li><p>A sphere or ellipsoid of radius <strong>PeakRadius</strong> is integrated around the center of
+each peak.</p>
+<ul>
+<li><p>This gives the summed intensity <span class="math notranslate nohighlight">\(I_{peak}\)</span> and the summed
+squared error <span class="math notranslate nohighlight">\(\sigma I_{peak}^2\)</span>.</p></li>
+<li><p>The volume of integration is <span class="math notranslate nohighlight">\(V_{peak}\)</span>.</p></li>
+<li><p>An ellipsoidal shape is integrated when the <strong>Ellipsoid</strong> option is enabled (the following also applies to BackgroundInnerRadius and BackgroundOuterRadius):</p>
+<ul>
+<li><p>When only one value for PeakRadius is given, then the ellipsoidal shape is calculated automatically with axes proportional to the sqrt of the eigenvalues of the covariance matrix. If <strong>FixMajorAxisLength = true</strong> then with the ellipsoid will be scaled such that the radius along the major axis is equal to the radius of the spherical region over which the covariance was estimated. In addition the covariance can be estimated iteratively (by setting <strong>MaxIterations &gt; 1</strong>) - points outside of 3 standard deviations will be exluded and the covariance will be estimated again. If the ellipsoid is large enough to fully contain the spherical region then the spherical region will be used instead.</p></li>
+<li><p>Three values for PeakRadius can be given, which correspond to the semi-axis lengths (a,b,c) of the ellipsoid.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>If <strong>BackgroundOuterRadius</strong> is specified, then a shell, with radius
+r where <strong>BackgroundInnerRadius</strong> &lt; r &lt; <strong>BackgroundOuterRadius</strong>, is
+integrated.</p>
+<ul>
+<li><p>This gives the summed intensity <span class="math notranslate nohighlight">\(I_{shell}\)</span> and the summed
+squared error <span class="math notranslate nohighlight">\(\sigma I_{shell}^2\)</span>.</p></li>
+<li><p>The volume of integration is <span class="math notranslate nohighlight">\(V_{shell}\)</span>.</p></li>
+<li><p><strong>BackgroundInnerRadius</strong> allows you to give some space between
+the peak and the background area.</p></li>
+<li><p>If the option <strong>UseOnePercentBackgroundCorrection</strong> is enabled, which it is by default, then the top one percent of the background events are removed so that there are no intensity spikes near the edges.</p></li>
+</ul>
+</li>
+<li><p><strong>AdaptiveQMultiplier</strong> can be used for the radius to vary as a function of the modulus of Q. If the AdaptiveQBackground option is set to True, the background radius also changes so each peak has a different integration radius.  Q includes the 2*pi factor.</p>
+<ul>
+<li><p>PeakRadius + AdaptiveQMultiplier * <strong>|Q|</strong></p></li>
+<li><p>BackgroundOuterRadius + AdaptiveQMultiplier * <strong>|Q|</strong></p></li>
+<li><p>BackgroundInnerRadius + AdaptiveQMultiplier * <strong>|Q|</strong></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="background-subtraction">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Background Subtraction</a><a class="headerlink" href="#background-subtraction" title="Link to this heading">¶</a></h3>
+<p>The background signal within PeakRadius is calculated by scaling the
+background signal density in the shell to the volume of the peak:</p>
+<p><span class="math notranslate nohighlight">\(I_{bg} = I_{shell} \frac{V_{peak}}{V_{shell}}\)</span></p>
+<p>with the error squared on that value:</p>
+<p><span class="math notranslate nohighlight">\(\sigma I_{bg}^2 = (\frac{V_{peak}}{V_{shell}})^2 \sigma I_{shell}^2\)</span></p>
+<p>This is applied to the integrated peak intensity <span class="math notranslate nohighlight">\(I_{peak}\)</span> to
+give the corrected intensity <span class="math notranslate nohighlight">\(I_{corr}\)</span>:</p>
+<p><span class="math notranslate nohighlight">\(I_{corr} = I_{peak} - I_{bg}\)</span></p>
+<p>with the errors summed in quadrature:</p>
+<p><span class="math notranslate nohighlight">\(\sigma I_{corr}^2 = \sigma I_{peak}^2 + \sigma I_{bg}^2\)</span></p>
+</section>
+<section id="if-backgroundinnerradius-is-omitted">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">If BackgroundInnerRadius is Omitted</a><a class="headerlink" href="#if-backgroundinnerradius-is-omitted" title="Link to this heading">¶</a></h3>
+<p>If BackgroundInnerRadius is left blank, then <strong>BackgroundInnerRadius</strong> =
+<strong>PeakRadius</strong>, and the integration is as follows:</p>
+<figure class="align-default" id="id2">
+<img alt="IntegratePeaksMD_graph2.png" src="../_images/IntegratePeaksMD_graph2.png" />
+<figcaption>
+<p><span class="caption-text">IntegratePeaksMD_graph2.png</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="integrateifonedge-option">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">IntegrateIfOnEdge option</a><a class="headerlink" href="#integrateifonedge-option" title="Link to this heading">¶</a></h3>
+<p>Edges for each bank or pack of tubes of the instrument are defined by masking the edges in the PeaksWorkspace instrument.
+e.g. For TOPAZ pixels 0 and 255 in both directions for the Rectangular Detector.
+Q in the lab frame for every peak is calculated, call it C
+For every point on the edge, the trajectory in reciprocal space is a straight line, going through:</p>
+<p><span class="math notranslate nohighlight">\(\vec{O}=(0,0,0)\)</span></p>
+<p>Calculate a point at a fixed momentum, say k=1.
+Q in the lab frame:</p>
+<p><span class="math notranslate nohighlight">\(\vec{E}=(-k \cdot \sin(\theta) \cdot \cos(\phi),-k \cdot \sin(\theta) \cdot \sin(\phi),k-k \cdot \cos(\phi))\)</span></p>
+<p>Normalize E to 1:</p>
+<p><span class="math notranslate nohighlight">\(\vec{E}=\vec{E} \cdot (1./\left|\vec{E}\right|)\)</span></p>
+<p>The distance from C to OE is given by:</p>
+<p><span class="math notranslate nohighlight">\(dv=\vec{C}-\vec{E} \cdot (\vec{C} \cdot \vec{E})\)</span></p>
+<p>If:</p>
+<p><span class="math notranslate nohighlight">\(\left|dv\right|&lt;PeakRadius\)</span></p>
+<p>for the integration, one of the detector trajectories on the edge is too close to the peak
+This method is also applied to all masked pixels.  If there are masked pixels trajectories inside an integration volume, the peak must be rejected.</p>
+</section>
+<section id="correctifonedge-option">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">CorrectIfOnEdge option</a><a class="headerlink" href="#correctifonedge-option" title="Link to this heading">¶</a></h3>
+<p>This is an extension of what was calculated for the IntegrateIfOnEdge option.  It will only be calculated if this option
+is true and the minimum dv is less than PeakRadius or BackgroundOuterRadius.</p>
+<p>For the background if</p>
+<p><span class="math notranslate nohighlight">\(\left|dv\right|_{\text{min}}&lt;BackgroundOuterRadius\)</span></p>
+<p><span class="math notranslate nohighlight">\(h = BackgroundOuterRadius - \left|dv\right|_{\text{min}}\)</span></p>
+<p>From the minimum of dv the volume of the cap of the sphere is found:</p>
+<p><span class="math notranslate nohighlight">\(V_{cap} = \pi h^2 / 3 (3 \cdot BackgroundOuterRadius - h)\)</span></p>
+<p>The volume of the total sphere is calculated and for the background the volume of the inner radius must be subtracted:</p>
+<p><span class="math notranslate nohighlight">\(V_{shell} = 4/3 \pi (BackgroundOuterRadius^3 - BackgroundInnerRadius^3)\)</span></p>
+<p>The integrated intensity is multiplied by the ratio of the volume of the sphere divided by the volume where data was collected</p>
+<p><span class="math notranslate nohighlight">\(I_{bkgMultiplier} = V_{shell} / (V_{shell} - V_{cap})\)</span></p>
+<p>For the peak assume that the shape is Gaussian.  If</p>
+<p><span class="math notranslate nohighlight">\(\left|dv\right|_{\text{min}}&lt;PeakRadius\)</span></p>
+<p><span class="math notranslate nohighlight">\(\sigma = PeakRadius / 3\)</span></p>
+<p><span class="math notranslate nohighlight">\(h = PeakRadius \cdot \exp(-\left|dv\right|_{min}^2 / (2 \sigma^2)\)</span></p>
+<p>From the minimum of dv the volume of the cap of the sphere is found:</p>
+<p><span class="math notranslate nohighlight">\(V_{cap} = \pi h^2 / 3 (3 \cdot PeakRadius - h)\)</span></p>
+<p>and the volume of the sphere is calculated</p>
+<p><span class="math notranslate nohighlight">\(V_{sphere} = 4/3 \pi PeakRadius^3\)</span></p>
+<p>The integrated intensity is multiplied by the ratio of the volume of the sphere divided by the volume where data was collected</p>
+<p><span class="math notranslate nohighlight">\(I_{peakMultiplier} = V_{sphere} / (V_{sphere} - V_{cap})\)</span></p>
+</section>
+</section>
+<section id="usage">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Usage</a><a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p><strong>Example - IntegratePeaks:</strong></p>
+<p>User should provide its own
+event nexus file instead of <strong>TOPAZ_3132_event.nxs</strong> used within this example. The original <strong>TOPAZ_3132_event.nxs</strong>
+file is available in <a class="reference external" href="https://github.com/mantidproject/systemtests/tree/master/Data/TOPAZ_3132_event.nxs">Mantid system tests repository</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="k">def</span> <span class="nf">print_tableWS</span><span class="p">(</span><span class="n">pTWS</span><span class="p">,</span><span class="n">nRows</span><span class="p">):</span>
+<span class="linenos"> 2</span><span class="w">    </span><span class="sd">&#39;&#39;&#39; Method to print part of the table workspace &#39;&#39;&#39;</span>
+<span class="linenos"> 3</span>    <span class="n">tab_names</span><span class="o">=</span><span class="n">pTWS</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="linenos"> 4</span>    <span class="n">row</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="linenos"> 5</span>    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">tab_names</span><span class="p">:</span>
+<span class="linenos"> 6</span>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">8</span><span class="p">:</span>
+<span class="linenos"> 7</span>           <span class="n">name</span><span class="o">=</span> <span class="n">name</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span>
+<span class="linenos"> 8</span>        <span class="n">row</span> <span class="o">+=</span> <span class="s2">&quot;| </span><span class="si">{:8}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="linenos"> 9</span>    <span class="nb">print</span><span class="p">(</span><span class="n">row</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span><span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nRows</span><span class="p">):</span>
+<span class="linenos">12</span>        <span class="n">row</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="linenos">13</span>        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">tab_names</span><span class="p">:</span>
+<span class="linenos">14</span>              <span class="n">col</span> <span class="o">=</span> <span class="n">pTWS</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+<span class="linenos">15</span>              <span class="n">data2pr</span><span class="o">=</span><span class="n">col</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="linenos">16</span>              <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data2pr</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">float</span><span class="p">:</span>
+<span class="linenos">17</span>                  <span class="n">row</span> <span class="o">+=</span> <span class="s2">&quot;| </span><span class="si">{:8.1f}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data2pr</span><span class="p">)</span>
+<span class="linenos">18</span>              <span class="k">else</span><span class="p">:</span>
+<span class="linenos">19</span>                  <span class="n">row</span> <span class="o">+=</span> <span class="s2">&quot;| </span><span class="si">{:8}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">data2pr</span><span class="p">))</span>
+<span class="linenos">20</span>        <span class="nb">print</span><span class="p">(</span><span class="n">row</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span><span class="p">)</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span> <span class="c1"># Load a SCD data set and find the peaks</span>
+<span class="linenos">23</span><span class="n">LoadEventNexus</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;TOPAZ_3132_event.nxs&#39;</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;TOPAZ_3132_nxs&#39;</span><span class="p">)</span>
+<span class="linenos">24</span><span class="n">ConvertToDiffractionMDWorkspace</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;TOPAZ_3132_nxs&#39;</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;TOPAZ_3132_md&#39;</span><span class="p">,</span><span class="n">LorentzCorrection</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+<span class="linenos">25</span><span class="n">FindPeaksMD</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;TOPAZ_3132_md&#39;</span><span class="p">,</span><span class="n">PeakDistanceThreshold</span><span class="o">=</span><span class="s1">&#39;0.15&#39;</span><span class="p">,</span><span class="n">MaxPeaks</span><span class="o">=</span><span class="s1">&#39;100&#39;</span><span class="p">,</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;peaks&#39;</span><span class="p">)</span>
+<span class="linenos">26</span><span class="n">FindUBUsingFFT</span><span class="p">(</span><span class="n">PeaksWorkspace</span><span class="o">=</span><span class="s1">&#39;peaks&#39;</span><span class="p">,</span><span class="n">MinD</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">,</span><span class="n">MaxD</span><span class="o">=</span><span class="s1">&#39;16&#39;</span><span class="p">)</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span> <span class="c1"># Perform the peak integration, in-place in the &#39;peaks&#39; workspace.</span>
+<span class="linenos">29</span><span class="n">peaks</span><span class="o">=</span> <span class="n">IntegratePeaksMD</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;TOPAZ_3132_md&#39;</span><span class="p">,</span> <span class="n">PeaksWorkspace</span><span class="o">=</span><span class="s1">&#39;peaks&#39;</span><span class="p">,</span>\
+<span class="linenos">30</span>     <span class="n">PeakRadius</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">BackgroundOuterRadius</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">BackgroundInnerRadius</span><span class="o">=</span><span class="mf">0.16</span><span class="p">,</span>\
+<span class="linenos">31</span>     <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;peaks&#39;</span><span class="p">)</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span><span class="c1"># print the integration results</span>
+<span class="linenos">34</span><span class="n">print_tableWS</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output:</strong></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span>| RunNumbe | DetID    | h        | k        | l        | Waveleng | Energy   | TOF      | DSpacing | Intens   | SigInt   | BinCount | BankName | Row      | Col      | QLab     | QSample  | PeakNumb |
+<span class="linenos"> 2</span>| 3132     | 1168209  |      0.0 |      0.0 |      0.0 |      1.1 |     66.9 |   5158.0 |      0.7 |   2160.9 |     32.3 |   1326.0 | bank17   |     81.0 |    211.0 | [4.42961,2.81707,7.86314] | [8.75838,3.55459,-0.205083] | 1        |
+<span class="linenos"> 3</span>| 3132     | 1124983  |      0.0 |      0.0 |      0.0 |      1.6 |     33.9 |   7250.6 |      1.0 |   1990.0 |     14.4 |   1060.0 | bank17   |    119.0 |     42.0 | [3.14813,2.43563,4.75389] | [5.9822,1.62965,0.00130101] | 2        |
+<span class="linenos"> 4</span>| 3132     | 1141521  |      0.0 |      0.0 |      0.0 |      1.7 |     28.1 |   7959.1 |      1.0 |    644.6 |      7.3 |   1034.0 | bank17   |     17.0 |    107.0 | [2.60893,2.31831,4.86248] | [5.69311,1.79103,-0.453311] | 3        |
+<span class="linenos"> 5</span>| 3132     | 1125238  |      0.0 |      0.0 |      0.0 |      3.1 |      8.4 |  14518.9 |      2.0 |    750.5 |      2.2 |    880.0 | bank17   |    118.0 |     43.0 | [1.57116,1.21649,2.37775] | [2.98926,0.816337,-0.00161709] | 4        |
+<span class="linenos"> 6</span>| 3132     | 1170852  |      0.0 |      0.0 |      0.0 |      1.6 |     34.0 |   7235.3 |      1.0 |   1826.4 |     14.7 |    762.0 | bank17   |    164.0 |    221.0 | [3.4229,1.70246,5.39532] | [6.0734,2.6008,0.271523] | 5        |
+<span class="linenos"> 7</span>| 3132     | 1156497  |      0.0 |      0.0 |      0.0 |      2.1 |     18.9 |   9718.2 |      1.3 |   5137.6 |     13.4 |    518.0 | bank17   |    145.0 |    165.0 | [2.49117,1.46093,3.88649] | [4.5291,1.70753,0.129446] | 6        |
+<span class="linenos"> 8</span>| 3132     | 1207828  |      0.0 |      0.0 |      0.0 |      1.7 |     27.9 |   7989.1 |      1.3 |   3233.6 |     12.7 |   1024.0 | bank18   |     20.0 |    110.0 | [2.80538,2.29342,3.08833] | [4.71342,0.553533,0.380727] | 7        |
+<span class="linenos"> 9</span>| 3132     | 1218593  |      0.0 |      0.0 |      0.0 |      1.0 |     79.6 |   4729.3 |      0.8 |   3018.1 |     35.4 |    756.0 | bank18   |     33.0 |    152.0 | [4.96533,3.60693,5.32436] | [7.98578,1.19927,0.895763] | 8        |
+<span class="linenos">10</span>| 3132     | 1232694  |      0.0 |      0.0 |      0.0 |      1.2 |     53.4 |   5772.9 |      0.9 |   3464.5 |     25.9 |    631.0 | bank18   |     54.0 |    207.0 | [4.29539,2.63813,4.45945] | [6.53086,1.27477,1.00974] | 9        |
+<span class="linenos">11</span>| 3132     | 1200023  |      0.0 |      0.0 |      0.0 |      0.7 |    159.1 |   3345.1 |      0.6 |   3796.1 |     71.1 |    509.0 | bank18   |    151.0 |     79.0 | [6.75629,4.8092,5.93224] | [10.0166,0.773518,1.74245] | 10       |
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/MDAlgorithms/Peaks.html">MDAlgorithms\Peaks</a> | <a class="reference external" href="categories/Crystal/Integration.html">Crystal\Integration</a></p>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/1b00e0b0644260219c488cf4142569b296f21ab0/Framework/MDAlgorithms/inc/MantidMDAlgorithms/IntegratePeaksMD2.h">IntegratePeaksMD2.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/1b00e0b0644260219c488cf4142569b296f21ab0/Framework/MDAlgorithms/src/IntegratePeaksMD2.cpp">IntegratePeaksMD2.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="IntegratePeaksMD-v1.html" title="Previous Chapter: IntegratePeaksMD v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; IntegratePeaksMD v1</span>
+    </a>
+  </li>
+  <li>
+    <a href="IntegratePeaksMDHKL-v1.html" title="Next Chapter: IntegratePeaksMDHKL v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">IntegratePeak... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

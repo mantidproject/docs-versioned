@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fractional Rebinning (RebinnedOutput Workspaces)</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=770b529d"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Framework Manager" href="FrameworkManager.html" />
+    <link rel="prev" title="Comparison of minimizers, with weighted least squares" href="FittingMinimizersWeightedComparisonDetailed.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.10</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Concepts</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Fractional Rebinning (RebinnedOutput Workspaces)</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="fractional-rebinning-rebinnedoutput-workspaces">
+<span id="fractionalrebinning"></span><h1>Fractional Rebinning (RebinnedOutput Workspaces)<a class="headerlink" href="#fractional-rebinning-rebinnedoutput-workspaces" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#normalisedpolygon-technique" id="id1">NormalisedPolygon Technique</a></p></li>
+<li><p><a class="reference internal" href="#rebin2d-on-rebinnedoutput-workspaces" id="id2">Rebin2D on RebinnedOutput workspaces</a></p></li>
+<li><p><a class="reference internal" href="#integration-on-rebinnedoutput-workspaces" id="id3">Integration on RebinnedOutput workspaces</a></p></li>
+<li><p><a class="reference internal" href="#notes" id="id4">Notes</a></p></li>
+</ul>
+</nav>
+<p>In some instances of rebinning data, the information of the counts in the bins
+prior rebinning should be preserved in the output of rebinning in some way.
+This is because some algorithms depend on how the original data was treated.
+We achieve this by storing a weight for each bin that corresponds to the fraction
+between the area of the output bin and the area of the input bin (i.e. prior to rebinning).
+This kind of <strong>Workspace2D</strong> that contains information of the areas used during rebinning
+is called a <strong>RebinnedOutput</strong>. Some algorithms, such as
+<a class="reference internal" href="../algorithms/SofQWNormalisedPolygon-v1.html#algm-sofqwnormalisedpolygon"><span class="std std-ref">SofQWNormalisedPolygon</span></a>
+and <a class="reference internal" href="../algorithms/ConvertToReflectometryQ-v2.html#algm-converttoreflectometryq"><span class="std std-ref">ConvertToReflectometryQ</span></a>, create this special type of
+<a class="reference internal" href="Workspace2D.html#workspace2d"><span class="std std-ref">Workspace2D</span></a> workspace in which
+each bin contains both a value and the fractional overlap area of this bin over
+that of the original data. This fractional overlap area value is referred to as
+a fractional weight, since it has the role of controlling the proportion of the counts
+in output bins that underwent some coordinate transformation.</p>
+<p>To illustrate why using these fractional weights is necessary we explain how rebinning works
+through the technique of <em>NormalisedPolygon</em>.</p>
+<section id="normalisedpolygon-technique">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">NormalisedPolygon Technique</a><a class="headerlink" href="#normalisedpolygon-technique" title="Link to this heading">¶</a></h2>
+<p><em>NormalisedPolygon</em> is the technique used by <a class="reference internal" href="../algorithms/SofQWNormalisedPolygon-v1.html#algm-sofqwnormalisedpolygon"><span class="std std-ref">SofQWNormalisedPolygon</span></a> algorithm
+and it performs a coordinate transformation (from scattering angle theta to momentum transfer Q) followed by the
+(fractional) rebinning in the new coordinate system.</p>
+<p>The fractional rebinning is not unique to this technique, as it could be applied even if there was no coordinate transformation
+(this is what Rebin2D does). However, while in Rebin2D the input and output grid lines are parallel to each other (no coordinate transformation),
+the input and output grid lines for <em>NormalisedPolygon</em> are <strong>not</strong> parallel, resulting in parallelpiped output bins.
+The algorithm constructs the polygon using the boundaries of the input bin and transforming that polygon
+into the output coordinates. In the output coordinates, we look for the intersections
+between the transformed input bin and the output bin:</p>
+<figure class="align-center">
+<img alt="../_images/RebinnedOutputStep1.png" src="../_images/RebinnedOutputStep1.png" />
+</figure>
+<p>As shown in the figure, the input bin (pink-shaded parallelopiped)
+has been transformed to the output bin coordinates and so is not parallel to the
+output grid.
+This means the output bins will only ever partially overlap the input data.
+The resulting value of the output bin is proportional to the
+overlap between the purple area <span class="math notranslate nohighlight">\(I_0\)</span> and the pink-shaded area <span class="math notranslate nohighlight">\(A_0\)</span>.
+In the general case where each output bin intersects several input bins,
+the signal <span class="math notranslate nohighlight">\(Y\)</span> and errors <span class="math notranslate nohighlight">\(E\)</span> in the new bins are calculated as:</p>
+<div class="math notranslate nohighlight">
+\[Y^{\mathrm{new}} = \sum_i Y^{\mathrm{old}}_i F_i\]</div>
+<div class="math notranslate nohighlight">
+\[E^{\mathrm{new}} = \sqrt{\sum_i (E^{\mathrm{old}}_i)^2 F_i}\]</div>
+<p>And the fractional weight of the new bin is stored as the sum of all the
+weights with intersecting input areas:</p>
+<div class="math notranslate nohighlight">
+\[F^{\mathrm{new}} = \sum_i F_i\]</div>
+<p>The output data will be a workspace with type: <strong>RebinnedOutput</strong>, which means that
+it is a <strong>Workspace2D</strong> with the information of the weigthts on the bins.
+To see why this is needed, consider the case where another rebin is perfomed after the
+previous rebinning. This time the output bin sits on a larger grid:</p>
+<figure class="align-center">
+<img alt="../_images/RebinnedOutputStep2.png" src="../_images/RebinnedOutputStep2.png" />
+</figure>
+<p>If the fractional weight of the initial rebin were not stored, this
+rebin operation would have <span class="math notranslate nohighlight">\(F_0=1\)</span>, and the resulting weight <span class="math notranslate nohighlight">\(F_1\)</span>
+would be overestimated.
+In other words, if the fractional weights are not chained as shown, then the area
+shaded in a lighter blue under <span class="math notranslate nohighlight">\(A_1\)</span> (where originally there was
+no data) would be included in the weights, which would lead to an
+overestimate of the actual weights, and ultimately to an overestimate of the
+signal and error.</p>
+</section>
+<section id="rebin2d-on-rebinnedoutput-workspaces">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Rebin2D on RebinnedOutput workspaces</a><a class="headerlink" href="#rebin2d-on-rebinnedoutput-workspaces" title="Link to this heading">¶</a></h2>
+<p>As mentioned before, the distinction between Fractional Rebinning
+and normal Rebinning lies in the storage of the fractional weights relative to the original data.</p>
+<p><strong>RebinnedOutput</strong> workspaces have the fractional weight resulting from previous rebins stored
+for each input bin. When <a class="reference internal" href="../algorithms/Rebin2D-v1.html#algm-rebin2d"><span class="std std-ref">Rebin2D v1</span></a> is called on RebinnedOutput workspaces, the argument
+<em>UseFractionalArea</em> is always automatically turned on, to ensure the weight fractions are always propagated accross
+several rebins and that the best possible signal and error estimates are achieved.</p>
+<p>When <a class="reference internal" href="../algorithms/Rebin2D-v1.html#algm-rebin2d"><span class="std std-ref">Rebin2D v1</span></a> is called on a <strong>Workspace2D</strong> workspace, by default the argument
+<em>UseFractionalArea</em> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, and no fractional weights relative to the original bins are used.
+This is consistent with the original implementation of the algorithm, but can cause issues when
+used on certain types of workspaces. Take for example a ToF-scattering angle workspace from an
+instrument with two sets of detectors at similar scattering angles:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">sample_ws</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">theta_tof</span> <span class="o">=</span> <span class="n">ConvertSpectrumAxis</span><span class="p">(</span><span class="n">sample_ws</span><span class="p">,</span> <span class="s2">&quot;theta&quot;</span><span class="p">)</span>
+
+<span class="n">theta_tof_fa_false</span> <span class="o">=</span> <span class="n">Rebin2D</span><span class="p">(</span><span class="n">theta_tof</span><span class="p">,</span> <span class="s1">&#39;100,400,20000&#39;</span><span class="p">,</span> <span class="s1">&#39;0, 0.004, 1&#39;</span><span class="p">,</span> <span class="n">UseFractionalArea</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">theta_tof_fa_true</span> <span class="o">=</span> <span class="n">Rebin2D</span><span class="p">(</span><span class="n">theta_tof</span><span class="p">,</span>  <span class="s1">&#39;100,400,20000&#39;</span><span class="p">,</span> <span class="s1">&#39;0, 0.004, 1&#39;</span><span class="p">,</span> <span class="n">UseFractionalArea</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>By default <a class="reference internal" href="../algorithms/CreateSampleWorkspace-v1.html#algm-createsampleworkspace"><span class="std std-ref">CreateSampleWorkspace v1</span></a> uses the “basic_rect” instrument which has two
+detectors around the straight-through beam direction: one at 5m and one at 10m. You can see this
+if you right click on the <code class="docutils literal notranslate"><span class="pre">sample_ws</span></code> workspace and select “Instrument View”.
+When this workspace is converted to scattering angle (<code class="docutils literal notranslate"><span class="pre">theta</span></code>), the pixels on the 5m and 10m
+detectors will overlap because they have similar <code class="docutils literal notranslate"><span class="pre">theta</span></code> values. You can see this by right clicking
+the workspace and select “Show Data” and look along the row labels - you should see several labels
+repeated and others at non-uniform gaps.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">theta_tof</span></code> workspace thus has non-uniform bins in the <code class="docutils literal notranslate"><span class="pre">theta</span></code> axis, and if you use
+<a class="reference internal" href="../algorithms/Rebin2D-v1.html#algm-rebin2d"><span class="std std-ref">Rebin2D v1</span></a> with <code class="docutils literal notranslate"><span class="pre">UseFractionalArea=False</span></code> these bins will not be correctly normalised.
+To see this, plot the workspaces <code class="docutils literal notranslate"><span class="pre">theta_tof</span></code>, <code class="docutils literal notranslate"><span class="pre">theta_tof_fa_false</span></code> and <code class="docutils literal notranslate"><span class="pre">theta_tof_fa_true</span></code> using the
+SliceViewer. You will see that <code class="docutils literal notranslate"><span class="pre">theta_tof_fa_false</span></code> looks distinctly different with random intensity spots
+whilst <code class="docutils literal notranslate"><span class="pre">theta_tof</span></code> and <code class="docutils literal notranslate"><span class="pre">theta_tof_fa_true</span></code> looks similar with only a single ToF peak.</p>
+<p>We would thus recommend to always use <code class="docutils literal notranslate"><span class="pre">UseFractionalArea=True</span></code> with <a class="reference internal" href="../algorithms/Rebin2D-v1.html#algm-rebin2d"><span class="std std-ref">Rebin2D v1</span></a>.</p>
+<p>One final consideration is that <strong>RebinnedOutput</strong> workspaces are always treated as <strong>distributions</strong>.
+That is, the output counts and uncertainties are always renormalised by the fractional weights:</p>
+<div class="math notranslate nohighlight">
+\[Y^{\mathrm{output}} = Y^{\mathrm{new}} / F^{\mathrm{new}}\]</div>
+<div class="math notranslate nohighlight">
+\[E^{\mathrm{output}} = E^{\mathrm{new}} / F^{\mathrm{new}}\]</div>
+<p>If this is not done, then the output will look similarly to the case with <code class="docutils literal notranslate"><span class="pre">UseFractionalArea=False</span></code> with
+random intensity spots. This means that internally the <strong>RebinnedOutput</strong> workspace stores
+<span class="math notranslate nohighlight">\(Y^{\mathrm{new}}\)</span> and <span class="math notranslate nohighlight">\(F^{\mathrm{new}}\)</span> but when you plot the data,
+or use “Show Data”, you will get <span class="math notranslate nohighlight">\(Y^{\mathrm{output}}\)</span>.
+Thus if you view the data of <code class="docutils literal notranslate"><span class="pre">theta_tof_fa_true</span></code> you will see that the values generally match that of
+<code class="docutils literal notranslate"><span class="pre">theta_tof</span></code> whereas the data values of <code class="docutils literal notranslate"><span class="pre">theta_tof_fa_false</span></code> will be a factor of approximately 1/3 that of
+<code class="docutils literal notranslate"><span class="pre">theta_tof</span></code> due to the new bin size being twice as large in the ToF axis and 1.5 times as large in the <code class="docutils literal notranslate"><span class="pre">theta</span></code>
+axis.</p>
+</section>
+<section id="integration-on-rebinnedoutput-workspaces">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Integration on RebinnedOutput workspaces</a><a class="headerlink" href="#integration-on-rebinnedoutput-workspaces" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="../algorithms/Integration-v1.html#algm-integration"><span class="std std-ref">Integration v1</span></a> algorithm operates differently on <strong>RebinnedOutput</strong> workspaces and
+<strong>Workspace2D</strong> workspaces. For <strong>Workspace2D</strong> workspaces, the integrated counts per spectra is simply the
+sum of the counts in the bins within the Integration range:</p>
+<div class="math notranslate nohighlight">
+\[I = \left. \sum_i Y_i \right.\]</div>
+<p>In the case of <strong>RebinnedOutput</strong>, we take into the accout the fractional area weights <span class="math notranslate nohighlight">\(F_i\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[I = \left. \sum_i Y_i F_i \middle/ \left(\frac{1}{n} \sum_i F_i \right) \right.\]</div>
+<p>where <span class="math notranslate nohighlight">\(Y_i\)</span> and <span class="math notranslate nohighlight">\(F_i\)</span> are the values and fractions for the <span class="math notranslate nohighlight">\(i^{\mathrm{th}}\)</span>
+bin and <span class="math notranslate nohighlight">\(n\)</span> is the number of bins in the range which is not <code class="docutils literal notranslate"><span class="pre">NaN</span></code>.
+We can check that the factor <span class="math notranslate nohighlight">\(1/n\)</span> is needed by looking at the special case where the fractional
+weights are all set to <span class="math notranslate nohighlight">\(F_i = 1\)</span>. In this case, the result of the integral yields
+<span class="math notranslate nohighlight">\(\sum_i Y_i\)</span>, which is what we expect for an integral over bins with no fractional area weights.</p>
+</section>
+<section id="notes">
+<span id="fractionalrebinning-notes"></span><h2><a class="toc-backref" href="#id4" role="doc-backlink">Notes</a><a class="headerlink" href="#notes" title="Link to this heading">¶</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>For correct handling of the fractional weights in rebinning, the user
+is recommended to use the <a class="reference internal" href="../algorithms/Rebin2D-v1.html#algm-rebin2d"><span class="std std-ref">Rebin2D v1</span></a> algorithm in preference
+to <a class="reference internal" href="../algorithms/Integration-v1.html#algm-integration"><span class="std std-ref">Integration v1</span></a> or <a class="reference internal" href="../algorithms/SumSpectra-v1.html#algm-sumspectra"><span class="std std-ref">SumSpectra v1</span></a> although the other
+algorithms do account for the fractional weights.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>All binary and unary operations on
+workspaces will ignore the fractional weights. Thus it is important
+to handle all background subtractions and scaling in the original
+reduced dataset(s) <strong>before</strong> conversion using
+<a class="reference internal" href="../algorithms/SofQWNormalisedPolygon-v1.html#algm-sofqwnormalisedpolygon"><span class="std std-ref">SofQWNormalisedPolygon v1</span></a>.</p>
+</div>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="FittingMinimizersWeightedComparisonDetailed.html" title="Previous Chapter: Comparison of minimizers, with weighted least squares"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Comparison of...</span>
+    </a>
+  </li>
+  <li>
+    <a href="FrameworkManager.html" title="Next Chapter: Framework Manager"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Framework Manager &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

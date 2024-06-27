@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>IntegratePeaks1DProfile v1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=770b529d"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="IntegratePeaksCWSD v1" href="IntegratePeaksCWSD-v1.html" />
+    <link rel="prev" title="IntegratePeakTimeSlices v1" href="IntegratePeakTimeSlices-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.10</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">IntegratePeaks1DProfile v1</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="integratepeaks1dprofile-v1">
+<span id="algm-integratepeaks1dprofile"></span><span id="algm-integratepeaks1dprofile-v1"></span><h1>IntegratePeaks1DProfile v1<a class="headerlink" href="#integratepeaks1dprofile-v1" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id3">Summary</a></p>
+<ul>
+<li><p><a class="reference internal" href="#see-also" id="id4">See Also</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#properties" id="id5">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id6">Description</a></p></li>
+<li><p><a class="reference internal" href="#usage" id="id7">Usage</a></p></li>
+<li><p><a class="reference internal" href="#references" id="id8">References</a></p></li>
+<li><p><a class="reference internal" href="#source" id="id9">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Integrate single-crystal Bragg peaks in MatrixWorkspaces by fitting peaks TOF in adjacent pixels unitl I/sigma of the peak in a pixel is below a threshold. Algorithm is adapted and extendedfrom an algorithm in Gutmann, M. J. (2005). SXD2001. ISIS Facility, RAL</p>
+<section id="see-also">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="IntegratePeaksSkew-v1.html#algm-integratepeaksskew"><span class="std std-ref">IntegratePeaksSkew</span></a>, <a class="reference internal" href="IntegratePeaksShoeboxTOF-v1.html#algm-integratepeaksshoeboxtof"><span class="std std-ref">IntegratePeaksShoeboxTOF</span></a></p>
+</section>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>InputWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>A MatrixWorkspace to integrate (x-axis must be TOF).</p></td>
+</tr>
+<tr class="row-odd"><td><p>PeaksWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p>IPeaksWorkspace</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>A PeaksWorkspace containing the peaks to integrate.</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p>IPeaksWorkspace</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>The output PeaksWorkspace will be a copy of the input PeaksWorkspace with the integrated intensities.</p></td>
+</tr>
+<tr class="row-odd"><td><p>NRows</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>11</p></td>
+<td><p>Number of row components in the detector to use in the convolution kernel. For WISH row components correspond to pixels along a single tube.</p></td>
+</tr>
+<tr class="row-even"><td><p>NCols</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>11</p></td>
+<td><p>Number of column components in the detector to use in the convolution kernel. For WISH column components correspond to tubes.</p></td>
+</tr>
+<tr class="row-odd"><td><p>NBins</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>11</p></td>
+<td><p>Number of TOF bins to use in the convolution kernel.</p></td>
+</tr>
+<tr class="row-even"><td><p>GetNBinsFromBackToBackParams</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If true the number of TOF bins used in the convolution kernel will be calculated from the FWHM of the BackToBackExponential peak using parameters defined in the instrument parameters.xml file.</p></td>
+</tr>
+<tr class="row-odd"><td><p>NFWHM</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>10</p></td>
+<td><p>If GetNBinsFromBackToBackParams=True then the number of TOF bins will be NFWHM x FWHM of the BackToBackExponential at the peak detector and TOF.</p></td>
+</tr>
+<tr class="row-even"><td><p>CostFunction</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Cost funtion to minimise. Allowed values: [‘RSq’, ‘ChiSq’, ‘Poisson’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>PeakFunction</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>BackToBackExponential</p></td>
+<td><p>Peak profile funtion to fit. Allowed values: [‘BackToBackExponential’, ‘Gaussian’]</p></td>
+</tr>
+<tr class="row-even"><td><p>FixPeakParameters</p></td>
+<td><p>Input</p></td>
+<td><p>str list</p></td>
+<td></td>
+<td><p>Peak parameters to fix in the fits (recommend fixing A for back-to-back exponential based functions).</p></td>
+</tr>
+<tr class="row-odd"><td><p>BackgroundFunction</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>FlatBackground</p></td>
+<td><p>Background function to fit. Allowed values: [‘FlatBackground’, ‘LinearBackground’]</p></td>
+</tr>
+<tr class="row-even"><td><p>ErrorStrategy</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Summation</p></td>
+<td><p>If Hessian then error on the integrated intensity will be determined from the partial derivatives of the cost-function wrt the parameters (this is only supported for BackToBackExponential function for which the integrated intensity is a parameter. If Summation then the error will be the quadrature sum of the individual errors. Allowed values: [‘Hessian’, ‘Summation’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>IOverSigmaThreshold</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>2.5</p></td>
+<td><p>Criterion to stop fitting.</p></td>
+</tr>
+<tr class="row-even"><td><p>FractionalChangeDSpacing</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0.02</p></td>
+<td><p>Fractional change in peak centre allowed - this is a constraint in the fit.</p></td>
+</tr>
+<tr class="row-odd"><td><p>IntegrateIfOnEdge</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If IntegrateIfOnEdge=False then peaks on the detector edge will not be integrated.</p></td>
+</tr>
+<tr class="row-even"><td><p>NRowsEdge</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>1</p></td>
+<td><p>Shoeboxes containing detectors NRowsEdge from the detector edge are defined as on the edge.</p></td>
+</tr>
+<tr class="row-odd"><td><p>NColsEdge</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>1</p></td>
+<td><p>Shoeboxes containing detectors NColsEdge from the detector edge are defined as on the edge.</p></td>
+</tr>
+<tr class="row-even"><td><p>LorentzCorrection</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>Correct the integrated intensity by multiplying by the Lorentz factor sin(theta)^2 / lambda^4 - do not do this if the data have already been corrected.</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputFile</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td></td>
+<td><p>Optional file path in which to write diagnostic plots (note this will slow the execution of algorithm). Allowed extensions: [‘.pdf’]</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>This is an algorithm to integrate single-crystal Bragg peaks in a <a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a> with x-units
+of Time-of-Flight (TOF). It is adapted and extended from an algorithm in SXD2001 <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p>The algorithm proceeds by fitting a <code class="docutils literal notranslate"><span class="pre">PeakFunction</span></code> and <code class="docutils literal notranslate"><span class="pre">BackgroundFunction</span></code> to the TOF spectrum of individual
+pixels. If the fit is successful (fit converged and the ratio of intensity/sigma &gt; <code class="docutils literal notranslate"><span class="pre">IOverSigmaThreshold</span></code>), then the
+fit is attempted on a pixel that is adjacent to a previously successfully fit pixel. The algorithm stops
+when no adjacent pixels can be successfully fitted.</p>
+<p>The algorithm requires the user to define the number of pixels in the vicinity of a peak using the input <code class="docutils literal notranslate"><span class="pre">NRows</span></code>
+and <code class="docutils literal notranslate"><span class="pre">NCols</span></code> and the TOF extent of the data to fit, which can be specified in one of two ways:</p>
+<ol class="arabic simple">
+<li><p>Provide <code class="docutils literal notranslate"><span class="pre">NBins</span></code> directly - number of TOF bins in the kernel</p></li>
+<li><p>Setting <code class="docutils literal notranslate"><span class="pre">GetNBinsFromBackToBackParams=True</span></code> and providing <code class="docutils literal notranslate"><span class="pre">NFWHM</span></code> - in which case <code class="docutils literal notranslate"><span class="pre">NBins</span></code> will be NFWHM x FWHM
+of a <a class="reference internal" href="../fitting/fitfunctions/BackToBackExponential.html#func-backtobackexponential"><span class="std std-ref">BackToBackExponential</span></a> peak at the center of each detector panel/bank at the
+middle of the spectrum.</p></li>
+</ol>
+<p>Note to use method 2, back-to-back exponential coefficients must be defined in the Parameters.xml file for the
+instrument.</p>
+<p>Optionally if <code class="docutils literal notranslate"><span class="pre">OutputFile</span></code> is provided a pdf can be output that shows the shoebox kernel and the data integrated along
+each dimension like so</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/IntegratePeaks1DProfile_OutputFile.png"><img alt="Output for a peak from SXD NaCl data showing the TOF integrated intensity on the detector and the pixels fitted (white circles) along with the peak position (red +) and the TOF focussed spectrum in the fitted pixels along with the fitted intensity (red curve)." src="../_images/IntegratePeaks1DProfile_OutputFile.png" style="width: 50%;" /></a>
+</figure>
+</section>
+<section id="usage">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Usage</a><a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p><strong>Example - IntegratePeaks1DProfile</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s2">&quot;SXD23767.raw&quot;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s2">&quot;SXD23767&quot;</span><span class="p">)</span>
+<span class="n">CreatePeaksWorkspace</span><span class="p">(</span><span class="n">InstrumentWorkspace</span><span class="o">=</span><span class="s2">&quot;SXD23767&quot;</span><span class="p">,</span> <span class="n">NumberOfPeaks</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s2">&quot;peaks&quot;</span><span class="p">)</span>
+<span class="n">AddPeak</span><span class="p">(</span><span class="n">PeaksWorkspace</span><span class="o">=</span><span class="s2">&quot;peaks&quot;</span><span class="p">,</span> <span class="n">RunWorkspace</span><span class="o">=</span><span class="s2">&quot;SXD23767&quot;</span><span class="p">,</span> <span class="n">TOF</span><span class="o">=</span><span class="mf">8303.3735339704781</span><span class="p">,</span> <span class="n">DetectorID</span><span class="o">=</span><span class="mi">7646</span><span class="p">)</span>
+
+<span class="n">peaks_out</span> <span class="o">=</span> <span class="n">IntegratePeaks1DProfile</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s2">&quot;SXD23767&quot;</span><span class="p">,</span> <span class="n">PeaksWorkspace</span><span class="o">=</span><span class="s2">&quot;peaks&quot;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s2">&quot;peaks_int&quot;</span><span class="p">,</span>
+                                    <span class="n">GetNBinsFromBackToBackParams</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">NFWHM</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">CostFunction</span><span class="o">=</span><span class="s2">&quot;Poisson&quot;</span><span class="p">,</span>
+                                    <span class="n">PeakFunction</span><span class="o">=</span><span class="s2">&quot;BackToBackExponential&quot;</span><span class="p">,</span> <span class="n">FixPeakParameters</span><span class="o">=</span><span class="s1">&#39;A&#39;</span><span class="p">,</span>
+                                    <span class="n">FractionalChangeDSpacing</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">IntegrateIfOnEdge</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;I/sigma = </span><span class="si">{</span><span class="n">peaks_out</span><span class="o">.</span><span class="n">getPeak</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">getIntensityOverSigma</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Output:</strong></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>I/sigma = 100.46
+</pre></div>
+</div>
+</section>
+<section id="references">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">References</a><a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Gutmann, M. J. (2005). SXD2001. ISIS Facility, Rutherford Appleton Laboratory, Oxfordshire, England.</p>
+</aside>
+</aside>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/Diffraction/Reduction.html">Diffraction\Reduction</a></p>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>Python: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/1b00e0b0644260219c488cf4142569b296f21ab0/Framework/PythonInterface/plugins/algorithms/IntegratePeaks1DProfile.py">IntegratePeaks1DProfile.py</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="IntegratePeakTimeSlices-v1.html" title="Previous Chapter: IntegratePeakTimeSlices v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; IntegratePeak...</span>
+    </a>
+  </li>
+  <li>
+    <a href="IntegratePeaksCWSD-v1.html" title="Next Chapter: IntegratePeaksCWSD v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">IntegratePeaksCWSD v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
