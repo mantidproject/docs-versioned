@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fit v1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=06de18c4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FitGaussian v1" href="FitGaussian-v1.html" />
+    <link rel="prev" title="FindUBUsingLatticeParameters v1" href="FindUBUsingLatticeParameters-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.11</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Fit v1</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="fit-v1">
+<span id="algm-fit"></span><span id="algm-fit-v1"></span><h1>Fit v1<a class="headerlink" href="#fit-v1" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id5">Summary</a></p>
+<ul>
+<li><p><a class="reference internal" href="#see-also" id="id6">See Also</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#properties" id="id7">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id8">Description</a></p>
+<ul>
+<li><p><a class="reference internal" href="#additional-properties-for-a-1d-function" id="id9">Additional properties for a 1D function</a></p></li>
+<li><p><a class="reference internal" href="#changelog" id="id10">Changelog</a></p></li>
+<li><p><a class="reference internal" href="#overview" id="id11">Overview</a></p></li>
+<li><p><a class="reference internal" href="#setting-a-simple-function" id="id12">Setting a simple function</a></p></li>
+<li><p><a class="reference internal" href="#setting-a-composite-function" id="id13">Setting a composite function</a></p></li>
+<li><p><a class="reference internal" href="#setting-ties" id="id14">Setting ties</a></p></li>
+<li><p><a class="reference internal" href="#setting-constraints" id="id15">Setting constraints</a></p></li>
+<li><p><a class="reference internal" href="#fitting-to-data-in-a-matrixworkspace" id="id16">Fitting to data in a MatrixWorkspace</a></p></li>
+<li><p><a class="reference internal" href="#fitting-to-histogram-data" id="id17">Fitting to histogram data</a></p></li>
+<li><p><a class="reference internal" href="#excluding-data-from-fit" id="id18">Excluding data from fit</a></p></li>
+<li><p><a class="reference internal" href="#peak-radius" id="id19">Peak Radius</a></p></li>
+<li><p><a class="reference internal" href="#step-size" id="id20">Step Size</a></p></li>
+<li><p><a class="reference internal" href="#output" id="id21">Output</a></p></li>
+<li><p><a class="reference internal" href="#multiple-fit" id="id22">Multiple Fit</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#examples" id="id23">Examples</a></p></li>
+<li><p><a class="reference internal" href="#usage" id="id24">Usage</a></p></li>
+<li><p><a class="reference internal" href="#comparison-with-scipy-optimize-curve-fit" id="id25">Comparison with scipy.optimize.curve_fit</a></p></li>
+<li><p><a class="reference internal" href="#references" id="id26">References</a></p></li>
+<li><p><a class="reference internal" href="#source" id="id27">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Fits a function to data in a Workspace</p>
+<section id="see-also">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="FitGaussian-v1.html#algm-fitgaussian"><span class="std std-ref">FitGaussian</span></a>, <a class="reference internal" href="UserFunction1D-v1.html#algm-userfunction1d"><span class="std std-ref">UserFunction1D</span></a>, <a class="reference internal" href="PlotPeakByLogValue-v1.html#algm-plotpeakbylogvalue"><span class="std std-ref">PlotPeakByLogValue</span></a>, <a class="reference internal" href="SplineBackground-v1.html#algm-splinebackground"><span class="std std-ref">SplineBackground</span></a>, <a class="reference internal" href="EvaluateFunction-v1.html#algm-evaluatefunction"><span class="std std-ref">EvaluateFunction</span></a></p>
+</section>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Function</p></td>
+<td><p>InOut</p></td>
+<td><p>Function</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Parameters defining the fitting function and its initial values</p></td>
+</tr>
+<tr class="row-odd"><td><p>InputWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/Workspace.html#workspace"><span class="std std-ref">Workspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Name of the input Workspace</p></td>
+</tr>
+<tr class="row-even"><td><p>IgnoreInvalidData</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Flag to ignore infinities, NaNs and data with zero errors.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DomainType</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Simple</p></td>
+<td><p>The type of function domain to use: Simple, Sequential, or Parallel. Allowed values: [‘Simple’, ‘Sequential’, ‘Parallel’]</p></td>
+</tr>
+<tr class="row-even"><td><p>EvaluationType</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>CentrePoint</p></td>
+<td><p>The way the function is evaluated on histogram data sets. If value is “CentrePoint” then function is evaluated at centre of each bin. If it is “Histogram” then function is integrated within the bin and the integrals returned. Allowed values: [‘CentrePoint’, ‘Histogram’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>StepSizeMethod</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Default</p></td>
+<td><p>The way the step size is calculated for numerical derivatives. See the section about step sizes in the Fit algorithm documentation to understand the difference between “Default” and “Sqrt epsilon”. Allowed values: [‘Default’, ‘Sqrt epsilon’]</p></td>
+</tr>
+<tr class="row-even"><td><p>PeakRadius</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>A value of the peak radius the peak functions should use. A peak radius defines an interval on the x axis around the centre of the peak where its values are calculated. Values outside the interval are not calculated and assumed zeros.Numerically the radius is a whole number of peak widths (FWHM) that fit into the interval on each side from the centre. The default value of 0 means the whole x axis.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ties</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td></td>
+<td><p>Math expressions defining ties between parameters of the fitting function.</p></td>
+</tr>
+<tr class="row-even"><td><p>Constraints</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td></td>
+<td><p>List of constraints</p></td>
+</tr>
+<tr class="row-odd"><td><p>MaxIterations</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>500</p></td>
+<td><p>Stop after this number of iterations if a good fit is not found</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputStatus</p></td>
+<td><p>Output</p></td>
+<td><p>string</p></td>
+<td></td>
+<td><p>Whether the fit was successful</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputChi2overDoF</p></td>
+<td><p>Output</p></td>
+<td><p>number</p></td>
+<td></td>
+<td><p>Returns the goodness of the fit</p></td>
+</tr>
+<tr class="row-even"><td><p>Minimizer</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Levenberg-Marquardt</p></td>
+<td><p>Minimizer to use for fitting. Allowed values: [‘BFGS’, ‘Conjugate gradient (Fletcher-Reeves imp.)’, ‘Conjugate gradient (Polak-Ribiere imp.)’, ‘Damped GaussNewton’, ‘FABADA’, ‘Levenberg-Marquardt’, ‘Levenberg-MarquardtMD’, ‘Simplex’, ‘SteepestDescent’, ‘Trust Region’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>CostFunction</p></td>
+<td><p>InOut</p></td>
+<td><p>string</p></td>
+<td><p>Least squares</p></td>
+<td><p>The cost function to be used for the fit, default is Least squares. Allowed values: [‘Least squares’, ‘Poisson’, ‘Rwp’, ‘Unweighted least squares’]</p></td>
+</tr>
+<tr class="row-even"><td><p>CreateOutput</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Set to true to create output workspaces with the results of the fit(default is false).</p></td>
+</tr>
+<tr class="row-odd"><td><p>Output</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td></td>
+<td><p>A base name for the output workspaces (if not given default names will be created). The default is to use the name of the original data workspace as prefix followed by suffixes _Workspace, _Parameters, etc.</p></td>
+</tr>
+<tr class="row-even"><td><p>CalcErrors</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Set to true to calcuate errors when output isn’t created (default is false).</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputCompositeMembers</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If true and CreateOutput is true then the value of each member of a Composite Function is also output.</p></td>
+</tr>
+<tr class="row-even"><td><p>ConvolveMembers</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If true and OutputCompositeMembers is true members of any Convolution are output convolved with corresponding resolution</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputParametersOnly</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Set to true to output only the parameters and not workspace(s) with the calculated values (default is false, ignored if CreateOutput is false and Output is an empty string).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<section id="additional-properties-for-a-1d-function">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Additional properties for a 1D function</a><a class="headerlink" href="#additional-properties-for-a-1d-function" title="Link to this heading">¶</a></h3>
+<p>If Function defines a one-dimensional function and InputWorkspace is a
+<a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a> the algorithm will have these
+additional properties:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>WorkspaceIndex</p></td>
+<td><p>Input</p></td>
+<td><p>integer</p></td>
+<td><p>0</p></td>
+<td><p>The spectrum to fit, using the workspace numbering of the spectra</p></td>
+</tr>
+<tr class="row-odd"><td><p>StartX</p></td>
+<td><p>Input</p></td>
+<td><p>double</p></td>
+<td><p>Start of the spectrum</p></td>
+<td><p>An X value in the first bin to be included in the fit</p></td>
+</tr>
+<tr class="row-even"><td><p>EndX</p></td>
+<td><p>Input</p></td>
+<td><p>double</p></td>
+<td><p>End of the spectrum</p></td>
+<td><p>An X value in the last bin to be included in the fit</p></td>
+</tr>
+</tbody>
+</table>
+<p>If Function defines a one-dimensional function and InputWorkspace is a
+<a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">Table Workspace</span></a> the algorithm will have these
+additional properties:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>StartX</p></td>
+<td><p>Input</p></td>
+<td><p>double</p></td>
+<td><p>Start of the spectrum</p></td>
+<td><p>An X value in the first bin to be included in the fit</p></td>
+</tr>
+<tr class="row-odd"><td><p>EndX</p></td>
+<td><p>Input</p></td>
+<td><p>double</p></td>
+<td><p>End of the spectrum</p></td>
+<td><p>An X value in the last bin to be included in the fit</p></td>
+</tr>
+<tr class="row-even"><td><p>XColumn</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td></td>
+<td><p>The name of the X column.</p></td>
+</tr>
+<tr class="row-odd"><td><p>YColumn</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td></td>
+<td><p>The name of the Y column.</p></td>
+</tr>
+<tr class="row-even"><td><p>ErrColumn</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td></td>
+<td><p>The name of the error column.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="changelog">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Changelog</a><a class="headerlink" href="#changelog" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>In mantid v6.0 the errors/confidence-bounds on the fitted curve were determined using the covariance matrix scaled by the reduced chi-squared (i.e. chi-squared divided by the number of degrees of freedom). Previously it had been scaled by chi-squared.</p></li>
+<li><p>In mantid v6.3 the errors/confidence-bounds on the fitted curve were determined using the covariance matrix without scaling (this makes them consistent with the errors on the best fit parameters).</p></li>
+</ul>
+</section>
+<section id="overview">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Link to this heading">¶</a></h3>
+<p>This is a generic algorithm for fitting data in a Workspace with a
+function. The workspace must have the type supported by the algorithm.
+Currently supported types are: <a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a> and
+<a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">Table Workspace</span></a> for fitting with a IFunction1D and
+<a class="reference internal" href="../concepts/MDWorkspace.html#mdworkspace"><span class="std std-ref">MDWorkspace</span></a> for fitting with IFunctionMD.
+After Function and InputWorkspace properties are set the algorithm may decide
+that it needs more information from the caller to locate the fitting data.
+For example, if a spectrum in a MatrixWorkspace is to be fit with a 1D
+function it will need to know at least the index of that spectrum. To request
+this information Fit dynamically creates relevant properties which the caller
+can set. Note that the dynamic properties depend both on the workspace
+and the function. For example, the data in a MatrixWorkspace can be fit
+with a 2D function. In this case all spectra will be used in the fit and
+no additional properties will be declared. The Function property must be
+set before any other.</p>
+<p>The function and the initial values for its parameters are set with the
+Function property. A function can be simple or composite. A <a class="reference internal" href="../fitting/fitfunctions/index.html#fit-functions-list"><span class="std std-ref">simple
+function</span></a> has a name registered with Mantid
+framework. The Fit algorithm creates an instance of a function by this
+name. A composite function is an arithmetic sum of two or more functions
+(simple or composite). Each function has a number of named parameters,
+the names are case sensitive. All function parameters will be used in
+the fit unless some of them are tied. Parameters can be tied by setting
+the Ties property. A tie is a mathematical expression which is used to
+calculate the value of a (dependent) parameter. Only the parameter names
+of the same function can be used as variables in this expression.</p>
+<p>Using the Minimizer property, Fit can be set to use different algorithms
+to perform the minimization. By default if the function’s derivatives
+can be evaluated then Fit uses the GSL Levenberg-Marquardt minimizer.</p>
+<p>In <a class="reference internal" href="../workbench/index.html#workbench"><span class="std std-ref">MantidWorkbench</span></a> this algorithm can be run from the
+<a class="reference internal" href="../workbench/plotwindow.html#workbenchplotwindow-fitting"><span class="std std-ref">Fit Property Browser</span></a>
+which allows all the settings to be specified via its graphical user
+interface.</p>
+<p>The confidence bands (CB) on the calculated fit curve (<span class="math notranslate nohighlight">\(\mathbf{\hat{y}}\)</span>) are obtained using the method outlined in <cite>kmpfit</cite>.
+For a function, <span class="math notranslate nohighlight">\(f(\mathbf{p})\)</span>, with fit parameters <span class="math notranslate nohighlight">\(\mathbf{p}\)</span>, the confidence interval is given by,</p>
+<div class="math notranslate nohighlight">
+\[CB=\mathbf{f}(\mathbf{p}) \pm \mathbf{\sigma_f}\]</div>
+<p>with <span class="math notranslate nohighlight">\(\mathbf{\sigma_f}\)</span> defined as,</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{\sigma_f}^2=  \sum_{j=0}^{j=n}\sum_{k=0}^{k=n}\frac{\partial f}{\partial p_j}\frac{\partial f}{\partial p_k}\, \mathbf{C}_{jk}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{C}_{jk}\)</span> are elements of the covariance matrix (not scaled by the reduced chi-squared).
+This interval defines the region where there is a 68.3% chance to find the true value of <span class="math notranslate nohighlight">\(f(\mathbf{p})\)</span>.
+For further details see reference [1].</p>
+</section>
+<section id="setting-a-simple-function">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">Setting a simple function</a><a class="headerlink" href="#setting-a-simple-function" title="Link to this heading">¶</a></h3>
+<p>To use a simple function for a fit set its name and initial parameter
+values using the Function property. This property is a comma separated
+list of name=value pairs. The name of the first name=value pairs must be
+“name” and it must be set equal to the name of one of a <a class="reference internal" href="../fitting/fitfunctions/index.html#fit-functions-list"><span class="std std-ref">simple
+function</span></a>. This name=value pair is followed
+by name=value pairs specifying values for the parameters of this
+function. If a parameter is not set in Function it will be given its
+default value defined by the function. All names are case sensitive. For
+example for fitting a Gaussian the Function property might look like
+this:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Function:</span> <span class="pre">&quot;name=Gaussian,</span> <span class="pre">PeakCentre=4.6,</span> <span class="pre">Height=10,</span> <span class="pre">Sigma=0.5&quot;</span></code></p>
+<p>Some functions have attributes. An attribute is a non-fitting parameter
+and can be of one of the following types: text string, integer, or
+double. Attributes are set just like the parameters using name=value
+pairs. For example:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Function:</span> <span class="pre">&quot;name=UserFunction,</span> <span class="pre">Formula=a+b*x,</span> <span class="pre">a=1,</span> <span class="pre">b=2&quot;</span></code></p>
+<p>In this example Formula is the name of a string attribute which defines
+an expression for the user UserFunction. The fitting parameters a and b
+are created when the Formula attribute is set. It is important that
+Formula is defined before initializing the parameters.</p>
+<p>A list of the available simple functions can be found
+<a class="reference internal" href="../fitting/fitfunctions/index.html#fit-functions-list"><span class="std std-ref">here</span></a>.</p>
+</section>
+<section id="setting-a-composite-function">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">Setting a composite function</a><a class="headerlink" href="#setting-a-composite-function" title="Link to this heading">¶</a></h3>
+<p>A composite function is a sum of simple functions. It does not have a
+name. To define a composite function set a number of simple functions in
+the Function property. Each simple function definition must be separated
+by a semicolon ‘;’. For example fitting two Gaussians on a linear
+background might look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Function</span><span class="p">:</span> <span class="s2">&quot;name=LinearBackground, A0=0.3;</span>
+           <span class="n">name</span><span class="o">=</span><span class="n">Gaussian</span><span class="p">,</span> <span class="n">PeakCentre</span><span class="o">=</span><span class="mf">4.6</span><span class="p">,</span> <span class="n">Height</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.5</span><span class="p">;</span>
+           <span class="n">name</span><span class="o">=</span><span class="n">Gaussian</span><span class="p">,</span> <span class="n">PeakCentre</span><span class="o">=</span><span class="mf">7.6</span><span class="p">,</span> <span class="n">Height</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.5</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="setting-ties">
+<h3><a class="toc-backref" href="#id14" role="doc-backlink">Setting ties</a><a class="headerlink" href="#setting-ties" title="Link to this heading">¶</a></h3>
+<p>Parameters can be tied to other parameters or to a constant. In this
+case they do not take part in the fitting but are evaluated using the
+tying expressions. Use Ties property to set any ties. In case of a
+simple function the parameter names are used as variables in the tying
+expressions. For example</p>
+<p><code class="docutils literal notranslate"><span class="pre">Ties:</span> <span class="pre">&quot;a=2*b+1,</span> <span class="pre">c=2&quot;</span></code></p>
+<p>This ties parameter “a” to parameter “b” and fixes “c” to the constant
+2.</p>
+<p>In case of a composite function the variable name must refer to both the
+parameter name and the simple function it belongs to. It is done by
+writing the variable name in the following format:</p>
+<p><code class="docutils literal notranslate"><span class="pre">f</span></code><code class="docutils literal notranslate"><span class="pre">.</span></code></p>
+<p>The format consists of two parts separated by a period ‘.’. The first
+part defines the function by its index in the composite function
+(starting at 0). The index corresponds to the order in which the
+functions are defined in the Function property. For example:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Ties:</span> <span class="pre">&quot;f1.Sigma=f0.Sigma,f2.Sigma=f0.Sigma&quot;</span></code></p>
+<p>This ties parameter “Sigma” of functions 1 and 2 to the “Sigma” of
+function 0. Of course all three functions must have a parameter called
+“Sigma” for this to work. The last example can also be written</p>
+<p><code class="docutils literal notranslate"><span class="pre">Ties:</span> <span class="pre">&quot;f1.Sigma=f2.Sigma=f0.Sigma&quot;</span></code></p>
+</section>
+<section id="setting-constraints">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink">Setting constraints</a><a class="headerlink" href="#setting-constraints" title="Link to this heading">¶</a></h3>
+<p>Parameters can be constrained to be above a lower boundary and/or below
+an upper boundary. If a constraint is violated a penalty to the fit is
+applied which should result the parameters satisfying the constraint.
+The penalty applied is described in more detail
+<a class="reference internal" href="../concepts/FitConstraint.html#fitconstraint"><span class="std std-ref">here</span></a>. Use Constraints property to set any
+constraints. In case of a simple function the parameter names are used
+as variables in the constraint expressions. For example</p>
+<p><code class="docutils literal notranslate"><span class="pre">Constraints:</span> <span class="pre">&quot;4.0</span> <span class="pre">&lt;</span> <span class="pre">c</span> <span class="pre">&lt;</span> <span class="pre">4.2&quot;</span></code></p>
+<p>Constraint the parameter “c” to be with the range 4.0 to 4.2, whereas</p>
+<p><code class="docutils literal notranslate"><span class="pre">Constraints:</span> <span class="pre">&quot;c</span> <span class="pre">&gt;</span> <span class="pre">4.0&quot;</span></code></p>
+<p>means “c” is constrained to be above the lower value 4.0 and</p>
+<p><code class="docutils literal notranslate"><span class="pre">Constraints:</span> <span class="pre">&quot;c</span> <span class="pre">&lt;</span> <span class="pre">4.2&quot;</span></code></p>
+<p>means “c” is constrained to be below the upper value 4.2.</p>
+<p>In case of a composite function the same notation is used for
+constraints and for ties. For example</p>
+<p><code class="docutils literal notranslate"><span class="pre">Constraints:</span> <span class="pre">&quot;f1.c</span> <span class="pre">&lt;</span> <span class="pre">4.2&quot;</span></code></p>
+<p>constrain the parameter “c” of function 1.</p>
+</section>
+<section id="fitting-to-data-in-a-matrixworkspace">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink">Fitting to data in a MatrixWorkspace</a><a class="headerlink" href="#fitting-to-data-in-a-matrixworkspace" title="Link to this heading">¶</a></h3>
+<p>The error values in the input workspace are used to weight the data in
+the fit. Zero error values are not allowed and are replaced with ones.</p>
+</section>
+<section id="fitting-to-histogram-data">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">Fitting to histogram data</a><a class="headerlink" href="#fitting-to-histogram-data" title="Link to this heading">¶</a></h3>
+<p>If the input MatrixWorkspace contains histogram data then there are two
+ways to evaluate the fit function on it and it can be set via the <cite>EvaluationType</cite>
+property. If <cite>EvaluationType</cite> is “CentrePoint” (which is the default) the
+function is evaluated at the centre of the bin. If <cite>EvaluationType</cite> is set to
+“Histogram” then the function is integrated within each bin and these integrals
+are used to evaluate the cost function.</p>
+<p>The “Histogram” evaluation type will typically give more accurate results when fitting
+histograms with very large bins. It also less sensitive to a particular binning.</p>
+<p>For the next example a spectrum was generated and rebinned to different bin sizes.
+Each binned spectrum was fitted using both “CentrePoint” (left column) and “Histogram”
+evaluation (right column). As it can be seen form the plots the “Histogram” fitting
+gives more consistent results which are also closer to the correct values (Amplitude=20.0,
+PeakCentre=0.0, FWHM=1.0).</p>
+<figure class="align-default">
+<img alt="../_images/HistogramFit.png" src="../_images/HistogramFit.png" />
+</figure>
+<p>Currently only the following functions can be used in a fit with “Histogram” evaluation:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../fitting/fitfunctions/Gaussian.html#func-gaussian"><span class="std std-ref">Gaussian</span></a></p></li>
+<li><p><a class="reference internal" href="../fitting/fitfunctions/Lorentzian.html#func-lorentzian"><span class="std std-ref">Lorentzian</span></a></p></li>
+<li><p><a class="reference internal" href="../fitting/fitfunctions/FlatBackground.html#func-flatbackground"><span class="std std-ref">FlatBackground</span></a></p></li>
+<li><p><a class="reference internal" href="../fitting/fitfunctions/LinearBackground.html#func-linearbackground"><span class="std std-ref">LinearBackground</span></a></p></li>
+</ul>
+<p>If any other functions need to be included in the list please leave a request at the
+<a class="reference external" href="http://forum.mantidproject.org/">Forum</a>.</p>
+</section>
+<section id="excluding-data-from-fit">
+<h3><a class="toc-backref" href="#id18" role="doc-backlink">Excluding data from fit</a><a class="headerlink" href="#excluding-data-from-fit" title="Link to this heading">¶</a></h3>
+<p>Regions of a 1D data set can be excluded from fit with the <cite>Exclude</cite> property. It is a list of
+pairs of real numbers which define the regions to exclude. In the following example the regions
+under the peaks are excluded thus fitting only the background</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">-</span> <span class="mf">0.001</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">Fit</span><span class="p">(</span><span class="s2">&quot;name=Polynomial,n=2&quot;</span><span class="p">,</span> <span class="n">ws</span><span class="p">,</span> <span class="n">Exclude</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">Output</span><span class="o">=</span><span class="s1">&#39;out&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="../_images/FitExcludeRange.png" src="../_images/FitExcludeRange.png" />
+</figure>
+</section>
+<section id="peak-radius">
+<h3><a class="toc-backref" href="#id19" role="doc-backlink">Peak Radius</a><a class="headerlink" href="#peak-radius" title="Link to this heading">¶</a></h3>
+<p>The effect of setting <cite>PeakRadius</cite> to a non-default value can be seen from next figure.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../_images/PeakRadius_Fit.png"><img alt="../_images/PeakRadius_Fit.png" src="../_images/PeakRadius_Fit.png" style="width: 700px;" />
+</a>
+</figure>
+<p>It can be used to speed up computations but there is a danger of introducing higher errors.</p>
+</section>
+<section id="step-size">
+<h3><a class="toc-backref" href="#id20" role="doc-backlink">Step Size</a><a class="headerlink" href="#step-size" title="Link to this heading">¶</a></h3>
+<p>The choice of step size, <span class="math notranslate nohighlight">\(h\)</span>, is an important consideration when the derivative of a function
+is calculated numerically using floating-point arithmetic. Mantid provides two methods for calculating
+the step size. Depending on the data you are fitting, you might want to use a different step size
+calculation method than the default.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Default</span></code> method calculates the step size as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(x_0\)</span> range</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(h\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(|x_0| &lt; 2.22e-303\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(100\epsilon\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(|x_0| &gt;= 2.22e-303\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(0.001x_0\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<p>The <code class="docutils literal notranslate"><span class="pre">Sqrt</span> <span class="pre">epsilon</span></code> method calculates the step size as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><span class="math notranslate nohighlight">\(x_0\)</span> range</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(h\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(|x_0| &lt; 1\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\sqrt{\epsilon}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(|x_0| &gt;= 1\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(x_0\sqrt{\epsilon}\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<p>where <span class="math notranslate nohighlight">\(x_0\)</span> is the value of the active parameter and <span class="math notranslate nohighlight">\(\epsilon \approx 2.22e-16\)</span>.</p>
+</section>
+<section id="output">
+<h3><a class="toc-backref" href="#id21" role="doc-backlink">Output</a><a class="headerlink" href="#output" title="Link to this heading">¶</a></h3>
+<p>Two output properties are added if the property ‘CreateOutput’ is set:</p>
+<ol class="arabic simple">
+<li><p>OutputParameters</p></li>
+<li><p>OutputWorkspace (only if OutputParametersOnly is not set)</p></li>
+</ol>
+<p>These two properties are not shown in the table of properties above,
+as they are declared dynamically, but they can be retrieved after
+executing the algorithm (as long as the property ‘CreateOutput’ was
+used). These two output properties provide workspaces which are also
+added in the Analysis Data Service (ADS) with names defined by
+appending a suffix to the name of the original data workspace. You can
+replace the name of the workspace with a different name if you give a
+value to the property ‘Output’ which redefines the base name of the
+output workspaces.</p>
+<p>OutputParameters is a <a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a> with the fitted
+parameter values. OutputWorkspace is a <a class="reference internal" href="../concepts/Workspace2D.html#workspace2d"><span class="std std-ref">Workspace2D</span></a> which compares the fit with the original data. The
+names given to these workspaces are built by appending the suffixes
+“_Parameters” and “_Workspace” to the name given in the input property
+‘Output’. For example, if ‘Output’ was set to “MyResults” the name of
+the parameter TableWorkspace will be “MyResults_Parameters” and the
+name of the Workspace2D will be “MyResults_Workspace”.</p>
+<p>The <a class="reference internal" href="../concepts/Workspace2D.html#workspace2d"><span class="std std-ref">Workspace2D</span></a> produced in the output property
+‘OutputWorkspace’ (example name: “MyResults_Workspace”) has three
+spectra:</p>
+<ol class="arabic simple">
+<li><p>The first spectrum (workspace index 0) contains the original data.</p></li>
+<li><p>The second spectrum is the data simulated with the fitted function.</p></li>
+<li><p>The third spectrum is the difference between the first two.</p></li>
+</ol>
+<p>Also, if the function’s derivatives can be evaluated an additional
+<a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a> is
+produced. If for example the property Output is set to “MyResults”
+then this TableWorkspace will have the name
+“MyResults_NormalisedCovarianceMatrix” and it contains a calculated
+correlation matrix. Denote this matrix <span class="math notranslate nohighlight">\(\rm C\)</span> and its elements
+<span class="math notranslate nohighlight">\(c_{ij}\)</span> then the diagonal elements are listed as 1.0 and the
+off diagonal elements as percentages of correlation between parameter
+<span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(j\)</span> equal to</p>
+<div class="math notranslate nohighlight">
+\[100 \cdot c_{ij} / \sqrt{c_{ii} \cdot c_{jj}}.\]</div>
+</section>
+<section id="multiple-fit">
+<h3><a class="toc-backref" href="#id22" role="doc-backlink">Multiple Fit</a><a class="headerlink" href="#multiple-fit" title="Link to this heading">¶</a></h3>
+<p>It is possible to fit to multiple data sets using the fit algorithm. This
+can be either simultaneously or sequentially. There are a few differences
+to a single fit. Firstly is that the <a class="reference internal" href="../fitting/fitfunctions/CompositeFunction.html#func-compositefunction"><span class="std std-ref">CompositeFunction</span></a>
+must be a <code class="code docutils literal notranslate"><span class="pre">MultiDomainFunction</span></code> and each of the individual fitting functions must include
+<code class="code docutils literal notranslate"><span class="pre">$domain=i</span></code>. The extra workspaces can be added by placing an <code class="code docutils literal notranslate"><span class="pre">_i</span></code> after <code class="code docutils literal notranslate"><span class="pre">InputWorkspace</span></code> and
+<code class="code docutils literal notranslate"><span class="pre">InputWorkspaceIndex</span></code> starting with <span class="math notranslate nohighlight">\(i=1\)</span> for the second workspace. It is also possible to
+set the fitting range for each data set individually in the same way as the <code class="code docutils literal notranslate"><span class="pre">InputWorkspace</span></code>.
+If a variable is to be fitted using data from multiple data sets then a <code class="code docutils literal notranslate"><span class="pre">tie</span></code> has
+to be used. The values that are tied will have the same value and be calculated from multiple
+data sets.</p>
+</section>
+</section>
+<section id="examples">
+<h2><a class="toc-backref" href="#id23" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>This example shows a simple fit to a Gaussian function. The algorithm
+properties are:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">InputWorkspace</span><span class="p">:</span>  <span class="n">Test</span>
+<span class="n">WorkspaceIndex</span><span class="p">:</span>  <span class="mi">0</span>
+<span class="n">Function</span><span class="p">:</span>        <span class="n">name</span><span class="o">=</span><span class="n">Gaussian</span><span class="p">,</span> <span class="n">PeakCentre</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">Height</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.5</span>
+<span class="n">Output</span><span class="p">:</span>          <span class="n">res</span>
+</pre></div>
+</div>
+<figure class="align-default" id="id1">
+<img alt="GaussianFit.jpg" src="../_images/GaussianFit.jpg" />
+<figcaption>
+<p><span class="caption-text">GaussianFit.jpg</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<hr class="docutils" />
+<p>The next example shows a fit of the same data but with a tie.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">InputWorkspace</span><span class="p">:</span>  <span class="n">Test</span>
+<span class="n">WorkspaceIndex</span><span class="p">:</span>  <span class="mi">0</span>
+<span class="n">Function</span><span class="p">:</span>        <span class="n">name</span><span class="o">=</span><span class="n">Gaussian</span><span class="p">,</span> <span class="n">PeakCentre</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">Height</span><span class="o">=</span><span class="mf">1.3</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.5</span>
+<span class="n">Ties</span><span class="p">:</span>            <span class="n">Sigma</span><span class="o">=</span><span class="n">Height</span><span class="o">/</span><span class="mi">2</span>
+<span class="n">Output</span><span class="p">:</span>          <span class="n">res</span>
+</pre></div>
+</div>
+<figure class="align-default" id="id2">
+<img alt="GaussianFit_Ties.jpg" src="../_images/GaussianFit_Ties.jpg" />
+<figcaption>
+<p><span class="caption-text">GaussianFit_Ties.jpg</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<hr class="docutils" />
+<p>This example shows a fit of two overlapping Gaussians on a linear
+background. Here we create a composite function with a LinearBackground
+and two Gaussians:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">InputWorkspace</span><span class="p">:</span>  <span class="n">Test</span>
+<span class="n">WorkspaceIndex</span><span class="p">:</span>  <span class="mi">0</span>
+<span class="n">Function</span><span class="p">:</span>        <span class="n">name</span><span class="o">=</span><span class="n">LinearBackground</span><span class="p">,</span><span class="n">A0</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                 <span class="n">name</span><span class="o">=</span><span class="n">Gaussian</span><span class="p">,</span><span class="n">PeakCentre</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">Height</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.5</span><span class="p">;</span>
+                 <span class="n">name</span><span class="o">=</span><span class="n">Gaussian</span><span class="p">,</span><span class="n">PeakCentre</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">Height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.5</span>
+<span class="n">Output</span><span class="p">:</span>          <span class="n">res</span>
+</pre></div>
+</div>
+<figure class="align-default" id="id3">
+<img alt="Gaussian2Fit.jpg" src="../_images/Gaussian2Fit.jpg" />
+<figcaption>
+<p><span class="caption-text">Gaussian2Fit.jpg</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<hr class="docutils" />
+<p>This example repeats the previous one but with the Sigmas of the two
+Gaussians tied:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">InputWorkspace</span><span class="p">:</span>  <span class="n">Test</span>
+<span class="n">WorkspaceIndex</span><span class="p">:</span>  <span class="mi">0</span>
+<span class="n">Function</span><span class="p">:</span>        <span class="n">name</span><span class="o">=</span><span class="n">LinearBackground</span><span class="p">,</span><span class="n">A0</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                 <span class="n">name</span><span class="o">=</span><span class="n">Gaussian</span><span class="p">,</span><span class="n">PeakCentre</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">Height</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.5</span><span class="p">;</span>
+                 <span class="n">name</span><span class="o">=</span><span class="n">Gaussian</span><span class="p">,</span><span class="n">PeakCentre</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">Height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.5</span>
+<span class="n">Ties</span><span class="p">:</span>            <span class="n">f2</span><span class="o">.</span><span class="n">Sigma</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">Sigma</span>
+<span class="n">Output</span><span class="p">:</span>          <span class="n">res</span>
+</pre></div>
+</div>
+<figure class="align-default" id="id4">
+<img alt="Gaussian2Fit_Ties.jpg" src="../_images/Gaussian2Fit_Ties.jpg" />
+<figcaption>
+<p><span class="caption-text">Gaussian2Fit_Ties.jpg</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="usage">
+<h2><a class="toc-backref" href="#id24" role="doc-backlink">Usage</a><a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p><strong>Example - Fit a Gaussian to a peak in a spectrum:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a workspace with a gaussian peak sitting on top of a linear (here flat) background</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="n">Function</span><span class="o">=</span><span class="s2">&quot;User Defined&quot;</span><span class="p">,</span> <span class="n">UserDefinedFunction</span><span class="o">=</span><span class="s2">&quot;name=LinearBackground, </span><span class="se">\</span>
+<span class="s2">   A0=0.3;name=Gaussian, PeakCentre=5, Height=10, Sigma=0.7&quot;</span><span class="p">,</span> <span class="n">NumBanks</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">BankPixelWidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">XMin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">XMax</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">BinWidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="c1"># Setup the data to fit:</span>
+<span class="n">workspaceIndex</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># the spectrum with which WorkspaceIndex to fit</span>
+<span class="n">startX</span> <span class="o">=</span> <span class="mi">1</span>      <span class="c1"># specify fitting region</span>
+<span class="n">endX</span> <span class="o">=</span> <span class="mi">9</span>      <span class="c1">#</span>
+
+<span class="c1"># Setup the model, here a Gaussian, to fit to data</span>
+<span class="n">tryCentre</span> <span class="o">=</span> <span class="s1">&#39;4&#39;</span>   <span class="c1"># A start guess on peak centre</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>          <span class="c1"># A start guess on peak width</span>
+<span class="n">height</span> <span class="o">=</span> <span class="s1">&#39;8&#39;</span>         <span class="c1"># A start guess on peak height</span>
+<span class="n">myFunc</span> <span class="o">=</span> <span class="s1">&#39;name=Gaussian, Height=&#39;</span><span class="o">+</span><span class="n">height</span><span class="o">+</span><span class="s1">&#39;, PeakCentre=&#39;</span><span class="o">+</span><span class="n">tryCentre</span><span class="o">+</span><span class="s1">&#39;, Sigma=&#39;</span><span class="o">+</span><span class="n">sigma</span>
+<span class="c1"># here purposely haven&#39;t included a linear background which mean fit will not be spot on</span>
+<span class="c1"># to include a linear background uncomment the line below</span>
+<span class="c1">#myFunc = &#39;name=LinearBackground, A0=0.3;name=Gaussian, Height=&#39;+height+&#39;, PeakCentre=&#39;+tryCentre+&#39;, Sigma=&#39;+sigma</span>
+
+<span class="c1"># Do the fitting</span>
+<span class="n">fit_output</span> <span class="o">=</span> <span class="n">Fit</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">WorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">StartX</span> <span class="o">=</span> <span class="n">startX</span><span class="p">,</span> <span class="n">EndX</span><span class="o">=</span><span class="n">endX</span><span class="p">,</span> <span class="n">Output</span><span class="o">=</span><span class="s1">&#39;fit&#39;</span><span class="p">,</span> <span class="n">Function</span><span class="o">=</span><span class="n">myFunc</span><span class="p">)</span>
+<span class="n">paramTable</span> <span class="o">=</span> <span class="n">fit_output</span><span class="o">.</span><span class="n">OutputParameters</span>  <span class="c1"># table containing the optimal fit parameters</span>
+<span class="n">fitWorkspace</span> <span class="o">=</span> <span class="n">fit_output</span><span class="o">.</span><span class="n">OutputWorkspace</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The fit was: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fit_output</span><span class="o">.</span><span class="n">OutputStatus</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;chi-squared of fit is: </span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fit_output</span><span class="o">.</span><span class="n">OutputChi2overDoF</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fitted Height value is: </span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fitted centre value is: </span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fitted sigma value is: </span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">2</span><span class="p">]))</span>
+<span class="c1"># fitWorkspace contains the data, the calculated and the difference patterns</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of spectra in fitWorkspace is: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fitWorkspace</span><span class="o">.</span><span class="n">getNumberHistograms</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The 20th y-value of the calculated pattern: </span><span class="si">{:.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fitWorkspace</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">19</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The fit was: success
+chi-squared of fit is: ...
+Fitted Height value is: ...
+Fitted centre value is: ...
+Fitted sigma value is: ...
+Number of spectra in fitWorkspace is: ...
+The 20th y-value of the calculated pattern: ...
+</pre></div>
+</div>
+<p><strong>Example - Fit a Gaussian to a Table Workspace:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+
+<span class="c1">#Create a table workspace with a gaussian curve and a flat background of 0.5</span>
+<span class="n">tableWS</span> <span class="o">=</span> <span class="n">CreateEmptyTableWorkspace</span><span class="p">()</span>
+<span class="n">tableWS</span><span class="o">.</span><span class="n">addColumn</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;X data&quot;</span><span class="p">)</span>
+<span class="n">tableWS</span><span class="o">.</span><span class="n">addColumn</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Y data&quot;</span><span class="p">)</span>
+<span class="n">tableWS</span><span class="o">.</span><span class="n">addColumn</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Errors&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">99</span><span class="p">):</span>
+    <span class="n">xValue</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mf">0.1</span>
+    <span class="n">yValue</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">xValue</span> <span class="o">-</span> <span class="mf">5.0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mf">0.7</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span>
+    <span class="n">eValue</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">tableWS</span><span class="o">.</span><span class="n">addRow</span> <span class="p">(</span> <span class="p">{</span><span class="s1">&#39;X data&#39;</span><span class="p">:</span> <span class="n">xValue</span><span class="p">,</span> <span class="s1">&#39;Y data&#39;</span><span class="p">:</span> <span class="n">yValue</span><span class="p">,</span> <span class="s1">&#39;Errors&#39;</span><span class="p">:</span> <span class="n">eValue</span><span class="p">}</span> <span class="p">)</span>
+
+<span class="c1"># Do the fitting</span>
+<span class="n">myFunc</span> <span class="o">=</span> <span class="s1">&#39;name=Gaussian, PeakCentre=4, Height=8, Sigma=1&#39;</span>
+<span class="n">fit_output</span> <span class="o">=</span> <span class="n">Fit</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">tableWS</span><span class="p">,</span> <span class="n">StartX</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">EndX</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">Output</span><span class="o">=</span><span class="s1">&#39;fit&#39;</span><span class="p">,</span> <span class="n">Function</span><span class="o">=</span><span class="n">myFunc</span><span class="p">,</span> \
+                 <span class="n">XColumn</span> <span class="o">=</span> <span class="s1">&#39;X data&#39;</span><span class="p">,</span> <span class="n">YColumn</span> <span class="o">=</span> <span class="s1">&#39;Y data&#39;</span><span class="p">,</span> <span class="n">ErrColumn</span> <span class="o">=</span> <span class="s1">&#39;Errors&#39;</span><span class="p">)</span>
+<span class="n">paramTable</span> <span class="o">=</span> <span class="n">fit_output</span><span class="o">.</span><span class="n">OutputParameters</span>
+<span class="n">fitWorkspace</span> <span class="o">=</span> <span class="n">fit_output</span><span class="o">.</span><span class="n">OutputWorkspace</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The fit was: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fit_output</span><span class="o">.</span><span class="n">OutputStatus</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;chi-squared of fit is: </span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fit_output</span><span class="o">.</span><span class="n">OutputChi2overDoF</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fitted Height value is: </span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fitted centre value is: </span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fitted sigma value is: </span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">2</span><span class="p">]))</span>
+<span class="c1"># fitWorkspace contains the data, the calculated and the difference patterns</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of spectra in fitWorkspace is: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fitWorkspace</span><span class="o">.</span><span class="n">getNumberHistograms</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The 20th y-value of the calculated pattern: </span><span class="si">{:.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fitWorkspace</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">19</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The fit was: success
+chi-squared of fit is: 0.59
+Fitted Height value is: 10.33
+Fitted centre value is: 5.00
+Fitted sigma value is: 0.75
+Number of spectra in fitWorkspace is: 3
+The 20th y-value of the calculated pattern: 0.2125
+</pre></div>
+</div>
+<p><strong>Example - Fit to two data sets simultaneously:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># create data</span>
+<span class="n">xData</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">stop</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">num</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+<span class="n">yData</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xData</span><span class="p">:</span>
+    <span class="n">yData</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">yData2</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xData</span><span class="p">:</span>
+    <span class="n">yData2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="c1"># create workspaces</span>
+<span class="nb">input</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">xData</span><span class="p">,</span><span class="n">yData</span><span class="p">)</span>
+<span class="n">input2</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">xData</span><span class="p">,</span><span class="n">yData2</span><span class="p">)</span>
+<span class="c1"># create function</span>
+<span class="n">myFunc</span><span class="o">=</span><span class="s1">&#39;;name=FlatBackground,$domains=i,A0=0&#39;</span>
+<span class="n">multiFunc</span><span class="o">=</span><span class="s1">&#39;composite=MultiDomainFunction,NumDeriv=1&#39;</span><span class="o">+</span><span class="n">myFunc</span><span class="o">+</span><span class="n">myFunc</span><span class="o">+</span><span class="s2">&quot;;&quot;</span>
+<span class="c1"># do fit</span>
+<span class="n">fit_output</span> <span class="o">=</span> <span class="n">Fit</span><span class="p">(</span><span class="n">Function</span><span class="o">=</span><span class="n">multiFunc</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="nb">input</span><span class="p">,</span> <span class="n">WorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> \
+                 <span class="n">InputWorkspace_1</span><span class="o">=</span><span class="n">input2</span><span class="p">,</span> <span class="n">WorkspaceIndex_1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> \
+                 <span class="n">StartX</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">EndX</span><span class="o">=</span><span class="mf">9.5</span><span class="p">,</span> <span class="n">StartX_1</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">EndX_1</span><span class="o">=</span><span class="mf">9.5</span><span class="p">,</span><span class="n">Output</span><span class="o">=</span><span class="s1">&#39;fit&#39;</span> <span class="p">)</span>
+<span class="n">paramTable</span> <span class="o">=</span> <span class="n">fit_output</span><span class="o">.</span><span class="n">OutputParameters</span>  <span class="c1"># table containing the optimal fit parameters</span>
+<span class="c1"># print results</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Constant 1: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Constant 2: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Constant 1: 2.00
+Constant 2: 5.00
+</pre></div>
+</div>
+<p><strong>Example - Fit to two data sets with shared parameter:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># create data</span>
+<span class="n">xData</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">stop</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">num</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+<span class="n">yData</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xData</span><span class="p">:</span>
+    <span class="n">yData</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">yData2</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xData</span><span class="p">:</span>
+    <span class="n">yData2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>
+<span class="c1"># create workspaces</span>
+<span class="nb">input</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">xData</span><span class="p">,</span><span class="n">yData</span><span class="p">)</span>
+<span class="n">input2</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">xData</span><span class="p">,</span><span class="n">yData2</span><span class="p">)</span>
+<span class="c1"># create function</span>
+<span class="n">myFunc</span><span class="o">=</span><span class="s1">&#39;;name=FlatBackground,$domains=i,A0=0&#39;</span>
+<span class="n">multiFunc</span><span class="o">=</span><span class="s1">&#39;composite=MultiDomainFunction,NumDeriv=1&#39;</span><span class="o">+</span><span class="n">myFunc</span><span class="o">+</span><span class="n">myFunc</span><span class="o">+</span><span class="s1">&#39;;ties=(f0.A0=f1.A0)&#39;</span>
+<span class="c1"># do fit</span>
+<span class="n">fit_output</span> <span class="o">=</span> <span class="n">Fit</span><span class="p">(</span><span class="n">Function</span><span class="o">=</span><span class="n">multiFunc</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="nb">input</span><span class="p">,</span> <span class="n">WorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> \
+                 <span class="n">InputWorkspace_1</span><span class="o">=</span><span class="n">input2</span><span class="p">,</span> <span class="n">WorkspaceIndex_1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> \
+                 <span class="n">StartX</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">EndX</span><span class="o">=</span><span class="mf">9.5</span><span class="p">,</span> <span class="n">StartX_1</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">EndX_1</span><span class="o">=</span><span class="mf">9.5</span><span class="p">,</span><span class="n">Output</span><span class="o">=</span><span class="s1">&#39;fit&#39;</span><span class="p">)</span>
+<span class="n">paramTable</span> <span class="o">=</span> <span class="n">fit_output</span><span class="o">.</span><span class="n">OutputParameters</span>  <span class="c1"># table containing the optimal fit parameters</span>
+<span class="c1"># print results</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Constant 1: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Constant 2: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Constant 1: 3.50
+Constant 2: 3.50
+</pre></div>
+</div>
+<p><strong>Example - Fit to two data sets with one shared parameter:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># create data</span>
+<span class="n">xData</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">stop</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">num</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+<span class="n">yData</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xData</span><span class="p">:</span>
+    <span class="n">yData</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mf">10.</span><span class="p">)</span>
+<span class="n">yData2</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xData</span><span class="p">:</span>
+    <span class="n">yData2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">5.0</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="mf">7.</span><span class="p">)</span>
+<span class="c1"># create workspaces</span>
+<span class="nb">input</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">xData</span><span class="p">,</span><span class="n">yData</span><span class="p">)</span>
+<span class="n">input2</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">xData</span><span class="p">,</span><span class="n">yData2</span><span class="p">)</span>
+<span class="c1"># create function</span>
+<span class="n">myFunc</span><span class="o">=</span><span class="s1">&#39;;name=LinearBackground,$domains=i,A0=0,A1=0&#39;</span>
+<span class="n">multiFunc</span><span class="o">=</span><span class="s1">&#39;composite=MultiDomainFunction,NumDeriv=1&#39;</span><span class="o">+</span><span class="n">myFunc</span><span class="o">+</span><span class="n">myFunc</span><span class="o">+</span><span class="s1">&#39;;ties=(f0.A1=f1.A1)&#39;</span>
+<span class="c1"># do fit</span>
+<span class="n">fit_output</span> <span class="o">=</span> <span class="n">Fit</span><span class="p">(</span><span class="n">Function</span><span class="o">=</span><span class="n">multiFunc</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="nb">input</span><span class="p">,</span> <span class="n">WorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> \
+                 <span class="n">InputWorkspace_1</span><span class="o">=</span><span class="n">input2</span><span class="p">,</span> <span class="n">WorkspaceIndex_1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> \
+                 <span class="n">StartX</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">EndX</span><span class="o">=</span><span class="mf">9.5</span><span class="p">,</span> <span class="n">StartX_1</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">EndX_1</span><span class="o">=</span><span class="mf">9.5</span><span class="p">,</span><span class="n">Output</span><span class="o">=</span><span class="s1">&#39;fit&#39;</span><span class="p">)</span>
+<span class="n">paramTable</span> <span class="o">=</span> <span class="n">fit_output</span><span class="o">.</span><span class="n">OutputParameters</span>  <span class="c1"># table containing the optimal fit parameters</span>
+<span class="c1"># print results</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gradients (shared):&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Gradient 1: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">3</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Gradient 2: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;offsets:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Constant 1: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Constant 2: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">2</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Gradients (shared):
+Gradient 1: 3.50
+Gradient 2: 3.50
+offsets:
+Constant 1: 2.86
+Constant 2: 14.14
+</pre></div>
+</div>
+<p><strong>Example - Fit to two data sets with one shared parameter, and different fit functions:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Create workspaces</span>
+<span class="n">x_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span><span class="n">stop</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span><span class="n">num</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+<span class="n">y_values1</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2.0</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mf">10.0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_values</span><span class="p">]</span>
+<span class="n">y_values2</span> <span class="o">=</span> <span class="p">[</span><span class="mf">5.0</span><span class="o">/</span><span class="n">x</span> <span class="o">+</span> <span class="mf">10.0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_values</span><span class="p">]</span>
+
+<span class="n">input_workspace1</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values1</span><span class="p">)</span>
+<span class="n">input_workspace2</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">y_values2</span><span class="p">)</span>
+
+<span class="c1"># Create MultiDomainFunction where datasets have different fitting functions</span>
+<span class="n">multi_domain_function</span> <span class="o">=</span> <span class="n">FunctionFactory</span><span class="o">.</span><span class="n">createInitializedMultiDomainFunction</span><span class="p">(</span><span class="s1">&#39;name=CompositeFunction&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">flat_background</span> <span class="o">=</span> <span class="n">FunctionFactory</span><span class="o">.</span><span class="n">createInitialized</span><span class="p">(</span><span class="s2">&quot;name=FlatBackground&quot;</span><span class="p">)</span>
+<span class="n">linear_background</span> <span class="o">=</span> <span class="n">FunctionFactory</span><span class="o">.</span><span class="n">createInitialized</span><span class="p">(</span><span class="s2">&quot;name=LinearBackground&quot;</span><span class="p">)</span>
+<span class="n">exp_decay</span> <span class="o">=</span> <span class="n">FunctionFactory</span><span class="o">.</span><span class="n">createInitialized</span><span class="p">(</span><span class="s2">&quot;name=ExpDecay&quot;</span><span class="p">)</span>
+
+<span class="n">composite1</span> <span class="o">=</span> <span class="n">multi_domain_function</span><span class="o">.</span><span class="n">getFunction</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">composite1</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">flat_background</span><span class="p">)</span>
+<span class="n">composite1</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">linear_background</span><span class="p">)</span>
+
+<span class="n">composite2</span> <span class="o">=</span> <span class="n">multi_domain_function</span><span class="o">.</span><span class="n">getFunction</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">composite2</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">flat_background</span><span class="p">)</span>
+<span class="n">composite2</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">exp_decay</span><span class="p">)</span>
+
+<span class="c1"># Tie the FlatBackground which is common for both datasets</span>
+<span class="n">function_string</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">multi_domain_function</span><span class="p">)</span>
+<span class="n">function_string</span> <span class="o">+=</span> <span class="s2">&quot;;ties=(f1.f0.A0=f0.f0.A0)&quot;</span>
+
+<span class="c1"># Perform the fit</span>
+<span class="n">fit_output</span> <span class="o">=</span> <span class="n">Fit</span><span class="p">(</span><span class="n">Function</span><span class="o">=</span><span class="n">function_string</span><span class="p">,</span>
+                 <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">input_workspace1</span><span class="p">,</span> <span class="n">WorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">StartX</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">EndX</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+                 <span class="n">InputWorkspace_1</span><span class="o">=</span><span class="n">input_workspace2</span><span class="p">,</span> <span class="n">WorkspaceIndex_1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">StartX_1</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">EndX_1</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+                 <span class="n">Output</span><span class="o">=</span><span class="s1">&#39;fit&#39;</span><span class="p">)</span>
+
+<span class="c1"># Print Results</span>
+<span class="n">param_values</span> <span class="o">=</span> <span class="n">fit_output</span><span class="o">.</span><span class="n">OutputParameters</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tied parameters (shared):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Workspace1 FlatBackground.A0: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Workspace2 FlatBackground.A0: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param_values</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Other Parameters:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Workspace1 LinearBackground.A0: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param_values</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Workspace1 LinearBackground.A1: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param_values</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Workspace2 ExpDecay.Height: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param_values</span><span class="p">[</span><span class="mi">4</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Workspace2 ExpDecay.Lifetime: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">param_values</span><span class="p">[</span><span class="mi">5</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Tied parameters (shared):
+Workspace1 FlatBackground.A0: 10.64
+Workspace2 FlatBackground.A0: 10.64
+Other Parameters:
+Workspace1 LinearBackground.A0: -0.64
+Workspace1 LinearBackground.A1: 2.00
+Workspace2 ExpDecay.Height: 8.44
+Workspace2 ExpDecay.Lifetime: 1.40
+</pre></div>
+</div>
+</section>
+<section id="comparison-with-scipy-optimize-curve-fit">
+<h2><a class="toc-backref" href="#id25" role="doc-backlink">Comparison with scipy.optimize.curve_fit</a><a class="headerlink" href="#comparison-with-scipy-optimize-curve-fit" title="Link to this heading">¶</a></h2>
+<p>The <cite>scipy.optimize.curve_fit</cite> function is a commonly used optimiser for fitting models to data.
+By default <cite>curve_fit</cite> scales the covariance matrix from the fit by the reduced chi-squared statistic -
+this is equivalent to scaling the errorbars on the data points such that the reduced chi-squared is unity
+(the expectation value for a “good” fit). This can be desirable if a fit is performed with unit weights
+or the weights are only to be interpreted as relative.</p>
+<p>In mantid the weights are typically calculated from the error on a number of counts using Poisson statistics and
+should be interpreted as absolute. Therefore, the mantid <cite>Fit</cite> algorithm does not scale the covariance matrix by the
+reduced chi-squared (since v6.3). The scaling of the covariance matrix in <cite>curve_fit</cite> is governed by the
+<cite>absolute_sigma</cite> parameter (by default <cite>absolute_sigma = False</cite>). Here we show that the mantid <cite>Fit</cite> algorithm and
+<cite>curve_fit</cite> give the same result when <cite>absolute_sigma=True</cite>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">optimize</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">t</span>
+
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c</span> <span class="p">,</span><span class="n">m</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">m</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">c</span>
+
+<span class="k">def</span> <span class="nf">confidence_band</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yfit</span><span class="p">,</span> <span class="n">covar</span><span class="p">,</span> <span class="n">dfdp</span><span class="p">,</span> <span class="n">confprob</span><span class="o">=</span><span class="mf">0.6826</span><span class="p">):</span>
+   <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">confprob</span>
+   <span class="n">prb</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">alpha</span><span class="o">/</span><span class="mi">2</span>
+   <span class="n">nparams</span> <span class="o">=</span> <span class="n">pcov_true</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+   <span class="n">dof</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="n">nparams</span>
+   <span class="n">tval</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">prb</span><span class="p">,</span> <span class="n">dof</span><span class="p">)</span>
+   <span class="n">df_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+   <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nparams</span><span class="p">):</span>
+      <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nparams</span><span class="p">):</span>
+         <span class="n">df_sq</span>  <span class="o">+=</span> <span class="n">dfdp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">dfdp</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="n">covar</span><span class="p">[</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">]</span>
+   <span class="n">df</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">df_sq</span><span class="p">)</span>
+   <span class="n">delta</span> <span class="o">=</span> <span class="n">tval</span> <span class="o">*</span> <span class="n">df</span>
+   <span class="n">upperband</span> <span class="o">=</span> <span class="n">yfit</span> <span class="o">+</span> <span class="n">delta</span>
+   <span class="n">lowerband</span> <span class="o">=</span> <span class="n">yfit</span> <span class="o">-</span> <span class="n">delta</span>
+   <span class="k">return</span> <span class="n">upperband</span><span class="p">,</span> <span class="n">lowerband</span>
+
+<span class="c1"># Generate data</span>
+<span class="n">noise_stdev</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">err_scale</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># 1 =&gt; chi-squared ~ 1 (i.e. errorbars will correspond to stdev of simulated noise)</span>
+<span class="n">m0</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">c0</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c0</span><span class="p">,</span> <span class="n">m0</span><span class="p">),</span> <span class="n">noise_stdev</span><span class="p">)</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">err_scale</span><span class="o">*</span><span class="n">noise_stdev</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="n">DataY</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">DataE</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">EnableLogging</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># initial guess</span>
+<span class="n">p0</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># c, m</span>
+
+<span class="c1"># scipy</span>
+<span class="n">popt</span><span class="p">,</span> <span class="n">pcov_false</span> <span class="o">=</span> <span class="n">optimize</span><span class="o">.</span><span class="n">curve_fit</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">e</span><span class="p">,</span>
+    <span class="n">absolute_sigma</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">perr_false</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">pcov_false</span><span class="p">))</span>
+<span class="n">_</span><span class="p">,</span> <span class="n">pcov_true</span> <span class="o">=</span> <span class="n">optimize</span><span class="o">.</span><span class="n">curve_fit</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="n">e</span><span class="p">,</span>
+    <span class="n">absolute_sigma</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># popt does not depend on absolute_sigma</span>
+<span class="n">perr_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">pcov_true</span><span class="p">))</span>
+<span class="n">chisq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(((</span><span class="n">y</span> <span class="o">-</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">popt</span><span class="p">))</span><span class="o">/</span><span class="n">e</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">red_chisq</span> <span class="o">=</span> <span class="n">chisq</span><span class="o">/</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">popt</span><span class="p">))</span>
+<span class="c1"># calc confidence limits</span>
+<span class="n">dfdp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span>  <span class="c1"># dy/dparam = [dy/dc, dy/dm]</span>
+<span class="n">upper_true</span><span class="p">,</span> <span class="n">lower_true</span> <span class="o">=</span> <span class="n">confidence_band</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">popt</span><span class="p">),</span> <span class="n">pcov_true</span><span class="p">,</span> <span class="n">dfdp</span><span class="p">)</span>
+<span class="n">upper_false</span><span class="p">,</span> <span class="n">lower_false</span> <span class="o">=</span> <span class="n">confidence_band</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">popt</span><span class="p">),</span> <span class="n">pcov_false</span><span class="p">,</span> <span class="n">dfdp</span><span class="p">)</span>
+
+<span class="c1"># mantid</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">Fit</span><span class="p">(</span><span class="n">Function</span><span class="o">=</span><span class="s1">&#39;name=LinearBackground,A0=</span><span class="si">{0}</span><span class="s1">,A1=</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">p0</span><span class="p">),</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">IgnoreInvalidData</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">Output</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">OutputCompositeMembers</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">popt_mtd</span> <span class="o">=</span> <span class="p">[</span><span class="n">fit</span><span class="o">.</span><span class="n">Function</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">getParameterValue</span><span class="p">(</span><span class="n">iparam</span><span class="p">)</span> <span class="k">for</span>
+    <span class="n">iparam</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">Function</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">nParams</span><span class="p">())]</span>
+<span class="n">perr_mtd</span> <span class="o">=</span> <span class="p">[</span><span class="n">fit</span><span class="o">.</span><span class="n">Function</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">getError</span><span class="p">(</span><span class="n">iparam</span><span class="p">)</span> <span class="k">for</span>
+    <span class="n">iparam</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">Function</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">nParams</span><span class="p">())]</span>
+<span class="n">red_chisq_mtd</span> <span class="o">=</span> <span class="n">fit</span><span class="o">.</span><span class="n">OutputChi2overDoF</span>
+
+<span class="c1"># compare mantid and scipy</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;### scipy curve_fit ###&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;red chisq = &quot;</span><span class="p">,</span> <span class="n">red_chisq</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;popt = &quot;</span><span class="p">,</span> <span class="n">popt</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;abs_sigma=False:</span><span class="se">\t</span><span class="s1"> perr = &#39;</span><span class="p">,</span> <span class="n">perr_false</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;abs_sigma=True:</span><span class="se">\t</span><span class="s1"> perr = &#39;</span><span class="p">,</span> <span class="n">perr_true</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;### mantid ###&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;red chisq = &quot;</span><span class="p">,</span> <span class="n">red_chisq_mtd</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;popt = &quot;</span><span class="p">,</span> <span class="n">popt_mtd</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;perr =&#39;</span><span class="p">,</span> <span class="n">perr_mtd</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">yerr</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;k&#39;</span><span class="p">,</span>
+    <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">(),</span> <span class="n">func</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()),</span> <span class="n">c0</span><span class="p">,</span> <span class="n">m0</span><span class="p">),</span> <span class="s1">&#39;-k&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;model&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">popt</span><span class="p">),</span> <span class="s1">&#39;-b&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;scipy curve_fit&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">upper_true</span><span class="p">,</span> <span class="s1">&#39;:b&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;68.3% bound (scipy cov abs_sig=True)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lower_true</span><span class="p">,</span> <span class="s1">&#39;:b&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">upper_false</span><span class="p">,</span> <span class="s1">&#39;:c&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;68.3% bound (scipy cov abs_sig=False)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lower_false</span><span class="p">,</span> <span class="s1">&#39;:c&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">OutputWorkspace</span><span class="p">,</span> <span class="n">wkspIndex</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">ls</span> <span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;mtd fit&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mf">8.0</span><span class="p">)</span><span class="o">.</span><span class="n">set_draggable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">legend</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="../_images/ScipyCurveFit_Mantid_comparison_LinearFit.png" src="../_images/ScipyCurveFit_Mantid_comparison_LinearFit.png" />
+</figure>
+<p><strong>Example - Fit two data sets that has nan or infinite values:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># create data</span>
+<span class="n">xData</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">stop</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">num</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+
+<span class="n">yData</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xData</span><span class="p">:</span>
+    <span class="n">yData</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+
+<span class="n">yData2</span><span class="o">=</span><span class="p">[]</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xData</span><span class="p">:</span>
+    <span class="n">yData2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">5.0</span><span class="p">)</span>
+
+<span class="n">yData</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+<span class="n">yData2</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+
+<span class="n">eData</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">xData</span><span class="p">)</span>
+<span class="n">eData2</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">xData</span><span class="p">)</span>
+
+<span class="c1"># create workspaces</span>
+<span class="nb">input</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">xData</span><span class="p">,</span><span class="n">yData</span><span class="p">,</span> <span class="n">eData</span><span class="p">)</span>
+<span class="n">input2</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">xData</span><span class="p">,</span><span class="n">yData2</span><span class="p">,</span> <span class="n">eData2</span><span class="p">)</span>
+
+<span class="c1"># create function</span>
+<span class="n">myFunc</span><span class="o">=</span><span class="s1">&#39;;name=FlatBackground,$domains=i,A0=0&#39;</span>
+<span class="n">multiFunc</span><span class="o">=</span><span class="s1">&#39;composite=MultiDomainFunction,NumDeriv=1&#39;</span><span class="o">+</span><span class="n">myFunc</span><span class="o">+</span><span class="n">myFunc</span><span class="o">+</span><span class="s2">&quot;;&quot;</span>
+
+<span class="c1"># do fit</span>
+<span class="n">fit_output</span> <span class="o">=</span> <span class="n">Fit</span><span class="p">(</span><span class="n">Function</span><span class="o">=</span><span class="n">multiFunc</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="nb">input</span><span class="p">,</span> <span class="n">WorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> \
+                <span class="n">InputWorkspace_1</span><span class="o">=</span><span class="n">input2</span><span class="p">,</span> <span class="n">WorkspaceIndex_1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> \
+                <span class="n">StartX</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">EndX</span><span class="o">=</span><span class="mf">9.5</span><span class="p">,</span> <span class="n">StartX_1</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">EndX_1</span><span class="o">=</span><span class="mf">9.5</span><span class="p">,</span><span class="n">Output</span><span class="o">=</span><span class="s1">&#39;fit&#39;</span><span class="p">,</span>
+                <span class="n">IgnoreInvalidData</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">paramTable</span> <span class="o">=</span> <span class="n">fit_output</span><span class="o">.</span><span class="n">OutputParameters</span>  <span class="c1"># table containing the optimal fit parameters</span>
+
+<span class="c1"># print results</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Constant 1: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Constant 2: </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">paramTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Constant 1: 2.00
+Constant 2: 5.00
+</pre></div>
+</div>
+</section>
+<section id="references">
+<h2><a class="toc-backref" href="#id26" role="doc-backlink">References</a><a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<p>[1] Vogelaar, M.G.R., kmpfit. University of Groningen, The Netherlands (<a class="reference external" href="https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html">https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html</a>)</p>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/Optimization.html">Optimization</a></p>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id27" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/c66b9d75d3432a3fcde604fac070fd25fe61daf8/Framework/CurveFitting/inc/MantidCurveFitting/Algorithms/Fit.h">Fit.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/c66b9d75d3432a3fcde604fac070fd25fe61daf8/Framework/CurveFitting/src/Algorithms/Fit.cpp">Fit.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="FindUBUsingLatticeParameters-v1.html" title="Previous Chapter: FindUBUsingLatticeParameters v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; FindUBUsingLa...</span>
+    </a>
+  </li>
+  <li>
+    <a href="FitGaussian-v1.html" title="Next Chapter: FitGaussian v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">FitGaussian v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Reduction for ORNL SANS</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=06de18c4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PSI Muon Bin File" href="PSIMuonBinFile.html" />
+    <link rel="prev" title="Nexus File" href="NexusFile.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.11</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Concepts</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Reduction for ORNL SANS</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="reduction-for-ornl-sans">
+<span id="id1"></span><h1>Reduction for ORNL SANS<a class="headerlink" href="#reduction-for-ornl-sans" title="Link to this heading">¶</a></h1>
+<p>This document explains how to use Mantid to perform reduction of ORNL SANS data.
+Information about the underlying Mantid algorithms involved can be found in the
+<a class="reference internal" href="../algorithms/SANSReduction-v1.html#algm-sansreduction"><span class="std std-ref">SANSReduction</span></a> algorithm documentation.
+For HFIR reduction specifically, you can also see the <a class="reference internal" href="../algorithms/HFIRSANSReduction-v1.html#algm-hfirsansreduction"><span class="std std-ref">HFIRSANSReduction</span></a> algorithm documentation.</p>
+<p>Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#reduction-script">Reduction script</a></p></li>
+<li><p><a class="reference internal" href="#reduction-commands">Reduction commands</a></p></li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#instrument-selection">Instrument selection</a></p></li>
+<li><p><a class="reference internal" href="#beam-center">Beam center</a></p></li>
+<li><p><a class="reference internal" href="#normalization-options">Normalization options</a></p></li>
+<li><p><a class="reference internal" href="#absolute-normalization">Absolute normalization</a></p></li>
+<li><p><a class="reference internal" href="#dark-current-subtraction">Dark current subtraction</a></p></li>
+<li><p><a class="reference internal" href="#pixel-masking">Pixel masking</a></p></li>
+<li><p><a class="reference internal" href="#sensitivity-correction">Sensitivity correction</a></p></li>
+<li><p><a class="reference internal" href="#solid-angle-correction">Solid angle correction</a></p></li>
+<li><p><a class="reference internal" href="#transmission-correction">Transmission correction</a></p></li>
+<li><p><a class="reference internal" href="#background-subtraction">Background subtraction</a></p></li>
+<li><p><a class="reference internal" href="#i-q-calculation">I(Q) calculation</a></p></li>
+<li><p><a class="reference internal" href="#wedge-calculation">Wedge calculation</a></p></li>
+<li><p><a class="reference internal" href="#data-stitching">Data stitching</a></p></li>
+<li><p><a class="reference internal" href="#general-commands">General commands</a></p></li>
+</ul>
+</div></blockquote>
+<section id="reduction-script">
+<span id="id2"></span><h2>Reduction script<a class="headerlink" href="#reduction-script" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mantid</span>
+<span class="kn">from</span> <span class="nn">mantid.simpleapi</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">reduction_workflow.instruments.sans.hfir_command_interface</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">GPSANS</span><span class="p">()</span>
+<span class="n">SetSampleDetectorDistance</span><span class="p">(</span><span class="mf">1802.5</span><span class="p">)</span>
+<span class="n">SetWavelength</span><span class="p">(</span><span class="mf">4.86</span><span class="p">,</span> <span class="mf">0.13</span><span class="p">)</span>
+<span class="n">NoSolidAngle</span><span class="p">()</span>
+<span class="n">NoNormalization</span><span class="p">()</span>
+<span class="n">SetAbsoluteScale</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">AzimuthalAverage</span><span class="p">(</span><span class="n">n_bins</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_subpix</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">log_binning</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">IQxQy</span><span class="p">(</span><span class="n">nbins</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">SetWedges</span><span class="p">(</span><span class="n">number_of_wedges</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">wedge_angle</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">wedge_offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">SetBeamCenter</span><span class="p">(</span><span class="mf">95.5</span><span class="p">,</span> <span class="mf">127.5</span><span class="p">)</span>
+<span class="n">NoSensitivityCorrection</span><span class="p">()</span>
+<span class="n">SetTransmission</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">ThetaDependentTransmission</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">TransmissionDarkCurrent</span><span class="p">(</span><span class="s2">&quot;HiResSANS_exp5_scan0032_0001.xml&quot;</span><span class="p">)</span>
+<span class="n">DataPath</span><span class="p">(</span><span class="s2">&quot;/SNS/users/m2d&quot;</span><span class="p">)</span>
+<span class="n">AppendDataFile</span><span class="p">([</span><span class="s2">&quot;/SNS/users/m2d/scan30test1.xml&quot;</span><span class="p">])</span>
+<span class="n">SaveIq</span><span class="p">()</span>
+<span class="n">Reduce</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">hfir_command_interface</span></code> import statement gives us access to the various commands we will use to set up the reduction process.</p>
+<p>The first important part of the script is to declare which instrument you are using.
+This will define the general flow of the reduction process. In this particular case, this is done by calling <code class="docutils literal notranslate"><span class="pre">GPSANS()</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">DataPath()</span></code> command sets the directory where the data file will be found.
+Once this has been done, only the name of the data files need to be supplied to the various reduction commands.</p>
+<p>The rest of the commands are setting up options for the reduction. Those commands do not need to be typed in any particular order. They only set options and define the reduction process that will be used later when processing each data file. See the list of commands for more details.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">AppendDataFile()</span></code> command appends a data file to the list of files to be reduced. The reducer can process any number of data files, and the same reduction process will be applied to each of them.
+The <code class="docutils literal notranslate"><span class="pre">Reduce()</span></code> command tell the reducer to start the reduction process. Since this command does the actual execution, it needs to be the last command in the reduction script.</p>
+</section>
+<section id="reduction-commands">
+<span id="id3"></span><h2>Reduction commands<a class="headerlink" href="#reduction-commands" title="Link to this heading">¶</a></h2>
+<p>The following is a list of reduction commands to apply corrections to the data and produce <span class="math notranslate nohighlight">\(I(Q)\)</span>.</p>
+<section id="instrument-selection">
+<span id="id4"></span><h3>Instrument Selection<a class="headerlink" href="#instrument-selection" title="Link to this heading">¶</a></h3>
+<p>Since each instrument has its own configuration parameters, the first command called is the name of the instrument.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">GPSANS()</span></code></dt><dd><p>Sets up the GPSANS reduction options.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BIOSANS()</span></code></dt><dd><p>Sets up the BIOSANS reduction options.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">EQSANS()</span></code></dt><dd><p>Sets up the EQSANS reduction options.</p>
+</dd>
+</dl>
+</section>
+<section id="beam-center">
+<span id="id5"></span><h3>Beam Center<a class="headerlink" href="#beam-center" title="Link to this heading">¶</a></h3>
+<p>Options for finding the beam center</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">SetBeamCenter(x,y)</span></code></dt><dd><p>Sets the beam center location to be used, in pixel coordinates.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DirectBeamCenter(datafile)</span></code></dt><dd><p>Finds the beam center using the direct beam method. The position of the beam center p is given by</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(p(x,y) = \frac{\sum_i I_i \ d_i(x,y)}{\sum_i I_i}\)</span></p>
+</div></blockquote>
+<p>where <code class="docutils literal notranslate"><span class="pre">i</span></code> runs over all pixels within the largest square detector area centered on the initial guess for the beam center position. The initial guess is the center of the detector. <span class="math notranslate nohighlight">\(I_i\)</span> is the detector count for pixel <code class="docutils literal notranslate"><span class="pre">i</span></code>, and <span class="math notranslate nohighlight">\(d_i(x,y)\)</span> is the pixel coordinates. The calculation above is repeated iteratively by replacing the initial guess with the position found with the previous iteration. The process stops when the difference between the positions found with two consecutive iterations is smaller than 0.25 pixel.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ScatteringBeamCenter(datafile,</span> <span class="pre">beam_radius=3.0)</span></code></dt><dd><p>Finds the beam center using the scattered beam method. The process is identical to the direct beam method, with the only difference being that the pixels within a distance R (the <code class="docutils literal notranslate"><span class="pre">beam_radius</span></code> parameter) of the beam center guess are excluded from the calculation. The direct beam is thus excluded and only the scattered data is used.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">TotalChargeNormalization(normalize_to_beam=True,</span> <span class="pre">beam_file='')</span></code></dt><dd><p>[<strong>EQSANS only</strong>] Specifies that we want to normalize by the total proton charge, using the specified <code class="docutils literal notranslate"><span class="pre">beam_file</span></code> for the beam profile.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BeamMonitorNormalization(reference_flux_file)</span></code></dt><dd><p>[<strong>EQSANS only</strong>] Specifies that we want to normalize by the beam monitor, using the specified reference flux file.</p>
+</dd>
+</dl>
+</section>
+<section id="normalization-options">
+<span id="id6"></span><h3>Normalization options<a class="headerlink" href="#normalization-options" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">TimeNormalization()</span></code></dt><dd><p>Tells the reducer to normalize the data to counting time.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MonitorNormalization()</span></code></dt><dd><p>Tells the reducer to normalize the data to the beam monitor.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">NoNormalization()</span></code></dt><dd><p>Tells the reducer not to normalize the data.</p>
+</dd>
+</dl>
+</section>
+<section id="absolute-normalization">
+<span id="id7"></span><h3>Absolute Normalization<a class="headerlink" href="#absolute-normalization" title="Link to this heading">¶</a></h3>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">SetAbsoluteScale(factor=1.0)</span></code></dt><dd><p>Sets a multiplicative scale factor to obtain I(Q) in absolute scale.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SetDirectBeamAbsoluteScale(direct_beam,</span> <span class="pre">beamstop_radius=None,</span> <span class="pre">attenuator_trans=1.0,</span> <span class="pre">sample_thickness=None,</span> <span class="pre">apply_sensitivity=False)</span></code></dt><dd><p>Tells the reducer to use the direct beam method to compute the absolute scale factor. The direct_beam parameter is a valid file path to the direct beam data file. attenuator_trans is the attenuator transmission. The sample_thickness should be given in cm. If apply_sensitivity=True, the sensitivity correction will be applied to the direct beam data before the absolute scale factor is computed.</p>
+<p>The absolute cross-section in 1/cm is computed after all corrections including the transmission correction have been applied to the sample data. It is given by:</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(d\Sigma/d\Omega = \frac{I(Q)}{KD}\)</span></p>
+</div></blockquote>
+<p>where <em>D</em> is the sample thickness in <em>cm</em> and <em>K</em> is given by</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(K=N \ \Delta\Omega\)</span></p>
+</div></blockquote>
+<p>where <em>N</em> is the total empty beam detector counts per monitor count divided by the attenuation factor at the used wavelength, and <span class="math notranslate nohighlight">\(\Delta\Omega\)</span> is the square of the ratio of the pixel size to the sample-detector distance.</p>
+</dd>
+</dl>
+</section>
+<section id="dark-current-subtraction">
+<span id="id8"></span><h3>Dark current subtraction<a class="headerlink" href="#dark-current-subtraction" title="Link to this heading">¶</a></h3>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">NoDarkCurrent()</span></code></dt><dd><p>Lets the reducer know that no dark current should be subtracted.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DarkCurrent(datafile)</span></code></dt><dd><p>Specifies which data file to use for the dark current. The dark current is subtracted pixel by pixel by normalizing the dark current data by counting time, as follows:</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(I'(x,y) = I_{data}(x,y) - \frac{T_{data}}{T_{dc}} \ I_{dc}(x,y)\)</span></p>
+</div></blockquote>
+<p>where the T-values are the counting times for the data set and the dark current (dc).</p>
+</dd>
+</dl>
+</section>
+<section id="pixel-masking">
+<span id="id9"></span><h3>Pixel masking<a class="headerlink" href="#pixel-masking" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Mask(nx_low=0,</span> <span class="pre">nx_high=0,</span> <span class="pre">ny_low=0,</span> <span class="pre">ny_high=0,</span> <span class="pre">component_name=None)</span></code></dt><dd><p>A band of pixels on each side of the detector is masked according to the input parameters.
+By default this is done only for the main detector (See IDF tag ‘detector-name’). For Biosans one can specify ‘component_name=”wing_detector”’.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MaskRectangle(x_min,</span> <span class="pre">x_max,</span> <span class="pre">y_min,</span> <span class="pre">y_max)</span></code></dt><dd><p>Masks a rectangular region on the detector defined by the given pixel numbers.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MaskDetectors(det_list)</span></code></dt><dd><p>Masks the given detector IDs.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MaskDetectorSide(side_to_mask=None)</span></code></dt><dd><p>Masks a detector plane. Choices are ‘Front’, ‘Back’, and ‘None’.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">MaskComponent(component_name)</span></code></dt><dd><p>Masks the given component_name. See the instrument IDF for the correct component name. Useful for BIOSANS to mask the ‘wing_detector’.</p>
+</dd>
+</dl>
+</section>
+<section id="sensitivity-correction">
+<span id="id10"></span><h3>Sensitivity correction<a class="headerlink" href="#sensitivity-correction" title="Link to this heading">¶</a></h3>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">SensitivityCorrection(flood_data,</span> <span class="pre">min_sensitivity=0.5,</span> <span class="pre">max_sensitivity=1.5,</span> <span class="pre">dark_current=None,</span> <span class="pre">use_sample_dc=False)</span></code></dt><dd><p>The relative detector efficiency is computed the following way</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(S(x,y) = \frac{I_{flood}(x,y)}{1/N_{pixels} \ \sum_{i,j} \ I_{flood}(i,j)}\)</span></p>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(I_{flood}(x,y)\)</span> is the pixel count of the flood data in pixel (x,y). If a minimum and/or maximum sensitivity is given, the pixels having an efficiency outside the given limits are masked and the efficiency is recomputed without using those pixels.
+The sample data is then corrected by dividing the intensity in each pixels by the efficiency S</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(I'_{sample}(x,y) = \frac{I_{sample}(x,y)}{S(x,y)}\)</span></p>
+</div></blockquote>
+<p>The pixels found to have an efficiency outside the given limits are also masked in the sample data so that they don’t enter any subsequent calculations.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">use_sample_dc</span></code> is set to True, the dark current data that was chosen to be subtracted from the sample data will also be subtracted from the flood data. The subtraction is done before the sensitivity is calculated. Alternatively, a different file can be selected by specifying the <code class="docutils literal notranslate"><span class="pre">dark_current</span></code> parameter.</p>
+<p>If the user chose to use the solid angle correction for the reduction process, that correction will be applied to the flood data before the sensitivity is calculated.</p>
+<p><strong>Note</strong>: The solid angle correction is either not applied at all, or applied to both the flood data to calculate the sensitivity correction and applied to the sample data as part of the reduction process.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">NoSensitivityCorrection()</span></code></dt><dd><p>Tells the reducer not to correct for detector sensitivity.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SetSensitivityBeamCenter(x,y)</span></code></dt><dd><p>Sets the beam center for the flood data (may be different from the sample data).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SensitivityDirectBeamCenter(datafile)</span></code></dt><dd><p>Tells the reducer to use the direct beam center finding method for the flood data (see DirectBeamCenter for details).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SensitivityScatteringBeamCenter(datafile,</span> <span class="pre">beam_radius=3.0)</span></code></dt><dd><p>Tells the reducer to use the scattering beam center finding method for the flood data (see ScatteringBeamCenter for details).</p>
+</dd>
+</dl>
+</section>
+<section id="solid-angle-correction">
+<span id="id11"></span><h3>Solid angle correction<a class="headerlink" href="#solid-angle-correction" title="Link to this heading">¶</a></h3>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">SolidAngle(detector_tubes=False,</span> <span class="pre">detector_wing=False)</span></code></dt><dd><p>Tells the reducer to apply the solid angle correction. The solid angle correction is applied as follows:</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(I'(x,y) = \frac{I(x,y)}{\cos^3(2\theta)}\)</span></p>
+<p><span class="math notranslate nohighlight">\(\sigma_{i'(x,y)} = \frac{\sigma_{I(x,y)}}{|\cos^3(2\theta)|}\)</span></p>
+</div></blockquote>
+<p>If <code class="docutils literal notranslate"><span class="pre">detector_tubes</span></code> is selected, the correction is calculated according to a tube geometry. The cosine term above then becomes:</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(\cos^3(2\theta) \rightarrow \cos^2(2\theta) \cos(\alpha)\)</span></p>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(\alpha\)</span>: is the angle between the sample-to-pixel vector and its projection on the X-Z plane.</p>
+<p><code class="docutils literal notranslate"><span class="pre">detector_wing=True</span></code> is used only for BioSANS wing detector.</p>
+</dd>
+</dl>
+<figure class="align-right" style="width: 10cm">
+<img alt="Definition of angles for tube solid angle correction." src="../_images/sans_solid_angle_correction.png" />
+</figure>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">NoSolidAngle()</span></code></dt><dd><p>Tells the reducer not to apply the solid angle correction.</p>
+</dd>
+</dl>
+</section>
+<section id="transmission-correction">
+<span id="id12"></span><h3>Transmission correction<a class="headerlink" href="#transmission-correction" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">SetTransmission(trans,</span> <span class="pre">error)</span></code></dt><dd><p>[<strong>HFIR only</strong>] Sets the sample transmission. For each detector pixel, the transmission correction is applied as follows:</p>
+</dd>
+</dl>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}I'(x,y) = \frac{I(x,y)}{T^{[1+\sec(2\theta)]/2}}\\\sigma_{I'(x,y)} = \left[ \left[ \frac{\sigma_I}{T^{[1+\sec(2\theta)]/2}} \right]^2 + \left[ \frac{I(x,y)\sigma_T\left( \frac{1+\sec(2\theta)}{2}\right)}{T^{[\sec(2\theta)-1]/2}} \right]^2 \right]^{1/2}\end{aligned}\end{align} \]</div>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">DirectBeamTransmissionsample_file,</span> <span class="pre">empty_file,</span> <span class="pre">beam_radius=3.0,</span> <span class="pre">theta_dependent=True,</span> <span class="pre">use_sample_dc=True)</span></code></dt><dd><p>Tells the reducer to use the direct beam method to calculate the sample transmission. The transmission is calculated as follows:</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(T=\frac{\sum_{i; \ d(i,j)&lt;R} \sum_j{\frac{I_{sample}(i,j)}{T_{sample}}}}{\sum_{i; \ d(i,j)&lt;R} \sum_j{\frac{I_{beam}(i,j)}{T_{beam}}}}\)</span></p>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(I_{sample}\)</span> and <span class="math notranslate nohighlight">\(I_{beam}\)</span> are the pixel counts for the sample data set and the direct beam data set, respectively. The sums for each data set runs only over the pixels within a distance <code class="docutils literal notranslate"><span class="pre">R=beam_radium</span></code> of the beam center. <span class="math notranslate nohighlight">\(T_{sample}\)</span> and <span class="math notranslate nohighlight">\(T_{sample}\)</span> are the counting times for each of the two data sets. If the user chose to normalize the data using the beam monitor when setting up the reduction process, the beam monitor will be used to normalize the sample and direct beam data sets instead of the timer.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">use_sample_dc</span></code> is set to True, the dark current data that was chosen to be subtracted from the sample data will also be subtracted from the flood data.</p>
+<p>Once the transmission is calculated, it is applied to the input data set in the same way as described for <code class="docutils literal notranslate"><span class="pre">SetTransmission()</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BeamSpreaderTransmission(sample_spreader,</span> <span class="pre">direct_spreader,</span> <span class="pre">sample_scattering,</span> <span class="pre">direct_scattering,</span> <span class="pre">spreader_transmission=1.0,</span> <span class="pre">spreader_transmission_err=0.0,</span> <span class="pre">theta_dependent=True)</span></code></dt><dd><p>Tells the reducer to use the beam spreader (“glassy carbon”) method to calculate the sample transmission. The transmission is calculated as follows:</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(T=\frac{N_{gc, sample}/T_{gc, sample} - T_{gc}N_{sample}/T_{sample}}{N_{gc, empty}/T_{gc, empty} - T_{gc}N_{empty}/T_{empty}}\)</span></p>
+</div></blockquote>
+<p>where <span class="math notranslate nohighlight">\(N_{gc, sample}\)</span> and <span class="math notranslate nohighlight">\(N_{gc, empty}\)</span> are the sums of all pixel counts for the sample and direct beam data sets with glass carbon, and <span class="math notranslate nohighlight">\(N_{sample}\)</span> and <span class="math notranslate nohighlight">\(N_{empty}\)</span> are the sums of all the pixel counts for the sample and direct beam without glassy carbon. The T values are the corresponding counting times. If the user chose to normalize the data using the beam monitor when setting up the reduction process, the beam monitor will be used to normalize all data sets instead of the timer.</p>
+<p>If the user chose to use a dark current data set when starting the reduction process, that dark current data will be subtracted from all data sets before the transmission is calculated.</p>
+<p>Once the transmission is calculated, it is applied to the input data set in the same way as described for <code class="docutils literal notranslate"><span class="pre">SetTransmission()</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">NoTransmission()</span></code></dt><dd><p>Tells the reducer not to apply a transmission correction.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">TransmissionDarkCurrent(dark_current)</span></code></dt><dd><p>Sets the dark current to be subtracted for the transmission measurement.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ThetaDependentTransmission(theta_dependence=True)</span></code></dt><dd><p>If set to False, the transmission correction will be applied by dividing each pixel by the zero-angle transmission, without theta dependence.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SetTransmissionBeamCenter(x,</span> <span class="pre">y)</span></code></dt><dd><p>Sets the beam center position to be used when applying the transmission correction. The beam center position of the sample data is otherwise used.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">TransmissionDirectBeamCenter(datafile)</span></code></dt><dd><p>Specifies a direct beam data file to use to determine a beam center to use when applying the transmission correction. The beam center position of the sample data is otherwise used.</p>
+</dd>
+</dl>
+</section>
+<section id="background-subtraction">
+<span id="id13"></span><h3>Background subtraction<a class="headerlink" href="#background-subtraction" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Background(datafile)</span></code></dt><dd><p>The same reduction steps that are applied to the sample data are applied to the background data set. Those are the dark current subtraction, the data normalization, applying the detector mask, the sensitivity correction, the solid angle correction and the transmission correction. Although the same sensitivity correction is used for both sample and background, the background transmission is calculated separately from the sample transmission. Once all those reduction steps are applied to the background data set, the resulting background is subtracted from the sample data.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">NoBackground()</span></code></dt><dd><p>Tells the reducer not to subtract background.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">NoBckTransmission()</span></code></dt><dd><p>Specifies that we do not want a transmission correction for the background.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SetBckTransmission(trans,</span> <span class="pre">error,</span> <span class="pre">theta_dependent=True)</span></code></dt><dd><p>Sets the background transmission.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BckDirectBeamTransmission(sample_file,</span> <span class="pre">empty_file,</span> <span class="pre">beam_radius=3.0,</span> <span class="pre">theta_dependent=True)</span></code></dt><dd><p>Similar to <code class="docutils literal notranslate"><span class="pre">DirectBeamTransmission</span></code>, this command sets the options to measure the background transmission.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BckBeamSpreaderTransmission(sample_spreader,</span> <span class="pre">direct_spreader,</span> <span class="pre">sample_scattering,</span> <span class="pre">direct_scattering,</span> <span class="pre">spreader_transmission=1.0,</span> <span class="pre">spreader_transmission_err=0.0,</span> <span class="pre">theta_dependent=True)</span></code></dt><dd><p>Similar to <code class="docutils literal notranslate"><span class="pre">BeamSpreaderTransmission</span></code>, this command sets the options to measure the background transmission.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BckTransmissionDarkCurrent(dark_current)</span></code></dt><dd><p>Similar to <code class="docutils literal notranslate"><span class="pre">TransmissionDarkCurrent</span></code>, this command sets the dark current for the background.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BckThetaDependentTransmission(theta_dependence=True)</span></code></dt><dd><p>Similar to <code class="docutils literal notranslate"><span class="pre">ThetaDependentTransmission</span></code>, this command sets the theta-dependence option of the transmission correction for the background.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SetBckTransmissionBeamCenter(x,</span> <span class="pre">y)</span></code></dt><dd><p>Similar to <code class="docutils literal notranslate"><span class="pre">SetTransmissionBeamCenter</span></code>, sets the beam center position to be used when applying the transmission correction. The beam center position of the background data is otherwise used.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BckTransmissionDirectBeamCenter(datafile)</span></code></dt><dd><p>Similar to <code class="docutils literal notranslate"><span class="pre">TransmissionDirectBeamCenter</span></code>,  specifies a direct beam data file to use to determine a beam center to use when applying the transmission correction. The beam center position of the background data is otherwise used.</p>
+</dd>
+</dl>
+</section>
+<section id="i-q-calculation">
+<span id="id14"></span><h3>I(Q) calculation<a class="headerlink" href="#i-q-calculation" title="Link to this heading">¶</a></h3>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">AzimuthalAverage(binning=None,</span> <span class="pre">suffix=&quot;_Iq&quot;,</span> <span class="pre">error_weighting=False,</span> <span class="pre">n_bins=100,</span> <span class="pre">n_subpix=1,</span> <span class="pre">log_binning=False,</span> <span class="pre">align_log_with_decades=False)</span></code></dt><dd><p>Sets the options for azimuthal averaging. The binning parameter sets the binning of the output I(q) distribution in the following format: <span class="math notranslate nohighlight">\(Q_{min}, \Delta Q, Q_{max}\)</span> (the binning will be found automatically if the <code class="docutils literal notranslate"><span class="pre">binning</span></code> parameter is not supplied). When letting the binning be calculated automatically, setting <code class="docutils literal notranslate"><span class="pre">log_binning=True</span></code> will tell the reducer to find the best log binning. Setting <code class="docutils literal notranslate"><span class="pre">align_log_with_decades=True</span></code> will ensure that <code class="docutils literal notranslate"><span class="pre">q</span></code> points fall on decades. The <code class="docutils literal notranslate"><span class="pre">suffix</span></code> parameter sets the suffix appended to the I(q) workspace name. If <code class="docutils literal notranslate"><span class="pre">error_weighting</span></code> is set to True, the pixel counts will be weighted by a function of the error when computing I(q) (see below).</p>
+<p>The binning of the output <em>I(Q)</em> distribution is defined by the user.
+It runs from <span class="math notranslate nohighlight">\(Q_{min}\)</span> to <span class="math notranslate nohighlight">\(Q_{max}\)</span> in steps of <span class="math notranslate nohighlight">\(\Delta Q\)</span>.
+Each pixel is divided in <span class="math notranslate nohighlight">\(N_{sub} \times N_{sub}\)</span> sub-pixels. Each sub-pixel is assigned a count equal to  of the original pixel count.</p>
+<p>The intensity I(Q) in each Q bin is given by</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(I(Q_j) = \frac{1}{\sum_i \ w} \ \sum_i \ wI_i\)</span></p>
+</div></blockquote>
+<p>where the sum runs over all sub-pixels <em>i</em> such that <span class="math notranslate nohighlight">\(Q_j &lt; q_i &lt; Q_{j+1}\)</span>, where <span class="math notranslate nohighlight">\(q_i\)</span> is the q-value of the given sub-pixel:</p>
+<blockquote>
+<div><p><span class="math notranslate nohighlight">\(q_i = \frac{4\pi \ \sin(\theta)}{\lambda}\)</span></p>
+</div></blockquote>
+<p>The <em>w</em> factor is a weight that is set to 1 by default. Alternatively, pixels can be weighted as a function of their error by setting <span class="math notranslate nohighlight">\(w=1/\Delta I_i\)</span>.</p>
+<p>The resolution in Q is computed using Mildner-Carpenter.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">IQxQy(nbins=100,</span> <span class="pre">log_binning=False)</span></code></dt><dd><p>Option to produce the reduced <cite>I(Qx, Qy)</cite>. If <cite>log_binning</cite> is <cite>True</cite> the output <cite>QxQy</cite> will be logarithmic of base 10. By default the output <cite>QxQy</cite> is linear.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">NoIQxQy()</span></code></dt><dd><p>Turns off the option to produce the reduced I(Qx, Qy).</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SaveIq(output_dir)</span></code></dt><dd><p>Tells the reducer to save the output I(q) to an ascii file. The file will have a name similar to the input file, with “_Iq” appended to it. The file will be located in the specified directory.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">NoSaveIq()</span></code></dt><dd><p>Do not save the I(q) result.</p>
+</dd>
+</dl>
+</section>
+<section id="wedge-calculation">
+<span id="id15"></span><h3>Wedge calculation<a class="headerlink" href="#wedge-calculation" title="Link to this heading">¶</a></h3>
+<p>Wedge calculation is done as part of the azimuthal averaging algorithm. The image below shows how the wedges are defined. A wedge includes both the forward and backward direction relative to the beam center. Any number of wedges can be used. They will be uniformly distributed around <span class="math notranslate nohighlight">\(2\pi\)</span>. Each wedge is computed independently, so overlapping wedges are possible. As shown on the figure below, the angular offset is definited with respect to the x-axis.</p>
+<figure class="align-right" style="width: 10cm">
+<img alt="Wedge definition." src="../_images/SANS_wedge_definition.png" />
+</figure>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">SetWedges(number_of_wedges=2,</span> <span class="pre">wedge_angle=30.0,</span> <span class="pre">wedge_offset=0.0)</span></code></dt><dd><p>Specifies I(q) wedges to compute.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">number_of_wedges</span></code>: number of wedges to calculate</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wedge_angle</span></code>: opening angle of each wedge, in degrees</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wedge_offset</span></code>: angular offset relative to the x-axis, defining the first wedge.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="data-stitching">
+<span id="id16"></span><h3>Data Stitching<a class="headerlink" href="#data-stitching" title="Link to this heading">¶</a></h3>
+<p>Data stitching can be done using the SANS reduction UI, or by calling the underlying command directly. The stitching process lets you pick an overlap region that will be used to scale data sets to each other. For any number of input data sets, the data sets are scaled to the first set in the input series. The second set is scaled to the first set, then the third set is scaled to the modified second set. The process continues in pairs until all the data sets are rescaled.</p>
+<p>In the process of scaling two data sets, all the points of the lower Q set with a Q value lower than the higher bound of the overlap region are kept. All the points of the higher Q set with a Q value higher than the lower bound of the overlap region are kept (see image). All data points in the overlap region are kept.</p>
+<figure class="align-right" style="width: 10cm">
+<img alt="Description of stitching process." src="../_images/stitching_description.png" />
+</figure>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Stitch(data_list=[],</span> <span class="pre">q_min=None,</span> <span class="pre">q_max=None,</span> <span class="pre">output_workspace=None,</span> <span class="pre">scale=None,</span> <span class="pre">save_output=False)</span></code></dt><dd><p>Stitches a set of SANS data sets</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data_list</span></code>: List of workspaces to stitch.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">q_min</span></code>: Minimum Q-value of the overlap between two consecutive data sets. The q_min argument must be an array when stitching more than two data sets. The length of the array should be 1 less than the number of data sets.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">q_max</span></code>: Maximum Q-value of the overlap between two consecutive data sets (must be an array for more than two data sets). The q_max argument must be an array when stitching more than two data sets. The length of the array should be 1 less than the number of data sets.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output_workspace</span></code>: Name of the output workspace containing the stitched data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scale</span></code>: Scaling factor. The scaling factor should either be a single number or a list of length equal to the number of data sets. The former will scale everything by the given factor, while the latter will assign the given scaling factors to the data sets.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">save_output</span></code>: If true, the output will be saved in the current working directory.</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="general-commands">
+<span id="id17"></span><h3>General commands<a class="headerlink" href="#general-commands" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">DataPath(path)</span></code></dt><dd><p>Sets the directory containing all data files.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Reduce()</span></code></dt><dd><p>Tells the reducer to execute the reduction process.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">AppendDataFile(datafile,</span> <span class="pre">workspace=None)</span></code></dt><dd><p>Appends a data file to the list of files to be reduced.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SetSampleDetectorOffset(distance)</span></code></dt><dd><p>Sets an additive sample-detector distance offset, in mm.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SetSampleDetectorDistance(distance)</span></code></dt><dd><p>Sets the sample-detector distance, in mm. If set, this distance will take priority over the distance found in the data file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SetWavelength(wavelength,</span> <span class="pre">spread)</span></code></dt><dd><p>Sets the wavelength, in Angstrom. If set, this wavelength will take priority over the wavelength found in the data file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ResetWavelength()</span></code></dt><dd><p>Resets the wavelength to the value found in the data file.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DivideByThickness(thickness=1.0)</span></code></dt><dd><p>Specifies a thickness to normalize the output I(q) by, in cm.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">PerformFlightPathCorrection(do_correction=True)</span></code></dt><dd><p>Specifies that we want to perform the flight path correction.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SetTOFTailsCutoff(low_cut=0.0,</span> <span class="pre">high_cut=0.0)</span></code></dt><dd><p>Specifies the TOF width to cut on each side of the TOF distribution.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">UseConfigTOFTailsCutoff(use_config=True)</span></code></dt><dd><p>Use the TOF cut specified in the instrument configuration on /SNS/EQSANS.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SkipTOFCorrection(skip=True)</span></code></dt><dd><p>Skips the TOF correction. This is likely to give you bad results unless you know what you are doing.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">UseConfigMask(use_config=True)</span></code></dt><dd><p>Use the mask configuration defined in the instrument configuration on /SNS/EQSANS.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">SetWavelengthStep(step=0.1)</span></code></dt><dd><p>Sets the wavelength step size used when binning the TOF data after converting to wavelength. The I(q) is computed independently for each wavelength bin and combined afterwards.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">UseConfig(use_config=True)</span></code></dt><dd><p>Use the instrument configuration on /SNS/EQSANS.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">CombineTransmissionFits(combine_frames=True)</span></code></dt><dd><p>If True and we are running in frame-skipping mode, both frames will be processed together when measuring the transmission.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">BckCombineTransmissionFits(combine_frames=True)</span></code></dt><dd><p>Similar to <code class="docutils literal notranslate"><span class="pre">CombineTransmissionFits</span></code>, but for the background.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Resolution(sample_aperture_diameter=10.0)</span></code></dt><dd><p>Specifies that we want to q-resolution to be computed.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">LoadNexusInstrumentXML(True)</span></code></dt><dd><p>By default if the instrument definition is present in the NeXus file it is read. However one can pass <code class="docutils literal notranslate"><span class="pre">LoadNexusInstrumentXML(False)</span></code> to make sure the local IDF is read.</p>
+</dd>
+</dl>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="NexusFile.html" title="Previous Chapter: Nexus File"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Nexus File</span>
+    </a>
+  </li>
+  <li>
+    <a href="PSIMuonBinFile.html" title="Next Chapter: PSI Muon Bin File"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">PSI Muon Bin File &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

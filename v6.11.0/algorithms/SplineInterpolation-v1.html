@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>SplineInterpolation v1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=06de18c4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="SplineSmoothing v1" href="SplineSmoothing-v1.html" />
+    <link rel="prev" title="SplineBackground v1" href="SplineBackground-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.11</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">SplineInterpolation v1</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="splineinterpolation-v1">
+<span id="algm-splineinterpolation"></span><span id="algm-splineinterpolation-v1"></span><h1>SplineInterpolation v1<a class="headerlink" href="#splineinterpolation-v1" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id1">Summary</a></p>
+<ul>
+<li><p><a class="reference internal" href="#see-also" id="id2">See Also</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#properties" id="id3">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id4">Description</a></p>
+<ul>
+<li><p><a class="reference internal" href="#for-histogram-workspaces" id="id5">For Histogram Workspaces</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#usage" id="id6">Usage</a></p></li>
+<li><p><a class="reference internal" href="#source" id="id7">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Interpolates a set of spectra onto a spline defined by a second input workspace. Optionally, this algorithm can also calculate derivatives up to order 2 as a side product</p>
+<section id="see-also">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="Fit-v1.html#algm-fit"><span class="std std-ref">Fit</span></a>, <a class="reference internal" href="SplineBackground-v1.html#algm-splinebackground"><span class="std std-ref">SplineBackground</span></a>, <a class="reference internal" href="SplineSmoothing-v1.html#algm-splinesmoothing"><span class="std std-ref">SplineSmoothing</span></a></p>
+</section>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>WorkspaceToMatch</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>The workspace which defines the points of the spline.</p></td>
+</tr>
+<tr class="row-odd"><td><p>WorkspaceToInterpolate</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>The workspace on which to perform the interpolation algorithm.</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>The workspace containing the calculated points and derivatives</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputWorkspaceDeriv</p></td>
+<td><p>Output</p></td>
+<td><p>WorkspaceGroup</p></td>
+<td></td>
+<td><p>The workspace containing the calculated derivatives</p></td>
+</tr>
+<tr class="row-even"><td><p>DerivOrder</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>2</p></td>
+<td><p>Order to derivatives to calculate.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Linear2Points</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Set to true to perform linear interpolation if only 2 points are present.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>The algorithm performs interpolation of points onto a cubic spline. The
+algorithm takes two input workspaces: one that is used to define the
+spline and one that contains a number of spectra to be interpolated onto
+the spline.</p>
+<p>If multiple spectra are defined in the WorkspaceToInterpolate workspace,
+they will all be interpolated against the first spectra in
+WorkspaceToMatch.</p>
+<p>Optionally, this algorithm can also calculate the first and second
+derivatives of each of the interpolated points as a side product.
+Setting the DerivOrder property to zero will force the algorithm to
+calculate no derivatives.</p>
+<p>For the points outside the x-axis range covered by the WorkspaceToInterpolate, flat extrapolation will be performed.</p>
+<p>The algorithm can also perform linear interpolation by enabling <cite>Linear2Points</cite> if the WorkspaceToInterpolate has only 2 bins.
+Only 1st order derivative can be computed in this case. X-axis of the workspace to match must be sorted in ascending order.</p>
+<section id="for-histogram-workspaces">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">For Histogram Workspaces</a><a class="headerlink" href="#for-histogram-workspaces" title="Link to this heading">¶</a></h3>
+<p>If the input workspace contains histograms, rather than data points,
+then SplineInterpolation will automatically convert the input to point
+data for interpolation. The original inputs however will not be modified.
+The output returned will be in the same format as the input.</p>
+<p>Histogram workspaces being interpolated will show a warning when the
+range of the data is equal to the size of the workspace to match, but
+has finer bin boundaries. This is because histogram data is converted to
+point data using the average of the bin boundaries. This will cause some
+values to fall outside of the range of the spline when fine bin
+boundaries are used.</p>
+</section>
+</section>
+<section id="usage">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Usage</a><a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p><strong>Example - interpolate between points in one workspace to match a reference workspace:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1">#create a smooth function for interpolation</span>
+<span class="n">dataX1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.07</span>
+<span class="n">dataY1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">dataX1</span><span class="p">)</span>
+<span class="n">spline_ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">dataX1</span><span class="p">,</span> <span class="n">dataY1</span><span class="p">)</span>
+
+<span class="c1">#create some random points to interpolate between</span>
+<span class="n">dataX2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.07</span>
+<span class="n">dataY2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">(</span><span class="n">dataX2</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">dataX2</span><span class="p">,</span> <span class="n">dataY2</span><span class="p">)</span>
+
+<span class="c1">#interpolate using the reference workspace</span>
+<span class="n">interpolated_ws</span> <span class="o">=</span> <span class="n">SplineInterpolation</span><span class="p">(</span><span class="n">WorkspaceToMatch</span><span class="o">=</span><span class="n">spline_ws</span><span class="p">,</span> <span class="n">WorkspaceToInterpolate</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">DerivOrder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Example - output the derivatives of the interpolated workspace:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1">#create a smooth function for interpolation</span>
+<span class="n">dataX1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.07</span>
+<span class="n">dataY1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">dataX1</span><span class="p">)</span>
+<span class="n">spline_ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">dataX1</span><span class="p">,</span> <span class="n">dataY1</span><span class="p">)</span>
+
+<span class="c1">#create some random points to interpolate between</span>
+<span class="n">dataX2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.07</span>
+<span class="n">dataY2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random_sample</span><span class="p">(</span><span class="n">dataX2</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">dataX2</span><span class="p">,</span> <span class="n">dataY2</span><span class="p">)</span>
+
+<span class="c1">#interpolate using the reference workspace and output a group workspace of derivatives for each spectrum</span>
+<span class="n">interpolated_ws</span> <span class="o">=</span> <span class="n">SplineInterpolation</span><span class="p">(</span><span class="n">WorkspaceToMatch</span><span class="o">=</span><span class="n">spline_ws</span><span class="p">,</span> <span class="n">WorkspaceToInterpolate</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">DerivOrder</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">OutputWorkspaceDeriv</span><span class="o">=</span><span class="s1">&#39;derivs&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Example - linear interpolation:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">iws</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="n">NumBanks</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">XMin</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span> <span class="n">XMax</span> <span class="o">=</span> <span class="mi">29</span><span class="p">,</span> <span class="n">BinWidth</span> <span class="o">=</span> <span class="mi">11</span><span class="p">)</span>
+<span class="n">mws</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="n">NumBanks</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">XMin</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">XMax</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">BinWidth</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">ows</span> <span class="o">=</span> <span class="n">SplineInterpolation</span><span class="p">(</span><span class="n">WorkspaceToMatch</span> <span class="o">=</span> <span class="n">mws</span><span class="p">,</span> <span class="n">WorkspaceToInterpolate</span> <span class="o">=</span> <span class="n">iws</span><span class="p">,</span> <span class="n">Linear2Points</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">DerivOrder</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nditer</span><span class="p">(</span><span class="n">ows</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%0.2f</span><span class="s2">&quot;</span><span class="o">%</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>10.30
+10.30
+9.39
+6.66
+3.94
+1.21
+0.30
+0.30
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/Optimization.html">Optimization</a> | <a class="reference external" href="categories/CorrectionFunctions/BackgroundCorrections.html">CorrectionFunctions\BackgroundCorrections</a></p>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/c66b9d75d3432a3fcde604fac070fd25fe61daf8/Framework/CurveFitting/inc/MantidCurveFitting/Algorithms/SplineInterpolation.h">SplineInterpolation.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/c66b9d75d3432a3fcde604fac070fd25fe61daf8/Framework/CurveFitting/src/Algorithms/SplineInterpolation.cpp">SplineInterpolation.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="SplineBackground-v1.html" title="Previous Chapter: SplineBackground v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; SplineBackground v1</span>
+    </a>
+  </li>
+  <li>
+    <a href="SplineSmoothing-v1.html" title="Next Chapter: SplineSmoothing v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">SplineSmoothing v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

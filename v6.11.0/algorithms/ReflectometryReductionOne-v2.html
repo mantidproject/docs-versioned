@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ReflectometryReductionOne v2</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=06de18c4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ReflectometryReductionOneAuto v2" href="ReflectometryReductionOneAuto-v2.html" />
+    <link rel="prev" title="ReflectometryMomentumTransfer v1" href="ReflectometryMomentumTransfer-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.11</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">ReflectometryReductionOne v2</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="reflectometryreductionone-v2">
+<span id="algm-reflectometryreductionone"></span><span id="algm-reflectometryreductionone-v2"></span><h1>ReflectometryReductionOne v2<a class="headerlink" href="#reflectometryreductionone-v2" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id8">Summary</a></p>
+<ul>
+<li><p><a class="reference internal" href="#see-also" id="id9">See Also</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#properties" id="id10">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id11">Description</a></p>
+<ul>
+<li><p><a class="reference internal" href="#conversion-to-wavelength" id="id12">Conversion to Wavelength</a></p></li>
+<li><p><a class="reference internal" href="#create-direct-beam-workspace" id="id13">Create Direct Beam Workspace</a></p></li>
+<li><p><a class="reference internal" href="#create-monitor-workspace" id="id14">Create Monitor Workspace</a></p></li>
+<li><p><a class="reference internal" href="#transmission-correction" id="id15">Transmission Correction</a></p></li>
+<li><p><a class="reference internal" href="#sum-in-q" id="id16">Sum in Q</a></p></li>
+<li><p><a class="reference internal" href="#conversion-to-momentum-transfer-q" id="id17">Conversion to Momentum Transfer (Q)</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#previous-versions" id="id18">Previous Versions</a></p></li>
+<li><p><a class="reference internal" href="#usage" id="id19">Usage</a></p></li>
+<li><p><a class="reference internal" href="#source" id="id20">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Reduces a single TOF/Lambda reflectometry run into a mod Q vs I/I0 workspace. Performs monitor normalization and transmission corrections.</p>
+<section id="see-also">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="ReflectometryReductionOneAuto-v3.html#algm-reflectometryreductiononeauto"><span class="std std-ref">ReflectometryReductionOneAuto</span></a></p>
+</section>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>InputWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Run to reduce.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SummationType</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>SumInLambda</p></td>
+<td><p>The type of summation to perform. Allowed values: [‘SumInLambda’, ‘SumInQ’]</p></td>
+</tr>
+<tr class="row-even"><td><p>ReductionType</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Normal</p></td>
+<td><p>The type of reduction to perform when summing in Q. Allowed values: [‘Normal’, ‘DivergentBeam’, ‘NonFlatSample’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>IncludePartialBins</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If true then partial bins at the beginning and end of the output range are included</p></td>
+</tr>
+<tr class="row-even"><td><p>ThetaIn</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>Angle in degrees</p></td>
+</tr>
+<tr class="row-odd"><td><p>ProcessingInstructions</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Grouping pattern on spectrum numbers to yield only the detectors of interest. See GroupDetectors for details.</p></td>
+</tr>
+<tr class="row-even"><td><p>WavelengthMin</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Wavelength minimum in angstroms</p></td>
+</tr>
+<tr class="row-odd"><td><p>WavelengthMax</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Wavelength maximum in angstroms</p></td>
+</tr>
+<tr class="row-even"><td><p>I0MonitorIndex</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>I0 monitor workspace index</p></td>
+</tr>
+<tr class="row-odd"><td><p>MonitorBackgroundWavelengthMin</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>Wavelength minimum for monitor background subtraction in angstroms.</p></td>
+</tr>
+<tr class="row-even"><td><p>MonitorBackgroundWavelengthMax</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>Wavelength maximum for monitor background subtraction in angstroms.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MonitorIntegrationWavelengthMin</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>Wavelength minimum for integration in angstroms.</p></td>
+</tr>
+<tr class="row-even"><td><p>MonitorIntegrationWavelengthMax</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>Wavelength maximum for integration in angstroms.</p></td>
+</tr>
+<tr class="row-odd"><td><p>NormalizeByIntegratedMonitors</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>Normalize by dividing by the integrated monitors.</p></td>
+</tr>
+<tr class="row-even"><td><p>SubtractBackground</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If true then perform background subtraction</p></td>
+</tr>
+<tr class="row-odd"><td><p>BackgroundProcessingInstructions</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td></td>
+<td><p>These processing instructions will be passed to the background subtraction algorithm</p></td>
+</tr>
+<tr class="row-even"><td><p>BackgroundCalculationMethod</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>PerDetectorAverage</p></td>
+<td><p>The type of background reduction to perform. Allowed values: [‘PerDetectorAverage’, ‘Polynomial’, ‘AveragePixelFit’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>DegreeOfPolynomial</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>Degree of the fitted polynomial.</p></td>
+</tr>
+<tr class="row-even"><td><p>CostFunction</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Least squares</p></td>
+<td><p>The cost function to be passed to the Fit algorithm. Allowed values: [‘Least squares’, ‘Unweighted least squares’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>FirstTransmissionRun</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>First transmission run, or the low wavelength transmission run if SecondTransmissionRun is also provided.</p></td>
+</tr>
+<tr class="row-even"><td><p>SecondTransmissionRun</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>Second, high wavelength transmission run. Optional. Causes the FirstTransmissionRun to be treated as the low wavelength transmission run.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Params</p></td>
+<td><p>Input</p></td>
+<td><p>dbl list</p></td>
+<td></td>
+<td><p>A comma separated list of first bin boundary, width, last bin boundary. These parameters are used for stitching together transmission runs. Values are in wavelength (angstroms). This input is only needed if a SecondTransmission run is provided.</p></td>
+</tr>
+<tr class="row-even"><td><p>StartOverlap</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>Start wavelength for stitching transmission runs together. Only used if a second transmission run is provided.</p></td>
+</tr>
+<tr class="row-odd"><td><p>EndOverlap</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>End wavelength (angstroms) for stitching transmission runs together. Only used if a second transmission run is provided.</p></td>
+</tr>
+<tr class="row-even"><td><p>ScaleRHSWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>Scale the right-hand-side or left-hand-side workspace. Only used if a second transmission run is provided.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TransmissionProcessingInstructions</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td></td>
+<td><p>These processing instructions will be passed to the transmission workspace algorithm</p></td>
+</tr>
+<tr class="row-even"><td><p>CorrectionAlgorithm</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>None</p></td>
+<td><p>The type of correction to perform. Allowed values: [‘None’, ‘PolynomialCorrection’, ‘ExponentialCorrection’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>Polynomial</p></td>
+<td><p>Input</p></td>
+<td><p>dbl list</p></td>
+<td></td>
+<td><p>Coefficients to be passed to the PolynomialCorrection algorithm.</p></td>
+</tr>
+<tr class="row-even"><td><p>C0</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>C0 value to be passed to the ExponentialCorrection algorithm.</p></td>
+</tr>
+<tr class="row-odd"><td><p>C1</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>C1 value to be passed to the ExponentialCorrection algorithm.</p></td>
+</tr>
+<tr class="row-even"><td><p>Debug</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Whether to enable the output of extra workspaces.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Diagnostics</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Whether to enable the output of interim workspaces for debugging purposes.</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>Output Workspace IvsQ.</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputWorkspaceWavelength</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>Output Workspace IvsLam. Intermediate workspace.</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputWorkspaceTransmission</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>Output transmissison workspace in wavelength</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputWorkspaceFirstTransmission</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>First transmissison workspace in wavelength</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputWorkspaceSecondTransmission</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>Second transmissison workspace in wavelength</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>This algorithm is not meant to be used directly by users. Please see
+<a class="reference internal" href="ReflectometryReductionOneAuto-v3.html#algm-reflectometryreductiononeauto"><span class="std std-ref">ReflectometryReductionOneAuto v3</span></a> which is a facade over this
+algorithm.</p>
+<p>This algorithm reduces a single reflectometry run into a mod Q vs I/I0 workspace.
+The mandatory input properties, <code class="docutils literal notranslate"><span class="pre">WavelengthMin</span></code>, <code class="docutils literal notranslate"><span class="pre">WavelengthMax</span></code>
+and <code class="docutils literal notranslate"><span class="pre">ProcessingInstructions</span></code>, must be manually set by the user. In addition, for
+the algorithm to be able to convert from wavelength to momentum transfer correctly,
+instrument components, specially detectors, must be located at the correct positions.
+The expected experimental setup for the algorithm to produce correct results is
+shown below, where the angle between the beam direction and the sample-to-detector
+vector must be <span class="math notranslate nohighlight">\(2\theta\)</span>.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/ReflectometryReductionOneDetectorPositions.png"><img alt="../_images/ReflectometryReductionOneDetectorPositions.png" src="../_images/ReflectometryReductionOneDetectorPositions.png" style="width: 400px;" />
+</a>
+</figure>
+<p>The figure below displays a high-level workflow diagram illustrating the main
+steps taking place in the reduction. For the sake of clarity, all possible
+steps are illustrated, even if some of them are optional.</p>
+<figure class="align-default" id="id1">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>First, the algorithm checks the X units of the input workspace. If the input
+workspace is already in wavelength, summation and normalization by monitors and
+direct beam are not performed, as it is considered that the input run was
+already reduced using this algorithm.</p>
+<p>If summation is to be done in wavelength, then this is done first. The the
+conversion to wavelength and normalisation by monitors and direct beam is done,
+followed by the transmission correction. Transmission correction is always
+done, even if the input was already in wavelength. The resulting workspace is
+cropped in wavelength according to <code class="docutils literal notranslate"><span class="pre">WavelengthMin</span></code> and
+<code class="docutils literal notranslate"><span class="pre">WavelengthMax</span></code>, which are both mandatory properties.</p>
+<p>If summation is to be done in Q, this is done after the normalisations and
+cropping, but again, only if the reduction has not already been done.</p>
+<p>Finally, the output workspace in wavelength is converted to momentum transfer
+(Q).</p>
+<section id="conversion-to-wavelength">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">Conversion to Wavelength</a><a class="headerlink" href="#conversion-to-wavelength" title="Link to this heading">¶</a></h3>
+<p>If summing in wavelength, detectors of interest are extracted and summed in TOF
+using <a class="reference internal" href="GroupDetectors-v2.html#algm-groupdetectors"><span class="std std-ref">GroupDetectors v2</span></a> with <code class="docutils literal notranslate"><span class="pre">ProcessingInstructions</span></code> as input. (If
+summing in Q, summation is not done yet as it is done in a later step after all
+normalisations have been done.) The workspace is then converted to wavelength
+with <code class="docutils literal notranslate"><span class="pre">AlignBins</span></code> set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<p>Next, normalization by direct beam and monitors is optionally done using
+<a class="reference internal" href="Divide-v1.html#algm-divide"><span class="std std-ref">Divide v1</span></a>.  A summary of the steps is shown in the workflow diagram
+below.</p>
+<figure class="align-default" id="id2">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="create-direct-beam-workspace">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">Create Direct Beam Workspace</a><a class="headerlink" href="#create-direct-beam-workspace" title="Link to this heading">¶</a></h3>
+<p>Direct Beam and Monitor corrections can be applied to the workspace. These are
+both optional steps and will only take place if the required inputs are
+provided - otherwise, these steps will be skipped.</p>
+<p>The region of direct beam is extracted from the input workspace in TOF using
+<a class="reference internal" href="GroupDetectors-v2.html#algm-groupdetectors"><span class="std std-ref">GroupDetectors v2</span></a> with <code class="docutils literal notranslate"><span class="pre">RegionOfDirectBeam</span></code> as input. This is only
+done if <code class="docutils literal notranslate"><span class="pre">RegionOfDirectBeam</span></code> is specified. The resulting workspace is
+converted to wavelength with <code class="docutils literal notranslate"><span class="pre">AlignBins</span></code> set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<figure class="align-default" id="id3">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="create-monitor-workspace">
+<h3><a class="toc-backref" href="#id14" role="doc-backlink">Create Monitor Workspace</a><a class="headerlink" href="#create-monitor-workspace" title="Link to this heading">¶</a></h3>
+<p>Monitors are extracted from the input workspace in TOF using
+<a class="reference internal" href="CropWorkspace-v1.html#algm-cropworkspace"><span class="std std-ref">CropWorkspace v1</span></a> with <code class="docutils literal notranslate"><span class="pre">I0MonitorIndex</span></code> as input. The resulting
+workspace is converted to wavelength with <code class="docutils literal notranslate"><span class="pre">AlignBins</span></code> set to
+<code class="docutils literal notranslate"><span class="pre">True</span></code>. Monitor normalisation is only done if <code class="docutils literal notranslate"><span class="pre">I0MonitorIndex</span></code>,
+<code class="docutils literal notranslate"><span class="pre">MonitorBackgroundWavelengthMin</span></code> and <code class="docutils literal notranslate"><span class="pre">MonitorBackgroundWavelengthMax</span></code> are
+all specified.</p>
+<p>Normalisation can be done by integrated monitors by setting
+<code class="docutils literal notranslate"><span class="pre">NormalizeByIntegratedMonitors</span></code> to true, in which case
+<code class="docutils literal notranslate"><span class="pre">MonitorIntegrationWavelengthMin</span></code> and
+<code class="docutils literal notranslate"><span class="pre">MonitorIntegrationWavelengthMax</span></code> are used as the integration
+range. If monitors are not integrated, detectors are rebinned to monitors using
+<a class="reference internal" href="RebinToWorkspace-v1.html#algm-rebintoworkspace"><span class="std std-ref">RebinToWorkspace v1</span></a> so that the normalization by monitors can take
+place.</p>
+<figure class="align-default" id="id4">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="transmission-correction">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink">Transmission Correction</a><a class="headerlink" href="#transmission-correction" title="Link to this heading">¶</a></h3>
+<p>Transmission corrections can be optionally applied to the workspace resulting
+from the previous step. Transmission corrections can be either specified via
+transmission runs or specific correction algorithms.</p>
+<figure class="align-default" id="id5">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id5" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>When normalizing by transmission runs, i.e. when one or two transmission runs
+are given, the spectrum numbers in the
+transmission workspaces must be the same as those in the input run
+workspace. You can pass individual processing instructions to the transmission
+runs.</p>
+<p>When normalizing by transmission run, this algorithm will run
+<a class="reference internal" href="CreateTransmissionWorkspace-v2.html#algm-createtransmissionworkspace"><span class="std std-ref">CreateTransmissionWorkspace v2</span></a> as a child algorithm, with properties <code class="docutils literal notranslate"><span class="pre">WavelengthMin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">WavelengthMax</span></code>, <code class="docutils literal notranslate"><span class="pre">I0MonitorIndex</span></code>, <code class="docutils literal notranslate"><span class="pre">MonitorBackgroundWavelengthMin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">MonitorBackgroundWavelengthMax</span></code>, <code class="docutils literal notranslate"><span class="pre">MonitorIntegrationWavelengthMin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">MonitorIntegrationWavelengthMax</span></code>, and <code class="docutils literal notranslate"><span class="pre">ProcessingInstructions</span></code>.
+In addition, when both <code class="docutils literal notranslate"><span class="pre">FirstTransmissionRun</span></code> and <code class="docutils literal notranslate"><span class="pre">SecondTransmissionRun</span></code>
+are provided the stitching parameters <code class="docutils literal notranslate"><span class="pre">Params</span></code>, as well as <code class="docutils literal notranslate"><span class="pre">StartOverlap</span></code> and
+<code class="docutils literal notranslate"><span class="pre">EndOverlap</span></code> will be used by <a class="reference internal" href="CreateTransmissionWorkspace-v2.html#algm-createtransmissionworkspace"><span class="std std-ref">CreateTransmissionWorkspace v2</span></a> to create the
+transmission workspace that will be used for the normalization.</p>
+<p>If no transmission runs are provided, then algorithmic corrections can be
+performed instead by setting <code class="docutils literal notranslate"><span class="pre">CorrectionAlgorithm</span></code> to either
+<code class="docutils literal notranslate"><span class="pre">PolynomialCorrection</span></code> or <code class="docutils literal notranslate"><span class="pre">ExponentialCorrection</span></code>, the two
+possible types of corrections at the moment. If <code class="docutils literal notranslate"><span class="pre">PolynomialCorrection</span></code>,
+is selected, <a class="reference internal" href="PolynomialCorrection-v1.html#algm-polynomialcorrection"><span class="std std-ref">PolynomialCorrection v1</span></a> algorithm will be run, with this
+algorithm’s <code class="docutils literal notranslate"><span class="pre">Polynomial</span></code> property used as its <code class="docutils literal notranslate"><span class="pre">Coefficients</span></code>
+property. If the <code class="docutils literal notranslate"><span class="pre">CorrectionAlgorithm</span></code> property is set to
+<code class="docutils literal notranslate"><span class="pre">ExponentialCorrection</span></code>, then the <a class="reference internal" href="ExponentialCorrection-v1.html#algm-exponentialcorrection"><span class="std std-ref">ExponentialCorrection v1</span></a>
+algorithm is used, with <em>C0</em> and <em>C1</em> taken from the <code class="docutils literal notranslate"><span class="pre">C0</span></code> and <code class="docutils literal notranslate"><span class="pre">C1</span></code>
+properties.</p>
+</section>
+<section id="sum-in-q">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink">Sum in Q</a><a class="headerlink" href="#sum-in-q" title="Link to this heading">¶</a></h3>
+<p>If summing in Q, the summation is done now, after all normalisations and
+cropping have been done. As with summation in <span class="math notranslate nohighlight">\(\lambda\)</span>, the summation is
+only done if the reduction has not already been done.</p>
+<p>The summation is done using the algorithm proposed by Cubitt et al
+(J. Appl. Crystallogr., 48 (6) (2015)). This involves a projection to an
+arbitrary reference angle, <span class="math notranslate nohighlight">\(2\theta_R\)</span>, with a “virtual” wavelength,
+<span class="math notranslate nohighlight">\(\lambda_v\)</span>. This is the wavelength the neutron would have had if it had
+arrived at <span class="math notranslate nohighlight">\(2\theta_R\)</span> with the same momentum transfer (<span class="math notranslate nohighlight">\(Q\)</span>).</p>
+<p>Counts are considered to be spread evenly over the input pixel, and the
+top-left and bottom-right corner of the pixel are projected onto
+<span class="math notranslate nohighlight">\(2\theta_R\)</span> giving a range in <span class="math notranslate nohighlight">\(\lambda_v\)</span> to project onto. Counts
+are shared out proportionally into the output bins that overlap this range, and
+the projected counts from all pixels are summed into the appropriate output
+bins.</p>
+<p>The resulting 1D workspace in <span class="math notranslate nohighlight">\(\lambda_v\)</span> at <span class="math notranslate nohighlight">\(2\theta_R\)</span> becomes
+the output workspace in wavelength.</p>
+<figure class="align-default" id="id6">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id6" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The <code class="docutils literal notranslate"><span class="pre">IncludePartialBins</span></code> property specifies how the <span class="math notranslate nohighlight">\(\lambda_v\)</span> range
+should be calculated from the input range <span class="math notranslate nohighlight">\(\lambda_1, \lambda_2\)</span> (which
+corresponds to <code class="docutils literal notranslate"><span class="pre">WavelengthMin</span></code>, <code class="docutils literal notranslate"><span class="pre">WavelengthMax</span></code>). If <code class="docutils literal notranslate"><span class="pre">IncludePartialBins</span></code>
+is <code class="docutils literal notranslate"><span class="pre">false</span></code> (default) then we use the projection to the strictly-cropped range
+<span class="math notranslate nohighlight">\(\lambda_{c_1},\lambda_{c_2}\)</span>. This excludes any counts from the
+orange-shaded triangles shown in the figure, for which we may only have partial
+information because counts from the red shaded triangles are outside the
+specified lambda range.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">IncludePartialBins</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code> then the algorithm will use the full
+projected range <span class="math notranslate nohighlight">\(\lambda_{f_1},\lambda_{f_2}\)</span>. This will include all
+counts from the input range <span class="math notranslate nohighlight">\(\lambda_1,\lambda_2\)</span>, but may result in
+partially-filled bins for counts contributed from the orange-shaded regions if
+data is not available in the red-shaded regions. Note however that if the red
+regions do contain counts then they will still be included, e.g. if you have
+narrowed the range <code class="docutils literal notranslate"><span class="pre">WavelengthMin</span></code>, <code class="docutils literal notranslate"><span class="pre">WavelengthMax</span></code> from the available
+range for the instrument then the red regions may contain valid counts.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/ReflectometryReductionOneDetectorPositions.png"><img alt="../_images/ReflectometryReductionOneDetectorPositions.png" src="../_images/ReflectometryReductionOneDetectorPositions.png" style="width: 400px;" />
+</a>
+</figure>
+</section>
+<section id="conversion-to-momentum-transfer-q">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">Conversion to Momentum Transfer (Q)</a><a class="headerlink" href="#conversion-to-momentum-transfer-q" title="Link to this heading">¶</a></h3>
+<p>Finally, the output workspace in wavelength is converted to momentum transfer,
+<span class="math notranslate nohighlight">\(Q=\frac{4\pi}{\lambda}sin(\theta)\)</span>. The angle <span class="math notranslate nohighlight">\(\theta\)</span> used depends on
+the method used.</p>
+<p>When summing in wavelength, if <code class="docutils literal notranslate"><span class="pre">ThetaIn</span></code> is specified, this is used in the
+conversion to <span class="math notranslate nohighlight">\(Q\)</span> and the conversion is done using
+<a class="reference internal" href="RefRoi-v1.html#algm-refroi"><span class="std std-ref">RefRoi v1</span></a>. Otherwise, <a class="reference internal" href="ConvertUnits-v1.html#algm-convertunits"><span class="std std-ref">ConvertUnits v1</span></a> is used. This takes
+<span class="math notranslate nohighlight">\(\theta\)</span> from the average of the grouped detectors’ <span class="math notranslate nohighlight">\(2\theta\)</span>
+values (note that this is not the same as the <span class="math notranslate nohighlight">\(2\theta\)</span> of the average
+detector position).</p>
+<p>When summing in <span class="math notranslate nohighlight">\(Q\)</span>, <span class="math notranslate nohighlight">\(\theta\)</span> is <span class="math notranslate nohighlight">\(\theta_R\)</span> in the non-flat
+sample case or <span class="math notranslate nohighlight">\(2\theta_R-\theta_0\)</span> in the divergent beam case. This is
+because the latter needs to take into account the divergence of the beam from
+the assumed direct beam direction. The output workspace is set up with a single
+detector at the relevant <span class="math notranslate nohighlight">\(2\theta\)</span> so that the conversion can be done
+with <a class="reference internal" href="ConvertUnits-v1.html#algm-convertunits"><span class="std std-ref">ConvertUnits v1</span></a>.</p>
+<figure class="align-default" id="id7">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id7" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Note that the output workspace in <span class="math notranslate nohighlight">\(Q\)</span> is a workspace with native binning,
+and no rebin step is applied to it. If you wish to obtain a rebinned workspace
+in <span class="math notranslate nohighlight">\(Q\)</span> you should consider using algorithm
+<a class="reference internal" href="ReflectometryReductionOneAuto-v3.html#algm-reflectometryreductiononeauto"><span class="std std-ref">ReflectometryReductionOneAuto v3</span></a> instead, which is a facade over this
+algorithm and has two extra steps (<a class="reference internal" href="Rebin-v1.html#algm-rebin"><span class="std std-ref">Rebin v1</span></a> and <a class="reference internal" href="Scale-v1.html#algm-scale"><span class="std std-ref">Scale v1</span></a>) to
+produce an additional workspace in <span class="math notranslate nohighlight">\(Q\)</span> with specified binning and scale
+factor. Please refer to <a class="reference internal" href="ReflectometryReductionOneAuto-v3.html#algm-reflectometryreductiononeauto"><span class="std std-ref">ReflectometryReductionOneAuto v3</span></a> for more
+information.</p>
+</section>
+</section>
+<section id="previous-versions">
+<h2><a class="toc-backref" href="#id18" role="doc-backlink">Previous Versions</a><a class="headerlink" href="#previous-versions" title="Link to this heading">¶</a></h2>
+<p>This is version 2 of the algorithm. For version 1, please see <a class="reference external" href="ReflectometryReductionOne-v1.html">here.</a></p>
+</section>
+<section id="usage">
+<h2><a class="toc-backref" href="#id19" role="doc-backlink">Usage</a><a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p><strong>Example - Reduce a run</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;INTER00013460.nxs&#39;</span><span class="p">)</span>
+<span class="c1"># Basic reduction with no transmission run</span>
+<span class="n">IvsQ</span><span class="p">,</span> <span class="n">IvsLam</span> <span class="o">=</span> <span class="n">ReflectometryReductionOne</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">run</span><span class="p">,</span>
+                                         <span class="n">WavelengthMin</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                                         <span class="n">WavelengthMax</span><span class="o">=</span><span class="mf">17.0</span><span class="p">,</span>
+                                         <span class="n">ProcessingInstructions</span><span class="o">=</span><span class="s1">&#39;4&#39;</span><span class="p">,</span>
+                                         <span class="n">I0MonitorIndex</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                         <span class="n">MonitorBackgroundWavelengthMin</span><span class="o">=</span><span class="mf">15.0</span><span class="p">,</span>
+                                         <span class="n">MonitorBackgroundWavelengthMax</span><span class="o">=</span><span class="mf">17.0</span><span class="p">,</span>
+                                         <span class="n">MonitorIntegrationWavelengthMin</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span>
+                                         <span class="n">MonitorIntegrationWavelengthMax</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">IvsLam</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">533</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">IvsLam</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">534</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">IvsQ</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">327</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">IvsQ</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">328</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0.0003
+0.0003
+0.0003
+0.0003
+</pre></div>
+</div>
+<p><strong>Example - Reduce a run and normalize by transmission workspace</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;INTER00013460.nxs&#39;</span><span class="p">)</span>
+<span class="n">trans1</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;INTER00013463.nxs&#39;</span><span class="p">)</span>
+<span class="n">trans2</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;INTER00013464.nxs&#39;</span><span class="p">)</span>
+<span class="c1"># Basic reduction with two transmission runs</span>
+<span class="n">IvsQ</span><span class="p">,</span> <span class="n">IvsLam</span><span class="p">,</span> <span class="n">TRANS</span> <span class="o">=</span> <span class="n">ReflectometryReductionOne</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">run</span><span class="p">,</span>
+                                                <span class="n">WavelengthMin</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                                                <span class="n">WavelengthMax</span><span class="o">=</span><span class="mf">17.0</span><span class="p">,</span>
+                                                <span class="n">ProcessingInstructions</span><span class="o">=</span><span class="s1">&#39;4&#39;</span><span class="p">,</span>
+                                                <span class="n">I0MonitorIndex</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                                <span class="n">MonitorBackgroundWavelengthMin</span><span class="o">=</span><span class="mf">15.0</span><span class="p">,</span>
+                                                <span class="n">MonitorBackgroundWavelengthMax</span><span class="o">=</span><span class="mf">17.0</span><span class="p">,</span>
+                                                <span class="n">MonitorIntegrationWavelengthMin</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span>
+                                                <span class="n">MonitorIntegrationWavelengthMax</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span>
+                                                <span class="n">FirstTransmissionRun</span><span class="o">=</span><span class="n">trans1</span><span class="p">,</span>
+                                                <span class="n">SecondTransmissionRun</span><span class="o">=</span><span class="n">trans2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">IvsLam</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">480</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">IvsLam</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">481</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">IvsQ</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">107</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">IvsQ</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">108</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>0.4597
+0.4654
+0.7203
+1.0512
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/Reflectometry.html">Reflectometry</a></p>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id20" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/c66b9d75d3432a3fcde604fac070fd25fe61daf8/Framework/Reflectometry/inc/MantidReflectometry/ReflectometryReductionOne2.h">ReflectometryReductionOne2.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/c66b9d75d3432a3fcde604fac070fd25fe61daf8/Framework/Reflectometry/src/ReflectometryReductionOne2.cpp">ReflectometryReductionOne2.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="ReflectometryMomentumTransfer-v1.html" title="Previous Chapter: ReflectometryMomentumTransfer v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Reflectometry...</span>
+    </a>
+  </li>
+  <li>
+    <a href="ReflectometryReductionOneAuto-v2.html" title="Next Chapter: ReflectometryReductionOneAuto v2"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Reflectometry... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

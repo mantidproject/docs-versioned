@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Inelastic QENS Fitting</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <script src="../../_static/documentation_options.js?v=06de18c4"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Muon Feature Flags" href="../muon/Feature%20Flags.html" />
+    <link rel="prev" title="Inelastic Data Processor" href="Inelastic%20Data%20Processor.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.11</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Interfaces</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Inelastic QENS Fitting</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="inelastic-qens-fitting">
+<span id="interface-inelastic-qens-fitting"></span><h1>Inelastic QENS Fitting<a class="headerlink" href="#inelastic-qens-fitting" title="Link to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The Inelastic QENS Fitting interface is a collection of tools within Mantid
+for analysing reduced data from indirect geometry spectrometers, such as IRIS and
+OSIRIS and data from direct geometry spectrometer LET. Note that this interface
+used to be called the Inelastic Data Analysis interface, but has been renamed.</p>
+<p>The majority of the functions used within this interface can be used with both
+reduced files (<em>_red.nxs</em>) and workspaces (<em>_red</em>) created using the Indirect Data
+Reduction interface or using <span class="math notranslate nohighlight">\(S(Q, \omega)\)</span> files (<em>_sqw.nxs</em>) and
+workspaces (<em>_sqw</em>) created using either the Indirect Data Reduction interface or
+taken from a bespoke algorithm or auto reduction.</p>
+</section>
+<section id="qens-fitting-tabs">
+<h2>QENS Fitting tabs<a class="headerlink" href="#qens-fitting-tabs" title="Link to this heading">¶</a></h2>
+<p>There are four QENS Fitting interfaces that share a common layout and features:</p>
+<ul class="simple">
+<li><p>MSD</p></li>
+<li><p>I(Q,t)</p></li>
+<li><p>Convolution</p></li>
+<li><p>Function(Q)</p></li>
+</ul>
+<p>Each tab also has a few unique options. These interfaces do not support GroupWorkspaces
+as input.</p>
+<section id="input">
+<h3>Input<a class="headerlink" href="#input" title="Link to this heading">¶</a></h3>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../_images/ConvFitDataSelection.png"><img alt="../../_images/ConvFitDataSelection.png" src="../../_images/ConvFitDataSelection.png" style="height: 200px;" />
+</a>
+</figure>
+<p>The input section for QENSFitting tabs consists of, a table along with two buttons ‘Add Workspace’ and ‘Remove’.
+Clicking ‘Add Workspace’ will allow you to add a new data-set to the fit (this will bring up a menu allowing you
+to select a file/workspace and the spectra to load). Once the data has been loaded, it will be displayed in the table.
+Highlighting data in the table and selecting ‘Remove’ will allow you to remove data from the fit. The <cite>Unify Range</cite>
+button changes the startX and endX values for all selected spectra in the table to be the same as the first spectra
+selected. Above the preview plots there is a drop-down menu with which can be used to select the active data-set, which
+will be shown in the plots.</p>
+</section>
+<section id="sequential-and-simultaneous-fits">
+<h3>Sequential and Simultaneous fits<a class="headerlink" href="#sequential-and-simultaneous-fits" title="Link to this heading">¶</a></h3>
+<p>There are options to fit your selected spectra either Sequentially or Simultaneously.</p>
+<p>A <a class="reference internal" href="../../algorithms/IqtFitSequential-v1.html#algm-iqtfitsequential"><span class="std std-ref">sequential fit</span></a> will fit each spectra one after another. By default this will use the end values of one fit as the starting values of the next. This behaviour can be toggled
+using the sequential/individual option.</p>
+<p>A <a class="reference internal" href="../../algorithms/IqtFitSimultaneous-v1.html#algm-iqtfitsimultaneous"><span class="std std-ref">simultaneous fit</span></a> will fit all the selected spectra against one cost function. The primary advantage of this method is that
+parameters which are expected to be constant across the data range can be tied across all the spectra. This leads to these parameters being
+fitted with better statistics and hence reduced errors.</p>
+</section>
+<section id="fit-function">
+<h3>Fit Function<a class="headerlink" href="#fit-function" title="Link to this heading">¶</a></h3>
+<figure class="align-left">
+<a class="reference internal image-reference" href="../../_images/ConvFitFunctionSelection.png"><img alt="../../_images/ConvFitFunctionSelection.png" src="../../_images/ConvFitFunctionSelection.png" style="height: 300px;" />
+</a>
+</figure>
+<p>Under ‘Fit Function’, you can view the selected model and associated parameters as well as make modifications.</p>
+<p>There are two modes which can be used to select functions. The default version allows easy selection of the most commonly used function models. The options
+in this mode differ for each of the four fitting tabs so more detailed information is given in the specific sections below. The other mode, which may be switched to
+bu ticking the <cite>See full function</cite> box, displays the generic function browser in which any function model can be specified.</p>
+<p>Parameters may be tied by right-clicking on a parameter and selecting either ‘Tie &gt; To Function’ to tie the parameter
+to a parameter of the same name in a different function, or by selecting ‘Tie &gt; Custom Tie’ to tie to parameters of
+different names and for providing mathematical expressions. Parameters can be constrained by right-clicking and
+using the available options under ‘Constraint’.</p>
+<p>Upon performing a fit, the parameter values will be updated here to display the result of the fit for the selected
+spectrum.</p>
+</section>
+<section id="settings">
+<h3>Settings<a class="headerlink" href="#settings" title="Link to this heading">¶</a></h3>
+<p>The bottom half of the Fit Function section contains a table of settings which control what sort of fit is done. These are:</p>
+<dl class="simple">
+<dt>Fitting</dt><dd><p>Controls whether to do a sequential or simultaneous fit.</p>
+</dd>
+<dt>Max Iterations</dt><dd><p>The maximum number of iterations used to perform the fit of each spectrum.</p>
+</dd>
+<dt>Minimizer</dt><dd><p>The minimizer used for the fit (defaults to Levenberg-Marquadt).</p>
+</dd>
+<dt>Cost function</dt><dd><p>The cost function used for the fit (defaults to Least Squares).</p>
+</dd>
+<dt>Evaluate Function As</dt><dd><p>The way the function is evaluated on histogram data sets. If the value is “CentrePoint” then function is evaluated at centre of each bin. If it is “Histogram” then function is integrated within the bin and the integrals returned.</p>
+</dd>
+<dt>Fit Type</dt><dd><p>Only available in sequential fits. Controls whether each fit is initialised from the end values of the previous fit.</p>
+</dd>
+<dt>Ignore Invalid Data</dt><dd><p>If ticked the fit will exclude data points with values of <cite>NAN</cite> or <cite>inf</cite>. It will also exclude data with error bars of zero.</p>
+</dd>
+</dl>
+</section>
+<section id="preview-plots">
+<h3>Preview Plots<a class="headerlink" href="#preview-plots" title="Link to this heading">¶</a></h3>
+<figure class="align-left">
+<a class="reference internal image-reference" href="../../_images/ConvFitPlotPreview.png"><img alt="../../_images/ConvFitPlotPreview.png" src="../../_images/ConvFitPlotPreview.png" style="height: 300px;" />
+</a>
+</figure>
+<p>Two preview plots are included in each of the fitting interfaces. The top preview plot displays the sample, guess
+and fit curves. The bottom preview plot displays the difference curve.</p>
+<p>The preview plots will display the curves for the selected spectrum (‘Plot Spectrum’) of the selected data-set
+(when in multiple input mode, a drop-down menu will be available above the plots to select the active data-set).</p>
+<p>The ‘Plot Spectrum’ option can be used to select the active/displayed spectrum.</p>
+<p>A button labelled ‘Fit Single Spectrum’ is found under the preview plots and can be used to perform a fit of the
+selected specturm.</p>
+<p>‘Plot Current Preview’ can be used to plot the sample, fit, and difference curves of the selected spectrum in
+a separate plotting window.</p>
+<p>The ‘Plot Guess’ check-box can be used to enable/disable the guess curve in the top preview plot.</p>
+</section>
+<section id="output">
+<h3>Output<a class="headerlink" href="#output" title="Link to this heading">¶</a></h3>
+<p>The results of the fit may be plotted and saved under the ‘Output’ section of the fitting interfaces.</p>
+<p>Next to the ‘Plot’ label, you can select a parameter to plot and then click ‘Plot’ to plot it with error
+bars across the fit spectra (if multiple data-sets have been used, a separate plot will be produced for each data-set).
+The ‘Plot Output’ options will be disabled after a fit if there is only one data point for the parameters.</p>
+<p>During a sequential fit, the parameters calculated for one spectrum are used as the initial parameters for the next spectrum to be fitted.
+Although this normally yields better parameter values for the later spectra, it can also lead to poorly fitted parameters if the
+next spectrum is not ‘related’ to the previous spectrum. It may be useful to replace this poorly fitted spectrum with the results
+from a single fit using the ‘Edit Result’ option.
+Clicking the ‘Edit Result’ button will allow you to modify the data within your <em>_Results</em> workspace using the results
+produced from a fit to a single spectrum. See the algorithm <a class="reference internal" href="../../algorithms/IndirectReplaceFitResult-v1.html#algm-indirectreplacefitresult"><span class="std std-ref">IndirectReplaceFitResult</span></a>.</p>
+<p>Clicking the ‘Save Result’ button will save the result of the fit to your default save location.</p>
+</section>
+<section id="action-buttons">
+<h3>Action Buttons<a class="headerlink" href="#action-buttons" title="Link to this heading">¶</a></h3>
+<p>There are several buttons on the bottom left of every tab in the interface. These are:</p>
+<dl class="simple">
+<dt>Settings</dt><dd><p>Opens the <a class="reference internal" href="../indirect/Indirect%20Settings.html#inelastic-interface-settings"><span class="std std-ref">Settings</span></a> GUI which allows you to
+customize the settings for the Indirect interfaces.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>?</dt><dd><p>Opens this help page.</p>
+</dd>
+<dt>Py</dt><dd><p>Exports a Python script which will replicate the processing done by the current tab.</p>
+</dd>
+<dt>Manage Directories</dt><dd><p>Opens the Manage Directories dialog allowing you to change your search directories
+and default save directory and enable/disable data archive search.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="msd">
+<h2>MSD<a class="headerlink" href="#msd" title="Link to this heading">¶</a></h2>
+<p>Given either a saved NeXus file, or workspace generated using the Elwin tab, this
+tab fits <span class="math notranslate nohighlight">\(intensity\)</span> vs. <span class="math notranslate nohighlight">\(Q\)</span> with one of three functions for each
+run specified to give the Mean Square Displacement (MSD). It then plots the MSD
+as function of run number. This is done using the
+<a class="reference internal" href="../../algorithms/QENSFitSequential-v1.html#algm-qensfitsequential"><span class="std std-ref">QENSFitSequential</span></a> algorithm.</p>
+<p>MSD searches for the log files named &lt;runnumber&gt;_sample.txt in your chosen
+raw file directory (the name ‘sample’ is for OSIRIS). These log files will exist
+if the correct temperature was loaded using SE-log-name in the Elwin tab. If they
+exist the temperature is read and the MSD is plotted versus temperature; if they do
+not exist the MSD is plotted versus run number (last 3 digits).</p>
+<p>The fitted parameters for all runs are in _msd_Table and the &lt;u2&gt; in _msd. To
+run the Sequential fit a workspace named &lt;inst&gt;&lt;first-run&gt;_to_&lt;last-run&gt;_eq is
+created, consisting of <span class="math notranslate nohighlight">\(intensity\)</span> v. <span class="math notranslate nohighlight">\(Q\)</span> for all runs. A contour or 3D plot of
+this may be of interest.</p>
+<p>A sequential fit is run by clicking the Run button at the bottom of the tab, a
+single fit can be performed using the Fit Single Spectrum button underneath the
+preview plot. A simultaneous fit may be performed in a very similar fashion by changeing the Fit Type to Simultaneous
+and the clicking run.</p>
+<p>The <a class="reference internal" href="../../fitting/fitfunctions/MsdPeters.html#func-msdpeters"><span class="std std-ref">Peters model</span></a> [1] reduces to a <a class="reference internal" href="../../fitting/fitfunctions/MsdGauss.html#func-msdgauss"><span class="std std-ref">Gaussian</span></a> at large
+(towards infinity) beta. The <a class="reference internal" href="../../fitting/fitfunctions/MsdYi.html#func-msdyi"><span class="std std-ref">Yi Model</span></a> [2] reduces to a <a class="reference internal" href="../../fitting/fitfunctions/MsdGauss.html#func-msdgauss"><span class="std std-ref">Gaussian</span></a> at sigma
+equal to zero.</p>
+<figure class="align-default" id="id1">
+<a class="screenshot reference internal image-reference" href="../../_images/ImageNotFound.png"><img alt="../../_images/ImageNotFound.png" class="screenshot" src="../../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Enable screenshots using DOCS_SCREENSHOTS in CMake</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="msd-example-workflow">
+<span id="msdfit-example-workflow"></span><h3>MSD Example Workflow<a class="headerlink" href="#msd-example-workflow" title="Link to this heading">¶</a></h3>
+<p>The MSD tab operates on <code class="docutils literal notranslate"><span class="pre">_eq</span></code> files. The files used in this workflow are produced on the Elwin
+tab as seen in the <a class="reference internal" href="Inelastic%20Data%20Processor.html#elwin-example-workflow"><span class="std std-ref">Elwin Example Workflow</span></a>.</p>
+<ol class="arabic simple">
+<li><p>Click <strong>Browse</strong> and select the file <code class="docutils literal notranslate"><span class="pre">osi104371-104375_graphite002_red_elwin_eq</span></code>. Load this
+file and it will be automatically plotted in the upper mini-plot.</p></li>
+<li><p>Change the <strong>Plot Spectrum</strong> spinbox seen underneath the mini-plots to change the spectrum displayed
+in the upper mini-plot.</p></li>
+<li><p>Change the <strong>EndX</strong> variable to be around 0.8 in order to change the Q range over which the fit shall
+take place. Alternatively, drag the <strong>EndX</strong> blue line seen on the mini-plot using the cursor.</p></li>
+<li><p>Choose the <strong>Fit Type</strong> to be Gaussian. The parameters for this function can be seen if you
+expand the row labelled <strong>f0-MsdGauss</strong>. Choose appropriate starting values for these parameters.
+As well as being able to change the value of the parameters, Two additional options are available.
+Clicking on the button with <cite>…</cite> will bring up more options to set constraints and ties on the parameters. The checkbox will toggle
+whether the parameter is local or global. You need to click on the parameter value to see these options.</p></li>
+<li><p>Tick <strong>Plot Guess</strong> to get a prediction of what the fit will look like.</p></li>
+<li><p>Click <strong>Run</strong> and wait for the interface to finish processing. This should generate a
+_Parameters table workspace and two group workspaces with end suffixes _Results and
+_Workspaces. The mini-plots should also update, with the upper plot displaying the
+calculated fit and the lower mini-plot displaying the difference between the input data and the
+fit.</p></li>
+<li><p>Alternatively, you can click <strong>Fit Single Spectrum</strong> to perform a fit on just the currently displayed spectrum.
+Do not click this for the purposes of this demonstration.</p></li>
+<li><p>In the <strong>Output</strong> section, select the <strong>Msd</strong> parameter and then click <strong>Plot</strong>. This plots the
+Msd parameter which can be found within the _Results group workspace.</p></li>
+</ol>
+</section>
+</section>
+<section id="i-q-t">
+<span id="iqtfit"></span><h2>I(Q, t)<a class="headerlink" href="#i-q-t" title="Link to this heading">¶</a></h2>
+<p>I(Q, t) provides a simplified interface for controlling various fitting
+functions (see the <a class="reference internal" href="../../algorithms/Fit-v1.html#algm-fit"><span class="std std-ref">Fit</span></a> algorithm for more info). The functions
+are also available via the fit wizard.</p>
+<p>The fit types available for use in IqtFit are <a class="reference internal" href="../../fitting/fitfunctions/ExpDecay.html#func-expdecay"><span class="std std-ref">Exponentials</span></a> and
+<a class="reference internal" href="../../fitting/fitfunctions/StretchExp.html#func-stretchexp"><span class="std std-ref">Stretched Exponential</span></a>.</p>
+<figure class="align-default" id="id2">
+<a class="screenshot reference internal image-reference" href="../../_images/ImageNotFound.png"><img alt="../../_images/ImageNotFound.png" class="screenshot" src="../../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Enable screenshots using DOCS_SCREENSHOTS in CMake</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="i-q-t-example-workflow">
+<span id="iqtfit-example-workflow"></span><h3>I(Q, t)  Example Workflow<a class="headerlink" href="#i-q-t-example-workflow" title="Link to this heading">¶</a></h3>
+<p>The I(Q, t) tab operates on <code class="docutils literal notranslate"><span class="pre">_iqt</span></code> files. The files used in this workflow are produced on the
+I(Q, t) tab as seen in the <a class="reference internal" href="Inelastic%20Data%20Processor.html#iqt-example-workflow"><span class="std std-ref">I(Q, t) Example Workflow</span></a>.</p>
+<ol class="arabic simple">
+<li><p>Click <strong>Browse</strong> and select the file <code class="docutils literal notranslate"><span class="pre">irs26176_graphite002_iqt</span></code>.</p></li>
+<li><p>Change the <strong>EndX</strong> variable to be around 0.2 in order to change the time range. Alternatively, drag
+the <strong>EndX</strong> blue line seen on the upper mini-plot using the cursor.</p></li>
+<li><p>Choose the number of <strong>Exponentials</strong> to be 1. Select a <strong>Flat Background</strong>.</p></li>
+<li><p>Change the <strong>Fit Spectra</strong> to go from 0 to 7. This will ensure that only the spectra within the input
+workspace with workspace indices between 0 and 7 are fitted.</p></li>
+<li><p>Click <strong>Run</strong> and wait for the interface to finish processing. This should generate a
+_Parameters table workspace and two group workspaces with end suffixes _Results and
+_Workspaces. The mini-plots should also update, with the upper plot displaying the
+calculated fit and the lower mini-plot displaying the difference between the input data and the
+fit.</p></li>
+<li><p>In the <strong>Output</strong> section, you can choose which parameter you want to plot.</p></li>
+<li><p>Click <strong>Fit Single Spectrum</strong> to produce a fit result for the first spectrum.</p></li>
+<li><p>In the <strong>Output</strong> section, click <strong>Edit Result</strong> and then select the _Result workspace containing
+multiple fits (1), and in the second combobox select the _Result workspace containing the single fit
+(2). Choose an output name and click <strong>Replace Fit Result</strong>. This will replace the corresponding fit result
+in (1) with the fit result found in (2). See the <a class="reference internal" href="../../algorithms/IndirectReplaceFitResult-v1.html#algm-indirectreplacefitresult"><span class="std std-ref">IndirectReplaceFitResult</span></a>
+algorithm for more details. Note that the output workspace is inserted into the group workspace in which
+(1) is found.</p></li>
+</ol>
+</section>
+</section>
+<section id="convolution">
+<span id="convfit"></span><h2>Convolution<a class="headerlink" href="#convolution" title="Link to this heading">¶</a></h2>
+<p>Convolution provides a simplified interface for controlling
+various fitting functions (see the <a class="reference internal" href="../../algorithms/Fit-v1.html#algm-fit"><span class="std std-ref">Fit</span></a> algorithm for more
+info). The functions are also available via the fit wizard.</p>
+<p>Additionally, in the bottom-right of the interface there are options for doing a
+sequential fit. This is where the program loops through each spectrum in the
+input workspace, using the fitted values from the previous spectrum as input
+values for fitting the next. This is done by means of the
+<a class="reference internal" href="../../algorithms/ConvolutionFitSequential-v1.html#algm-convolutionfitsequential"><span class="std std-ref">ConvolutionFitSequential</span></a> algorithm.</p>
+<p>A sequential fit is run by clicking the Run button at the bottom of the tab, a
+single fit can be done using the Fit Single Spectrum button underneath the
+preview plot.</p>
+<p>The fit types available in Convolution are One <a class="reference internal" href="../../fitting/fitfunctions/Lorentzian.html#func-lorentzian"><span class="std std-ref">Lorentzian</span></a>, Two Lorentzian,
+<a class="reference internal" href="../../fitting/fitfunctions/TeixeiraWaterSQE.html#func-teixeirawatersqe"><span class="std std-ref">TeixeiraWater (SQE)</span></a>, <a class="reference internal" href="../../fitting/fitfunctions/InelasticDiffSphere.html#func-inelasticdiffsphere"><span class="std std-ref">InelasticDiffSphere</span></a>,
+<a class="reference internal" href="../../fitting/fitfunctions/InelasticDiffRotDiscreteCircle.html#func-inelasticdiffrotdiscretecircle"><span class="std std-ref">InelasticDiffRotDiscreteCircle</span></a>, <a class="reference internal" href="../../fitting/fitfunctions/ElasticDiffSphere.html#func-elasticdiffsphere"><span class="std std-ref">ElasticDiffSphere</span></a>,
+<a class="reference internal" href="../../fitting/fitfunctions/ElasticDiffRotDiscreteCircle.html#func-elasticdiffrotdiscretecircle"><span class="std std-ref">ElasticDiffRotDiscreteCircle</span></a> and <a class="reference internal" href="../../fitting/fitfunctions/StretchedExpFT.html#func-stretchedexpft"><span class="std std-ref">StretchedExpFT</span></a>.</p>
+<figure class="align-default" id="id3">
+<a class="screenshot reference internal image-reference" href="../../_images/ImageNotFound.png"><img alt="../../_images/ImageNotFound.png" class="screenshot" src="../../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Enable screenshots using DOCS_SCREENSHOTS in CMake</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="convolution-options">
+<h3>Convolution Options<a class="headerlink" href="#convolution-options" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Sample</dt><dd><p>Either a reduced file (<em>_red.nxs</em>) or workspace (<em>_red</em>) or an <span class="math notranslate nohighlight">\(S(Q,
+\omega)\)</span> file (<em>_sqw.nxs</em>, <em>_sqw.dave</em>) or workspace (<em>_sqw</em>).</p>
+</dd>
+<dt>Resolution</dt><dd><p>Either a resolution file (_res.nxs) or workspace (_res) or an <span class="math notranslate nohighlight">\(S(Q,
+\omega)\)</span> file (<em>_sqw.nxs</em>, <em>_sqw.dave</em>) or workspace (<em>_sqw</em>).
+If the resolution data contains any <cite>NAN</cite> values they will be replaced with zeros and
+a warning will be provided to the user when loading the data.</p>
+</dd>
+</dl>
+</section>
+<section id="convolution-example-workflow">
+<span id="convfit-example-workflow"></span><h3>Convolution Example Workflow<a class="headerlink" href="#convolution-example-workflow" title="Link to this heading">¶</a></h3>
+<p>The Convolution tab allows <code class="docutils literal notranslate"><span class="pre">_red</span></code> and <code class="docutils literal notranslate"><span class="pre">_sqw</span></code> for its sample file, and allows <code class="docutils literal notranslate"><span class="pre">_red</span></code>, <code class="docutils literal notranslate"><span class="pre">_sqw</span></code> and
+<code class="docutils literal notranslate"><span class="pre">_res</span></code> for the resolution file. The sample file used in this workflow can be produced using the run
+number 26176 on the <a class="reference internal" href="../indirect/Indirect%20Data%20Reduction.html#interface-indirect-data-reduction"><span class="std std-ref">Indirect Data Reduction</span></a> interface in the ISIS
+Energy Transfer tab. The resolution file is created in the ISIS Calibration tab using the run number
+26173. The instrument used to produce these files is IRIS, the analyser is graphite
+and the reflection is 002.</p>
+<ol class="arabic simple">
+<li><p>Click <strong>Browse</strong> for the sample and select the file <code class="docutils literal notranslate"><span class="pre">iris26176_graphite002_red</span></code>. Then click <strong>Browse</strong>
+for the resolution and select the file <code class="docutils literal notranslate"><span class="pre">iris26173_graphite002_res</span></code>.</p></li>
+<li><p>Choose the <strong>Fit Type</strong> to be One Lorentzian. Tick the <strong>Delta Function</strong> checkbox. Set the background
+to be a <strong>Flat Background</strong>.</p></li>
+<li><p>Expand the variables called <strong>f0-Lorentzian</strong> and <strong>f1-DeltaFunction</strong>. To tie the delta functions Centre
+to the PeakCentre of the Lorentzian, right click on the Centre parameter and go to Tie-&gt;Custom Tie and then
+enter f0.PeakCentre.</p></li>
+<li><p>Tick <strong>Plot Guess</strong> to get a prediction of what your fit will look like.</p></li>
+<li><p>Click <strong>Run</strong> and wait for the interface to finish processing. This should generate a
+_Parameters table workspace and two group workspaces with end suffixes _Results and
+_Workspaces. The mini-plots should also update, with the upper plot displaying the
+calculated fit and the lower mini-plot displaying the difference between the input data and the
+fit.</p></li>
+<li><p>Choose a default save directory and then click <strong>Save Result</strong> to save the _result workspaces
+found inside of the group workspace ending with _Results. The saved workspace will be used in
+the <a class="reference internal" href="#fqfit-example-workflow"><span class="std std-ref">Function(Q) Example Workflow</span></a>.</p></li>
+</ol>
+</section>
+<section id="theory">
+<h3>Theory<a class="headerlink" href="#theory" title="Link to this heading">¶</a></h3>
+<p>For more on the theory of Convolution see the <a class="reference internal" href="../../concepts/ConvFit.html#convfitconcept"><span class="std std-ref">Conv Fit</span></a> concept page.</p>
+</section>
+<section id="convolution-fitting-model">
+<h3>Convolution fitting model<a class="headerlink" href="#convolution-fitting-model" title="Link to this heading">¶</a></h3>
+<p>The model used to perform fitting in Convolution is described in the following tree, note that
+everything under the Model section is optional and determined by the <em>Fit Type</em>
+and <em>Use Delta Function</em> options in the interface.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/CompositeFunction.html#func-compositefunction"><span class="std std-ref">CompositeFunction</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/LinearBackground.html#func-linearbackground"><span class="std std-ref">LinearBackground</span></a></p></li>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/Convolution.html#func-convolution"><span class="std std-ref">Convolution</span></a></p>
+<ul>
+<li><p>Resolution</p></li>
+<li><p>Model (<a class="reference internal" href="../../fitting/fitfunctions/CompositeFunction.html#func-compositefunction"><span class="std std-ref">CompositeFunction</span></a>)</p>
+<ul>
+<li><p>DeltaFunction</p></li>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/ProductFunction.html#func-productfunction"><span class="std std-ref">ProductFunction</span></a> (One Lorentzian)</p>
+<ul>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/Lorentzian.html#func-lorentzian"><span class="std std-ref">Lorentzian</span></a></p></li>
+<li><p>Temperature Correction</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/ProductFunction.html#func-productfunction"><span class="std std-ref">ProductFunction</span></a> (Two Lorentzians)</p>
+<ul>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/Lorentzian.html#func-lorentzian"><span class="std std-ref">Lorentzian</span></a></p></li>
+<li><p>Temperature Correction</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/ProductFunction.html#func-productfunction"><span class="std std-ref">ProductFunction</span></a> (InelasticDiffSphere)</p>
+<ul>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/DiffSphere.html#func-diffsphere"><span class="std std-ref">Inelastic Diff Sphere</span></a></p></li>
+<li><p>Temperature Correction</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/ProductFunction.html#func-productfunction"><span class="std std-ref">ProductFunction</span></a> (InelasticDiffRotDiscreteCircle)</p>
+<ul>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/DiffRotDiscreteCircle.html#func-diffrotdiscretecircle"><span class="std std-ref">Inelastic Diff Rot Discrete Circle</span></a></p></li>
+<li><p>Temperature Correction</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/ProductFunction.html#func-productfunction"><span class="std std-ref">ProductFunction</span></a> (ElasticDiffSphere)</p>
+<ul>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/DiffSphere.html#func-diffsphere"><span class="std std-ref">Elastic Diff Sphere</span></a></p></li>
+<li><p>Temperature Correction</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/ProductFunction.html#func-productfunction"><span class="std std-ref">ProductFunction</span></a> (ElasticDiffRotDiscreteCircle)</p>
+<ul>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/DiffRotDiscreteCircle.html#func-diffrotdiscretecircle"><span class="std std-ref">Elastic Diff Rot Discrete Circle</span></a></p></li>
+<li><p>Temperature Correction</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/ProductFunction.html#func-productfunction"><span class="std std-ref">ProductFunction</span></a> (StretchedExpFT)</p>
+<ul>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/StretchedExpFT.html#func-stretchedexpft"><span class="std std-ref">StretchedExpFT</span></a></p></li>
+<li><p>Temperature Correction</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>The Temperature Correction is a <a class="reference internal" href="../../fitting/fitfunctions/UserFunction.html#func-userfunction"><span class="std std-ref">UserFunction</span></a> with the
+formula <span class="math notranslate nohighlight">\(((x * 11.606) / T) / (1 - exp(-((x * 11.606) / T)))\)</span> where
+<span class="math notranslate nohighlight">\(T\)</span> is the temperature in Kelvin.</p>
+</section>
+</section>
+<section id="function-q">
+<span id="fqfit"></span><h2>Function(Q)<a class="headerlink" href="#function-q" title="Link to this heading">¶</a></h2>
+<p>One of the models used to interpret diffusion is that of jump diffusion in which
+it is assumed that an atom remains at a given site for a time <span class="math notranslate nohighlight">\(\tau\)</span>; and
+then moves rapidly, that is, in a time negligible compared to <span class="math notranslate nohighlight">\(\tau\)</span>.</p>
+<p>This interface can be used for a jump diffusion fit as well as fitting across
+EISF. This is done by means of the
+<a class="reference internal" href="../../algorithms/QENSFitSequential-v1.html#algm-qensfitsequential"><span class="std std-ref">QENSFitSequential</span></a> algorithm.</p>
+<p>This interface can load <span class="math notranslate nohighlight">\(A0\)</span>, <span class="math notranslate nohighlight">\(EISF\)</span>, <span class="math notranslate nohighlight">\(Width\)</span> or <span class="math notranslate nohighlight">\(FWHM\)</span> fitting
+parameters. The fit types available for each of these are listed below:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Fit Parameter</p></th>
+<th class="head"><p>Produced on</p></th>
+<th class="head"><p>Available fit types</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A0</p></td>
+<td><p><a class="reference internal" href="#iqtfit"><span class="std std-ref">I(Q, t)</span></a> tab</p></td>
+<td><p><a class="reference internal" href="../../fitting/fitfunctions/EISFDiffCylinder.html#func-eisfdiffcylinder"><span class="std std-ref">EISFDiffCylinder</span></a>, <a class="reference internal" href="../../fitting/fitfunctions/EISFDiffSphere.html#func-eisfdiffsphere"><span class="std std-ref">EISFDiffSphere</span></a>, <a class="reference internal" href="../../fitting/fitfunctions/EISFDiffSphereAlkyl.html#func-eisfdiffspherealkyl"><span class="std std-ref">EISFDiffSphereAlkyl</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>EISF</p></td>
+<td><p><a class="reference internal" href="#convfit"><span class="std std-ref">Convolution</span></a> tab</p></td>
+<td><p><a class="reference internal" href="../../fitting/fitfunctions/EISFDiffCylinder.html#func-eisfdiffcylinder"><span class="std std-ref">EISFDiffCylinder</span></a>, <a class="reference internal" href="../../fitting/fitfunctions/EISFDiffSphere.html#func-eisfdiffsphere"><span class="std std-ref">EISFDiffSphere</span></a>, <a class="reference internal" href="../../fitting/fitfunctions/EISFDiffSphereAlkyl.html#func-eisfdiffspherealkyl"><span class="std std-ref">EISFDiffSphereAlkyl</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Width</p></td>
+<td><p><a class="reference internal" href="#convfit"><span class="std std-ref">Convolution</span></a> tab</p></td>
+<td><p><a class="reference internal" href="../../fitting/fitfunctions/ChudleyElliot.html#func-chudleyelliot"><span class="std std-ref">ChudleyElliot</span></a>, <a class="reference internal" href="../../fitting/fitfunctions/HallRoss.html#func-hall-ross"><span class="std std-ref">HallRoss</span></a>, <a class="reference internal" href="../../fitting/fitfunctions/FickDiffusion.html#func-fickdiffusion"><span class="std std-ref">FickDiffusion</span></a>, <a class="reference internal" href="../../fitting/fitfunctions/TeixeiraWater.html#func-teixeirawater"><span class="std std-ref">TeixeiraWater</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>FWHM</p></td>
+<td><p><a class="reference internal" href="#convfit"><span class="std std-ref">Convolution</span></a> tab</p></td>
+<td><p><a class="reference internal" href="../../fitting/fitfunctions/ChudleyElliot.html#func-chudleyelliot"><span class="std std-ref">ChudleyElliot</span></a>, <a class="reference internal" href="../../fitting/fitfunctions/HallRoss.html#func-hall-ross"><span class="std std-ref">HallRoss</span></a>, <a class="reference internal" href="../../fitting/fitfunctions/FickDiffusion.html#func-fickdiffusion"><span class="std std-ref">FickDiffusion</span></a>, <a class="reference internal" href="../../fitting/fitfunctions/TeixeiraWater.html#func-teixeirawater"><span class="std std-ref">TeixeiraWater</span></a></p></td>
+</tr>
+</tbody>
+</table>
+<figure class="align-default" id="id4">
+<a class="screenshot reference internal image-reference" href="../../_images/ImageNotFound.png"><img alt="../../_images/ImageNotFound.png" class="screenshot" src="../../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Enable screenshots using DOCS_SCREENSHOTS in CMake</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="function-q-example-workflow">
+<span id="fqfit-example-workflow"></span><h3>Function(Q) Example Workflow<a class="headerlink" href="#function-q-example-workflow" title="Link to this heading">¶</a></h3>
+<p>The Function(Q) tab operates on <code class="docutils literal notranslate"><span class="pre">_result</span></code> files which can be produced on the Convolution tab.  The
+sample file used in this workflow is produced on the Convolution tab as seen in the
+<a class="reference internal" href="#convfit-example-workflow"><span class="std std-ref">Convolution Example Workflow</span></a>.</p>
+<ol class="arabic simple">
+<li><p>Click <strong>Browse</strong> and select the file <code class="docutils literal notranslate"><span class="pre">irs26176_graphite002_conv_Delta1LFitF_s0_to_9_Result</span></code>.</p></li>
+<li><p>Change the mini-plot data by choosing the type of <strong>Fit Parameter</strong> you want to display. For the
+purposes of this demonstration select <strong>EISF</strong>. The combobox immediately to the right can be used to
+choose which EISF you want to see in the mini-plot. In this example there is only one available.</p></li>
+<li><p>Change the <strong>Fit Parameter</strong> back to <strong>Width</strong>.</p></li>
+<li><p>Choose the <strong>Fit Type</strong> to be TeixeiraWater.</p></li>
+<li><p>Click <strong>Run</strong> and wait for the interface to finish processing. This should generate a
+_Parameters table workspace and two group workspaces with end suffixes _Results and
+_Workspaces. The mini-plots should also update, with the upper plot displaying the
+calculated fit and the lower mini-plot displaying the difference between the input data and the
+fit.</p></li>
+<li><p>In the <strong>Output</strong> section, you can choose which parameter you want to plot. In this case the plotting
+option is disabled as the output workspace ending in _Result only has one data point to plot.</p></li>
+</ol>
+</section>
+</section>
+<section id="bayesian-fabada-minimizer">
+<h2>Bayesian (FABADA minimizer)<a class="headerlink" href="#bayesian-fabada-minimizer" title="Link to this heading">¶</a></h2>
+<p>There is the option to perform Bayesian analysis on the I(Q, t) and Convolution
+tabs on this interface by using the <a class="reference internal" href="../../concepts/FABADA.html#fabada"><span class="std std-ref">FABADA</span></a> fitting minimizer, however in
+order to to use this you will need to use better starting parameters than the
+defaults provided by the interface.</p>
+<p>You may also experience issues where the starting parameters may give a reliable
+fit on one spectra but not others, in this case the best option is to reduce
+the number of spectra that are fitted in one operation.</p>
+<p>In both I(Q, t) and Convolution the following options are available when fitting
+using FABADA:</p>
+<dl class="simple">
+<dt>Output Chain</dt><dd><p>Select to enable output of the FABADA chain when using FABADA as the fitting
+minimizer.</p>
+</dd>
+<dt>Chain Length</dt><dd><p>Number of further steps carried out by fitting algorithm once the parameters have
+converged (see <em>ChainLength</em> is <a class="reference internal" href="../../concepts/FABADA.html#fabada"><span class="std std-ref">FABADA</span></a> documentation)</p>
+</dd>
+<dt>Convergence Criteria</dt><dd><p>The minimum variation in the cost function before the parameters are
+considered to have converged (see <em>ConvergenceCriteria</em> in <a class="reference internal" href="../../concepts/FABADA.html#fabada"><span class="std std-ref">FABADA</span></a>
+documentation)</p>
+</dd>
+<dt>Acceptance Rate</dt><dd><p>The desired percentage acceptance of new parameters (see <em>JumpAcceptanceRate</em>
+in <a class="reference internal" href="../../concepts/FABADA.html#fabada"><span class="std std-ref">FABADA</span></a> documentation)</p>
+</dd>
+</dl>
+<p>The FABADA minimizer can output a PDF group workspace when the PDF option is ticked. If this happens,
+then it is possible to plot this PDF data using the output options at the bottom of the tabs.</p>
+<p><strong>References</strong></p>
+<ol class="arabic simple">
+<li><p>Peters &amp; Kneller, Journal of Chemical Physics, 139, 165102 (2013)</p></li>
+<li><p>Yi et al, J Phys Chem B 116, 5028 (2012)</p></li>
+</ol>
+<p><strong>Categories</strong>: <a class="reference external" href="../ILL/categories/Interfaces.html">Interfaces</a> | <a class="reference external" href="../../algorithms/categories/Inelastic.html">Inelastic</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Inelastic%20Data%20Processor.html" title="Previous Chapter: Inelastic Data Processor"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Inelastic Dat...</span>
+    </a>
+  </li>
+  <li>
+    <a href="../muon/Feature%20Flags.html" title="Next Chapter: Muon Feature Flags"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Muon Feature Flags &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

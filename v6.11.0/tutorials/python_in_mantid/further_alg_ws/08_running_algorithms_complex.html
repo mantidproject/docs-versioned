@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Running Algorithms - Complex Example</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <script src="../../../_static/documentation_options.js?v=06de18c4"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Python in Mantid: Exercise 4" href="09_pim_ex_4.html" />
+    <link rel="prev" title="Extract and Manipulate Data: Examples" href="07_extract_manipulate_data.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.11</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../../index.html" >Training</a> &#187;</li>
+          
+            <li class="nav-item nav-item-2"><a href="../index.html" >Python In Mantid</a> &#187;</li>
+          
+            <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Further Algorithm and Workspaces with Python</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Running Algorithms - Complex Example</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="running-algorithms-complex-example">
+<span id="running-algorithms-complex"></span><h1>Running Algorithms - Complex Example<a class="headerlink" href="#running-algorithms-complex-example" title="Link to this heading">¶</a></h1>
+<p>We have seen an example of chaining together two algorithms where just the workspace was passed as input. While this is a powerful use of Mantid it is also possible to extract the workspace data out to numpy, perform some operations and then feed this back into a workspace.</p>
+<p>The script below shows a more complex example of mixing Mantid’s algorithms with numpy</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="n">white_beam</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s2">&quot;MAR11060.raw&quot;</span><span class="p">)</span>
+
+<span class="c1"># Define constants</span>
+<span class="n">norm_spectrum</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">wb_scale_factor</span> <span class="o">=</span> <span class="mf">100.</span>
+<span class="n">rb_params</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.</span><span class="p">,</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">80.</span><span class="p">]</span>
+
+<span class="n">white_beam</span> <span class="o">=</span> <span class="n">NormaliseToMonitor</span><span class="p">(</span><span class="n">white_beam</span><span class="p">,</span><span class="n">MonitorSpectrum</span><span class="o">=</span><span class="n">norm_spectrum</span><span class="p">)</span>
+<span class="c1"># crop out monitors</span>
+<span class="n">white_beam</span> <span class="o">=</span> <span class="n">CropWorkspace</span><span class="p">(</span><span class="n">white_beam</span><span class="p">,</span> <span class="n">StartWorkspaceIndex</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">white_beam</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">white_beam</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s1">&#39;Energy&#39;</span><span class="p">)</span>
+<span class="n">white_beam</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">white_beam</span><span class="p">,</span> <span class="n">rb_params</span><span class="p">)</span>
+
+<span class="sd">&quot;&quot;&quot; Extract data to numpy, computes the sum value for each spectra</span>
+<span class="sd">      and puts the results back into a worksapace.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="n">xvalues</span> <span class="o">=</span> <span class="n">white_beam</span><span class="o">.</span><span class="n">extractX</span><span class="p">()</span> <span class="c1"># 2D copy of workspace data</span>
+<span class="n">yvalues</span> <span class="o">=</span> <span class="n">white_beam</span><span class="o">.</span><span class="n">extractY</span><span class="p">()</span> <span class="c1"># 2D copy of workspace data</span>
+<span class="n">evalues</span> <span class="o">=</span> <span class="n">white_beam</span><span class="o">.</span><span class="n">extractE</span><span class="p">()</span> <span class="c1"># 2D copy of workspace data</span>
+
+<span class="c1"># sum across axis that numpy calls 1, i.e sum values across bins for each spectra</span>
+<span class="n">sumy</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">yvalues</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#Compute errors</span>
+<span class="n">evalues</span> <span class="o">=</span> <span class="n">evalues</span> <span class="o">**</span> <span class="mi">2</span> <span class="c1"># Square each value</span>
+<span class="n">evalues</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">evalues</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># Sum the squares</span>
+<span class="n">evalues</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">evalues</span><span class="p">)</span>
+
+<span class="n">xlimits</span> <span class="o">=</span> <span class="n">xvalues</span><span class="p">[</span> <span class="p">:,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">]</span> <span class="c1"># numpy array slice. : takes all rows and [0,-1] selects only column 0 and n-1</span>
+<span class="c1"># + any other operations that numpy can do</span>
+
+<span class="c1"># Put back into workspace.</span>
+<span class="n">white_beam</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">xlimits</span><span class="p">,</span> <span class="n">sumy</span><span class="p">,</span> <span class="n">evalues</span><span class="p">,</span><span class="n">NSpec</span><span class="o">=</span><span class="n">sumy</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># Divide sample run</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s2">&quot;MAR11015&quot;</span><span class="p">)</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="n">NormaliseToMonitor</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span><span class="n">MonitorSpectrum</span><span class="o">=</span><span class="n">norm_spectrum</span><span class="p">)</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s1">&#39;DeltaE&#39;</span><span class="p">,</span><span class="n">EMode</span><span class="o">=</span><span class="s1">&#39;Direct&#39;</span><span class="p">,</span><span class="n">EFixed</span><span class="o">=</span><span class="mi">85</span><span class="p">)</span>
+<span class="c1"># crop out monitors</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="n">CropWorkspace</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">StartWorkspaceIndex</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">rb_params</span><span class="p">)</span>
+
+<span class="c1"># Normalize</span>
+<span class="n">sample</span> <span class="o">/=</span> <span class="n">white_beam</span>
+</pre></div>
+</div>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="07_extract_manipulate_data.html" title="Previous Chapter: Extract and Manipulate Data: Examples"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Extract and M...</span>
+    </a>
+  </li>
+  <li>
+    <a href="09_pim_ex_4.html" title="Next Chapter: Python in Mantid: Exercise 4"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Python in Man... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

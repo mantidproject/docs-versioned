@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Settings</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <script src="../../../_static/documentation_options.js?v=06de18c4"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Extract and Manipulate Data: Examples" href="07_extract_manipulate_data.html" />
+    <link rel="prev" title="Advanced Access to Sample Logs" href="05_advanced_logs.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.11</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../../index.html" >Training</a> &#187;</li>
+          
+            <li class="nav-item nav-item-2"><a href="../index.html" >Python In Mantid</a> &#187;</li>
+          
+            <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Further Algorithm and Workspaces with Python</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Settings</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="settings">
+<span id="id1"></span><h1>Settings<a class="headerlink" href="#settings" title="Link to this heading">¶</a></h1>
+<p>Mantid’s main configuration occurs through properties files. There are two (three on Linux) that allow customisation of Mantid (read in this order):</p>
+<ul class="simple">
+<li><p>Mantid.properties (found in the bin directory) - Default settings, replaced with each version of Mantid</p></li>
+<li><p>Mantid.system.properties (linux only) - System-wide settings for multi-user systems.</p></li>
+<li><p>Mantid.user.properties (found in the bin directory on Windows &amp; in $HOME/.mantid on Linux) - User settings that will never be touched by a later version of Mantid.</p></li>
+</ul>
+<p>The settings within these files occur as key-value pairs, i.e the default instrument is specified as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">default</span><span class="o">.</span><span class="n">instrument</span> <span class="o">=</span> <span class="n">INST_NAME</span>
+<span class="c1"># Note, this is not a Python command</span>
+</pre></div>
+</div>
+<p>where INST_NAME is the name of the default instrument, for example ‘LARMOR’.</p>
+<p>All settings specified in these files are accessible via python through the config object, which can be imported from the mantid module. For example, to access the default instrument:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid</span> <span class="kn">import</span> <span class="n">config</span>
+
+<span class="n">default_inst_name</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;default.instrument&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The config object behaves like a Python dictionary, where each setting in the properties file is used as a key to obtain its value from the config object.</p>
+<p>The dictionary-like manner can also be used to update settings, e.g.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid</span> <span class="kn">import</span> <span class="n">config</span>
+
+<span class="n">config</span><span class="p">[</span><span class="s1">&#39;default.instrument&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;INST_NAME&#39;</span>
+</pre></div>
+</div>
+<p>where the value on the RHS must be a string. NOTE: Settings changed in this manner only affect the current Mantid session</p>
+<section id="data-search-directories">
+<h2>Data search directories<a class="headerlink" href="#data-search-directories" title="Link to this heading">¶</a></h2>
+<p>Some keys in the properties are considered special and have their own accessors. For example, the datasearch.directories key is a semi-colon separated list of search directories. This is cumbersome to use as a string and various methods exist to manipulate the search paths more easily</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid</span> <span class="kn">import</span> <span class="n">config</span>
+
+<span class="c1"># Get a list of the search paths</span>
+<span class="n">current_paths</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getDataSearchDirs</span><span class="p">()</span>
+
+<span class="c1"># Add a new directory to the list</span>
+<span class="n">config</span><span class="o">.</span><span class="n">appendDataSearchDir</span><span class="p">(</span><span class="s1">&#39;new-dir&#39;</span><span class="p">)</span>
+
+<span class="c1"># Beware, the following commands will change your data search path</span>
+<span class="c1"># After that you may not be able to find your training data with Load()</span>
+
+<span class="c1">#Avoids dependency on the key name</span>
+<span class="n">config</span><span class="o">.</span><span class="n">setDataSearchDirs</span><span class="p">(</span><span class="s1">&#39;path1;path2;path3&#39;</span><span class="p">)</span>
+
+<span class="c1"># Set it via a list</span>
+<span class="n">config</span><span class="o">.</span><span class="n">setDataSearchDirs</span><span class="p">([</span><span class="s1">&#39;path1&#39;</span><span class="p">,</span><span class="s1">&#39;path2&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="facility-instrument-information">
+<h2>Facility &amp; Instrument Information<a class="headerlink" href="#facility-instrument-information" title="Link to this heading">¶</a></h2>
+<p>Mantid has another config file called facilities.xml that is found in the bin directory of the installation. This file provides Mantid with information regarding a facility &amp; its instruments. The types of information provided are:
+a list of instruments at the facility along with techniques that these instruments support;
+a default zero-padding for the run files at the facility, which each instrument declaration can override;
+a default list of extensions for files considered as data from an instrument;
+the data catalog in use at the facility;
+the archive search plugin used to access the data archive.</p>
+<p>All of these properties can be accessed via Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mantid</span> <span class="kn">import</span> <span class="n">config</span>
+
+<span class="n">facility</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getFacility</span><span class="p">(</span><span class="s1">&#39;SNS&#39;</span><span class="p">)</span>  <span class="c1"># or config.getFacility() returns the current default</span>
+<span class="n">inst_info</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getInstrument</span><span class="p">(</span><span class="s1">&#39;CNCS&#39;</span><span class="p">)</span> <span class="c1"># or config.Instrument() returns the current default</span>
+</pre></div>
+</div>
+<p>The list of methods available are shown in the python reference: <a class="reference internal" href="../../../api/python/mantid/kernel/InstrumentInfo.html#instrumentinfo"><span class="std std-ref">InstrumentInfo</span></a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="05_advanced_logs.html" title="Previous Chapter: Advanced Access to Sample Logs"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Advanced Acce...</span>
+    </a>
+  </li>
+  <li>
+    <a href="07_extract_manipulate_data.html" title="Next Chapter: Extract and Manipulate Data: Examples"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Extract and M... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

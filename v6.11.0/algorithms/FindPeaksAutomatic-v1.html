@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>FindPeaksAutomatic v1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=06de18c4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindPeaksConvolve v1" href="FindPeaksConvolve-v1.html" />
+    <link rel="prev" title="FindPeaks v1" href="FindPeaks-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.11</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">FindPeaksAutomatic v1</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="findpeaksautomatic-v1">
+<span id="algm-findpeaksautomatic"></span><span id="algm-findpeaksautomatic-v1"></span><h1>FindPeaksAutomatic v1<a class="headerlink" href="#findpeaksautomatic-v1" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id1">Summary</a></p>
+<ul>
+<li><p><a class="reference internal" href="#see-also" id="id2">See Also</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#properties" id="id3">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id4">Description</a></p></li>
+<li><p><a class="reference internal" href="#improving-the-fit" id="id5">Improving the fit</a></p></li>
+<li><p><a class="reference internal" href="#source" id="id6">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Locates and estimates parameters for all the peaks in a given spectra</p>
+<section id="see-also">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="FitGaussianPeaks-v1.html#algm-fitgaussianpeaks"><span class="std std-ref">FitGaussianPeaks</span></a>, <a class="reference internal" href="FindPeaks-v1.html#algm-findpeaks"><span class="std std-ref">FindPeaks</span></a>, <a class="reference internal" href="FindPeaksMD-v1.html#algm-findpeaksmd"><span class="std std-ref">FindPeaksMD</span></a>, <a class="reference internal" href="FindSXPeaks-v1.html#algm-findsxpeaks"><span class="std std-ref">FindSXPeaks</span></a>, <a class="reference internal" href="FitPeak-v1.html#algm-fitpeak"><span class="std std-ref">FitPeak</span></a>, <a class="reference internal" href="FitPeaks-v1.html#algm-fitpeaks"><span class="std std-ref">FitPeaks</span></a></p>
+</section>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>InputWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/Workspace.html#workspace"><span class="std std-ref">Workspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Workspace with peaks to be identified</p></td>
+</tr>
+<tr class="row-odd"><td><p>SpectrumNumber</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>1</p></td>
+<td><p>Spectrum number to use</p></td>
+</tr>
+<tr class="row-even"><td><p>StartXValue</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>Value of X to start the search from</p></td>
+</tr>
+<tr class="row-odd"><td><p>EndXValue</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>Value of X to stop the search to</p></td>
+</tr>
+<tr class="row-even"><td><p>AcceptanceThreshold</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0.01</p></td>
+<td><p>Threshold for considering a peak significant, the exact meaning of the value depends on the cost function used and the data to be fitted. Good values might be about 1-10 for poisson cost and 0.0001-0.01 for chi2</p></td>
+</tr>
+<tr class="row-odd"><td><p>SmoothWindow</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>5</p></td>
+<td><p>Half size of the window used to find the background values to subtract</p></td>
+</tr>
+<tr class="row-even"><td><p>BadPeaksToConsider</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>20</p></td>
+<td><p>Number of peaks that do not exceed the acceptance threshold to be searched before terminating. This is useful because sometimes good peaks can be found after some bad ones. However setting this value too high will make the search much slower.</p></td>
+</tr>
+<tr class="row-odd"><td><p>UsePoissonCost</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Use a probabilistic approach to find the cost of a fit instead of using chi2.</p></td>
+</tr>
+<tr class="row-even"><td><p>FitToBaseline</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Use a probabilistic approach to find the cost of a fit instead of using chi2.</p></td>
+</tr>
+<tr class="row-odd"><td><p>EstimatePeakSigma</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>3</p></td>
+<td><p>A rough estimate of the standard deviation of the gaussian used to fit the peaks</p></td>
+</tr>
+<tr class="row-even"><td><p>MinPeakSigma</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0.5</p></td>
+<td><p>Minimum value for the standard deviation of a peak</p></td>
+</tr>
+<tr class="row-odd"><td><p>MaxPeakSigma</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>30</p></td>
+<td><p>Maximum value for the standard deviation of a peak</p></td>
+</tr>
+<tr class="row-even"><td><p>PlotPeaks</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Plot the position of the peaks found by the algorithm</p></td>
+</tr>
+<tr class="row-odd"><td><p>PlotBaseline</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Plot the baseline as calculated by the algorithm</p></td>
+</tr>
+<tr class="row-even"><td><p>PeakPropertiesTableName</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a></p></td>
+<td><p>peak_table</p></td>
+<td><p>Name of the table containing the properties of the peaks</p></td>
+</tr>
+<tr class="row-odd"><td><p>RefitPeakPropertiesTableName</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a></p></td>
+<td><p>refit_peak_table</p></td>
+<td><p>Name of the table containing the properties of the peaks that had to be fitted twice as the first time the error was unreasonably large</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/Workspace.html#workspace"><span class="std std-ref">Workspace</span></a></p></td>
+<td><p>workspace_with_errors</p></td>
+<td><p>Workspace containing the same data as the input one, with errors added if not present from the beginning</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>The algorithm takes a workspace containing a spectrum and will attempt to find the number and parameters of
+all the peaks (assumed to be gaussian).</p>
+<p>To do so the algorithm performs the following:</p>
+<ol class="arabic simple">
+<li><p>The data is loaded, invalid values discarded and the run is cropped to the user defined window.</p></li>
+<li><p>If no error value is provided the error is calculated as the square root of the y values.</p></li>
+<li><p>The morphological operations of erosion and dilation are used to calculate a baseline. If the option
+<cite>FitToBaseline</cite> is selected, the following steps will be performed on the baseline. Otherwise the baseline is
+subtracted from the data.</p></li>
+<li><p>All peaks (including noise) are identified and sorted by relative height with respect to the background.</p></li>
+</ol>
+<ol class="arabic simple" start="6">
+<li><p>The cost function is evaluated against a flat background (i.e. no peak hypothesis).</p></li>
+<li><p>The best peak found in step #4 and not yet considered is added to the list of peaks to be fitted.
+A fit is performed using the <a class="reference internal" href="Fit-v1.html#algm-fit"><span class="std std-ref">Fit</span></a> algorithm and the cost function is evaluated on the result.</p></li>
+<li><p>If the newly calculated cost is compared to the previous best one. This is done differently for poisson
+and <span class="math notranslate nohighlight">\(\chi^2\)</span> costs:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\chi^2\)</span>: if the new cost is lower than the previous best and the relative difference is reater than <cite>AcceptanceThreshold</cite>
+the peak is considered valid.</p></li>
+<li><p><strong>poisson</strong>: if the difference between the new cost and the previous best is greater than
+<span class="math notranslate nohighlight">\(ln(AcceptanceThreshold)\)</span> the peak is considered valid</p></li>
+</ul>
+</li>
+<li><p>If more than <cite>BadPeaksToConsider</cite> invalid peaks have been encountered since the last valid peak then the program
+terminates and the list of valid peaks is returned. Otherwise the procedure is repeated from step #6.</p></li>
+</ol>
+<p>To fit a list of peaks and calculate the cost algorithm <a class="reference internal" href="FitGaussianPeaks-v1.html#algm-fitgaussianpeaks"><span class="std std-ref">FitGaussianPeaks</span></a>
+is used.
+If the option <cite>PlotPeaks</cite> is selected then after completing the algorithm a plot of the input data is generated
+and the peaks marked with red <cite>x</cite>. If the option <cite>PlotBaseline</cite> is also selected then the baseline will also be shown.
+This is particularly useful when tuning the value of <cite>SmoothWindow</cite> (see below).</p>
+</section>
+<section id="improving-the-fit">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Improving the fit</a><a class="headerlink" href="#improving-the-fit" title="Link to this heading">¶</a></h2>
+<p>The result of the fit is strongly dependent on the parameter chosen. Unfortunately these depend on the particular data
+to be fitted. Therefore, while the default choice will often generate reasonable answers it is often necessary to
+adjust some of them.</p>
+<p>The most important to this effect are:</p>
+<ul class="simple">
+<li><p><cite>AcceptanceThreshold</cite>, the value of this depends on the cost function used.
+For <span class="math notranslate nohighlight">\(\chi^2\)</span>, reasonable values range between 0.0001-0.1. For poisson cost, reasonable value range between 1-100.
+In both cases, higher values correspond to stronger constraints, and will lead to less peaks found. Conversely,
+lower values of the parameter will include more peaks, this causes the algorithm to slow down and to include more
+undesired peaks in the final output.</p></li>
+<li><p><cite>SmoothWindow</cite>, this affects the calculation of the baseline.
+Setting the parameter to 0 leaves the data unchanged.
+When subtracting a baseline found with low values of the parameter, all but the sharpest peaks will be removed,
+eliminating noise most effectively but also potentially getting rid of peaks of interest. Conversely, higher values
+will be less aggressive, leaving broader peaks and noise features to be fitted.</p></li>
+<li><p><cite>BadPeaksToConsider</cite>, this is the number of invalid peaks that can be encountered since the last valid one before the
+algorithm is terminated. If the parameter is too low, there is a possibility that valid peaks will be discarded because
+some noise features were previously encountered. However, higher values will strongly affect the performance and
+will tend to introduce unwanted noise in the final peak count.</p></li>
+<li><p><cite>EstimatePeakSigma</cite>, this is an initial guess for the standard deviation of the peaks in the data. It becomes
+especially important when trying to differentiate closely spaced features, where lower values of this parameter will
+usually perform better than higher ones.</p></li>
+</ul>
+<p><strong>Example - Find two gaussian peaks on an exponential background with added noise</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Function for a gaussian peak</span>
+<span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="n">xvals</span><span class="p">,</span> <span class="n">centre</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="n">exp_val</span> <span class="o">=</span> <span class="p">(</span><span class="n">xvals</span> <span class="o">-</span> <span class="n">centre</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigma</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">height</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">exp_val</span> <span class="o">*</span> <span class="n">exp_val</span><span class="p">)</span>
+
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1234</span><span class="p">)</span>
+
+<span class="c1"># Creating two peaks on an exponential background with gaussian noise</span>
+<span class="n">x_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1001</span><span class="p">)</span>
+<span class="n">centre</span> <span class="o">=</span> <span class="p">[</span><span class="mi">250</span><span class="p">,</span> <span class="mi">750</span><span class="p">]</span>
+<span class="n">height</span> <span class="o">=</span> <span class="p">[</span><span class="mi">350</span><span class="p">,</span> <span class="mi">200</span><span class="p">]</span>
+<span class="n">width</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">y_values</span> <span class="o">=</span> <span class="n">gaussian</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">centre</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">height</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">width</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">y_values</span> <span class="o">+=</span> <span class="n">gaussian</span><span class="p">(</span><span class="n">x_values</span><span class="p">,</span> <span class="n">centre</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">height</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">width</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">y_values_low_noise</span> <span class="o">=</span> <span class="n">y_values</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mi">400</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.005</span> <span class="o">*</span> <span class="n">x_values</span><span class="p">))</span> <span class="o">+</span> <span class="mi">30</span> <span class="o">+</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_values</span><span class="p">))</span>
+<span class="n">y_values_high_noise</span> <span class="o">=</span> <span class="n">y_values</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mi">400</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.005</span> <span class="o">*</span> <span class="n">x_values</span><span class="p">))</span> <span class="o">+</span> <span class="mi">30</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x_values</span><span class="p">))</span>
+<span class="n">low_noise_ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span><span class="o">=</span><span class="n">x_values</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">y_values_low_noise</span><span class="p">,</span> <span class="n">DataE</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">y_values_low_noise</span><span class="p">))</span>
+<span class="n">high_noise_ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span><span class="o">=</span><span class="n">x_values</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">y_values_high_noise</span><span class="p">,</span> <span class="n">DataE</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">y_values_high_noise</span><span class="p">))</span>
+
+<span class="c1"># Fitting the data with low noise</span>
+<span class="n">FindPeaksAutomatic</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">low_noise_ws</span><span class="p">,</span>
+                  <span class="n">AcceptanceThreshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                  <span class="n">SmoothWindow</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                  <span class="n">EstimatePeakSigma</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                  <span class="n">MaxPeakSigma</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                  <span class="n">PlotPeaks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">PeakPropertiesTableName</span><span class="o">=</span><span class="s1">&#39;properties&#39;</span><span class="p">,</span>
+                  <span class="n">RefitPeakPropertiesTableName</span><span class="o">=</span><span class="s1">&#39;refit_properties&#39;</span><span class="p">)</span>
+<span class="n">peak_properties</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;properties&#39;</span><span class="p">]</span>
+<span class="n">peak_low1</span> <span class="o">=</span> <span class="n">peak_properties</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">peak_low2</span> <span class="o">=</span> <span class="n">peak_properties</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Fitting the data with strong noise</span>
+<span class="n">FindPeaksAutomatic</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">high_noise_ws</span><span class="p">,</span>
+                  <span class="n">AcceptanceThreshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                  <span class="n">SmoothWindow</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                  <span class="n">EstimatePeakSigma</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                  <span class="n">MaxPeakSigma</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                  <span class="n">PlotPeaks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">PeakPropertiesTableName</span><span class="o">=</span><span class="s1">&#39;properties&#39;</span><span class="p">,</span>
+                  <span class="n">RefitPeakPropertiesTableName</span><span class="o">=</span><span class="s1">&#39;refit_properties&#39;</span><span class="p">)</span>
+<span class="n">peak_properties</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;properties&#39;</span><span class="p">]</span>
+<span class="n">peak_high1</span> <span class="o">=</span> <span class="n">peak_properties</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">peak_high2</span> <span class="o">=</span> <span class="n">peak_properties</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Low noise&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Peak 1: centre=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, height=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, sigma=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">&#39;</span>
+      <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">peak_low1</span><span class="p">[</span><span class="s1">&#39;centre&#39;</span><span class="p">],</span> <span class="n">peak_low1</span><span class="p">[</span><span class="s1">&#39;error centre&#39;</span><span class="p">],</span>
+              <span class="n">peak_low1</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">],</span> <span class="n">peak_low1</span><span class="p">[</span><span class="s1">&#39;error height&#39;</span><span class="p">],</span>
+              <span class="n">peak_low1</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">],</span> <span class="n">peak_low1</span><span class="p">[</span><span class="s1">&#39;error sigma&#39;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Peak 2: centre=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, height=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, sigma=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">&#39;</span>
+      <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">peak_low2</span><span class="p">[</span><span class="s1">&#39;centre&#39;</span><span class="p">],</span> <span class="n">peak_low2</span><span class="p">[</span><span class="s1">&#39;error centre&#39;</span><span class="p">],</span>
+              <span class="n">peak_low2</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">],</span> <span class="n">peak_low2</span><span class="p">[</span><span class="s1">&#39;error height&#39;</span><span class="p">],</span>
+              <span class="n">peak_low2</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">],</span> <span class="n">peak_low2</span><span class="p">[</span><span class="s1">&#39;error sigma&#39;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Strong noise&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Peak 1: centre=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, height=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, sigma=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">&#39;</span>
+      <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">peak_high1</span><span class="p">[</span><span class="s1">&#39;centre&#39;</span><span class="p">],</span> <span class="n">peak_high1</span><span class="p">[</span><span class="s1">&#39;error centre&#39;</span><span class="p">],</span>
+              <span class="n">peak_high1</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">],</span> <span class="n">peak_high1</span><span class="p">[</span><span class="s1">&#39;error height&#39;</span><span class="p">],</span>
+              <span class="n">peak_high1</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">],</span> <span class="n">peak_high1</span><span class="p">[</span><span class="s1">&#39;error sigma&#39;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Peak 2: centre=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, height=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, sigma=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">&#39;</span>
+      <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">peak_high2</span><span class="p">[</span><span class="s1">&#39;centre&#39;</span><span class="p">],</span> <span class="n">peak_high2</span><span class="p">[</span><span class="s1">&#39;error centre&#39;</span><span class="p">],</span>
+              <span class="n">peak_high2</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">],</span> <span class="n">peak_high2</span><span class="p">[</span><span class="s1">&#39;error height&#39;</span><span class="p">],</span>
+              <span class="n">peak_high2</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">],</span> <span class="n">peak_high2</span><span class="p">[</span><span class="s1">&#39;error sigma&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Low noise
+Peak 1: centre=250.01+/-0.09, height=352.47+/-10.91, sigma=3.06+/-0.08
+Peak 2: centre=750.00+/-0.09, height=200.03+/-9.13, sigma=2.01+/-0.07
+
+Strong noise
+Peak 1: centre=250.00+/-0.09, height=360.33+/-10.83, sigma=3.11+/-0.08
+Peak 2: centre=749.90+/-0.08, height=194.86+/-7.82, sigma=2.47+/-0.07
+</pre></div>
+</div>
+<p><strong>Example - Find 2 different gaussian peaks on a flat background with added noise</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="c1"># Function for a gaussian peak</span>
+<span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="n">xvals</span><span class="p">,</span> <span class="n">centre</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="n">exp_val</span> <span class="o">=</span> <span class="p">(</span><span class="n">xvals</span> <span class="o">-</span> <span class="n">centre</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigma</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">height</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">exp_val</span> <span class="o">*</span> <span class="n">exp_val</span><span class="p">)</span>
+
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">4321</span><span class="p">)</span>
+
+<span class="c1"># Creating two peaks on a flat background with gaussian noise</span>
+<span class="n">x_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1001</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">1001</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">centre</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">250</span><span class="p">,</span> <span class="mi">750</span><span class="p">],</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">600</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">height</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">350</span><span class="p">,</span> <span class="mi">200</span><span class="p">],</span> <span class="p">[</span><span class="mi">400</span><span class="p">,</span> <span class="mi">500</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">width</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">y_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">gaussian</span><span class="p">(</span><span class="n">x_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">centre</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">height</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">width</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span>
+                     <span class="n">gaussian</span><span class="p">(</span><span class="n">x_values</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">centre</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">height</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">width</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])])</span>
+<span class="n">y_values</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">gaussian</span><span class="p">(</span><span class="n">x_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">centre</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">height</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">width</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>
+                      <span class="n">gaussian</span><span class="p">(</span><span class="n">x_values</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">centre</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">height</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">width</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])])</span>
+<span class="n">y_values_low_noise</span> <span class="o">=</span> <span class="n">y_values</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mi">200</span> <span class="o">+</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="o">*</span><span class="n">x_values</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+<span class="n">y_values_high_noise</span> <span class="o">=</span> <span class="n">y_values</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="mi">200</span> <span class="o">+</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="o">*</span><span class="n">x_values</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+<span class="n">low_noise_ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span><span class="o">=</span><span class="n">x_values</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">y_values_low_noise</span><span class="p">,</span> <span class="n">DataE</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">y_values_low_noise</span><span class="p">),</span><span class="n">NSpec</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">high_noise_ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span><span class="o">=</span><span class="n">x_values</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">y_values_high_noise</span><span class="p">,</span> <span class="n">DataE</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">y_values_high_noise</span><span class="p">),</span><span class="n">NSpec</span> <span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Fitting the data with low noise</span>
+<span class="n">FindPeaksAutomatic</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">low_noise_ws</span><span class="p">,</span>
+                  <span class="n">SpectrumNumber</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+                  <span class="n">AcceptanceThreshold</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                  <span class="n">SmoothWindow</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                  <span class="n">EstimatePeakSigma</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                  <span class="n">MaxPeakSigma</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                  <span class="n">PlotPeaks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">PeakPropertiesTableName</span><span class="o">=</span><span class="s1">&#39;properties&#39;</span><span class="p">,</span>
+                  <span class="n">RefitPeakPropertiesTableName</span><span class="o">=</span><span class="s1">&#39;refit_properties&#39;</span><span class="p">)</span>
+<span class="n">peak_properties</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;properties&#39;</span><span class="p">]</span>
+<span class="n">peak_low1</span> <span class="o">=</span> <span class="n">peak_properties</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">peak_low2</span> <span class="o">=</span> <span class="n">peak_properties</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Fitting the data with strong noise</span>
+<span class="n">FindPeaksAutomatic</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">high_noise_ws</span><span class="p">,</span>
+                  <span class="n">SpectrumNumber</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+                  <span class="n">AcceptanceThreshold</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                  <span class="n">SmoothWindow</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                  <span class="n">EstimatePeakSigma</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                  <span class="n">MaxPeakSigma</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                  <span class="n">PlotPeaks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">PeakPropertiesTableName</span><span class="o">=</span><span class="s1">&#39;properties&#39;</span><span class="p">,</span>
+                  <span class="n">RefitPeakPropertiesTableName</span><span class="o">=</span><span class="s1">&#39;refit_properties&#39;</span><span class="p">)</span>
+<span class="n">peak_properties</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;properties&#39;</span><span class="p">]</span>
+<span class="n">peak_high1</span> <span class="o">=</span> <span class="n">peak_properties</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">peak_high2</span> <span class="o">=</span> <span class="n">peak_properties</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Low noise&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Peak 1: centre=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, height=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, sigma=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">&#39;</span>
+      <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">peak_low1</span><span class="p">[</span><span class="s1">&#39;centre&#39;</span><span class="p">],</span> <span class="n">peak_low1</span><span class="p">[</span><span class="s1">&#39;error centre&#39;</span><span class="p">],</span>
+              <span class="n">peak_low1</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">],</span> <span class="n">peak_low1</span><span class="p">[</span><span class="s1">&#39;error height&#39;</span><span class="p">],</span>
+              <span class="n">peak_low1</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">],</span> <span class="n">peak_low1</span><span class="p">[</span><span class="s1">&#39;error sigma&#39;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Peak 2: centre=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, height=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, sigma=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">&#39;</span>
+      <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">peak_low2</span><span class="p">[</span><span class="s1">&#39;centre&#39;</span><span class="p">],</span> <span class="n">peak_low2</span><span class="p">[</span><span class="s1">&#39;error centre&#39;</span><span class="p">],</span>
+              <span class="n">peak_low2</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">],</span> <span class="n">peak_low2</span><span class="p">[</span><span class="s1">&#39;error height&#39;</span><span class="p">],</span>
+              <span class="n">peak_low2</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">],</span> <span class="n">peak_low2</span><span class="p">[</span><span class="s1">&#39;error sigma&#39;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Strong noise&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Peak 1: centre=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, height=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, sigma=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">&#39;</span>
+      <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">peak_high1</span><span class="p">[</span><span class="s1">&#39;centre&#39;</span><span class="p">],</span> <span class="n">peak_high1</span><span class="p">[</span><span class="s1">&#39;error centre&#39;</span><span class="p">],</span>
+              <span class="n">peak_high1</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">],</span> <span class="n">peak_high1</span><span class="p">[</span><span class="s1">&#39;error height&#39;</span><span class="p">],</span>
+              <span class="n">peak_high1</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">],</span> <span class="n">peak_high1</span><span class="p">[</span><span class="s1">&#39;error sigma&#39;</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Peak 2: centre=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, height=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">, sigma=</span><span class="si">{:.2f}</span><span class="s1">+/-</span><span class="si">{:.2f}</span><span class="s1">&#39;</span>
+      <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">peak_high2</span><span class="p">[</span><span class="s1">&#39;centre&#39;</span><span class="p">],</span> <span class="n">peak_high2</span><span class="p">[</span><span class="s1">&#39;error centre&#39;</span><span class="p">],</span>
+              <span class="n">peak_high2</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">],</span> <span class="n">peak_high2</span><span class="p">[</span><span class="s1">&#39;error height&#39;</span><span class="p">],</span>
+              <span class="n">peak_high2</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">],</span> <span class="n">peak_high2</span><span class="p">[</span><span class="s1">&#39;error sigma&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Low noise
+Peak 1: centre=100.00+/-0.09, height=400.19+/-12.18, sigma=3.00+/-0.08
+Peak 2: centre=600.00+/-0.06, height=500.20+/-16.01, sigma=2.00+/-0.06
+
+Strong noise
+Peak 1: centre=100.00+/-0.10, height=377.97+/-0.02, sigma=3.35+/-0.07
+Peak 2: centre=600.00+/-0.06, height=503.59+/-15.68, sigma=2.08+/-0.06
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/Optimization/PeakFinding.html">Optimization\PeakFinding</a></p>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>Python: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/c66b9d75d3432a3fcde604fac070fd25fe61daf8/Framework/PythonInterface/plugins/algorithms/WorkflowAlgorithms/FindPeaksAutomatic.py">FindPeaksAutomatic.py</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="FindPeaks-v1.html" title="Previous Chapter: FindPeaks v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; FindPeaks v1</span>
+    </a>
+  </li>
+  <li>
+    <a href="FindPeaksConvolve-v1.html" title="Next Chapter: FindPeaksConvolve v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">FindPeaksConvolve v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

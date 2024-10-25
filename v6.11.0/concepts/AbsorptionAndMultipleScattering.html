@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Absorption and Multiple Scattering Corrections</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=06de18c4"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Algorithm" href="Algorithm.html" />
+    <link rel="prev" title="Abins: Fast approximate broadening with “interpolate”" href="AbinsInterpolatedBroadening.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.11</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Concepts</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Absorption and Multiple Scattering Corrections</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="absorption-and-multiple-scattering-corrections">
+<span id="sample-corrections"></span><h1><a class="toc-backref" href="#id51" role="doc-backlink">Absorption and Multiple Scattering Corrections</a><a class="headerlink" href="#absorption-and-multiple-scattering-corrections" title="Link to this heading">¶</a></h1>
+<nav class="contents" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#absorption-and-multiple-scattering-corrections" id="id51">Absorption and Multiple Scattering Corrections</a></p>
+<ul>
+<li><p><a class="reference internal" href="#introduction" id="id52">Introduction</a></p>
+<ul>
+<li><p><a class="reference internal" href="#total-cross-section-sigma-t" id="id53">Total cross section (<span class="math notranslate nohighlight">\(\sigma_t\)</span>)</a></p></li>
+<li><p><a class="reference internal" href="#scattering-cross-section-sigma-s" id="id54">Scattering cross section (<span class="math notranslate nohighlight">\(\sigma_s\)</span> )</a></p></li>
+<li><p><a class="reference internal" href="#absorption-cross-section-sigma-a" id="id55">Absorption cross section (<span class="math notranslate nohighlight">\(\sigma_a\)</span>)</a></p></li>
+<li><p><a class="reference internal" href="#attenuation-length-mu" id="id56">Attenuation Length (<span class="math notranslate nohighlight">\(\mu\)</span>)</a></p></li>
+<li><p><a class="reference internal" href="#techniques-for-calculating-corrections" id="id57">Techniques for Calculating Corrections</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#absorption" id="id58">Absorption</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id6" id="id59">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#basic-sample-absorption-theory" id="id60">Basic Sample Absorption Theory</a></p></li>
+<li><p><a class="reference internal" href="#partial-absorption-correction-factors-paalman-and-pings-formalism" id="id61">Partial Absorption Correction Factors: Paalman and Pings Formalism</a></p></li>
+<li><p><a class="reference internal" href="#general-notes" id="id62">General Notes</a></p>
+<ul>
+<li><p><a class="reference internal" href="#integration-methods" id="id63">Integration Methods</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#legends-for-absorption-correction-algorithms-in-mantid-table" id="id64">Legends for Absorption Correction Algorithms in Mantid Table</a></p></li>
+<li><p><a class="reference internal" href="#absorption-correction-algorithms-in-mantid-table" id="id65">Absorption Correction Algorithms in Mantid Table</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#multiple-scattering" id="id66">Multiple Scattering</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id18" id="id67">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#theory" id="id68">Theory</a></p></li>
+<li><p><a class="reference internal" href="#assumptions" id="id69">Assumptions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#elastic-scattering" id="id70">Elastic Scattering</a></p></li>
+<li><p><a class="reference internal" href="#isotropic-scattering" id="id71">Isotropic Scattering</a></p></li>
+<li><p><a class="reference internal" href="#elastic-isotropic-scattering" id="id72">Elastic + Isotropic Scattering</a></p></li>
+<li><p><a class="reference internal" href="#constant-ratio-for-frac-i-n-i-n-1-delta" id="id73">Constant Ratio for  <span class="math notranslate nohighlight">\(\frac{I_n}{I_{n-1}} = \Delta\)</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#id25" id="id74">General Notes</a></p>
+<ul>
+<li><p><a class="reference internal" href="#analytical-methods" id="id75">Analytical Methods</a></p></li>
+<li><p><a class="reference internal" href="#monte-carlo-methods" id="id76">Monte Carlo Methods</a></p></li>
+<li><p><a class="reference internal" href="#small-angle-scattering" id="id77">Small Angle Scattering</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#legends-for-multiple-scattering-correction-algorithms-in-mantid-table" id="id78">Legends for Multiple Scattering Correction Algorithms in Mantid Table</a></p></li>
+<li><p><a class="reference internal" href="#multiple-scattering-correction-algorithms-in-mantid-table" id="id79">Multiple Scattering Correction Algorithms in Mantid Table</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#references" id="id80">References</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="introduction">
+<h2><a class="toc-backref" href="#id52" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>To discuss sample corrections, specifically the absorption and multiple scattering, we must first define terms pertinent to the calculations of these corrections.</p>
+<section id="total-cross-section-sigma-t">
+<h3><a class="toc-backref" href="#id53" role="doc-backlink">Total cross section (<span class="math notranslate nohighlight">\(\sigma_t\)</span>)</a><a class="headerlink" href="#total-cross-section-sigma-t" title="Link to this heading">¶</a></h3>
+<p>First, we define the total cross section per atom, which for the majority of elements, is equal to the sum of the element’s scattering and absorption cross sections:</p>
+<div class="math notranslate nohighlight" id="equation-total-xs">
+<span class="eqno">(1)<a class="headerlink" href="#equation-total-xs" title="Link to this equation">¶</a></span>\[\sigma_t (\lambda) = \sigma_s (\lambda) + \sigma_a (\lambda)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\lambda\)</span> is the neutron wavelength, <span class="math notranslate nohighlight">\(\sigma_s = \int_{\Omega} \frac{d\sigma}{d\Omega} \left( \lambda, 2\theta \right) d\Omega\)</span>, and
+<span class="math notranslate nohighlight">\(\frac{d\sigma}{d\Omega} \left( \lambda, 2\theta \right)\)</span> is the differential cross-section which is the cross-section (<span class="math notranslate nohighlight">\(\sigma\)</span>) per solid angle (<span class="math notranslate nohighlight">\(d\Omega\)</span>).</p>
+</section>
+<section id="scattering-cross-section-sigma-s">
+<h3><a class="toc-backref" href="#id54" role="doc-backlink">Scattering cross section (<span class="math notranslate nohighlight">\(\sigma_s\)</span> )</a><a class="headerlink" href="#scattering-cross-section-sigma-s" title="Link to this heading">¶</a></h3>
+<p>Typically, the scattering cross section is directly found from tabulated single atom values <a class="footnote-reference brackets" href="#id35" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> and with good approximation, assumed independent of wavelength.
+If we observe the equation above for <span class="math notranslate nohighlight">\(\sigma_s\)</span>, we have that it is equal to the integration of the differential cross section. Yet, for the typical diffraction experiment,
+the differential cross-section is exactly the quantity we wish to measure. Thus, to proceed one could chose from the following:</p>
+<ol class="arabic simple">
+<li><p>Measure the sample and integrate over all <span class="math notranslate nohighlight">\(d\Omega\)</span> (very difficult to do exactly since instruments typically cannot cover all <span class="math notranslate nohighlight">\(4 \pi\)</span> of <span class="math notranslate nohighlight">\(\Omega\)</span>).</p></li>
+<li><p>Perform a transmission measurement to directly measure <span class="math notranslate nohighlight">\(\sigma_t\)</span> and subtract a known value for <span class="math notranslate nohighlight">\(\sigma_a\)</span> (also not typical).</p></li>
+<li><p>Use tabulated single atom values for <span class="math notranslate nohighlight">\(\sigma_s\)</span> <a class="footnote-reference brackets" href="#id35" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> (bingo!).</p></li>
+</ol>
+<p>For the energies used to measure structure of materials, <span class="math notranslate nohighlight">\(\sigma_s\)</span> is to
+reasonable approximation independent of <span class="math notranslate nohighlight">\(\lambda\)</span>. However, exceptions include nuclear resonances, strong Bragg scattering as in beryllium, and significant inelastic effects. <a class="footnote-reference brackets" href="#id36" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p>
+</section>
+<section id="absorption-cross-section-sigma-a">
+<h3><a class="toc-backref" href="#id55" role="doc-backlink">Absorption cross section (<span class="math notranslate nohighlight">\(\sigma_a\)</span>)</a><a class="headerlink" href="#absorption-cross-section-sigma-a" title="Link to this heading">¶</a></h3>
+<p>For the absorption cross section, again typically the cross section is used from the same tabulated single atom values <a class="footnote-reference brackets" href="#id35" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> but is only valid for the reference wavelength, 1.7982 <span class="math notranslate nohighlight">\(\AA\)</span>,
+at which it was measured at. Thus, we can look up the value of <span class="math notranslate nohighlight">\(\sigma_a (1.7982 \AA)\)</span>. Yet, the absorption cross section is a linear function of wavelength (away from nuclear resonances).
+Thus, we can calculate the absorption cross section at other wavelengths from:</p>
+<div class="math notranslate nohighlight" id="equation-abs-xs">
+<span class="eqno">(2)<a class="headerlink" href="#equation-abs-xs" title="Link to this equation">¶</a></span>\[ \sigma_a (\lambda) = \sigma_a (1.7982 \AA) \left( \frac{\lambda}{1.7982} \right)\]</div>
+<p><strong>NOTE:</strong> In Mantid, the reference wavelength is defined as a variable <code class="code docutils literal notranslate"><span class="pre">ReferenceLambda</span></code> in <code class="code docutils literal notranslate"><span class="pre">NeutronAtom.cpp</span></code> <a class="footnote-reference brackets" href="#id37" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a>. This variable should be used for consistency in all sample correction algorithms that
+calculate <span class="math notranslate nohighlight">\(\sigma_a (\lambda)\)</span> from this reference wavelength.</p>
+</section>
+<section id="attenuation-length-mu">
+<h3><a class="toc-backref" href="#id56" role="doc-backlink">Attenuation Length (<span class="math notranslate nohighlight">\(\mu\)</span>)</a><a class="headerlink" href="#attenuation-length-mu" title="Link to this heading">¶</a></h3>
+<p>The attenuation length is defined as:</p>
+<div class="math notranslate nohighlight" id="equation-attenuation-length">
+<span class="eqno">(3)<a class="headerlink" href="#equation-attenuation-length" title="Link to this equation">¶</a></span>\[ \mu = \rho \sigma_t = \rho \left( \sigma_s + \sigma_a \right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\rho\)</span> is the atomic number density of the sample.
+Note that <span class="math notranslate nohighlight">\(\rho\)</span> is not the crystallographic or microscopic density of a unit cell but the macroscopic density of the bulk sample. If one were to measure a powder sample, the powder would not pack
+perfectly and thus there would be a given packing fraction, <span class="math notranslate nohighlight">\(f\)</span>. Then, if the microscopic density is given as <span class="math notranslate nohighlight">\(\rho_{micro}\)</span>, it is related to <span class="math notranslate nohighlight">\(\rho\)</span> via:</p>
+<div class="math notranslate nohighlight" id="equation-packing-fraction">
+<span class="eqno">(4)<a class="headerlink" href="#equation-packing-fraction" title="Link to this equation">¶</a></span>\[ \rho = f * \rho_{micro}\]</div>
+<p>The definition of <span class="math notranslate nohighlight">\(\rho\)</span> is used throughout the rest of this documentation.</p>
+</section>
+<section id="techniques-for-calculating-corrections">
+<h3><a class="toc-backref" href="#id57" role="doc-backlink">Techniques for Calculating Corrections</a><a class="headerlink" href="#techniques-for-calculating-corrections" title="Link to this heading">¶</a></h3>
+<p>Methods for calculating the absorption corrections (and also the multiple scattering)  generally fall into these categories:</p>
+<ol class="arabic simple">
+<li><p>Analytical solutions. For some simple situations it is possible to do an exact, analytical integration to produce a formula for the absorption correction based on parameters of the sample</p></li>
+</ol>
+<ul class="simple">
+<li><p>Very fast.</p></li>
+<li><p>Results are often stored in look up tables.</p></li>
+<li><p>Use often involves interpolating between tabulated results.</p></li>
+<li><p>Implemented in Mantid</p></li>
+</ul>
+<ol class="arabic simple" start="2">
+<li><p>Numerical integration</p></li>
+</ol>
+<ul class="simple">
+<li><p>Generally provides quicker solutions than Monte Carlo methods.</p></li>
+<li><p>Some assumptions are included: sample geometries and the scattering processes.</p></li>
+<li><p>Less flexible than the Monte Carlo integration or ray-tracing for tackling different problems.</p></li>
+<li><p>Implemented in Mantid</p></li>
+</ul>
+<ol class="arabic simple" start="3">
+<li><p>Monte Carlo integration</p></li>
+</ol>
+<ul class="simple">
+<li><p>Monte Carlo is used for the numerical integration technique.</p></li>
+<li><p>The performance relative to classical numerical integration depends on the number of dimensions in the integration. Monte Carlo integration is faster for a large number of dimensions</p></li>
+<li><p>Relaxation of most assumptions needed by analytical solutions.</p></li>
+<li><p>More flexible than the analytical techniques for shapes, beam profiles, and mixed number of scattering processes.</p></li>
+<li><p>Implemented in Mantid</p></li>
+</ul>
+<ol class="arabic simple" start="4">
+<li><p>Monte Carlo ray tracing</p></li>
+</ol>
+<ul class="simple">
+<li><p>Most general solution in that it is a virtual neutron experiment with all neutron histories kept. Slowest to solution.</p></li>
+<li><p>Relatively no assumptions needed. Can simulate mixed numbers of scattering, complex scattering processes (ie scattering sample to sample environment back to sample then to detector), moderator and guides included.</p></li>
+<li><p>Most flexible but mainly a tool for designing new instruments than for calculating sample corrections.</p></li>
+<li><p>Typically calculated in another program specific to ray tracing and then imported into Mantid.</p></li>
+<li><p>Some ray tracing solutions reduce the cost of simulating neutrons that never reach a detector by forcing neutrons into certain trajectories and assigning weights. This type of enhanced ray tracing approach is very similar to a Monte Carlo integration</p></li>
+</ul>
+<p>The analytical and numerical integration methods generally provide a quicker solution, but at the expense of having to make assumptions about sample geometries and scattering processes that make them less flexible than the Monte Carlo techniques (integration and ray-tracing).
+However, in many cases analytical and numerical integration solutions are satisfactory and allow much more efficient analysis of results.</p>
+</section>
+</section>
+<section id="absorption">
+<span id="absorption-corrections"></span><h2><a class="toc-backref" href="#id58" role="doc-backlink">Absorption</a><a class="headerlink" href="#absorption" title="Link to this heading">¶</a></h2>
+<figure class="align-default">
+<a class="screenshot reference internal image-reference" href="../_images/ImageNotFound.png"><img alt="../_images/ImageNotFound.png" class="screenshot" src="../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+</figure>
+<blockquote>
+<div><p>Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</p>
+</div></blockquote>
+<section id="id6">
+<h3><a class="toc-backref" href="#id59" role="doc-backlink">Introduction</a><a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<p>Determination of the structure and/or dynamics of samples depends on the analysis of single scattering data.
+Overall, the absorption correction is a factor, <span class="math notranslate nohighlight">\(A\)</span>, such that 0 &lt; <span class="math notranslate nohighlight">\(A\)</span> &lt; 1 . It is a factor that accounts for the loss of intensity from single scattering in the sample (or other component in the instrument).
+due to both scattering and capture events in the sample. The factor <span class="math notranslate nohighlight">\(A\)</span> is divided by the measured intensity. Thus, the absorption correction has an overall multiplicative enhancement of the measured intensity.</p>
+</section>
+<section id="basic-sample-absorption-theory">
+<h3><a class="toc-backref" href="#id60" role="doc-backlink">Basic Sample Absorption Theory</a><a class="headerlink" href="#basic-sample-absorption-theory" title="Link to this heading">¶</a></h3>
+<p>The figure shows how a general single scattering process might occur. The neutron travels
+a certain distance <span class="math notranslate nohighlight">\(l_1\)</span> through the sample before a single scattering event occurs in
+the volume element <span class="math notranslate nohighlight">\(dV\)</span> of the sample. Then, the neutron travels a final length <span class="math notranslate nohighlight">\(l_2\)</span> before leaving the sample and being picked up by
+a detector.</p>
+<figure class="align-default">
+<img alt="AbsorptionVolume.png" src="../_images/AbsorptionVolume.png" />
+</figure>
+<p>To formulate the absorption sample correction, first, we assume we have a homogeneous sample of a given shape that is fully illuminated by the incident beam.
+Then, the number of neutrons per unit solid angle scattered once by a volume element <span class="math notranslate nohighlight">\(dV\)</span> of the sample and seen by a detector is given by:</p>
+<div class="math notranslate nohighlight" id="equation-di1">
+<span class="eqno">(5)<a class="headerlink" href="#equation-di1" title="Link to this equation">¶</a></span>\[dI_1(\theta) = J_0 \rho \frac{d\sigma}{d\Omega} \left( \theta \right) exp \left[ -\mu (\lambda_1) l_1 + - \mu (\lambda_2) l_2 \right] dV\]</div>
+<p>where <span class="math notranslate nohighlight">\(J_0\)</span> is the incident flux, <span class="math notranslate nohighlight">\(\rho\)</span> is the atomic number density, <span class="math notranslate nohighlight">\(\frac{d\sigma}{d\Omega} \left( \theta \right)\)</span> is the differential cross-section,
+<span class="math notranslate nohighlight">\(l_1\)</span> and <span class="math notranslate nohighlight">\(l_2\)</span> are the path lengths for incident neutrons to <span class="math notranslate nohighlight">\(dV\)</span> and from <span class="math notranslate nohighlight">\(dV\)</span> to the detector, respectively,
+and <span class="math notranslate nohighlight">\(\lambda_1\)</span> and <span class="math notranslate nohighlight">\(\lambda_2\)</span> are the incident and scattered wavelength, respectively.</p>
+<p>Yet, this is only the contribution from a single volume element, or voxel, of the sample volume that contributes to a detector. Thus, if we integrate over the entire sample volume (all the voxels),
+we arrive at the total intensity of neutrons scattered once through an angle <span class="math notranslate nohighlight">\(\theta\)</span> and then leaving the sample without further scattering, given as:</p>
+<div class="math notranslate nohighlight" id="equation-i1">
+<span class="eqno">(6)<a class="headerlink" href="#equation-i1" title="Link to this equation">¶</a></span>\[\begin{split}I_1(\theta) &amp;= \int_V dI_1 \\
+            &amp;= J_0 \rho \frac{d\sigma}{d\Omega} \left( \theta \right) \int_{V} exp \left[ -\mu (\lambda_1) l_1 + -\mu (\lambda_2) l_2 \right] dV \\
+            &amp;= J_0 \rho \frac{d\sigma}{d\Omega} \left( \theta \right) A V\end{split}\]</div>
+<p>In the last part of the equation for <span class="math notranslate nohighlight">\(I_1(\theta)\)</span>, we have introduced the term <span class="math notranslate nohighlight">\(A\)</span>, given as:</p>
+<div class="math notranslate nohighlight" id="equation-absorption-factor">
+<span class="eqno">(7)<a class="headerlink" href="#equation-absorption-factor" title="Link to this equation">¶</a></span>\[ A = \frac{1}{V} \int_{V} exp \left[ -\mu (\lambda_1) l_1 + -\mu (\lambda_2) l_2 \right] dV\]</div>
+<p>This is the basic absorption correction for a single sample volume (i.e. no container included, no partial correction factors, no partial illumination, etc.).
+NOTE: In some references, this term <span class="math notranslate nohighlight">\(A\)</span> is instead defined as the inverse <span class="math notranslate nohighlight">\(A^{-1}\)</span>. Some references use the notation here: <a class="footnote-reference brackets" href="#id36" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id38" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id39" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id41" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id42" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a> and <a class="footnote-reference brackets" href="#id44" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></a>, while others use the inverse notation: <a class="footnote-reference brackets" href="#id40" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a>.</p>
+<p>For elastic scattering, <span class="math notranslate nohighlight">\(\lambda_1\)</span> = <span class="math notranslate nohighlight">\(\lambda_2\)</span> = <span class="math notranslate nohighlight">\(\lambda\)</span> and we can simplify to:</p>
+<div class="math notranslate nohighlight" id="equation-absorption-factor-elastic">
+<span class="eqno">(8)<a class="headerlink" href="#equation-absorption-factor-elastic" title="Link to this equation">¶</a></span>\[ A_{elastic} = \frac{1}{V} \int_{V} exp \left[ -\mu (\lambda) \left( l_1 + l_2 \right) \right] dV\]</div>
+</section>
+<section id="partial-absorption-correction-factors-paalman-and-pings-formalism">
+<h3><a class="toc-backref" href="#id61" role="doc-backlink">Partial Absorption Correction Factors: Paalman and Pings Formalism</a><a class="headerlink" href="#partial-absorption-correction-factors-paalman-and-pings-formalism" title="Link to this heading">¶</a></h3>
+<p>When the scattering of a sample (liquid, powder, gas, etc.) is measured, the sample is often held in a thick sample container. This container contributes significantly to the measured neutron beam. Often the empty container is measured and the signal from the container (<span class="math notranslate nohighlight">\(C\)</span>) subtracted from the signal of sample plus container (<span class="math notranslate nohighlight">\(S+C\)</span>).</p>
+<p>The Paalman-Pings formalism (PPF) <a class="footnote-reference brackets" href="#id38" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> provides a framework for correcting for individual component absorption contributions, or the partial absorption correction factors, when a sample is measured in a container and, possibly, one or more sample environments. PPF builds on the earlier work of Ritter <a class="footnote-reference brackets" href="#id39" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a>, who described a graphical approach of accounting for partial absorption correction factors. The PPF goes beyond the work of Ritter in two important ways</p>
+<ul class="simple">
+<li><p>The graphical approach is formulated instead using numerical integration.</p></li>
+<li><p>The contribution from the sample/container correlation region, or the interface, where the density of each is affected due to their inter-material interactions.</p></li>
+</ul>
+<p>In their analysis, Paalman and Pings show that the latter point is not generally of consequence since this region only exists for a few angstroms in most materials, but the ability to account for it is re-assuring. The sample/container interaction could be of significant importance in cases where the container and sample are single crystal or poly-crystalline.</p>
+<p>Generally, the container measurement (neglecting multiple scattering and inelastic effects) is written:</p>
+<div class="math notranslate nohighlight" id="equation-ppf-container">
+<span class="eqno">(9)<a class="headerlink" href="#equation-ppf-container" title="Link to this equation">¶</a></span>\[ I^E_{C} = I_C A_{C,C}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(I^E_C\)</span> experimental intensity from the isolated container.</p></li>
+<li><p><span class="math notranslate nohighlight">\(I_C\)</span> theoretical intensity from the isolated container.</p></li>
+<li><p><span class="math notranslate nohighlight">\(A_{C,C}\)</span> is the absorption factor for scattering in the container region and absorption in the container.</p></li>
+</ul>
+<p>The full PPF for the sample and container measurement (neglecting multiple scattering and inelastic effects) is written:</p>
+<div class="math notranslate nohighlight" id="equation-ppf-sample-container">
+<span class="eqno">(10)<a class="headerlink" href="#equation-ppf-sample-container" title="Link to this equation">¶</a></span>\[ I^E_{S+C} = I_SA_{S,SC} + I_CA_{C,SC} + I_{SC}A_{SC,SC}\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(I^E_{S+C}\)</span> experimentally measured intensity from <span class="math notranslate nohighlight">\(S+C\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(I_S\)</span> theoretical intensity from the isolated sample.</p></li>
+<li><p><span class="math notranslate nohighlight">\(I_C\)</span> theoretical intensity from the isolated container.</p></li>
+<li><p><span class="math notranslate nohighlight">\(I_{SC}\)</span> theoretical intensity from the correlated sample and container interface.</p></li>
+<li><p><span class="math notranslate nohighlight">\(A_{S,SC}\)</span> is the absorption factor for scattering in the sample region and absorption by the sample and container.</p></li>
+<li><p><span class="math notranslate nohighlight">\(A_{C,SC}\)</span> is the absorption factor for scattering in the container region and absorption by the sample and container.</p></li>
+<li><p><span class="math notranslate nohighlight">\(A_{SC,SC}\)</span> is the absorption factor for scattering in the correlated sample and container interface and absorption by the sample and container.</p></li>
+</ul>
+<p>As discussed above, the final term in this expression is generally neglected.</p>
+</section>
+<section id="general-notes">
+<h3><a class="toc-backref" href="#id62" role="doc-backlink">General Notes</a><a class="headerlink" href="#general-notes" title="Link to this heading">¶</a></h3>
+<section id="integration-methods">
+<h4><a class="toc-backref" href="#id63" role="doc-backlink">Integration Methods</a><a class="headerlink" href="#integration-methods" title="Link to this heading">¶</a></h4>
+<p>The numerical and Monte Carlo integration approaches can be further extended in a number of ways:</p>
+<ol class="arabic simple">
+<li><p>The beam profile (and similarly the detector visibility of the sample) can also be included to accommodate partial illumination of the sample by the beam by means of a convolution function for the shape of the profile. <a class="footnote-reference brackets" href="#id44" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></a> The beam profile and detector profile can be defined as a function of the volume element <span class="math notranslate nohighlight">\(dV\)</span> as <span class="math notranslate nohighlight">\(P(dV)\)</span> and <span class="math notranslate nohighlight">\(D(dV)\)</span>, respectively. These can then be included into Eq. <a class="reference internal" href="#equation-absorption-factor">(7)</a> as:</p></li>
+</ol>
+<div class="math notranslate nohighlight" id="equation-absorption-factor-partial-illumination">
+<span class="eqno">(11)<a class="headerlink" href="#equation-absorption-factor-partial-illumination" title="Link to this equation">¶</a></span>\[A = \frac{1}{V'} \int_{V} exp \left[ -\mu (\lambda_1) l_1 + -\mu (\lambda_2) l_2 \right] P(dV) D(dV) dV\]</div>
+<p>where <span class="math notranslate nohighlight">\(V = \int_V P(dV) D(dV) dV\)</span> is the effective volume of the cylinder in the beam.</p>
+<ol class="arabic simple" start="2">
+<li><p>Building on (1), the PPF can also be generalized to include the beam and detector profiles. <a class="footnote-reference brackets" href="#id44" id="id17" role="doc-noteref"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></a></p></li>
+</ol>
+</section>
+</section>
+<section id="legends-for-absorption-correction-algorithms-in-mantid-table">
+<h3><a class="toc-backref" href="#id64" role="doc-backlink">Legends for Absorption Correction Algorithms in Mantid Table</a><a class="headerlink" href="#legends-for-absorption-correction-algorithms-in-mantid-table" title="Link to this heading">¶</a></h3>
+<p>Indicates the energy modes that the algorithm can accommodate:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p>Legend for Energy Mode</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>E</p></td>
+<td><p>Elastic</p></td>
+</tr>
+<tr class="row-odd"><td><p>D</p></td>
+<td><p>Direct</p></td>
+</tr>
+<tr class="row-even"><td><p>I</p></td>
+<td><p>Indirect</p></td>
+</tr>
+</tbody>
+</table>
+<p>Indicates the technique used for calculating the absorption correction:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p>Legend for Technique</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A</p></td>
+<td><p>Analytical</p></td>
+</tr>
+<tr class="row-odd"><td><p>NI</p></td>
+<td><p>Numerical Integration</p></td>
+</tr>
+<tr class="row-even"><td><p>MC</p></td>
+<td><p>Monte Carlo</p></td>
+</tr>
+</tbody>
+</table>
+<p>Due to the overlap between the Monte Carlo integration and Monte Carlo ray tracing techniques a single classification of “Monte Carlo” is used</p>
+<p>Options that describe what functions the algorithm is capable of and the output types:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p>Legend for Functions</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>L</p></td>
+<td><p>Loads correction from file</p></td>
+</tr>
+<tr class="row-odd"><td><p>MS</p></td>
+<td><p>Multiple scattering correction calculated</p></td>
+</tr>
+<tr class="row-even"><td><p>FI</p></td>
+<td><p>Full illumination of sample by beam</p></td>
+</tr>
+<tr class="row-odd"><td><p>PI</p></td>
+<td><p>Full or partial illumination of sample by beam</p></td>
+</tr>
+<tr class="row-even"><td><p>W</p></td>
+<td><p>Outputs a corrected sample workspace</p></td>
+</tr>
+<tr class="row-odd"><td><p>A</p></td>
+<td><p>Absorption correction calculated</p></td>
+</tr>
+<tr class="row-even"><td><p>A+</p></td>
+<td><p>Calculates both sample and container absorption corrections (<span class="math notranslate nohighlight">\(A_{s,s}\)</span>, <span class="math notranslate nohighlight">\(A_{c,c}\)</span>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>A++</p></td>
+<td><p>Calculates full set of partial absorption corrections (<span class="math notranslate nohighlight">\(A_{s,s}\)</span>, <span class="math notranslate nohighlight">\(A_{s,sc}\)</span>, <span class="math notranslate nohighlight">\(A_{c,c}\)</span>, <span class="math notranslate nohighlight">\(A_{c,sc}\)</span>)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="absorption-correction-algorithms-in-mantid-table">
+<h3><a class="toc-backref" href="#id65" role="doc-backlink">Absorption Correction Algorithms in Mantid Table</a><a class="headerlink" href="#absorption-correction-algorithms-in-mantid-table" title="Link to this heading">¶</a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Algorithm</p></th>
+<th class="head"><p>Energy Mode</p></th>
+<th class="head"><p>Technique</p></th>
+<th class="head"><p>Geometry</p></th>
+<th class="head"><p>Input Units</p></th>
+<th class="head"><p>Functions</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/AbsorptionCorrection-v1.html#algm-absorptioncorrection"><span class="std std-ref">AbsorptionCorrection</span></a></p></td>
+<td><p>E,D,I</p></td>
+<td><p>NI</p></td>
+<td><p>Any Shape</p></td>
+<td><p>Wavelength</p></td>
+<td><p>A,PI</p></td>
+<td><div class="line-block">
+<div class="line">Approximates sample shape using cuboid mesh of given element size</div>
+<div class="line">Base class: AbsorptionCorrection</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/AnnularRingAbsorption-v1.html#algm-annularringabsorption"><span class="std std-ref">AnnularRingAbsorption</span></a></p></td>
+<td><p>E,D,I</p></td>
+<td><p>MC</p></td>
+<td><p>Annular / Hollow Cylinder</p></td>
+<td><p>Wavelength</p></td>
+<td><p>A,PI</p></td>
+<td><p>Wrapper for MonteCarloAbsorption for hollow cylindrical sample</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/AnvredCorrection-v1.html#algm-anvredcorrection"><span class="std std-ref">AnvredCorrection</span></a></p></td>
+<td><p>E</p></td>
+<td><p>A</p></td>
+<td><p>Sphere</p></td>
+<td><p>Wavelength or TOF</p></td>
+<td><p>A,FI,W</p></td>
+<td><div class="line-block">
+<div class="line">Absorption for spheres with additional corrections in ANVRED program from ISAW:</div>
+<div class="line">- weight factors for pixels of instrument</div>
+<div class="line">- correct for the slant path through the scintillator glass and scale factors</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/ApplyPaalmanPingsCorrection-v1.html#algm-applypaalmanpingscorrection"><span class="std std-ref">ApplyPaalmanPingsCorrection</span></a></p></td>
+<td><p>E,D,I</p></td>
+<td></td>
+<td><p>Cylinder or Flat Plate / Slab</p></td>
+<td><p>Wavelength</p></td>
+<td><p>W</p></td>
+<td><div class="line-block">
+<div class="line">Simply applies the correction workspaces from other Paalman-Pings-style algorithms</div>
+<div class="line">Can also apply shift and scale factors to container workspaces</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/CalculateCarpenterSampleCorrection-v1.html#algm-calculatecarpentersamplecorrection"><span class="std std-ref">CalculateCarpenterSampleCorrection</span></a></p></td>
+<td><p>E</p></td>
+<td><p>A</p></td>
+<td><p>Cylinder</p></td>
+<td><p>Wavelength</p></td>
+<td><p>A,MS,FI</p></td>
+<td><div class="line-block">
+<div class="line">Only applicable to Vanadium</div>
+<div class="line">In-plane only</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/CalculateMonteCarloAbsorption-v1.html#algm-calculatemontecarloabsorption"><span class="std std-ref">CalculateMonteCarloAbsorption</span></a></p></td>
+<td><p>E,D,I</p></td>
+<td><p>MC</p></td>
+<td><div class="line-block">
+<div class="line">Cylinder or</div>
+<div class="line">Flat Plate / Slab or</div>
+<div class="line">Annular / Hollow Cylinder</div>
+</div>
+</td>
+<td><p>Wavelength</p></td>
+<td><p>A+,PI</p></td>
+<td><div class="line-block">
+<div class="line">Uses multiple calls to SimpleShapeMonteCarloAbsorption to calculate</div>
+<div class="line">sample and container correction workspaces</div>
+<div class="line">(Deprecated)</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/CarpenterSampleCorrection-v1.html#algm-carpentersamplecorrection"><span class="std std-ref">CarpenterSampleCorrection</span></a></p></td>
+<td><p>E</p></td>
+<td><p>A</p></td>
+<td><p>Cylinder</p></td>
+<td><p>Wavelength</p></td>
+<td><p>A,MS,FI,W</p></td>
+<td><div class="line-block">
+<div class="line">Calls CalculateCarpenterSampleCorrection</div>
+<div class="line"><br /></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/CuboidGaugeVolumeAbsorption-v1.html#algm-cuboidgaugevolumeabsorption"><span class="std std-ref">CuboidGaugeVolumeAbsorption</span></a></p></td>
+<td><p>E,D,I</p></td>
+<td><p>NI</p></td>
+<td><p>Cuboid section
+in Any Shape sample</p></td>
+<td><p>Wavelength</p></td>
+<td><p>A,PI</p></td>
+<td><p>Base class: AbsorptionCorrection via wrapping
+via wrapping <a class="reference internal" href="../algorithms/FlatPlateAbsorption-v1.html#algm-flatplateabsorption"><span class="std std-ref">FlatPlateAbsorption</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/CylinderAbsorption-v1.html#algm-cylinderabsorption"><span class="std std-ref">CylinderAbsorption</span></a></p></td>
+<td><p>E,D,I</p></td>
+<td><p>NI</p></td>
+<td><p>Cylinder</p></td>
+<td><p>Wavelength</p></td>
+<td><p>A,FI</p></td>
+<td><p>Base class: AbsorptionCorrection</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/CylinderPaalmanPingsCorrection-v2.html#algm-cylinderpaalmanpingscorrection"><span class="std std-ref">CylinderPaalmanPingsCorrection</span></a></p></td>
+<td><p>E,D,I</p></td>
+<td><p>NI</p></td>
+<td><p>Cylinder</p></td>
+<td><p>Wavelength</p></td>
+<td><p>A++,PI</p></td>
+<td><p>in-plane only</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/FlatPlateAbsorption-v1.html#algm-flatplateabsorption"><span class="std std-ref">FlatPlateAbsorption</span></a></p></td>
+<td><p>E,D,I</p></td>
+<td><p>NI</p></td>
+<td><p>Flat Plate / Slab</p></td>
+<td><p>Wavelength</p></td>
+<td><p>A,FI</p></td>
+<td><p>Base class: AbsorptionCorrection</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/FlatPlatePaalmanPingsCorrection-v1.html#algm-flatplatepaalmanpingscorrection"><span class="std std-ref">FlatPlatePaalmanPingsCorrection</span></a></p></td>
+<td><p>E,D,I</p></td>
+<td><p>NI</p></td>
+<td><p>Flat Plate / Slab</p></td>
+<td><p>Wavelength</p></td>
+<td><p>A++,FI</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/HRPDSlabCanAbsorption-v1.html#algm-hrpdslabcanabsorption"><span class="std std-ref">HRPDSlabCanAbsorption</span></a></p></td>
+<td><p>E</p></td>
+<td><p>NI</p></td>
+<td><div class="line-block">
+<div class="line">HRPD aluminium flat plate only</div>
+<div class="line"><br /></div>
+<div class="line">with HRPD vanadium windows</div>
+<div class="line">with HRPD vanadium windows</div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><p>Wavelength</p></td>
+<td><p>A+*,FI</p></td>
+<td><div class="line-block">
+<div class="line">Only for HRPD via hard-coded dimensions.</div>
+<div class="line">Uses <a class="reference internal" href="../algorithms/FlatPlateAbsorption-v1.html#algm-flatplateabsorption"><span class="std std-ref">FlatPlateAbsorption</span></a> for sample.</div>
+<div class="line">Uses slightly different analytical formula for aluminium holder and vanadium windows</div>
+<div class="line">for the HRPD instrument.</div>
+<div class="line">*Outputs a single correction workspace with both sample and container corrections</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/IndirectAnnulusAbsorption-v2.html#algm-indirectannulusabsorption"><span class="std std-ref">IndirectAnnulusAbsorption</span></a></p></td>
+<td><p>I</p></td>
+<td><p>MC</p></td>
+<td><div class="line-block">
+<div class="line">Annular / Hollow Cylinder for</div>
+<div class="line">both sample and container</div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><p>Wavelength</p></td>
+<td><p>A+,W</p></td>
+<td><div class="line-block">
+<div class="line">Workflow algorithm specific to Indirect geometry spectrometers.</div>
+<div class="line">Uses MonteCarloAbsorption for sample and container.</div>
+<div class="line">Will apply calculated absorption corrections and subtract container from sample.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/IndirectCylinderAbsorption-v2.html#algm-indirectcylinderabsorption"><span class="std std-ref">IndirectCylinderAbsorption</span></a></p></td>
+<td><p>I</p></td>
+<td><p>MC</p></td>
+<td><div class="line-block">
+<div class="line">Cylinder for sample and</div>
+<div class="line">Annular / Hollow Cylinder</div>
+<div class="line">for container</div>
+</div>
+</td>
+<td><p>Wavelength</p></td>
+<td><p>A+,W</p></td>
+<td><div class="line-block">
+<div class="line">Workflow algorithm specific to Indirect geometry spectrometers.</div>
+<div class="line">Uses MonteCarloAbsorption for sample and container.</div>
+<div class="line">Will apply calculated absorption corrections and subtract container from sample.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/IndirectFlatPlateAbsorption-v2.html#algm-indirectflatplateabsorption"><span class="std std-ref">IndirectFlatPlateAbsorption</span></a></p></td>
+<td><p>I</p></td>
+<td><p>MC</p></td>
+<td><div class="line-block">
+<div class="line">Flat Plate / Slab for both</div>
+<div class="line">sample and container</div>
+<div class="line"><br /></div>
+</div>
+</td>
+<td><p>Wavelength</p></td>
+<td><p>A+,W</p></td>
+<td><div class="line-block">
+<div class="line">Workflow algorithm specific to Indirect geometry spectrometers.</div>
+<div class="line">Uses MonteCarloAbsorption for sample and container.</div>
+<div class="line">Will apply calculated absorption corrections and subtract container from sample.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/MayersSampleCorrection-v1.html#algm-mayerssamplecorrection"><span class="std std-ref">MayersSampleCorrection</span></a></p></td>
+<td><p>E</p></td>
+<td><p>NI</p></td>
+<td><p>Cylinder</p></td>
+<td><p>TOF</p></td>
+<td><p>A,MS,FI,W</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/MonteCarloAbsorption-v1.html#algm-montecarloabsorption"><span class="std std-ref">MonteCarloAbsorption</span></a></p></td>
+<td><p>E,D,I</p></td>
+<td><p>MC</p></td>
+<td><p>Any Shape</p></td>
+<td><p>Wavelength</p></td>
+<td><p>A+*,PI</p></td>
+<td><div class="line-block">
+<div class="line">“Workhorse” of the MC-based algorithms</div>
+<div class="line">*Outputs a single correction workspace with both sample and container corrections</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/MultipleScatteringCorrection-v1.html#algm-multiplescatteringcorrection"><span class="std std-ref">MultipleScatteringCorrection</span></a></p></td>
+<td><p>E, EI</p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><div class="line-block">
+<div class="line"><br /></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/PaalmanPingsAbsorptionCorrection-v1.html#algm-paalmanpingsabsorptioncorrection"><span class="std std-ref">PaalmanPingsAbsorptionCorrection</span></a></p></td>
+<td><p>E</p></td>
+<td><p>NI</p></td>
+<td><div class="line-block">
+<div class="line">Any Shape</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Wavelength</div>
+</div>
+</td>
+<td><p>A++,PI</p></td>
+<td><div class="line-block">
+<div class="line">Calculates Paalman Pings partial absorption factors based on AbsorptionCorrection</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/PaalmanPingsMonteCarloAbsorption-v1.html#algm-paalmanpingsmontecarloabsorption"><span class="std std-ref">PaalmanPingsMonteCarloAbsorption</span></a></p></td>
+<td><p>E,D,I</p></td>
+<td><p>MC</p></td>
+<td><div class="line-block">
+<div class="line">Cylinder or</div>
+<div class="line">Flat Plate / Slab or</div>
+<div class="line">Annular / Hollow Cylinder</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Wavelength</div>
+<div class="line">Energy Transfer</div>
+<div class="line">Momentum Transfer</div>
+</div>
+</td>
+<td><p>A++,PI</p></td>
+<td><div class="line-block">
+<div class="line">Calculates Paalman Pings partial absorption factors using MonteCarloAbsorption</div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/PearlMCAbsorption-v1.html#algm-pearlmcabsorption"><span class="std std-ref">PearlMCAbsorption</span></a></p></td>
+<td><p>E</p></td>
+<td><p>MC</p></td>
+<td><p>Any Shape</p></td>
+<td><p>N/A</p></td>
+<td><p>L</p></td>
+<td><div class="line-block">
+<div class="line">Simply reads in pre-computed <span class="math notranslate nohighlight">\(\mu\)</span> values for PEARL instrument from an</div>
+<div class="line">external Monte Carlo program. Uses <a class="reference internal" href="../algorithms/LoadAscii-v2.html#algm-loadascii"><span class="std std-ref">LoadAscii</span></a></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/SimpleShapeMonteCarloAbsorption-v1.html#algm-simpleshapemontecarloabsorption"><span class="std std-ref">SimpleShapeMonteCarloAbsorption</span></a></p></td>
+<td><p>E,D,I</p></td>
+<td><p>MC</p></td>
+<td><div class="line-block">
+<div class="line">Cylinder or</div>
+<div class="line">Flat Plate / Slab or</div>
+<div class="line">Annular / Hollow Cylinder</div>
+</div>
+</td>
+<td><p>Wavelength</p></td>
+<td><p>A,PI</p></td>
+<td><div class="line-block">
+<div class="line">Wrapper for MonteCarloAbsorption for 3 shape types</div>
+<div class="line"><br /></div>
+<div class="line"><br /></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/SphericalAbsorption-v1.html#algm-sphericalabsorption"><span class="std std-ref">SphericalAbsorption</span></a></p></td>
+<td><p>E</p></td>
+<td><p>NI</p></td>
+<td><p>Sphere</p></td>
+<td><p>Wavelength</p></td>
+<td><p>A,FI,W</p></td>
+<td><p>Wrapper around <a class="reference internal" href="../algorithms/AnvredCorrection-v1.html#algm-anvredcorrection"><span class="std std-ref">AnvredCorrection</span></a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="multiple-scattering">
+<span id="multiple-scattering-corrections"></span><h2><a class="toc-backref" href="#id66" role="doc-backlink">Multiple Scattering</a><a class="headerlink" href="#multiple-scattering" title="Link to this heading">¶</a></h2>
+<figure class="align-default">
+<a class="screenshot reference internal image-reference" href="../_images/ImageNotFound.png"><img alt="../_images/ImageNotFound.png" class="screenshot" src="../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+</figure>
+<blockquote>
+<div><p>Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</p>
+</div></blockquote>
+<section id="id18">
+<h3><a class="toc-backref" href="#id67" role="doc-backlink">Introduction</a><a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<p>Determination of the structure and/or dynamics of samples depends on the analysis of single scattering data.
+Small but unwanted higher-order scattering is always present although in many typical
+experiments multiple scattering effects are negligible. However, in some cases the data may
+contain a significant contribution from multiple scattering. In neutron scattering, the absorption cross-section is often much smaller than the scattering cross-section.
+For this reason it is necessary to account for multiple scattering events. Using the PPF notation from previously, the measured beam from <span class="math notranslate nohighlight">\(S+C\)</span>
+(neglecting multiple scattering and inelastic effects) is given as:</p>
+<div class="math notranslate nohighlight" id="equation-ppf-sample-container-ms">
+<span class="eqno">(12)<a class="headerlink" href="#equation-ppf-sample-container-ms" title="Link to this equation">¶</a></span>\[ I^E_{S+C} = [I_SA_{S,SC} + I_CA_{C,SC} + I_{m,S+C}]\]</div>
+<p>Thus, the multiple scattering is a parasitic signal that needs to be subtracted from the experimentally measured <span class="math notranslate nohighlight">\(I^E\)</span> intensity.
+To get an idea of when and why multiple scattering
+corrections are needed, let us define <span class="math notranslate nohighlight">\(\sigma_n\)</span> as the likelihood of a neutron being scattered <span class="math notranslate nohighlight">\(n\)</span> times.
+Then it is possible to show <a class="footnote-reference brackets" href="#id40" id="id19" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> that:</p>
+<div class="math notranslate nohighlight" id="equation-sigma-m">
+<span class="eqno">(13)<a class="headerlink" href="#equation-sigma-m" title="Link to this equation">¶</a></span>\[     \sigma_m \sim (\frac{\sigma_s}{\sigma_t})^m\]</div>
+<p>Where practical, the shape and thickness of a sample are carefully chosen to minimize as much
+unwanted multiple. This may be achieved by using a sample that is either <a class="footnote-reference brackets" href="#id41" id="id20" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>Small in comparison with its mean free path.</p></li>
+<li><p>Strongly absorbing (the absorption cross section is much greater than the scattering cross section. Usually this means the dimensions of a sample are chosen to ensure that between 10% and 20% of incident neutrons end up being scattered <a class="footnote-reference brackets" href="#id42" id="id21" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a> ).</p></li>
+</ul>
+<p>Increasing the absorption cross section is not always attainable - due to the type of material in question - or desirable, due to
+the accompanying intensity losses becoming overly prohibitive.</p>
+</section>
+<section id="theory">
+<h3><a class="toc-backref" href="#id68" role="doc-backlink">Theory</a><a class="headerlink" href="#theory" title="Link to this heading">¶</a></h3>
+<p>The figure shows how a general double scattering process might occur. The neutron travels
+a certain distance <span class="math notranslate nohighlight">\(l_1\)</span> through the sample before the first scattering event in the volume
+element <span class="math notranslate nohighlight">\(dV_1\)</span>. The second scattering occurs in another volume element <span class="math notranslate nohighlight">\(dV_2\)</span> after a distance
+<span class="math notranslate nohighlight">\(l_{12}\)</span> has been traversed following which the neutron travels a final length <span class="math notranslate nohighlight">\(l_2\)</span> before
+leaving the sample and being picked up by a detector.</p>
+<figure class="align-default">
+<img alt="MultipleScatteringVolume.png" src="../_images/MultipleScatteringVolume.png" />
+</figure>
+<p>We define the multiple scattering intensity, <span class="math notranslate nohighlight">\(I_m\)</span>, in terms of the total scattering intensity, <span class="math notranslate nohighlight">\(I_{total}\)</span>, from <span class="math notranslate nohighlight">\(n\)</span> number of orders of scattering intensity, <span class="math notranslate nohighlight">\(I_n\)</span>, as:</p>
+<div class="math notranslate nohighlight" id="equation-itotal">
+<span class="eqno">(14)<a class="headerlink" href="#equation-itotal" title="Link to this equation">¶</a></span>\[\begin{split} I_{total} &amp;= I_1 + I_2 + I_3 + ... + I_n \\
+           &amp;= I_1 + \sum_{i=2}^{n} I_i \\
+           &amp;= I_1 + I_m\end{split}\]</div>
+<p>Then, we see that to compute the multiple scattering, we must compute <span class="math notranslate nohighlight">\(n-1\)</span> scattering intensity terms to subtract from the total, <span class="math notranslate nohighlight">\(I_{total}\)</span>.</p>
+<p>Let us first just consider the secondary scattering term, <span class="math notranslate nohighlight">\(I_2\)</span>. We again assume we have a homogeneous sample of a given shape that is fully illuminated by the incident beam.
+Then, extending from Eq. <a class="reference internal" href="#equation-di1">(5)</a>, we have that the number of neutrons per unit solid angle scattered once by a volume element <span class="math notranslate nohighlight">\(dV_1\)</span> and then a second time by
+a volume element <span class="math notranslate nohighlight">\(dV_2\)</span> of the sample and seen by a detector is given by:</p>
+<div class="math notranslate nohighlight" id="equation-di2">
+<span class="eqno">(15)<a class="headerlink" href="#equation-di2" title="Link to this equation">¶</a></span>\[dI_2(\theta_s) = J_0 \rho^2 \frac{d\sigma}{d\Omega} \left( \theta_1 \right) \frac{d\sigma}{d\Omega} \left( \theta_2 \right) \frac{exp \left[ -\mu (\lambda_1) l_1 + - \mu (\lambda_{12}) l_{12} + - \mu (\lambda_2) l_2 \right]}{l_{12}^2} dV dV\]</div>
+<p>where <span class="math notranslate nohighlight">\(\theta_1\)</span> is the angle between the incident path and scatter path from <span class="math notranslate nohighlight">\(dV_1\)</span>,
+<span class="math notranslate nohighlight">\(\theta_2\)</span> is the angle between scatter path from <span class="math notranslate nohighlight">\(dV_1\)</span> and  scatter path from <cite>dV_2</cite>,
+<span class="math notranslate nohighlight">\(\theta_s\)</span> is the angle between the incident path and scatter path from <span class="math notranslate nohighlight">\(dV_2\)</span> to the detector,
+<span class="math notranslate nohighlight">\(\mu_{12}\)</span> is the scattered wavelength from volume element <span class="math notranslate nohighlight">\(dV_1\)</span>,
+and the <span class="math notranslate nohighlight">\(l_12\)</span> term is due to the inverse square law (that as the distance increases between <span class="math notranslate nohighlight">\(dV_1\)</span> and
+<span class="math notranslate nohighlight">\(dV_2\)</span>, the solid angle subtended by <span class="math notranslate nohighlight">\(dV_2\)</span> at <span class="math notranslate nohighlight">\(dV_1\)</span> decreases as the inverse square of <span class="math notranslate nohighlight">\(l_{12}\)</span>).</p>
+<p>And the total secondary scattering intensity seen by a detector is:</p>
+<div class="math notranslate nohighlight" id="equation-i2">
+<span class="eqno">(16)<a class="headerlink" href="#equation-i2" title="Link to this equation">¶</a></span>\[\begin{split}I_2(\theta_s) &amp;= \int_{V} \int_{V} dI_2  \\
+              &amp;= J_0 \rho^2 \frac{d\sigma}{d\Omega} \left( \theta_1 \right) \frac{d\sigma}{d\Omega} \left( \theta_2 \right) \int_{V} \int_{V} \frac{exp \left[ -\mu (\lambda_1) l_1 + - \mu (\lambda_{12}) l_{12} + - \mu (\lambda_2) l_2 \right]}{l_{12}^2} dV dV\end{split}\]</div>
+<p>We can generalize this for <span class="math notranslate nohighlight">\(i^{th}\)</span> order of scatter terms as:</p>
+<div class="math notranslate nohighlight" id="equation-dii">
+<span class="eqno">(17)<a class="headerlink" href="#equation-dii" title="Link to this equation">¶</a></span>\[dI_i(\theta_s) = J_0 \rho^n \prod_{j=1}^{i} \frac{d\sigma}{d\Omega} \left( \theta_j \right) \frac{exp \left[ -\mu (\lambda_1) l_1 + - \sum_{j=1}^{i-1} \mu (\lambda_{j,j+1}) l_{j,j+1} + - \mu (\lambda_i) l_i \right]}{ \prod_{j=1}^{i-1} l_{j,j+1}^2}  dV^{i}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight" id="equation-ii">
+<span class="eqno">(18)<a class="headerlink" href="#equation-ii" title="Link to this equation">¶</a></span>\[\begin{split}I_i(\theta_s) &amp;= \int_V ... \int_V dI_i  \\
+              &amp;= J_0 \rho^n \prod_{j=1}^{i} \frac{d\sigma}{d\Omega} \left( \theta_j \right) \int_V ... \int_V \frac{exp \left[ -\mu (\lambda_1) l_1 + - \sum_{j=1}^{i-1} \mu (\lambda_{j,j+1}) l_{j,j+1} + - \mu (\lambda_i) l_i \right]}{ \prod_{j=1}^{i-1} l_{j,j+1}^2} dV^{i}\end{split}\]</div>
+<p>Which then the multiple scattering up to the <span class="math notranslate nohighlight">\(n\)</span> order scattering term is given as:</p>
+<div class="math notranslate nohighlight" id="equation-im">
+<span class="eqno">(19)<a class="headerlink" href="#equation-im" title="Link to this equation">¶</a></span>\[\begin{split}I_m &amp;= \sum_{i=2}^n I_i \\
+    &amp;= \sum_{i=2}^{n} \int_V ... \int_V dI_i  \\
+    &amp;= \sum_{i=2}^{n} J_0 \rho^i \prod_{j=1}^{i} \frac{d\sigma}{d\Omega} \left( \theta_j \right) \int_V ... \int_V \frac{exp \left[ -\mu (\lambda_1) l_1 + - \sum_{j=1}^{i-1} \mu (\lambda_{j,j+1}) l_{j,j+1} + - \mu (\lambda_i) l_i \right]}{ \prod_{j=1}^{i-1} l_{j,j+1}^2} dV^{i}\end{split}\]</div>
+<p>Thus, some of the difficulties in correcting multiple scattering arises from:</p>
+<ol class="arabic simple">
+<li><p>For each <span class="math notranslate nohighlight">\(i^{th}\)</span> order of scattering we must perform <span class="math notranslate nohighlight">\(i\)</span> volume integrals <span class="math notranslate nohighlight">\(dV^{i}\)</span> over the sample (although these terms tend to zero as explained in the introduction).</p></li>
+<li><p>Without the elastic scattering assumption, we need to know each emerging <span class="math notranslate nohighlight">\(\lambda_i\)</span> due to energy transfer of the <span class="math notranslate nohighlight">\(i^{th}\)</span> scattering event.</p></li>
+<li><p>Without the isotropic approximation, we need to know each <span class="math notranslate nohighlight">\(\frac{d\sigma}{d\Omega} \left( \theta_i \right)\)</span> of the <span class="math notranslate nohighlight">\(i^{th}\)</span> scattering event. This requires knowledge of <span class="math notranslate nohighlight">\(\frac{d\sigma}{d\Omega}\)</span>, which is exactly what we are usually trying to measure (for diffraction)!</p></li>
+<li><p>It is arbitrary at which <span class="math notranslate nohighlight">\(n^{th}\)</span> order of scatter should the correction be cutoff.</p></li>
+<li><p>This kind of calculation is difficult for all but the simplest of geometries (i.e. cylindrical, planar and spherical) although Monte Carlo integration methods may be utilized for the multiple scattering calculations of more general shapes.</p></li>
+</ol>
+</section>
+<section id="assumptions">
+<h3><a class="toc-backref" href="#id69" role="doc-backlink">Assumptions</a><a class="headerlink" href="#assumptions" title="Link to this heading">¶</a></h3>
+<section id="elastic-scattering">
+<h4><a class="toc-backref" href="#id70" role="doc-backlink">Elastic Scattering</a><a class="headerlink" href="#elastic-scattering" title="Link to this heading">¶</a></h4>
+<p>To address (2) above, we can assume elastic scattering and then Eq. <a class="reference internal" href="#equation-im">(19)</a> becomes:</p>
+<div class="math notranslate nohighlight" id="equation-im-elastic">
+<span class="eqno">(20)<a class="headerlink" href="#equation-im-elastic" title="Link to this equation">¶</a></span>\[ I_{m,elastic} = \sum_{i=2}^{n} J_0 \rho^i \prod_{j=1}^{i} \frac{d\sigma}{d\Omega} \left( \theta_j \right) \int_V ... \int_V \frac{exp \left[ -\mu (\lambda) \left( l_1 + \sum_{j=1}^{i-1} l_{j,j+1} + l_i \right) \right]}{ \prod_{j=1}^{i-1} l_{j,j+1}^2} dV^{i}\]</div>
+</section>
+<section id="isotropic-scattering">
+<h4><a class="toc-backref" href="#id71" role="doc-backlink">Isotropic Scattering</a><a class="headerlink" href="#isotropic-scattering" title="Link to this heading">¶</a></h4>
+<p>To address (3) above, we can assume isotropic scattering and then Eq. <a class="reference internal" href="#equation-im">(19)</a> becomes:</p>
+<div class="math notranslate nohighlight" id="equation-im-isotropic">
+<span class="eqno">(21)<a class="headerlink" href="#equation-im-isotropic" title="Link to this equation">¶</a></span>\[ I_{m,isotropic} = \sum_{i=2}^{n} J_0 \rho^i \left( \frac{\sigma}{4\pi} \right)^i \int_V ... \int_V \frac{exp \left[ -\mu (\lambda_1) l_1 + - \sum_{j=1}^{i-1} \mu (\lambda_{j,j+1}) l_{j,j+1} + - \mu (\lambda_i) l_i \right]}{ \prod_{j=1}^{i-1} l_{j,j+1}^2} dV^{i}\]</div>
+</section>
+<section id="elastic-isotropic-scattering">
+<h4><a class="toc-backref" href="#id72" role="doc-backlink">Elastic + Isotropic Scattering</a><a class="headerlink" href="#elastic-isotropic-scattering" title="Link to this heading">¶</a></h4>
+<p>Combining both the elastic and isotropic assumptions, we have:</p>
+<div class="math notranslate nohighlight" id="equation-im-elastic-isotropic">
+<span class="eqno">(22)<a class="headerlink" href="#equation-im-elastic-isotropic" title="Link to this equation">¶</a></span>\[ I_{m,elastic+isotropic} = \sum_{i=2}^{n} J_0 \rho^i \left( \frac{\sigma}{4\pi} \right)^i \int_V ... \int_V \frac{exp \left[ -\mu (\lambda) \left( l_1 + \sum_{j=1}^{i-1} l_{j,j+1} + l_i \right) \right]}{ \prod_{j=1}^{i-1} l_{j,j+1}^2} dV^{i}\]</div>
+</section>
+<section id="constant-ratio-for-frac-i-n-i-n-1-delta">
+<h4><a class="toc-backref" href="#id73" role="doc-backlink">Constant Ratio for  <span class="math notranslate nohighlight">\(\frac{I_n}{I_{n-1}} = \Delta\)</span></a><a class="headerlink" href="#constant-ratio-for-frac-i-n-i-n-1-delta" title="Link to this heading">¶</a></h4>
+<p>To address (4), a typical assumption in the analytical method <a class="footnote-reference brackets" href="#id40" id="id22" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id43" id="id23" role="doc-noteref"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></a> approaches is to assume that the ratio <span class="math notranslate nohighlight">\(\frac{I_n}{I_{n-1}}\)</span> is a constant, <span class="math notranslate nohighlight">\(\Delta\)</span>, thus:</p>
+<div class="math notranslate nohighlight" id="equation-delta">
+<span class="eqno">(23)<a class="headerlink" href="#equation-delta" title="Link to this equation">¶</a></span>\[\frac{I_n}{I_{n-1}} = \frac{I_2}{I_1} = \Delta\]</div>
+<p>Then, with the assumption that <span class="math notranslate nohighlight">\(\Delta &lt; 1\)</span>, Eq. <a class="reference internal" href="#equation-im">(19)</a> can be manipulated into a geometric series:</p>
+<div class="math notranslate nohighlight" id="equation-im-proof">
+<span class="eqno">(24)<a class="headerlink" href="#equation-im-proof" title="Link to this equation">¶</a></span>\[\begin{split}I_m &amp;= \sum_{i=2}^n I_i = \sum_{i=2}^n I_i \prod_{j=1}^{i-1} \frac{I_{j}}{I_{j}} = \sum_{i=2}^n I_i \frac{I_1}{I_{i-1}} \prod_{j=2}^{i-1} \frac{I_{j}}{I_{j-1}} \\
+    &amp;=  \sum_{i=2}^n I_1 \prod_{j=2}^{i} \frac{I_{j}}{I_{j-1}} = \sum_{i=2}^n I_1 \prod_{j=2}^{i} \Delta \\
+    &amp;= I_1 \sum_{i=2}^n \Delta^{i-1}\end{split}\]</div>
+<p>Similarly:</p>
+<div class="math notranslate nohighlight" id="equation-im-delta-proof">
+<span class="eqno">(25)<a class="headerlink" href="#equation-im-delta-proof" title="Link to this equation">¶</a></span>\[I_m \Delta = I_1 \Delta \sum_{i=2}^n \Delta^{i-1} = I_1 \sum_{i=2}^n \Delta^{i}\]</div>
+<p>Subtracting Eq. <a class="reference internal" href="#equation-im-delta-proof">(25)</a> from Eq. <a class="reference internal" href="#equation-im-proof">(24)</a>, we have:</p>
+<div class="math notranslate nohighlight" id="equation-im-delta-difference">
+<span class="eqno">(26)<a class="headerlink" href="#equation-im-delta-difference" title="Link to this equation">¶</a></span>\[\begin{split} I_m - I_m \Delta &amp;= I_1 \sum_{i=2}^n \Delta^{i-1}  - I_1 \sum_{i=2}^n \Delta^{i} \\
+                  &amp;= I_1 (\Delta - \Delta^{n})\end{split}\]</div>
+<p>Which, solving for <span class="math notranslate nohighlight">\(I_m\)</span> and based on the assumption <span class="math notranslate nohighlight">\(\Delta &lt; 1\)</span>, implying <span class="math notranslate nohighlight">\(\Delta^n &lt;&lt; \Delta\)</span>, we arrive at:</p>
+<div class="math notranslate nohighlight" id="equation-im-geometric">
+<span class="eqno">(27)<a class="headerlink" href="#equation-im-geometric" title="Link to this equation">¶</a></span>\[\begin{split} I_m &amp;= I_1 \frac{\Delta - \Delta^{n}}{1 - \Delta} \\
+     &amp;\approx I_1 \frac{\Delta }{1 - \Delta}\end{split}\]</div>
+<p>NOTE: Sears arrived at a separate equation for <span class="math notranslate nohighlight">\(I_m\)</span> based on flat plate samples but supposedly general enough for any shape sample: <span class="math notranslate nohighlight">\(I_{m,Sears} = I_1 \left( \frac{exp(2\delta)-1}{2\delta} - 1 \right)\)</span>.
+However, comparisons of both equations for cylinders show that Eq. <a class="reference internal" href="#equation-im-geometric">(27)</a> is more accurate solution. <a class="footnote-reference brackets" href="#id44" id="id24" role="doc-noteref"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></a></p>
+<p>From Eq. <a class="reference internal" href="#equation-im-geometric">(27)</a>, we are left with calculating <span class="math notranslate nohighlight">\(\Delta\)</span>:</p>
+<div class="math notranslate nohighlight" id="equation-delta-equation">
+<span class="eqno">(28)<a class="headerlink" href="#equation-delta-equation" title="Link to this equation">¶</a></span>\[\begin{split} \Delta &amp;= \frac{I_n}{I_{n-1}} = \frac{I_2}{I_1} \\
+        &amp;= \frac{ J_0 \rho^2 \frac{d\sigma}{d\Omega} \left( \theta_1 \right) \frac{d\sigma}{d\Omega} \left( \theta_2 \right) \int_{V} \int_{V} \frac{exp \left[ -\mu (\lambda_1) l_1 + - \mu (\lambda_{12}) l_{12} + - \mu (\lambda_2) l_2 \right]}{l_{12}^2} dV dV }
+                { J_0 \rho \frac{d\sigma}{d\Omega} \left( \theta_s \right) \int_{V} exp \left[ -\mu (\lambda_1) l_1 + -\mu (\lambda_2) l_2 \right] dV  } \\
+        &amp;= \frac{ \rho \frac{d\sigma}{d\Omega} \left( \theta_1 \right) \frac{d\sigma}{d\Omega} \left( \theta_2 \right) \int_{V} \int_{V} \frac{exp \left[ -\mu (\lambda_1) l_1 + - \mu (\lambda_{12}) l_{12} + - \mu (\lambda_2) l_2 \right]}{l_{12}^2} dV dV }
+                { \frac{d\sigma}{d\Omega} \left( \theta_s \right) \int_{V} exp \left[ -\mu (\lambda_1) l_1 + -\mu (\lambda_2) l_2 \right] dV  }\end{split}\]</div>
+<p>Using the isotropic approximation, we arrive at:</p>
+<div class="math notranslate nohighlight" id="equation-delta-equation-elastic">
+<span class="eqno">(29)<a class="headerlink" href="#equation-delta-equation-elastic" title="Link to this equation">¶</a></span>\[\begin{split} \Delta_{elastic} &amp;= \frac{ \rho \left( \frac{\sigma_s}{4 \pi} \right)^2 \int_{V} \int_{V} \frac{exp \left[ -\mu (\lambda_1) l_1 + - \mu (\lambda_{12}) l_{12} + - \mu (\lambda_2) l_2 \right]}{l_{12}^2} dV dV }
+                          { \frac{\sigma_s}{4 \pi}  \int_{V} exp \left[ -\mu (\lambda_1) l_1 + -\mu (\lambda_2) l_2 \right] dV  } \\
+                  &amp;= \frac{ \rho \sigma_s A_2 }{ 4 \pi A_1  }\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(A_2\)</span> is the secondary scattering absorption factor and <span class="math notranslate nohighlight">\(A_1\)</span> is the single scattering absorption factor, equivalent to <span class="math notranslate nohighlight">\(A\)</span> in Eq. <a class="reference internal" href="#equation-absorption-factor">(7)</a>.
+The absorption factors can be further simplified by using the elastic scattering assumption from Eq. <a class="reference internal" href="#equation-absorption-factor-elastic">(8)</a>.</p>
+<p>We can now begin to solve for <span class="math notranslate nohighlight">\(I_m\)</span> by taking Eq. <a class="reference internal" href="#equation-im-geometric">(27)</a> and substituting this into Eq. <a class="reference internal" href="#equation-itotal">(14)</a>:</p>
+<div class="math notranslate nohighlight" id="equation-ms-derivation-part1">
+<span class="eqno">(30)<a class="headerlink" href="#equation-ms-derivation-part1" title="Link to this equation">¶</a></span>\[\begin{split}I_{total} &amp;= I_1 + I_m \\
+          &amp;= I_1 + I_1 \frac{\Delta }{1 - \Delta} \\
+          &amp;= I_1 \left( 1 + \frac{\Delta }{1 - \Delta} \right) \\
+          &amp;= I_1 \left( \frac{1}{1 - \Delta} \right) \\\end{split}\]</div>
+<p>Solving this for <span class="math notranslate nohighlight">\(I_1\)</span>, we see that:</p>
+<div class="math notranslate nohighlight" id="equation-ms-derivation-part2">
+<span class="eqno">(31)<a class="headerlink" href="#equation-ms-derivation-part2" title="Link to this equation">¶</a></span>\[\begin{split}I_1 &amp;= I_{total} \left( 1 - \Delta \right) \\
+    &amp;= I_{total}  - I_{total} \Delta\end{split}\]</div>
+<p>Thus, comparing Eq. <a class="reference internal" href="#equation-ms-derivation-part2">(31)</a> and Eq. <a class="reference internal" href="#equation-delta-equation-elastic">(29)</a> with Eq. <a class="reference internal" href="#equation-itotal">(14)</a>, we see that:</p>
+<div class="math notranslate nohighlight" id="equation-im-equation">
+<span class="eqno">(32)<a class="headerlink" href="#equation-im-equation" title="Link to this equation">¶</a></span>\[\begin{split}I_m &amp;= I_{total} \Delta \\
+    &amp;= I_{total} \frac{ \rho V \sigma_s A_2 }{ 4 \pi A_1  }\end{split}\]</div>
+</section>
+</section>
+<section id="id25">
+<h3><a class="toc-backref" href="#id74" role="doc-backlink">General Notes</a><a class="headerlink" href="#id25" title="Link to this heading">¶</a></h3>
+<section id="analytical-methods">
+<h4><a class="toc-backref" href="#id75" role="doc-backlink">Analytical Methods</a><a class="headerlink" href="#analytical-methods" title="Link to this heading">¶</a></h4>
+<p>The analytical approach has been further extended in a number of ways:</p>
+<ol class="arabic simple">
+<li><p>The beam profile (and similarly the detector visibility of the sample) can also be included to accommodate partial illumination of the sample by the beam by means of a convolution function for the shape of the profile. <a class="footnote-reference brackets" href="#id44" id="id26" role="doc-noteref"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></a></p></li>
+<li><p>The isotropic approximation can be relaxed, giving anisotropic scattering for the single scattering term <span class="math notranslate nohighlight">\(I_1\)</span> in Eq. <a class="reference internal" href="#equation-im-isotropic">(21)</a>. This can be realized by either producing a solvable equation for <span class="math notranslate nohighlight">\(\frac{d\sigma}{d\Omega}\)</span> <a class="footnote-reference brackets" href="#id40" id="id27" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> or by using a model equation for <span class="math notranslate nohighlight">\(\frac{d\sigma}{d\Omega}\)</span>. <a class="footnote-reference brackets" href="#id45" id="id28" role="doc-noteref"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></a></p></li>
+<li><p>The constant ratio assumption can be tested by computing the higher orders of scattering terms with comparison to Monte Carlo (for flat plate and cylinder comparisons to Monte Carlo, see <a class="footnote-reference brackets" href="#id46" id="id29" role="doc-noteref"><span class="fn-bracket">[</span>12<span class="fn-bracket">]</span></a>).</p></li>
+</ol>
+</section>
+<section id="monte-carlo-methods">
+<h4><a class="toc-backref" href="#id76" role="doc-backlink">Monte Carlo Methods</a><a class="headerlink" href="#monte-carlo-methods" title="Link to this heading">¶</a></h4>
+<p>Monte Carlo approaches are a “brute force” technique that does require more computational time than the analytical approaches yet does not suffer many of the drawbacks
+to the analytical approach. Such drawbacks included assumptions of isotropic scattering required to formulate the solvable equations, not being able to include
+the intermediate energy transfers for scattering, and easier flexibility to handle complicated shapes for sample, container, and/or sample environments.</p>
+<p>In the Monte Carlo ray tracing technique, a virtual experiment is performed such that individual neutrons are put on a trajectory through a model of the
+instrument with scattering kernels defined for samples, containers, and other components of the instrument.
+Neutron histories are recorded so there is a clear distinction between single and multiple scattered neutrons and the multiple scattering correction
+is easily obtained from the result.</p>
+</section>
+<section id="small-angle-scattering">
+<h4><a class="toc-backref" href="#id77" role="doc-backlink">Small Angle Scattering</a><a class="headerlink" href="#small-angle-scattering" title="Link to this heading">¶</a></h4>
+<p>In some areas, such as small angle scattering, there may be useful approximations that can be
+applied that are not present for the more general wide angle scattering case.
+Again matters may become complicated, as for example small angle scatter followed by incoherent
+scatter from hydrogen can be more significant in blurring sharp features than double small angle scatter.
+For early considerations of multiple small angle scattering see for example <a class="footnote-reference brackets" href="#id47" id="id30" role="doc-noteref"><span class="fn-bracket">[</span>13<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id48" id="id31" role="doc-noteref"><span class="fn-bracket">[</span>14<span class="fn-bracket">]</span></a>.</p>
+</section>
+</section>
+<section id="legends-for-multiple-scattering-correction-algorithms-in-mantid-table">
+<h3><a class="toc-backref" href="#id78" role="doc-backlink">Legends for Multiple Scattering Correction Algorithms in Mantid Table</a><a class="headerlink" href="#legends-for-multiple-scattering-correction-algorithms-in-mantid-table" title="Link to this heading">¶</a></h3>
+<p>Indicates the energy modes that the algorithm can accommodate:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p>Legend for Energy Mode</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>E</p></td>
+<td><p>Elastic</p></td>
+</tr>
+<tr class="row-odd"><td><p>D</p></td>
+<td><p>Direct</p></td>
+</tr>
+<tr class="row-even"><td><p>I</p></td>
+<td><p>Indirect</p></td>
+</tr>
+</tbody>
+</table>
+<p>Indicates the technique used for calculating the absorption correction:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p>Legend for Technique</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>NI</p></td>
+<td><p>Numerical Integration</p></td>
+</tr>
+<tr class="row-odd"><td><p>MC</p></td>
+<td><p>Monte Carlo</p></td>
+</tr>
+</tbody>
+</table>
+<p>Options that describe what functions the algorithm is capable of, assumptions, and the output types:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p>Functions</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>L</p></td>
+<td><p>Loads correction from file</p></td>
+</tr>
+<tr class="row-odd"><td><p>FI</p></td>
+<td><p>Full illumination of sample by beam</p></td>
+</tr>
+<tr class="row-even"><td><p>PI</p></td>
+<td><p>Full or partial illumination of sample by beam</p></td>
+</tr>
+<tr class="row-odd"><td><p>W</p></td>
+<td><p>Outputs a corrected sample workspace</p></td>
+</tr>
+<tr class="row-even"><td><p>IA</p></td>
+<td><p>Isotropic assumption is used for all orders of scattering</p></td>
+</tr>
+<tr class="row-odd"><td><p>EA</p></td>
+<td><p>Elastic scattering assumption is used</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="multiple-scattering-correction-algorithms-in-mantid-table">
+<h3><a class="toc-backref" href="#id79" role="doc-backlink">Multiple Scattering Correction Algorithms in Mantid Table</a><a class="headerlink" href="#multiple-scattering-correction-algorithms-in-mantid-table" title="Link to this heading">¶</a></h3>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Algorithm</p></th>
+<th class="head"><p>Energy Mode</p></th>
+<th class="head"><p>Technique</p></th>
+<th class="head"><p>Geometry</p></th>
+<th class="head"><p>Input Units</p></th>
+<th class="head"><p>Functions</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/CalculateCarpenterSampleCorrection-v1.html#algm-calculatecarpentersamplecorrection"><span class="std std-ref">CalculateCarpenterSampleCorrection</span></a></p></td>
+<td><p>E</p></td>
+<td><p>A</p></td>
+<td><p>Cylinder</p></td>
+<td><p>Wavelength</p></td>
+<td><p>IA,EA,FI</p></td>
+<td><div class="line-block">
+<div class="line">Only applicable to Vanadium</div>
+<div class="line">In-plane only</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/CarpenterSampleCorrection-v1.html#algm-carpentersamplecorrection"><span class="std std-ref">CarpenterSampleCorrection</span></a></p></td>
+<td><p>E</p></td>
+<td><p>A</p></td>
+<td><p>Cylinder</p></td>
+<td><p>Wavelength</p></td>
+<td><p>IA,EA,FI,W</p></td>
+<td><div class="line-block">
+<div class="line">Only applicable to Vanadium</div>
+<div class="line">In-plane only</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/DiscusMultipleScatteringCorrection-v1.html#algm-discusmultiplescatteringcorrection"><span class="std std-ref">DiscusMultipleScatteringCorrection</span></a></p></td>
+<td><p>E,D,I</p></td>
+<td><p>MC</p></td>
+<td><p>Any Shape</p></td>
+<td><p>Momentum (elastic)
+DeltaE (inelastic)</p></td>
+<td><p>PI</p></td>
+<td><div class="line-block">
+<div class="line">Based on Monte Carlo program DISCUS <a class="footnote-reference brackets" href="#id50" id="id32" role="doc-noteref"><span class="fn-bracket">[</span>16<span class="fn-bracket">]</span></a> (or MINUS).</div>
+<div class="line">It has been ported to C++ and integrated in to the Mantid framework featuring:</div>
+<div class="line">- Mantid geometry (mesh\CSG shape descriptions)</div>
+<div class="line">- multi-threading for reduced run times</div>
+<div class="line">- spatial interpolation and wavelength interpolation</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/LoadMcStas-v1.html#algm-loadmcstas"><span class="std std-ref">LoadMcStas</span></a></p></td>
+<td><p>E,D,I</p></td>
+<td><p>MC</p></td>
+<td><p>Any Shape</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>L</p></td>
+<td><div class="line-block">
+<div class="line">Loads McStas <a class="footnote-reference brackets" href="#id49" id="id33" role="doc-noteref"><span class="fn-bracket">[</span>15<span class="fn-bracket">]</span></a> v2.1 histogram or event data files.</div>
+<div class="line">Can extract multiple scattering and subtract from scattering in Mantid</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/LoadMcStasNexus-v1.html#algm-loadmcstasnexus"><span class="std std-ref">LoadMcStasNexus</span></a></p></td>
+<td><p>E,D,I</p></td>
+<td><p>MC</p></td>
+<td><p>Any Shape</p></td>
+<td><ul class="simple">
+<li></li>
+</ul>
+</td>
+<td><p>L</p></td>
+<td><div class="line-block">
+<div class="line">Loads McStas <a class="footnote-reference brackets" href="#id49" id="id34" role="doc-noteref"><span class="fn-bracket">[</span>15<span class="fn-bracket">]</span></a> v2.0 histogram data files.</div>
+<div class="line">Can extract multiple scattering and subtract from scattering in Mantid</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/MayersSampleCorrection-v1.html#algm-mayerssamplecorrection"><span class="std std-ref">MayersSampleCorrection</span></a></p></td>
+<td><p>E</p></td>
+<td><p>NI+MC</p></td>
+<td><p>Cylinder</p></td>
+<td><p>TOF</p></td>
+<td><p>IA,EA,FI,W</p></td>
+<td><p>Uses Monte Carlo integration to evaluate the analytical integral.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../algorithms/MultipleScatteringCorrection-v1.html#algm-multiplescatteringcorrection"><span class="std std-ref">MultipleScatteringCorrection</span></a></p></td>
+<td><p>E</p></td>
+<td><p>NI</p></td>
+<td><p>Any shape</p></td>
+<td><p>Wavelength</p></td>
+<td><p>FI,IA,EA</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../algorithms/VesuvioCalculateMS-v1.html#algm-vesuviocalculatems"><span class="std std-ref">VesuvioCalculateMS</span></a></p></td>
+<td><p>I</p></td>
+<td><p>MC</p></td>
+<td><p>Flat Plate / Slab</p></td>
+<td><p>TOF</p></td>
+<td><p>IA,FI</p></td>
+<td><div class="line-block">
+<div class="line">Monte Carlo ray tracing algorithm for deep inelastic neutron scattering.</div>
+<div class="line">Calculates both total and multiple scattering output workspaces. Specific to</div>
+<div class="line"><a class="reference external" href="https://www.isis.stfc.ac.uk/Pages/Vesuvio.aspx">Vesuvio</a> but possibly general.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="references">
+<h2><a class="toc-backref" href="#id80" role="doc-backlink">References</a><a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id35" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>,<a role="doc-backlink" href="#id4">3</a>)</span>
+<p>NIST Center for Neutron Research tabulated neutron scattering lengths and cross sections. - <a class="reference external" href="https://www.ncnr.nist.gov/resources/n-lengths/list.html">https://www.ncnr.nist.gov/resources/n-lengths/list.html</a></p>
+</aside>
+<aside class="footnote brackets" id="id36" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id3">1</a>,<a role="doc-backlink" href="#id7">2</a>)</span>
+<p>A.K. Soper (2012). GudrunN and GudrunX manual. - <a class="reference external" href="https://www.isis.stfc.ac.uk/OtherFiles/Disordered%20Materials/Gudrun-Manual-2017-10.pdf">https://www.isis.stfc.ac.uk/OtherFiles/Disordered%20Materials/Gudrun-Manual-2017-10.pdf</a></p>
+</aside>
+<aside class="footnote brackets" id="id37" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">3</a><span class="fn-bracket">]</span></span>
+<p>Mantid source code for <a class="reference external" href="https://github.com/mantidproject/mantid/blob/master/Framework/Kernel/src/NeutronAtom.cpp#L23">NeutronAtom.cpp to define ReferenceLambda variable.</a></p>
+</aside>
+<aside class="footnote brackets" id="id38" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id8">1</a>,<a role="doc-backlink" href="#id14">2</a>)</span>
+<ol class="upperalpha simple" start="8">
+<li><ol class="upperalpha simple" start="8">
+<li><p>Paalman, and C. J. Pings. (1962) <em>Numerical Evaluation of X‐Ray Absorption Factors for Cylindrical Samples and Annular Sample Cells</em>, Journal of Applied Physics 33:8 2635–2639 <a class="reference external" href="http://dx.doi.org/10.1063/1.1729034">doi: 10.1063/1.1729034</a></p></li>
+</ol>
+</li>
+</ol>
+</aside>
+<aside class="footnote brackets" id="id39" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id9">1</a>,<a role="doc-backlink" href="#id15">2</a>)</span>
+<ol class="upperalpha simple" start="8">
+<li><ol class="upperalpha simple" start="12">
+<li><p>Ritter, R. L. Harris, &amp; R. E. Wood (1951) <em>On the X-Ray Absorption Correction for Encased Diffracters in the Debye-Sherrer Technique</em>, Journal of Applied Physics 22:2 169-176 <a class="reference external" href="https://doi.org/10.1063/1.1699919">doi: 10.1063/1.699919</a></p></li>
+</ol>
+</li>
+</ol>
+</aside>
+<aside class="footnote brackets" id="id40" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id13">1</a>,<a role="doc-backlink" href="#id19">2</a>,<a role="doc-backlink" href="#id22">3</a>,<a role="doc-backlink" href="#id27">4</a>)</span>
+<ol class="upperalpha simple" start="5">
+<li><ol class="upperalpha simple" start="10">
+<li><p>Lindley &amp; J. Mayers (Ed.). (1988). <em>Chapter 10: Experimental method and corrections to data</em>. United Kingdom: Adam Hilger. - <a class="reference external" href="https://inis.iaea.org/search/search.aspx?orig_q=RN:20000574">https://inis.iaea.org/search/search.aspx?orig_q=RN:20000574</a></p></li>
+</ol>
+</li>
+</ol>
+</aside>
+<aside class="footnote brackets" id="id41" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id10">1</a>,<a role="doc-backlink" href="#id20">2</a>)</span>
+<p>V.F. Sears (1975): <em>Slow-neutron multiple scattering</em>, <a class="reference external" href="http://dx.doi.org/10.1080/00018737500101361">Advances in Physics</a>, 24:1, 1-45</p>
+</aside>
+<aside class="footnote brackets" id="id42" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id11">1</a>,<a role="doc-backlink" href="#id21">2</a>)</span>
+<p>A.K.Soper, W.S.Howells and A.C.Hannon <em>ATLAS - Analysis of Time-of-Flight Diffraction Data from Liquid and Amorphous Samples</em> Rutherford Appleton Laboratory Report (1989): <a class="reference external" href="http://wwwisis2.isis.rl.ac.uk/disordered/Manuals/ATLAS/ATLAS%20manual%20v1.0.pdf">RAL-89-046</a></p>
+</aside>
+<aside class="footnote brackets" id="id43" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id23">9</a><span class="fn-bracket">]</span></span>
+<ol class="upperroman simple">
+<li><ol class="upperalpha simple">
+<li><p>Blech,&amp; B. L. Averbach (Ed.). (1965). <em>Multiple Scattering of Neutrons in Vanadium and Copper</em>. Physical Review 137:4A A1113–A1116 <a class="reference external" href="https://doi.org/10.1103/PhysRev.137.A1113">doi: 10.1103/PhysRev.137.A1113</a></p></li>
+</ol>
+</li>
+</ol>
+</aside>
+<aside class="footnote brackets" id="id44" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id12">1</a>,<a role="doc-backlink" href="#id16">2</a>,<a role="doc-backlink" href="#id17">3</a>,<a role="doc-backlink" href="#id24">4</a>,<a role="doc-backlink" href="#id26">5</a>)</span>
+<ol class="upperalpha simple">
+<li><ol class="upperalpha simple" start="11">
+<li><p>Soper &amp; P. A. Egelstaff (1980). <em>Multiple Scattering and Attenuation of Neutrons in Concentric Cylinders: I. Isotropic First Scattering</em>. Nuclear Instruments and Methods 178 415–425 <a class="reference external" href="https://doi.org/10.1016/0029-554X(80)90820-4">doi: 10.1016/0029-554X(80)90820-4</a></p></li>
+</ol>
+</li>
+</ol>
+</aside>
+<aside class="footnote brackets" id="id45" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id28">11</a><span class="fn-bracket">]</span></span>
+<ol class="upperalpha simple" start="19">
+<li><ol class="upperalpha simple" start="10">
+<li><p>Cocking &amp; C. R. T. Heard (1965). <em>Multiple Scattering in Plane Samples: Application to Scattering of Thermal Neutrons</em>. Report AERE - R5016, Harwell, Berkshire.</p></li>
+</ol>
+</li>
+</ol>
+</aside>
+<aside class="footnote brackets" id="id46" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id29">12</a><span class="fn-bracket">]</span></span>
+<ol class="upperalpha simple" start="10">
+<li><p>Mayers &amp; R. Cywinski (1985). <em>A Monte Carlo Evaluation of Analytical Multiple Scattering Corrections for Unpolarised Neutron Scatting and Polarization Analysis Data</em>. Nuclear Instruments and Methods in Physics Research Section A: Accelerators, Spectrometers, Detectors, and Associated Equipment 241, 519-531 <a class="reference external" href="https://doi.org/10.1016/0168-9002(85)90607-2">doi: 10.1016/0168-9002(85)90607-2</a></p></li>
+</ol>
+</aside>
+<aside class="footnote brackets" id="id47" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id30">13</a><span class="fn-bracket">]</span></span>
+<p>J.Schelten &amp; W.Schmatz, J.Appl.Cryst. 13(1980)385-390</p>
+</aside>
+<aside class="footnote brackets" id="id48" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id31">14</a><span class="fn-bracket">]</span></span>
+<p>J.R.D.Copley J.Appl.Cryst 21(1988)639-644</p>
+</aside>
+<aside class="footnote brackets" id="id49" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>15<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id33">1</a>,<a role="doc-backlink" href="#id34">2</a>)</span>
+<p>McStas: A neutron ray-trace simulation package <a class="reference external" href="http://mcstas.org/">website</a></p>
+</aside>
+<aside class="footnote brackets" id="id50" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id32">16</a><span class="fn-bracket">]</span></span>
+<ol class="upperalpha simple" start="13">
+<li><ol class="upperalpha simple" start="23">
+<li><p>Johnson, (1974). <em>Discus: A computer program for calculation of multiple scattering effects in inelastic neutron scattering experiments</em>. Report AERE-R7682 UKAEA AERE Harwell, Oxfordshire. <a class="reference external" href="https://www.isis.stfc.ac.uk/Pages/discus-manual6827.pdf">Report</a></p></li>
+</ol>
+</li>
+</ol>
+</aside>
+</aside>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="AbinsInterpolatedBroadening.html" title="Previous Chapter: Abins: Fast approximate broadening with “interpolate”"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Abins: Fast a...</span>
+    </a>
+  </li>
+  <li>
+    <a href="Algorithm.html" title="Next Chapter: Algorithm"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Algorithm &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
