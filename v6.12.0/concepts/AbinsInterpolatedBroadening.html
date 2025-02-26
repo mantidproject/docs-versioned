@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Abins: Fast approximate broadening with “interpolate”</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=94a1c62f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Absorption and Multiple Scattering Corrections" href="AbsorptionAndMultipleScattering.html" />
+    <link rel="prev" title="Abins: Implementation details" href="AbinsImplementation.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.12</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Concepts</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Abins: Fast approximate broadening with “interpolate”</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="abins-fast-approximate-broadening-with-interpolate">
+<span id="abinsinterpolatedbroadening"></span><h1><a class="toc-backref" href="#id1" role="doc-backlink">Abins: Fast approximate broadening with “interpolate”</a><a class="headerlink" href="#abins-fast-approximate-broadening-with-interpolate" title="Link to this heading">¶</a></h1>
+<nav class="contents" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#abins-fast-approximate-broadening-with-interpolate" id="id1">Abins: Fast approximate broadening with “interpolate”</a></p></li>
+</ul>
+</nav>
+<p>The “interpolate” scheme in <code class="docutils literal notranslate"><span class="pre">abins.instruments.broadening</span></code>
+estimates broadened spectra using a limited number of kernel
+evaluations or convolution steps in order to reduce the computation
+time. The method appears to be novel, so some explanation is needed.</p>
+<p>Consider first that we can approximate a Gaussian function by a linear
+combination of two other Gaussians; one narrower and one wider. If the
+mixing parameters are linearly based on the relationship between the
+widths the results are not impressive:</p>
+<figure class="align-default">
+<a class="screenshot reference internal image-reference" href="../_images/ImageNotFound.png"><img alt="../_images/ImageNotFound.png" class="screenshot" src="../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+</figure>
+<blockquote>
+<div><p>Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</p>
+</div></blockquote>
+<p>But if we optimise the mixing parameter at each width then the
+magnitudes improve significantly, even if the shapes remain distinctly non-Gaussian:</p>
+<figure class="align-default">
+<a class="screenshot reference internal image-reference" href="../_images/ImageNotFound.png"><img alt="../_images/ImageNotFound.png" class="screenshot" src="../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+</figure>
+<blockquote>
+<div><p>Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</p>
+</div></blockquote>
+<p>This error is closely related to the width difference between the
+endpoints. Here the range is reduced from a factor 4 to a factor 2,
+and the resulting functions are visually quite convincing</p>
+<figure class="align-default">
+<a class="screenshot reference internal image-reference" href="../_images/ImageNotFound.png"><img alt="../_images/ImageNotFound.png" class="screenshot" src="../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+</figure>
+<blockquote>
+<div><p>Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</p>
+</div></blockquote>
+<p>while a gap of <span class="math notranslate nohighlight">\(\sqrt{2}\)</span> is practically indistinguishable with error below 1% of the peak maximum.</p>
+<figure class="align-default">
+<a class="screenshot reference internal image-reference" href="../_images/ImageNotFound.png"><img alt="../_images/ImageNotFound.png" class="screenshot" src="../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+</figure>
+<blockquote>
+<div><p>Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</p>
+</div></blockquote>
+<p>For TOSCA <span class="math notranslate nohighlight">\(\sigma = a f^2 + b f + c\)</span> where <span class="math notranslate nohighlight">\(a, b, c$ = $10^{-7}, 0.005, 2.5\)</span>. For an energy range of 32 cm<sup>-1</sup> to 4100 cm<sup>-1</sup> sigma ranges from 2.66 to 24.68, which could covered by 5 Gaussians separated by width factor 2 or 9 Gaussians seperated by width factor <span class="math notranslate nohighlight">\(\sqrt{2}\)</span>.
+This could present a significant cost saving compared to full evaluation of ~4000 convolution kernels (one per convolution bin).</p>
+<p>We can build on this by performing convolution of the full spectrum with each of the sampled kernels, and then interpolate <em>between the spectra</em> using the predetermined mixing weights. The convolution is performed efficiently using FFTs, and relatively little memory is required to hold this limited number of spectra and interpolate between them.</p>
+<figure class="align-default">
+<a class="screenshot reference internal image-reference" href="../_images/ImageNotFound.png"><img alt="../_images/ImageNotFound.png" class="screenshot" src="../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+</figure>
+<blockquote>
+<div><p>Enable :plots: using DOCS_PLOTDIRECTIVE in CMake</p>
+</div></blockquote>
+<p>This procedure is not strictly equivalent to a summation over frequency-dependent functions, even if there is no interpolation error.
+At each energy coordinate <span class="math notranslate nohighlight">\(\epsilon\)</span> we “see” a fragment of full spectrum convolved at the same width as any points at <span class="math notranslate nohighlight">\(\epsilon\)</span> would be.
+In a typical indirect INS spectrum which becomes broader at high energy, this would overestimate the contribution from peaks originating below this <span class="math notranslate nohighlight">\(\epsilon\)</span> and underestimate the contribution from peaks originating above <span class="math notranslate nohighlight">\(\epsilon\)</span>.
+As a result, peaks will appear asymmetric.
+In practice, the magnitude of this error depends on the rate of change of <span class="math notranslate nohighlight">\(\sigma\)</span> relative to the size of <span class="math notranslate nohighlight">\(\sigma\)</span>.
+In the case of the TOSCA parameters, the error is very small. This should be re-evaluated for other instruments with different energy-dependent broadening functions.</p>
+<img alt="../_images/abins-interpolation-benzene.png" src="../_images/abins-interpolation-benzene.png" />
+<p>We can see the artefacts of this approach more clearly if we use fewer Gaussians (spaced by factor 2) and zoom in on the spectrum. The interpolation method has a tendency to show small peaks at turning points; this may be related to the imperfection in the shape of the smooth bell.</p>
+<img alt="../_images/abins-interpolation-zoom.png" src="../_images/abins-interpolation-zoom.png" />
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="AbinsImplementation.html" title="Previous Chapter: Abins: Implementation details"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Abins: Implem...</span>
+    </a>
+  </li>
+  <li>
+    <a href="AbsorptionAndMultipleScattering.html" title="Next Chapter: Absorption and Multiple Scattering Corrections"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Absorption an... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

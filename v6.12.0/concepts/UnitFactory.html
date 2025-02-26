@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Units</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=94a1c62f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Using XML Schemas" href="UsingXMLSchema.html" />
+    <link rel="prev" title="Table Workspaces" href="TableWorkspaces.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.12</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Concepts</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Units</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="units">
+<span id="unit-factory"></span><h1>Units<a class="headerlink" href="#units" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#what-are-units" id="id1">What are units?</a></p></li>
+<li><p><a class="reference internal" href="#available-tof-convertible-units" id="id2">Available TOF Convertible units</a></p></li>
+<li><p><a class="reference internal" href="#available-non-tof-convertible-units" id="id3">Available non-TOF Convertible units</a></p></li>
+<li><p><a class="reference internal" href="#working-with-units-in-python" id="id4">Working with Units in Python</a></p>
+<ul>
+<li><p><a class="reference internal" href="#accessing-units-on-workspaces" id="id5">Accessing units on workspaces</a></p></li>
+<li><p><a class="reference internal" href="#setting-the-axislabel-to-a-label-of-your-choice" id="id6">Setting the axisLabel to a Label of your choice</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#adding-new-units" id="id7">Adding new units</a></p></li>
+</ul>
+</nav>
+<section id="what-are-units">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">What are units?</a><a class="headerlink" href="#what-are-units" title="Link to this heading">¶</a></h2>
+<p>Units are a set of small classes in Mantid that define a unit of measure, and the conversions between various units.</p>
+<p>The Unit Factory is a <a class="reference internal" href="DynamicFactory.html#dynamic-factory"><span class="std std-ref">Dynamic Factory</span></a> that creates
+and hands out instances of Mantid Unit objects.</p>
+</section>
+<section id="available-tof-convertible-units">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Available TOF Convertible units</a><a class="headerlink" href="#available-tof-convertible-units" title="Link to this heading">¶</a></h2>
+<p>The following units are available in the default Mantid distribution. These units are TOF convertible.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>ID (as known by Unit Factory)</p></th>
+<th class="head"><p>Unit</p></th>
+<th class="head"><p>Relevant equation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Time of flight</p></td>
+<td><p>TOF</p></td>
+<td><p><span class="math notranslate nohighlight">\(\mu s\)</span></p></td>
+<td><p>TOF</p></td>
+</tr>
+<tr class="row-odd"><td><p>Wavelength</p></td>
+<td><p>Wavelength</p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathrm{\AA}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\lambda = \frac{h}{p} = \frac{h \times \mathrm{tof}}{m_N \times L_{tot}}\)</span> (see below)</p></td>
+</tr>
+<tr class="row-even"><td><p>Energy</p></td>
+<td><p>Energy</p></td>
+<td><p><span class="math notranslate nohighlight">\(meV\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(E = \frac{1}{2} mv^2 = \frac{m_N}{2} \left ( \frac{L_{tot}}{\mathrm{tof}} \right )^2\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>Energy in wavenumber</p></td>
+<td><p>Energy_inWavenumber</p></td>
+<td><p><span class="math notranslate nohighlight">\(cm^{-1}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(8.06554465 \times E\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>Momentum (k)</p></td>
+<td><p>Momentum</p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathrm{\AA}^{-1}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(k = \frac{2 \pi }{\lambda}=\frac{2 \pi \times m_N \times L_{tot}}{h \times \mathrm{tof}}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>d-spacing</p></td>
+<td><p>dSpacing</p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathrm{\AA}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(TOF = DIFA \, d^2 + DIFC d + TZERO\)</span> (see below)</p></td>
+</tr>
+<tr class="row-even"><td><p>Momentum transfer (Q)</p></td>
+<td><p>MomentumTransfer</p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathrm{\AA}^{-1}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(Q = 2 \, k \, sin \, \theta = \frac{4 \pi sin \theta}{\lambda}\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>Momentum transfer squared (<span class="math notranslate nohighlight">\(Q^2\)</span>)</p></td>
+<td><p>QSquared</p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathrm{\AA}^{-2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(Q^2 \frac{}{}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>Energy transfer</p></td>
+<td><p>DeltaE</p></td>
+<td><p><span class="math notranslate nohighlight">\(meV\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\Delta E = E_{i}-\frac{1}{2}m_N \left ( \frac{L_2}{\mathrm{tof}-L_1\sqrt{\frac{m_N}{2E_i}}} \right )^2\)</span></p></td>
+</tr>
+<tr class="row-odd"><td><p>Energy transfer in wavenumber</p></td>
+<td><p>DeltaE_inWavenumber</p></td>
+<td><p><span class="math notranslate nohighlight">\(cm^{-1}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(8.06554465 \times \Delta E\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p>Spin Echo Length</p></td>
+<td><p>SpinEchoLength</p></td>
+<td><p><span class="math notranslate nohighlight">\(nm\)</span></p></td>
+<td><div class="line-block">
+<div class="line"><span class="math notranslate nohighlight">\(constant \times \lambda^2\)</span></div>
+<div class="line-block">
+<div class="line">The constant is supplied in eFixed</div>
+</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>Spin Echo Time</p></td>
+<td><p>SpinEchoTime</p></td>
+<td><p><span class="math notranslate nohighlight">\(ns\)</span></p></td>
+<td><div class="line-block">
+<div class="line"><span class="math notranslate nohighlight">\(constant \times \lambda^3\)</span></div>
+<div class="line-block">
+<div class="line">The constant is supplied in eFixed</div>
+</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>d-spacingPerpendicular</p></td>
+<td><p>dSpacingPerpendicular</p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathrm{\AA}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(d_{\perp} = \sqrt{\lambda^2 - 2\log\cos\theta}\)</span></p></td>
+</tr>
+</tbody>
+</table>
+<p>Where <span class="math notranslate nohighlight">\(L_1\)</span> and <span class="math notranslate nohighlight">\(L_2\)</span> are sample to the source and sample to
+detector distances respectively, <span class="math notranslate nohighlight">\(L_{tot} = L_1+L_2\)</span> and
+<span class="math notranslate nohighlight">\(E_i\)</span> is the energy of neutrons leaving the source. <span class="math notranslate nohighlight">\(\theta\)</span>
+here is the Bragg scattering angle (e.g. half of the
+<span class="math notranslate nohighlight">\(\theta\)</span>-angle used in spherical coordinate system directed along
+Mantid z-axis)</p>
+<p><strong>Note on Wavelength</strong>: If the emode property in
+<a class="reference internal" href="../algorithms/ConvertUnits-v1.html#algm-convertunits"><span class="std std-ref">ConvertUnits</span></a>
+is specified as inelastic Direct/Indirect (inelastic) then the
+conversion to wavelength will take into account the fixed initial/final
+energy respectively. Units conversion into elastic momentum transfer
+(MomentumTransfer) will throw in elastic mode (emode=0) on inelastic
+workspace (when energy transfer is specified along x-axis)</p>
+<p><strong>Note on d-spacing</strong>: The coefficients DIFA, DIFC and TZERO may be obtained
+via calibration of a TOF diffraction instrument. In the absence of a calibration,
+DIFA=TZERO=0 and the default value of DIFC is:</p>
+<p><span class="math notranslate nohighlight">\(DIFC = 10^{-4} \frac{m_N}{h} (L_1 + L_2) 2 \sin(\theta)\)</span></p>
+<p>where the scaling factor adjusts for the fact that DIFC is required in units
+of <span class="math notranslate nohighlight">\(\mu s\)</span> per <span class="math notranslate nohighlight">\(\mathrm{\AA}\)</span>.</p>
+<p><strong>d-spacingPerpendicular</strong> is a unit invented in <a class="reference external" href="https://doi.org/10.1107/S1600576715016520">J. Appl. Cryst. (2015) 48, pp. 1627–1636</a> for 2D Rietveld refinement
+of angular and wavelength-dispersive neutron time-of-flight powder diffraction data. Together with the d-Spacing <span class="math notranslate nohighlight">\(d\)</span>,
+d-SpacingPerpendicular <span class="math notranslate nohighlight">\(d_{\perp}\)</span> forms a new orthogonal coordinate system.</p>
+</section>
+<section id="available-non-tof-convertible-units">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Available non-TOF Convertible units</a><a class="headerlink" href="#available-non-tof-convertible-units" title="Link to this heading">¶</a></h2>
+<p>The following units are available in the default Mantid distribution. These units cannot be converted to or from TOF.</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>ID (as known by Unit Factory)</p></th>
+<th class="head"><p>Unit</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td></td>
+<td><p>Empty</p></td>
+<td><p>No unit</p></td>
+<td><p>An empty label</p></td>
+</tr>
+<tr class="row-odd"><td><p>t</p></td>
+<td><p>Time</p></td>
+<td><p><span class="math notranslate nohighlight">\(s\)</span></p></td>
+<td><p>An independent unit of time not related to energy or TOF</p></td>
+</tr>
+<tr class="row-even"><td><p>Scattering angle</p></td>
+<td><p>Degrees</p></td>
+<td><p><span class="math notranslate nohighlight">\(degrees\)</span></p></td>
+<td><p>Degrees is a measurement of angular position</p></td>
+</tr>
+<tr class="row-odd"><td><p>Temperature</p></td>
+<td><p>Temperature</p></td>
+<td><p><span class="math notranslate nohighlight">\(K\)</span></p></td>
+<td><p>Temperature in Kelvin</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="working-with-units-in-python">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Working with Units in Python</a><a class="headerlink" href="#working-with-units-in-python" title="Link to this heading">¶</a></h2>
+<section id="accessing-units-on-workspaces">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Accessing units on workspaces</a><a class="headerlink" href="#accessing-units-on-workspaces" title="Link to this heading">¶</a></h3>
+<p>Units on MatrixWorkspaces are accessed via the Axis.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ws</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">axes</span><span class="p">()):</span>
+    <span class="n">axis</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Axis </span><span class="si">{0}</span><span class="s2"> is a </span><span class="si">{1}{2}{3}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span>
+                                           <span class="s2">&quot;Spectrum Axis&quot;</span> <span class="k">if</span> <span class="n">axis</span><span class="o">.</span><span class="n">isSpectra</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                                           <span class="s2">&quot;Text Axis&quot;</span> <span class="k">if</span> <span class="n">axis</span><span class="o">.</span><span class="n">isText</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                                           <span class="s2">&quot;Numeric Axis&quot;</span> <span class="k">if</span> <span class="n">axis</span><span class="o">.</span><span class="n">isNumeric</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+
+    <span class="n">unit</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">getUnit</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> caption:</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">caption</span><span class="p">()))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2"> symbol:</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">symbol</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Axis 0 is a Numeric Axis
+   caption:Time-of-flight
+   symbol:microsecond
+Axis 1 is a Spectrum Axis
+   caption:Spectrum
+   symbol:
+</pre></div>
+</div>
+</section>
+<section id="setting-the-axislabel-to-a-label-of-your-choice">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Setting the axisLabel to a Label of your choice</a><a class="headerlink" href="#setting-the-axislabel-to-a-label-of-your-choice" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ws</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">()</span>
+<span class="n">axis</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Create a new axis</span>
+<span class="n">axis</span><span class="o">.</span><span class="n">setUnit</span><span class="p">(</span><span class="s2">&quot;Label&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLabel</span><span class="p">(</span><span class="s1">&#39;Temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;K&#39;</span><span class="p">)</span>
+
+<span class="n">unit</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">getUnit</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;New caption:</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">caption</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;New symbol:</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">symbol</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>New caption:Temperature
+New symbol:K
+</pre></div>
+</div>
+</section>
+</section>
+<section id="adding-new-units">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Adding new units</a><a class="headerlink" href="#adding-new-units" title="Link to this heading">¶</a></h2>
+<p>Writing and adding a new unit is relatively straightforward.
+Instructions will appear here in due course. In the meantime if a unit
+that you require is missing, then please contact the development team
+and we will add it to the default Mantid library.</p>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="TableWorkspaces.html" title="Previous Chapter: Table Workspaces"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Table Workspaces</span>
+    </a>
+  </li>
+  <li>
+    <a href="UsingXMLSchema.html" title="Next Chapter: Using XML Schemas"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Using XML Schemas &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

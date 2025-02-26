@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>GetDetectorOffsets v1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=94a1c62f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="GetEi v1" href="GetEi-v1.html" />
+    <link rel="prev" title="GetAllEi v1" href="GetAllEi-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.12</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">GetDetectorOffsets v1</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="getdetectoroffsets-v1">
+<span id="algm-getdetectoroffsets"></span><span id="algm-getdetectoroffsets-v1"></span><h1>GetDetectorOffsets v1<a class="headerlink" href="#getdetectoroffsets-v1" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id1">Summary</a></p>
+<ul>
+<li><p><a class="reference internal" href="#see-also" id="id2">See Also</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#properties" id="id3">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id4">Description</a></p>
+<ul>
+<li><p><a class="reference internal" href="#converting-peak-position-to-offset" id="id5">Converting peak position to offset</a></p></li>
+<li><p><a class="reference internal" href="#estimating-the-cc-spectrum-fit-parameters" id="id6">Estimating the CC-spectrum fit parameters</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#usage" id="id7">Usage</a></p>
+<ul>
+<li><p><a class="reference internal" href="#output" id="id8">Output</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#source" id="id9">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Creates an OffsetsWorkspace containing offsets for each detector. You can then save these to a .cal file using SaveCalFile.</p>
+<section id="see-also">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="AlignComponents-v1.html#algm-aligncomponents"><span class="std std-ref">AlignComponents</span></a>, <a class="reference internal" href="ConvertDiffCal-v1.html#algm-convertdiffcal"><span class="std std-ref">ConvertDiffCal</span></a></p>
+</section>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>InputWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>A 2D workspace with X values of d-spacing</p></td>
+</tr>
+<tr class="row-odd"><td><p>Step</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0.001</p></td>
+<td><p>Step size used to bin d-spacing data</p></td>
+</tr>
+<tr class="row-even"><td><p>DReference</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>2</p></td>
+<td><p>Center of reference peak in d-space</p></td>
+</tr>
+<tr class="row-odd"><td><p>XMin</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>Minimum of CrossCorrelation data to search for peak, usually negative</p></td>
+</tr>
+<tr class="row-even"><td><p>XMax</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>Maximum of CrossCorrelation data to search for peak, usually positive</p></td>
+</tr>
+<tr class="row-odd"><td><p>GroupingFileName</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td></td>
+<td><p>Optional: The name of the output CalFile to save the generated OffsetsWorkspace. Allowed extensions: [‘.cal’]</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p>OffsetsWorkspace</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>An output workspace containing the offsets.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MaskWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p>MaskWorkspace</p></td>
+<td><p>_empty_</p></td>
+<td><p>Mask workspace (optional input / output workspace):  when specified, if the workspace already exists, any incoming masked detectors will be combined  with any additional outgoing masked detectors detected by the algorithm</p></td>
+</tr>
+<tr class="row-even"><td><p>PeakFunction</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Gaussian</p></td>
+<td><p>The function type for fitting the peaks. Allowed values: [‘AsymmetricPearsonVII’, ‘BackToBackExponential’, ‘Bk2BkExpConvPV’, ‘DeltaFunction’, ‘ElasticDiffRotDiscreteCircle’, ‘ElasticDiffSphere’, ‘ElasticIsoRotDiff’, ‘ExamplePeakFunction’, ‘Gaussian’, ‘IkedaCarpenterPV’, ‘Lorentzian’, ‘PearsonIV’, ‘PseudoVoigt’, ‘Voigt’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>EstimateFWHM</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Whether to esimate FWHM of peak function when estimating fit parameters</p></td>
+</tr>
+<tr class="row-even"><td><p>MaxOffset</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>1</p></td>
+<td><p>Maximum absolute value of offsets; default is 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>OffsetMode</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Relative</p></td>
+<td><p>Whether to calculate a relative, absolute, or signed offset. Allowed values: [‘Relative’, ‘Absolute’, ‘Signed’]</p></td>
+</tr>
+<tr class="row-even"><td><p>DIdeal</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>2</p></td>
+<td><p>The known peak centre value from the NIST standard information, this is only used in Absolute OffsetMode.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>This algorithm requires a workspace containing a cross-correlation, generated by the <a class="reference internal" href="CrossCorrelate-v1.html#algm-crosscorrelate"><span class="std std-ref">CrossCorrelate v1</span></a> algorithm which should contain a single peak and where the x-axis contains spectral offsets, in number of bins.</p>
+<p>The algorithm iterates over each spectrum in the input workspace containing the cross-correlation spectra and fits a PeakFunction (default is a <a class="reference internal" href="../fitting/fitfunctions/Gaussian.html#func-gaussian"><span class="std std-ref">Gaussian</span></a> function) with <a class="reference internal" href="../fitting/fitfunctions/LinearBackground.html#func-linearbackground"><span class="std std-ref">linear background</span></a> to the cross-correlation spectra.
+Remember: the peak shape is used for fitting the cross-correlation spectrum rather than the Bragg peaks in the original data.</p>
+<section id="converting-peak-position-to-offset">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Converting peak position to offset</a><a class="headerlink" href="#converting-peak-position-to-offset" title="Link to this heading">¶</a></h3>
+<p>The fit is used to calculate the centre of the fitted peak.
+In the equations below, the found centre of the cross-correlation peak is refered to as <span class="math notranslate nohighlight">\(CCPeakCentre\)</span>.
+The other parameters in the equations,
+<span class="math notranslate nohighlight">\(Step\)</span> is the <code class="docutils literal notranslate"><span class="pre">Step</span></code> property,
+<span class="math notranslate nohighlight">\(DReference\)</span> is the <code class="docutils literal notranslate"><span class="pre">DReference</span></code> property,
+and <span class="math notranslate nohighlight">\(DIdeal\)</span> is the <code class="docutils literal notranslate"><span class="pre">DIdeal</span></code> property.
+Using the fitted peak center, there are 3 options for calculating offset, depending on the choice for the <code class="docutils literal notranslate"><span class="pre">OffsetMode</span></code>
+input parameter:</p>
+<p><code class="docutils literal notranslate"><span class="pre">OffsetMode=&quot;Relative&quot;</span></code> (offset relative to reference position):</p>
+<p><span class="math notranslate nohighlight">\(offset = -CCPeakCentre*Step/(DReference+CCPeakCentre*Step)\)</span></p>
+<p>This requires a narrow integration band in <a class="reference internal" href="CrossCorrelate-v1.html#algm-crosscorrelate"><span class="std std-ref">CrossCorrelate v1</span></a> with linear binning of the input data and a known <code class="docutils literal notranslate"><span class="pre">DReference</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">OffsetMode=&quot;Absolute&quot;</span></code> (offset relative to ideal position):</p>
+<p><span class="math notranslate nohighlight">\(offset = -CCPeakCentre*Step/(DReference+CCPeakCentre*Step) + (DIdeal - DReference) / DReference\)</span></p>
+<p>This requires a narrow integration band in <a class="reference internal" href="CrossCorrelate-v1.html#algm-crosscorrelate"><span class="std std-ref">CrossCorrelate v1</span></a> with linear binning of the input data and a known <code class="docutils literal notranslate"><span class="pre">DReference</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">OffsetMode=&quot;Signed&quot;</span></code> (offset in raw number of bins):</p>
+<p><span class="math notranslate nohighlight">\(offset = -CCPeakCentre\)</span></p>
+<p>This is then written into a <a class="reference internal" href="../concepts/calibration/CalFile.html#calfile"><span class="std std-ref">.cal file</span></a> for every detector
+that contributes to that spectrum. All of the entries in the cal file
+are initially set to both be included, but also to all group into a
+single group on <a class="reference internal" href="DiffractionFocussing-v2.html#algm-diffractionfocussing"><span class="std std-ref">DiffractionFocussing v2</span></a>. The
+<a class="reference internal" href="CreateCalFileByNames-v1.html#algm-createcalfilebynames"><span class="std std-ref">CreateCalFileByNames v1</span></a> algorithm can be used to
+alter the grouping in the cal file.</p>
+</section>
+<section id="estimating-the-cc-spectrum-fit-parameters">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Estimating the CC-spectrum fit parameters</a><a class="headerlink" href="#estimating-the-cc-spectrum-fit-parameters" title="Link to this heading">¶</a></h3>
+<p>The starting value for the fit is that the linear background is zero.</p>
+<p>The peak center is found in two steps.
+First is the x-value of the highest point in the whole cross-correlation spectrum.
+Then it is observed again by subtracting the background (which is zero) then finding the highest point again within the neighborhood of the original data.</p>
+<p>The height is the background subtracted y-value of the heightest point as described earlier.</p>
+<p>The full-width-half-maximum is <span class="math notranslate nohighlight">\(2 \sigma \sqrt{2 ln(2)}\)</span> where <span class="math notranslate nohighlight">\(\sigma=10\)</span> if <code class="docutils literal notranslate"><span class="pre">EstimateFWHM=False</span></code>.
+When <code class="docutils literal notranslate"><span class="pre">True</span></code>, the value is estimated by integrating the background subtracted area under the window and dividing by the height.</p>
+<p><strong>Problems can arise</strong> for fitting if the cross-correlation peak is broad or the background is high and/or with significant slope.
+Since a broad peak can be estimated as a very broad peak with a relatively high background, the peak can be easily misfit.
+Similarly, since the starting value for the background is zero, a heavily sloping background will interfere with determining a starting value for the peak position.
+Also note that if the input cross-correlation has been calculated over too large a d-spacing range it can contain “harmonics” in addition to the fundamental peak and this will obviously confuse the peak fitting algorithm.</p>
+</section>
+</section>
+<section id="usage">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Usage</a><a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="c1"># Create a workspace with a Gaussian peak in the centre.</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="n">Function</span><span class="o">=</span><span class="s1">&#39;User Defined&#39;</span><span class="p">,</span><span class="n">UserDefinedFunction</span><span class="o">=</span><span class="s1">&#39;name=Gaussian,Height=1,PeakCentre=10,Sigma=1&#39;</span><span class="p">,</span><span class="n">XMin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">XMax</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">BinWidth</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">ws</span><span class="o">.</span><span class="n">getAxis</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">setUnit</span><span class="p">(</span> <span class="s1">&#39;dSpacing&#39;</span> <span class="p">)</span>
+
+<span class="c1"># Generate a file path to save the .cal file at.</span>
+<span class="n">calFilePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span> <span class="s1">&#39;~/MantidUsageExample_CalFile.cal&#39;</span> <span class="p">)</span>
+
+<span class="c1"># Run the algorithm</span>
+<span class="n">msk</span> <span class="o">=</span> <span class="n">GetDetectorOffsets</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span><span class="mf">0.001</span><span class="p">,</span><span class="mf">10.0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">calFilePath</span><span class="p">)</span>
+
+<span class="c1"># Read the saved .cal file back in</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span> <span class="n">calFilePath</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span> <span class="p">)</span>
+<span class="n">file</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># Print out first 10 lines of the file</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="mi">55</span><span class="p">]))</span>
+<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="output">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Output</a><a class="headerlink" href="#output" title="Link to this heading">¶</a></h3>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Calibration file for instrument basic_rect written on ...
+# Format: number    UDET         offset    select    group
+        0            ...     ...       1       1
+        1            ...     ...       1       1
+        2            ...     ...       1       1
+        3            ...     ...       1       1
+        4            ...     ...       1       1
+        5            ...     ...       1       1
+        6            ...     ...       1       1
+        7            ...     ...       1       1
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/Diffraction/Calibration.html">Diffraction\Calibration</a></p>
+</section>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/a8f64cccc781eac9892433e956bab7104ebf1213/Framework/Algorithms/inc/MantidAlgorithms/GetDetectorOffsets.h">GetDetectorOffsets.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/a8f64cccc781eac9892433e956bab7104ebf1213/Framework/Algorithms/src/GetDetectorOffsets.cpp">GetDetectorOffsets.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="GetAllEi-v1.html" title="Previous Chapter: GetAllEi v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; GetAllEi v1</span>
+    </a>
+  </li>
+  <li>
+    <a href="GetEi-v1.html" title="Next Chapter: GetEi v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">GetEi v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

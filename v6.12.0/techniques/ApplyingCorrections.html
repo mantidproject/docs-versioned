@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Applying Corrections</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=94a1c62f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="BinMD Coordinate Transformations" href="BinMDCoordinateTransformations.html" />
+    <link rel="prev" title="Techniques" href="index.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.12</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Techniques</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Applying Corrections</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="applying-corrections">
+<span id="id1"></span><h1>Applying Corrections<a class="headerlink" href="#applying-corrections" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#introduction" id="id4">Introduction</a></p></li>
+<li><p><a class="reference internal" href="#absorption-and-multiple-scattering-corrections-on-a-water-sample" id="id5">Absorption and Multiple Scattering Corrections on a Water sample</a></p>
+<ul>
+<li><p><a class="reference internal" href="#sample" id="id6">Sample</a></p></li>
+<li><p><a class="reference internal" href="#absorption-corrections" id="id7">Absorption Corrections</a></p></li>
+<li><p><a class="reference internal" href="#multiple-scattering-corrections" id="id8">Multiple Scattering Corrections</a></p></li>
+<li><p><a class="reference internal" href="#iterative-multiple-scattering-corrections" id="id9">Iterative multiple scattering corrections</a></p></li>
+<li><p><a class="reference internal" href="#effect-of-multiple-scattering-corrections-on-peak-widths" id="id10">Effect of Multiple Scattering Corrections on Peak Widths</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#references" id="id11">References</a></p></li>
+</ul>
+</nav>
+<section id="introduction">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>Neutron Data from spectrometers sometimes requires taking into consideration the contributions from Absorption and Multiple
+Scattering processes from the sample and the container. This section gives an overview of considerations and techniques when applying corrections in Mantid with data obtained
+from an indirect geometry spectrometer.</p>
+<p>In the <a class="reference internal" href="../interfaces/inelastic/Inelastic%20Corrections.html#interface-inelastic-corrections"><span class="std std-ref">Inelastic Corrections</span></a> interface of Mantid Workbench, it is possible to calculate and apply different absorption correction routines, such as the Paalman-Pings
+formalism. The algorithm used for these corrections is <a class="reference internal" href="../algorithms/PaalmanPingsMonteCarloAbsorption-v1.html#algm-paalmanpingsmontecarloabsorption"><span class="std std-ref">PaalmanPingsMonteCarloAbsorption</span></a>.
+To calculate corrections for multiple scattering events, the <a class="reference internal" href="../algorithms/DiscusMultipleScatteringCorrection-v1.html#algm-discusmultiplescatteringcorrection"><span class="std std-ref">Discus Multiple Scattering</span></a> algorithm can be used.
+This algorithm is based on M. Johnson’s DISCUS fortran program <a class="footnote-reference brackets" href="#id3" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, which has been adapted and refactored to run within Mantid.
+For Inelastic geometry instruments, we can additionally use the <a class="reference internal" href="../algorithms/SimpleShapeDiscusInelastic-v1.html#algm-simpleshapediscusinelastic"><span class="std std-ref">SimpleShapeDiscusInelastic</span></a> algorithm, which is also based on DISCUS.
+More information about the theory and application of absorption and multiple scattering corrections can be found in the <a class="reference internal" href="../concepts/AbsorptionAndMultipleScattering.html#sample-corrections"><span class="std std-ref">Absorption and Scatering Corrections</span></a> documentation.</p>
+<p>There are some features of these algorithms to consider when applying absorption and multiple scattering corrections in Mantid:</p>
+<ol class="arabic simple">
+<li><p>They can be used for diffraction measurements and both with Indirect and Direct Inelastic geometry instruments.</p></li>
+<li><p>A scheme for having more complicated sample environment may be defined in an XML file. For example: flat plates could include the outer frame, or different cylindrical geometries for
+the containers can be stored within Mantid Workbench.</p></li>
+<li><p>Calculating corrections requires knowledge of the scattering angle for each spectrum thus a reduced workspace must be used.</p></li>
+<li><p>There is an option to reduce computation time for multidetector instruments with large numbers of pixels using sparse instrument configurations.</p></li>
+</ol>
+<p>We are going to illustrate a process of performing absorption and multiple scattering corrections produced and analysed within Mantid Workbench with a liquid sample, in this case water, acquired with an Indirect geometry instrument.</p>
+</section>
+<section id="absorption-and-multiple-scattering-corrections-on-a-water-sample">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Absorption and Multiple Scattering Corrections on a Water sample</a><a class="headerlink" href="#absorption-and-multiple-scattering-corrections-on-a-water-sample" title="Link to this heading">¶</a></h2>
+<section id="sample">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Sample</a><a class="headerlink" href="#sample" title="Link to this heading">¶</a></h3>
+<p>A water sample acquired in the IRIS spectrometer <cite>irs26176_graphite002_red.nsx</cite> from the Mantid Usage Data set is used.
+Characteristics of this sample are:</p>
+<ul class="simple">
+<li><p>Sample: Liquid Water (<span class="math notranslate nohighlight">\(H_2O\)</span>), with 1 mm thickness  and 3 cm height sample.</p></li>
+<li><p>Container: Annular aluminium cylinder with 1 mm wall thickness.</p></li>
+<li><p>Calibration: Sample and container were calibrated with a Vanadium container.</p></li>
+<li><p>Detector: Indirect Spectrometer is IRIS with 51 individual detectors.</p></li>
+</ul>
+</section>
+<section id="absorption-corrections">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Absorption Corrections</a><a class="headerlink" href="#absorption-corrections" title="Link to this heading">¶</a></h3>
+<p>Firstly, we can calculate and apply neutron absorption corrections for the sample and container by using the  <a class="reference internal" href="../algorithms/PaalmanPingsMonteCarloAbsorption-v1.html#algm-paalmanpingsmontecarloabsorption"><span class="std std-ref">Monte Carlo Absorption</span></a>
+algorithm in the <a class="reference internal" href="../interfaces/inelastic/Inelastic%20Corrections.html#interface-inelastic-corrections"><span class="std std-ref">Inelastic Corrections</span></a> interface. Opening the interface, we navigate to the
+<cite>Calculate Monte Carlo Corrections</cite> tab. Selecting the <cite>irs26176_graphite002_red.nsx</cite> sample dataset with an annulus sample shape of the aforementioned dimensions.
+For sample and container chemical formula, we type <cite>H2-O</cite> and <cite>Al</cite>, respectively. Leaving all other parameters as default.
+Running the algorithm we generate a corrections group workspace. This workspace can be used in the <cite>Apply Absorption Corrections</cite> tab of the interface
+to generate a corrected reduced workspace.
+The corrected reduced workspace can then be used to generate the <span class="math notranslate nohighlight">\(S(Q, \omega)\)</span> profile from the <cite>S(Q,w)</cite> tab of the <a class="reference internal" href="../interfaces/inelastic/Inelastic%20Data%20Processor.html#interface-inelastic-data-processor"><span class="std std-ref">Data Processor Interface</span></a>.
+A 3D plot of the generated workspace is shown below:</p>
+<figure class="align-default">
+<img alt="water_sqw_corrected_for_absorption.png" src="../_images/water_sqw_corrected_for_absorption.png" />
+</figure>
+<p>The <span class="math notranslate nohighlight">\(S(Q, \omega)\)</span> workspace will be used to generate multiple scattering corrections.</p>
+</section>
+<section id="multiple-scattering-corrections">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Multiple Scattering Corrections</a><a class="headerlink" href="#multiple-scattering-corrections" title="Link to this heading">¶</a></h3>
+<p>We are going to calculate the multiple scattering corrections using the <a class="reference internal" href="../algorithms/SimpleShapeDiscusInelastic-v1.html#algm-simpleshapediscusinelastic"><span class="std std-ref">SimpleShapeDiscusInelastic</span></a> algorithm from the algorithms widget.
+On this algorithm, the input workspaces are:</p>
+<ol class="arabic simple">
+<li><p>The reduced absorption corrected workspaces to provide the scattering angles.</p></li>
+<li><p>The <span class="math notranslate nohighlight">\(S(Q, \omega)\)</span> calculated from the reduced corrected workspace to calculate the scattering.</p></li>
+</ol>
+<p>The sample shape and container dimensions are similar to the ones used for absorption corrections.
+Additionally, we can also include the effect of multiple scattering of the container in the algorithm. Although, for ease and simplicity,
+the scattering from the container is assumed to be isotropic and a <span class="math notranslate nohighlight">\(S(Q, \omega)\)</span> file is thus not required, only the container dimensions and material.</p>
+<p>For this example, we will use 4000 scattering paths to calculate up to 3 consecutive scattering events. The calculations of this algorithm, based on Monte Carlo sampling,
+are quite CPU intensive. Depending on the platform, it can take a time between 10 and 30 minutes to finalize processing. This example was run
+with a Cloud Computing rack equipped with 16CPU.</p>
+<p>Once the algorithm is finished, an output group workspace with several 2D Workspaces will be generated.
+The scattering weights per spectra for 1,2 or 3 scattering events will have a corresponding 2D workspace.
+Plotting these weights for the first spectrum results in the following graph:</p>
+<figure class="align-default">
+<img alt="Multiple_Scattering_for_Spectrum_1.png" src="../_images/Multiple_Scattering_for_Spectrum_1.png" />
+</figure>
+<p>From this figure, it appears that the weights for 3 scattering events are practically zero, and negligible in comparison with the other 2 terms.
+We could then assume only 2 scattering events in the computation of succesive multiple scattering corrections to reduce computation time.
+Additionally, we can find in the output group workspace the ratio of all scattering events to a single scattering (as well as its inverse curve).</p>
+<figure class="align-default">
+<img alt="Ratio_All_To_Single.png" src="../_images/Ratio_All_To_Single.png" />
+</figure>
+<p>Noticeable from this ratio is that the scattering weight ratio increase in the wings of the curve, where they contribute to an enlargement of the
+measured width, and thus could be appearing in fitting routines as extra peaks.</p>
+<p>The reduced absorption workspace can then be corrected by multiplying it to the <cite>single_to_all</cite> ratio workspace.</p>
+<figure class="align-default">
+<img alt="Starting_and_multiple_scattering_corrected_data_for_spectrum_1.png" src="../_images/Starting_and_multiple_scattering_corrected_data_for_spectrum_1.png" />
+</figure>
+</section>
+<section id="iterative-multiple-scattering-corrections">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Iterative multiple scattering corrections</a><a class="headerlink" href="#iterative-multiple-scattering-corrections" title="Link to this heading">¶</a></h3>
+<p>In the calculation of the multiple scattering corrections using the <a class="reference internal" href="../algorithms/SimpleShapeDiscusInelastic-v1.html#algm-simpleshapediscusinelastic"><span class="std std-ref">SimpleShapeDiscusInelastic</span></a> algorithm, we have
+used a <span class="math notranslate nohighlight">\(S(Q, \omega)\)</span> file which already contained multiple scattering terms, as we obtained from the workspace.
+In this case, it would improve upon the multiple scattering results if we perform a second iteration on the <a class="reference internal" href="../algorithms/SimpleShapeDiscusInelastic-v1.html#algm-simpleshapediscusinelastic"><span class="std std-ref">SimpleShapeDiscusInelastic</span></a> algorithm,
+but this time using the new <span class="math notranslate nohighlight">\(S(Q, \omega)\)</span> calculated from the multiple scattering corrected reduced workspace.</p>
+<figure class="align-default">
+<img alt="Scatterings_for_iterations_1_2.png.png" src="../_images/Scatterings_for_iterations_1_2.png" />
+</figure>
+<p>Comparing the results of the scattering weight amplitudes on 2 scattering events from the first and second iteration we can observe
+that the scattering for the second iteration is slightly smaller, this is the result of using the corrected <span class="math notranslate nohighlight">\(S(Q, \omega)\)</span>.
+If we perform another iteration, correcting the reduced workspace with these results and recalculating the <span class="math notranslate nohighlight">\(S(Q, \omega)\)</span>, we arrive
+at the following results from the third iteration:</p>
+<figure class="align-default">
+<img alt="Scatterings_for_iterations_2_3.png" src="../_images/Scatterings_for_iterations_2_3.png" />
+</figure>
+<p>This plot now shows that the difference between the scattering weights in iterations 2 and 3 is negligible, and thus we are not
+correcting further by continuing with the iteration procedure and can stop applying multiple scattering corrections.</p>
+</section>
+<section id="effect-of-multiple-scattering-corrections-on-peak-widths">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Effect of Multiple Scattering Corrections on Peak Widths</a><a class="headerlink" href="#effect-of-multiple-scattering-corrections-on-peak-widths" title="Link to this heading">¶</a></h3>
+<p>We can then use corrected multiple scattering data to model the quasielastic response with a convolution fitting algorithm.
+If we convolute with a lorentzian, we can apply the multiple scattering corrections to the reduced workspace as described above
+and then run ConvFit algorithm as normal.
+Plotting the FWHM obtained from convolutional fitting with and without applying corrections:</p>
+<figure class="align-default">
+<img alt="FWHM_for_Water_with_without_multiple_scattering_corrections.png" src="../_images/FWHM_for_Water_with_without_multiple_scattering_corrections.png" />
+</figure>
+<p>The corrected data shows smaller widths indicating that the multiple scattering increases the peak widths, which shows the effect of the extra wing scattering.</p>
+<p>Another method to apply the multiple scattering corrections would be to scale the model function, e.g. Lorentzian, by the multiple scattering corrections
+and then fit the reduced workspace. In this case, we would disentangle the resolution broadening of the <span class="math notranslate nohighlight">\(S(Q, \omega)\)</span> from the broadening occurring
+from multiple scattering corrections.</p>
+</section>
+</section>
+<section id="references">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">References</a><a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id3" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
+<p>M.W.Johnson, (1974). <em>Discus: A computer program for calculation of multiple scattering effects in inelastic neutron scattering experiments</em>. Report AERE-R7682 UKAEA AERE Harwell, Oxfordshire. <a class="reference external" href="https://www.isis.stfc.ac.uk/Pages/discus-manual6827.pdf">Report</a></p>
+</aside>
+</aside>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Techniques.html">Techniques</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="index.html" title="Previous Chapter: Techniques"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Techniques</span>
+    </a>
+  </li>
+  <li>
+    <a href="BinMDCoordinateTransformations.html" title="Next Chapter: BinMD Coordinate Transformations"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">BinMD Coordin... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

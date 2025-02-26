@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>BSpline</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <script src="../../_static/documentation_options.js?v=94a1c62f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="BackToBackExponential" href="BackToBackExponential.html" />
+    <link rel="prev" title="Asymmetric Pearson VII" href="AsymmetricPearsonVII.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.12</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Fit Functions</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">BSpline</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="bspline">
+<span id="func-bspline"></span><h1>BSpline<a class="headerlink" href="#bspline" title="Link to this heading">¶</a></h1>
+<section id="description">
+<span id="index-0"></span><h2>Description<a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>This function creates spline using the set of points and interpolates
+the input between them taking into account the least-squares fit.</p>
+<p>First and second derivatives from the spline can be calculated by using
+the derivative1D function.</p>
+<p>A BSpline is a polynomial function <span class="math notranslate nohighlight">\(f(x)\)</span> of order N, defined between an interval <span class="math notranslate nohighlight">\(a \leqslant x \leqslant b\)</span>.
+When using BSplines for interpolation or for fitting, we essentially chain BSplines together so that each
+spline passes through the breakpoints in that interval.</p>
+<p>There are conditions at each breakpoint that need to be fulfilled for the overall BSpline to be piecewise-smooth.</p>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h2>
+<p>To demonstrate these conditions we can set up a basic BSpline of order 2 with 3 breakpoints:</p>
+<p>Breakpoints : <span class="math notranslate nohighlight">\(x_0, x_1, x_2\)</span></p>
+<p>Our BSpline will be defined as the following:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}B(x) =
+                            \begin{cases}
+                              f_1(x)&amp; x_0 \leq x \leq x_1 \\
+                              f_2(x)&amp; x_1 \leq x \leq x_2 \\
+                            \end{cases}\end{split}\]</div>
+<p>We can write our <span class="math notranslate nohighlight">\(B(x)\)</span> function as a series <span class="math notranslate nohighlight">\(B(x) = \sum_{i=0}^{n+k-2} A_i f_i(x)\)</span></p>
+<p>where <span class="math notranslate nohighlight">\(A_i\)</span> is the coefficient of the BSpline. This coefficient maps to our fitting parameters found below.
+The coefficients <span class="math notranslate nohighlight">\(A_0\)</span> to <span class="math notranslate nohighlight">\(A_i\)</span> can be readily retrieved from a least-squares fit.</p>
+<p>If <span class="math notranslate nohighlight">\(N\)</span> is our number of breakpoints for a spline of order <span class="math notranslate nohighlight">\(K\)</span> then we can expect <span class="math notranslate nohighlight">\(N + K - 2\)</span> coefficients
+as the -2 accounts for our 2 exterior breakpoints at <span class="math notranslate nohighlight">\(x_0\)</span> and <span class="math notranslate nohighlight">\(x_n\)</span>.</p>
+<p>To make our BSpline piecewise-smooth we must ensure that these conditions are satisfied:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}f_1(x_0) = y_0\\
+f_2(x_2) = y_2\\
+\frac{df_1}{dx}(x_1) = \frac{df_2}{dx}(x_1)\\
+\frac{d^2 f_1}{dx^2}(x_1) = \frac{d^2 f_2}{dx^2}(x_1)\\\end{split}\]</div>
+<p>This point of smoothness is represented by the red circle in the graph below of our BSpline function <span class="math notranslate nohighlight">\(B(x)\)</span></p>
+<a class="reference internal image-reference" href="../../_images/BSplineQuadraticExample.jpg"><img alt="quadratic example of BSpline" class="align-center" src="../../_images/BSplineQuadraticExample.jpg" style="width: 800px; height: 600px;" />
+</a>
+</section>
+<section id="bsplines-and-interpolation">
+<h2>BSplines and Interpolation<a class="headerlink" href="#bsplines-and-interpolation" title="Link to this heading">¶</a></h2>
+<p>BSplines are commonly used when interpolating between points. An interpolation is different to a fit as
+it uses all of the data points to connect a straight line through them. It acts as if all of your data points
+are also breakpoints and a smooth spline of order N will connect the points together.</p>
+</section>
+<section id="bsplines-and-fitting">
+<h2>BSplines and Fitting<a class="headerlink" href="#bsplines-and-fitting" title="Link to this heading">¶</a></h2>
+<p>Fitting with a BSpline is different to interpolation as it requires your number of breakpoints to be less than your number
+of data points. The reason being, the BSplines will attempt to fit close to the data points but might only pass through
+some of the data points. It is not necessarily going to pass through all data points, only passing through breakpoints is guaranteed.</p>
+<p>An example of a fit using BSplines of order 3 can be seen in the image below, our breakpoints have been highlighted in green.
+The original dataset is in black, while the calculated fit using a least-squares fit with 4 breakpoints is in red.</p>
+<a class="reference internal image-reference" href="../../_images/BSplineFittingExample.png"><img alt="fitting example using BSplines" class="align-center" src="../../_images/BSplineFittingExample.png" style="width: 800px; height: 600px;" />
+</a>
+</section>
+<section id="attributes-non-fitting-parameters">
+<h2>Attributes (non-fitting parameters)<a class="headerlink" href="#attributes-non-fitting-parameters" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Uniform</p></td>
+<td><p>Boolean</p></td>
+<td><p>true</p></td>
+<td><p>If set to true, all breakpoints will be evenly spaced between startX and endX</p></td>
+</tr>
+<tr class="row-odd"><td><p>Order</p></td>
+<td><p>Integer</p></td>
+<td><p>3</p></td>
+<td><p>The order of the spline you wish to use i.e Order = 2 will use Quadratic Splines</p></td>
+</tr>
+<tr class="row-even"><td><p>NBreak</p></td>
+<td><p>Integer</p></td>
+<td><p>-</p></td>
+<td><p>The number of breakpoints you wish to have (must be greater than 1)</p></td>
+</tr>
+<tr class="row-odd"><td><p>StartX</p></td>
+<td><p>Double</p></td>
+<td><p>0.0</p></td>
+<td><p>Minimum value of X</p></td>
+</tr>
+<tr class="row-even"><td><p>EndX</p></td>
+<td><p>Double</p></td>
+<td><p>1.0</p></td>
+<td><p>Maximum value of X</p></td>
+</tr>
+<tr class="row-odd"><td><p>BreakPoints</p></td>
+<td><p>Double list</p></td>
+<td><p>-</p></td>
+<td><p>If Uniform is set to false, you must supply the breakpoints as a comma-separated list</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="properties-fitting-parameters">
+<h2>Properties (fitting parameters)<a class="headerlink" href="#properties-fitting-parameters" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>A0</p></td>
+<td><p>0.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>A1</p></td>
+<td><p>0.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>A2</p></td>
+<td><p>0.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>A3</p></td>
+<td><p>0.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>A4</p></td>
+<td><p>0.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>A5</p></td>
+<td><p>0.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>A6</p></td>
+<td><p>0.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>A7</p></td>
+<td><p>0.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>A8</p></td>
+<td><p>0.0</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>A9</p></td>
+<td><p>0.0</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>A10</p></td>
+<td><p>0.0</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/FitFunctions.html">FitFunctions</a> | <a class="reference external" href="categories/Background.html">Background</a></p>
+</section>
+<section id="source">
+<h2>Source<a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/a8f64cccc781eac9892433e956bab7104ebf1213/Framework/CurveFitting/inc/MantidCurveFitting/Functions/BSpline.h">BSpline.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/a8f64cccc781eac9892433e956bab7104ebf1213/Framework/CurveFitting/src/Functions/BSpline.cpp">BSpline.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="AsymmetricPearsonVII.html" title="Previous Chapter: Asymmetric Pearson VII"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Asymmetric Pe...</span>
+    </a>
+  </li>
+  <li>
+    <a href="BackToBackExponential.html" title="Next Chapter: BackToBackExponential"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">BackToBackExponential &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
