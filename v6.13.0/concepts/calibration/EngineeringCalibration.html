@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Engineering Calibration</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <script src="../../_static/documentation_options.js?v=e5748c76"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="PSD Tube Calibration" href="PSDTubeCalibration.html" />
+    <link rel="prev" title="CalFile" href="CalFile.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.13</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../index.html" >Concepts</a> &#187;</li>
+          
+            <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Calibration</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Engineering Calibration</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="engineering-calibration">
+<span id="id1"></span><h1>Engineering Calibration<a class="headerlink" href="#engineering-calibration" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#calculating-calibration" id="id2">Calculating Calibration</a></p>
+<ul>
+<li><p><a class="reference internal" href="#notes" id="id3">Notes</a></p></li>
+<li><p><a class="reference internal" href="#data-required" id="id4">Data Required</a></p></li>
+<li><p><a class="reference internal" href="#using-the-engineering-gui" id="id5">Using the Engineering GUI</a></p></li>
+<li><p><a class="reference internal" href="#calibrating-the-entire-instrument" id="id6">Calibrating the entire instrument</a></p></li>
+<li><p><a class="reference internal" href="#calibrating-individual-banks" id="id7">Calibrating individual banks</a></p></li>
+<li><p><a class="reference internal" href="#under-the-hood" id="id8">Under the hood</a></p></li>
+<li><p><a class="reference internal" href="#file-formats" id="id9">File Formats</a></p></li>
+<li><p><a class="reference internal" href="#applying-your-calibration" id="id10">Applying your calibration</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="calculating-calibration">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Calculating Calibration</a><a class="headerlink" href="#calculating-calibration" title="Link to this heading">¶</a></h2>
+<section id="notes">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">Notes</a><a class="headerlink" href="#notes" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The engineering Calibration is currently implemented to support Engin-X at ISIS, it may work for other instruments, but is subject to change at this point.</p></li>
+</ul>
+</section>
+<section id="data-required">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Data Required</a><a class="headerlink" href="#data-required" title="Link to this heading">¶</a></h3>
+<p>You will need to run a sample which will create good clean peaks at known reference dSpacing positions.  To get a good calibration you will want good statistics on this calibration data.  Vanadium and Ceria are common samples used for calibration.</p>
+</section>
+<section id="using-the-engineering-gui">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Using the Engineering GUI</a><a class="headerlink" href="#using-the-engineering-gui" title="Link to this heading">¶</a></h3>
+<p>Mantid provides a graphical user interface that  calculate can calibrations and
+visualize them.</p>
+<p>It is possible to load an existing calibration (as a CSV file) and to
+generate a new calibration file (which becomes the new current
+calibration).</p>
+<p>A description of the interface and all of it’s controls can be found
+<a class="reference internal" href="../../interfaces/diffraction/Engineering%20Diffraction.html#ui-engineering-calibration"><span class="std std-ref">here</span></a>.</p>
+</section>
+<section id="calibrating-the-entire-instrument">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Calibrating the entire instrument</a><a class="headerlink" href="#calibrating-the-entire-instrument" title="Link to this heading">¶</a></h3>
+<p>Calibration of every detector/pixel at the same time is done by <a class="reference internal" href="../../algorithms/EnggCalibrateFull-v1.html#algm-enggcalibratefull"><span class="std std-ref">EnggCalibrateFull</span></a>.  This calculates the calibration in a single step and outputs a table workspace of the calibration.  As it is calibrating the whole instrument it can take some time, the next section shows how you can perform a partial calibration.</p>
+</section>
+<section id="calibrating-individual-banks">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Calibrating individual banks</a><a class="headerlink" href="#calibrating-individual-banks" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="../../algorithms/EnggCalibrate-v1.html#algm-enggcalibrate"><span class="std std-ref">EnggCalibrate</span></a> allows calibration of individual bank within the instrument, which is useful if only one bank has moved from a previous calibration, or if the calibration failed for a certain area of the instrument.</p>
+</section>
+<section id="under-the-hood">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Under the hood</a><a class="headerlink" href="#under-the-hood" title="Link to this heading">¶</a></h3>
+<p>All of these approaches use the algorithm <a class="reference internal" href="../../algorithms/EnggFitPeaks-v1.html#algm-enggfitpeaks"><span class="std std-ref">EnggFitPeaks</span></a>, <a class="reference internal" href="../../algorithms/FindPeaks-v1.html#algm-findpeaks"><span class="std std-ref">FindPeaks</span></a> and  <a class="reference internal" href="../../algorithms/EnggVanadiumCorrections-v1.html#algm-enggvanadiumcorrections"><span class="std std-ref">EnggVanadiumCorrections</span></a> to find, and fit the recorded peaks and compare them to the expected values.</p>
+<p>The peak functions (shapes):</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/BackToBackExponential.html#func-backtobackexponential"><span class="std std-ref">BackToBackExponential</span></a> (used in EnggFitPeaks, to fit the peaks when accuracy is needed)</p></li>
+<li><p><a class="reference internal" href="../../fitting/fitfunctions/Gaussian.html#func-gaussian"><span class="std std-ref">Gaussian</span></a> (used in FindPeaks when the a quick validation is needed, but fit accuracy is not vital)</p></li>
+</ul>
+</section>
+<section id="file-formats">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">File Formats</a><a class="headerlink" href="#file-formats" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The legacy ascii/csv format: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/v6.0.0/scripts/Engineering/calib/ENGINX_full_pixel_calibration_vana194547_ceria193749.csv">ENGINX_full_pixel_calibration_vana194547_ceria193749.csv</a>
+This can get very large and cumbersome to deal with for instruments with many detectors.</p></li>
+<li><p>The <a class="reference internal" href="../DiffractionCalibrationWorkspace.html#diffractioncalibrationworkspace"><span class="std std-ref">HDF format</span></a>.
+This is that is more compact and is increasingly being used.</p></li>
+</ul>
+</section>
+<section id="applying-your-calibration">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Applying your calibration</a><a class="headerlink" href="#applying-your-calibration" title="Link to this heading">¶</a></h3>
+<p>The result of the calibration (the output table given in OutDetPosTable) is accepted by both <a class="reference internal" href="../../algorithms/EnggCalibrate-v1.html#algm-enggcalibrate"><span class="std std-ref">EnggCalibrate</span></a> and <a class="reference internal" href="../../algorithms/EnggFocus-v1.html#algm-enggfocus"><span class="std std-ref">EnggFocus</span></a> which use the columns ‘Detector ID’ and ‘Detector Position’ of the table to correct the detector positions before focusing.  The OutDetPosTable output table can also be used to apply the calibration calculated by this algorithm on any other workspace by using the algorithm <a class="reference internal" href="../../algorithms/ApplyCalibration-v1.html#algm-applycalibration"><span class="std std-ref">ApplyCalibration</span></a>.</p>
+<p><strong>Category</strong>: <a class="reference external" href="../categories/Calibration.html">Calibration</a></p>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="CalFile.html" title="Previous Chapter: CalFile"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; CalFile</span>
+    </a>
+  </li>
+  <li>
+    <a href="PSDTubeCalibration.html" title="Next Chapter: PSD Tube Calibration"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">PSD Tube Calibration &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

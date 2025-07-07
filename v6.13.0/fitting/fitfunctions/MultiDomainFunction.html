@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>MultiDomain Function</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <script src="../../_static/documentation_options.js?v=e5748c76"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="MultivariateGaussianComptonProfile" href="MultivariateGaussianComptonProfile.html" />
+    <link rel="prev" title="MuMinusExpTF" href="MuMinusExpTF.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.13</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Fit Functions</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">MultiDomain Function</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="multidomain-function">
+<span id="func-multidomainfunction"></span><h1>MultiDomain Function<a class="headerlink" href="#multidomain-function" title="Link to this heading">¶</a></h1>
+<section id="description">
+<span id="index-0"></span><h2>Description<a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>A multidomain function includes information about
+which domain a particular entry (function) will be applied to.
+The members of the multidomain function are indexed from 0 to the number of functions minus 1.
+Multidomain functions do not have their own parameters, instead they use
+parameters of the member functions. Parameter names are formed from the
+member function’s index and its parameter name: f[domain_index].[name]. For
+example, “f0.A0” would refer to the “A0” parameter of the first function in the multidomain function.</p>
+<p>The input string to create a multidomain function is formed by including
+the $domains=n directive in the function string. For example, the string for two
+<a class="reference internal" href="Gaussian.html#func-gaussian"><span class="std std-ref">Gaussians</span></a> is given by,</p>
+<p><code class="docutils literal notranslate"><span class="pre">composite=MultiDomainFunction,NumDeriv=1;name=Gaussian,$domains=i,PeakCentre=0,Height=10,Sigma=0.7;name=Gaussian,$domains=i,PeakCentre=0.1,Height=10,Sigma=0.7</span></code></p>
+<p>where we note that the multidomain function is itself a <a class="reference internal" href="CompositeFunction.html#func-compositefunction"><span class="std std-ref">Composite function</span></a>. The inclusion of $domains=i specifies that the ith
+function will correspond to the ith domain of the data. As a concrete example, consider fitting two spectra (domains) of
+a workspace,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">linear</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">x</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">quadratic</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="n">linear</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="n">quadratic</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">))</span>
+
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">ys</span><span class="p">,</span> <span class="n">NSpec</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">multiFunc</span><span class="o">=</span><span class="s2">&quot;composite=MultiDomainFunction,NumDeriv=1;name=Quadratic,$domains=1;name=LinearBackground,$domains=0&quot;</span>
+<span class="n">func</span> <span class="o">=</span> <span class="n">FunctionFactory</span><span class="o">.</span><span class="n">Instance</span><span class="p">()</span><span class="o">.</span><span class="n">createInitialized</span><span class="p">(</span><span class="n">multiFunc</span><span class="p">)</span>
+<span class="n">fit_output</span> <span class="o">=</span> <span class="n">Fit</span><span class="p">(</span><span class="n">Function</span><span class="o">=</span><span class="n">func</span><span class="p">,</span>
+                 <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">WorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">InputWorkspace_1</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">WorkspaceIndex_1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">Output</span><span class="o">=</span><span class="s1">&#39;fit&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As $domains=1 is set for the Quadratic function, it will be used to fit the second domain of the input workspace,
+corresponding to WorkspaceIndex=1. Similarly, the LinearBackground will be used to fit the first domain of the workspace,
+WorkspaceIndex=0. If instead we had specified domains=i, the function would have been fit based on the order of creation,
+i.e. the quadratic function would fit to the first domain and the LinearBackground to the second domain. If
+the same function is to be applied to each domain the $domains=All$ option may be specified, for instance if we want to
+fit a flat background across multiple domains,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+<span class="n">background</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">num_points</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="c1"># generate random data from exponential distribution</span>
+<span class="n">rv1</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">rv1</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">num_points</span><span class="p">)</span>
+<span class="n">x1</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="n">rv1</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span> <span class="o">+</span> <span class="n">background</span> <span class="o">+</span> <span class="mf">0.02</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">num_points</span><span class="p">)</span>
+
+<span class="n">rv2</span><span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">rv2</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">num_points</span><span class="p">)</span>
+<span class="n">x2</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="n">rv2</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span> <span class="o">+</span> <span class="n">background</span> <span class="o">+</span> <span class="mf">0.02</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">num_points</span><span class="p">)</span>
+
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)),</span> <span class="n">DataY</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">)),</span> <span class="n">NSpec</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">background</span><span class="o">=</span><span class="s1">&#39;;name=FlatBackground,$domains=All&#39;</span>
+<span class="n">func</span><span class="o">=</span><span class="s1">&#39;;name=ExpDecay,$domains=i&#39;</span>
+<span class="n">multiFunc</span><span class="o">=</span><span class="s1">&#39;composite=MultiDomainFunction,NumDeriv=1&#39;</span> <span class="o">+</span> <span class="n">func</span> <span class="o">+</span> <span class="n">func</span> <span class="o">+</span> <span class="n">background</span>
+
+<span class="n">fit_output</span> <span class="o">=</span> <span class="n">Fit</span><span class="p">(</span><span class="n">Function</span><span class="o">=</span><span class="n">multiFunc</span><span class="p">,</span>
+                 <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">WorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">InputWorkspace_1</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">WorkspaceIndex_1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">Output</span><span class="o">=</span><span class="s1">&#39;fit&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Each function of the multidomain function may itself be a composite function.
+If a member function is a composite function the same principle applies, where ‘f[domain_index].’
+is prepended to each composite function. A multidomain function of composites may be generated as follows,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">multidomain</span><span class="o">=</span><span class="s2">&quot;composite=MultiDomainFunction,NumDeriv=true;&quot;</span>\
+<span class="s2">&quot;(composite=CompositeFunction,$domains=i;name=FlatBackground;name=Polynomial,n=2);&quot;</span>\
+<span class="s2">&quot;(composite=CompositeFunction,$domains=i;name=FlatBackground;name=Polynomial,n=2)&quot;</span>
+<span class="n">func</span> <span class="o">=</span> <span class="n">FunctionFactory</span><span class="o">.</span><span class="n">Instance</span><span class="p">()</span><span class="o">.</span><span class="n">createInitialized</span><span class="p">(</span><span class="n">multidomain</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Which creates a multidomain function consisting of two composite functions, each composed of a FlatBackground and
+second order polynomial.</p>
+<p>Ties across domains can be added by appending a ties string to the multidomain function, for instance the following will create
+a multidomain of FlatBackgrounds, where the A0 parameter is tied across both domains,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">multidomain</span> <span class="o">=</span> <span class="s1">&#39;composite=MultiDomainFunction,NumDeriv=1;name=FlatBackground,$domains=i,A0=0;name=FlatBackground,$domains=i,A0=0;ties=(f0.A0=f1.A0)&#39;</span>
+<span class="n">func</span> <span class="o">=</span> <span class="n">FunctionFactory</span><span class="o">.</span><span class="n">Instance</span><span class="p">()</span><span class="o">.</span><span class="n">createInitialized</span><span class="p">(</span><span class="n">multidomain</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="attributes-non-fitting-parameters">
+<h2>Attributes (non-fitting parameters)<a class="headerlink" href="#attributes-non-fitting-parameters" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>NumDeriv</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/FitFunctions.html">FitFunctions</a> | <a class="reference external" href="categories/General.html">General</a></p>
+</section>
+<section id="source">
+<h2>Source<a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/722b60aac1ef429e64a71ebe8193a2d0cbb5b998/Framework/API/inc/MantidAPI/MultiDomainFunction.h">MultiDomainFunction.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/722b60aac1ef429e64a71ebe8193a2d0cbb5b998/Framework/API/src/MultiDomainFunction.cpp">MultiDomainFunction.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="MuMinusExpTF.html" title="Previous Chapter: MuMinusExpTF"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; MuMinusExpTF</span>
+    </a>
+  </li>
+  <li>
+    <a href="MultivariateGaussianComptonProfile.html" title="Next Chapter: MultivariateGaussianComptonProfile"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">MultivariateG... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

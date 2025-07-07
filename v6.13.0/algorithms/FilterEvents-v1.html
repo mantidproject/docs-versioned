@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>FilterEvents v1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=e5748c76"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FilterLogByTime v1" href="FilterLogByTime-v1.html" />
+    <link rel="prev" title="FilterByXValue v1" href="FilterByXValue-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.13</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">FilterEvents v1</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="filterevents-v1">
+<span id="algm-filterevents"></span><span id="algm-filterevents-v1"></span><h1>FilterEvents v1<a class="headerlink" href="#filterevents-v1" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id1">Summary</a></p>
+<ul>
+<li><p><a class="reference internal" href="#see-also" id="id2">See Also</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#properties" id="id3">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id4">Description</a></p>
+<ul>
+<li><p><a class="reference internal" href="#specifying-the-splitting-strategy" id="id5">Specifying the splitting strategy</a></p></li>
+<li><p><a class="reference internal" href="#unfiltered-events" id="id6">Unfiltered Events</a></p></li>
+<li><p><a class="reference internal" href="#correcting-time-neutron-was-at-the-sample" id="id7">Correcting time neutron was at the sample</a></p></li>
+<li><p><a class="reference internal" href="#filter-by-pulse-time-vs-full-time" id="id8">Filter by pulse time vs. full time</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#usage" id="id9">Usage</a></p></li>
+<li><p><a class="reference internal" href="#source" id="id10">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Filter events from an EventWorkspace to one or multiple target event workspaces according to a series of splitters.</p>
+<section id="see-also">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="GenerateEventsFilter-v1.html#algm-generateeventsfilter"><span class="std std-ref">GenerateEventsFilter</span></a>, <a class="reference internal" href="FilterByTime-v1.html#algm-filterbytime"><span class="std std-ref">FilterByTime</span></a>, <a class="reference internal" href="FilterByLogValue-v1.html#algm-filterbylogvalue"><span class="std std-ref">FilterByLogValue</span></a></p>
+</section>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>InputWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/EventWorkspace.html#eventworkspace"><span class="std std-ref">EventWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Input event workspace.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SplitterWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/Workspace.html#workspace"><span class="std std-ref">Workspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Input workspace specifying “splitters”, i.e. time intervals and targets for InputWorkspace filtering.</p></td>
+</tr>
+<tr class="row-even"><td><p>RelativeTime</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Flag indicating whether in SplitterWorkspace the times are absolute or relative. If true, they are relative to either the run start time or, if specified, FilterStartTime.</p></td>
+</tr>
+<tr class="row-odd"><td><p>InformationWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a></p></td>
+<td></td>
+<td><p>Optional information on each filtering target workspace.</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputWorkspaceBaseName</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>OutputWorkspace</p></td>
+<td><p>The base name to use for the output workspaces. An output workspace name is a combination of this and the target specified in SplitterWorkspace. For unfiltered events the workspace name will end with “_unfiltered”.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DescriptiveOutputNames</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If selected, the names of the output workspaces will include their time intervals.</p></td>
+</tr>
+<tr class="row-even"><td><p>GroupWorkspaces</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>An option to group all the output workspaces. The group name will be OutputWorkspaceBaseName.</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputWorkspaceIndexedFrom1</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If selected, the target index included in the output workspace name will be 1-based.</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputTOFCorrectionWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p>TOFCorrectWS</p></td>
+<td><p>Name of the output workspace for TOF correction factor.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SplitSampleLogs</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>DEPRECATED. All logs will be split.</p></td>
+</tr>
+<tr class="row-even"><td><p>FilterByPulseTime</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If selected, events will be filtered by their pulse time as opposed to full time.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TimeSeriesPropertyLogs</p></td>
+<td><p>Input</p></td>
+<td><p>str list</p></td>
+<td></td>
+<td><p>DEPRECATED. All logs will be split.</p></td>
+</tr>
+<tr class="row-even"><td><p>ExcludeSpecifiedLogs</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>DEPRECATED. All logs will be split.</p></td>
+</tr>
+<tr class="row-odd"><td><p>FilterStartTime</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td></td>
+<td><p>Absolute base time for relative times in SplitterWorkspace. Specify date and UTC time in ISO8601 format, e.g. 2010-09-14T04:20:12.</p></td>
+</tr>
+<tr class="row-even"><td><p>CorrectionToSample</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>None</p></td>
+<td><p>Type of correction on neutron events to sample time from detector time.  Allowed values: [‘None’, ‘Customized’, ‘Direct’, ‘Elastic’, ‘Indirect’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>DetectorTOFCorrectionWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a></p></td>
+<td></td>
+<td><p>Workspace containing the log time correction factor for each detector.</p></td>
+</tr>
+<tr class="row-even"><td><p>IncidentEnergy</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>Value of incident energy (Ei) in meV in direct mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SpectrumWithoutDetector</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Skip</p></td>
+<td><p>Approach to deal with spectrum without detectors.  Allowed values: [‘Skip’, ‘Skip only if TOF correction’]</p></td>
+</tr>
+<tr class="row-even"><td><p>DBSpectrum</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>Spectrum (workspace index) for debug purpose.</p></td>
+</tr>
+<tr class="row-odd"><td><p>NumberOutputWS</p></td>
+<td><p>Output</p></td>
+<td><p>number</p></td>
+<td></td>
+<td><p>Number of output workspaces after splitting InputWorkspace.</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputWorkspaceNames</p></td>
+<td><p>Output</p></td>
+<td><p>str list</p></td>
+<td></td>
+<td><p>List of output workspace names.</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputUnfilteredEvents</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If selected, unfiltered events will be output.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>This algorithm filters events from a single <a class="reference internal" href="../concepts/EventWorkspace.html#eventworkspace"><span class="std std-ref">Event Workspace</span></a> to
+one or multiple target event workspaces according to
+the <code class="docutils literal notranslate"><span class="pre">SplitterWorkspace</span></code> property. The <a class="reference internal" href="../concepts/EventFiltering.html#eventfiltering"><span class="std std-ref">Event Filtering</span></a> concept
+page has a detailed introduction to event filtering.</p>
+<section id="specifying-the-splitting-strategy">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Specifying the splitting strategy</a><a class="headerlink" href="#specifying-the-splitting-strategy" title="Link to this heading">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">SplitterWorkspace</span></code> provides information for
+splitting the <code class="docutils literal notranslate"><span class="pre">InputWorkspace</span></code> into target output
+workspaces. It can have one of three types:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>workspace class</p></th>
+<th class="head"><p>units</p></th>
+<th class="head"><p>rel/abs</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p>seconds</p></td>
+<td><p>either</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../api/python/mantid/api/ISplittersWorkspace.html#mantid.api.ISplittersWorkspace" title="mantid.api.ISplittersWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">SplittersWorkspace</span></code></a></p></td>
+<td><p>nanoseconds</p></td>
+<td><p>absolute</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a></p></td>
+<td><p>seconds</p></td>
+<td><p>either</p></td>
+</tr>
+</tbody>
+</table>
+<p>Whether the times in <code class="docutils literal notranslate"><span class="pre">SplitterWorkspace</span></code> are treated as relative or
+absolute is dependent on the value of <code class="docutils literal notranslate"><span class="pre">RelativeTime</span></code>. In the
+case of <code class="docutils literal notranslate"><span class="pre">RelativeTime=True</span></code>, the times are relative to the start of
+the run (in the <code class="docutils literal notranslate"><span class="pre">ws.run()['run_start']</span></code>) or, if specified, the
+<code class="docutils literal notranslate"><span class="pre">FilterStartTime</span></code>. In the case of <code class="docutils literal notranslate"><span class="pre">RelativeTime=False</span></code>, the times
+are relative to the <a class="reference internal" href="../api/python/mantid/kernel/DateAndTime.html#mantid.kernel.DateAndTime" title="mantid.kernel.DateAndTime"><code class="xref py py-class docutils literal notranslate"><span class="pre">GPS</span> <span class="pre">epoch</span></code></a>.</p>
+<p>Both <a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a> and
+<a class="reference internal" href="../api/python/mantid/api/ISplittersWorkspace.html#mantid.api.ISplittersWorkspace" title="mantid.api.ISplittersWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">SplittersWorkspace</span></code></a> have 3
+columns, <code class="docutils literal notranslate"><span class="pre">start</span></code>, <code class="docutils literal notranslate"><span class="pre">stop</span></code>, and <code class="docutils literal notranslate"><span class="pre">target</span></code>. <a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a> has a single spectrum where X-values
+represent the time boundaries and Y-values represent the target workspace indexes.
+The <a class="reference internal" href="#filter-events-usage-label"><span class="std std-ref">Usage</span></a> examples and <a class="reference internal" href="../concepts/EventFiltering.html#eventfiltering"><span class="std std-ref">Event Filtering</span></a> concept
+page have details on creating the <code class="docutils literal notranslate"><span class="pre">SplitterWorkspace</span></code> by hand.
+Note that event filtering treats all time intervals as [inclusive,exclusive).</p>
+<p>The optional <code class="docutils literal notranslate"><span class="pre">InformationWorkspace</span></code> is a <a class="reference internal" href="../concepts/TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a> for information on splitters.</p>
+</section>
+<section id="unfiltered-events">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Unfiltered Events</a><a class="headerlink" href="#unfiltered-events" title="Link to this heading">¶</a></h3>
+<p>Some events do not fall into any time-splitting intervals. They are put into a workspace
+with the name ending with <code class="docutils literal notranslate"><span class="pre">_unfiltered</span></code>. If <code class="docutils literal notranslate"><span class="pre">OutputUnfilteredEvents=False</span></code>,
+this workspace will not be created.</p>
+</section>
+<section id="correcting-time-neutron-was-at-the-sample">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Correcting time neutron was at the sample</a><a class="headerlink" href="#correcting-time-neutron-was-at-the-sample" title="Link to this heading">¶</a></h3>
+<p>When filtering fast logs, the time to filter by is the time that the
+neutron was at the sample. This can be specified using the
+<code class="docutils literal notranslate"><span class="pre">CorrectionToSample</span></code> parameter. Either the user specifies the
+correction parameter for every pixel, or one is calculated. The
+correction parameters are applied as</p>
+<div class="math notranslate nohighlight">
+\[TOF_{sample} = TOF_{detector} * scale[detectorID] + shift[detectorID]\]</div>
+<p>and stored in the <code class="docutils literal notranslate"><span class="pre">OutputTOFCorrectionWorkspace</span></code>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">CorrectionToSample=&quot;None&quot;</span></code> applies no correction</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CorrectionToSample=&quot;Elastic&quot;</span></code> applies <span class="math notranslate nohighlight">\(shift = 0\)</span> with
+<span class="math notranslate nohighlight">\(scale = L1/(L1+L2)\)</span> for detectors and <span class="math notranslate nohighlight">\(scale = L1/L_{monitor}\)</span>
+for monitors</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CorrectionToSample=&quot;Direct&quot;</span></code> applies <span class="math notranslate nohighlight">\(scale = 0\)</span> and
+<span class="math notranslate nohighlight">\(shift = L1 / \sqrt{2 E_{fix} / m_n}\)</span>.  The value supplied in
+<code class="docutils literal notranslate"><span class="pre">IncidentEnergy</span></code> will override the value found in the workspace’s
+value of <code class="docutils literal notranslate"><span class="pre">Ei</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CorrectionToSample=&quot;Indirect&quot;</span></code> applies <span class="math notranslate nohighlight">\(scale = 1\)</span> and
+<span class="math notranslate nohighlight">\(shift = -1 * L2 / \sqrt{2 E_{fix} / m_n}\)</span> for detectors. For
+monitors, uses the same corrections as <code class="docutils literal notranslate"><span class="pre">Elastic</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CorrectionToSample=&quot;Customized&quot;</span></code> applies the correction supplied
+in the <code class="docutils literal notranslate"><span class="pre">DetectorTOFCorrectionWorkspace</span></code>.</p></li>
+</ul>
+</section>
+<section id="filter-by-pulse-time-vs-full-time">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Filter by pulse time vs. full time</a><a class="headerlink" href="#filter-by-pulse-time-vs-full-time" title="Link to this heading">¶</a></h3>
+<p>In the case of <code class="docutils literal notranslate"><span class="pre">FilterByPulseTime=True</span></code>, events will be filtered by pulse time.
+This is recommended for slow sample environment logs. The algorithm
+will run faster, but with lower precision. In the case of <code class="docutils literal notranslate"><span class="pre">FilterByPulseTime=False</span></code>,
+events will be filtered by full time, i.e. pulse time plus TOF.</p>
+</section>
+</section>
+<section id="usage">
+<span id="filter-events-usage-label"></span><h2><a class="toc-backref" href="#id9" role="doc-backlink">Usage</a><a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p><strong>Example - Filtering events without correction on TOF</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ws</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_event.nxs&#39;</span><span class="p">)</span>
+<span class="n">splitws</span><span class="p">,</span> <span class="n">infows</span> <span class="o">=</span> <span class="n">GenerateEventsFilter</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">UnitOfTime</span><span class="o">=</span><span class="s1">&#39;Nanoseconds&#39;</span><span class="p">,</span> <span class="n">LogName</span><span class="o">=</span><span class="s1">&#39;SampleTemp&#39;</span><span class="p">,</span>
+        <span class="n">MinimumLogValue</span><span class="o">=</span><span class="mf">279.9</span><span class="p">,</span>  <span class="n">MaximumLogValue</span><span class="o">=</span><span class="mf">279.98</span><span class="p">,</span> <span class="n">LogValueInterval</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="n">FilterEvents</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">SplitterWorkspace</span><span class="o">=</span><span class="n">splitws</span><span class="p">,</span> <span class="n">InformationWorkspace</span><span class="o">=</span><span class="n">infows</span><span class="p">,</span>
+        <span class="n">OutputWorkspaceBaseName</span><span class="o">=</span><span class="s1">&#39;tempsplitws&#39;</span><span class="p">,</span>  <span class="n">GroupWorkspaces</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">FilterByPulseTime</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">OutputWorkspaceIndexedFrom1</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">CorrectionToSample</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">SpectrumWithoutDetector</span> <span class="o">=</span> <span class="s2">&quot;Skip&quot;</span><span class="p">,</span>
+        <span class="n">OutputTOFCorrectionWorkspace</span><span class="o">=</span><span class="s1">&#39;mock&#39;</span><span class="p">,</span> <span class="n">OutputUnfilteredEvents</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Print result</span>
+<span class="n">wsgroup</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s2">&quot;tempsplitws&quot;</span><span class="p">]</span>
+<span class="n">wsnames</span> <span class="o">=</span> <span class="n">wsgroup</span><span class="o">.</span><span class="n">getNames</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">wsnames</span><span class="p">):</span>
+    <span class="n">tmpws</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;workspace </span><span class="si">%s</span><span class="s2"> has </span><span class="si">%d</span><span class="s2"> events&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">tmpws</span><span class="o">.</span><span class="n">getNumberEvents</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>workspace tempsplitws_0 has 124 events
+workspace tempsplitws_1 has 16915 events
+workspace tempsplitws_2 has 10009 events
+workspace tempsplitws_3 has 6962 events
+workspace tempsplitws_4 has 22520 events
+workspace tempsplitws_5 has 5133 events
+workspace tempsplitws_unfiltered has 50603 events
+</pre></div>
+</div>
+<p><strong>Example - Filtering events by a user-generated TableWorkspace</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_event.nxs&#39;</span><span class="p">)</span>
+
+<span class="c1"># create TableWorkspace</span>
+<span class="n">split_table_ws</span> <span class="o">=</span> <span class="n">CreateEmptyTableWorkspace</span><span class="p">()</span>
+<span class="n">split_table_ws</span><span class="o">.</span><span class="n">addColumn</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;start&#39;</span><span class="p">)</span>
+<span class="n">split_table_ws</span><span class="o">.</span><span class="n">addColumn</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;stop&#39;</span><span class="p">)</span>
+<span class="n">split_table_ws</span><span class="o">.</span><span class="n">addColumn</span><span class="p">(</span><span class="s1">&#39;str&#39;</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">)</span>
+
+<span class="n">split_table_ws</span><span class="o">.</span><span class="n">addRow</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">100.</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">])</span>
+<span class="n">split_table_ws</span><span class="o">.</span><span class="n">addRow</span><span class="p">([</span><span class="mf">200.</span><span class="p">,</span> <span class="mf">300.</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">])</span>
+<span class="n">split_table_ws</span><span class="o">.</span><span class="n">addRow</span><span class="p">([</span><span class="mf">400.</span><span class="p">,</span> <span class="mf">600.</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">])</span>
+<span class="n">split_table_ws</span><span class="o">.</span><span class="n">addRow</span><span class="p">([</span><span class="mf">600.</span><span class="p">,</span> <span class="mf">650.</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">])</span>
+
+<span class="c1"># filter events</span>
+<span class="n">FilterEvents</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">SplitterWorkspace</span><span class="o">=</span><span class="n">split_table_ws</span><span class="p">,</span>
+        <span class="n">OutputWorkspaceBaseName</span><span class="o">=</span><span class="s1">&#39;tempsplitws3&#39;</span><span class="p">,</span>  <span class="n">GroupWorkspaces</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">FilterByPulseTime</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">OutputWorkspaceIndexedFrom1</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">CorrectionToSample</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">SpectrumWithoutDetector</span> <span class="o">=</span> <span class="s2">&quot;Skip&quot;</span><span class="p">,</span>
+        <span class="n">OutputTOFCorrectionWorkspace</span><span class="o">=</span><span class="s1">&#39;mock&#39;</span><span class="p">,</span>
+        <span class="n">RelativeTime</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">OutputUnfilteredEvents</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># print result</span>
+<span class="n">wsgroup</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s2">&quot;tempsplitws3&quot;</span><span class="p">]</span>
+<span class="n">wsnames</span> <span class="o">=</span> <span class="n">wsgroup</span><span class="o">.</span><span class="n">getNames</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">wsnames</span><span class="p">):</span>
+    <span class="n">tmpws</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;workspace </span><span class="si">%s</span><span class="s2"> has </span><span class="si">%d</span><span class="s2"> events&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">tmpws</span><span class="o">.</span><span class="n">getNumberEvents</span><span class="p">()))</span>
+    <span class="n">time_roi</span> <span class="o">=</span> <span class="n">tmpws</span><span class="o">.</span><span class="n">run</span><span class="p">()</span><span class="o">.</span><span class="n">getTimeROI</span><span class="p">()</span>
+    <span class="n">splitters</span> <span class="o">=</span> <span class="n">time_roi</span><span class="o">.</span><span class="n">toTimeIntervals</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">splitter</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">splitters</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">splitter</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;ns&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;1990-01-01T00:00&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;event splitter &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;: from &quot;</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime_as_string</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">timezone</span><span class="o">=</span><span class="s1">&#39;UTC&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; to &quot;</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime_as_string</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">timezone</span><span class="o">=</span><span class="s1">&#39;UTC&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>workspace tempsplitws3_a has 77580 events
+event splitter 1: from 2010-03-25T16:08:37.000000000Z to 2010-03-25T16:10:17.000000000Z
+workspace tempsplitws3_b has 0 events
+event splitter 1: from 2010-03-25T16:11:57.000000000Z to 2010-03-25T16:13:37.000000000Z
+event splitter 2: from 2010-03-25T16:18:37.000000000Z to 2010-03-25T16:19:27.000000000Z
+workspace tempsplitws3_c has 0 events
+event splitter 1: from 2010-03-25T16:15:17.000000000Z to 2010-03-25T16:18:37.000000000Z
+workspace tempsplitws3_unfiltered has 34686 events
+event splitter 1: from 2010-03-25T16:10:17.000000000Z to 2010-03-25T16:11:57.000000000Z
+event splitter 2: from 2010-03-25T16:13:37.000000000Z to 2010-03-25T16:15:17.000000000Z
+</pre></div>
+</div>
+<p><strong>Example - Filtering events by a user-generated MatrixWorkspace</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_event.nxs&#39;</span><span class="p">)</span>
+
+<span class="c1"># create MatrixWorkspace. Use -1 as a target for unfiltered events.</span>
+<span class="n">times</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">650</span><span class="p">]</span>
+<span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">split_matrix_ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span><span class="o">=</span><span class="n">times</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">targets</span><span class="p">,</span> <span class="n">NSpec</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># filter events</span>
+<span class="n">FilterEvents</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">SplitterWorkspace</span><span class="o">=</span><span class="n">split_matrix_ws</span><span class="p">,</span>
+        <span class="n">OutputWorkspaceBaseName</span><span class="o">=</span><span class="s1">&#39;tempsplitws4&#39;</span><span class="p">,</span>  <span class="n">GroupWorkspaces</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">FilterByPulseTime</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">OutputWorkspaceIndexedFrom1</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">CorrectionToSample</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span><span class="p">,</span> <span class="n">SpectrumWithoutDetector</span> <span class="o">=</span> <span class="s2">&quot;Skip&quot;</span><span class="p">,</span>
+        <span class="n">OutputTOFCorrectionWorkspace</span><span class="o">=</span><span class="s1">&#39;mock&#39;</span><span class="p">,</span>
+        <span class="n">RelativeTime</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">OutputUnfilteredEvents</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># print result</span>
+<span class="n">wsgroup</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s2">&quot;tempsplitws4&quot;</span><span class="p">]</span>
+<span class="n">wsnames</span> <span class="o">=</span> <span class="n">wsgroup</span><span class="o">.</span><span class="n">getNames</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">wsnames</span><span class="p">):</span>
+    <span class="n">tmpws</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;workspace </span><span class="si">%s</span><span class="s2"> has </span><span class="si">%d</span><span class="s2"> events&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">tmpws</span><span class="o">.</span><span class="n">getNumberEvents</span><span class="p">()))</span>
+    <span class="n">time_roi</span> <span class="o">=</span> <span class="n">tmpws</span><span class="o">.</span><span class="n">run</span><span class="p">()</span><span class="o">.</span><span class="n">getTimeROI</span><span class="p">()</span>
+    <span class="n">splitters</span> <span class="o">=</span> <span class="n">time_roi</span><span class="o">.</span><span class="n">toTimeIntervals</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">splitter</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">splitters</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">splitter</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;ns&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;1990-01-01T00:00&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;event splitter &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;: from &quot;</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime_as_string</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">timezone</span><span class="o">=</span><span class="s1">&#39;UTC&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; to &quot;</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime_as_string</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">timezone</span><span class="o">=</span><span class="s1">&#39;UTC&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>workspace tempsplitws4_0 has 77580 events
+event splitter 1: from 2010-03-25T16:08:37.000000000Z to 2010-03-25T16:10:17.000000000Z
+workspace tempsplitws4_1 has 0 events
+event splitter 1: from 2010-03-25T16:11:57.000000000Z to 2010-03-25T16:13:37.000000000Z
+event splitter 2: from 2010-03-25T16:18:37.000000000Z to 2010-03-25T16:19:27.000000000Z
+workspace tempsplitws4_2 has 0 events
+event splitter 1: from 2010-03-25T16:15:17.000000000Z to 2010-03-25T16:18:37.000000000Z
+workspace tempsplitws4_unfiltered has 34686 events
+event splitter 1: from 2010-03-25T16:10:17.000000000Z to 2010-03-25T16:11:57.000000000Z
+event splitter 2: from 2010-03-25T16:13:37.000000000Z to 2010-03-25T16:15:17.000000000Z
+</pre></div>
+</div>
+<p><strong>Example - Filtering events by pulse time</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ws</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_event.nxs&#39;</span><span class="p">)</span>
+<span class="n">splitws</span><span class="p">,</span> <span class="n">infows</span> <span class="o">=</span> <span class="n">GenerateEventsFilter</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">UnitOfTime</span><span class="o">=</span><span class="s1">&#39;Nanoseconds&#39;</span><span class="p">,</span> <span class="n">LogName</span><span class="o">=</span><span class="s1">&#39;SampleTemp&#39;</span><span class="p">,</span>
+        <span class="n">MinimumLogValue</span><span class="o">=</span><span class="mf">279.9</span><span class="p">,</span>  <span class="n">MaximumLogValue</span><span class="o">=</span><span class="mf">279.98</span><span class="p">,</span> <span class="n">LogValueInterval</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="n">FilterEvents</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span>
+    <span class="n">SplitterWorkspace</span><span class="o">=</span><span class="n">splitws</span><span class="p">,</span>
+    <span class="n">InformationWorkspace</span><span class="o">=</span><span class="n">infows</span><span class="p">,</span>
+    <span class="n">OutputWorkspaceBaseName</span><span class="o">=</span><span class="s1">&#39;tempsplitws&#39;</span><span class="p">,</span>
+    <span class="n">GroupWorkspaces</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">FilterByPulseTime</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">OutputWorkspaceIndexedFrom1</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">CorrectionToSample</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span><span class="p">,</span>
+    <span class="n">SpectrumWithoutDetector</span> <span class="o">=</span> <span class="s2">&quot;Skip&quot;</span><span class="p">,</span>
+    <span class="n">OutputTOFCorrectionWorkspace</span><span class="o">=</span><span class="s1">&#39;mock&#39;</span><span class="p">)</span>
+
+<span class="c1"># Print result</span>
+<span class="n">wsgroup</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s2">&quot;tempsplitws&quot;</span><span class="p">]</span>
+<span class="n">wsnames</span> <span class="o">=</span> <span class="n">wsgroup</span><span class="o">.</span><span class="n">getNames</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">wsnames</span><span class="p">):</span>
+    <span class="n">tmpws</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;workspace </span><span class="si">%s</span><span class="s2"> has </span><span class="si">%d</span><span class="s2"> events&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">tmpws</span><span class="o">.</span><span class="n">getNumberEvents</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>workspace tempsplitws_1 has 123 events
+workspace tempsplitws_2 has 16951 events
+workspace tempsplitws_3 has 9972 events
+workspace tempsplitws_4 has 7019 events
+workspace tempsplitws_5 has 22529 events
+workspace tempsplitws_6 has 5067 events
+</pre></div>
+</div>
+<p><strong>Example - Filtering events with correction on TOF</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ws</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_event.nxs&#39;</span><span class="p">)</span>
+<span class="n">splitws</span><span class="p">,</span> <span class="n">infows</span> <span class="o">=</span> <span class="n">GenerateEventsFilter</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">UnitOfTime</span><span class="o">=</span><span class="s1">&#39;Nanoseconds&#39;</span><span class="p">,</span> <span class="n">LogName</span><span class="o">=</span><span class="s1">&#39;SampleTemp&#39;</span><span class="p">,</span>
+        <span class="n">MinimumLogValue</span><span class="o">=</span><span class="mf">279.9</span><span class="p">,</span>  <span class="n">MaximumLogValue</span><span class="o">=</span><span class="mf">279.98</span><span class="p">,</span> <span class="n">LogValueInterval</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="n">FilterEvents</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">SplitterWorkspace</span><span class="o">=</span><span class="n">splitws</span><span class="p">,</span> <span class="n">InformationWorkspace</span><span class="o">=</span><span class="n">infows</span><span class="p">,</span>
+    <span class="n">OutputWorkspaceBaseName</span><span class="o">=</span><span class="s1">&#39;tempsplitws&#39;</span><span class="p">,</span>
+    <span class="n">GroupWorkspaces</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">FilterByPulseTime</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">OutputWorkspaceIndexedFrom1</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">CorrectionToSample</span> <span class="o">=</span> <span class="s2">&quot;Direct&quot;</span><span class="p">,</span>
+    <span class="n">IncidentEnergy</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">SpectrumWithoutDetector</span> <span class="o">=</span> <span class="s2">&quot;Skip&quot;</span><span class="p">,</span>
+    <span class="n">OutputTOFCorrectionWorkspace</span><span class="o">=</span><span class="s1">&#39;mock&#39;</span><span class="p">,</span>
+    <span class="n">OutputUnfilteredEvents</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Print result</span>
+<span class="n">wsgroup</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s2">&quot;tempsplitws&quot;</span><span class="p">]</span>
+<span class="n">wsnames</span> <span class="o">=</span> <span class="n">wsgroup</span><span class="o">.</span><span class="n">getNames</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">wsnames</span><span class="p">):</span>
+    <span class="n">tmpws</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;workspace </span><span class="si">%s</span><span class="s2"> has </span><span class="si">%d</span><span class="s2"> events&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">tmpws</span><span class="o">.</span><span class="n">getNumberEvents</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>workspace tempsplitws_0 has 123 events
+workspace tempsplitws_1 has 16951 events
+workspace tempsplitws_2 has 9972 events
+workspace tempsplitws_3 has 7019 events
+workspace tempsplitws_4 has 22514 events
+workspace tempsplitws_5 has 5082 events
+workspace tempsplitws_unfiltered has 50605 events
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/Events/EventFiltering.html">Events\EventFiltering</a></p>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/722b60aac1ef429e64a71ebe8193a2d0cbb5b998/Framework/Algorithms/inc/MantidAlgorithms/FilterEvents.h">FilterEvents.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/722b60aac1ef429e64a71ebe8193a2d0cbb5b998/Framework/Algorithms/src/FilterEvents.cpp">FilterEvents.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="FilterByXValue-v1.html" title="Previous Chapter: FilterByXValue v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; FilterByXValue v1</span>
+    </a>
+  </li>
+  <li>
+    <a href="FilterLogByTime-v1.html" title="Next Chapter: FilterLogByTime v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">FilterLogByTime v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Data reduction for D7 instrument at the ILL</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=e5748c76"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Data reduction for reflectometry instruments at the ILL" href="ReflectometryILL.html" />
+    <link rel="prev" title="ISIS Single Crystal Diffraction Reduction Scripts" href="ISIS_SingleCrystalDiffraction_Workflow.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.13</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Techniques</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Data reduction for D7 instrument at the ILL</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="data-reduction-for-d7-instrument-at-the-ill">
+<span id="polariseddiffractionill"></span><h1>Data reduction for D7 instrument at the ILL<a class="headerlink" href="#data-reduction-for-d7-instrument-at-the-ill" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#reduction-workflow-and-recommendations" id="id25">Reduction workflow and recommendations</a></p>
+<ul>
+<li><p><a class="reference internal" href="#reduction-basics" id="id26">Reduction basics</a></p></li>
+<li><p><a class="reference internal" href="#wavelength-and-position-calibration" id="id27">Wavelength and position calibration</a></p></li>
+<li><p><a class="reference internal" href="#transmission-calculation" id="id28">Transmission calculation</a></p>
+<ul>
+<li><p><a class="reference internal" href="#workflow-diagrams-and-working-example" id="id29">Workflow diagrams and working example</a></p></li>
+<li><p><a class="reference internal" href="#absorber" id="id30">Absorber</a></p></li>
+<li><p><a class="reference internal" href="#empty-container" id="id31">Empty container</a></p></li>
+<li><p><a class="reference internal" href="#transmission" id="id32">Transmission</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#polarisation-correction" id="id33">Polarisation correction</a></p>
+<ul>
+<li><p><a class="reference internal" href="#workflow-diagram-and-working-example" id="id34">Workflow diagram and working example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#vanadium-data-reduction" id="id35">Vanadium data reduction</a></p>
+<ul>
+<li><p><a class="reference internal" href="#reduction-workflow" id="id36">Reduction workflow</a></p></li>
+<li><p><a class="reference internal" href="#background-subtraction" id="id37">Background subtraction</a></p></li>
+<li><p><a class="reference internal" href="#id5" id="id38">Polarisation correction</a></p></li>
+<li><p><a class="reference internal" href="#frame-overlap-correction" id="id39">Frame-overlap correction</a></p></li>
+<li><p><a class="reference internal" href="#self-attenuation-correction" id="id40">Self-attenuation correction</a></p></li>
+<li><p><a class="reference internal" href="#detector-and-analyser-energy-efficiency-corrections" id="id41">Detector and analyser energy efficiency corrections</a></p></li>
+<li><p><a class="reference internal" href="#output" id="id42">Output</a></p></li>
+<li><p><a class="reference internal" href="#id8" id="id43">Workflow diagrams and working example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#sample-data-reduction" id="id44">Sample data reduction</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id10" id="id45">Frame-overlap correction</a></p></li>
+<li><p><a class="reference internal" href="#detector-efficiency-correction" id="id46">Detector efficiency correction</a></p></li>
+<li><p><a class="reference internal" href="#cross-section-separation" id="id47">Cross-section separation</a></p></li>
+<li><p><a class="reference internal" href="#sample-data-normalisation" id="id48">Sample data normalisation</a></p></li>
+<li><p><a class="reference internal" href="#id15" id="id49">Output</a></p></li>
+<li><p><a class="reference internal" href="#id16" id="id50">Workflow diagrams and working example</a></p></li>
+<li><p><a class="reference internal" href="#sample-reduction" id="id51">Sample reduction</a></p></li>
+<li><p><a class="reference internal" href="#sample-normalisation" id="id52">Sample normalisation</a></p></li>
+<li><p><a class="reference internal" href="#references" id="id53">References</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+<p>There are three workflow algorithms supporting data reduction at ILL’s D7 polarised diffraction and spectroscopy instrument. These algorithms are:</p>
+<dl class="simple">
+<dt><a class="reference internal" href="../algorithms/D7YIGPositionCalibration-v1.html#algm-d7yigpositioncalibration"><span class="std std-ref">D7YIGPositionCalibration v1</span></a></dt><dd><p>Performs wavelength and position calibraiton for D7 instrument banks and individual detectors in banks.</p>
+</dd>
+<dt><a class="reference internal" href="../algorithms/PolDiffILLReduction-v1.html#algm-poldiffillreduction"><span class="std std-ref">PolDiffILLReduction v1</span></a></dt><dd><p>Performs data reduction, including all desired corrections, and produces the input for the following cross-section separation and normalisation.</p>
+</dd>
+<dt><a class="reference internal" href="../algorithms/D7AbsoluteCrossSections-v1.html#algm-d7absolutecrosssections"><span class="std std-ref">D7AbsoluteCrossSections v1</span></a></dt><dd><p>Performs cross-section separation into nuclear coherent, spin-incoherent and magnetic components, does the data normalisation, and sets desired final units.</p>
+</dd>
+</dl>
+<p>Together with the other algorithms and services provided by the Mantid framework, the reduction algorithms can handle a number of reduction scenarios. If this proves insufficient, however, the algorithms can be accessed using Python. Before making modifications it is recommended to copy the source files and rename the algorithms as not to break the original behavior.</p>
+<p>This document tries to give an overview on how the algorithms work together via Python examples. Please refer to the algorithm documentation for details of each individual algorithm.</p>
+<section id="reduction-workflow-and-recommendations">
+<h2><a class="toc-backref" href="#id25" role="doc-backlink">Reduction workflow and recommendations</a><a class="headerlink" href="#reduction-workflow-and-recommendations" title="Link to this heading">¶</a></h2>
+<p>A description of the usage of the algorithms for the D7 data reduction is presented along with several possible workflows, depending on the number of desired corrections, the type of normalisation, as well as the type of measurement that the data comes from (powder sample,  single crystal, TOF).</p>
+<section id="reduction-basics">
+<h3><a class="toc-backref" href="#id26" role="doc-backlink">Reduction basics</a><a class="headerlink" href="#reduction-basics" title="Link to this heading">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To run these usage examples please first download the
+<a class="reference external" href="https://sourceforge.net/projects/mantid/files/Sample%20Data/UsageData.zip/download">usage data</a>,
+and add these to your path.
+In Mantid this is done using <a class="reference internal" href="../interfaces/framework/ManageUserDirectories.html#manageuserdirectories"><span class="std std-ref">Manage User Directories</span></a>.</p>
+</div>
+<p>A very basic powder data reduction would include a vanadium reference and a sample, without any corrections or position and wavelength calibration, and follow the following steps:</p>
+<ol class="arabic simple">
+<li><p>Reduce vanadium data.</p></li>
+<li><p>Reduce sample data.</p></li>
+<li><p>Run normalisation with vanadium reduction output as input.</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define vanadium properties:</span>
+<span class="n">vanadiumProperties</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SampleMass&#39;</span><span class="p">:</span> <span class="mf">8.54</span><span class="p">,</span> <span class="s1">&#39;FormulaUnitMass&#39;</span><span class="p">:</span> <span class="mf">50.94</span><span class="p">}</span>
+
+<span class="c1"># Vanadium reduction</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span><span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396993&#39;</span><span class="p">,</span> <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Vanadium&#39;</span><span class="p">,</span> <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;Sum&#39;</span><span class="p">,</span>
+                    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;reduced_vanadium&#39;</span><span class="p">,</span>
+                    <span class="n">SampleAndEnvironmentProperties</span><span class="o">=</span><span class="n">vanadiumProperties</span><span class="p">)</span>
+
+<span class="c1"># Define the number of formula units for the sample</span>
+<span class="n">sampleProperties</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SampleMass&#39;</span><span class="p">:</span> <span class="mf">2.932</span><span class="p">,</span> <span class="s1">&#39;FormulaUnitMass&#39;</span><span class="p">:</span> <span class="mf">182.54</span><span class="p">}</span>
+<span class="c1"># Sample reduction</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span><span class="n">Run</span><span class="o">=</span><span class="s1">&#39;397004&#39;</span><span class="p">,</span> <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Sample&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;reduced_sample&#39;</span><span class="p">,</span>
+                        <span class="n">SampleAndEnvironmentProperties</span><span class="o">=</span><span class="n">sampleProperties</span><span class="p">)</span>
+
+<span class="c1"># normalise sample and set the output to absolute units with vanadium</span>
+<span class="n">D7AbsoluteCrossSections</span><span class="p">(</span>
+          <span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;reduced_sample&#39;</span><span class="p">,</span>
+          <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;normalised_sample&#39;</span><span class="p">,</span>
+          <span class="n">SampleAndEnvironmentProperties</span><span class="o">=</span><span class="n">sampleProperties</span><span class="p">,</span>
+          <span class="n">NormalisationMethod</span><span class="o">=</span><span class="s1">&#39;Vanadium&#39;</span><span class="p">,</span>
+          <span class="n">VanadiumInputWorkspace</span><span class="o">=</span><span class="s1">&#39;reduced_vanadium&#39;</span><span class="p">,</span>
+          <span class="n">OutputUnits</span><span class="o">=</span><span class="s1">&#39;TwoTheta&#39;</span><span class="p">)</span>
+
+<span class="n">SofQ</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;normalised_sample&#39;</span><span class="p">]</span>
+<span class="n">xAxis</span> <span class="o">=</span> <span class="n">SofQ</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># TwoTheta axis</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;dS/dOmega (TwoTheta) detector position range: </span><span class="si">{:.2f}</span><span class="s1">...</span><span class="si">{:.2f}</span><span class="s1"> (degrees)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xAxis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xAxis</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>dS/dOmega (TwoTheta) detector position range: 13.14...144.06 (degrees)
+</pre></div>
+</div>
+</section>
+<section id="wavelength-and-position-calibration">
+<h3><a class="toc-backref" href="#id27" role="doc-backlink">Wavelength and position calibration</a><a class="headerlink" href="#wavelength-and-position-calibration" title="Link to this heading">¶</a></h3>
+<p>The first step of working with D7 data is to ensure that there exist a proper calibration of the wavelength, bank positions, and detector positions relative to their bank. This calibration can be either taken from a previous experiment performed in comparable conditions or obtained from the <span class="math notranslate nohighlight">\(\text{Y}_{3}\text{Fe}_{5}\text{O}_{12}\)</span> (YIG) scan data using a dedicated algorithm <a class="reference internal" href="../algorithms/D7YIGPositionCalibration-v1.html#algm-d7yigpositioncalibration"><span class="std std-ref">D7YIGPositionCalibration</span></a>. The method follows the description presented in Ref. <a class="footnote-reference brackets" href="#fennell" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p>This algorithm performs wavelength and position calibration for both individual detectors and detector banks using measurement of a sample of powdered YIG. This data is fitted with Gaussian distributions at the expected peak positions. The output is an <a class="reference internal" href="../concepts/InstrumentParameterFile.html#instrumentparameterfile"><span class="std std-ref">Instrument Parameter File</span></a> readable by the <a class="reference internal" href="../algorithms/LoadILLPolarizedDiffraction-v1.html#algm-loadillpolarizeddiffraction"><span class="std std-ref">LoadILLPolarizedDiffraction</span></a> algorithm that will place the detector banks and detectors using the output of this algorithm.</p>
+<p>The provided YIG d-spacing values are loaded from an XML list. The default d-spacing distribution for YIG available in Mantid in <cite>D7_YIG_peaks.xml</cite> file is coming from Ref. <a class="footnote-reference brackets" href="#nakatsuka" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.
+As long as this d-spacing list is sufficient and does not require changes, the <cite>YIGPeaksFile</cite> property does not need to be specified. The peak positions are converted into <span class="math notranslate nohighlight">\(2\theta\)</span> positions using the initial assumption of the neutron wavelength. YIG peaks in the detector’s scan are fitted separately using a Gaussian distribution.</p>
+<p>The workspace containing the peak fitting results is then fitted using a <cite>Multidomain</cite> function of the form:</p>
+<div class="math notranslate nohighlight">
+\[2\theta_{\text{fit}} = m \cdot (2.0 \cdot \text{asin} ( \lambda / 2d ) + offset_{\text{pixel}} + offset_{\text{bank}}),\]</div>
+<p>where <cite>m</cite> is the bank slope, <span class="math notranslate nohighlight">\(offset_{\text{pixel}}\)</span> is the relative offset to the initial assumption of the position inside the detector bank, and <span class="math notranslate nohighlight">\(offset_{\text{bank}}\)</span> is the offset of the entire bank. This function allows to extract the information about the wavelength, detector bank slopes and offsets, and the distribution of detector offsets.</p>
+<p>It is strongly advised to first run the <a class="reference internal" href="../algorithms/D7YIGPositionCalibration-v1.html#algm-d7yigpositioncalibration"><span class="std std-ref">D7YIGPositionCalibration</span></a> algorithm with the <cite>FittingMethod</cite> set to <cite>None</cite>, so that the initial guesses for the positions of the YIG Bragg peaks can be inspected and corrected if needed. Assuming the first python code-block below is used for this purpose, the workspace name to use for inspection of the initial guesses is named <cite>peak_fits_fitting_test</cite>. There, the initial guesses for individual detectors can be checked against the measured YIG Bragg peaks distribution. The correction can be done by changing the bank offsets, changing the desired peaks width and the minimal distance between them.</p>
+<p>To save time in this iterative process, <cite>InputWorkspace</cite> property can be specified instead of <cite>Filenames</cite>. This way, the 2D distribution of measured intensities does not have to be created each time from loaded data but can be cached and reused for time saving. To profit from this feature, comment the <cite>Filenames</cite> property and uncomment the <cite>InputWorkspace</cite> in the first example below.</p>
+<p><strong>Example - D7YIGPositionCalibration - initial guess check before fitting at the shortest wavelength</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">approximate_wavelength</span> <span class="o">=</span> <span class="s1">&#39;3.1&#39;</span> <span class="c1"># Angstrom</span>
+<span class="n">D7YIGPositionCalibration</span><span class="p">(</span>
+             <span class="n">Filenames</span><span class="o">=</span><span class="s1">&#39;402652:403041&#39;</span><span class="p">,</span>
+<span class="c1">#            InputWorkspace=&#39;conjoined_input_fitting_test&#39;,</span>
+             <span class="n">ApproximateWavelength</span><span class="o">=</span><span class="n">approximate_wavelength</span><span class="p">,</span>
+             <span class="n">YIGPeaksFile</span><span class="o">=</span><span class="s1">&#39;D7_YIG_peaks.xml&#39;</span><span class="p">,</span>
+             <span class="n">MinimalDistanceBetweenPeaks</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+             <span class="n">BraggPeakWidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+             <span class="n">BankOffsets</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+             <span class="n">MaskedBinsRange</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
+             <span class="n">FittingMethod</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+             <span class="n">ClearCache</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+             <span class="n">FitOutputWorkspace</span><span class="o">=</span><span class="s1">&#39;fitting_test&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Example - D7YIGPositionCalibration - calibration at the shortest wavelength</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">approximate_wavelength</span> <span class="o">=</span> <span class="s1">&#39;3.1&#39;</span> <span class="c1"># Angstrom</span>
+<span class="n">D7YIGPositionCalibration</span><span class="p">(</span><span class="n">Filenames</span><span class="o">=</span><span class="s1">&#39;402652:403041&#39;</span><span class="p">,</span> <span class="n">ApproximateWavelength</span><span class="o">=</span><span class="n">approximate_wavelength</span><span class="p">,</span>
+                            <span class="n">YIGPeaksFile</span><span class="o">=</span><span class="s1">&#39;D7_YIG_peaks.xml&#39;</span><span class="p">,</span> <span class="n">CalibrationOutputFile</span><span class="o">=</span><span class="s1">&#39;test_shortWavelength.xml&#39;</span><span class="p">,</span>
+                            <span class="n">MinimalDistanceBetweenPeaks</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">BankOffsets</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                            <span class="n">MaskedBinsRange</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span> <span class="n">FittingMethod</span><span class="o">=</span><span class="s1">&#39;Global&#39;</span><span class="p">,</span> <span class="n">ClearCache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">FitOutputWorkspace</span><span class="o">=</span><span class="s1">&#39;shortWavelength&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The calibrated wavelength is: </span><span class="si">{0:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">approximate_wavelength</span><span class="p">)</span><span class="o">*</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;shortWavelength&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The bank2 gradient is: </span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;shortWavelength&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The bank3 gradient is: </span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;shortWavelength&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">176</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The bank4 gradient is: </span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;shortWavelength&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">352</span><span class="p">]))</span>
+</pre></div>
+</div>
+</section>
+<section id="transmission-calculation">
+<h3><a class="toc-backref" href="#id28" role="doc-backlink">Transmission calculation</a><a class="headerlink" href="#transmission-calculation" title="Link to this heading">¶</a></h3>
+<p>The transmission (T) is calculated using counts measured by monitor 2 (M2) normalised to either measurement time or monitor 1, and according to the following formula:</p>
+<div class="math notranslate nohighlight">
+\[T = \frac{S - E_{Cd}}{E - E_{Cd}},\]</div>
+<p>where <span class="math notranslate nohighlight">\(S\)</span> is normalised M2 counts measured with the current sample, <span class="math notranslate nohighlight">\(E_{Cd}\)</span> is normalised counts when cadmium absorber is measured, and <span class="math notranslate nohighlight">\(E\)</span> is normalised counts from the direct beam.</p>
+<p>The measurement of the cadmium absorber is optional and does not have to be provided as input for the transmission to be calculated. However, it allows
+to take into account dark currents in the readout system electronics and thus this measurement is advised to be included in transmission calculations.</p>
+<p>It is possible to provide more than one numor as input for the transmission calculation. In such a case, the input workspaces are averaged.</p>
+<p>The output of the transmission calculation is given as a <a class="reference internal" href="../concepts/WorkspaceGroup.html#workspacegroup"><span class="std std-ref">WorkspaceGroup</span></a> with a single workspace containing a single value of the calculated polarisation.</p>
+<p>Instead of running the transmission calculation it is also possible to either provide a workspace with a single value or a floating-point value for the transmission to the workflows
+that require transmission.</p>
+<section id="workflow-diagrams-and-working-example">
+<h4><a class="toc-backref" href="#id29" role="doc-backlink">Workflow diagrams and working example</a><a class="headerlink" href="#workflow-diagrams-and-working-example" title="Link to this heading">¶</a></h4>
+<p>Below are the relevant workflow diagrams describing reduction steps of the transmission calculation.</p>
+</section>
+<section id="absorber">
+<h4><a class="toc-backref" href="#id30" role="doc-backlink">Absorber</a><a class="headerlink" href="#absorber" title="Link to this heading">¶</a></h4>
+<figure class="align-default" id="id18">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id18" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="empty-container">
+<h4><a class="toc-backref" href="#id31" role="doc-backlink">Empty container</a><a class="headerlink" href="#empty-container" title="Link to this heading">¶</a></h4>
+<figure class="align-default" id="id19">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id19" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="transmission">
+<h4><a class="toc-backref" href="#id32" role="doc-backlink">Transmission</a><a class="headerlink" href="#transmission" title="Link to this heading">¶</a></h4>
+<figure class="align-default" id="id20">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id20" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To run these usage examples please first download the
+<a class="reference external" href="https://sourceforge.net/projects/mantid/files/Sample%20Data/UsageData.zip/download">usage data</a>,
+and add these to your path.
+In Mantid this is done using <a class="reference internal" href="../interfaces/framework/ManageUserDirectories.html#manageuserdirectories"><span class="std std-ref">Manage User Directories</span></a>.</p>
+</div>
+<p><strong>Example - transmission calculation for quartz sample</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Beam with cadmium absorber, used for transmission</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396991&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_transmission_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;BeamWithCadmium&#39;</span>
+<span class="p">)</span>
+<span class="c1"># Beam measurement for transmisison</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396983&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;beam_ws&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumTransmissionWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_transmission_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;EmptyBeam&#39;</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cadmium absorber transmission is </span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;cadmium_transmission_ws_1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;beam_ws_1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="c1"># Quartz transmission</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396985&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;quartz_transmission&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumTransmissionWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_transmission_ws&#39;</span><span class="p">,</span>
+    <span class="n">EmptyBeamWorkspace</span><span class="o">=</span><span class="s1">&#39;beam_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Transmission&#39;</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Quartz transmission is </span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;quartz_transmission_1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Cadmium absorber transmission is 0.011
+Quartz transmission is 0.700
+</pre></div>
+</div>
+</section>
+</section>
+<section id="polarisation-correction">
+<h3><a class="toc-backref" href="#id33" role="doc-backlink">Polarisation correction</a><a class="headerlink" href="#polarisation-correction" title="Link to this heading">¶</a></h3>
+<p>The polarisation correction is estimated using quartz sample. The scattering is purely diffuse and, to a good approximation, non-spin flip.
+Ideally, the quartz should have the same geometry and attenuation as the sample as then the same gauge volume of the beam is measured
+and the reduction will give an accurate estimation of the polarizing efficiency. However, the correction is usually fairly insensitive to small
+differences in the polarizing efficiency and choosing the quartz to have the same outer dimensions is normally satisfactory. Multiple scattering
+is not a problem, as the correction is given by a ratio and there is no spin-flip scattering to depolarize the beam. The polarization efficiencies
+are calculated from ratios of non-spin-flip to spin-flip scattering, hence absolute numbers are not necessary.</p>
+<p>First, the data is normalised to monitor 1 (M1) or measurement time. Then, if the necessary inputs of empty container and absorber (please note
+this is a different measurement than mentioned in the <cite>Transmission</cite> section) measurements are provided, the background can be subtracted from the data:</p>
+<div class="math notranslate nohighlight">
+\[\dot{I_{B}} = \dot{I} - T\dot{E} - (1-T) \dot{C},\]</div>
+<p>where <span class="math notranslate nohighlight">\(\dot{I}\)</span> denotes monitor or time-normalised quartz data, <span class="math notranslate nohighlight">\(T\)</span> is transmission, and <span class="math notranslate nohighlight">\(\dot{E}\)</span> and <span class="math notranslate nohighlight">\(\dot{C}\)</span> are the normalised counts
+measured with empty container and cadmium absorber, respectively.</p>
+<p>In the case where either absorber or empty container inputs are not provided, this correction is not performed.</p>
+<p>The data can be processed individually for all polarisation orientations available in the provided sample, or alternatively, the processing is done on averaged
+data. To process data averaged over polarisation orienantions, <cite>OutputTreatment</cite> property needs to be set to <cite>AveragePol</cite>. The alternative averaging is done
+over twoTheta positions of detectors, when <cite>OutputTreatment</cite> is set to <cite>AverageTwoTheta</cite>. In the latter case, the data is processed individually and averaged
+after polarisation correction is calculated.</p>
+<p>Finally, the polariser-analyser efficiency can be calculated, using the following formula:</p>
+<div class="math notranslate nohighlight">
+\[\phi = \frac{\dot{I_{B}}(00) - \dot{I_{B}}(01)}{(2f_{p}-1) \dot{I_{B}}(00) + \dot{I_{B}}(01)},\]</div>
+<p>where <span class="math notranslate nohighlight">\(f_{p}\)</span> is the flipper efficiency, currently assumed to be 1.0, and <span class="math notranslate nohighlight">\(\dot{I_{B}}(00)\)</span> and <span class="math notranslate nohighlight">\(\dot{I_{B}}(01)\)</span> denote normalised
+and background-subtracted data with flipper states off and on respectively.</p>
+<p>The output is given in as a <a class="reference internal" href="../concepts/WorkspaceGroup.html#workspacegroup"><span class="std std-ref">WorkspaceGroup</span></a> with the number of entries consistent with the number of measured polarisation directions.
+Each workspace in the group contains a single value of the polariser-analyser efficiency per detector. The flipping ratios are also available for inspection
+in a <a class="reference internal" href="../concepts/WorkspaceGroup.html#workspacegroup"><span class="std std-ref">WorkspaceGroup</span></a> named <cite>flipping_ratios</cite>.</p>
+<section id="workflow-diagram-and-working-example">
+<h4><a class="toc-backref" href="#id34" role="doc-backlink">Workflow diagram and working example</a><a class="headerlink" href="#workflow-diagram-and-working-example" title="Link to this heading">¶</a></h4>
+<p>Below is the relevant workflow diagram describing reduction steps of the quartz reduction.</p>
+<figure class="align-default" id="id21">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id21" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To run these usage examples please first download the
+<a class="reference external" href="https://sourceforge.net/projects/mantid/files/Sample%20Data/UsageData.zip/download">usage data</a>,
+and add these to your path.
+In Mantid this is done using <a class="reference internal" href="../interfaces/framework/ManageUserDirectories.html#manageuserdirectories"><span class="std std-ref">Manage User Directories</span></a>.</p>
+</div>
+<p><strong>Example - full treatment of a sample</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Beam with cadmium absorber, used for transmission</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396991&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_transmission_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;BeamWithCadmium&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Beam measurement for transmisison</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396983&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;beam_ws&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumTransmissionWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_transmission_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;EmptyBeam&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Quartz transmission</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396985&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;quartz_transmission&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumTransmissionWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_transmission_ws&#39;</span><span class="p">,</span>
+    <span class="n">EmptyBeamWorkspace</span><span class="o">=</span><span class="s1">&#39;beam_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Transmission&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Empty container</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396917&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;empty_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Empty&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Absorber</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396928&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Cadmium&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Polarisation correction</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396939&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;pol_corrections&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_ws&#39;</span><span class="p">,</span>
+    <span class="n">EmptyContainerWorkspace</span><span class="o">=</span><span class="s1">&#39;empty_ws&#39;</span><span class="p">,</span>
+    <span class="n">Transmission</span><span class="o">=</span><span class="s1">&#39;quartz_transmission&#39;</span><span class="p">,</span>
+    <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;AveragePol&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Quartz&#39;</span>
+<span class="p">)</span>
+
+<span class="n">SumSpectra</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;pol_corrections_ZPO_0&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span>
+           <span class="n">StartWorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">EndWorkspaceIndex</span><span class="o">=</span><span class="mi">131</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The average polarisation efficiency in the Z direction is </span><span class="si">{0:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;sum&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">132.0</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The average polarisation efficiency in the Z direction is 0.90
+</pre></div>
+</div>
+</section>
+</section>
+<section id="vanadium-data-reduction">
+<h3><a class="toc-backref" href="#id35" role="doc-backlink">Vanadium data reduction</a><a class="headerlink" href="#vanadium-data-reduction" title="Link to this heading">¶</a></h3>
+<p>Vanadium provides a measure of the relative detector efficiencies and its count rate can be used for the calibration
+of sample data to absolute units. Multiple scattering and sample self-attenuation are issues here and the correction
+works best if the vanadium has, as close as possible, the same attenuation and shape as the sample.</p>
+<p>The scattering from the vanadium is considered to be purely elastic scattering and the cross-section considered to be purely
+due to the nuclear spin-incoherent contribution. The reduced vanadium data can be used to normalise the results of the sample
+data reduction in <a class="reference internal" href="../algorithms/D7AbsoluteCrossSections-v1.html#algm-d7absolutecrosssections"><span class="std std-ref">D7AbsoluteCrossSections</span></a>. The vanadium data can also be used as a consistency
+check for polarization and multiple scattering corrections.</p>
+<p>If the sample has a large nuclear-spin-incoherent cross-section, this separated cross-section can be used as a self-correction for detector
+efficiency and even for shape effects from the sample. If the sample stoichiometry is well-known and an accurate estimate for the
+nuclear-spin-incoherent cross-section can be derived, this cross-section can be used to express the sample data in absolute units.
+In this case, the vanadium cross-section is unnecessary.</p>
+<p>For the best results of using the reduced vanadium data as input for sample data normalisation, the <cite>OutputTreatment</cite> property of the
+<a class="reference internal" href="../algorithms/PolDiffILLReduction-v1.html#algm-poldiffillreduction"><span class="std std-ref">PolDiffILLReduction</span></a> algorithm needs to be set to <cite>Sum</cite>. Alternatively, it is possible to inspect data
+for diagnostic purposes by setting the <cite>OutputTreatment</cite> property to either <cite>AveragePol</cite> for averaging over polarisation orientations,
+or <cite>AverageTwoTheta</cite> to obtain an average over twoTheta positions.</p>
+<section id="reduction-workflow">
+<h4><a class="toc-backref" href="#id36" role="doc-backlink">Reduction workflow</a><a class="headerlink" href="#reduction-workflow" title="Link to this heading">¶</a></h4>
+<p>The first two steps of the reduction of vanadium data are the same as for quartz, with normalisation to the monitor or time, and background
+subtraction (provided the necessary inputs). This is followed by polarisation correction, frame-overlap correction (optional in the TOF mode),
+self-attenuation correction, detector energy-efficiency correction (optional in the TOF mode), and finally normalisation to either relative
+or absolute scale. In the case of relative scale, the counts are normalised to the number of polarisation directions (e.g. one in the <cite>Z</cite>
+method, three for the <cite>XYZ</cite>, etc. ). For the absolute scale normalisation, the number of moles and the total expected cross-section is also
+taken into account.</p>
+</section>
+<section id="background-subtraction">
+<h4><a class="toc-backref" href="#id37" role="doc-backlink">Background subtraction</a><a class="headerlink" href="#background-subtraction" title="Link to this heading">¶</a></h4>
+<p>Background subtraction is straight-forward in case of a diffraction experiment, where it is perfomed
+in the way described in the Quartz reduction. However, in the case of Time-of-flight experiment, this approach is not sufficient. There, background
+is split into time-independent (<span class="math notranslate nohighlight">\(B_{\mathrm{indep}}\)</span>) and time-dependent (<span class="math notranslate nohighlight">\(B_{\mathrm{dep}}\)</span>) contributions. Time-independent contribution
+is calculated as an average of counts of the background source (either empty container or vanadium measurement itself) in time channels outside
+of the elastic peak region. There are three possible ways to take into account the time-dependent contribution available
+in the <a class="reference internal" href="../algorithms/PolDiffILLReduction-v1.html#algm-poldiffillreduction"><span class="std std-ref">PolDiffILLReduction</span></a>, depending on the selection of <cite>SubtractTOFBackgroundMethod</cite>, which follows formulas
+given below.</p>
+<ol class="arabic">
+<li><p><cite>Data</cite> and <cite>Rectangular</cite> options</p>
+<p>Both of these method will use the following equation to establish time-dependent background:</p>
+<div class="math notranslate nohighlight">
+\[B_{dep} = T \left( E (\#, \mathrm{chn} = \mathrm{chn(el)}) - B_{\mathrm{indep}} \right),\]</div>
+<p>where <cite>T</cite> is sample transmission, <cite>E</cite> is distribution of counts as measured for the empty container (or vanadium) if the <cite>SubtractTOFBackgroundMethod</cite>
+is set to <cite>Data</cite>, or <cite>E</cite> is an average of the measured background distribution in the elastic peak region, if the property is set to <cite>Rectangular</cite>,
+chn(el) signifies the region around the elastic peak, and <span class="math notranslate nohighlight">\(B_{\mathrm{indep}}\)</span> is the time-independent background.</p>
+<p>Then, regardless of the <cite>SubtractTOFBackgroundMethod</cite> choice, the time-dependent and time-independent background contributions are subtracted from
+the sample counts as follows:</p>
+<div class="math notranslate nohighlight">
+\[I_{B} (\#, chn) = I (\#, chn) - B_{dep} - B_{indep},\]</div>
+<p>where <span class="math notranslate nohighlight">\(I_{B} (\#, chn)\)</span> is the intensity after background is subtracted, and <span class="math notranslate nohighlight">\(I (\#, chn)\)</span> is the current sample distribution before background
+subtraction.</p>
+</li>
+<li><p><cite>Gaussian</cite> option</p>
+<p>The approach when <cite>Gaussian</cite> option is set for the <cite>SubtractTOFBackgroundMethod</cite> property is similar to previously described solution, with a significant
+change, where the <cite>E</cite> distribution is substituted by sample data itself. The background subtraction in that case is as follows:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}I_{B} (\#, \mathrm{chn} \ne \mathrm{chn(el)}) &amp;= I (\#, \mathrm{chn}) - B_{\mathrm{indep}},\\I_{B} (\#, \mathrm{chn} = \mathrm{chn(el)}) &amp;= T \left( I (\#, \mathrm{chn} = \mathrm{chn(el)}) - B_{\mathrm{indep}} \right) - G (\#, \mathrm{chn} = \mathrm{chn(el)}),\end{aligned}\end{align} \]</div>
+<p>where <span class="math notranslate nohighlight">\(G (\#, \mathrm{chn} = \mathrm{chn(el)})\)</span> is a gaussian distribution matched to the background source, so that the centre of the distribution falls
+at the position of the elastic peak, the width matches with the elastic peak region width, and the counts of the background source are preserved. <cite>G</cite> is generated
+for each time channel or time-of-flight value in the elastic peak region as follows:</p>
+<div class="math notranslate nohighlight">
+\[G (\#) = \frac{A}{\sigma \sqrt{2\pi}} \mathrm{exp} \left( -\frac{1}{2} \left(\frac{chn - chn_{el}}{\sigma}\right)^{2} \right),\]</div>
+<p>where <cite>A</cite> is the total counts of the background source in the elastic peak region, <span class="math notranslate nohighlight">\(\sigma\)</span> is the half-width of the elastic peak region, <cite>chn</cite> is the time-of-flight
+or time channel value of a bin in the elastic peak region, <span class="math notranslate nohighlight">\(chn_{el}\)</span> is the position of the elastic peak.</p>
+</li>
+</ol>
+</section>
+<section id="id5">
+<h4><a class="toc-backref" href="#id38" role="doc-backlink">Polarisation correction</a><a class="headerlink" href="#id5" title="Link to this heading">¶</a></h4>
+<p>The polarisation efficiency of the instrument can be corrected using the previously reduced quartz data. The correction is applied according
+to the following formula:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{bmatrix}
+    \dot{I_{B}}(+) \\
+    \dot{I_{B}}(-) \\
+\end{bmatrix} = \frac{1}{2 f_{p} \phi}  \begin{bmatrix}
+                                        (1-\phi)(1-f_{p}) + f_{p}(1+\phi) &amp; -(1-\phi) \\
+                                        -(1+\phi)(1-f_{p}) - f_{p}(1-\phi) &amp; (1+\phi) \\
+                                        \end{bmatrix}  \begin{bmatrix}
+                                                           \dot{I_{B}}(0) \\
+                                                           \dot{I_{B}}(1) \\
+                                                       \end{bmatrix},\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\dot{I_{B}}(+)\)</span> and <span class="math notranslate nohighlight">\(\dot{I_{B}}(-)\)</span> denote the spin-flip and the non-spin-flip scattering events, respectively,
+and <span class="math notranslate nohighlight">\(\dot{I_{B}}(0)\)</span> and <span class="math notranslate nohighlight">\(\dot{I_{B}}(1)\)</span> are the events with the flipper state on and off, respectively.</p>
+</section>
+<section id="frame-overlap-correction">
+<h4><a class="toc-backref" href="#id39" role="doc-backlink">Frame-overlap correction</a><a class="headerlink" href="#frame-overlap-correction" title="Link to this heading">¶</a></h4>
+<p>This correction is relevant only in the <cite>TOF</cite> reduction mode.</p>
+<p>Frame overlap correction can be performed based on the status of the <cite>FrameOverlapCorrection</cite> property of <a class="reference internal" href="../algorithms/PolDiffILLReduction-v1.html#algm-poldiffillreduction"><span class="std std-ref">PolDiffILLReduction</span></a>,
+and by default it is applied to data.</p>
+<p>The frame-overlap is calculated for each detector using the following formula:</p>
+<div class="math notranslate nohighlight">
+\[F (\#) = \left( \frac{t_{max}}{t_{prev}} \right)^{4} \cdot \frac{1}{N_{ch}-n} \sum^{N_{ch}}_{i=N_{ch}-n} I (\#, i),\]</div>
+<p>where <span class="math notranslate nohighlight">\(t_{max}\)</span> is the maximum time in the current frame, <span class="math notranslate nohighlight">\(t_{prev}\)</span> is the time calculated from the previous frame, which depends on the rotation period
+of the Fermi Chopper, <span class="math notranslate nohighlight">\(N_{ch}\)</span> is the number of time channels, <span class="math notranslate nohighlight">\(n\)</span> is the number of time channels at the end of the frame used for calculating an average, set to 15,
+and <span class="math notranslate nohighlight">\(I (\#, i)\)</span> are counts for <span class="math notranslate nohighlight">\(\#\)</span> detector in the <span class="math notranslate nohighlight">\(i\)</span>-th time channel.</p>
+</section>
+<section id="self-attenuation-correction">
+<h4><a class="toc-backref" href="#id40" role="doc-backlink">Self-attenuation correction</a><a class="headerlink" href="#self-attenuation-correction" title="Link to this heading">¶</a></h4>
+<p>There are several ways the self-attenuation of a sample can be taken into account in the implemented D7 reduction: <cite>None</cite>, <cite>Transmission</cite>, <cite>Numerical</cite>, <cite>MonteCarlo</cite>, and <cite>User</cite>.
+In the first case, no corrections are calculated nor applied to data. In the second, the transmission value is used to scale all detector counts by the transmission value.
+In the three final cases, the correction is applied to data with <a class="reference internal" href="../algorithms/ApplyPaalmanPingsCorrection-v1.html#algm-applypaalmanpingscorrection"><span class="std std-ref">ApplyPaalmanPingsCorrection</span></a> algorithm.</p>
+<p>The <cite>User</cite> option depends on the self-attenuation parameters provided by the user through <cite>SampleSelfAttenuationFactors</cite> property of the <a class="reference internal" href="../algorithms/PolDiffILLReduction-v1.html#algm-poldiffillreduction"><span class="std std-ref">PolDiffILLReduction</span></a>
+algorithm. This option allows to study the self-attenuation of a sample that can have arbitrary shape separately from running the reduction algorithm,
+and in more detail if necessary.</p>
+<p>On the contrary, The <cite>Numerical</cite> and <cite>MonteCarlo</cite> options calculate the self-attenuation parameters for both the sample and its container during the execution of
+the reduction algorithm. These two options depend on Mantid algorithms <a class="reference internal" href="../algorithms/PaalmanPingsAbsorptionCorrection-v1.html#algm-paalmanpingsabsorptioncorrection"><span class="std std-ref">PaalmanPingsAbsorptionCorrection</span></a>
+and <a class="reference internal" href="../algorithms/PaalmanPingsMonteCarloAbsorption-v1.html#algm-paalmanpingsmontecarloabsorption"><span class="std std-ref">PaalmanPingsMonteCarloAbsorption</span></a>, respectively. These two algorithms require multiple parameters describing
+the sample and its environment, such as the geometry, density, and chemical composition to be defined. The communication of these parameters is done
+via <cite>SampleAndEnvironmentProperties</cite> property of the <a class="reference internal" href="../algorithms/PolDiffILLReduction-v1.html#algm-poldiffillreduction"><span class="std std-ref">PolDiffILLReduction</span></a> algorithm. All the necessary and accepted keys that
+need to be defined for the sample self-attenuation to be properly corrected are described below.</p>
+<p>The <cite>SampleAndEnvironmentProperties</cite> property of the <a class="reference internal" href="../algorithms/PolDiffILLReduction-v1.html#algm-poldiffillreduction"><span class="std std-ref">PolDiffILLReduction</span></a> algorithm is a dictionary containing
+all of the information about the sample and its environment. This information is used in self-attenuation calculations and also can be reused
+in data normalisation in the <a class="reference internal" href="../algorithms/D7AbsoluteCrossSections-v1.html#algm-d7absolutecrosssections"><span class="std std-ref">D7AbsoluteCrossSections</span></a> algorithm.</p>
+<p>The complete list of keys can is summarised below:</p>
+<p>Sample-only keys:</p>
+<ul class="simple">
+<li><p><em>SampleMass</em></p></li>
+<li><p><em>FormulaUnitMass</em></p></li>
+<li><p><em>SampleChemicalFormula</em></p></li>
+<li><p><em>SampleDensity</em></p></li>
+<li><p><em>Height</em></p></li>
+</ul>
+<p>The first three keys need to be always defined, so that the number of moles of the sample can be calculated, to ensure proper data normalisation.
+The sample and container density parameters are in units of <strong>mass density</strong>.</p>
+<p>Container-only keys:</p>
+<ul class="simple">
+<li><p><em>ContainerChemicalFormula</em></p></li>
+<li><p><em>ContainerDensity</em></p></li>
+</ul>
+<p>Optional beam-only keys, if not user-defined will be automatically defined to be larger than the sample dimensions:</p>
+<ul class="simple">
+<li><p><em>BeamHeight</em></p></li>
+<li><p><em>BeamWidth</em></p></li>
+</ul>
+<p>Then, depending on the chosen sample geometry, additional parameters need to be defined:</p>
+<ul class="simple">
+<li><p>For FlatPlate:</p>
+<ul>
+<li><p><em>SampleThickness</em></p></li>
+<li><p><em>SampleWidth</em></p></li>
+<li><p><em>SampleCenter</em></p></li>
+<li><p><em>SampleAngle</em></p></li>
+<li><p><em>ContainerFrontThickness</em></p></li>
+<li><p><em>ContainerBackThickness</em></p></li>
+</ul>
+</li>
+<li><p>For Cylinder:</p>
+<ul>
+<li><p><em>SampleRadius</em></p></li>
+<li><p><em>ContainerRadius</em></p></li>
+</ul>
+</li>
+<li><p>For Annulus:</p>
+<ul>
+<li><p><em>SampleInnerRadius</em></p></li>
+<li><p><em>SampleOuterRadius</em></p></li>
+<li><p><em>ContainerInnerRadius</em></p></li>
+<li><p><em>ContainerOuterRadius</em></p></li>
+</ul>
+</li>
+</ul>
+<p>Depending on the choice of the self-attenuation method, either <cite>ElementSize</cite> in case of numerical calculations or <cite>EventsPerPoint</cite> for Monte-Carlo method
+need to be defined.</p>
+<p>Optional keys:</p>
+<ul class="simple">
+<li><p><em>InitialEnergy</em> - if not provided, the value will be calculated from the wavelength in the SampleLogs</p></li>
+<li><p><em>NMoles</em> - if not provided, the value will be calculated based on the <em>SampleMass</em> and <em>FormulaUnitMass</em></p></li>
+</ul>
+</section>
+<section id="detector-and-analyser-energy-efficiency-corrections">
+<h4><a class="toc-backref" href="#id41" role="doc-backlink">Detector and analyser energy efficiency corrections</a><a class="headerlink" href="#detector-and-analyser-energy-efficiency-corrections" title="Link to this heading">¶</a></h4>
+<p>This correction is relevant only in the <cite>TOF</cite> reduction mode.</p>
+<p>The detector energy efficiency correction is performed only if <cite>ConvertToEnergy</cite> property is checked, and only when
+<cite>DetectorEnergyEfficiencyCorrection</cite> property of <a class="reference internal" href="../algorithms/PolDiffILLReduction-v1.html#algm-poldiffillreduction"><span class="std std-ref">PolDiffILLReduction</span></a> is set to <cite>True</cite>.
+By default it is applied to data.</p>
+<p>The data needs to have elastic peak positions calibrated before the detector efficiency can be performed. Positions of elastic peaks
+for each detector and their widths are obtained using <a class="reference internal" href="../algorithms/FindEPP-v2.html#algm-findepp"><span class="std std-ref">FindEPP</span></a> algorithm or from the user input via <cite>EPCentre</cite> and <cite>EPWidth</cite>
+valuees provided through <cite>SampleAndEnvironmentProperties</cite>. Missing values of widths, in cases where the gaussian fit was not successful,
+are padded with the average width calculated from available peak widths. The fitting is done when the X-axis
+is still in TOF units.</p>
+<p>Detector efficiency correction algorithm, <a class="reference internal" href="../algorithms/DetectorEfficiencyCorUser-v1.html#algm-detectorefficiencycoruser"><span class="std std-ref">DetectorEfficiencyCorUser</span></a>, requires the X-axis unit
+to be <cite>DeltaE</cite> (energy exchange), therefore if <cite>ConvertToEnergy</cite> property is set to <cite>False</cite>, this correction cannot be performed and is skipped.
+Unit conversion from <cite>TOF</cite> units to <cite>DeltaE</cite> is handled by <a class="reference internal" href="../algorithms/ConvertUnits-v1.html#algm-convertunits"><span class="std std-ref">ConvertUnits</span></a>.
+The following formula is used to correct for detector energy efficiency:</p>
+<div class="math notranslate nohighlight">
+\[y = \frac{y}{eff},\]</div>
+<p>where:</p>
+<div class="math notranslate nohighlight">
+\[eff = \frac{f(E_{i} - \Delta E_{i})}{f(E_{i})},\]</div>
+<p>where in turn, the <span class="math notranslate nohighlight">\(f(E_{i})\)</span> for D7 is:</p>
+<div class="math notranslate nohighlight">
+\[f(E_{i}) = 1.0 - \mathrm{exp} \left( \frac{-13.153}{\sqrt{E_{i}}} \right),\]</div>
+<p>where the constant value of -13.153 is derived from multiplying the pressure of detector tubes (10 Pa), their diameter (2.54 cm),
+and a factor of −0.51784, obtained by D7 responsible scientists using Monte Carlo simulations.</p>
+<p>The analyser energy correction is a multiplicative correction, applied after the detector efficiency is taken into account, if the <cite>PerformAnalyserTrCorrection</cite>
+property is checked. The correction factor is a ratio of the analyser transmission for the elastic energy and the final energy corresponding to each bin
+(after conversion from time channels to energy exchange). The distribution of analyser transmission values as a function of wavelength (or, equivalently, energy)
+are coming from Monte Carlo simulations performed by D7 scientists, and are shown in Fig. 9 of Ref. <a class="footnote-reference brackets" href="#steward" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a>.</p>
+<p>Correction factors are obtained by using an output from a fit to the data from Fig. 9 in <a class="footnote-reference brackets" href="#steward" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a>. A composite function of two hiperbolic tangents has been fitted
+to the data outside of Mantid, with a total of 6 parameters and the following form:</p>
+<div class="math notranslate nohighlight">
+\[f (e_{i}) = a_{0} \cdot \mathrm{tanh} ( a_{1} \cdot e_{i} + a_{2} ) + a_{3} \cdot \mathrm{tanh} ( a_{4} \cdot e_{i} + a_{5} ),\]</div>
+<p>which was found to reproduce MonteCarlo simulations well in the wavelength range from 0.5 <span class="math notranslate nohighlight">\(\AA\)</span> to 10 <span class="math notranslate nohighlight">\(\AA\)</span>.</p>
+<p>Then, the parameters of this fit are used to calculate the analyser transmission for the initial energy and for each bin energy in the workspace that is to be corrected.
+A ratio between the analyser transmission for the initial energy and final energies of each bin is calculated and thus obtained workspace is then used as a multiplicative
+correction of the current sample data.</p>
+</section>
+<section id="output">
+<h4><a class="toc-backref" href="#id42" role="doc-backlink">Output</a><a class="headerlink" href="#output" title="Link to this heading">¶</a></h4>
+<p>The corrected counts in each each detector are normalised to the expected total cross-section for vanadium
+of <span class="math notranslate nohighlight">\(0.404 \frac{\text{barn}}{\text{steradian} \cdot \text{atom}}\)</span>. The output of vanadium reduction
+is a <a class="reference internal" href="../concepts/WorkspaceGroup.html#workspacegroup"><span class="std std-ref">WorkspaceGroup</span></a> with one entry if the <cite>OutputTreatment</cite> is set to <cite>Sum</cite>, or
+the same number of entries as input data if <cite>Individual</cite> was selected. In the case of <cite>TOF</cite> reduction mode,
+vanadium counts are integrated around the elastic peak position for each detector before normalisation
+to the expected cross-section.</p>
+<p>In case it is desireable to separate cross-sections, for example for diagnostic purposes, it can be done
+using the reduced data described as above using <a class="reference internal" href="../algorithms/D7AbsoluteCrossSections-v1.html#algm-d7absolutecrosssections"><span class="std std-ref">D7AbsoluteCrossSections</span></a>
+algorithm. More details on working with this algorithm are given in the sample normalisation section.</p>
+<p>In the case of <cite>TOF</cite> reduction mode, an additional output is created, which contains fitted elastic peak
+positions and their widths. This is subsequently used in calibrating sample data elastic peak positions.</p>
+</section>
+<section id="id8">
+<h4><a class="toc-backref" href="#id43" role="doc-backlink">Workflow diagrams and working example</a><a class="headerlink" href="#id8" title="Link to this heading">¶</a></h4>
+<p>Below is the relevant workflow diagram describing reduction steps of the vanadium reduction.</p>
+<figure class="align-default" id="id22">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id22" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To run these usage examples please first download the
+<a class="reference external" href="https://sourceforge.net/projects/mantid/files/Sample%20Data/UsageData.zip/download">usage data</a>,
+and add these to your path.
+In Mantid this is done using <a class="reference internal" href="../interfaces/framework/ManageUserDirectories.html#manageuserdirectories"><span class="std std-ref">Manage User Directories</span></a>.</p>
+</div>
+<p><strong>Example - Vanadium reduction with annulus geometry</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vanadium_dictionary</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SampleMass&#39;</span><span class="p">:</span><span class="mf">8.54</span><span class="p">,</span><span class="s1">&#39;FormulaUnitMass&#39;</span><span class="p">:</span><span class="mf">50.94</span><span class="p">,</span><span class="s1">&#39;SampleChemicalFormula&#39;</span><span class="p">:</span><span class="s1">&#39;V&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;Height&#39;</span><span class="p">:</span><span class="mf">2.0</span><span class="p">,</span><span class="s1">&#39;SampleDensity&#39;</span><span class="p">:</span><span class="mf">6.1</span><span class="p">,</span><span class="s1">&#39;SampleInnerRadius&#39;</span><span class="p">:</span><span class="mf">2.0</span><span class="p">,</span> <span class="s1">&#39;SampleOuterRadius&#39;</span><span class="p">:</span><span class="mf">2.49</span><span class="p">,</span>
+                       <span class="s1">&#39;BeamWidth&#39;</span><span class="p">:</span><span class="mf">2.5</span><span class="p">,</span><span class="s1">&#39;BeamHeight&#39;</span><span class="p">:</span><span class="mf">2.5</span><span class="p">,</span>
+                       <span class="s1">&#39;ContainerChemicalFormula&#39;</span><span class="p">:</span><span class="s1">&#39;Al&#39;</span><span class="p">,</span><span class="s1">&#39;ContainerDensity&#39;</span><span class="p">:</span><span class="mf">2.7</span><span class="p">,</span><span class="s1">&#39;ContainerOuterRadius&#39;</span><span class="p">:</span><span class="mf">2.52</span><span class="p">,</span>
+                       <span class="s1">&#39;ContainerInnerRadius&#39;</span><span class="p">:</span><span class="mf">1.99</span><span class="p">,</span> <span class="s1">&#39;EventsPerPoint&#39;</span><span class="p">:</span><span class="mi">1000</span><span class="p">}</span>
+
+<span class="n">calibration_file</span><span class="o">=</span><span class="s1">&#39;D7_YIG_calibration.xml&#39;</span> <span class="c1"># example calibration file</span>
+
+<span class="c1"># Beam with cadmium absorber, used for transmission</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396991&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_transmission_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;BeamWithCadmium&#39;</span>
+<span class="p">)</span>
+<span class="c1"># Beam measurement for transmisison</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396983&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;beam_ws&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumTransmissionWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_transmission_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;EmptyBeam&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Quartz transmission</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396985&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;quartz_transmission&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumTransmissionWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_transmission_ws&#39;</span><span class="p">,</span>
+    <span class="n">EmptyBeamWorkspace</span><span class="o">=</span><span class="s1">&#39;beam_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Transmission&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Empty container</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396917&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;empty_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Empty&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Absorber</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396928&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Cadmium&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Polarisation correction</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396939&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;pol_corrections&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_ws&#39;</span><span class="p">,</span>
+    <span class="n">EmptyContainerWorkspace</span><span class="o">=</span><span class="s1">&#39;empty_ws&#39;</span><span class="p">,</span>
+    <span class="n">Transmission</span><span class="o">=</span><span class="s1">&#39;quartz_transmission&#39;</span><span class="p">,</span>
+    <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;AveragePol&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Quartz&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Vanadium transmission</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396990&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;vanadium_transmission&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumTransmissionWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_transmission_ws&#39;</span><span class="p">,</span>
+    <span class="n">EmptyBeamWorkspace</span><span class="o">=</span><span class="s1">&#39;beam_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Transmission&#39;</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Vanadium transmission is </span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;vanadium_transmission_1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="c1"># Vanadium reduction</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396993&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;vanadium_ws&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_ws&#39;</span><span class="p">,</span>
+    <span class="n">EmptyContainerWorkspace</span><span class="o">=</span><span class="s1">&#39;empty_ws&#39;</span><span class="p">,</span>
+    <span class="n">Transmission</span><span class="o">=</span><span class="s1">&#39;vanadium_transmission&#39;</span><span class="p">,</span>
+    <span class="n">QuartzWorkspace</span><span class="o">=</span><span class="s1">&#39;pol_corrections&#39;</span><span class="p">,</span>
+    <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;Sum&#39;</span><span class="p">,</span>
+    <span class="n">SelfAttenuationMethod</span><span class="o">=</span><span class="s1">&#39;MonteCarlo&#39;</span><span class="p">,</span>
+    <span class="n">SampleGeometry</span><span class="o">=</span><span class="s1">&#39;Annulus&#39;</span><span class="p">,</span>
+    <span class="n">SampleAndEnvironmentProperties</span><span class="o">=</span><span class="n">vanadium_dictionary</span><span class="p">,</span>
+    <span class="n">InstrumentCalibration</span><span class="o">=</span><span class="n">calibration_file</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Vanadium&#39;</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The vanadium reduction output contains </span><span class="si">{}</span><span class="s2"> entry with </span><span class="si">{}</span><span class="s2"> spectra and </span><span class="si">{}</span><span class="s2"> bin.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;vanadium_ws&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getNumberOfEntries</span><span class="p">(),</span>
+          <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;vanadium_ws&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getNumberHistograms</span><span class="p">(),</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;vanadium_ws&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">blocksize</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Vanadium transmission is 0.886
+The vanadium reduction output contains 1 entry with 132 spectra and 1 bin.
+</pre></div>
+</div>
+<p><strong>Example - Vanadium reduction in the TOF mode</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vanadium_dictionary</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SampleMass&#39;</span><span class="p">:</span> <span class="mf">8.54</span><span class="p">,</span> <span class="s1">&#39;FormulaUnitMass&#39;</span><span class="p">:</span> <span class="mf">50.94</span><span class="p">}</span>
+<span class="n">calibration_file</span><span class="o">=</span><span class="s1">&#39;D7_YIG_calibration_TOF.xml&#39;</span> <span class="c1"># example calibration file</span>
+
+<span class="c1"># Vanadium reduction</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396016&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;vanadium_ws&#39;</span><span class="p">,</span>
+    <span class="n">Transmission</span><span class="o">=</span><span class="s1">&#39;0.945&#39;</span><span class="p">,</span>
+    <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;Sum&#39;</span><span class="p">,</span>
+    <span class="n">SelfAttenuationMethod</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+    <span class="n">SampleGeometry</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+    <span class="n">SampleAndEnvironmentProperties</span><span class="o">=</span><span class="n">vanadium_dictionary</span><span class="p">,</span>
+    <span class="n">InstrumentCalibration</span><span class="o">=</span><span class="n">calibration_file</span><span class="p">,</span>
+    <span class="n">MeasurementTechnique</span><span class="o">=</span><span class="s1">&#39;TOF&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Vanadium&#39;</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The vanadium reduction output contains </span><span class="si">{}</span><span class="s2"> entry with </span><span class="si">{}</span><span class="s2"> spectra and </span><span class="si">{}</span><span class="s2"> bin.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;vanadium_ws&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getNumberOfEntries</span><span class="p">(),</span>
+          <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;vanadium_ws&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getNumberHistograms</span><span class="p">(),</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;vanadium_ws&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">blocksize</span><span class="p">()))</span>
+<span class="n">ep_positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;vanadium_ws_elastic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s1">&#39;PeakCentre&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The average vanadium-derived elastic peak position falls at </span><span class="si">{0:.0f}</span><span class="s2"> microseconds.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ep_positions</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The vanadium reduction output contains 1 entry with 132 spectra and 1 bin.
+The average vanadium-derived elastic peak position falls at ... microseconds.
+</pre></div>
+</div>
+</section>
+</section>
+<section id="sample-data-reduction">
+<h3><a class="toc-backref" href="#id44" role="doc-backlink">Sample data reduction</a><a class="headerlink" href="#sample-data-reduction" title="Link to this heading">¶</a></h3>
+<p>The sample data reduction follows the same steps of monitor or time normalisation, background subtraction, polarisation correction, and
+self-attenuation correction as vanadium data reduction. Should the self-attenuation correction be taken into account, the relevant
+sample and environment parameters need to be defined in a dictionary that is provided to <cite>SampleAndEnvironmentProperty</cite> with
+keys described in the vanadium reduction section. The extra keys, required by <a class="reference internal" href="../algorithms/D7AbsoluteCrossSections-v1.html#algm-d7absolutecrosssections"><span class="std std-ref">D7AbsoluteCrossSections</span></a>
+and relevant only for the <cite>SingleCrystal</cite> reduction are:</p>
+<ul class="simple">
+<li><p>KiXAngle - the angle between the incident momentum and the Sharpf angle,</p></li>
+<li><p>OmegaShift - omega offset of the sample.</p></li>
+</ul>
+<p>The output of the  is a <a class="reference internal" href="../concepts/WorkspaceGroup.html#workspacegroup"><span class="std std-ref">WorkspaceGroup</span></a> with the number of entries equal to number of measured polarisations
+times number of steps in a <span class="math notranslate nohighlight">\(2\theta\)</span> scan. This output can be provided to <a class="reference internal" href="../algorithms/D7AbsoluteCrossSections-v1.html#algm-d7absolutecrosssections"><span class="std std-ref">D7AbsoluteCrossSections</span></a>
+for cross-section separation, e.g. for diagnostic purposes, or for the final normalisation.</p>
+<section id="id10">
+<h4><a class="toc-backref" href="#id45" role="doc-backlink">Frame-overlap correction</a><a class="headerlink" href="#id10" title="Link to this heading">¶</a></h4>
+<p>This correction is relevant only in the <cite>TOF</cite> reduction mode and is performed the same way as for the vanadium data.</p>
+</section>
+<section id="detector-efficiency-correction">
+<h4><a class="toc-backref" href="#id46" role="doc-backlink">Detector efficiency correction</a><a class="headerlink" href="#detector-efficiency-correction" title="Link to this heading">¶</a></h4>
+<p>This correction is relevant only in the <cite>TOF</cite> reduction mode and is performed the same way as for the vanadium data.</p>
+</section>
+<section id="cross-section-separation">
+<h4><a class="toc-backref" href="#id47" role="doc-backlink">Cross-section separation</a><a class="headerlink" href="#cross-section-separation" title="Link to this heading">¶</a></h4>
+<p>The <a class="reference internal" href="../algorithms/D7AbsoluteCrossSections-v1.html#algm-d7absolutecrosssections"><span class="std std-ref">D7AbsoluteCrossSections</span></a> algorithm allows for either cross-section separation or sample data
+normalisation. It is possible to use only one of the possibilities, for example, to separate cross-sections of the reduced vanadium
+data without the normalisation subroutines to be invoked. This is especially useful for diagnostic purposes.</p>
+<p>The cross-section separation is done according to formulae presented in Ref. <a class="footnote-reference brackets" href="#sharpf" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#steward" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#ehlers" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a>. More details on the exact calculations is given in
+documentation of the <a class="reference internal" href="../algorithms/D7AbsoluteCrossSections-v1.html#algm-d7absolutecrosssections"><span class="std std-ref">D7AbsoluteCrossSections</span></a> algorithm. It is possible to perform uniaxial,
+6-point (or XYZ), and 10-point measurement separation of magnetic, nuclear coherent, and nuclear-spin-incoherent components of the total
+measured scattering cross-section. The specifics of the 10-point measurement as a set of two separate 6-point measurements are taken into account.
+In that case, the second set of 6-point data needs to be provided to <cite>RotatedXYZWorkspace</cite> property of the <a class="reference internal" href="../algorithms/D7AbsoluteCrossSections-v1.html#algm-d7absolutecrosssections"><span class="std std-ref">D7AbsoluteCrossSections</span></a>
+algorithm, and the ‘10-p’ needs to be chosen as the <cite>CrossSectionSeparationMethod</cite>.</p>
+<p>In the case of <cite>SingleCrystal</cite> measurements, cross-section separation can be performed following Ref. <a class="footnote-reference brackets" href="#schweika" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> formulae, which apply in the case
+of anisotropic magnetism. The relevant property to be checked as <cite>False</cite> is <cite>IsotropicMagnetism</cite> of the <a class="reference internal" href="../algorithms/D7AbsoluteCrossSections-v1.html#algm-d7absolutecrosssections"><span class="std std-ref">D7AbsoluteCrossSections</span></a>
+algorithm.</p>
+</section>
+<section id="sample-data-normalisation">
+<h4><a class="toc-backref" href="#id48" role="doc-backlink">Sample data normalisation</a><a class="headerlink" href="#sample-data-normalisation" title="Link to this heading">¶</a></h4>
+<p>The output from sample data reduction still needs to be normalised to the relevant standard to set the units to absolute scale.
+The normalisation is handled by <a class="reference internal" href="../algorithms/D7AbsoluteCrossSections-v1.html#algm-d7absolutecrosssections"><span class="std std-ref">D7AbsoluteCrossSections</span></a> algorithm, and there are three
+options available to normalise the sample data:</p>
+<ol class="arabic">
+<li><p>Vanadium normalisation</p>
+<p>Uses output from the vanadium data reduction. The units chosen for both the sample and vanadium data during reduction should agree.</p>
+</li>
+<li><p>Paramagnetic normalisation</p>
+<p>This normalisation approach uses the output from the cross-section separation to set the sample output to absolute units. An additional parameter
+needs to be defined in the sample properties dictionary, named <cite>SampleSpin</cite>, to define the spin of the sample.</p>
+</li>
+<li><p>Spin-incoherent normalisation</p>
+<p>This normalisation approach also uses the output from the cross-section separation. If the goal is to set the output data to absolute scale,
+an additional parameter needs to be defined in the sample properties dictionary, named <cite>IncoherentCrossSection</cite>, to provide the total
+nuclear-spin-incoherent cross-section of the sample.</p>
+</li>
+</ol>
+</section>
+<section id="id15">
+<h4><a class="toc-backref" href="#id49" role="doc-backlink">Output</a><a class="headerlink" href="#id15" title="Link to this heading">¶</a></h4>
+<p>The output of the reduction and normalisation is a <a class="reference internal" href="../concepts/WorkspaceGroup.html#workspacegroup"><span class="std std-ref">WorkspaceGroup</span></a> with the number of entries consistent with the input
+if the <cite>OutputTreatment</cite> property was selected to be <cite>Individual</cite>, or the number of entries will be consistent with either the number of polarisation
+orientations present in the data (e.g. six for a XYZ method) or the number of separated cross-section.
+Each entry of the output group is a workspace with X-axis unit being either momentum exchange <span class="math notranslate nohighlight">\(Q\)</span>, the scattering angle <span class="math notranslate nohighlight">\(2\theta\)</span>,
+or, in the case of <cite>SingleCrystal</cite> reduction, cross-section values on a <span class="math notranslate nohighlight">\(Q_{x}\)</span> - <span class="math notranslate nohighlight">\(Q_{y}\)</span> plane.</p>
+</section>
+<section id="id16">
+<h4><a class="toc-backref" href="#id50" role="doc-backlink">Workflow diagrams and working example</a><a class="headerlink" href="#id16" title="Link to this heading">¶</a></h4>
+<p>Below is the relevant workflow diagram describing reduction steps of the sample reduction and normalisation.</p>
+</section>
+<section id="sample-reduction">
+<h4><a class="toc-backref" href="#id51" role="doc-backlink">Sample reduction</a><a class="headerlink" href="#sample-reduction" title="Link to this heading">¶</a></h4>
+<figure class="align-default" id="id23">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id23" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="sample-normalisation">
+<h4><a class="toc-backref" href="#id52" role="doc-backlink">Sample normalisation</a><a class="headerlink" href="#sample-normalisation" title="Link to this heading">¶</a></h4>
+<figure class="align-default" id="id24">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id24" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To run these usage examples please first download the
+<a class="reference external" href="https://sourceforge.net/projects/mantid/files/Sample%20Data/UsageData.zip/download">usage data</a>,
+and add these to your path.
+In Mantid this is done using <a class="reference internal" href="../interfaces/framework/ManageUserDirectories.html#manageuserdirectories"><span class="std std-ref">Manage User Directories</span></a>.</p>
+</div>
+<p><strong>Example - Complete sample reduction with normalisation</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vanadium_dictionary</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SampleMass&#39;</span><span class="p">:</span><span class="mf">8.54</span><span class="p">,</span><span class="s1">&#39;FormulaUnitMass&#39;</span><span class="p">:</span><span class="mf">50.94</span><span class="p">}</span>
+
+<span class="n">sample_dictionary</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SampleMass&#39;</span><span class="p">:</span><span class="mf">2.932</span><span class="p">,</span><span class="s1">&#39;SampleDensity&#39;</span><span class="p">:</span><span class="mf">7.8</span><span class="p">,</span><span class="s1">&#39;FormulaUnitMass&#39;</span><span class="p">:</span><span class="mf">182.56</span><span class="p">,</span>
+                     <span class="s1">&#39;SampleChemicalFormula&#39;</span><span class="p">:</span><span class="s1">&#39;Mn0.5-Fe0.5-P-S3&#39;</span><span class="p">,</span><span class="s1">&#39;Height&#39;</span><span class="p">:</span><span class="mf">2.0</span><span class="p">,</span>
+                     <span class="s1">&#39;SampleInnerRadius&#39;</span><span class="p">:</span><span class="mf">2.0</span><span class="p">,</span> <span class="s1">&#39;SampleOuterRadius&#39;</span><span class="p">:</span><span class="mf">2.49</span><span class="p">,</span><span class="s1">&#39;BeamWidth&#39;</span><span class="p">:</span><span class="mf">2.5</span><span class="p">,</span><span class="s1">&#39;BeamHeight&#39;</span><span class="p">:</span><span class="mf">2.5</span><span class="p">,</span>
+                     <span class="s1">&#39;ContainerChemicalFormula&#39;</span><span class="p">:</span><span class="s1">&#39;Al&#39;</span><span class="p">,</span><span class="s1">&#39;ContainerDensity&#39;</span><span class="p">:</span><span class="mf">2.7</span><span class="p">,</span><span class="s1">&#39;ContainerOuterRadius&#39;</span><span class="p">:</span><span class="mf">2.52</span><span class="p">,</span>
+                     <span class="s1">&#39;ContainerInnerRadius&#39;</span><span class="p">:</span><span class="mf">1.99</span><span class="p">,</span> <span class="s1">&#39;ElementSize&#39;</span><span class="p">:</span><span class="mf">0.5</span><span class="p">}</span>
+
+<span class="n">calibration_file</span> <span class="o">=</span> <span class="s1">&#39;D7_YIG_calibration.xml&#39;</span>
+
+<span class="c1"># Beam with cadmium absorber, used for transmission</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396991&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_transmission_ws&#39;</span><span class="p">,</span>
+    <span class="n">NormaliseBy</span><span class="o">=</span><span class="s1">&#39;Monitor&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;BeamWithCadmium&#39;</span>
+<span class="p">)</span>
+<span class="c1"># Beam measurement for transmisison</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396983&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;beam_ws&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumTransmissionWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_transmission_ws&#39;</span><span class="p">,</span>
+    <span class="n">NormaliseBy</span><span class="o">=</span><span class="s1">&#39;Monitor&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;EmptyBeam&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Quartz transmission</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396985, 396986&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;quartz_transmission&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumTransmissionWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_transmission_ws&#39;</span><span class="p">,</span>
+    <span class="n">EmptyBeamWorkspace</span><span class="o">=</span><span class="s1">&#39;beam_ws&#39;</span><span class="p">,</span>
+    <span class="n">NormaliseBy</span><span class="o">=</span><span class="s1">&#39;Monitor&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Transmission&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Empty container</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396917, 396918&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;empty_ws&#39;</span><span class="p">,</span>
+    <span class="n">NormaliseBy</span><span class="o">=</span><span class="s1">&#39;Monitor&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Empty&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Cadmium absorber</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396928, 396929&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_ws&#39;</span><span class="p">,</span>
+    <span class="n">NormaliseBy</span><span class="o">=</span><span class="s1">&#39;Monitor&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Cadmium&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Polarisation correction</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396939, 396940&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;pol_corrections&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_ws&#39;</span><span class="p">,</span>
+    <span class="n">EmptyContainerWorkspace</span><span class="o">=</span><span class="s1">&#39;empty_ws&#39;</span><span class="p">,</span>
+    <span class="n">Transmission</span><span class="o">=</span><span class="s1">&#39;quartz_transmission&#39;</span><span class="p">,</span>
+    <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;AveragePol&#39;</span><span class="p">,</span>
+    <span class="n">NormaliseBy</span><span class="o">=</span><span class="s1">&#39;Monitor&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Quartz&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Vanadium transmission</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396990&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;vanadium_transmission&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumTransmissionWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_transmission_ws&#39;</span><span class="p">,</span>
+    <span class="n">EmptyBeamWorkspace</span><span class="o">=</span><span class="s1">&#39;beam_ws&#39;</span><span class="p">,</span>
+    <span class="n">NormaliseBy</span><span class="o">=</span><span class="s1">&#39;Monitor&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Transmission&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Vanadium reduction</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396993, 396994&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;vanadium_ws&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_ws&#39;</span><span class="p">,</span>
+    <span class="n">EmptyContainerWorkspace</span><span class="o">=</span><span class="s1">&#39;empty_ws&#39;</span><span class="p">,</span>
+    <span class="n">Transmission</span><span class="o">=</span><span class="s1">&#39;vanadium_transmission&#39;</span><span class="p">,</span>
+    <span class="n">QuartzWorkspace</span><span class="o">=</span><span class="s1">&#39;pol_corrections&#39;</span><span class="p">,</span>
+    <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;Sum&#39;</span><span class="p">,</span>
+    <span class="n">SampleGeometry</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+    <span class="n">SampleAndEnvironmentProperties</span><span class="o">=</span><span class="n">vanadium_dictionary</span><span class="p">,</span>
+    <span class="n">AbsoluteNormalisation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">InstrumentCalibration</span><span class="o">=</span><span class="n">calibration_file</span><span class="p">,</span>
+    <span class="n">NormaliseBy</span><span class="o">=</span><span class="s1">&#39;Monitor&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Vanadium&#39;</span>
+<span class="p">)</span>
+<span class="c1"># Sample transmission</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396986, 396987&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;sample_transmission&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumTransmissionWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_transmission_ws&#39;</span><span class="p">,</span>
+    <span class="n">EmptyBeamWorkspace</span><span class="o">=</span><span class="s1">&#39;beam_ws&#39;</span><span class="p">,</span>
+    <span class="n">NormaliseBy</span><span class="o">=</span><span class="s1">&#39;Monitor&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Transmission&#39;</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sample transmission is </span><span class="si">{0:.3f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;sample_transmission_1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="c1"># Sample reduction</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;397004, 397005&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;sample_ws&#39;</span><span class="p">,</span>
+    <span class="n">CadmiumWorkspace</span><span class="o">=</span><span class="s1">&#39;cadmium_ws&#39;</span><span class="p">,</span>
+    <span class="n">EmptyContainerWorkspace</span><span class="o">=</span><span class="s1">&#39;empty_ws&#39;</span><span class="p">,</span>
+    <span class="n">Transmission</span><span class="o">=</span><span class="s1">&#39;sample_transmission&#39;</span><span class="p">,</span>
+    <span class="n">QuartzWorkspace</span><span class="o">=</span><span class="s1">&#39;pol_corrections&#39;</span><span class="p">,</span>
+    <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;Individual&#39;</span><span class="p">,</span>
+    <span class="n">InstrumentCalibration</span><span class="o">=</span><span class="n">calibration_file</span><span class="p">,</span>
+    <span class="n">SelfAttenuationMethod</span><span class="o">=</span><span class="s1">&#39;Numerical&#39;</span><span class="p">,</span>
+    <span class="n">SampleGeometry</span><span class="o">=</span><span class="s1">&#39;Annulus&#39;</span><span class="p">,</span>
+    <span class="n">SampleAndEnvironmentProperties</span><span class="o">=</span><span class="n">sample_dictionary</span><span class="p">,</span>
+    <span class="n">NormaliseBy</span><span class="o">=</span><span class="s1">&#39;Monitor&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Sample&#39;</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The reduced sample data contains </span><span class="si">{}</span><span class="s2"> entries with </span><span class="si">{}</span><span class="s2"> spectra and </span><span class="si">{}</span><span class="s2"> bins.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;sample_ws&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getNumberOfEntries</span><span class="p">(),</span>
+          <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;sample_ws&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getNumberHistograms</span><span class="p">(),</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;sample_ws&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">blocksize</span><span class="p">()))</span>
+
+<span class="c1"># Normalise sample data</span>
+<span class="n">D7AbsoluteCrossSections</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;sample_ws&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;sample_norm&#39;</span><span class="p">,</span>
+    <span class="n">CrossSectionSeparationMethod</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+    <span class="n">NormalisationMethod</span><span class="o">=</span><span class="s1">&#39;Vanadium&#39;</span><span class="p">,</span>
+    <span class="n">VanadiumInputWorkspace</span><span class="o">=</span><span class="s1">&#39;vanadium_ws&#39;</span><span class="p">,</span>
+    <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;Merge&#39;</span><span class="p">,</span>
+    <span class="n">OutputUnits</span><span class="o">=</span><span class="s1">&#39;TwoTheta&#39;</span><span class="p">,</span>
+    <span class="n">ScatteringAngleBinSize</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="c1"># degrees</span>
+    <span class="n">SampleAndEnvironmentProperties</span><span class="o">=</span><span class="n">sample_dictionary</span><span class="p">,</span>
+    <span class="n">AbsoluteUnitsNormalisation</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The normalised sample data contains </span><span class="si">{}</span><span class="s2"> entries with </span><span class="si">{}</span><span class="s2"> spectrum and </span><span class="si">{}</span><span class="s2"> bins.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;sample_norm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getNumberOfEntries</span><span class="p">(),</span>
+          <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;sample_norm&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getNumberHistograms</span><span class="p">(),</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;sample_norm&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">blocksize</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Sample transmission is 0.963
+The reduced sample data contains 12 entries with 132 spectra and 1 bins.
+The normalised sample data contains 6 entries with 1 spectrum and 134 bins.
+</pre></div>
+</div>
+<p><strong>Example - full treatment of a single crystal sample</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="n">vanadium_mass</span> <span class="o">=</span> <span class="mf">8.535</span>
+ <span class="n">sample_formula_mass</span> <span class="o">=</span> <span class="mf">137.33</span> <span class="o">*</span> <span class="mf">2.0</span> <span class="o">+</span> <span class="mf">54.93</span> <span class="o">+</span> <span class="mf">127.6</span> <span class="o">+</span> <span class="mf">15.999</span> <span class="o">*</span> <span class="mf">6.0</span>
+ <span class="n">sample_mass</span> <span class="o">=</span> <span class="mf">7.83</span>
+ <span class="n">vanadium_dictionary</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SampleMass&#39;</span><span class="p">:</span> <span class="n">vanadium_mass</span><span class="p">,</span> <span class="s1">&#39;FormulaUnits&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;FormulaUnitMass&#39;</span><span class="p">:</span> <span class="mf">50.942</span><span class="p">}</span>
+ <span class="n">sample_dictionary</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SampleMass&#39;</span><span class="p">:</span> <span class="n">sample_mass</span><span class="p">,</span> <span class="s1">&#39;FormulaUnits&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;FormulaUnitMass&#39;</span><span class="p">:</span> <span class="n">sample_formula_mass</span><span class="p">,</span>
+                          <span class="s1">&#39;KiXAngle&#39;</span><span class="p">:</span> <span class="mf">45.0</span><span class="p">,</span> <span class="s1">&#39;OmegaShift&#39;</span><span class="p">:</span> <span class="mf">52.5</span><span class="p">}</span>
+ <span class="n">calibration_file</span> <span class="o">=</span> <span class="s2">&quot;D7_YIG_calibration.xml&quot;</span>
+
+ <span class="c1"># Empty container for quartz and vanadium</span>
+ <span class="n">PolDiffILLReduction</span><span class="p">(</span>
+     <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;450747:450748&#39;</span><span class="p">,</span>
+         <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;container_ws&#39;</span><span class="p">,</span>
+         <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Empty&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Empty container for bank position 1 (bt1), tth=79.5</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;397406:397407&#39;</span><span class="p">,</span>
+    <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;AveragePol&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;container_bt1_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Empty&#39;</span>
+<span class="p">)</span>
+<span class="c1"># empty container for bt2, tth=75</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;397397:397398&#39;</span><span class="p">,</span>
+    <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;AveragePol&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;container_bt2_ws&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Empty&#39;</span>
+<span class="p">)</span>
+
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;450769:450770&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;pol_corrections&#39;</span><span class="p">,</span>
+    <span class="n">EmptyContainerWorkspace</span><span class="o">=</span><span class="s1">&#39;container_ws&#39;</span><span class="p">,</span>
+    <span class="n">Transmission</span><span class="o">=</span><span class="s1">&#39;0.9&#39;</span><span class="p">,</span>
+    <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;AveragePol&#39;</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Quartz&#39;</span>
+<span class="p">)</span>
+
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;450835:450836&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;vanadium_ws&#39;</span><span class="p">,</span>
+    <span class="n">EmptyContainerWorkspace</span><span class="o">=</span><span class="s1">&#39;container_ws&#39;</span><span class="p">,</span>
+    <span class="n">Transmission</span><span class="o">=</span><span class="s1">&#39;0.89&#39;</span><span class="p">,</span>
+    <span class="n">QuartzWorkspace</span><span class="o">=</span><span class="s1">&#39;pol_corrections&#39;</span><span class="p">,</span>
+    <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;Sum&#39;</span><span class="p">,</span>
+    <span class="n">SampleGeometry</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+    <span class="n">SelfAttenuationMethod</span><span class="o">=</span><span class="s1">&#39;Transmission&#39;</span><span class="p">,</span>
+    <span class="n">SampleAndEnvironmentProperties</span><span class="o">=</span><span class="n">vanadium_dictionary</span><span class="p">,</span>
+    <span class="n">AbsoluteNormalisation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">InstrumentCalibration</span><span class="o">=</span><span class="n">calibration_file</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Vanadium&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># bank position 1, tth=79.5</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;399451:399452&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;bt1&#39;</span><span class="p">,</span>
+    <span class="n">EmptyContainerWorkspace</span><span class="o">=</span><span class="s1">&#39;container_bt1_ws&#39;</span><span class="p">,</span>
+    <span class="n">Transmission</span><span class="o">=</span><span class="s1">&#39;0.95&#39;</span><span class="p">,</span>
+    <span class="n">QuartzWorkspace</span><span class="o">=</span><span class="s1">&#39;pol_corrections&#39;</span><span class="p">,</span>
+    <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;Individual&#39;</span><span class="p">,</span>
+    <span class="n">SampleGeometry</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+    <span class="n">SampleAndEnvironmentProperties</span><span class="o">=</span><span class="n">sample_dictionary</span><span class="p">,</span>
+    <span class="n">MeasurementTechnique</span><span class="o">=</span><span class="s1">&#39;SingleCrystal&#39;</span><span class="p">,</span>
+    <span class="n">InstrumentCalibration</span><span class="o">=</span><span class="n">calibration_file</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Sample&#39;</span>
+<span class="p">)</span>
+<span class="c1"># bank position 2, tth=75</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+    <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;400287:400288&#39;</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;bt2&#39;</span><span class="p">,</span>
+    <span class="n">EmptyContainerWorkspace</span><span class="o">=</span><span class="s1">&#39;container_bt2_ws&#39;</span><span class="p">,</span>
+    <span class="n">Transmission</span><span class="o">=</span><span class="s1">&#39;0.95&#39;</span><span class="p">,</span>
+    <span class="n">QuartzWorkspace</span><span class="o">=</span><span class="s1">&#39;pol_corrections&#39;</span><span class="p">,</span>
+    <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;Individual&#39;</span><span class="p">,</span>
+    <span class="n">SampleGeometry</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+    <span class="n">SampleAndEnvironmentProperties</span><span class="o">=</span><span class="n">sample_dictionary</span><span class="p">,</span>
+    <span class="n">MeasurementTechnique</span><span class="o">=</span><span class="s1">&#39;SingleCrystal&#39;</span><span class="p">,</span>
+    <span class="n">InstrumentCalibration</span><span class="o">=</span><span class="n">calibration_file</span><span class="p">,</span>
+    <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Sample&#39;</span>
+<span class="p">)</span>
+<span class="n">appended_ws</span> <span class="o">=</span> <span class="s1">&#39;appended_ws&#39;</span>
+<span class="n">AppendSpectra</span><span class="p">(</span><span class="n">InputWorkspace1</span><span class="o">=</span><span class="s1">&#39;bt1&#39;</span><span class="p">,</span> <span class="n">InputWorkspace2</span><span class="o">=</span><span class="s1">&#39;bt2&#39;</span><span class="p">,</span>
+<span class="n">OutputWorkspace</span><span class="o">=</span><span class="n">appended_ws</span><span class="p">)</span>
+<span class="c1"># names need to be re-set, AppendSpectra just concatenates them</span>
+<span class="n">possible_polarisations</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ZPO_ON&#39;</span><span class="p">,</span> <span class="s1">&#39;ZPO_OFF&#39;</span><span class="p">,</span> <span class="s1">&#39;XPO_ON&#39;</span><span class="p">,</span> <span class="s1">&#39;XPO_OFF&#39;</span><span class="p">,</span> <span class="s1">&#39;YPO_ON&#39;</span><span class="p">,</span> <span class="s1">&#39;YPO_OFF&#39;</span><span class="p">]</span>
+<span class="n">polarisation</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">mtd</span><span class="p">[</span><span class="n">appended_ws</span><span class="p">]:</span>
+    <span class="n">entry_name</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">polarisation</span> <span class="ow">in</span> <span class="n">possible_polarisations</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">polarisation</span> <span class="ow">in</span> <span class="n">entry_name</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="n">RenameWorkspace</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">entry</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">appended_ws</span><span class="p">,</span> <span class="n">polarisation</span><span class="p">))</span>
+
+
+<span class="n">D7AbsoluteCrossSections</span><span class="p">(</span>
+    <span class="n">InputWorkspace</span><span class="o">=</span><span class="n">appended_ws</span><span class="p">,</span>
+    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;normalized_single_crystal_XYZ&#39;</span><span class="p">,</span>
+    <span class="n">CrossSectionSeparationMethod</span><span class="o">=</span><span class="s1">&#39;XYZ&#39;</span><span class="p">,</span>
+    <span class="n">NormalisationMethod</span><span class="o">=</span><span class="s1">&#39;Vanadium&#39;</span><span class="p">,</span>
+    <span class="n">VanadiumInputWorkspace</span><span class="o">=</span><span class="s1">&#39;vanadium_ws&#39;</span><span class="p">,</span>
+    <span class="n">OutputUnits</span><span class="o">=</span><span class="s1">&#39;Qxy&#39;</span><span class="p">,</span>
+    <span class="n">SampleAndEnvironmentProperties</span><span class="o">=</span><span class="n">sample_dictionary</span><span class="p">,</span>
+    <span class="n">AbsoluteUnitsNormalisation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">IsotropicMagnetism</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">MeasurementTechnique</span><span class="o">=</span><span class="s1">&#39;SingleCrystal&#39;</span><span class="p">,</span>
+    <span class="n">ClearCache</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Example - full treatment of a sample in TOF mode</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># based on logbook from exp_6-02-594, cycle 193</span>
+
+<span class="n">vanadium_mass</span> <span class="o">=</span> <span class="mf">6.11</span> <span class="o">*</span> <span class="mf">4.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.6</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">0.4</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">formula_weight_H2O</span> <span class="o">=</span> <span class="mf">1.008</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">15.999</span> <span class="c1"># NIST</span>
+<span class="n">sample_mass_H2O</span> <span class="o">=</span> <span class="mf">0.874</span>
+<span class="n">sample_formula_H2O</span> <span class="o">=</span> <span class="s1">&#39;H2O&#39;</span>
+<span class="n">sample_thickness_H2O</span> <span class="o">=</span> <span class="mf">1.95</span>
+<span class="n">max_tof_channel</span> <span class="o">=</span> <span class="mi">511</span>
+<span class="n">vanadium_dictionary</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SampleMass&#39;</span><span class="p">:</span><span class="n">vanadium_mass</span><span class="p">,</span> <span class="s1">&#39;FormulaUnitMass&#39;</span><span class="p">:</span><span class="mf">50.942</span><span class="p">}</span>
+<span class="n">sample_dictionary_H2O</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SampleMass&#39;</span><span class="p">:</span><span class="n">sample_mass_H2O</span><span class="p">,</span> <span class="s1">&#39;FormulaUnitMass&#39;</span><span class="p">:</span><span class="n">formula_weight_H2O</span><span class="p">,</span> <span class="s1">&#39;SampleChemicalFormula&#39;</span><span class="p">:</span><span class="n">sample_formula_H2O</span><span class="p">}</span>
+<span class="n">masked_detectors</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">yig_calibration_file</span> <span class="o">=</span> <span class="s2">&quot;D7_YIG_calibration_TOF.xml&quot;</span>
+
+<span class="c1"># Beam measurement for transmission</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+             <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;395557&#39;</span><span class="p">,</span>
+             <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;beam_ws&#39;</span><span class="p">,</span>
+             <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;EmptyBeam&#39;</span>
+<span class="p">)</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+             <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;395566&#39;</span><span class="p">,</span>
+             <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;beam_ws_2&#39;</span><span class="p">,</span>
+             <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;EmptyBeam&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># empty container</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+             <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396036:396155&#39;</span><span class="p">,</span>
+             <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;AveragePol&#39;</span><span class="p">,</span>
+             <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;container_ws&#39;</span><span class="p">,</span>
+             <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Empty&#39;</span><span class="p">,</span>
+             <span class="n">MeasurementTechnique</span><span class="o">=</span><span class="s1">&#39;TOF&#39;</span><span class="p">,</span>
+             <span class="n">MaxTOFChannel</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+             <span class="n">MaskDetectors</span><span class="o">=</span><span class="n">masked_detectors</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Quartz has not been measured</span>
+
+<span class="c1"># Vanadium transmission</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+             <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;395564&#39;</span><span class="p">,</span>
+             <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;vanadium_tr&#39;</span><span class="p">,</span>
+             <span class="n">EmptyBeamWorkspace</span><span class="o">=</span><span class="s1">&#39;beam_ws&#39;</span><span class="p">,</span>
+             <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Transmission&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Vanadium reduction</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+             <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;396016:396034&#39;</span><span class="p">,</span>
+             <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;vanadium_ws&#39;</span><span class="p">,</span>
+             <span class="n">EmptyContainerWorkspace</span><span class="o">=</span><span class="s1">&#39;container_ws&#39;</span><span class="p">,</span>
+             <span class="n">Transmission</span><span class="o">=</span><span class="s1">&#39;vanadium_tr&#39;</span><span class="p">,</span>
+             <span class="n">SubtractTOFBackgroundMethod</span><span class="o">=</span><span class="s1">&#39;Data&#39;</span><span class="p">,</span>
+             <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;Sum&#39;</span><span class="p">,</span>
+             <span class="n">SelfAttenuationMethod</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+             <span class="n">SampleGeometry</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+             <span class="n">AbsoluteNormalisation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+             <span class="n">SampleAndEnvironmentProperties</span><span class="o">=</span><span class="n">vanadium_dictionary</span><span class="p">,</span>
+             <span class="n">MeasurementTechnique</span><span class="o">=</span><span class="s1">&#39;TOF&#39;</span><span class="p">,</span>
+             <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Vanadium&#39;</span><span class="p">,</span>
+             <span class="n">InstrumentCalibration</span><span class="o">=</span><span class="n">yig_calibration_file</span><span class="p">,</span>
+             <span class="n">MaskDetectors</span><span class="o">=</span><span class="n">masked_detectors</span><span class="p">,</span>
+             <span class="n">MaxTOFChannel</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+             <span class="n">FrameOverlapCorrection</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+             <span class="n">DetectorEnergyEfficiencyCorrection</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+             <span class="n">ConvertToEnergy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+             <span class="n">ClearCache</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="c1"># H2O transmissions</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+             <span class="n">Run</span><span class="o">=</span><span class="s1">&#39;395560,395561&#39;</span><span class="p">,</span> <span class="c1"># 0 and 90 degrees</span>
+             <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;h2O_1cm_tr&#39;</span><span class="p">,</span>
+             <span class="n">EmptyBeamWorkspace</span><span class="o">=</span><span class="s1">&#39;beam_ws&#39;</span><span class="p">,</span>
+             <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Transmission&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Sample reduction</span>
+
+<span class="c1"># water reduction</span>
+<span class="n">PolDiffILLReduction</span><span class="p">(</span>
+             <span class="n">Run</span><span class="o">=</span><span class="s2">&quot;395639:395798&quot;</span><span class="p">,</span>
+             <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;h2O_ws&#39;</span><span class="p">,</span>
+             <span class="n">EmptyContainerWorkspace</span><span class="o">=</span><span class="s1">&#39;container_ws&#39;</span><span class="p">,</span>
+             <span class="n">Transmission</span><span class="o">=</span><span class="s1">&#39;h2O_1cm_tr&#39;</span><span class="p">,</span>
+             <span class="n">SubtractTOFBackgroundMethod</span><span class="o">=</span><span class="s1">&#39;Gaussian&#39;</span><span class="p">,</span>
+             <span class="n">OutputTreatment</span><span class="o">=</span><span class="s1">&#39;AveragePol&#39;</span><span class="p">,</span>
+             <span class="n">SampleGeometry</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+             <span class="n">SampleAndEnvironmentProperties</span><span class="o">=</span><span class="n">sample_dictionary_H2O</span><span class="p">,</span>
+             <span class="n">MeasurementTechnique</span><span class="o">=</span><span class="s1">&#39;TOF&#39;</span><span class="p">,</span>
+             <span class="n">InstrumentCalibration</span><span class="o">=</span><span class="n">yig_calibration_file</span><span class="p">,</span>
+             <span class="n">ElasticChannelsWorkspace</span><span class="o">=</span><span class="s1">&#39;vanadium_ws_elastic&#39;</span><span class="p">,</span>
+             <span class="n">MaskDetectors</span><span class="o">=</span><span class="n">masked_detectors</span><span class="p">,</span>
+             <span class="n">MaxTOFChannel</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+             <span class="n">FrameOverlapCorrection</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+             <span class="n">DetectorEnergyEfficiencyCorrection</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+             <span class="n">ConvertToEnergy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+             <span class="n">ProcessAs</span><span class="o">=</span><span class="s1">&#39;Sample&#39;</span>
+<span class="p">)</span>
+
+<span class="n">D7AbsoluteCrossSections</span><span class="p">(</span>
+             <span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;h2O_ws&#39;</span><span class="p">,</span>
+             <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;h2O_red&#39;</span><span class="p">,</span>
+             <span class="n">CrossSectionSeparationMethod</span><span class="o">=</span><span class="s1">&#39;Uniaxial&#39;</span><span class="p">,</span>
+             <span class="n">NormalisationMethod</span><span class="o">=</span><span class="s1">&#39;Vanadium&#39;</span><span class="p">,</span>
+             <span class="n">VanadiumInputWorkspace</span><span class="o">=</span><span class="s1">&#39;vanadium_ws&#39;</span><span class="p">,</span>
+             <span class="n">OutputUnits</span><span class="o">=</span><span class="s1">&#39;Qw&#39;</span><span class="p">,</span>
+             <span class="n">SampleAndEnvironmentProperties</span><span class="o">=</span><span class="n">sample_dictionary_H2O</span><span class="p">,</span>
+             <span class="n">AbsoluteUnitsNormalisation</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+             <span class="n">MeasurementTechnique</span><span class="o">=</span><span class="s1">&#39;TOF&#39;</span><span class="p">,</span>
+             <span class="n">ClearCache</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="references">
+<h4><a class="toc-backref" href="#id53" role="doc-backlink">References</a><a class="headerlink" href="#references" title="Link to this heading">¶</a></h4>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="fennell" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Fennell T. , Mangin-Thro L., Mutka H., Nilsen G.J., Wildes A.R..
+<em>Wavevector and energy resolution of the polarized diffuse scattering spectrometer D7</em>,
+Nuclear Instruments and Methods in Physics Research A <strong>857</strong> (2017) 24–30
+<a class="reference external" href="https://doi.org/10.1016/j.nima.2017.03.024">doi: 10.1016/j.nima.2017.03.024</a></p>
+</aside>
+<aside class="footnote brackets" id="nakatsuka" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>Nakatsuka A., Yoshiasa A., and Takeno S..
+<em>Site preference of cations and structural variation in Y3Fe5O12 solid solutions with garnet structure</em>,
+Acta Crystallographica Section B <strong>51</strong> (1995) 737–745
+<a class="reference external" href="https://doi.org/10.1107/S0108768194014813">doi: 10.1107/S0108768194014813</a></p>
+</aside>
+<aside class="footnote brackets" id="sharpf" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id11">3</a><span class="fn-bracket">]</span></span>
+<p>Scharpf, O. and Capellmann, H.
+<em>The XYZ‐Difference Method with Polarized Neutrons and the Separation of Coherent, Spin Incoherent, and Magnetic Scattering Cross Sections in a Multidetector</em>
+Physica Status Solidi (A) <strong>135</strong> (1993) 359-379
+<a class="reference external" href="https://doi.org/10.1002/pssa.2211350204">doi: 10.1002/pssa.2211350204</a></p>
+</aside>
+<aside class="footnote brackets" id="steward" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id6">1</a>,<a role="doc-backlink" href="#id7">2</a>,<a role="doc-backlink" href="#id12">3</a>)</span>
+<p>Stewart, J. R. and Deen, P. P. and Andersen, K. H. and Schober, H. and Barthelemy, J.-F. and Hillier, J. M. and Murani, A. P. and Hayes, T. and Lindenau, B.
+<em>Disordered materials studied using neutron polarization analysis on the multi-detector spectrometer, D7</em>
+Journal of Applied Crystallography <strong>42</strong> (2009) 69-84
+<a class="reference external" href="https://doi.org/10.1107/S0021889808039162">doi: 10.1107/S0021889808039162</a></p>
+</aside>
+<aside class="footnote brackets" id="ehlers" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id13">5</a><span class="fn-bracket">]</span></span>
+<p>Ehlers G., Stewart J. R., Wildes A. R., Deen P. P., and Andersen K. H.
+<em>Generalization of the classical xyz-polarization analysis technique to out-of-plane and inelastic scattering</em>
+Review of Scientific Instruments <strong>84</strong> (2013), 093901
+<a class="reference external" href="https://doi.org/10.1063/1.4819739">doi: 10.1063/1.4819739</a></p>
+</aside>
+<aside class="footnote brackets" id="schweika" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id14">6</a><span class="fn-bracket">]</span></span>
+<p>Schweika W.
+<em>XYZ-polarisation analysis of diffuse magnetic neutron scattering from single crystals</em>
+J. Phys.: Conf. Ser. <strong>211</strong> (2010) 012026
+<a class="reference external" href="https://doi.org/10.1088/1742-6596/211/1/012026">doi: 10.1088/1742-6596/211/1/012026</a></p>
+</aside>
+</aside>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Techniques.html">Techniques</a></p>
+</section>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="ISIS_SingleCrystalDiffraction_Workflow.html" title="Previous Chapter: ISIS Single Crystal Diffraction Reduction Scripts"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; ISIS Single C...</span>
+    </a>
+  </li>
+  <li>
+    <a href="ReflectometryILL.html" title="Next Chapter: Data reduction for reflectometry instruments at the ILL"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Data reductio... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

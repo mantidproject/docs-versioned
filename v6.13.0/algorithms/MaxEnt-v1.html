@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>MaxEnt v1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=e5748c76"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="MaxMin v1" href="MaxMin-v1.html" />
+    <link rel="prev" title="Max v1" href="Max-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.13</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">MaxEnt v1</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="maxent-v1">
+<span id="algm-maxent"></span><span id="algm-maxent-v1"></span><h1>MaxEnt v1<a class="headerlink" href="#maxent-v1" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id5">Summary</a></p>
+<ul>
+<li><p><a class="reference internal" href="#see-also" id="id6">See Also</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#properties" id="id7">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id8">Description</a></p></li>
+<li><p><a class="reference internal" href="#output-workspaces" id="id9">Output Workspaces</a></p></li>
+<li><p><a class="reference internal" href="#usage" id="id10">Usage</a></p></li>
+<li><p><a class="reference internal" href="#positive-images" id="id11">Positive Images</a></p></li>
+<li><p><a class="reference internal" href="#complex-images" id="id12">Complex Images</a></p></li>
+<li><p><a class="reference internal" href="#complex-data" id="id13">Complex Data</a></p></li>
+<li><p><a class="reference internal" href="#increasing-the-number-of-points-in-the-image" id="id14">Increasing the number of points in the image</a></p></li>
+<li><p><a class="reference internal" href="#adjusting-the-reconstructed-data" id="id15">Adjusting the Reconstructed Data</a></p></li>
+<li><p><a class="reference internal" href="#references" id="id16">References</a></p></li>
+<li><p><a class="reference internal" href="#source" id="id17">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Runs Maximum Entropy method on every spectrum of an input workspace. It currently works for the case where data and image are related by a 1D Fourier transform.</p>
+<section id="see-also">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="ExtractFFTSpectrum-v1.html#algm-extractfftspectrum"><span class="std std-ref">ExtractFFTSpectrum</span></a>, <a class="reference internal" href="FFT-v1.html#algm-fft"><span class="std std-ref">FFT</span></a>, <a class="reference internal" href="FFTDerivative-v1.html#algm-fftderivative"><span class="std std-ref">FFTDerivative</span></a>, <a class="reference internal" href="RealFFT-v1.html#algm-realfft"><span class="std std-ref">RealFFT</span></a>, <a class="reference internal" href="SassenaFFT-v1.html#algm-sassenafft"><span class="std std-ref">SassenaFFT</span></a>, <a class="reference internal" href="FFTSmooth-v2.html#algm-fftsmooth"><span class="std std-ref">FFTSmooth</span></a></p>
+</section>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>InputWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>An input workspace.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ComplexData</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If true, the input data is assumed to be complex and the input workspace is expected to have an even number of histograms (2N). Spectrum numbers S and S+N are assumed to be the real and imaginary part of the complex signal respectively.</p></td>
+</tr>
+<tr class="row-even"><td><p>ComplexImage</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>If true, the algorithm will use complex images for the calculations. This is the recommended option when there is no prior knowledge about the image. If the image is known to be real, this option can be set to false and the algorithm will only consider the real part for calculations.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PositiveImage</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>If true, the reconstructed image is only allowed to take positive values. It can take negative values otherwise. This option defines the entropy formula that will be used for the calculations (see next section for more details).</p></td>
+</tr>
+<tr class="row-even"><td><p>AutoShift</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Automatically calculate and apply phase shift. Zero on the X axis is assumed to be in the first bin. If it is not, setting this property will automatically correct for this.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ResolutionFactor</p></td>
+<td><p>Input</p></td>
+<td><p>m</p></td>
+<td><p>1</p></td>
+<td><p>An integer number indicating the factor by which the number of points will be increased in the image and reconstructed data</p></td>
+</tr>
+<tr class="row-even"><td><p>A</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0.4</p></td>
+<td><p>A maximum entropy constant. This algorithm was first developed for the ISIS muon group where the default 0.4 was found to give good reconstructions. In general the user will need to experiment with this value. Choosing a small value may lead to unphysical spiky reconstructions and choosing an increasingly large value the reconstruction will start to resamble that of a direct fourier transform reconstruction. However, where the data contain a zero Fourier data point with a small error the reconstruction will be insensitive to the choice of this property (and increasing so the more well determined this data point is).</p></td>
+</tr>
+<tr class="row-odd"><td><p>ChiTargetOverN</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>1</p></td>
+<td><p>Target value of Chi-square divided by the number of data points (N)</p></td>
+</tr>
+<tr class="row-even"><td><p>ChiEps</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0.001</p></td>
+<td><p>Required precision for Chi-square</p></td>
+</tr>
+<tr class="row-odd"><td><p>DistancePenalty</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0.1</p></td>
+<td><p>Distance penalty applied to the current image at each iteration.</p></td>
+</tr>
+<tr class="row-even"><td><p>MaxAngle</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0.001</p></td>
+<td><p>Maximum degree of non-parallelism between S (the entropy) and C (chi-squared). These needs to be parallel. Chosing a smaller shouldn’t change the output. However, if you find this is the case please let the Mantid team know since this indicates that the default value of this proporty may need changing or other changes to this implementation are required.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MaxIterations</p></td>
+<td><p>Input</p></td>
+<td><p>m</p></td>
+<td><p>20000</p></td>
+<td><p>Maximum number of iterations.</p></td>
+</tr>
+<tr class="row-even"><td><p>AlphaChopIterations</p></td>
+<td><p>Input</p></td>
+<td><p>m</p></td>
+<td><p>500</p></td>
+<td><p>Maximum number of iterations in alpha chop.</p></td>
+</tr>
+<tr class="row-odd"><td><p>DataLinearAdj</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>Adjusts the calculated data by multiplying each value by the corresponding Y value of this workspace. The data in this workspace is complex in the same manner as complex input data.</p></td>
+</tr>
+<tr class="row-even"><td><p>DataConstAdj</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td></td>
+<td><p>Adjusts the calculated data by adding to each value the corresponding Y value of this workspace. If DataLinearAdj is also specified, this addition is done after its multiplication. See equation in documentation for how DataLinearAdj and DataConstAdj are applied. The data in this workspace is complex in the same manner as complex input data.</p></td>
+</tr>
+<tr class="row-odd"><td><p>PerSpectrumReconstruction</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>Reconstruction is done independently on each spectrum. If false, all the spectra use one image and the reconstructions differ only through their adjustments. ComplexData must be set true, when this is false.</p></td>
+</tr>
+<tr class="row-even"><td><p>EvolChi</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Output workspace containing the evolution of Chi-sq.</p></td>
+</tr>
+<tr class="row-odd"><td><p>EvolAngle</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Output workspace containing the evolution of non-paralellism between S and C.</p></td>
+</tr>
+<tr class="row-even"><td><p>ReconstructedImage</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>The output workspace containing the reconstructed image.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ReconstructedData</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>The output workspace containing the reconstructed data.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>The maximum entropy method (MEM) is used as a signal processing technique for reconstructing
+images from noisy data. It selects a single
+image from the many images which fit the data with the same value of the statistic,
+<span class="math notranslate nohighlight">\(\chi^2\)</span>. The maximum entropy method selects from this <em>feasible set</em> of images, the one which
+has minimum information (maximum entropy).
+More specifically, the algorithm maximizes the entropy <span class="math notranslate nohighlight">\(S\left(x\right)\)</span> subject to the constraint:</p>
+<div class="math notranslate nohighlight">
+\[\chi^2 = \frac{1}{N'}\sum_m \frac{\left(d_m - d_m^c\right)^2}{\sigma_m^2} \leq \chi^2_{target}\]</div>
+<p>where <span class="math notranslate nohighlight">\(d_m\)</span> are the experimental data, <span class="math notranslate nohighlight">\(\sigma_m\)</span> the associated errors, <span class="math notranslate nohighlight">\(d_m^c\)</span>
+the calculated or reconstructed data, <span class="math notranslate nohighlight">\(\chi^2_{target}\)</span> is value of the input algorithm
+property ChiTargetOverN and <span class="math notranslate nohighlight">\(N'\)</span> the number of measured data point. The image is a set of numbers
+<span class="math notranslate nohighlight">\(\{x_0, x_1, \dots, x_{N-1}\}\)</span> related to the measured data via a 1D Fourier transform:</p>
+<div class="math notranslate nohighlight">
+\[d_m = \frac{1}{N} \sum_{j=0}^{N-1} x_j e^{i 2\pi m j / N}\]</div>
+<p>where <span class="math notranslate nohighlight">\(N\)</span> is the number of image points, which can be made different from <span class="math notranslate nohighlight">\(N'\)</span> and
+is controlled by the input algorithm property ResolutionFactor, see examples further below.</p>
+<p>Note that even for real input data the reconstructed image can be complex, which means that both the real and
+imaginary parts will be taken into account for the calculations. This is the default behaviour, which can be
+changed by setting the input property <em>ComplexImage</em> to <em>False</em>. Note that the algorithm will fail to converge
+if the image is complex (i.e. the data does not satisfy Friedel’s law) and this option is set to <em>False</em>.
+For this reason, it is recommended to use the default when no prior knowledge is available.</p>
+<p>The entropy is defined on the image <span class="math notranslate nohighlight">\(\{x_j\}\)</span> as:</p>
+<div class="math notranslate nohighlight">
+\[S = \sum_j \left[ \sqrt{x_j^2 + A^2} - x_j \sinh^{-1}\left(\frac{x_j}{A}\right) \right]\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[S = -\sum_j x_j \left(\log(x_j/A)-1\right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(A\)</span> is a constant and the formula which is used depends on the input property <em>PositiveImage</em>: when it is
+set to <em>False</em> the first equation will be applied, whereas the latter expression will be used if this property
+is set to <em>True</em>. The sensitive of the reconstructed image to reconstructed
+image will vary depending on the data. In general a smaller value would preduce a
+sharper image. See section 4.7 in Ref. [1] for recommended strategy to selected <span class="math notranslate nohighlight">\(A\)</span>.</p>
+<p>The implementation used to find the solution where the entropy is maximized
+subject to the constraint in <span class="math notranslate nohighlight">\(\chi^2\)</span> follows the approach by Skilling &amp; Bryan [2], which is an
+algorithm that is not explicitly using Lagrange multiplier. Instead, they
+construct a subspace from a set of <em>search directions</em> to approach the maximum entropy solution. Initially,
+the image <span class="math notranslate nohighlight">\(x\)</span> is set to the flat background <span class="math notranslate nohighlight">\(A\)</span> and the search directions are constructed
+using the gradients of <span class="math notranslate nohighlight">\(S\)</span> and <span class="math notranslate nohighlight">\(\chi^2\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{e}_1 = \left|x\right|\left(\nabla S\right)\]</div>
+<div class="math notranslate nohighlight">
+\[\mathbf{e}_2 = \left|x\right|\left(\nabla \chi^2\right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(a\left(b\right)\)</span> stands for a componentwise multiplication between vectors
+<span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span>. The algorithm next uses
+a quadratic approximation to determine the increment <span class="math notranslate nohighlight">\(\delta \mathbf{x}\)</span> that <em>moves</em> the image
+one step closer to the solution:</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{x} = \mathbf{x} + \delta \mathbf{x}\]</div>
+<p>If <em>DataLinearAdj</em> <span class="math notranslate nohighlight">\(l_m\)</span> and <em>DataConstAdj</em> <span class="math notranslate nohighlight">\(c_m\)</span> are set
+then the reconstructed data is adjusted to</p>
+<div class="math notranslate nohighlight">
+\[d_m = \frac{l_m}{N} \sum_{j=0}^{N-1} x_j e^{i 2\pi m j / N} + c_m\]</div>
+<p>If <em>PerSpectrumImage</em> is set false, then chi squared is calculated for all spectra together to form a single image</p>
+<div class="math notranslate nohighlight">
+\[\chi^2 = \frac{1}{N'}\sum_{m,k} \frac{\left(d_{m,k} - d_{m,k}^c\right)^2}{\sigma_{m,k}^2} \leq \chi^2_{target}\]</div>
+<p>then the reconstructed data are calculated from this single image and the adjustments are applied for each spectrum:</p>
+<div class="math notranslate nohighlight">
+\[d_{m,k} = \frac{l_{m,k}}{N} \sum_{j=0}^{N-1} x_j e^{i 2\pi m j / N} + c_{m,k}\]</div>
+</section>
+<section id="output-workspaces">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Output Workspaces</a><a class="headerlink" href="#output-workspaces" title="Link to this heading">¶</a></h2>
+<p>There are four output workspaces: <em>ReconstructedImage</em> and <em>ReconstructedData</em> contain the image and
+calculated data respectively, and <em>EvolChi</em> and <em>EvolAngle</em> record the algorithm’s evolution.
+<em>ReconstructedData</em> can be used to check that the calculated data approaches the experimental,
+measured data, and <em>ReconstructedImage</em> corresponds to its Fourier transform. If the input data are real they
+contain twice the original number of spectra, as the Fourier transform will be a complex signal
+in general. The real and imaginary parts are organized as follows (see Table 1): assuming your input workspace has
+<span class="math notranslate nohighlight">\(M\)</span> spectra, the real part of the reconstructed spectrum <span class="math notranslate nohighlight">\(s\)</span> corresponds to
+spectrum <span class="math notranslate nohighlight">\(s\)</span> in the output workspaces <em>ReconstructedImage</em> and <em>ReconstructedData</em>, while the imaginary part can be found in spectrum <span class="math notranslate nohighlight">\(s+M\)</span>.</p>
+<p>When the input data are complex, the input workspace is expected to have <span class="math notranslate nohighlight">\(2M\)</span> spectra, where
+real and imaginary parts of input <span class="math notranslate nohighlight">\(s\)</span>, are arranged in spectra <span class="math notranslate nohighlight">\((s, s+M)\)</span> respectively. In other words,
+<em>ReconstructedData</em> and <em>ReconstructedImage</em> will contain <span class="math notranslate nohighlight">\(2M\)</span> spectra, where spectra
+<span class="math notranslate nohighlight">\((s, s+M)\)</span> correspond to the real and imaginary parts reconstructed from the input signal at
+<span class="math notranslate nohighlight">\((s, s+M)\)</span> in the input workspace (see Table 2 below).</p>
+<p>The workspaces <em>EvolChi</em> and <em>EvolAngle</em> record the evolution of <span class="math notranslate nohighlight">\(\chi^2\)</span> and the angle (or
+non-parallelism) between <span class="math notranslate nohighlight">\(\nabla S\)</span> and <span class="math notranslate nohighlight">\(\nabla \chi^2\)</span>. Note that the algorithm runs
+until a solution is found, and that an image is considered to be a true maximum entropy
+solution when the following two conditions are met simultaneously:</p>
+<div class="math notranslate nohighlight">
+\[\chi^2_{Target} - \chi^2 &lt; \epsilon_1, \qquad \frac{1}{2} \left| \frac{\nabla S}{\left|\nabla S\right|} - \frac{\nabla \chi^2}{\left|\nabla \chi^2\right|} \right| &lt; \epsilon_2\]</div>
+<p>While one of these conditions is not satisfied the algorithm keeps running until it reaches the maximum
+number of iterations. When the maximum number of iterations is reached, the last
+reconstructed image and its corresponding calculated data are returned, even if they do not correspond to
+a true maximum entropy solution satisfying the conditions above. In this way, the user can check by inspecting
+the output workspaces whether the algorithm was evolving towards the correct solution or not.
+On the other hand, the user must always check the validity of the solution by inspecting <em>EvolChi</em> and <em>EvolAngle</em>,
+whose values will be set to zero once the true maximum entropy solution is found.</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Table 1. Output workspaces for a real input workspace with M histograms and N bins, taking J iterations.</span><a class="headerlink" href="#id1" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Workspace</p></th>
+<th class="head"><p>Number of histograms</p></th>
+<th class="head"><p>Number of bins</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>EvolChi</p></td>
+<td><p>M</p></td>
+<td><p>J</p></td>
+<td><p>For spectrum <span class="math notranslate nohighlight">\(k\)</span> in the input workspace, evolution of <span class="math notranslate nohighlight">\(\chi^2\)</span> until the solution is found</p></td>
+</tr>
+<tr class="row-odd"><td><p>EvolAngle</p></td>
+<td><p>M</p></td>
+<td><p>J</p></td>
+<td><p>For spectrum <span class="math notranslate nohighlight">\(k\)</span> in the input workspace, evolution of the angle between <span class="math notranslate nohighlight">\(\nabla S\)</span> and <span class="math notranslate nohighlight">\(\nabla \chi^2\)</span>, until the solution is found</p></td>
+</tr>
+<tr class="row-even"><td><p>ReconstructedImage</p></td>
+<td><p>2M</p></td>
+<td><p>N</p></td>
+<td><p>For spectrum <span class="math notranslate nohighlight">\(k\)</span> in the input workspace, the reconstructed image is stored in spectra <span class="math notranslate nohighlight">\(k\)</span> (real part) and <span class="math notranslate nohighlight">\(k+M\)</span> (imaginary part)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ReconstructedData</p></td>
+<td><p>2M</p></td>
+<td><p>N</p></td>
+<td><p>For spectrum <span class="math notranslate nohighlight">\(k\)</span> in the input workspace, the reconstructed data are stored in spectrum <span class="math notranslate nohighlight">\(k\)</span> (real part) and <span class="math notranslate nohighlight">\(k+M\)</span> (imaginary part). Note that although the input is real, the imaginary part is recorded for debugging purposes, it should be zero for all data points.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text">Table 2. Output workspaces for a complex input workspace with 2M histograms and N bins, taking J iterations.</span><a class="headerlink" href="#id2" title="Link to this table">¶</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Workspace</p></th>
+<th class="head"><p>Number of histograms</p></th>
+<th class="head"><p>Number of bins</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>EvolChi</p></td>
+<td><p>M</p></td>
+<td><p>J</p></td>
+<td><p>For spectrum <span class="math notranslate nohighlight">\((k, k+M)\)</span> in the input workspace, evolution of <span class="math notranslate nohighlight">\(\chi^2\)</span> until the solution is found</p></td>
+</tr>
+<tr class="row-odd"><td><p>EvolAngle</p></td>
+<td><p>M</p></td>
+<td><p>J</p></td>
+<td><p>For spectrum <span class="math notranslate nohighlight">\((k, k+M)\)</span> in the input workspace, evolution of the angle between <span class="math notranslate nohighlight">\(\nabla S\)</span> and <span class="math notranslate nohighlight">\(\nabla \chi^2\)</span>, until the solution is found</p></td>
+</tr>
+<tr class="row-even"><td><p>ReconstructedImage</p></td>
+<td><p>2M</p></td>
+<td><p><span class="math notranslate nohighlight">\(N\)</span></p></td>
+<td><p>For spectrum <span class="math notranslate nohighlight">\((k, k+M)\)</span> in the input workspace, the reconstructed image is stored in spectra <span class="math notranslate nohighlight">\(k\)</span> (real part) and <span class="math notranslate nohighlight">\(k+M\)</span> (imaginary part)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ReconstructedData</p></td>
+<td><p>2M</p></td>
+<td><p><span class="math notranslate nohighlight">\(N\)</span></p></td>
+<td><p>For spectrum <span class="math notranslate nohighlight">\((k, k+M)\)</span> in the input workspace, the reconstructed data are stored in spectra <span class="math notranslate nohighlight">\(k\)</span> (real part) and <span class="math notranslate nohighlight">\(k+M\)</span> (imaginary part)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="usage">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Usage</a><a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p>Some of the usage examples use usage data files.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To run these usage examples please first download the
+<a class="reference external" href="https://sourceforge.net/projects/mantid/files/Sample%20Data/UsageData.zip/download">usage data</a>,
+and add these to your path.
+In Mantid this is done using <a class="reference internal" href="../interfaces/framework/ManageUserDirectories.html#manageuserdirectories"><span class="std std-ref">Manage User Directories</span></a>.</p>
+</div>
+<p><strong>Example - Reconstruct Fourier coefficients</strong></p>
+<p>In the example below, a workspace containing five Fourier coefficients is created and
+used as input to <a class="reference internal" href="#algm-maxent"><span class="std std-ref">MaxEnt v1</span></a>. In the figure we show the original and reconstructed data (left),
+and the reconstructed image, i.e. Fourier transform (right).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an empty workspace</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">E</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="p">((</span><span class="n">i</span><span class="o">-</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">Y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">E</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+
+<span class="c1"># Fill in five Fourier coefficients</span>
+<span class="c1"># The input signal must be symmetric to get a real image</span>
+<span class="n">Y</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[</span><span class="mi">195</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.85</span>
+<span class="n">Y</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[</span><span class="mi">190</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.85</span>
+<span class="n">Y</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[</span><span class="mi">180</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.85</span>
+<span class="n">Y</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[</span><span class="mi">188</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.90</span>
+<span class="n">Y</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">=</span> <span class="n">Y</span><span class="p">[</span><span class="mi">186</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.90</span>
+<span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;inputws&#39;</span><span class="p">,</span><span class="n">DataX</span><span class="o">=</span><span class="n">X</span><span class="p">,</span><span class="n">DataY</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span><span class="n">DataE</span><span class="o">=</span><span class="n">E</span><span class="p">,</span><span class="n">NSpec</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">evolChi</span><span class="p">,</span> <span class="n">evolAngle</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;inputws&#39;</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First  reconstructed coefficient: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">5</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Second reconstructed coefficient: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">10</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Third  reconstructed coefficient: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">20</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fourth reconstructed coefficient: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">12</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fifth  reconstructed coefficient: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">14</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of iterations: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngle</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>First  reconstructed coefficient: 0.847
+Second reconstructed coefficient: 0.846
+Third  reconstructed coefficient: 0.846
+Fourth reconstructed coefficient: 0.896
+Fifth  reconstructed coefficient: 0.896
+Number of iterations: ...
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../_images/MaxEntFourierCoefficients.png" src="../_images/MaxEntFourierCoefficients.png" />
+</figure>
+<p><strong>Example - Reconstruct a real muon dataset</strong></p>
+<p>In this example, <a class="reference internal" href="#algm-maxent"><span class="std std-ref">MaxEnt v1</span></a> is run on a pre-analyzed muon dataset. The corresponding figure shows
+the original and reconstructed data (left), and the real part of the image obtained with <a class="reference internal" href="#algm-maxent"><span class="std std-ref">MaxEnt v1</span></a>
+and <a class="reference internal" href="FFT-v1.html#algm-fft"><span class="std std-ref">FFT v1</span></a> (right).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;MUSR00022725.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;MUSR00022725&#39;</span><span class="p">)</span>
+<span class="n">CropWorkspace</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;MUSR00022725&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;MUSR00022725&#39;</span><span class="p">,</span> <span class="n">XMin</span><span class="o">=</span><span class="mf">0.11</span><span class="p">,</span> <span class="n">XMax</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span> <span class="n">EndWorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">RemoveExpDecay</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;MUSR00022725&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;MUSR00022725&#39;</span><span class="p">)</span>
+<span class="n">Rebin</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;MUSR00022725&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;MUSR00022725&#39;</span><span class="p">,</span> <span class="n">Params</span><span class="o">=</span><span class="s1">&#39;0.016&#39;</span><span class="p">)</span>
+<span class="n">evolChi</span><span class="p">,</span> <span class="n">evolAngle</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;MUSR00022725&#39;</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.005</span><span class="p">)</span>
+<span class="c1"># Compare MaxEnt to FFT</span>
+<span class="n">imageFFT</span> <span class="o">=</span> <span class="n">FFT</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;MUSR00022725&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image at </span><span class="si">{:.3f}</span><span class="s2">: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">44</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">44</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image at </span><span class="si">{:.3f}</span><span class="s2">: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">46</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">46</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image at </span><span class="si">{:.3f}</span><span class="s2">: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">48</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">48</span><span class="p">]))</span>
+<span class="c1"># check background is not nosiy</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">getInt</span><span class="p">(</span><span class="n">originalX</span><span class="p">,</span><span class="n">originalY</span><span class="p">,</span><span class="n">xMin</span><span class="p">,</span><span class="n">xMax</span><span class="p">):</span>
+   <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+   <span class="n">yData</span><span class="o">=</span><span class="p">[]</span>
+   <span class="n">xData</span><span class="o">=</span><span class="p">[]</span>
+   <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">originalX</span><span class="p">)):</span>
+       <span class="k">if</span> <span class="n">originalX</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&gt;</span><span class="n">xMin</span> <span class="ow">and</span> <span class="n">originalX</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&lt;</span><span class="n">xMax</span><span class="p">:</span>
+           <span class="n">yData</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">originalY</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+           <span class="n">xData</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">originalX</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+   <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xData</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">yData</span><span class="p">))</span>
+<span class="c1"># Do not change these numbers - they test if noise has been added to the alg</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Negative background </span><span class="si">{:.6f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">getInt</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span> <span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Positive background </span><span class="si">{:.6f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">getInt</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="mi">2</span><span class="p">,</span><span class="mi">30</span> <span class="p">)))</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Number of iterations: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngle</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Image at -1.359: 0.100
+Image at 0.000: 0.009
+Image at 1.359: 0.100
+Negative background 0.006431
+Positive background 0.006431
+Number of iterations: ...
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../_images/MaxEntMUSR00022725.png" src="../_images/MaxEntMUSR00022725.png" />
+</figure>
+<p>Next, <a class="reference internal" href="#algm-maxent"><span class="std std-ref">MaxEnt v1</span></a> is run on a different muon dataset. The figure shows
+the original and reconstructed data (left), the real part of the image (middle)
+and its imaginary part (right).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;EMU00020884.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;EMU00020884&#39;</span><span class="p">)</span>
+<span class="n">CropWorkspace</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;EMU00020884&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;EMU00020884&#39;</span><span class="p">,</span> <span class="n">XMin</span><span class="o">=</span><span class="mf">0.17</span><span class="p">,</span> <span class="n">XMax</span><span class="o">=</span><span class="mf">4.5</span><span class="p">,</span> <span class="n">EndWorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">RemoveExpDecay</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;EMU00020884&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;EMU00020884&#39;</span><span class="p">)</span>
+<span class="n">Rebin</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;EMU00020884&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;EMU00020884&#39;</span><span class="p">,</span> <span class="n">Params</span><span class="o">=</span><span class="s1">&#39;0.016&#39;</span><span class="p">)</span>
+<span class="n">evolChi</span><span class="p">,</span> <span class="n">evolAngle</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;EMU00020884&#39;</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">MaxIterations</span><span class="o">=</span><span class="mi">2500</span><span class="p">,</span> <span class="n">ChiTargetOverN</span><span class="o">=</span><span class="mf">300.0</span><span class="o">/</span><span class="mf">270.0</span><span class="p">)</span>
+<span class="c1"># Compare MaxEnt to FFT</span>
+<span class="n">imageFFT</span> <span class="o">=</span> <span class="n">FFT</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;EMU00020884&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image (real part) at </span><span class="si">{:.3f}</span><span class="s2">: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">129</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">129</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image (real part) at  </span><span class="si">{:.3f}</span><span class="s2">:  </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">135</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">135</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image (real part) at  </span><span class="si">{:.3f}</span><span class="s2">: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">141</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">141</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image (imaginary part) at </span><span class="si">{:.3f}</span><span class="s2">: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">129</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">129</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image (imaginary part) at  </span><span class="si">{:.3f}</span><span class="s2">:  </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">135</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">135</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image (imaginary part) at  </span><span class="si">{:.3f}</span><span class="s2">:  </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">141</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="mi">141</span><span class="p">]))</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Number of iterations: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngle</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Image (real part) at -1.389: -0.063
+Image (real part) at  0.000:  0.035
+Image (real part) at  1.389: -0.063
+Image (imaginary part) at -1.389: -0.277
+Image (imaginary part) at  0.000:  0.000
+Image (imaginary part) at  1.389:  0.277
+Number of iterations: ...
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../_images/MaxEntMUSR00020884.png" src="../_images/MaxEntMUSR00020884.png" />
+</figure>
+<p>Finally, we show an example where a complex signal is analyzed. In this case, the input workspace contains two spectra corresponding to the
+real and imaginary part of the same signal. The figure shows
+the original and reconstructed data (left), and the reconstructed image (right).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">random</span><span class="p">,</span> <span class="n">seed</span>
+<span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># Create a test workspace</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">YRe</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">YIm</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">E</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">w</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">i</span><span class="o">/</span><span class="n">N</span>
+    <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">YRe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">random</span><span class="p">()</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">YIm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">random</span><span class="p">()</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">E</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span><span class="n">DataX</span><span class="o">=</span><span class="n">X</span><span class="o">+</span><span class="n">X</span><span class="p">,</span><span class="n">DataY</span><span class="o">=</span><span class="n">YRe</span><span class="o">+</span><span class="n">YIm</span><span class="p">,</span><span class="n">DataE</span><span class="o">=</span><span class="n">E</span><span class="o">+</span><span class="n">E</span><span class="p">,</span><span class="n">NSpec</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">evolChi</span><span class="p">,</span> <span class="n">evolAngle</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">ComplexData</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image (real part) at </span><span class="si">{:.3f}</span><span class="s2">: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">102</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">102</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image (real part) at </span><span class="si">{:.3f}</span><span class="s2">: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">103</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">103</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image (real part) at </span><span class="si">{:.3f}</span><span class="s2">: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">104</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">104</span><span class="p">]))</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Number of iterations: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngle</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Image (real part) at 0.318: 0.000
+Image (real part) at 0.477: 5.862
+Image (real part) at 0.637: 0.000
+Number of iterations: ...
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../_images/MaxEntComplexData.png" src="../_images/MaxEntComplexData.png" />
+</figure>
+</section>
+<section id="positive-images">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Positive Images</a><a class="headerlink" href="#positive-images" title="Link to this heading">¶</a></h2>
+<p>The algorithm allows users to restrict the reconstructed image to positive values only. This behaviour can be
+selected by setting the input property <em>PositiveImage</em> to true. In this case, the entropy is defined by the
+expression:</p>
+<div class="math notranslate nohighlight">
+\[S = -\sum_j x_j \left(\log(x_j/A)-1\right)\]</div>
+<p>In addition, the algorithm explicitly protects against negative values by setting those to a fraction of the maximum entropy constant <em>A</em>.
+In the example below both modes are compared. As the input is a complex signal with expected Fourier transform <span class="math notranslate nohighlight">\(F(\omega) = \delta\left(\omega-\omega_0\right)\)</span>,
+i.e. positive,
+both modes should produce the same results (note that the maximum entropy constant <em>A</em> typically needs to be set to smaller values for positive
+image in order to obtain smooth results).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">random</span><span class="p">,</span> <span class="n">seed</span>
+<span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># Create a test workspace</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">YRe</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">YIm</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">E</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">w</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">i</span><span class="o">/</span><span class="n">N</span>
+    <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">YRe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">random</span><span class="p">()</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">YIm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">random</span><span class="p">()</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">E</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span><span class="n">DataX</span><span class="o">=</span><span class="n">X</span><span class="o">+</span><span class="n">X</span><span class="p">,</span><span class="n">DataY</span><span class="o">=</span><span class="n">YRe</span><span class="o">+</span><span class="n">YIm</span><span class="p">,</span><span class="n">DataE</span><span class="o">=</span><span class="n">E</span><span class="o">+</span><span class="n">E</span><span class="p">,</span><span class="n">NSpec</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">evolChi</span><span class="p">,</span> <span class="n">evolAngle</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">ComplexData</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">PositiveImage</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">evolChiP</span><span class="p">,</span> <span class="n">evolAngleP</span><span class="p">,</span> <span class="n">imageP</span><span class="p">,</span> <span class="n">dataP</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">ComplexData</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">PositiveImage</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image at </span><span class="si">{:.3f}</span><span class="s2">: </span><span class="si">{:.3f}</span><span class="s2"> (PositiveImage=False), </span><span class="si">{:.3f}</span><span class="s2"> (PositiveImage=True)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">102</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">102</span><span class="p">],</span> <span class="n">imageP</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">102</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image at </span><span class="si">{:.3f}</span><span class="s2">: </span><span class="si">{:.3f}</span><span class="s2"> (PositiveImage=False), </span><span class="si">{:.3f}</span><span class="s2"> (PositiveImage=True)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">103</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">103</span><span class="p">],</span> <span class="n">imageP</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">103</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image at </span><span class="si">{:.3f}</span><span class="s2">: </span><span class="si">{:.3f}</span><span class="s2"> (PositiveImage=False), </span><span class="si">{:.3f}</span><span class="s2"> (PositiveImage=True)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">104</span><span class="p">],</span> <span class="n">image</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">104</span><span class="p">],</span> <span class="n">imageP</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">102</span><span class="p">]))</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Number of iterations: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngle</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Number of iterations: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngleP</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Image at 0.318: 0.000 (PositiveImage=False), 0.000 (PositiveImage=True)
+Image at 0.477: 5.862 (PositiveImage=False), 5.913 (PositiveImage=True)
+Image at 0.637: 0.000 (PositiveImage=False), 0.000 (PositiveImage=True)
+Number of iterations: ...
+Number of iterations: ...
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../_images/MaxEntPositiveImage.png" src="../_images/MaxEntPositiveImage.png" />
+</figure>
+</section>
+<section id="complex-images">
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">Complex Images</a><a class="headerlink" href="#complex-images" title="Link to this heading">¶</a></h2>
+<p>By default the input property <em>ComplexImage</em> is set to <em>True</em> and the algorithm will assume complex images for the calculations.
+This means that the set of numbers <span class="math notranslate nohighlight">\(\{x_j\}\)</span> that form the image will have a real and an imaginary part, and both components will be
+considered to evaluate the entropy, <span class="math notranslate nohighlight">\(S\left(x_j\right)\)</span>, and its derivative, <span class="math notranslate nohighlight">\(\nabla S\left(x_j\right)\)</span>. This effectively means
+splitting the entropy (the same applies to its derivative) in two terms, <span class="math notranslate nohighlight">\(S\left(x_j\right) = \left[S\left(x_j^{re}\right), S\left(x_j^{im}\right)\right]\)</span>,
+where the first one refers to the real part of the entropy and the second one to the imaginary part. This is the recommended option when no prior knowledge
+about the image is available, as trying to reconstruct images that are inherently complex discarding the imaginary part will prevent the algorithm
+from converging. If the image is known to be real this property can be safely set to <em>False</em>.</p>
+</section>
+<section id="complex-data">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink">Complex Data</a><a class="headerlink" href="#complex-data" title="Link to this heading">¶</a></h2>
+<p>If the input property <em>ComplexData</em> is set to <em>True</em>, the algorithm will assume complex data for the calculations with all the
+real parts listed before all the imaginary parts. This means that if you have workspaces where the imaginary part immediately
+follow the real part, such workspaces cannot be combined by using the <a class="reference internal" href="AppendSpectra-v1.html#algm-appendspectra"><span class="std std-ref">AppendSpectra v1</span></a> algorithm because the resulting
+output will not order the real and imaginary parts corrected as needed for this algorithm. The following usage example
+shows how to combine two workspaces with complex data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">random</span><span class="p">,</span> <span class="n">seed</span>
+<span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># Create complex data for a workspace</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">YRe</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">YIm</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">E</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">w</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">i</span><span class="o">/</span><span class="n">N</span>
+    <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">YRe</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">random</span><span class="p">()</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">YIm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">random</span><span class="p">()</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">E</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># Create complex data for a second workspace</span>
+<span class="n">X2</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">YRe2</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">YIm2</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">E2</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">N2</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">w2</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N2</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">i</span><span class="o">/</span><span class="n">N2</span>
+    <span class="n">X2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">YRe2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">w2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">random</span><span class="p">()</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">YIm2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">w2</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">random</span><span class="p">()</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">E2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1"># Create two workspaces of one spectrum each</span>
+<span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws1&#39;</span><span class="p">,</span><span class="n">DataX</span><span class="o">=</span><span class="n">X</span><span class="o">+</span><span class="n">X</span><span class="p">,</span><span class="n">DataY</span><span class="o">=</span><span class="n">YRe</span><span class="o">+</span><span class="n">YIm</span><span class="p">,</span><span class="n">DataE</span><span class="o">=</span><span class="n">E</span><span class="o">+</span><span class="n">E</span><span class="p">,</span><span class="n">NSpec</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">evolChiP</span><span class="p">,</span> <span class="n">evolAngleP</span><span class="p">,</span> <span class="n">imageP</span><span class="p">,</span> <span class="n">dataP</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws1&#39;</span><span class="p">,</span> <span class="n">ComplexData</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">PositiveImage</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Number of iterations dataset1 separate: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngleP</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+
+<span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws2&#39;</span><span class="p">,</span><span class="n">DataX</span><span class="o">=</span><span class="n">X2</span><span class="o">+</span><span class="n">X2</span><span class="p">,</span><span class="n">DataY</span><span class="o">=</span><span class="n">YRe2</span><span class="o">+</span><span class="n">YIm2</span><span class="p">,</span><span class="n">DataE</span><span class="o">=</span><span class="n">E2</span><span class="o">+</span><span class="n">E2</span><span class="p">,</span><span class="n">NSpec</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">evolChiP2</span><span class="p">,</span> <span class="n">evolAngleP2</span><span class="p">,</span> <span class="n">imageP2</span><span class="p">,</span> <span class="n">dataP2</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws2&#39;</span><span class="p">,</span> <span class="n">ComplexData</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">PositiveImage</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Number of iterations dataset2 separate: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngleP2</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+
+<span class="c1"># Combine the two workspaces</span>
+<span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;wsCombined&#39;</span><span class="p">,</span><span class="n">DataX</span><span class="o">=</span><span class="n">X</span><span class="o">+</span><span class="n">X2</span><span class="o">+</span><span class="n">X</span><span class="o">+</span><span class="n">X2</span><span class="p">,</span><span class="n">DataY</span><span class="o">=</span><span class="n">YRe</span><span class="o">+</span><span class="n">YRe2</span><span class="o">+</span><span class="n">YIm</span><span class="o">+</span><span class="n">YIm2</span><span class="p">,</span><span class="n">DataE</span><span class="o">=</span><span class="n">E</span><span class="o">+</span><span class="n">E2</span><span class="o">+</span><span class="n">E</span><span class="o">+</span><span class="n">E2</span><span class="p">,</span><span class="n">NSpec</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">evolChiC</span><span class="p">,</span> <span class="n">evolAngleC</span><span class="p">,</span> <span class="n">imageC</span><span class="p">,</span> <span class="n">dataC</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;wsCombined&#39;</span><span class="p">,</span> <span class="n">ComplexData</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">PositiveImage</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Number of iterations dataset1 combined: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngleC</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Number of iterations dataset2 combined: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngleC</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">1</span><span class="p">))))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Number of iterations dataset1 separate: ...
+Number of iterations dataset2 separate: ...
+Number of iterations dataset1 combined: ...
+Number of iterations dataset2 combined: ...
+</pre></div>
+</div>
+</section>
+<section id="increasing-the-number-of-points-in-the-image">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Increasing the number of points in the image</a><a class="headerlink" href="#increasing-the-number-of-points-in-the-image" title="Link to this heading">¶</a></h2>
+<p>The algorithm has an input property, <em>ResolutionFactor</em>, that allows to increase the number of points in the reconstructed image. This is
+at present done by extending the range (and therefore the number of points) in the reconstructed data. The number of reconstructed
+points can be increased by any integer factor, but note that this will slow down the algorithm and you may need to increase the number of
+maxent iterations so that the algorithm is able to converge to a solution.</p>
+<p>An example script where the density of points is increased by a factor of 2 can be found below. Note that when a factor of 2 is used,
+the reconstructed data is twice the size of the original (experimental) data. Also shown is how ChiTargetOverN property may be varied away
+from the default 1.0; the dataset contains 270 data points and here set to be slightly higher at 300/270.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;EMU00020884.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">)</span>
+<span class="n">CropWorkspace</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">XMin</span><span class="o">=</span><span class="mf">0.17</span><span class="p">,</span> <span class="n">XMax</span><span class="o">=</span><span class="mf">4.5</span><span class="p">,</span> <span class="n">EndWorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">RemoveExpDecay</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">)</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">Params</span><span class="o">=</span><span class="s1">&#39;0.016&#39;</span><span class="p">)</span>
+<span class="n">evolChi1</span><span class="p">,</span> <span class="n">evolAngle1</span><span class="p">,</span> <span class="n">image1</span><span class="p">,</span> <span class="n">data1</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">MaxIterations</span><span class="o">=</span><span class="mi">2500</span><span class="p">,</span> <span class="n">ResolutionFactor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ChiTargetOverN</span><span class="o">=</span><span class="mf">300.0</span><span class="o">/</span><span class="mf">270.0</span><span class="p">)</span>
+<span class="n">evolChi2</span><span class="p">,</span> <span class="n">evolAngle2</span><span class="p">,</span> <span class="n">image2</span><span class="p">,</span> <span class="n">data2</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">MaxIterations</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">ResolutionFactor</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ChiTargetOverN</span><span class="o">=</span><span class="mf">300.0</span><span class="o">/</span><span class="mf">270.0</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image at </span><span class="si">{:.3f}</span><span class="s2">: </span><span class="si">{:.3f}</span><span class="s2"> (ResolutionFactor=1)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image1</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">135</span><span class="p">],</span> <span class="n">image1</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">135</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Image at </span><span class="si">{:.3f}</span><span class="s2">: </span><span class="si">{:.3f}</span><span class="s2"> (ResolutionFactor=2)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image2</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">270</span><span class="p">],</span> <span class="n">image2</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">270</span><span class="p">]))</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Number of iterations: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngle1</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Number of iterations: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngle2</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Image at 0.000: 0.035 (ResolutionFactor=1)
+Image at 0.000: 0.068 (ResolutionFactor=2)
+Number of iterations: ...
+Number of iterations: ...
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../_images/MaxEntResolutionFactor.png" src="../_images/MaxEntResolutionFactor.png" />
+</figure>
+<p>In the next example, we increased the density of points by factors of 10, 20 and 40. We show the reconstructed image (left) and
+a zoom into the region <span class="math notranslate nohighlight">\(0.82 &lt; x &lt; 1.44\)</span> and <span class="math notranslate nohighlight">\(-0.187 &lt; y &lt; 0.004\)</span>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;EMU00020884.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">)</span>
+<span class="n">CropWorkspace</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">XMin</span><span class="o">=</span><span class="mf">0.17</span><span class="p">,</span> <span class="n">XMax</span><span class="o">=</span><span class="mf">4.5</span><span class="p">,</span> <span class="n">EndWorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">RemoveExpDecay</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">)</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">Params</span><span class="o">=</span><span class="s1">&#39;0.016&#39;</span><span class="p">)</span>
+<span class="n">evolChi1</span><span class="p">,</span> <span class="n">evolAngle1</span><span class="p">,</span> <span class="n">image1</span><span class="p">,</span> <span class="n">data1</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">MaxIterations</span><span class="o">=</span><span class="mi">2500</span><span class="p">,</span> <span class="n">ResolutionFactor</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">evolChi10</span><span class="p">,</span> <span class="n">evolAngle10</span><span class="p">,</span> <span class="n">image10</span><span class="p">,</span> <span class="n">data10</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">MaxIterations</span><span class="o">=</span><span class="mi">25000</span><span class="p">,</span> <span class="n">ResolutionFactor</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">evolChi20</span><span class="p">,</span> <span class="n">evolAngle20</span><span class="p">,</span> <span class="n">image20</span><span class="p">,</span> <span class="n">data20</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">MaxIterations</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span> <span class="n">ResolutionFactor</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">evolChi40</span><span class="p">,</span> <span class="n">evolAngle40</span><span class="p">,</span> <span class="n">image40</span><span class="p">,</span> <span class="n">data40</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">A</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">MaxIterations</span><span class="o">=</span><span class="mi">75000</span><span class="p">,</span> <span class="n">ResolutionFactor</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Number of iterations: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngle1</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Number of iterations: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngle10</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Number of iterations: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngle20</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Number of iterations: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngle40</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Number of iterations: ...
+Number of iterations: ...
+Number of iterations: ...
+Number of iterations: ...
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../_images/MaxEntResolutionFactor2.png" src="../_images/MaxEntResolutionFactor2.png" />
+</figure>
+</section>
+<section id="adjusting-the-reconstructed-data">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">Adjusting the Reconstructed Data</a><a class="headerlink" href="#adjusting-the-reconstructed-data" title="Link to this heading">¶</a></h2>
+<p>The reconstructed data can be adjusted by multiplying by the <em>DataLinearAdj</em> property and then adding the <em>DataConstAdj</em> property.
+Each of these properties is a workspace with complex Y values, just like complex input workspaces. Each Y value is then applied to
+the corresponding Y values in the reconstructed data at each iteration.</p>
+<p>These usage examples merely demonstrate how to use the adjustments and are not realistic use cases.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">random</span><span class="p">,</span> <span class="n">seed</span>
+
+<span class="c1"># Construct workspace (cosine + noise) over 3 spectra</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">E</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">w</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">i</span><span class="o">/</span><span class="n">N</span>
+        <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">Y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">random</span><span class="p">()</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span>
+        <span class="n">E</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;inputws&#39;</span><span class="p">,</span><span class="n">DataX</span><span class="o">=</span><span class="n">X</span><span class="p">,</span><span class="n">DataY</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span><span class="n">DataE</span><span class="o">=</span><span class="n">E</span><span class="p">,</span><span class="n">NSpec</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># Construct linear adjustment workspace (real = 1, imaginary linear)</span>
+<span class="c1"># no adjustment on first spectrum, double adjustment on third spectrum.</span>
+<span class="n">Zeroes</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">Ylin</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">Magnitude</span> <span class="o">=</span> <span class="o">-</span> <span class="mf">0.1</span>
+<span class="c1"># Real values</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">Ylin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">Zeroes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Imaginary values</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">Ylin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="o">*</span><span class="n">Magnitude</span><span class="o">*</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">Zeroes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;linadj&#39;</span><span class="p">,</span> <span class="n">DataX</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">Ylin</span><span class="p">,</span> <span class="n">DataE</span><span class="o">=</span><span class="n">Zeroes</span><span class="p">,</span> <span class="n">NSpec</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="c1"># Construct constant adjustment workspace (real = 0, imaginary linear)</span>
+<span class="c1"># no adjustment on first spectrum, double adjustment on third spectrum.</span>
+<span class="n">Yconst</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">Magnitude</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="c1"># Real values</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">Yconst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Imaginary values</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">Yconst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="o">*</span><span class="n">Magnitude</span><span class="o">*</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+<span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;constadj&#39;</span><span class="p">,</span><span class="n">DataX</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">Yconst</span><span class="p">,</span> <span class="n">DataE</span><span class="o">=</span><span class="n">Zeroes</span><span class="p">,</span> <span class="n">NSpec</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="n">evolChi</span><span class="p">,</span> <span class="n">evolAngle</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;inputws&#39;</span><span class="p">,</span> <span class="n">DataLinearAdj</span><span class="o">=</span><span class="s1">&#39;linadj&#39;</span><span class="p">,</span> <span class="n">DataConstAdj</span><span class="o">=</span><span class="s1">&#39;constadj&#39;</span><span class="p">,</span><span class="n">A</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconstruction at 05 of first spectrum: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">5</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconstruction at 10 of first spectrum: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">10</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconstruction at 15 of first spectrum: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">15</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconstruction at 05 of third spectrum: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">2</span><span class="p">)[</span><span class="mi">5</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconstruction at 10 of third spectrum: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">2</span><span class="p">)[</span><span class="mi">10</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconstruction at 15 of third spectrum: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">2</span><span class="p">)[</span><span class="mi">15</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of iterations of first spectrum: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngle</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">))))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of iterations of second spectrum: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngle</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">1</span><span class="p">))))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of iterations of third spectrum: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">evolAngle</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">2</span><span class="p">))))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Reconstruction at 05 of first spectrum: 0.657
+Reconstruction at 10 of first spectrum: 0.433
+Reconstruction at 15 of first spectrum: 0.115
+Reconstruction at 05 of third spectrum: 0.522
+Reconstruction at 10 of third spectrum: 0.485
+Reconstruction at 15 of third spectrum: -0.019
+Number of iterations of first spectrum: 5
+Number of iterations of second spectrum: 37
+Number of iterations of third spectrum: 70
+</pre></div>
+</div>
+<figure class="align-center" id="id3">
+<img alt="../_images/MaxEntAdjust.png" src="../_images/MaxEntAdjust.png" />
+<figcaption>
+<p><span class="caption-text">The first plot shows the reconstructed data and the second plot the corresponding image.
+The first three spectra plotted are the real parts of the 3 spectra
+and the other three spectra are the imaginary parts.</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>This can also be done with the spectra of the data effectively concatenated and converted into a single image.
+The reconstructed data is then obtained by converting the image back to data, copying for each spectrum and applying the adjustments.</p>
+<p>This is done by setting the <em>PerSpectrumImage</em> property to <em>false</em>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">random</span><span class="p">,</span> <span class="n">seed</span>
+
+<span class="c1"># Construct workspace (real cosine + complex noise) over 3 spectra</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">E</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">w</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+   <span class="c1"># Real values</span>
+   <span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+   <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+     <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">i</span><span class="o">/</span><span class="n">N</span>
+     <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+     <span class="n">Y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">random</span><span class="p">()</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span>
+     <span class="n">E</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.27</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+   <span class="c1"># Imaginary values</span>
+   <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+     <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">i</span><span class="o">/</span><span class="n">N</span>
+     <span class="n">X</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+     <span class="n">Y</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">random</span><span class="p">()</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="mf">0.3</span><span class="p">)</span>
+     <span class="n">E</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.27</span><span class="p">)</span>
+
+<span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;inputws&#39;</span><span class="p">,</span><span class="n">DataX</span><span class="o">=</span><span class="n">X</span><span class="p">,</span><span class="n">DataY</span><span class="o">=</span><span class="n">Y</span><span class="p">,</span><span class="n">DataE</span><span class="o">=</span><span class="n">E</span><span class="p">,</span><span class="n">NSpec</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="c1"># Construct linear adjustment workspace (real = 1, imaginary linear)</span>
+<span class="c1"># no adjustment on first spectrum, double adjustment on third spectrum.</span>
+<span class="n">Zeroes</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">Xlin</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">Ylin</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">Magnitude</span> <span class="o">=</span> <span class="o">-</span> <span class="mf">0.14</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+   <span class="c1"># Real values</span>
+   <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+      <span class="n">Xlin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+      <span class="n">Ylin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+      <span class="n">Zeroes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+   <span class="c1"># Imaginary values</span>
+   <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+      <span class="n">Xlin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+      <span class="n">Ylin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="o">*</span><span class="n">Magnitude</span><span class="o">*</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+      <span class="n">Zeroes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;linadj&#39;</span><span class="p">,</span> <span class="n">DataX</span><span class="o">=</span><span class="n">Xlin</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">Ylin</span><span class="p">,</span> <span class="n">DataE</span><span class="o">=</span><span class="n">Zeroes</span><span class="p">,</span> <span class="n">NSpec</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="c1"># Construct constant adjustment workspace (real = 0, imaginary linear)</span>
+<span class="c1"># no adjustment on first spectrum, double adjustment on third spectrum.</span>
+<span class="n">Yconst</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">Magnitude</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.05</span>
+<span class="c1"># Real values</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+       <span class="n">Yconst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Imaginary values</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">Yconst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="o">*</span><span class="n">Magnitude</span><span class="o">*</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+
+<span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;constadj&#39;</span><span class="p">,</span><span class="n">DataX</span><span class="o">=</span><span class="n">Xlin</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">Yconst</span><span class="p">,</span> <span class="n">DataE</span><span class="o">=</span><span class="n">Zeroes</span><span class="p">,</span> <span class="n">NSpec</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="n">evolChi</span><span class="p">,</span> <span class="n">evolAngle</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">MaxEnt</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;inputws&#39;</span><span class="p">,</span> <span class="n">ComplexData</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">DataLinearAdj</span><span class="o">=</span><span class="s1">&#39;linadj&#39;</span><span class="p">,</span> <span class="n">DataConstAdj</span><span class="o">=</span><span class="s1">&#39;constadj&#39;</span><span class="p">,</span><span class="n">A</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">PerSpectrumReconstruction</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconstruction at 05 of first spectrum: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">5</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconstruction at 10 of first spectrum: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">10</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconstruction at 15 of first spectrum: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">15</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconstruction at 05 of third spectrum: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">2</span><span class="p">)[</span><span class="mi">5</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconstruction at 10 of third spectrum: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">2</span><span class="p">)[</span><span class="mi">10</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reconstruction at 15 of third spectrum: </span><span class="si">{:.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">2</span><span class="p">)[</span><span class="mi">15</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Reconstruction at 05 of first spectrum: 0.679
+Reconstruction at 10 of first spectrum: 0.470
+Reconstruction at 15 of first spectrum: 0.158
+Reconstruction at 05 of third spectrum: 0.687
+Reconstruction at 10 of third spectrum: 0.481
+Reconstruction at 15 of third spectrum: 0.163
+</pre></div>
+</div>
+<figure class="align-center" id="id4">
+<img alt="../_images/MaxEntAdjustTogether.png" src="../_images/MaxEntAdjustTogether.png" />
+<figcaption>
+<p><span class="caption-text">The first plot shows the reconstructed data and the second plot the corresponding image.
+In the data, the first three spectra plotted are the real parts of the 3 spectra
+and the other three spectra are the imaginary parts.
+In the image, the first spectrum is the real part and the second spectrum is the imaginary part.</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="references">
+<h2><a class="toc-backref" href="#id16" role="doc-backlink">References</a><a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<p>[1] Anders Johannes Markvardsen, (2000). Polarised neutron diffraction measurements of PrBa2Cu3O6+x and the Bayesian statistical analysis of such data. DPhil. University of Oxford (<a class="reference external" href="http://ora.ox.ac.uk/objects/uuid:bef0c991-4e1c-4b07-952a-a0fe7e4943f7">http://ora.ox.ac.uk/objects/uuid:bef0c991-4e1c-4b07-952a-a0fe7e4943f7</a>)</p>
+<p>[2] Skilling &amp; Bryan, (1984). Maximum entropy image reconstruction: general algorithm. Mon. Not. R. astr. Soc. 211, 111-124.</p>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/Arithmetic/FFT.html">Arithmetic\FFT</a></p>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id17" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/722b60aac1ef429e64a71ebe8193a2d0cbb5b998/Framework/Algorithms/inc/MantidAlgorithms/MaxEnt.h">MaxEnt.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/722b60aac1ef429e64a71ebe8193a2d0cbb5b998/Framework/Algorithms/src/MaxEnt.cpp">MaxEnt.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="Max-v1.html" title="Previous Chapter: Max v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Max v1</span>
+    </a>
+  </li>
+  <li>
+    <a href="MaxMin-v1.html" title="Next Chapter: MaxMin v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">MaxMin v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
