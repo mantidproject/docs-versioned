@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Indirect Data Reduction</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <script src="../../_static/documentation_options.js?v=410c086f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Indirect Diffraction" href="Indirect%20Diffraction.html" />
+    <link rel="prev" title="SimpleScanViewer Interface" href="../ILL/Simple%20Scan%20Viewer.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.13</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Interfaces</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Indirect Data Reduction</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="indirect-data-reduction">
+<span id="interface-indirect-data-reduction"></span><h1>Indirect Data Reduction<a class="headerlink" href="#indirect-data-reduction" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#overview" id="id13">Overview</a></p>
+<ul>
+<li><p><a class="reference internal" href="#instrument-options" id="id14">Instrument Options</a></p></li>
+<li><p><a class="reference internal" href="#action-buttons" id="id15">Action Buttons</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#isis-ill-energy-transfer" id="id16">ISIS/ILL Energy Transfer</a></p>
+<ul>
+<li><p><a class="reference internal" href="#isis-energy-transfer" id="id17">ISIS Energy Transfer</a></p>
+<ul>
+<li><p><a class="reference internal" href="#isis-energy-transfer-options" id="id18">ISIS Energy Transfer Options</a></p></li>
+<li><p><a class="reference internal" href="#isis-energy-transfer-example-workflow" id="id19">ISIS Energy Transfer Example Workflow</a></p></li>
+<li><p><a class="reference internal" href="#grouping" id="id20">Grouping</a></p></li>
+<li><p><a class="reference internal" href="#rebinning" id="id21">Rebinning</a></p></li>
+<li><p><a class="reference internal" href="#a-note-on-masked-detectors" id="id22">A note on Masked Detectors</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#ill-energy-transfer" id="id23">ILL Energy Transfer</a></p>
+<ul>
+<li><p><a class="reference internal" href="#reduction-type" id="id24">Reduction Type</a></p></li>
+<li><p><a class="reference internal" href="#common-options" id="id25">Common Options</a></p></li>
+<li><p><a class="reference internal" href="#qens-only-options" id="id26">QENS-only Options</a></p></li>
+<li><p><a class="reference internal" href="#fws-only-options" id="id27">FWS-only Options</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#isis-calibration" id="id28">ISIS Calibration</a></p>
+<ul>
+<li><p><a class="reference internal" href="#isis-calibration-options" id="id29">ISIS Calibration Options</a></p>
+<ul>
+<li><p><a class="reference internal" href="#calibration" id="id30">Calibration</a></p></li>
+<li><p><a class="reference internal" href="#resolution" id="id31">Resolution</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#options" id="id32">Options</a></p></li>
+<li><p><a class="reference internal" href="#isis-calibration-example-workflow" id="id33">ISIS Calibration Example Workflow</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#isis-diagnostics" id="id34">ISIS Diagnostics</a></p>
+<ul>
+<li><p><a class="reference internal" href="#isis-diagnostics-options" id="id35">ISIS Diagnostics Options</a></p></li>
+<li><p><a class="reference internal" href="#isis-diagnostics-example-workflow" id="id36">ISIS Diagnostics Example Workflow</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#transmission" id="id37">Transmission</a></p>
+<ul>
+<li><p><a class="reference internal" href="#transmission-options" id="id38">Transmission Options</a></p></li>
+<li><p><a class="reference internal" href="#transmission-example-workflow" id="id39">Transmission Example Workflow</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="overview">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The Indirect Data Reduction interface provides the initial reduction that
+is used to convert raw instrument data to S(Q, w) for analysis in the
+Inelastic QENS Fitting and Bayes Fitting interfaces.</p>
+<p>The tabs shown on this interface will vary depending on the current default
+facility such that only tabs that will work with data from the facility are
+shown, this page describes all the tabs which can possibly be shown.</p>
+<figure class="align-right" id="id5">
+<a class="screenshot reference internal image-reference" href="../../_images/ImageNotFound.png"><img alt="../../_images/ImageNotFound.png" class="screenshot" src="../../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Enable screenshots using DOCS_SCREENSHOTS in CMake</span><a class="headerlink" href="#id5" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="instrument-options">
+<h3><a class="toc-backref" href="#id14" role="doc-backlink">Instrument Options</a><a class="headerlink" href="#instrument-options" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Instrument</dt><dd><p>Used to select the instrument on which the data being reduced was created on.</p>
+</dd>
+<dt>Analyser</dt><dd><p>The analyser bank that was active when the experiment was run, or for which
+you are interested in seeing the results of.</p>
+</dd>
+<dt>Reflection</dt><dd><p>The reflection plane of the instrument set up.</p>
+</dd>
+</dl>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you need clarification as to the instrument setup you should use
+please speak to the instrument scientist who dealt with your experiment.</p>
+</div>
+</section>
+<section id="action-buttons">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink">Action Buttons</a><a class="headerlink" href="#action-buttons" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Settings</dt><dd><p>Opens the <a class="reference internal" href="Indirect%20Settings.html#inelastic-interface-settings"><span class="std std-ref">Settings</span></a> GUI which allows you to
+customize the settings for the Indirect interfaces.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>?</dt><dd><p>Opens this help page.</p>
+</dd>
+<dt>Py</dt><dd><p>Exports a Python script which will replicate the processing done by the current tab.</p>
+</dd>
+<dt>Manage Directories</dt><dd><p>Opens the Manage Directories dialog allowing you to change your search directories
+and default save directory and enable/disable data archive search.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="isis-ill-energy-transfer">
+<h2><a class="toc-backref" href="#id16" role="doc-backlink">ISIS/ILL Energy Transfer</a><a class="headerlink" href="#isis-ill-energy-transfer" title="Link to this heading">¶</a></h2>
+<p>If the default facility has been set to ISIS, then the ISIS Energy Transfer tab will be available. However, this tab will
+be replaced by the ILL Energy Transfer tab if the default facility has been set to ILL. A further explanation of each tab
+can be found below.</p>
+<section id="isis-energy-transfer">
+<span id="isisenergytransfer"></span><h3><a class="toc-backref" href="#id17" role="doc-backlink">ISIS Energy Transfer</a><a class="headerlink" href="#isis-energy-transfer" title="Link to this heading">¶</a></h3>
+<p>This tab provides you with the functionality to convert the raw data from the experiment run into
+units of <span class="math notranslate nohighlight">\(\Delta E\)</span>. See the algorithm <a class="reference internal" href="../../algorithms/ISISIndirectEnergyTransfer-v1.html#algm-isisindirectenergytransfer"><span class="std std-ref">ISISIndirectEnergyTransfer</span></a>.</p>
+<figure class="align-default" id="id6">
+<a class="screenshot reference internal image-reference" href="../../_images/ImageNotFound.png"><img alt="../../_images/ImageNotFound.png" class="screenshot" src="../../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Enable screenshots using DOCS_SCREENSHOTS in CMake</span><a class="headerlink" href="#id6" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="isis-energy-transfer-options">
+<h4><a class="toc-backref" href="#id18" role="doc-backlink">ISIS Energy Transfer Options</a><a class="headerlink" href="#isis-energy-transfer-options" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Input Runs</dt><dd><p>Allows you to select the raw data files for an experiment. You can enter these
+either by clicking on the Browse button and selecting them, or entering the run
+numbers. Multiple files can be selected, multiple run numbers can be separated
+by a comma (,) or a range can be specified by using a dash (-).</p>
+</dd>
+<dt>Sum Files</dt><dd><p>If selected the data from each raw file will be summed and from then on
+treated as a single run.</p>
+</dd>
+<dt>Load Log Files</dt><dd><p>If selected the sample logs will be loaded from each of the run files.</p>
+</dd>
+<dt>Use Calib File &amp; Calibration File</dt><dd><p>Allows you to select a calibration file created using the Calibration tab.</p>
+</dd>
+<dt>Efixed</dt><dd><p>This option allows you to override the default fixed final energy for the
+analyser and reflection number setting. This can be useful in correcting an
+offset peak caused by the sample being slightly out of centre.</p>
+</dd>
+<dt>Spectra Min/Spectra Max</dt><dd><p>Used to specify a range of spectra.</p>
+</dd>
+<dt>Detector Grouping</dt><dd><p>Used to specify a method for grouping detectors. Possible grouping options include ‘Individual’, ‘All’, ‘IPF’,
+‘File’, ‘Groups’ and ‘Custom’. The TOSCA instrument will default to grouping using ‘IPF’, and the other instruments
+will default to ‘Individual’ grouping.</p>
+</dd>
+<dt>Background Removal</dt><dd><p>Allows removal of a background given a time-of-flight range.</p>
+</dd>
+<dt>Detailed Balance</dt><dd><p>Gives the option to perform an exponential correction on the data once it has
+been converted to Energy based on the temperature. This is automatically loaded
+from the sample logs of the input file if available.</p>
+</dd>
+<dt>Scale by Factor</dt><dd><p>Gives the option to scale the output by a given factor.</p>
+</dd>
+<dt>Do Not Rebin</dt><dd><p>If selected it will disable the rebinning step.</p>
+</dd>
+<dt>Rebin Steps</dt><dd><p>Select the type of rebinning you wish to perform.</p>
+</dd>
+<dt>Plot Time</dt><dd><p>Creates a time of flight plot of the grouping of the spectra in the range
+defined in the Plot Time section. To include a single spectrum, set the Spectra
+Min and Spectra Max selectors to the same value. Note that this first rebins
+the sample input to ensure that each detector spectrum has the same binning in
+order to be grouped into a single spectrum.</p>
+</dd>
+<dt>Spectra Min &amp; Spectra Max</dt><dd><p>Select the range of detectors you are interested in, default values are
+chosen based on the instrument and analyser bank selected.</p>
+</dd>
+<dt>Run</dt><dd><p>Runs the processing configured on the current tab.</p>
+</dd>
+<dt>Plot Spectra</dt><dd><p>If enabled, it will plot the selected workspace indices in the selected output workspace.</p>
+</dd>
+<dt>Open Slice Viewer</dt><dd><p>If enabled, it will open the slice viewer for the selected output workspace.</p>
+</dd>
+<dt>Group Output</dt><dd><p>This will place the output reduced files from a reduction into a group workspace.</p>
+</dd>
+<dt>Fold Multiple Frames</dt><dd><p>This option is only relevant for TOSCA. If checked, then multiple-framed data
+will be folded back into a single spectra, if unchecked the frames will be
+left as is with the frame number given at the end of the workspace name.</p>
+</dd>
+<dt>Output in <span class="math notranslate nohighlight">\(cm^{-1}\)</span></dt><dd><p>Converts the units of the energy axis from <span class="math notranslate nohighlight">\(meV\)</span> to wave number
+(<span class="math notranslate nohighlight">\(cm^{-1}\)</span>).</p>
+</dd>
+<dt>Select Save Formats</dt><dd><p>Allows you to select multiple output save formats to save the reduced data as,
+in all cases the file will be saved in the default save directory.</p>
+</dd>
+</dl>
+</section>
+<section id="isis-energy-transfer-example-workflow">
+<span id="id1"></span><h4><a class="toc-backref" href="#id19" role="doc-backlink">ISIS Energy Transfer Example Workflow</a><a class="headerlink" href="#isis-energy-transfer-example-workflow" title="Link to this heading">¶</a></h4>
+<p>The ISIS Energy Transfer tab operates on raw TOF data files. Before starting this workflow, go to
+<strong>Manage Directories</strong> and make sure that <strong>Search Data Archive</strong> is set to <strong>all</strong>.</p>
+<ol class="arabic simple">
+<li><p>Set the <strong>Instrument</strong> to be OSIRIS, the <strong>Analyser</strong> to be graphite and the <strong>Reflection</strong> to
+be 002.</p></li>
+<li><p>In <strong>Input Runs</strong>, enter the run numbers 104371-104375 and press enter.</p></li>
+<li><p>Change the <strong>Spectra Min</strong> and <strong>Spectra Max</strong> if you want to avoid some of the detectors. For
+the purposes of this demonstration, keep them at their default values.</p></li>
+<li><p>The <strong>Detector Grouping</strong> option allows you to specify how you want to group your detectors. The
+different option available are explained in the <a class="reference internal" href="#detector-grouping"><span class="std std-ref">Grouping</span></a> section. For this
+demonstration, choose <strong>Individual</strong>.</p></li>
+<li><p>Click <strong>Run</strong> and wait for the interface to finish processing. This should generate a
+workspace ending in _red.</p></li>
+<li><p>Choose a default save directory and then tick the <strong>Nexus</strong> checkbox. Click <strong>Save</strong> to save the
+output workspace. The workspace ending in _red will be used in the <a class="reference internal" href="../inelastic/Inelastic%20Data%20Processor.html#elwin-example-workflow"><span class="std std-ref">Elwin Example Workflow</span></a>.</p></li>
+</ol>
+<p>Go to the <a class="reference internal" href="#isis-calibration-example-workflow"><span class="std std-ref">ISIS Calibration Example Workflow</span></a>.</p>
+</section>
+<section id="grouping">
+<span id="detector-grouping"></span><h4><a class="toc-backref" href="#id20" role="doc-backlink">Grouping</a><a class="headerlink" href="#grouping" title="Link to this heading">¶</a></h4>
+<p>The following options are available for grouping output data:</p>
+<dl>
+<dt>Custom</dt><dd><p>Follows the same grouping patterns used in the <a class="reference internal" href="../../algorithms/GroupDetectors-v2.html#algm-groupdetectors"><span class="std std-ref">GroupDetectors</span></a> algorithm.
+An example of the syntax is 1,2+3,4-6,7:10</p>
+<p>This would produce spectra for: spectra 1, the sum of spectra 2 and 3, the sum of spectra 4-6 (4+5+6)
+and individual spectra from 7 to 10 (7,8,9,10)</p>
+</dd>
+<dt>Individual</dt><dd><p>All detectors will remain on individual spectra.</p>
+</dd>
+<dt>Groups</dt><dd><p>The detectors will automatically be divided into a given number of equal size groups. Any
+left over will be added as an additional group.</p>
+</dd>
+<dt>All</dt><dd><p>All detectors will be grouped into a single spectra.</p>
+</dd>
+<dt>File</dt><dd><p>Gives the option of supplying a grouping file to be used with the
+<a class="reference internal" href="../../algorithms/GroupDetectors-v2.html#algm-groupdetectors"><span class="std std-ref">GroupDetectors</span></a> algorithm.</p>
+</dd>
+<dt>Default</dt><dd><p>This grouping option is only available for TOSCA. It uses the spectra grouping specified in the IPF.</p>
+</dd>
+</dl>
+</section>
+<section id="rebinning">
+<h4><a class="toc-backref" href="#id21" role="doc-backlink">Rebinning</a><a class="headerlink" href="#rebinning" title="Link to this heading">¶</a></h4>
+<p>Rebinning can be done using either a single step or multiple steps as described
+in the sections below.</p>
+<dl class="simple">
+<dt>Single</dt><dd><p>In this mode only a single binning range is defined as a range and width.</p>
+</dd>
+</dl>
+<figure class="align-default" id="id7">
+<a class="screenshot reference internal image-reference" href="../../_images/ImageNotFound.png"><img alt="../../_images/ImageNotFound.png" class="screenshot" src="../../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Enable screenshots using DOCS_SCREENSHOTS in CMake</span><a class="headerlink" href="#id7" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<dl class="simple">
+<dt>Multiple</dt><dd><p>In this mode multiple binning ranges can be defined using the rebin string syntax
+used by the <a class="reference internal" href="../../algorithms/Rebin-v1.html#algm-rebin"><span class="std std-ref">Rebin</span></a> algorithm.</p>
+</dd>
+</dl>
+<figure class="align-default" id="id8">
+<a class="screenshot reference internal image-reference" href="../../_images/ImageNotFound.png"><img alt="../../_images/ImageNotFound.png" class="screenshot" src="../../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Enable screenshots using DOCS_SCREENSHOTS in CMake</span><a class="headerlink" href="#id8" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="a-note-on-masked-detectors">
+<h4><a class="toc-backref" href="#id22" role="doc-backlink">A note on Masked Detectors</a><a class="headerlink" href="#a-note-on-masked-detectors" title="Link to this heading">¶</a></h4>
+<p>When a reduction of a single run number takes place, the masked detectors used for the
+reduction are found using the <a class="reference internal" href="../../algorithms/IdentifyNoisyDetectors-v1.html#algm-identifynoisydetectors"><span class="std std-ref">IdentifyNoisyDetectors</span></a>
+algorithm.</p>
+<p>When using the <strong>Sum Files</strong> option the noisy detectors for each of the run numbers could
+be different. In this case, the masked detectors for the summed run is found by first finding
+the noisy detectors for each of the individual runs within the summed run using
+<a class="reference internal" href="../../algorithms/IdentifyNoisyDetectors-v1.html#algm-identifynoisydetectors"><span class="std std-ref">IdentifyNoisyDetectors</span></a>. For instance, let us say that we
+find that the following run numbers have these noisy detectors:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>Run<span class="w"> </span>number<span class="w"> </span><span class="m">22841</span><span class="w"> </span>has<span class="w"> </span>noisy<span class="w"> </span>detectors<span class="w"> </span><span class="m">53</span>,<span class="w"> </span><span class="m">54</span>,<span class="w"> </span><span class="m">55</span>
+Run<span class="w"> </span>number<span class="w"> </span><span class="m">22842</span><span class="w"> </span>has<span class="w"> </span>noisy<span class="w"> </span>detectors<span class="w"> </span><span class="m">53</span>,<span class="w"> </span><span class="m">54</span>,<span class="w"> </span><span class="m">56</span>
+Run<span class="w"> </span>number<span class="w"> </span><span class="m">22843</span><span class="w"> </span>has<span class="w"> </span>noisy<span class="w"> </span>detectors<span class="w"> </span><span class="m">53</span>,<span class="w"> </span><span class="m">55</span>,<span class="w"> </span><span class="m">56</span>
+</pre></div>
+</div>
+<p>To find the detectors which should be masked for a summed run of 22841-22843 we first combine
+these noisy detectors so that we have 53, 54, 55 and 56. A summed file is then calculated from
+these run numbers and the <a class="reference internal" href="../../algorithms/IdentifyNoisyDetectors-v1.html#algm-identifynoisydetectors"><span class="std std-ref">IdentifyNoisyDetectors</span></a> algorithm
+finds the noisy detectors for this summed file.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>Summed<span class="w"> </span>file<span class="w"> </span><span class="m">22841</span>-22843<span class="w"> </span>has<span class="w"> </span>noisy<span class="w"> </span>detectors<span class="w"> </span><span class="m">13</span>,<span class="w"> </span><span class="m">53</span>,<span class="w"> </span><span class="m">54</span>,<span class="w"> </span><span class="m">55</span>
+</pre></div>
+</div>
+<p>The masked detectors used for the summed run would also include any additional detectors found
+to be noisy for the summed run. The masked detectors used for the summed reduction of 22841-22843
+would therefore be 13, 53, 54, 55 and 56.</p>
+</section>
+</section>
+<section id="ill-energy-transfer">
+<h3><a class="toc-backref" href="#id23" role="doc-backlink">ILL Energy Transfer</a><a class="headerlink" href="#ill-energy-transfer" title="Link to this heading">¶</a></h3>
+<p>This tab handles the reduction of data from the IN16B instrument and will appear when the default facility is set to be
+the ILL. See the algorithm <a class="reference internal" href="../../algorithms/IndirectILLEnergyTransfer-v1.html#algm-indirectillenergytransfer"><span class="std std-ref">IndirectILLEnergyTransfer</span></a>.</p>
+<figure class="align-default" id="id9">
+<a class="screenshot reference internal image-reference" href="../../_images/ImageNotFound.png"><img alt="../../_images/ImageNotFound.png" class="screenshot" src="../../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Enable screenshots using DOCS_SCREENSHOTS in CMake</span><a class="headerlink" href="#id9" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="reduction-type">
+<h4><a class="toc-backref" href="#id24" role="doc-backlink">Reduction Type</a><a class="headerlink" href="#reduction-type" title="Link to this heading">¶</a></h4>
+<p>There are two reduction types of IN16B data: Quasi-Elastic Neutron Scattering (QENS) or Fixed Window Scans (FWS).
+The latter can be either Elastic (EFWS) or Inelastic (IFWS).
+If one or another reduction type is checked, the corresponding algorithm will be invoked
+(see <a class="reference internal" href="../../algorithms/IndirectILLReductionQENS-v1.html#algm-indirectillreductionqens"><span class="std std-ref">IndirectILLReductionQENS</span></a> and <a class="reference internal" href="../../algorithms/IndirectILLReductionFWS-v1.html#algm-indirectillreductionfws"><span class="std std-ref">IndirectILLReductionFWS</span></a>).
+There are several properties in common between the two, and several others that are specific to one or the other.
+The specific ones will show up or disappear corresponding to the choice of the reduction type.</p>
+</section>
+<section id="common-options">
+<h4><a class="toc-backref" href="#id25" role="doc-backlink">Common Options</a><a class="headerlink" href="#common-options" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Input File</dt><dd><p>Used to select the raw data in <code class="docutils literal notranslate"><span class="pre">.nxs</span></code> format. Note that multiple files can be specified following <a class="reference internal" href="../../api/python/mantid/api/MultipleFileProperty.html#mantid.api.MultipleFileProperty" title="mantid.api.MultipleFileProperty"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultipleFileProperty</span></code></a> instructions.</p>
+</dd>
+<dt>Detector Grouping</dt><dd><p>Used to switch between grouping as per the IDF (<em>Default</em>) or grouping using a
+mapping file (<em>Map File</em>). This defines e.g. the summing of the vertical pixels per PSDs.</p>
+</dd>
+<dt>Background Subtraction</dt><dd><p>Used to specify the background (i.e. empty can) runs to subtract. A scale factor can be applied to background subtraction.</p>
+</dd>
+<dt>Detector Calibration</dt><dd><p>Used to specify the calibration (i.e. vanadium) runs to divide by.</p>
+</dd>
+<dt>Background Subtraction for Calibration</dt><dd><p>Used to specify the background (i.e. empty can) runs to subtract from the vanadium calibration runs.</p>
+</dd>
+<dt>Output Name</dt><dd><p>This will be the name of the resulting reduced workspace group.</p>
+</dd>
+<dt>Spectrum Axis</dt><dd><p>This allows the spectrum axis to be converted to elastic momentum transfer or scattering angle if desired.</p>
+</dd>
+<dt>Plot</dt><dd><p>If enabled, it will plot the result (of the first run) as a contour plot.</p>
+</dd>
+<dt>Save</dt><dd><p>If enabled the reduced workspace group will be saved as a <code class="docutils literal notranslate"><span class="pre">.nxs</span></code> file in the default save
+directory.</p>
+</dd>
+</dl>
+</section>
+<section id="qens-only-options">
+<h4><a class="toc-backref" href="#id26" role="doc-backlink">QENS-only Options</a><a class="headerlink" href="#qens-only-options" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Sum All Runs</dt><dd><p>If checked, all the input runs will be summed while loading.</p>
+</dd>
+<dt>Crop Dead Monitor Channels</dt><dd><p>If checked, the few channels in the beginning and at the end of the spectra that contain zero monitor counts will be cropped out.
+As a result, the doppler maximum energy will be mapped to the first and last non-zero monitor channels, resulting in narrower peaks.
+Care must be taken with this option; since this alters the total number of bins,
+problems might occur while subtracting the background or performing unmirroring if the number of dead monitor channels are different.</p>
+</dd>
+<dt>Calibration Peak Range</dt><dd><p>This defines the integration range over the peak in calibration run in <code class="docutils literal notranslate"><span class="pre">meV</span></code>.</p>
+</dd>
+<dt>Unmirror Options</dt><dd><p>This is used to choose the option of summing of the left and right wings of the data, when recorded in mirror sense.
+See <a class="reference internal" href="../../algorithms/IndirectILLReductionQENS-v1.html#algm-indirectillreductionqens"><span class="std std-ref">IndirectILLReductionQENS</span></a> for full details.
+Unmirror option 5 and 7 require vanadium alignment run.</p>
+</dd>
+</dl>
+</section>
+<section id="fws-only-options">
+<h4><a class="toc-backref" href="#id27" role="doc-backlink">FWS-only Options</a><a class="headerlink" href="#fws-only-options" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Observable</dt><dd><p>This is the scanning observable, that will become the x-axis of the final result.
+It can be any numeric sample parameter defined in Sample Logs (e.g. sample.*) or a time-stamp string (e.g. start_time).
+It can also be the run number. It can not be an instrument parameter.</p>
+</dd>
+<dt>Sort X Axis</dt><dd><p>If checked, the x-axis of the final results will be sorted.</p>
+</dd>
+<dt>Sum/Interpolate</dt><dd><p>Both background and calibration have options to use the summed (averaged) or interpolated values over different observable points.
+Default behaviour is Sum. Interpolation is done using cubic (or linear for 2 measured values only) splines.
+If interpolation is requested, x-axis will be sorted automatically.</p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+<section id="isis-calibration">
+<span id="interface-indirect-isis-calibration"></span><h2><a class="toc-backref" href="#id28" role="doc-backlink">ISIS Calibration</a><a class="headerlink" href="#isis-calibration" title="Link to this heading">¶</a></h2>
+<p>This tab gives you the ability to create Calibration and Resolution files, and is only available when the default facility is set to ISIS.</p>
+<p>The calibration file is normalised to an average of 1.</p>
+<figure class="align-default" id="id10">
+<a class="screenshot reference internal image-reference" href="../../_images/ImageNotFound.png"><img alt="../../_images/ImageNotFound.png" class="screenshot" src="../../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Enable screenshots using DOCS_SCREENSHOTS in CMake</span><a class="headerlink" href="#id10" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="isis-calibration-options">
+<h3><a class="toc-backref" href="#id29" role="doc-backlink">ISIS Calibration Options</a><a class="headerlink" href="#isis-calibration-options" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Input Runs</dt><dd><p>This allows you to select a run for the function to use, either by selecting the
+<em>.raw</em> file with the Browse button or through entering the number in the box.</p>
+</dd>
+<dt>Plot Raw</dt><dd><p>Updates the preview plots.</p>
+</dd>
+<dt>Intensity Scale Factor</dt><dd><p>Optionally applies a scale by a given factor to the raw input data.</p>
+</dd>
+<dt>Load Log Files</dt><dd><p>This will load the log files if enabled.</p>
+</dd>
+<dt>Run</dt><dd><p>Runs the processing configured on the current tab.</p>
+</dd>
+<dt>Plot Spectra</dt><dd><p>If enabled, it will plot the selected workspace indices in the selected output workspace.</p>
+</dd>
+<dt>Plot Bins</dt><dd><p>If enabled, it will plot the selected bin indices in the selected output workspace.</p>
+</dd>
+<dt>Save Result</dt><dd><p>If enabled the result will be saved as a NeXus file in the default save
+directory.</p>
+</dd>
+</dl>
+<section id="calibration">
+<h4><a class="toc-backref" href="#id30" role="doc-backlink">Calibration</a><a class="headerlink" href="#calibration" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Peak Min &amp; Peak Max</dt><dd><p>Selects the time-of-flight range corresponding to the peak. A default starting
+value is generally provided from the instrument’s parameter file.</p>
+</dd>
+<dt>Back Min &amp; Back Max</dt><dd><p>Selects the time-of-flight range corresponding to the background. A default
+starting value is generally provided from the instrument’s parameter file.</p>
+</dd>
+</dl>
+</section>
+<section id="resolution">
+<h4><a class="toc-backref" href="#id31" role="doc-backlink">Resolution</a><a class="headerlink" href="#resolution" title="Link to this heading">¶</a></h4>
+<dl class="simple">
+<dt>Create RES File</dt><dd><p>If selected, it will create a resolution file when the tab is run.</p>
+</dd>
+<dt>Smooth RES</dt><dd><p>If selected, the <a class="reference internal" href="../../algorithms/WienerSmooth-v1.html#algm-wienersmooth"><span class="std std-ref">WienerSmooth</span></a> algorithm will be
+applied to the output of the resolution algorithm.</p>
+</dd>
+<dt>Scale RES</dt><dd><p>Applies a scale by a given factor to the resolution output.</p>
+</dd>
+<dt>Spectra Min &amp; Spectra Max</dt><dd><p>Allows restriction of the range of spectra used when creating the resolution curve.</p>
+</dd>
+<dt>Background Start &amp; Background End</dt><dd><p>Defines the time-of-flight range used to calculate the background noise.</p>
+</dd>
+<dt>Low, Width &amp; High</dt><dd><p>Binning parameters used to rebin the resolution curve.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="options">
+<h3><a class="toc-backref" href="#id32" role="doc-backlink">Options</a><a class="headerlink" href="#options" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Input Files</dt><dd><p>File for the calibration (e.g. vanadium) run. If multiple specified, they will be automatically summed.</p>
+</dd>
+<dt>Grouping</dt><dd><p>Used to switch between grouping as per the IDF (<em>Default</em>) or grouping using a
+mapping file (<em>Map File</em>).</p>
+</dd>
+<dt>Peak Range</dt><dd><p>Sets the integration range over the peak in <span class="math notranslate nohighlight">\(meV\)</span></p>
+</dd>
+<dt>Scale Factor</dt><dd><p>Factor to scale the intensities with</p>
+</dd>
+</dl>
+</section>
+<section id="isis-calibration-example-workflow">
+<span id="id2"></span><h3><a class="toc-backref" href="#id33" role="doc-backlink">ISIS Calibration Example Workflow</a><a class="headerlink" href="#isis-calibration-example-workflow" title="Link to this heading">¶</a></h3>
+<p>The ISIS Calibration tab operates on raw TOF data files. Before starting this workflow, go to
+<strong>Manage Directories</strong> and make sure that <strong>Search Data Archive</strong> is set to <strong>all</strong>.</p>
+<ol class="arabic simple">
+<li><p>Set the <strong>Instrument</strong> to be IRIS, the <strong>Analyser</strong> to be graphite and the <strong>Reflection</strong> to
+be 002.</p></li>
+<li><p>In <strong>Input Runs</strong>, enter the run number 26176 and press enter.</p></li>
+<li><p>Tick <strong>Create RES File</strong>. This will create a workspace ending in _res.</p></li>
+<li><p>Click <strong>Run</strong> and wait for the interface to finish processing. This should generate
+workspaces ending in _red, _res and _calib. The calibration workspace can be used in the ISIS
+Energy Transfer tab by ticking <strong>Use Calib File</strong>.</p></li>
+<li><p>Select the workspace ending in _calib in the output options. Enter index 0 in the neighbouring box,
+and then click the down arrow on the <strong>Plot Spectra</strong> button, and select <strong>Plot Bins</strong>. This will
+plot the bin at index 0.</p></li>
+<li><p>Select the workspace ending in _res in the output options. Enter index 0 in the neighbouring box,
+and then click the <strong>Plot Spectra</strong> button. This will plot the spectrum at workspace index 0.</p></li>
+<li><p>Choose a default save directory and then click <strong>Save Result</strong> to save the workspaces ending
+in _res and _calib. The _res file is used in the <a class="reference internal" href="../inelastic/Inelastic%20Data%20Processor.html#iqt-example-workflow"><span class="std std-ref">I(Q, t) Example Workflow</span></a> and
+<a class="reference internal" href="../inelastic/Inelastic%20QENS%20Fitting.html#convfit-example-workflow"><span class="std std-ref">Convolution Example Workflow</span></a>. The _calib file is used in the
+<a class="reference internal" href="#isis-diagnostics-example-workflow"><span class="std std-ref">ISIS Diagnostics Example Workflow</span></a>.</p></li>
+</ol>
+</section>
+</section>
+<section id="isis-diagnostics">
+<h2><a class="toc-backref" href="#id34" role="doc-backlink">ISIS Diagnostics</a><a class="headerlink" href="#isis-diagnostics" title="Link to this heading">¶</a></h2>
+<p>This tab allows you to perform an integration on a raw file over a specified
+time of flight range, and is equivalent to the Slice functionality found in
+MODES. It is only available when the default facility is set to ISIS.</p>
+<figure class="align-default" id="id11">
+<a class="screenshot reference internal image-reference" href="../../_images/ImageNotFound.png"><img alt="../../_images/ImageNotFound.png" class="screenshot" src="../../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Enable screenshots using DOCS_SCREENSHOTS in CMake</span><a class="headerlink" href="#id11" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="isis-diagnostics-options">
+<h3><a class="toc-backref" href="#id35" role="doc-backlink">ISIS Diagnostics Options</a><a class="headerlink" href="#isis-diagnostics-options" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Input Runs</dt><dd><p>This allows you to select a run for the function to use, either by selecting the
+<em>.raw</em> file with the Browse button or through entering the number in the box.
+Multiple files can be selected, in the same manner as described for the Energy
+Transfer tab.</p>
+</dd>
+<dt>Use Calibration</dt><dd><p>Allows you to select either a calibration file or workspace to apply to the raw
+files.</p>
+</dd>
+<dt>Preview Spectrum</dt><dd><p>Allows selection of the spectrum to be shown in the preview plot to the right
+of the Time Slice section.</p>
+</dd>
+<dt>Spectra Min &amp; Spectra Max</dt><dd><p>Allows selection of the range of detectors you are interested in, this is
+automatically set based on the instrument and analyser bank that are currently
+selected.</p>
+</dd>
+<dt>Peak</dt><dd><p>The time-of-flight range that will be integrated over to give the result (the
+blue range in the plot window). A default starting value is generally provided
+from the instrument’s parameter file.</p>
+</dd>
+<dt>Use Two Ranges</dt><dd><p>If selected, enables subtraction of the background range.</p>
+</dd>
+<dt>Background</dt><dd><p>An optional range denoting background noise that is to be removed from the raw
+data before the integration is performed. A default starting value is generally
+provided from the instrument’s parameter file.</p>
+</dd>
+<dt>Run</dt><dd><p>Runs the processing configured on the current tab.</p>
+</dd>
+<dt>Plot Spectra</dt><dd><p>If enabled, it will plot the selected workspace indices in the selected output workspace.</p>
+</dd>
+<dt>Save Result</dt><dd><p>If enabled the result will be saved as a NeXus file in the default save
+directory.</p>
+</dd>
+</dl>
+</section>
+<section id="isis-diagnostics-example-workflow">
+<span id="id3"></span><h3><a class="toc-backref" href="#id36" role="doc-backlink">ISIS Diagnostics Example Workflow</a><a class="headerlink" href="#isis-diagnostics-example-workflow" title="Link to this heading">¶</a></h3>
+<p>The ISIS Diagnostics tab operates on raw TOF data files. Before starting this workflow, go to
+<strong>Manage Directories</strong> and make sure that <strong>Search Data Archive</strong> is set to <strong>all</strong>.</p>
+<ol class="arabic simple">
+<li><p>Set the <strong>Instrument</strong> to be IRIS, the <strong>Analyser</strong> to be graphite and the <strong>Reflection</strong> to
+be 002.</p></li>
+<li><p>In <strong>Input Runs</strong>, enter the run number 26176 and press enter.</p></li>
+<li><p>Tick <strong>Use Calibration</strong> and load the file named <code class="docutils literal notranslate"><span class="pre">irs26173_graphite002_calib</span></code>.</p></li>
+<li><p>Change the <strong>Preview Spectrum</strong> variable to view a different spectrum in the mini-plot.</p></li>
+<li><p>Change the <strong>Start</strong> and <strong>End</strong> variables to specify a PeakRange for the
+<a class="reference internal" href="../../algorithms/TimeSlice-v1.html#algm-timeslice"><span class="std std-ref">TimeSlice</span></a> algorithm. Alternatively, you can move the blue sliders on the
+mini-plot.</p></li>
+<li><p>Click <strong>Run</strong> and wait for the interface to finish processing. This should generate a
+workspace ending in _slice. The <strong>Preview</strong> mini-plot will be updated.</p></li>
+<li><p>Click <strong>Plot Spectra</strong> to produce a larger plot of the <strong>Preview</strong> mini-plot.</p></li>
+</ol>
+<p>Go to the <a class="reference internal" href="#transmission-example-workflow"><span class="std std-ref">Transmission Example Workflow</span></a>.</p>
+</section>
+</section>
+<section id="transmission">
+<h2><a class="toc-backref" href="#id37" role="doc-backlink">Transmission</a><a class="headerlink" href="#transmission" title="Link to this heading">¶</a></h2>
+<p>Calculates the sample transmission using the raw data files of the sample and
+its background or container. The incident and transmission monitors are
+converted to wavelength and the transmission monitor is normalised to the
+incident monitor over the common wavelength range. The sample is then divided by
+the background/container to give the sample transmission as a function of
+wavelength.</p>
+<figure class="align-default" id="id12">
+<a class="screenshot reference internal image-reference" href="../../_images/ImageNotFound.png"><img alt="../../_images/ImageNotFound.png" class="screenshot" src="../../_images/ImageNotFound.png" style="width: 200px;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Enable screenshots using DOCS_SCREENSHOTS in CMake</span><a class="headerlink" href="#id12" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="transmission-options">
+<h3><a class="toc-backref" href="#id38" role="doc-backlink">Transmission Options</a><a class="headerlink" href="#transmission-options" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>Sample</dt><dd><p>Allows the selection of a raw file to be used as the sample.</p>
+</dd>
+<dt>Background</dt><dd><p>Allows the selection of a raw file to be used as the background.</p>
+</dd>
+<dt>Run</dt><dd><p>Runs the processing configured on the current tab.</p>
+</dd>
+<dt>Plot Spectra</dt><dd><p>If enabled, it will plot the selected spectra indices in the selected output workspace.</p>
+</dd>
+<dt>Save Result</dt><dd><p>If enabled the result will be saved as a NeXus file in the default save
+directory.</p>
+</dd>
+</dl>
+</section>
+<section id="transmission-example-workflow">
+<span id="id4"></span><h3><a class="toc-backref" href="#id39" role="doc-backlink">Transmission Example Workflow</a><a class="headerlink" href="#transmission-example-workflow" title="Link to this heading">¶</a></h3>
+<p>The Transmission tab operates on raw TOF data files. Before starting this workflow, go to
+<strong>Manage Directories</strong> and make sure that <strong>Search Data Archive</strong> is set to <strong>all</strong>.</p>
+<ol class="arabic simple">
+<li><p>Set the <strong>Instrument</strong> to be IRIS, the <strong>Analyser</strong> to be graphite and the <strong>Reflection</strong> to
+be 002.</p></li>
+<li><p>In the <strong>Sample</strong> box, enter the run number 26176 and press enter. In the <strong>Background</strong> box,
+enter the run number 26174 and press enter.</p></li>
+<li><p>Click <strong>Run</strong> and wait for the interface to finish processing. This will run the algorithm
+<a class="reference internal" href="../../algorithms/IndirectTransmissionMonitor-v1.html#algm-indirecttransmissionmonitor"><span class="std std-ref">IndirectTransmissionMonitor</span></a> and plots the output
+workspaces in the <strong>Preview</strong> mini-plot.</p></li>
+<li><p>Click <strong>Plot Spectra</strong> to produce a larger plot of the <strong>Preview</strong> mini-plot.</p></li>
+</ol>
+<p>Go to the <a class="reference internal" href="../inelastic/Inelastic%20Data%20Processor.html#symmetrise-example-workflow"><span class="std std-ref">Symmetrise Example Workflow</span></a>.</p>
+<p><strong>Categories</strong>: <a class="reference external" href="../ILL/categories/Interfaces.html">Interfaces</a> | <a class="reference external" href="categories/Indirect.html">Indirect</a></p>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="../ILL/Simple%20Scan%20Viewer.html" title="Previous Chapter: SimpleScanViewer Interface"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; SimpleScanVie...</span>
+    </a>
+  </li>
+  <li>
+    <a href="Indirect%20Diffraction.html" title="Next Chapter: Indirect Diffraction"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Indirect Diffraction &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>SANSWideAngleCorrection v1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=410c086f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="SCDCalibratePanels v1" href="SCDCalibratePanels-v1.html" />
+    <link rel="prev" title="SANSTubeMerge v1" href="SANSTubeMerge-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.13</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">SANSWideAngleCorrection v1</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="sanswideanglecorrection-v1">
+<span id="algm-sanswideanglecorrection"></span><span id="algm-sanswideanglecorrection-v1"></span><h1>SANSWideAngleCorrection v1<a class="headerlink" href="#sanswideanglecorrection-v1" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id1">Summary</a></p></li>
+<li><p><a class="reference internal" href="#properties" id="id2">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id3">Description</a></p></li>
+<li><p><a class="reference internal" href="#algorithm-reference-discussion" id="id4">Algorithm Reference Discussion</a></p>
+<ul>
+<li><p><a class="reference internal" href="#error-propagation" id="id5">Error Propagation</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#enabling-wide-angle-correction-for-reduction-of-sans-isis" id="id6">Enabling Wide Angle Correction for Reduction of SANS ISIS</a></p></li>
+<li><p><a class="reference internal" href="#sans-isis-reduction" id="id7">SANS ISIS Reduction</a></p></li>
+<li><p><a class="reference internal" href="#wide-angle-correction-and-the-sans-reduction" id="id8">Wide Angle Correction and the SANS Reduction</a></p></li>
+<li><p><a class="reference internal" href="#comparison-with-wide-angle-correction-at-sns" id="id9">Comparison with Wide Angle Correction at SNS</a></p></li>
+<li><p><a class="reference internal" href="#references" id="id10">References</a></p></li>
+<li><p><a class="reference internal" href="#usage" id="id11">Usage</a></p></li>
+<li><p><a class="reference internal" href="#source" id="id12">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Calculate the Wide Angle correction for SANS transmissions.</p>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SampleData</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>A workspace cropped to the detector to be reduced (the SAME as the input to [[Q1D]]); used to verify the solid angle. The workspace is not modified, just inspected.</p></td>
+</tr>
+<tr class="row-odd"><td><p>TransmissionData</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>The transmission data calculated, referred to as &lt;math&gt;T_0&lt;/math&gt; in equations in discussion section</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>The transmission corrected SANS data, normalised (divided) by &lt;math&gt;T_0&lt;/math&gt;, see discussion section</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+</section>
+<section id="algorithm-reference-discussion">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Algorithm Reference Discussion</a><a class="headerlink" href="#algorithm-reference-discussion" title="Link to this heading">¶</a></h2>
+<p>Looking at <a class="reference external" href="https://kur.web.psi.ch/sans1/manuals/sas_manual.pdf">Computing guide for Small Angle Scattering
+Experiments</a> by
+Ghosh, Egelhaaf &amp; Rennie, we see that for scattering at larger angles
+the transmission should be modified due to the longer path length after
+the scattering event.</p>
+<p>The longer path length after scattering will also slightly increase the
+probability of a second scattering event, but this is not dealt with
+here.</p>
+<p>If our on-axis transmission is <span class="math notranslate nohighlight">\(T_0\)</span> through a sample of thickness
+<span class="math notranslate nohighlight">\(d\)</span>, then the transmission at some other thickness <span class="math notranslate nohighlight">\(x\)</span> is
+<span class="math notranslate nohighlight">\(\exp(-\mu x)\)</span> where attenuation coefficient
+<span class="math notranslate nohighlight">\(\mu = -\ln( \frac{T_0}{d})\)</span>.</p>
+<p>If a neutron scatters at angle <span class="math notranslate nohighlight">\(2\theta\)</span> at distance <span class="math notranslate nohighlight">\(x\)</span>
+into the sample, its total transmission is then:</p>
+<p><span class="math notranslate nohighlight">\(T^{''} = \exp(-\mu x) \exp( \frac{-\mu(d-x)}{\cos(2\theta)})\)</span></p>
+<p><span class="math notranslate nohighlight">\(T^{''}\)</span> should be integrated and averaged between <span class="math notranslate nohighlight">\(x = 0\)</span>
+and <span class="math notranslate nohighlight">\(x = d\)</span>.</p>
+<p>Hammouda, gives an approximate result for the integral, see page 208 of
+<a class="reference external" href="http://www.ncnr.nist.gov/staff/hammouda/the_SANS_toolbox.pdf">SANS toolbox</a>:</p>
+<p><span class="math notranslate nohighlight">\(T^{'} = \frac{T_0(T_0^A - 1)}{A \ln(T_0)}\)</span></p>
+<p>For:</p>
+<p><span class="math notranslate nohighlight">\(A = \frac{1}{\cos(2\theta)} - 1\)</span></p>
+<p>For example if <span class="math notranslate nohighlight">\(T_0 = 0.2\)</span> and <span class="math notranslate nohighlight">\(2\theta = 40\)</span> then
+<span class="math notranslate nohighlight">\(T^{'} = 0.158\)</span>, a shift of <span class="math notranslate nohighlight">\(~20\)</span>% of the SANS curve. Note
+that the result is independent of sample thickness.</p>
+<p><span class="math notranslate nohighlight">\(T_0\)</span> is a function of neutron wavelength, whilst <span class="math notranslate nohighlight">\(A\)</span> is a
+function of detector pixel location.</p>
+<p>The output of this algorithm is:</p>
+<p><span class="math notranslate nohighlight">\(OutputWorkspace = \frac{T^\prime}{T_0}\)</span></p>
+<section id="error-propagation">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Error Propagation</a><a class="headerlink" href="#error-propagation" title="Link to this heading">¶</a></h3>
+<p>The error propagation follows this formula:</p>
+<p><span class="math notranslate nohighlight">\(OutputWorkspace_{error} = \frac{T_{0E} ^A - 1}{A\ln(T_0E)}\)</span></p>
+<p>Which means, that we do not consider the error in the definition of the
+<span class="math notranslate nohighlight">\(2\theta\)</span> (the parameter A)</p>
+</section>
+</section>
+<section id="enabling-wide-angle-correction-for-reduction-of-sans-isis">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Enabling Wide Angle Correction for Reduction of SANS ISIS</a><a class="headerlink" href="#enabling-wide-angle-correction-for-reduction-of-sans-isis" title="Link to this heading">¶</a></h2>
+<p>To enable the Wide Angle correction use the User File settings:</p>
+<p><code class="docutils literal notranslate"><span class="pre">SAMPLE/PATH/ON</span></code></p>
+<p>More information on:
+<a class="reference external" href="SANS_User_File_Commands#SAMPLE">SANS_User_File_Commands#SAMPLE</a></p>
+</section>
+<section id="sans-isis-reduction">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">SANS ISIS Reduction</a><a class="headerlink" href="#sans-isis-reduction" title="Link to this heading">¶</a></h2>
+<p>The output of SANSWideAngleCorrection is used as WavePixelAdj parameter
+at <a class="reference internal" href="Q1D-v2.html#algm-q1d"><span class="std std-ref">Q1D v2</span></a>.</p>
+</section>
+<section id="wide-angle-correction-and-the-sans-reduction">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Wide Angle Correction and the SANS Reduction</a><a class="headerlink" href="#wide-angle-correction-and-the-sans-reduction" title="Link to this heading">¶</a></h2>
+<p>The equation for the reduction is (see <a class="reference internal" href="Q1D-v2.html#algm-q1d"><span class="std std-ref">Q1D v2</span></a>)</p>
+<p><span class="math notranslate nohighlight">\(P_I(Q) = \frac{\sum_{\{i, j, n\} \supset \{I\}} S(i,j,n)}{\sum_{\{i, j, n\} \supset \{I\}}M(n)\eta(n)T(n)\Omega_{i j}F_{i j}}\)</span></p>
+<p>But, <span class="math notranslate nohighlight">\(T(n)\)</span> is not really <span class="math notranslate nohighlight">\(T(n)\)</span>, because of the wide
+angles, it is now <span class="math notranslate nohighlight">\(T(n,theta)\)</span> or <span class="math notranslate nohighlight">\(T(n,i,j)\)</span>.</p>
+<p>So, we decided to have a new factor that changes this equation to:</p>
+<p><span class="math notranslate nohighlight">\(P_I(Q) = \frac{\sum_{\{i, j, n\} \supset \{I\}} S(i,j,n)}{\sum_{\{i, j, n\} \supset \{I\}}M(n)\eta(n)T(n)\Omega_{i j}F_{i j}Corr(i,j,n)}\)</span></p>
+<p>Where Corr (Correction factor) in this case will be:</p>
+<p><span class="math notranslate nohighlight">\(Corr = \frac{T_0^A - 1}{A \ln(T_0)}\)</span></p>
+<p>Which is the OutputWorkspace of SANSWideAngleCorrection.</p>
+<p>This parameter enters inside <a class="reference internal" href="Q1D-v2.html#algm-q1d"><span class="std std-ref">Q1D v2</span></a> as WavePixelAdj. But, this is
+all done for you inside the Reduction Script.</p>
+</section>
+<section id="comparison-with-wide-angle-correction-at-sns">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Comparison with Wide Angle Correction at SNS</a><a class="headerlink" href="#comparison-with-wide-angle-correction-at-sns" title="Link to this heading">¶</a></h2>
+<p>The transmission correction applied at SNS is described
+<a class="reference internal" href="HFIRSANSReduction-v1.html#algm-hfirsansreduction-v1"><span class="std std-ref">here</span></a>,
+and it is applied through the
+<a class="reference internal" href="ApplyTransmissionCorrection-v1.html#algm-applytransmissioncorrection"><span class="std std-ref">ApplyTransmissionCorrection v1</span></a> algorithm.
+The correction applied there is an approximation for the same equations
+described here. The picture above compare their results</p>
+<figure class="align-default">
+<img alt="SNS_ISIS_WideAngleCorrections.png" src="../_images/SNS_ISIS_WideAngleCorrections.png" />
+</figure>
+<p>Note a difference among them is when they are applied. At SNS, the
+correction is applied before averaging the counters per bin inside
+<a class="reference internal" href="Q1D-v2.html#algm-q1d"><span class="std std-ref">Q1D v2</span></a> algorithm, while at ISIS, it is used after, inside the
+<a class="reference internal" href="Q1D-v2.html#algm-q1d"><span class="std std-ref">Q1D v2</span></a> algorithm, for the division of the counters per bin
+normalized by the transmission counters.</p>
+</section>
+<section id="references">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">References</a><a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<p>Annie Brulet et al. - Improvement of data treatment in small-angle neutron scattering - <a class="reference external" href="http://dx.doi.org/10.1107/S0021889806051442">J. Appl.
+Cryst. (2007). 40</a></p>
+<p>Ghosh, Egelhaaf &amp; Rennie - Computing guide for Small Angle Scattering
+Experiments</p>
+</section>
+<section id="usage">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Usage</a><a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p><strong>Example - Correcting Some Dummy Data</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create some dummy data, but crop it for quick demonstration purposes.</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="n">CreateSimulationWorkspace</span><span class="p">(</span><span class="n">Instrument</span><span class="o">=</span><span class="s1">&#39;SANS2D&#39;</span><span class="p">,</span> <span class="n">BinParams</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">500</span><span class="p">,</span><span class="mi">100005</span><span class="p">],</span> <span class="n">UnitX</span><span class="o">=</span><span class="s1">&#39;TOF&#39;</span><span class="p">)</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="n">CropWorkspace</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span><span class="n">StartWorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">EndWorkspaceIndex</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># Create a dummy transmission workspace.</span>
+<span class="n">transmission</span> <span class="o">=</span> <span class="n">CropWorkspace</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span><span class="n">StartWorkspaceIndex</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">EndWorkspaceIndex</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">transmission</span> <span class="o">*=</span> <span class="mi">2</span>
+
+<span class="n">corrected_data</span> <span class="o">=</span> <span class="n">SANSWideAngleCorrection</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">transmission</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{:.6f}</span><span class="s2"> was corrected to </span><span class="si">{:.6f}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sample</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">19</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">corrected_data</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">19</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>1.000000 was corrected to 1.004997.
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/CorrectionFunctions/TransmissionCorrections.html">CorrectionFunctions\TransmissionCorrections</a></p>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>Python: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/eea692df788805d655ad0462903b75258b202acb/Framework/PythonInterface/plugins/algorithms/SANSWideAngleCorrection.py">SANSWideAngleCorrection.py</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="SANSTubeMerge-v1.html" title="Previous Chapter: SANSTubeMerge v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; SANSTubeMerge v1</span>
+    </a>
+  </li>
+  <li>
+    <a href="SCDCalibratePanels-v1.html" title="Next Chapter: SCDCalibratePanels v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">SCDCalibratePanels v1 &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

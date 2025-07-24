@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>CompositeFunction</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <script src="../../_static/documentation_options.js?v=410c086f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="CompositePCRmagnet" href="CompositePCRmagnet.html" />
+    <link rel="prev" title="CombGaussLorentzKT" href="CombGaussLorentzKT.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.13</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Fit Functions</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">CompositeFunction</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="compositefunction">
+<span id="func-compositefunction"></span><h1>CompositeFunction<a class="headerlink" href="#compositefunction" title="Link to this heading">¶</a></h1>
+<section id="description">
+<span id="index-0"></span><h2>Description<a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>A composite function is a function containing other functions. It
+combines the values calculated by the member functions by adding them.
+The members are indexed from 0 to the number of functions minus 1. The
+indices are defined by the order in which the functions were added.
+Composite functions do not have their own parameters, instead they use
+parameters of the member functions. Parameter names are formed from the
+member function’s index and its parameter name: f[index].[name]. For
+example, name “f0.Sigma” would be given to the “Sigma” parameter of a
+Gaussian added first to the composite function. If a member function is
+a composite function itself the same principle applies: ‘f[index].’ is
+prepended to a name, e.g. “f0.f1.Sigma”.</p>
+<p>The input string to the Fit algorithm for a CompositeFunction is
+constructed by joining the inputs of the member functions using the
+semicolon ‘;’ as a separator. For example, the string for two
+<a class="reference internal" href="Gaussian.html#func-gaussian"><span class="std std-ref">Gaussians</span></a> with tied sigma parameters may look like the
+following:</p>
+<p><code class="docutils literal notranslate"><span class="pre">name=Gaussian,PeakCentre=0,Height=1,Sigma=0.1,constraints=(0&lt;Sigma&lt;1);name=Gaussian,PeakCentre=1,Height=1,Sigma=0.1;ties=(f1.Sigma=f0.Sigma)</span></code></p>
+<p>Note that the ties clause is also separated by a semicolon. It is done
+because the parameters are from different functions. Ties between
+parameters of the same function can be placed inside the member
+definition in which the local parameter names must be used, for example:</p>
+<p><code class="docutils literal notranslate"><span class="pre">name = FunctionType, P1=0, ties=( P2 = 2*P1 ); name = FunctionType, P1=0, ties=( P2 = 3 )</span></code></p>
+<p>which is equivalent to</p>
+<p><code class="docutils literal notranslate"><span class="pre">name = FunctionType, P1=0; name = FunctionType, P1=0; ties=( f0.P2 = 2*f0.P1, f1.P2 = 3 )</span></code></p>
+<p>Boundary constraints usually make sense to put in a local function
+definition but they can also be moved to the composite function level,
+i.e. can be separated by ‘;’. In this case the full parameter name must
+be used, for example:</p>
+<p><code class="docutils literal notranslate"><span class="pre">name=Gaussian,PeakCentre=0,Height=1,Sigma=0.1;name=Gaussian,PeakCentre=1,Height=1,Sigma=0.1;ties=(f1.Sigma=f0.Sigma);constraints=(0&lt;f0.Sigma&lt;1)</span></code></p>
+<p>Mantid defines a number of fitting functions which extend
+CompositeFunction. These are functions which also include other
+functions but use different operations to combine them. Examples are
+<a class="reference internal" href="ProductFunction.html#func-productfunction"><span class="std std-ref">ProductFunction</span></a> and <a class="reference internal" href="Convolution.html#func-convolution"><span class="std std-ref">Convolution</span></a>.
+Everything said about parameters of the CompositeFunction applies to
+these functions.</p>
+<p>Input strings of an extended composite function must start with
+“composite=FunctionName;” and followed by the definitions of its members
+as described for CompositeFunction. For example,</p>
+<p><code class="docutils literal notranslate"><span class="pre">composite=ProductFunction;name=LinearBackground;name=ExpDecay</span></code></p>
+<p>To define a composite function inside a composite function enclose the
+inner one in brackets:</p>
+<p><code class="docutils literal notranslate"><span class="pre">name=LinearBackground;(composite=Convolution;name=Resolution;name=Lorentzian)</span></code></p>
+</section>
+<section id="attributes-non-fitting-parameters">
+<h2>Attributes (non-fitting parameters)<a class="headerlink" href="#attributes-non-fitting-parameters" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>NumDeriv</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/FitFunctions.html">FitFunctions</a> | <a class="reference external" href="categories/General.html">General</a></p>
+</section>
+<section id="source">
+<h2>Source<a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/eea692df788805d655ad0462903b75258b202acb/Framework/API/inc/MantidAPI/CompositeFunction.h">CompositeFunction.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/eea692df788805d655ad0462903b75258b202acb/Framework/API/src/CompositeFunction.cpp">CompositeFunction.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="CombGaussLorentzKT.html" title="Previous Chapter: CombGaussLorentzKT"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; CombGaussLorentzKT</span>
+    </a>
+  </li>
+  <li>
+    <a href="CompositePCRmagnet.html" title="Next Chapter: CompositePCRmagnet"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">CompositePCRmagnet &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ConvertCWPDMDToSpectra v1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=410c086f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ConvertCWSDExpToMomentum v1" href="ConvertCWSDExpToMomentum-v1.html" />
+    <link rel="prev" title="ConvertAxisByFormula v1" href="ConvertAxisByFormula-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.13</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">ConvertCWPDMDToSpectra v1</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="convertcwpdmdtospectra-v1">
+<span id="algm-convertcwpdmdtospectra"></span><span id="algm-convertcwpdmdtospectra-v1"></span><h1>ConvertCWPDMDToSpectra v1<a class="headerlink" href="#convertcwpdmdtospectra-v1" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id1">Summary</a></p></li>
+<li><p><a class="reference internal" href="#properties" id="id2">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id3">Description</a></p>
+<ul>
+<li><p><a class="reference internal" href="#input-workspaces" id="id4">Input Workspaces</a></p></li>
+<li><p><a class="reference internal" href="#outputs" id="id5">Outputs</a></p></li>
+<li><p><a class="reference internal" href="#sample-logs" id="id6">Sample Logs</a></p></li>
+<li><p><a class="reference internal" href="#target-units" id="id7">Target Units</a></p></li>
+<li><p><a class="reference internal" href="#binning-normalization-and-error" id="id8">Binning, Normalization and Error</a></p></li>
+<li><p><a class="reference internal" href="#scaling" id="id9">Scaling</a></p></li>
+<li><p><a class="reference internal" href="#linear-interpolation" id="id10">Linear Interpolation</a></p></li>
+<li><p><a class="reference internal" href="#excluding-detectors" id="id11">Excluding detectors</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#workflow" id="id12">Workflow</a></p>
+<ul>
+<li><p><a class="reference internal" href="#an-example" id="id13">An Example</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#usage" id="id14">Usage</a></p></li>
+<li><p><a class="reference internal" href="#source" id="id15">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Convert constant wavelength (CW) powder diffraction (PD) data in MDEventWorksapces  to a single-spectrum MatrixWorkspace, i.e., binning the diffraction data  to single spectrum according to neutron’s scattering angle, d-spacing or Q.</p>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>InputWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MDWorkspace.html#mdworkspace"><span class="std std-ref">MDEventWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Name of the input MDEventWorkspace that stores detectors counts from a constant-wave powder diffraction experiment.</p></td>
+</tr>
+<tr class="row-odd"><td><p>InputMonitorWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MDWorkspace.html#mdworkspace"><span class="std std-ref">MDEventWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Name of the input MDEventWorkspace that stores monitor counts from a constant-wave powder diffraciton experiment.</p></td>
+</tr>
+<tr class="row-even"><td><p>BinningParams</p></td>
+<td><p>Input</p></td>
+<td><p>dbl list</p></td>
+<td></td>
+<td><p>A comma separated list of first bin boundary, width, last bin boundary. Optionally this can be followed by a comma and more widths and last boundary pairs. Negative width values indicate logarithmic binning.</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Name of the output workspace for reduced data.</p></td>
+</tr>
+<tr class="row-even"><td><p>UnitOutput</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>2theta</p></td>
+<td><p>Unit of the output workspace. Allowed values: [‘2theta’, ‘dSpacing’, ‘Momentum Transfer (Q)’]</p></td>
+</tr>
+<tr class="row-odd"><td><p>NeutronWaveLength</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Optional</em></p></td>
+<td><p>Constant wavelength of the neutrons from reactor source.</p></td>
+</tr>
+<tr class="row-even"><td><p>NeutornWaveLengthPropertyName</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>wavelength</p></td>
+<td><p>Property name of the neutron wavelength in the sample log.If output unit is other than 2theta and NeutronWaveLength is not given,then the neutron wavelength will be searched in sample logs by name specified by this property.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ScaleFactor</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>1</p></td>
+<td><p>Scaling factor on the normalized counts.</p></td>
+</tr>
+<tr class="row-even"><td><p>ExcludedDetectorIDs</p></td>
+<td><p>Input</p></td>
+<td><p>int list</p></td>
+<td></td>
+<td><p>A comma separated list of integers to indicate the IDs of the detectors that will be excluded from binning.</p></td>
+</tr>
+<tr class="row-odd"><td><p>LinearInterpolateZeroCounts</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>True</p></td>
+<td><p>If set to true and if a bin has zero count, a linear interpolation will be made to set the value of this bin. It is applied to the case that the bin size is small.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>This algorithms is to collect the all the counts on the detectors among
+a set of measurements, which belong to a same experiment run,
+and bin them according to detector’s position, i.e., <span class="math notranslate nohighlight">\(2\theta\)</span>.</p>
+<p>In this algorithm’s name, ConvertCWPDMDToSpectra, <em>CW</em> stands for constant wave
+(reactor-source instrument); <em>PD</em> stands for powder diffraction; and <em>MD</em>
+stands for MDEventWorkspace because the input of this algorithms are two
+MDEventWorkspaces.</p>
+<p>This algorithm takes 2 MDEventWorkspaces as inputs.
+One stores the detectors’ counts;
+and the other stores the monitors’ counts.
+These two MDEventWorkspaces are generated from algorithm ConvertSpiceToRealSpace.</p>
+<p>Furthermore, the unit of the output matrix workspace can be converted to
+d-spacing and momentum transfer (<span class="math notranslate nohighlight">\(Q\)</span>).</p>
+<section id="input-workspaces">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Input Workspaces</a><a class="headerlink" href="#input-workspaces" title="Link to this heading">¶</a></h3>
+<p>Two input MDEventWorkspaces that are required.</p>
+<p>{it InputWorkspace} is an MDEventWorkspace stores detectors counts and sample logs.
+Each run in this MDEventWorkspace corresponds to an individual measurement point in experiment run.
+Each run has its own instrument object.</p>
+<p>The other input MDEventWorkspace, i.e., {it InputMonitorWorkspace} contains the monitor counts of each measurement point.
+The signal value of each MDEvent in this workspace is the monitor counts
+corresponding to an individual detector.</p>
+<p>These two MDEventWorkspace should have the same number of runs and same number of MDEvent.</p>
+</section>
+<section id="outputs">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Outputs</a><a class="headerlink" href="#outputs" title="Link to this heading">¶</a></h3>
+<p>The output is a MatrixWorkspace containing the reduced powder diffraction data from a SPICE file for
+powder diffractometers in HFIR.</p>
+<p>Besides the data, it also has the sample logs’ copied from the input workspace.</p>
+</section>
+<section id="sample-logs">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Sample Logs</a><a class="headerlink" href="#sample-logs" title="Link to this heading">¶</a></h3>
+<p>The sample logs of the reduced HFIR powder diffraction data are aggregated from all measurements points
+in the experiment run.</p>
+<p>They are copied from the last ExperimentInfo object of the input MDWorkspace {it InputWorkspace}.</p>
+</section>
+<section id="target-units">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Target Units</a><a class="headerlink" href="#target-units" title="Link to this heading">¶</a></h3>
+<p>Three units are supported by this algorithm via property <em>UnitOutput</em>.
+They are <span class="math notranslate nohighlight">\(2\theta\)</span>, dSpacing and MomentumTransfer(Q).</p>
+<p>The following equations are used to convert the units.</p>
+<div class="math notranslate nohighlight">
+\[\lambda = 2d\sin(\theta)\]</div>
+<div class="math notranslate nohighlight">
+\[d = \frac{4\pi}{Q}\]</div>
+<p>Therefore neutron wavelength <span class="math notranslate nohighlight">\(\lambda\)</span> must be given either in sample log or via input property
+if the unit of the output workspace is targeted to be dSpacing or MomentumTransfer.</p>
+</section>
+<section id="binning-normalization-and-error">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Binning, Normalization and Error</a><a class="headerlink" href="#binning-normalization-and-error" title="Link to this heading">¶</a></h3>
+<p>According to the input binning parameters, the bins in <span class="math notranslate nohighlight">\(2\theta\)</span> are created as
+<span class="math notranslate nohighlight">\(2\theta_{min}, 2\theta_{min}+\Delta, 2\theta_{min}+2\Delta, \cdots\)</span>.</p>
+<p>If the unit of output workspace is specified as dSpacing or MomentrumTransfer,
+then the bins should be created as <span class="math notranslate nohighlight">\(d_{min}, d_{min}+\Delta, d_{min}+2\Delta, \cdots, d_{max}\)</span>
+or <span class="math notranslate nohighlight">\(q_{min}, q_{min}+\Delta, \cdots, q_{max}\)</span> respectively.</p>
+<p>For each detector, if its position falls between <span class="math notranslate nohighlight">\(2\theta_i\)</span> and <span class="math notranslate nohighlight">\(2\theta_{i+1}\)</span>,,
+<span class="math notranslate nohighlight">\(d_i\)</span> and <span class="math notranslate nohighlight">\(d_{i+1}\)</span>, or <span class="math notranslate nohighlight">\(Q_i\)</span> and <span class="math notranslate nohighlight">\(Q_{i+1}\)</span>,
+then its counts is added to <span class="math notranslate nohighlight">\(Y_i\)</span> and the corresponding monitor counts is added to
+<span class="math notranslate nohighlight">\(M_i\)</span>.</p>
+<p>The signals on these bins are normalized by its monitor counts, such that</p>
+<div class="math notranslate nohighlight">
+\[y_i = \frac{Y_i}{M_i}\]</div>
+<p>The error (i.e., standard deviation) is defined as</p>
+<div class="math notranslate nohighlight">
+\[\frac{\Delta y_i}{y_i} = \sqrt{(\frac{\Delta Y_i}{Y_i})^2 + (\frac{\Delta M_i}{M_i})^2}\]</div>
+</section>
+<section id="scaling">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Scaling</a><a class="headerlink" href="#scaling" title="Link to this heading">¶</a></h3>
+<p>The normalized histogram can be scaled up by a factor specified by  <em>ScaleFactor</em>.
+In most cases, the scaling factor is equal to average monitor counts of all measurements.</p>
+<p>If the scaling factor is specified, then
+the standard error of data point <span class="math notranslate nohighlight">\(i\)</span> will be converted to</p>
+<div class="math notranslate nohighlight">
+\[\sigma^{(s)}_i = f \times \sigma^{(n)}_i\]</div>
+<p>where <span class="math notranslate nohighlight">\(f\)</span> is the scaling factor, <span class="math notranslate nohighlight">\(\sigma^{(n)}_i\)</span> is the standard error of the normalized signal
+of data point <span class="math notranslate nohighlight">\(i\)</span>, and
+<span class="math notranslate nohighlight">\(\sigma^{(s)}_i\)</span> is the standard error of the signal scaled up.</p>
+</section>
+<section id="linear-interpolation">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Linear Interpolation</a><a class="headerlink" href="#linear-interpolation" title="Link to this heading">¶</a></h3>
+<p>If a user specifies a bin size that is smaller than the resolution of the instrument,
+then it is very likely to occur that some bins have zero count, while their neighboring
+bins have counts that are significantly larger than noise.
+In this case, an option to do linear interpolation to the zero count bins
+in the histogram is provided.
+Property <em>LinearInterpolateZeroCounts</em> is used to set the flag to do linear interpolation.</p>
+<p>The linear interpolation will be only applied to those zero-count bins within
+the measuring range.</p>
+</section>
+<section id="excluding-detectors">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">Excluding detectors</a><a class="headerlink" href="#excluding-detectors" title="Link to this heading">¶</a></h3>
+<p>Detectors can be excluded from conversion process.
+They can be specified by their <em>Detector ID*s via property *ExcludedDetectorIDs</em>.
+If a detector is specified as being excluded,
+all of its counts of all runs (pts) will be taken out of binning process.</p>
+</section>
+</section>
+<section id="workflow">
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">Workflow</a><a class="headerlink" href="#workflow" title="Link to this heading">¶</a></h2>
+<p>This algorithm is the third step to reduce powder diffraction data from a SPICE file.
+Following algorithm <em>LoadSpiceAscii</em>, which loads SPICE file to a TableWorkspace
+and {it ConvertSpiceToRealSpace}, which converts the TableWorkspace to MDEvnetWorkspace
+that is able to reflect all the information of the epxeriment,
+{it ConvertCWPDMDToSpectra} goes through all the detectors’ counts and rebins the data.</p>
+<section id="an-example">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">An Example</a><a class="headerlink" href="#an-example" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>LoadSpiceAscii</p></li>
+<li><p>ConvertSpiceToRealSpace</p></li>
+<li><p>Merge a few data MDWorkspaces together; merge the corresponding monitor MDWorkspaces together;</p></li>
+<li><p>ConvertCWPDMDToSpectra.</p></li>
+</ol>
+<p>Experimental data with different neutron wavelengths can be binned together to d-spacing or momentum transfer space.</p>
+</section>
+</section>
+<section id="usage">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Usage</a><a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p><strong>Example - reduce a SPICE file for HB2A to Fullprof file:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create table workspace and parent log workspace</span>
+<span class="n">LoadSpiceAscii</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;HB2A_exp0231_scan0001.dat&#39;</span><span class="p">,</span>
+      <span class="n">IntegerSampleLogNames</span><span class="o">=</span><span class="s2">&quot;Sum of Counts, scan, mode, experiment_number&quot;</span><span class="p">,</span>
+      <span class="n">FloatSampleLogNames</span><span class="o">=</span><span class="s2">&quot;samplemosaic, preset_value, Full Width Half-Maximum, Center of Mass&quot;</span><span class="p">,</span>
+      <span class="n">DateAndTimeLog</span><span class="o">=</span><span class="s1">&#39;date,MM/DD/YYYY,time,HH:MM:SS AM&#39;</span><span class="p">,</span>
+      <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;Exp0231DataTable&#39;</span><span class="p">,</span>
+      <span class="n">RunInfoWorkspace</span><span class="o">=</span><span class="s1">&#39;Exp0231ParentWS&#39;</span><span class="p">)</span>
+
+<span class="c1"># load for HB2A</span>
+<span class="n">ConvertSpiceDataToRealSpace</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;Exp0231DataTable&#39;</span><span class="p">,</span>
+      <span class="n">RunInfoWorkspace</span><span class="o">=</span><span class="s1">&#39;Exp0231ParentWS&#39;</span><span class="p">,</span>
+      <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;Exp0231DataMD&#39;</span><span class="p">,</span>
+      <span class="n">OutputMonitorWorkspace</span><span class="o">=</span><span class="s1">&#39;Exp0231MonitorMD&#39;</span><span class="p">)</span>
+
+<span class="c1"># Convert from real-space MD to Fullprof data</span>
+<span class="n">ConvertCWPDMDToSpectra</span><span class="p">(</span>
+      <span class="n">InputWorkspace</span> <span class="o">=</span> <span class="s1">&#39;Exp0231DataMD&#39;</span><span class="p">,</span>
+      <span class="n">InputMonitorWorkspace</span> <span class="o">=</span> <span class="s1">&#39;Exp0231MonitorMD&#39;</span><span class="p">,</span>
+      <span class="n">OutputWorkspace</span> <span class="o">=</span> <span class="s1">&#39;Exp0231Reduced&#39;</span><span class="p">,</span>
+      <span class="n">BinningParams</span> <span class="o">=</span> <span class="s1">&#39;5, 0.1, 150&#39;</span><span class="p">,</span>
+      <span class="n">UnitOutput</span> <span class="o">=</span> <span class="s1">&#39;2theta&#39;</span><span class="p">,</span>
+      <span class="n">ScaleFactor</span> <span class="o">=</span> <span class="mf">100.</span><span class="p">,</span>
+      <span class="n">LinearInterpolateZeroCounts</span> <span class="o">=</span> <span class="kc">True</span>
+      <span class="p">)</span>
+
+<span class="c1"># output</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">mtd</span><span class="p">[</span><span class="s2">&quot;Exp0231Reduced&quot;</span><span class="p">]</span>
+
+<span class="n">vecx</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">readX</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">vecy</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">readY</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">vece</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">readE</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1101</span><span class="p">,</span> <span class="mi">1228</span><span class="p">]:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2theta = </span><span class="si">{:.6f}</span><span class="s2">, Y = </span><span class="si">{:.6f}</span><span class="s2">, E = </span><span class="si">{:.6f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vecx</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">vecy</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">vece</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>2theta = 15.000000, Y = 0.386563, E = 0.024744
+2theta = 15.000000, Y = 0.386563, E = 0.024744
+2theta = 115.100000, Y = 1.846279, E = 0.054287
+2theta = 127.800000, Y = 0.237738, E = 0.027303
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/Diffraction/ConstantWavelength.html">Diffraction\ConstantWavelength</a> | <a class="reference external" href="categories/Diffraction/Focussing.html">Diffraction\Focussing</a></p>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/eea692df788805d655ad0462903b75258b202acb/Framework/MDAlgorithms/inc/MantidMDAlgorithms/ConvertCWPDMDToSpectra.h">ConvertCWPDMDToSpectra.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/eea692df788805d655ad0462903b75258b202acb/Framework/MDAlgorithms/src/ConvertCWPDMDToSpectra.cpp">ConvertCWPDMDToSpectra.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="ConvertAxisByFormula-v1.html" title="Previous Chapter: ConvertAxisByFormula v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; ConvertAxisBy...</span>
+    </a>
+  </li>
+  <li>
+    <a href="ConvertCWSDExpToMomentum-v1.html" title="Next Chapter: ConvertCWSDExpToMomentum v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">ConvertCWSDEx... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

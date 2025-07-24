@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>mantid.plots</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+    <script src="../../../../_static/documentation_options.js?v=410c086f"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="mantid.utils" href="../utils/index.html" />
+    <link rel="prev" title="WorkspaceUnitValidator" href="../api/WorkspaceUnitValidator.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.13</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../../../index.html" >API</a> &#187;</li>
+          
+            <li class="nav-item nav-item-2"><a href="../../index.html" >Python API</a> &#187;</li>
+          
+            <li class="nav-item nav-item-3"><a href="../index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mantid</span></code> — Framework package</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">mantid.plots</span></code></a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="mantid-plots">
+<span id="id1"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">mantid.plots</span></code><a class="headerlink" href="#mantid-plots" title="Link to this heading">¶</a></h1>
+<p>The functions in this module are intended to be used with matplotlib’s
+object oriented abstract program interface (API). matplotlib’s
+(stateful) functional interface is discouraged by matplotlib.
+The object oriented API allow for customization as well.</p>
+<p>The plotting of a <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or a
+<a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a> can happen in two different ways.
+The use of a <code class="docutils literal notranslate"><span class="pre">mantid</span></code> projection allows most matplotlib-like
+experience:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="c1">#some code here to get a workspace, and x, y, yerr arrays</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">workspace</span><span class="p">,</span><span class="s1">&#39;rs&#39;</span><span class="p">,</span><span class="n">specNum</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">yerr</span><span class="p">,</span><span class="s1">&#39;bo&#39;</span><span class="p">)</span>            <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If the <code class="docutils literal notranslate"><span class="pre">mantid</span></code> projection is not used, the plotting functions take a
+<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a> and a <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or
+<a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>, with some keywords that are
+specific to Mantid an the type or workspace used. While there are defaults for the
+labels, you can easily override them after the initial plotting is
+called. A useful reference is matplotlib’s <a class="reference external" href="https://matplotlib.org/examples/showcase/anatomy.html">anatomy of a figure</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To run these usage examples please first download the
+<a class="reference external" href="https://sourceforge.net/projects/mantid/files/Sample%20Data/UsageData.zip/download">usage data</a>,
+and add these to your path.
+In Mantid this is done using <a class="reference internal" href="../../../../interfaces/framework/ManageUserDirectories.html#manageuserdirectories"><span class="std std-ref">Manage User Directories</span></a>.</p>
+</div>
+<p>All of the examples below can be run with the following imports, but
+not all are used in all places.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">mtd</span><span class="p">,</span> <span class="n">Load</span><span class="p">,</span> <span class="n">LoadEventNexus</span><span class="p">,</span> <span class="n">Rebin</span><span class="p">,</span> <span class="n">ConvertUnits</span><span class="p">,</span> <span class="n">SofQW</span><span class="p">,</span> <span class="n">Transpose</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogNorm</span>
+</pre></div>
+</div>
+<p>First, load some diffraction data and see what the automatic axes will
+be using <code class="xref py py-func docutils literal notranslate"><span class="pre">get_axes_labels()</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Load</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s2">&quot;PG3_733&quot;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s2">&quot;PG3_733&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">plots</span><span class="o">.</span><span class="n">helperfunctions</span><span class="o">.</span><span class="n">get_axes_labels</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;PG3_733&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Which will print the <code class="docutils literal notranslate"><span class="pre">y-label</span></code> then the labels for all the other
+axes as properly escaped for use directly in
+<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_xlabel.html#matplotlib.axes.Axes.set_xlabel" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.set_xlabel()</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="s1">&#39;Counts&#39;</span><span class="p">,</span> <span class="s1">&#39;d-Spacing ($</span><span class="se">\\</span><span class="s1">AA$)&#39;</span><span class="p">,</span> <span class="s1">&#39;Spectrum&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To generate a 1D plots of some spectra with <code class="docutils literal notranslate"><span class="pre">mantid</span></code> projection:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;PG3_733&#39;</span><span class="p">],</span> <span class="s1">&#39;go-&#39;</span><span class="p">,</span> <span class="n">specNum</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;user label&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;PG3_733&#39;</span><span class="p">],</span>  <span class="n">wkspIndex</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>or without:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">plotfunctions</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;PG3_733&#39;</span><span class="p">],</span> <span class="s1">&#39;go-&#39;</span><span class="p">,</span> <span class="n">specNum</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;user label&#39;</span><span class="p">)</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">plotfunctions</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;PG3_733&#39;</span><span class="p">],</span>  <span class="n">wkspIndex</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../../../../_images/mantid_plots_1D.png" src="../../../../_images/mantid_plots_1D.png" />
+</figure>
+<p>This example demonstrates adding multiple spectra onto a single 1D
+plot and overriding some of the default behavior. <a class="reference internal" href="#mantid.plots.MantidAxes.plot" title="mantid.plots.MantidAxes.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> is a normal
+line plot, while <a class="reference internal" href="#mantid.plots.MantidAxes.errorbar" title="mantid.plots.MantidAxes.errorbar"><code class="xref py py-func docutils literal notranslate"><span class="pre">errorbar()</span></code></a> adds the uncertainties. It should be
+warned that every call to one of the plot functions will automatically
+annotate the axes with the last one called being the one that takes
+effect.</p>
+<p>The <a class="reference internal" href="#mantid.plots.MantidAxes.plot" title="mantid.plots.MantidAxes.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> function also allows
+plotting sample logs.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">LoadEventNexus</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_event.nxs&#39;</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">,</span> <span class="n">projection</span> <span class="o">=</span> <span class="s1">&#39;mantid&#39;</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">,</span> <span class="n">projection</span> <span class="o">=</span> <span class="s1">&#39;mantid&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">LogName</span> <span class="o">=</span> <span class="s1">&#39;ChopperStatus5&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;From run start&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">LogName</span> <span class="o">=</span> <span class="s1">&#39;ChopperStatus5&#39;</span><span class="p">,</span> <span class="n">FullTime</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Absolute time&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../../../../_images/mantid_plots_1Dlogs.png" src="../../../../_images/mantid_plots_1Dlogs.png" />
+</figure>
+<p>Two common ways to look at 2D plots are <a class="reference internal" href="#mantid.plots.MantidAxes.contourf" title="mantid.plots.MantidAxes.contourf"><code class="xref py py-func docutils literal notranslate"><span class="pre">contourf()</span></code></a> and
+<a class="reference internal" href="#mantid.plots.MantidAxes.pcolormesh" title="mantid.plots.MantidAxes.pcolormesh"><code class="xref py py-func docutils literal notranslate"><span class="pre">pcolormesh()</span></code></a>. The difference between these is the
+<a class="reference internal" href="#mantid.plots.MantidAxes.contourf" title="mantid.plots.MantidAxes.contourf"><code class="xref py py-func docutils literal notranslate"><span class="pre">contourf()</span></code></a> calculates smooth lines of constant
+value, where the <a class="reference internal" href="#mantid.plots.MantidAxes.pcolormesh" title="mantid.plots.MantidAxes.pcolormesh"><code class="xref py py-func docutils literal notranslate"><span class="pre">pcolormesh()</span></code></a> is the actual data
+values.
+<a class="reference internal" href="#mantid.plots.MantidAxes.pcolormesh" title="mantid.plots.MantidAxes.pcolormesh"><code class="xref py py-func docutils literal notranslate"><span class="pre">pcolormesh()</span></code></a> is similar to <a class="reference internal" href="#mantid.plots.MantidAxes.pcolor" title="mantid.plots.MantidAxes.pcolor"><code class="xref py py-func docutils literal notranslate"><span class="pre">pcolor()</span></code></a>,
+but uses a different mechanism and returns a different object; pcolor returns a PolyCollection
+but pcolormesh returns a QuadMesh.
+It is much faster, so it is almost always preferred for large arrays.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">LoadEventNexus</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_event.nxs&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_event&#39;</span><span class="p">)</span>
+<span class="n">ConvertUnits</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_event&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_event&#39;</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s1">&#39;DeltaE&#39;</span><span class="p">,</span> <span class="n">EMode</span><span class="o">=</span><span class="s1">&#39;Direct&#39;</span><span class="p">,</span> <span class="n">EFixed</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">Rebin</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_event&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_event&#39;</span><span class="p">,</span> <span class="n">Params</span><span class="o">=</span><span class="s1">&#39;-3,0.05,3&#39;</span><span class="p">)</span>
+<span class="n">SofQW</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_event&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_sqw&#39;</span><span class="p">,</span> <span class="n">QAxisBinning</span><span class="o">=</span><span class="s1">&#39;0,0.05,3&#39;</span><span class="p">,</span> <span class="n">EMode</span><span class="o">=</span><span class="s1">&#39;Direct&#39;</span><span class="p">,</span> <span class="n">EFixed</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">Transpose</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_sqw&#39;</span><span class="p">,</span>  <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;CNCS_7860_sqw&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;CNCS_7860_sqw&#39;</span><span class="p">],</span> <span class="n">norm</span><span class="o">=</span><span class="n">LogNorm</span><span class="p">())</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;awesome label&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../../../../_images/mantid_plots_contourf.png" src="../../../../_images/mantid_plots_contourf.png" />
+</figure>
+<p>Similarly, showing the actual values with <a class="reference internal" href="#mantid.plots.MantidAxes.pcolormesh" title="mantid.plots.MantidAxes.pcolormesh"><code class="xref py py-func docutils literal notranslate"><span class="pre">pcolormesh()</span></code></a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;CNCS_7860_sqw&#39;</span><span class="p">],</span> <span class="n">norm</span><span class="o">=</span><span class="n">LogNorm</span><span class="p">())</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../../../../_images/mantid_plots_pcolormesh.png" src="../../../../_images/mantid_plots_pcolormesh.png" />
+</figure>
+<p>A couple of notes about <a class="reference internal" href="#mantid.plots.MantidAxes.pcolor" title="mantid.plots.MantidAxes.pcolor"><code class="xref py py-func docutils literal notranslate"><span class="pre">pcolor()</span></code></a>,
+<a class="reference internal" href="#mantid.plots.MantidAxes.pcolormesh" title="mantid.plots.MantidAxes.pcolormesh"><code class="xref py py-func docutils literal notranslate"><span class="pre">pcolormesh()</span></code></a>,
+and <a class="reference internal" href="#mantid.plots.MantidAxes.pcolorfast" title="mantid.plots.MantidAxes.pcolorfast"><code class="xref py py-func docutils literal notranslate"><span class="pre">pcolorfast()</span></code></a>:</p>
+<ul class="simple">
+<li><p>If the <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> has unequal bins,
+the polygons/meshes will have sides not aligned
+with the axes. One can override this behavior by using the
+<strong>axisaligned</strong> keyword, and setting it to True</p></li>
+<li><p>If the <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> has different numbers
+of bins the above functions will automatically use the
+<strong>axisaligned</strong> behavior (cannot be overridden). <a class="reference internal" href="#mantid.plots.MantidAxes.contour" title="mantid.plots.MantidAxes.contour"><code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code></a>
+and the like cannot plot these type of workspaces.</p></li>
+</ul>
+<p>In addition to the <code class="docutils literal notranslate"><span class="pre">mantid</span></code> projection, there is also the <code class="docutils literal notranslate"><span class="pre">mantid3d</span></code> projection for 3d plots.
+Can be used much the same as the <code class="docutils literal notranslate"><span class="pre">mantid</span></code> projection, but by instead specifying <code class="docutils literal notranslate"><span class="pre">mantid3d</span></code>
+when giving the projection:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="c1">#some code here to get a workspace, and x, y, yerr arrays</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid3d&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_wireframe</span><span class="p">(</span><span class="n">workspace</span><span class="p">)</span>   <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_wireframe</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>       <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<section id="matrix-workspace-plotting">
+<h2>Matrix Workspace Plotting<a class="headerlink" href="#matrix-workspace-plotting" title="Link to this heading">¶</a></h2>
+<p>The <a class="reference internal" href="../../../../concepts/MatrixWorkspace.html#matrixworkspace-plotting"><span class="std std-ref">Matrix Workspace</span></a> has some additional features that help simplify plotting data.
+The <cite>setPlotType()</cite> method allows you to define how a workspace should be visualized when plotting. The following plot types are available:</p>
+<ul class="simple">
+<li><p><strong>marker</strong>:
+A scatter plot where data points are displayed as markers without connecting lines. Ideal for visualizing individual data points.</p></li>
+<li><p><strong>plot</strong>:
+A standard line plot that connects data points using lines. This is the default visualization for continuous data.</p></li>
+<li><p><strong>errorbar_x</strong>:
+A plot with error bars in the x-direction only. Uses <cite>dataX</cite> for the x-values, <cite>dataY</cite> for the y-values, and <cite>dataDx</cite> for the x-error values.</p></li>
+<li><p><strong>errorbar_y</strong>:
+A plot with error bars in the y-direction only. Uses <cite>dataX</cite> for the x-values, <cite>dataY</cite> for the y-values, and <cite>dataE</cite> for the y-error values.</p></li>
+<li><p><strong>errorbar_xy</strong>:
+A plot with error bars in both x- and y-directions. Uses <cite>dataX</cite> for the x-values, <cite>dataY</cite> for the y-values, <cite>dataDx</cite> for the x-error values, and <cite>dataE</cite> for the y-error values.</p></li>
+</ul>
+<p>These options can be set using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">workspace</span><span class="o">.</span><span class="n">setPlotType</span><span class="p">(</span><span class="s1">&#39;marker&#39;</span><span class="p">)</span> <span class="c1"># or &#39;plot&#39;, &#39;errorbar_x&#39;, &#39;errorbar_y&#39;, &#39;errorbar_xy&#39;</span>
+<span class="n">workspace</span><span class="o">.</span><span class="n">getPlotType</span><span class="p">()</span> <span class="c1"># returns the current plot type</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../../../../_images/mantid_plot_types.png" src="../../../../_images/mantid_plot_types.png" />
+</figure>
+</section>
+<section id="types-of-functions">
+<h2>Types of functions<a class="headerlink" href="#types-of-functions" title="Link to this heading">¶</a></h2>
+<p><strong>Informational</strong></p>
+<ul class="simple">
+<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">get_axes_labels()</span></code></p></li>
+</ul>
+<p><strong>1D Plotting</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes.plot" title="mantid.plots.MantidAxes.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> - Plot lines and/or markers</p></li>
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes.errorbar" title="mantid.plots.MantidAxes.errorbar"><code class="xref py py-func docutils literal notranslate"><span class="pre">errorbar()</span></code></a> - Plot values with errorbars</p></li>
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes.scatter" title="mantid.plots.MantidAxes.scatter"><code class="xref py py-func docutils literal notranslate"><span class="pre">scatter()</span></code></a> - Make a scatter plot</p></li>
+</ul>
+<p><strong>2D Plotting</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes.contour" title="mantid.plots.MantidAxes.contour"><code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code></a> - Draw contours at specified levels</p></li>
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes.contourf" title="mantid.plots.MantidAxes.contourf"><code class="xref py py-func docutils literal notranslate"><span class="pre">contourf()</span></code></a> - Draw contours at calculated levels</p></li>
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes.pcolor" title="mantid.plots.MantidAxes.pcolor"><code class="xref py py-func docutils literal notranslate"><span class="pre">pcolor()</span></code></a> - Draw a pseudocolor plot of a 2-D array</p></li>
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes.pcolorfast" title="mantid.plots.MantidAxes.pcolorfast"><code class="xref py py-func docutils literal notranslate"><span class="pre">pcolorfast()</span></code></a> - Draw a pseudocolor plot of a 2-D array</p></li>
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes.pcolormesh" title="mantid.plots.MantidAxes.pcolormesh"><code class="xref py py-func docutils literal notranslate"><span class="pre">pcolormesh()</span></code></a> - Draw a quadrilateral mesh</p></li>
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes.tripcolor" title="mantid.plots.MantidAxes.tripcolor"><code class="xref py py-func docutils literal notranslate"><span class="pre">tripcolor()</span></code></a> - Draw a pseudocolor plot of an unstructured triangular grid</p></li>
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes.tricontour" title="mantid.plots.MantidAxes.tricontour"><code class="xref py py-func docutils literal notranslate"><span class="pre">tricontour()</span></code></a> - Draw contours at specified levels on an unstructured triangular grid</p></li>
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes.tricontourf" title="mantid.plots.MantidAxes.tricontourf"><code class="xref py py-func docutils literal notranslate"><span class="pre">tricontourf()</span></code></a> - Draw contours at calculated levels on an unstructured triangular grid</p></li>
+</ul>
+<p><strong>3D Plotting</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes3D.plot" title="mantid.plots.MantidAxes3D.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot()</span></code></a> - Draws a line plot in 3D space</p></li>
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes3D.scatter" title="mantid.plots.MantidAxes3D.scatter"><code class="xref py py-func docutils literal notranslate"><span class="pre">scatter()</span></code></a> - Draws a scatter plot in 3d space</p></li>
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes3D.plot_wireframe" title="mantid.plots.MantidAxes3D.plot_wireframe"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_wireframe()</span></code></a> - Draws a wire frame linking all adjacent data plots</p></li>
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes3D.plot_surface" title="mantid.plots.MantidAxes3D.plot_surface"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_surface()</span></code></a> - Draws a surface linking all adjacent data points</p></li>
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes3D.contour" title="mantid.plots.MantidAxes3D.contour"><code class="xref py py-func docutils literal notranslate"><span class="pre">contour()</span></code></a> - Draws contour lines at specified levels of the data</p></li>
+<li><p><a class="reference internal" href="#mantid.plots.MantidAxes3D.contourf" title="mantid.plots.MantidAxes3D.contourf"><code class="xref py py-func docutils literal notranslate"><span class="pre">contourf()</span></code></a> - Draws filled contour lines at specified levels of the data</p></li>
+</ul>
+<p>matplotlib demonstrates the difference between uniform and nonuniform
+grids well in <a class="reference external" href="https://matplotlib.org/gallery/images_contours_and_fields/tricontour_vs_griddata.html#sphx-glr-gallery-images-contours-and-fields-tricontour-vs-griddata-py">this example</a></p>
+</section>
+<section id="available-functions">
+<h2>Available Functions<a class="headerlink" href="#available-functions" title="Link to this heading">¶</a></h2>
+<section id="when-using-mantid-projection">
+<h3>When using <code class="docutils literal notranslate"><span class="pre">mantid</span></code> projection<a class="headerlink" href="#when-using-mantid-projection" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mantid.plots.</span></span><span class="sig-name descname"><span class="pre">MantidAxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes" title="Link to this definition">¶</a></dt>
+<dd><p>This class defines the <strong>mantid</strong> projection for 2d plotting. One chooses
+this projection using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;mantid&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The mantid projection allows replacing the array objects with mantid workspaces.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes.contour">
+<span class="sig-name descname"><span class="pre">contour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes.contour" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid</strong> projection is chosen, it can be
+used the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.contour.html#matplotlib.axes.Axes.contour" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.contour()</span></code></a> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">workspace</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>     <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions.contour()</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes.contourf">
+<span class="sig-name descname"><span class="pre">contourf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes.contourf" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid</strong> projection is chosen, it can be
+used the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.contourf.html#matplotlib.axes.Axes.contourf" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.contourf()</span></code></a> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">workspace</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>     <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions.contourf()</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes.errorbar">
+<span class="sig-name descname"><span class="pre">errorbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes.errorbar" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid</strong> projection is chosen, it can be
+used the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.errorbar.html#matplotlib.axes.Axes.errorbar" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.errorbar()</span></code></a> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">workspace</span><span class="p">,</span><span class="s1">&#39;rs&#39;</span><span class="p">,</span><span class="n">specNum</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">yerr</span><span class="p">,</span><span class="s1">&#39;bo&#39;</span><span class="p">)</span>            <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions.errorbar()</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes.pcolor">
+<span class="sig-name descname"><span class="pre">pcolor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes.pcolor" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid</strong> projection is chosen, it can be
+used the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.pcolor.html#matplotlib.axes.Axes.pcolor" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.pcolor()</span></code></a> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">workspace</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">pcolor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">C</span><span class="p">)</span>     <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions.pcolor()</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes.pcolorfast">
+<span class="sig-name descname"><span class="pre">pcolorfast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes.pcolorfast" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid</strong> projection is chosen, it can be
+used the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.pcolorfast.html#matplotlib.axes.Axes.pcolorfast" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.pcolorfast()</span></code></a> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matpolotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">pcolorfast</span><span class="p">(</span><span class="n">workspace</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">pcolorfast</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">C</span><span class="p">)</span>     <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions.pcolorfast()</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes.pcolormesh">
+<span class="sig-name descname"><span class="pre">pcolormesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes.pcolormesh" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid</strong> projection is chosen, it can be
+used the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.pcolormesh.html#matplotlib.axes.Axes.pcolormesh" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.pcolormesh()</span></code></a> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">workspace</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">C</span><span class="p">)</span>     <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions.pcolormesh()</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes.plot" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid</strong> projection is chosen, it can be
+used the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html#matplotlib.axes.Axes.plot" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.plot()</span></code></a> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">workspace</span><span class="p">,</span><span class="s1">&#39;rs&#39;</span><span class="p">,</span><span class="n">specNum</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="s1">&#39;bo&#39;</span><span class="p">)</span>                 <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions.plot()</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes.scatter">
+<span class="sig-name descname"><span class="pre">scatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes.scatter" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid</strong> projection is chosen, it can be
+used the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.scatter.html#matplotlib.axes.Axes.scatter" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.scatter()</span></code></a> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">workspace</span><span class="p">,</span><span class="s1">&#39;rs&#39;</span><span class="p">,</span><span class="n">specNum</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="s1">&#39;bo&#39;</span><span class="p">)</span>                 <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions.scatter()</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes.tripcolor">
+<span class="sig-name descname"><span class="pre">tripcolor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes.tripcolor" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid</strong> projection is chosen, it can be
+used the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.tripcolor.html#matplotlib.axes.Axes.tripcolor" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.tripcolor()</span></code></a> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">tripcolor</span><span class="p">(</span><span class="n">workspace</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">tripcolor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">C</span><span class="p">)</span>     <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions.tripcolor()</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes.tricontour">
+<span class="sig-name descname"><span class="pre">tricontour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes.tricontour" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid</strong> projection is chosen, it can be
+used the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.tricontour.html#matplotlib.axes.Axes.tricontour" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.tricontour()</span></code></a> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">tricontour</span><span class="p">(</span><span class="n">workspace</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">tricontour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>     <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions.tricontour()</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes.tricontourf">
+<span class="sig-name descname"><span class="pre">tricontourf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes.tricontourf" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid</strong> projection is chosen, it can be
+used the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.tricontourf.html#matplotlib.axes.Axes.tricontourf" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.tricontourf()</span></code></a> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">tricontourf</span><span class="p">(</span><span class="n">workspace</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">tricontourf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>     <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions.tricontourf()</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="when-using-mantid3d-projection">
+<h3>When using <code class="docutils literal notranslate"><span class="pre">mantid3d</span></code> projection<a class="headerlink" href="#when-using-mantid3d-projection" title="Link to this heading">¶</a></h3>
+<dl class="py class">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes3D">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mantid.plots.</span></span><span class="sig-name descname"><span class="pre">MantidAxes3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes3D" title="Link to this definition">¶</a></dt>
+<dd><p>This class defines the <strong>mantid3d</strong> projection for 3d plotting. One chooses
+this projection using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid3d&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;mantid3d&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The mantid3d projection allows replacing the array objects with mantid workspaces.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes3D.contour">
+<span class="sig-name descname"><span class="pre">contour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes3D.contour" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid3d</strong> projection is chosen, it can be
+used the same as <code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes3D.contour()</span></code> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid3d&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">workspace</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>     <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions3D.contour()</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes3D.contourf">
+<span class="sig-name descname"><span class="pre">contourf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes3D.contourf" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid3d</strong> projection is chosen, it can be
+used the same as <code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes3D.contourf()</span></code> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid3d&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">workspace</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>     <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions3D.contourf()</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes3D.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes3D.plot" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid3d</strong> projection is chosen, it can be
+used the same as <code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes3D.plot()</span></code> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid3d&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">workspace</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>     <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions3D.plot3D()</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes3D.plot_surface">
+<span class="sig-name descname"><span class="pre">plot_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes3D.plot_surface" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid3d</strong> projection is chosen, it can be
+used the same as <code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes3D.plot_surface()</span></code> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid3d&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">workspace</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>     <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions3D.plot_surface()</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes3D.plot_wireframe">
+<span class="sig-name descname"><span class="pre">plot_wireframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes3D.plot_wireframe" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid3d</strong> projection is chosen, it can be
+used the same as <code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes3D.plot_wireframe()</span></code> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid3d&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_wireframe</span><span class="p">(</span><span class="n">workspace</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_wireframe</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>     <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions3D.wireframe()</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mantid.plots.MantidAxes3D.scatter">
+<span class="sig-name descname"><span class="pre">scatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.MantidAxes3D.scatter" title="Link to this definition">¶</a></dt>
+<dd><p>If the <strong>mantid3d</strong> projection is chosen, it can be
+used the same as <code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes3D.scatter()</span></code> for arrays,
+or it can be used to plot <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a>
+or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>. You can have something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="o">...</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;projection&#39;</span><span class="p">:</span><span class="s1">&#39;mantid3d&#39;</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">workspace</span><span class="p">)</span> <span class="c1">#for workspaces</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">)</span>     <span class="c1">#for arrays</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For keywords related to workspaces, see <code class="xref py py-func docutils literal notranslate"><span class="pre">plotfunctions3D.scatter()</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-mantid.plots.axesfunctions">
+<span id="functions-to-use-when-mantid-projection-is-not-available"></span><h3>Functions to use when <strong>mantid</strong> projection is not available<a class="headerlink" href="#module-mantid.plots.axesfunctions" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions.contour">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions.</span></span><span class="sig-name descname"><span class="pre">contour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions.contour" title="Link to this definition">¶</a></dt>
+<dd><p>Essentially the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.contour.html#matplotlib.axes.Axes.contour" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.contour()</span></code></a>
+but calculates the countour levels. Currently this only works with
+workspaces that have a constant number of bins between spectra.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>
+to extract the data from</p></li>
+<li><p><strong>distribution</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) asks the workspace. <code class="docutils literal notranslate"><span class="pre">False</span></code> means
+divide by bin width. <code class="docutils literal notranslate"><span class="pre">True</span></code> means do not divide by bin width.
+Applies only when the matrix workspace is a histogram.</p></li>
+<li><p><strong>normalization</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) ask the workspace. Applies to MDHisto workspaces. It can override
+the value from displayNormalizationHisto. It checks only if
+the normalization is mantid.api.MDNormalization.NumEventsNormalization</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimensions to plot. <em>e.g.</em> to select the last two axes to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">slice(None))</span></code> where the 5 is the bin selected
+for the first axis.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the last
+two axes to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">None)</span></code> where the 1.0 is
+the value of the dimension selected for the first axis.</p></li>
+<li><p><strong>transpose</strong> – <code class="docutils literal notranslate"><span class="pre">bool</span></code> to transpose the x and y axes of the plotted dimensions of an MDHistoWorkspace</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions.contourf">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions.</span></span><span class="sig-name descname"><span class="pre">contourf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions.contourf" title="Link to this definition">¶</a></dt>
+<dd><p>Essentially the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.contourf.html#matplotlib.axes.Axes.contourf" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.contourf()</span></code></a>
+but calculates the countour levels. Currently this only works with
+workspaces that have a constant number of bins between spectra.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>
+to extract the data from</p></li>
+<li><p><strong>distribution</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) asks the workspace. <code class="docutils literal notranslate"><span class="pre">False</span></code> means
+divide by bin width. <code class="docutils literal notranslate"><span class="pre">True</span></code> means do not divide by bin width.
+Applies only when the matrix workspace is a histogram.</p></li>
+<li><p><strong>normalization</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) ask the workspace. Applies to MDHisto workspaces. It can override
+the value from displayNormalizationHisto. It checks only if
+the normalization is mantid.api.MDNormalization.NumEventsNormalization</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimensions to plot. <em>e.g.</em> to select the last two axes to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">slice(None))</span></code> where the 5 is the bin selected
+for the first axis.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the last
+two axes to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">None)</span></code> where the 1.0 is
+the value of the dimension selected for the first axis.</p></li>
+<li><p><strong>transpose</strong> – <code class="docutils literal notranslate"><span class="pre">bool</span></code> to transpose the x and y axes of the plotted dimensions of an MDHistoWorkspace</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions.errorbar">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions.</span></span><span class="sig-name descname"><span class="pre">errorbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions.errorbar" title="Link to this definition">¶</a></dt>
+<dd><p>Unpack mantid workspace and render it with matplotlib. <code class="docutils literal notranslate"><span class="pre">args</span></code> and
+<code class="docutils literal notranslate"><span class="pre">kwargs</span></code> are passed to <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.errorbar.html#matplotlib.axes.Axes.errorbar" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.errorbar()</span></code></a> after special
+keyword arguments are removed. This will automatically label the
+line according to the spectrum number unless specified otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>
+to extract the data from</p></li>
+<li><p><strong>specNum</strong> – spectrum number to plot if MatrixWorkspace</p></li>
+<li><p><strong>wkspIndex</strong> – workspace index to plot if MatrixWorkspace</p></li>
+<li><p><strong>distribution</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) asks the global setting. <code class="docutils literal notranslate"><span class="pre">False</span></code> means
+divide by bin width. <code class="docutils literal notranslate"><span class="pre">True</span></code> means do not divide by bin width.
+Applies only when the workspace is a MatrixWorkspace histogram.</p></li>
+<li><p><strong>normalize_by_bin_width</strong> – Plot the workspace as a distribution. If None default to global
+setting: config[‘graph1d.autodistribution’]</p></li>
+<li><p><strong>normalization</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) ask the workspace. Applies to MDHisto workspaces. It can override
+the value from displayNormalizationHisto. It checks only if
+the normalization is mantid.api.MDNormalization.NumEventsNormalization</p></li>
+<li><p><strong>axis</strong> – Specify which axis will be plotted. Use axis=MantidAxType.BIN to plot a bin,
+and axis=MantidAxType.SPECTRUM to plot a spectrum.
+The default value is axis=1, plotting spectra by default.</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimension to plot. <em>e.g.</em> to select the second axis to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">10)</span></code> where the 5/10 are the bins selected
+for the other 2 axes.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the second
+axis to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">2.0)</span></code> where the 1.0/2.0 are
+the dimension selected for the other 2 axes.</p></li>
+</ul>
+</dd>
+</dl>
+<p>For matrix workspaces with more than one spectra, either <code class="docutils literal notranslate"><span class="pre">specNum</span></code> or <code class="docutils literal notranslate"><span class="pre">wkspIndex</span></code>
+needs to be specified. Giving both will generate a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></a>. There is no similar
+keyword for MDHistoWorkspaces. These type of workspaces have to have exactly one non integrated
+dimension</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions.pcolor">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions.</span></span><span class="sig-name descname"><span class="pre">pcolor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions.pcolor" title="Link to this definition">¶</a></dt>
+<dd><p>Essentially the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.pcolor.html#matplotlib.axes.Axes.pcolor" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.pcolor()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>
+to extract the data from</p></li>
+<li><p><strong>distribution</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) asks the workspace. <code class="docutils literal notranslate"><span class="pre">False</span></code> means
+divide by bin width. <code class="docutils literal notranslate"><span class="pre">True</span></code> means do not divide by bin width.
+Applies only when the matrix workspace is a histogram.</p></li>
+<li><p><strong>normalization</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) ask the workspace. Applies to MDHisto workspaces. It can override
+the value from displayNormalizationHisto. It checks only if
+the normalization is mantid.api.MDNormalization.NumEventsNormalization</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimensions to plot. <em>e.g.</em> to select the last two axes to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">slice(None))</span></code> where the 5 is the bin selected
+for the first axis.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the last
+two axes to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">None)</span></code> where the 1.0 is
+the value of the dimension selected for the first axis.</p></li>
+<li><p><strong>axisaligned</strong> – <code class="docutils literal notranslate"><span class="pre">False</span></code> (default). If <code class="docutils literal notranslate"><span class="pre">True</span></code>, or if the workspace has a variable
+number of bins, the polygons will be aligned with the axes</p></li>
+<li><p><strong>transpose</strong> – <code class="docutils literal notranslate"><span class="pre">bool</span></code> to transpose the x and y axes of the plotted dimensions of an MDHistoWorkspace</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions.pcolorfast">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions.</span></span><span class="sig-name descname"><span class="pre">pcolorfast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions.pcolorfast" title="Link to this definition">¶</a></dt>
+<dd><p>Essentially the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.pcolorfast.html#matplotlib.axes.Axes.pcolorfast" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.pcolorfast()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>
+to extract the data from</p></li>
+<li><p><strong>distribution</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) asks the workspace. <code class="docutils literal notranslate"><span class="pre">False</span></code> means
+divide by bin width. <code class="docutils literal notranslate"><span class="pre">True</span></code> means do not divide by bin width.
+Applies only when the matrix workspace is a histogram.</p></li>
+<li><p><strong>normalization</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) ask the workspace. Applies to MDHisto workspaces. It can override
+the value from displayNormalizationHisto. It checks only if
+the normalization is mantid.api.MDNormalization.NumEventsNormalization</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimensions to plot. <em>e.g.</em> to select the last two axes to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">slice(None))</span></code> where the 5 is the bin selected
+for the first axis.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the last
+two axes to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">None)</span></code> where the 1.0 is
+the value of the dimension selected for the first axis.</p></li>
+<li><p><strong>axisaligned</strong> – <code class="docutils literal notranslate"><span class="pre">False</span></code> (default). If <code class="docutils literal notranslate"><span class="pre">True</span></code>, or if the workspace has a variable
+number of bins, the polygons will be aligned with the axes</p></li>
+<li><p><strong>transpose</strong> – <code class="docutils literal notranslate"><span class="pre">bool</span></code> to transpose the x and y axes of the plotted dimensions of an MDHistoWorkspace</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions.pcolormesh">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions.</span></span><span class="sig-name descname"><span class="pre">pcolormesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions.pcolormesh" title="Link to this definition">¶</a></dt>
+<dd><p>Essentially the same as <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.pcolormesh.html#matplotlib.axes.Axes.pcolormesh" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.pcolormesh()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>
+to extract the data from</p></li>
+<li><p><strong>distribution</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) asks the workspace. <code class="docutils literal notranslate"><span class="pre">False</span></code> means
+divide by bin width. <code class="docutils literal notranslate"><span class="pre">True</span></code> means do not divide by bin width.
+Applies only when the matrix workspace is a histogram.</p></li>
+<li><p><strong>normalization</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) ask the workspace. Applies to MDHisto workspaces. It can override
+the value from displayNormalizationHisto. It checks only if
+the normalization is mantid.api.MDNormalization.NumEventsNormalization</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimensions to plot. <em>e.g.</em> to select the last two axes to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">slice(None))</span></code> where the 5 is the bin selected
+for the first axis.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the last
+two axes to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">None)</span></code> where the 1.0 is
+the value of the dimension selected for the first axis.</p></li>
+<li><p><strong>axisaligned</strong> – <code class="docutils literal notranslate"><span class="pre">False</span></code> (default). If <code class="docutils literal notranslate"><span class="pre">True</span></code>, or if the workspace has a variable
+number of bins, the polygons will be aligned with the axes</p></li>
+<li><p><strong>transpose</strong> – <code class="docutils literal notranslate"><span class="pre">bool</span></code> to transpose the x and y axes of the plotted dimensions of an MDHistoWorkspace</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions.plot">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions.plot" title="Link to this definition">¶</a></dt>
+<dd><p>Unpack mantid workspace and render it with matplotlib. <code class="docutils literal notranslate"><span class="pre">args</span></code> and
+<code class="docutils literal notranslate"><span class="pre">kwargs</span></code> are passed to <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.plot.html#matplotlib.axes.Axes.plot" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.plot()</span></code></a> after special
+keyword arguments are removed. This will automatically label the
+line according to the spectrum number unless specified otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>
+to extract the data from</p></li>
+<li><p><strong>specNum</strong> – spectrum number to plot if MatrixWorkspace</p></li>
+<li><p><strong>wkspIndex</strong> – workspace index to plot if MatrixWorkspace</p></li>
+<li><p><strong>distribution</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) asks the workspace. <code class="docutils literal notranslate"><span class="pre">False</span></code> means
+divide by bin width. <code class="docutils literal notranslate"><span class="pre">True</span></code> means do not divide by bin width.
+Applies only when the workspace is a MatrixWorkspace histogram.</p></li>
+<li><p><strong>normalization</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) ask the workspace. Applies to MDHisto workspaces. It can override
+the value from displayNormalizationHisto. It checks only if
+the normalization is mantid.api.MDNormalization.NumEventsNormalization</p></li>
+<li><p><strong>normalize_by_bin_width</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) ask the workspace. It can override
+the value from distribution. Is implemented so get_normalize_by_bin_width
+only need to be run once.</p></li>
+<li><p><strong>LogName</strong> – if specified, it will plot the corresponding sample log. The x-axis
+of the plot is the time difference between the log time and the first
+value of the <cite>proton_charge</cite> log (if available) or the sample log’s
+first time.</p></li>
+<li><p><strong>StartFromLog</strong> – False by default. If True the time difference will be from the sample log’s
+first time, even if <cite>proton_charge</cite> log is available.</p></li>
+<li><p><strong>FullTime</strong> – False by default. If true, the full date and time will be plotted on the axis
+instead of the time difference</p></li>
+<li><p><strong>ExperimentInfo</strong> – for MD Workspaces with multiple <a class="reference internal" href="../api/ExperimentInfo.html#mantid.api.ExperimentInfo" title="mantid.api.ExperimentInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.ExperimentInfo</span></code></a> is the
+ExperimentInfo object from which to extract the log. It’s 0 by default</p></li>
+<li><p><strong>axis</strong> – Specify which axis will be plotted. Use axis=MantidAxType.BIN to plot a bin,
+and axis=MantidAxType.SPECTRUM to plot a spectrum.
+The default value is axis=1, plotting spectra by default.</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimension to plot. <em>e.g.</em> to select the second axis to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">10)</span></code> where the 5/10 are the bins selected
+for the other 2 axes.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the second
+axis to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">2.0)</span></code> where the 1.0/2.0 are
+the dimension selected for the other 2 axes.</p></li>
+</ul>
+</dd>
+</dl>
+<p>For matrix workspaces with more than one spectra, either <code class="docutils literal notranslate"><span class="pre">specNum</span></code> or <code class="docutils literal notranslate"><span class="pre">wkspIndex</span></code>
+needs to be specified. Giving both will generate a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></a>. There is no similar
+keyword for MDHistoWorkspaces. These type of workspaces have to have exactly one non integrated
+dimension</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions.scatter">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions.</span></span><span class="sig-name descname"><span class="pre">scatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions.scatter" title="Link to this definition">¶</a></dt>
+<dd><p>Unpack mantid workspace and render it with matplotlib. <code class="docutils literal notranslate"><span class="pre">args</span></code> and
+<code class="docutils literal notranslate"><span class="pre">kwargs</span></code> are passed to <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.scatter.html#matplotlib.axes.Axes.scatter" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.scatter()</span></code></a> after special
+keyword arguments are removed. This will automatically label the
+line according to the spectrum number unless specified otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>
+to extract the data from</p></li>
+<li><p><strong>specNum</strong> – spectrum number to plot if MatrixWorkspace</p></li>
+<li><p><strong>wkspIndex</strong> – workspace index to plot if MatrixWorkspace</p></li>
+<li><p><strong>distribution</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) asks the workspace. <code class="docutils literal notranslate"><span class="pre">False</span></code> means
+divide by bin width. <code class="docutils literal notranslate"><span class="pre">True</span></code> means do not divide by bin width.
+Applies only when the workspace is a MatrixWorkspace histogram.</p></li>
+<li><p><strong>normalization</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) ask the workspace. Applies to MDHisto workspaces. It can override
+the value from displayNormalizationHisto. It checks only if
+the normalization is mantid.api.MDNormalization.NumEventsNormalization</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimension to plot. <em>e.g.</em> to select the second axis to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">10)</span></code> where the 5/10 are the bins selected
+for the other 2 axes.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the second
+axis to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">2.0)</span></code> where the 1.0/2.0 are
+the dimension selected for the other 2 axes.</p></li>
+</ul>
+</dd>
+</dl>
+<p>For matrix workspaces with more than one spectra, either <code class="docutils literal notranslate"><span class="pre">specNum</span></code> or <code class="docutils literal notranslate"><span class="pre">wkspIndex</span></code>
+needs to be specified. Giving both will generate a <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RuntimeError</span></code></a>. There is no similar
+keyword for MDHistoWorkspaces. These type of workspaces have to have exactly one non integrated
+dimension</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions.tricontour">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions.</span></span><span class="sig-name descname"><span class="pre">tricontour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions.tricontour" title="Link to this definition">¶</a></dt>
+<dd><p>Essentially the same as <code class="xref py py-meth docutils literal notranslate"><span class="pre">mantid.plots.contour()</span></code>, but works
+for non-uniform grids. Currently this only works with workspaces
+that have a constant number of bins between spectra or with
+MDHistoWorkspaces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>
+to extract the data from</p></li>
+<li><p><strong>distribution</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) asks the workspace. <code class="docutils literal notranslate"><span class="pre">False</span></code> means
+divide by bin width. <code class="docutils literal notranslate"><span class="pre">True</span></code> means do not divide by bin width.
+Applies only when the matrix workspace is a histogram.</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimensions to plot. <em>e.g.</em> to select the last two axes to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">slice(None))</span></code> where the 5 is the bin selected
+for the first axis.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the last
+two axes to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">None)</span></code> where the 1.0 is
+the value of the dimension selected for the first axis.</p></li>
+<li><p><strong>normalization</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) ask the workspace. Applies to MDHisto workspaces. It can override
+the value from displayNormalizationHisto. It checks only if
+the normalization is mantid.api.MDNormalization.NumEventsNormalization</p></li>
+<li><p><strong>transpose</strong> – <code class="docutils literal notranslate"><span class="pre">bool</span></code> to transpose the x and y axes of the plotted dimensions of an MDHistoWorkspace</p></li>
+</ul>
+</dd>
+</dl>
+<p>See <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.tricontour.html#matplotlib.axes.Axes.tricontour" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.tricontour()</span></code></a> for more information.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions.tricontourf">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions.</span></span><span class="sig-name descname"><span class="pre">tricontourf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions.tricontourf" title="Link to this definition">¶</a></dt>
+<dd><p>Essentially the same as <code class="xref py py-meth docutils literal notranslate"><span class="pre">mantid.plots.contourf()</span></code>, but works
+for non-uniform grids. Currently this only works with workspaces
+that have a constant number of bins between spectra or with
+MDHistoWorkspaces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>
+to extract the data from</p></li>
+<li><p><strong>distribution</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) asks the workspace. <code class="docutils literal notranslate"><span class="pre">False</span></code> means
+divide by bin width. <code class="docutils literal notranslate"><span class="pre">True</span></code> means do not divide by bin width.
+Applies only when the matrix workspace is a histogram.</p></li>
+<li><p><strong>normalization</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) ask the workspace. Applies to MDHisto workspaces. It can override
+the value from displayNormalizationHisto. It checks only if
+the normalization is mantid.api.MDNormalization.NumEventsNormalization</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimensions to plot. <em>e.g.</em> to select the last two axes to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">slice(None))</span></code> where the 5 is the bin selected
+for the first axis.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the last
+two axes to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">None)</span></code> where the 1.0 is
+the value of the dimension selected for the first axis.</p></li>
+<li><p><strong>transpose</strong> – <code class="docutils literal notranslate"><span class="pre">bool</span></code> to transpose the x and y axes of the plotted dimensions of an MDHistoWorkspace</p></li>
+</ul>
+</dd>
+</dl>
+<p>See <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.tricontourf.html#matplotlib.axes.Axes.tricontourf" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.tricontourf()</span></code></a> for more information.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions.tripcolor">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions.</span></span><span class="sig-name descname"><span class="pre">tripcolor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions.tripcolor" title="Link to this definition">¶</a></dt>
+<dd><p>To be used with non-uniform grids. Currently this only works with workspaces
+that have a constant number of bins between spectra or with
+MDHistoWorkspaces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.10.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>
+to extract the data from</p></li>
+<li><p><strong>distribution</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) asks the workspace. <code class="docutils literal notranslate"><span class="pre">False</span></code> means
+divide by bin width. <code class="docutils literal notranslate"><span class="pre">True</span></code> means do not divide by bin width.
+Applies only when the matrix workspace is a histogram.</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimensions to plot. <em>e.g.</em> to select the last two axes to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">slice(None))</span></code> where the 5 is the bin selected
+for the first axis.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the last
+two axes to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">None)</span></code> where the 1.0 is
+the value of the dimension selected for the first axis.</p></li>
+<li><p><strong>normalization</strong> – <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) ask the workspace. Applies to MDHisto workspaces. It can override
+the value from displayNormalizationHisto. It checks only if
+the normalization is mantid.api.MDNormalization.NumEventsNormalization</p></li>
+<li><p><strong>transpose</strong> – <code class="docutils literal notranslate"><span class="pre">bool</span></code> to transpose the x and y axes of the plotted dimensions of an MDHistoWorkspace</p></li>
+</ul>
+</dd>
+</dl>
+<p>See <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.tripcolor.html#matplotlib.axes.Axes.tripcolor" title="(in Matplotlib v3.10.3)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">matplotlib.axes.Axes.tripcolor()</span></code></a> for more information.</p>
+</dd></dl>
+
+</section>
+<section id="module-mantid.plots.axesfunctions3D">
+<span id="functions-to-use-when-mantid3d-projection-is-not-available"></span><h3>Functions to use when <strong>mantid3d</strong> projection is not available<a class="headerlink" href="#module-mantid.plots.axesfunctions3D" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions3D.contour">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions3D.</span></span><span class="sig-name descname"><span class="pre">contour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions3D.contour" title="Link to this definition">¶</a></dt>
+<dd><p>Contour plots</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – class:<cite>matplotlib.axes.Axes3D</cite> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or
+<a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a> to extract the data from</p></li>
+<li><p><strong>extend3d</strong> – Whether to extend contour in 3D (default: False)</p></li>
+<li><p><strong>stride</strong> – Stride (step size) for extending contour</p></li>
+<li><p><strong>zdir</strong> – The direction to use: x, y or z (default)</p></li>
+<li><p><strong>offset</strong> – If specified plot a projection of the contour lines
+on this position in plane normal to zdir</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimensions to plot. <em>e.g.</em> to select the last two axes to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">slice(None))</span></code> where the 5 is the bin selected
+for the first axis.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the last
+two axes to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">None)</span></code> where the 1.0 is
+the value of the dimension selected for the first axis.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions3D.contourf">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions3D.</span></span><span class="sig-name descname"><span class="pre">contourf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions3D.contourf" title="Link to this definition">¶</a></dt>
+<dd><p>Filled Contour plots</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – class:<cite>matplotlib.axes.Axes3D</cite> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or
+<a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a> to extract the data from</p></li>
+<li><p><strong>zdir</strong> – The direction to use: x, y or z (default)</p></li>
+<li><p><strong>offset</strong> – If specified plot a projection of the filled contour on this
+position in plane normal to zdir</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimensions to plot. <em>e.g.</em> to select the last two axes to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">slice(None))</span></code> where the 5 is the bin selected
+for the first axis.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the last
+two axes to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">None)</span></code> where the 1.0 is
+the value of the dimension selected for the first axis.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions3D.plot">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions3D.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions3D.plot" title="Link to this definition">¶</a></dt>
+<dd><p>3D plots - line plots</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – class:<cite>matplotlib.axes.Axes3D</cite> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or
+<a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a> to extract the data from</p></li>
+<li><p><strong>zdir</strong> – Which direction to use as z (‘x’, ‘y’ or ‘z’) when plotting a 2D set.</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimension to plot. <em>e.g.</em> to select the second axis to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">10)</span></code> where the 5/10 are the bins selected
+for the other 2 axes.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the second
+axis to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">2.0)</span></code> where the 1.0/2.0 are
+the dimension selected for the other 2 axes.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions3D.plot_surface">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions3D.</span></span><span class="sig-name descname"><span class="pre">plot_surface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions3D.plot_surface" title="Link to this definition">¶</a></dt>
+<dd><p>Surface plots</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – class:<cite>matplotlib.axes.Axes3D</cite> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or
+<a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a> to extract the data from</p></li>
+<li><p><strong>rstride</strong> – Array row stride (step size)</p></li>
+<li><p><strong>cstride</strong> – Array column stride (step size)</p></li>
+<li><p><strong>rcount</strong> – Use at most this many rows, defaults to 100 (vs matplotlib default of 50)</p></li>
+<li><p><strong>ccount</strong> – Use at most this many columns, defaults to 100 (vs matplotlib default of 50)</p></li>
+<li><p><strong>color</strong> – Color of the surface patches</p></li>
+<li><p><strong>cmap</strong> – A colormap for the surface patches.</p></li>
+<li><p><strong>norm</strong> – An instance of Normalize to map values to colors</p></li>
+<li><p><strong>vmin</strong> – Minimum value to map</p></li>
+<li><p><strong>vmax</strong> – Maximum value to map</p></li>
+<li><p><strong>shade</strong> – Whether to shade the facecolors</p></li>
+<li><p><strong>facecolors</strong> – Face colors for the individual patches</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimensions to plot. <em>e.g.</em> to select the last two axes to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">slice(None))</span></code> where the 5 is the bin selected
+for the first axis.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the last
+two axes to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">None)</span></code> where the 1.0 is
+the value of the dimension selected for the first axis.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions3D.plot_wireframe">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions3D.</span></span><span class="sig-name descname"><span class="pre">plot_wireframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions3D.plot_wireframe" title="Link to this definition">¶</a></dt>
+<dd><p>Wire-frame plot</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – class:<cite>matplotlib.axes.Axes3D</cite> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or
+<a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a> to extract the data from</p></li>
+<li><p><strong>rstride</strong> – Array row stride (step size), defaults to 1</p></li>
+<li><p><strong>cstride</strong> – Array column stride (step size), defaults to 1</p></li>
+<li><p><strong>rcount</strong> – Use at most this many rows, defaults to 50</p></li>
+<li><p><strong>ccount</strong> – Use at most this many columns, defaults to 50</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimensions to plot. <em>e.g.</em> to select the last two axes to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">slice(None))</span></code> where the 5 is the bin selected
+for the first axis.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the last
+two axes to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">None)</span></code> where the 1.0 is
+the value of the dimension selected for the first axis.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.axesfunctions3D.scatter">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.axesfunctions3D.</span></span><span class="sig-name descname"><span class="pre">scatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.axesfunctions3D.scatter" title="Link to this definition">¶</a></dt>
+<dd><p>Scatter plots</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> – class:<cite>matplotlib.axes.Axes3D</cite> object that will do the plotting</p></li>
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a>
+to extract the data from</p></li>
+<li><p><strong>zdir</strong> – Which direction to use as z (‘x’, ‘y’ or ‘z’) when plotting a 2D set.</p></li>
+<li><p><strong>s</strong> – Size in points^2. It is a scalar or an array of the same length as x and y.</p></li>
+<li><p><strong>c</strong> – A color. c can be a single color format string, or a sequence of color
+specifications of length N, or a sequence of N numbers to be mapped to
+colors using the cmap and norm specified via kwargs (see below). Note
+that c should not be a single numeric RGB or RGBA sequence because that
+is indistinguishable from an array of values to be colormapped.
+c can be a 2-D array in which the rows are RGB or RGBA, however, including
+the case of a single row to specify the same color for all points.</p></li>
+<li><p><strong>depthshade</strong> – Whether or not to shade the scatter markers to give the appearance
+of depth. Default is True.</p></li>
+<li><p><strong>indices</strong> – Specify which slice of an MDHistoWorkspace to use when plotting. Needs to be a tuple
+and will be interpreted as a list of indices. You need to use <code class="docutils literal notranslate"><span class="pre">slice(None)</span></code> to
+select which dimensions to plot. <em>e.g.</em> to select the last two axes to plot from a
+3D volume use <code class="docutils literal notranslate"><span class="pre">indices=(5,</span> <span class="pre">slice(None),</span> <span class="pre">slice(None))</span></code> where the 5 is the bin selected
+for the first axis.</p></li>
+<li><p><strong>slicepoint</strong> – Specify which slice of an MDHistoWorkspace to use when plotting in the dimension units.
+You need to use <code class="docutils literal notranslate"><span class="pre">None</span></code> to select which dimension to plot. <em>e.g.</em> to select the last
+two axes to plot from a 3D volume use <code class="docutils literal notranslate"><span class="pre">slicepoint=(1.0,</span> <span class="pre">None,</span> <span class="pre">None)</span></code> where the 1.0 is
+the value of the dimension selected for the first axis.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-mantid.plots.datafunctions">
+<span id="helper-functions"></span><h3>Helper functions<a class="headerlink" href="#module-mantid.plots.datafunctions" title="Link to this heading">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.datafunctions.boundaries_from_points">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.datafunctions.</span></span><span class="sig-name descname"><span class="pre">boundaries_from_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.datafunctions.boundaries_from_points" title="Link to this definition">¶</a></dt>
+<dd><p>The function tries to guess bin boundaries from bin centers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_array</strong> – a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> of bin centers</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.datafunctions.get_axes_labels">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.datafunctions.</span></span><span class="sig-name descname"><span class="pre">get_axes_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_by_bin_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_latex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.datafunctions.get_axes_labels" title="Link to this definition">¶</a></dt>
+<dd><p>Get axis labels from a Workspace2D or an MDHistoWorkspace
+Returns a tuple. The first element is the quantity label, such as “Intensity” or “Counts”.
+All other elements in the tuple are labels for axes.
+Some of them are latex formatted already.</p>
+<p>If MDWorkspace then the last element will be the values selected by the indices, to be set as title.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> or <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a></p></li>
+<li><p><strong>indices</strong></p></li>
+<li><p><strong>normalize_by_bin_width</strong> – bool: Plotting workspace normalized by bin width</p></li>
+<li><p><strong>use_latex</strong> – bool: return y-unit label in Latex form</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.datafunctions.get_distribution">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.datafunctions.</span></span><span class="sig-name descname"><span class="pre">get_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.datafunctions.get_distribution" title="Link to this definition">¶</a></dt>
+<dd><p>Determine whether or not the data is a distribution.
+If the workspace is a distribution return true,
+else the value in kwargs wins.
+Applies to Matrix workspaces only
+:param workspace: <a class="reference internal" href="../api/MatrixWorkspace.html#mantid.api.MatrixWorkspace" title="mantid.api.MatrixWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MatrixWorkspace</span></code></a> to extract the data from</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.datafunctions.get_matrix_2d_data">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.datafunctions.</span></span><span class="sig-name descname"><span class="pre">get_matrix_2d_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">histogram2D</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.datafunctions.get_matrix_2d_data" title="Link to this definition">¶</a></dt>
+<dd><p>Get all data from a Matrix workspace that has the same number of bins
+in every spectrum. It is used for 2D plots</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>workspace</strong> – Matrix workspace to extract the data from</p></li>
+<li><p><strong>distribution</strong> – if False, and the workspace contains histogram data,
+the intensity will be divided by the x bin width</p></li>
+<li><p><strong>histogram2D</strong> – flag that specifies if the coordinates in the output are
+-bin centers (such as for contour) for False, or
+-bin edges (such as for pcolor) for True.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns x,y,z 2D arrays</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.datafunctions.get_md_data">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.datafunctions.</span></span><span class="sig-name descname"><span class="pre">get_md_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalization</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withError</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.datafunctions.get_md_data" title="Link to this definition">¶</a></dt>
+<dd><p>Generic function to extract data from an MDHisto workspace</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>workspace</strong> – <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a> containing data</p></li>
+<li><p><strong>normalization</strong> – if <a class="reference internal" href="../api/MDNormalization.html#mantid.api.MDNormalization.NumEventsNormalization" title="mantid.api.MDNormalization.NumEventsNormalization"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.MDNormalization.NumEventsNormalization</span></code></a>
+it will divide intensity by the number of corresponding MDEvents</p></li>
+<li><p><strong>indices</strong> – slice indices to select data</p></li>
+<li><p><strong>withError</strong> – flag for if the error is calculated. If False, err is returned as None</p></li>
+</ul>
+</dd>
+</dl>
+<p>returns a tuple containing bin boundaries for each dimension, the (maybe normalized)
+signal and error arrays</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.datafunctions.get_md_data1d">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.datafunctions.</span></span><span class="sig-name descname"><span class="pre">get_md_data1d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalization</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.datafunctions.get_md_data1d" title="Link to this definition">¶</a></dt>
+<dd><p>Function to transform data in an MDHisto workspace with exactly
+one non-integrated dimension into arrays of bin centers, data,
+and error, to be used in 1D plots (plot, scatter, errorbar)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.datafunctions.get_md_data2d_bin_bounds">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.datafunctions.</span></span><span class="sig-name descname"><span class="pre">get_md_data2d_bin_bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalization</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.datafunctions.get_md_data2d_bin_bounds" title="Link to this definition">¶</a></dt>
+<dd><p>Function to transform data in an MDHisto workspace with exactly
+two non-integrated dimension into arrays of bin boundaries in each
+dimension, and data. To be used in 2D plots (pcolor, pcolorfast, pcolormesh)</p>
+<p>Note: return coordinates are 1d vectors. Use numpy.meshgrid to generate 2d versions</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.datafunctions.get_md_data2d_bin_centers">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.datafunctions.</span></span><span class="sig-name descname"><span class="pre">get_md_data2d_bin_centers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalization</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.datafunctions.get_md_data2d_bin_centers" title="Link to this definition">¶</a></dt>
+<dd><p>Function to transform data in an MDHisto workspace with exactly
+two non-integrated dimension into arrays of bin centers in each
+dimension, and data. To be used in 2D plots (contour, contourf,
+tricontour, tricontourf, tripcolor)</p>
+<p>Note: return coordinates are 1d vectors. Use numpy.meshgrid to generate 2d versions</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.datafunctions.get_normalization">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.datafunctions.</span></span><span class="sig-name descname"><span class="pre">get_normalization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">md_workspace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.datafunctions.get_normalization" title="Link to this definition">¶</a></dt>
+<dd><p>Gets the normalization flag of an MDHistoWorkspace. For workspaces
+derived similar to MSlice/Horace, one needs to average data, the so-called
+“number of events” normalization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>md_workspace</strong> – <a class="reference internal" href="../api/IMDHistoWorkspace.html#mantid.api.IMDHistoWorkspace" title="mantid.api.IMDHistoWorkspace"><code class="xref py py-class docutils literal notranslate"><span class="pre">mantid.api.IMDHistoWorkspace</span></code></a> to extract the data from</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.datafunctions.get_spectrum">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.datafunctions.</span></span><span class="sig-name descname"><span class="pre">get_spectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wkspIndex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_by_bin_width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withDy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withDx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.datafunctions.get_spectrum" title="Link to this definition">¶</a></dt>
+<dd><p>Extract a single spectrum and process the data into a frequency</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>workspace</strong> – a Workspace2D or an EventWorkspace</p></li>
+<li><p><strong>wkspIndex</strong> – workspace index</p></li>
+<li><p><strong>normalize_by_bin_width</strong> – flag to divide the data by bin width. The same
+effect can be obtained by running the <a class="reference internal" href="../../../../algorithms/ConvertToDistribution-v1.html#algm-converttodistribution"><span class="std std-ref">ConvertToDistribution v1</span></a>
+algorithm</p></li>
+<li><p><strong>withDy</strong> – if True, it will return the error in the “counts”, otherwise None</p></li>
+<li><p><strong>Dx</strong> (<em>with</em>) – if True, and workspace has them, it will return errors
+in the x coordinate, otherwise None</p></li>
+</ul>
+</dd>
+</dl>
+<p>Note that for workspaces containing bin boundaries, this function will return
+the bin centers for x.
+To be used in 1D plots (plot, scatter, errorbar)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.datafunctions.get_uneven_data">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.datafunctions.</span></span><span class="sig-name descname"><span class="pre">get_uneven_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.datafunctions.get_uneven_data" title="Link to this definition">¶</a></dt>
+<dd><p>Function to get data for uneven workspace2Ds, such as
+that pcolor, pcolorfast, and pcolormesh will plot axis aligned rectangles</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>workspace</strong> – a workspace2d</p></li>
+<li><p><strong>distribution</strong> – if False, and the workspace contains histogram data,
+the intensity will be divided by the x bin width</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns three lists. Each element in the x list is an array of boundaries
+for a spectra. Each element in the y list is a 2 element array with the extents
+of a particular spectra. The z list contains arrays of intensities at bin centers</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.datafunctions.get_wksp_index_dist_and_label">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.datafunctions.</span></span><span class="sig-name descname"><span class="pre">get_wksp_index_dist_and_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">workspace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">MantidAxType.SPECTRUM</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.datafunctions.get_wksp_index_dist_and_label" title="Link to this definition">¶</a></dt>
+<dd><p>Get workspace index, whether the workspace is a distribution,
+and label for the spectrum</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>workspace</strong> – a Workspace2D or an EventWorkspace</p></li>
+<li><p><strong>axis</strong> – The axis on which we’re operating</p></li>
+<li><p><strong>kwargs</strong> – Keyword arguments passed to the plot function, passed by reference as it is mutated</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mantid.plots.datafunctions.points_from_boundaries">
+<span class="sig-prename descclassname"><span class="pre">mantid.plots.datafunctions.</span></span><span class="sig-name descname"><span class="pre">points_from_boundaries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mantid.plots.datafunctions.points_from_boundaries" title="Link to this definition">¶</a></dt>
+<dd><p>The function returns bin centers from bin boundaries</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_array</strong> – a <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> of bin boundaries</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="../api/WorkspaceUnitValidator.html" title="Previous Chapter: WorkspaceUnitValidator"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; WorkspaceUnit...</span>
+    </a>
+  </li>
+  <li>
+    <a href="../utils/index.html" title="Next Chapter: mantid.utils"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">mantid.utils &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

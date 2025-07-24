@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ConvertToDiffractionMDWorkspace v1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=410c086f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ConvertToDiffractionMDWorkspace v2" href="ConvertToDiffractionMDWorkspace-v2.html" />
+    <link rel="prev" title="ConvertToDetectorFaceMD v1" href="ConvertToDetectorFaceMD-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.13</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Algorithms</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">ConvertToDiffractionMDWorkspace v1</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="converttodiffractionmdworkspace-v1">
+<span id="algm-converttodiffractionmdworkspace-v1"></span><h1>ConvertToDiffractionMDWorkspace v1<a class="headerlink" href="#converttodiffractionmdworkspace-v1" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id1">Summary</a></p></li>
+<li><p><a class="reference internal" href="#properties" id="id2">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id3">Description</a></p>
+<ul>
+<li><p><a class="reference internal" href="#types-of-conversion" id="id4">Types of Conversion</a></p></li>
+<li><p><a class="reference internal" href="#lorentz-correction" id="id5">Lorentz Correction</a></p></li>
+<li><p><a class="reference internal" href="#oneeventperbin-option" id="id6">OneEventPerBin option</a></p></li>
+<li><p><a class="reference internal" href="#performance-notes" id="id7">Performance Notes</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#source" id="id8">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Create a MDEventWorkspace with events in reciprocal space (Qx, Qy, Qz) for an elastic diffraction experiment.</p>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>InputWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p><a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>An input workspace in time-of-flight. If you specify a Workspace2D, it gets converted to an EventWorkspace using ConvertToEventWorkspace.</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputWorkspace</p></td>
+<td><p>Output</p></td>
+<td><p><a class="reference internal" href="../concepts/MDWorkspace.html#mdworkspace"><span class="std std-ref">MDEventWorkspace</span></a></p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Name of the output MDEventWorkspace. If the workspace already exists, then the events will be added to it.</p></td>
+</tr>
+<tr class="row-even"><td><p>Append</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Append events to the output workspace. The workspace is replaced if unchecked.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ClearInputWorkspace</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Clear the events from the input workspace during conversion, to save memory.</p></td>
+</tr>
+<tr class="row-even"><td><p>OneEventPerBin</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Use the histogram representation (event for event workspaces). One MDEvent will be created for each histogram bin (even empty ones). Warning! This can use significantly more memory!</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputDimensions</p></td>
+<td><p>Input</p></td>
+<td><p>string</p></td>
+<td><p>Q (lab frame)</p></td>
+<td><p>What will be the dimensions of the output workspace?   Q (lab frame): Wave-vector change of the lattice in the lab frame.   Q (sample frame): Wave-vector change of the lattice in the frame of the sample (taking out goniometer rotation).   HKL: Use the sample’s UB matrix to convert to crystal’s HKL indices. Allowed values: [‘Q (lab frame)’, ‘Q (sample frame)’, ‘HKL’]</p></td>
+</tr>
+<tr class="row-even"><td><p>LorentzCorrection</p></td>
+<td><p>Input</p></td>
+<td><p>boolean</p></td>
+<td><p>False</p></td>
+<td><p>Correct the weights of events by multiplying by the Lorentz formula: sin(theta)^2 / lambda^4</p></td>
+</tr>
+<tr class="row-odd"><td><p>SplitInto</p></td>
+<td><p>Input</p></td>
+<td><p>int list</p></td>
+<td><p>2</p></td>
+<td><p>A comma separated list of into how many sub-grid elements each dimension should split; or just one to split into the same number for all dimensions. Default 2.</p></td>
+</tr>
+<tr class="row-even"><td><p>SplitThreshold</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>1500</p></td>
+<td><p>How many events in a box before it should be split. Default 1500.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MaxRecursionDepth</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>20</p></td>
+<td><p>How many levels of box splitting recursion are allowed. The smallest box will have each side length <span class="math notranslate nohighlight">\(l = (extents) / (SplitInto^{MaxRecursionDepth}).\)</span> Default 20.</p></td>
+</tr>
+<tr class="row-even"><td><p>MinRecursionDepth</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0</p></td>
+<td><p>Optional. If specified, then all the boxes will be split to this minimum recursion depth. 1 = one level of splitting, etc. Be careful using this since it can quickly create a huge number of <span class="math notranslate nohighlight">\(boxes = SplitInto^{MinRercursionDepth \times NumDimensions}\)</span>. But setting this property equal to MaxRecursionDepth property is necessary if one wants to generate multiple file based workspaces in order to merge them later</p></td>
+</tr>
+<tr class="row-odd"><td><p>Extents</p></td>
+<td><p>Input</p></td>
+<td><p>dbl list</p></td>
+<td><p>-50,50</p></td>
+<td><p>A comma separated list of min, max for each dimension, specifying the extents of each dimension. Optional, default +-50 in each dimension.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>This algorithm converts from a <a class="reference internal" href="../concepts/MatrixWorkspace.html#matrixworkspace"><span class="std std-ref">MatrixWorkspace</span></a> (in
+detector/time-of-flight space) to a
+<a class="reference internal" href="../concepts/MDWorkspace.html#mdworkspace"><span class="std std-ref">MDEventWorkspace</span></a> containing events in reciprocal
+space.</p>
+<p>The calculations apply only to elastic diffraction experiments. The
+conversion can be done either to Q-space in the lab or sample frame, or
+to HKL of the crystal.</p>
+<p>If the OutputWorkspace does NOT already exist, a default one is created.
+In order to define more precisely the parameters of the
+<a class="reference internal" href="../concepts/MDWorkspace.html#mdworkspace"><span class="std std-ref">MDEventWorkspace</span></a>, use the <a class="reference internal" href="CreateMDWorkspace-v1.html#algm-createmdworkspace"><span class="std std-ref">CreateMDWorkspace v1</span></a>
+algorithm first.</p>
+<section id="types-of-conversion">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Types of Conversion</a><a class="headerlink" href="#types-of-conversion" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>Q (lab frame)</strong>: this calculates the momentum transfer (ki-kf) for
+each event is calculated in the experimental lab frame.</p></li>
+<li><p><strong>Q (sample frame)</strong>: the goniometer rotation of the sample is taken
+out, to give Q in the frame of the sample. See
+<a class="reference internal" href="SetGoniometer-v1.html#algm-setgoniometer"><span class="std std-ref">SetGoniometer v1</span></a> to specify the goniometer used in
+the experiment.</p></li>
+<li><p><strong>HKL</strong>: uses the <a class="reference internal" href="../concepts/Lattice.html#lattice"><span class="std std-ref">UB matrix</span></a> (see <a class="reference internal" href="SetUB-v1.html#algm-setub"><span class="std std-ref">SetUB v1</span></a>,
+<a class="reference internal" href="FindUBUsingFFT-v1.html#algm-findubusingfft"><span class="std std-ref">FindUBUsingFFT v1</span></a> and others) to calculate the HKL
+Miller indices of each event.</p></li>
+</ul>
+</section>
+<section id="lorentz-correction">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Lorentz Correction</a><a class="headerlink" href="#lorentz-correction" title="Link to this heading">¶</a></h3>
+<p>If selected, the following Lorentz correction factor is applied on each
+event by multiplying its weight by L:</p>
+<p><span class="math notranslate nohighlight">\(L = \frac{ sin(\theta)^2 } { \lambda^{4} }\)</span></p>
+<p>Where <span class="math notranslate nohighlight">\(\theta\)</span> is <em>half</em> of the neutron scattering angle
+(conventionally called <span class="math notranslate nohighlight">\(2\theta\)</span>). <span class="math notranslate nohighlight">\(\lambda\)</span> is the neutron
+wavelength in <em>Angstroms</em>.</p>
+<p>This correction is also done by the
+<a class="reference internal" href="AnvredCorrection-v1.html#algm-anvredcorrection"><span class="std std-ref">AnvredCorrection v1</span></a> algorithm, and will be set to
+false if that algorithm has been run on the input workspace.</p>
+</section>
+<section id="oneeventperbin-option">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">OneEventPerBin option</a><a class="headerlink" href="#oneeventperbin-option" title="Link to this heading">¶</a></h3>
+<p>If you specify <em>OneEventPerBin</em>, then the <strong>histogram</strong> representation
+of the input workspace is used, with one MDEvent generated for each bin
+of the workspace, <strong>including zeros</strong>.</p>
+<p>This can be useful in cases where the experimental coverage needs to be
+tracked. With one MDEvent for each bin, you can count which regions in
+Q-space have been measured. The <a class="reference internal" href="../workbench/sliceviewer.html#sliceviewer"><span class="std std-ref">Sliceviewer</span></a> has an
+option to view normalized by number of events. This means that, for
+example, areas with overlap from two runs will appear scaled down.</p>
+<p>A significant drawback to this is that the output MDEventWorkspace will
+be <em>significantly</em> larger than the events alone would be. It currently
+must be created in physical memory (it cannot yet be cached to disk).
+One way to limit the memory used is to limit the OutputExtents to a
+smaller region and only convert part of the space.</p>
+<p>Also, the <a class="reference internal" href="FindPeaksMD-v1.html#algm-findpeaksmd"><span class="std std-ref">FindPeaksMD v1</span></a> algorithm may not work optimally
+because it depends partly on higher density of events causing more
+finely split boxes.</p>
+<p>If your input is a <a class="reference internal" href="../concepts/Workspace2D.html#workspace2d"><span class="std std-ref">Workspace2D</span></a> and you do NOT check
+<em>OneEventPerBin</em>, then the workspace is converted to an
+<a class="reference internal" href="../concepts/EventWorkspace.html#eventworkspace"><span class="std std-ref">EventWorkspace</span></a> but with no events for empty bins.</p>
+</section>
+<section id="performance-notes">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Performance Notes</a><a class="headerlink" href="#performance-notes" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>8-core Intel Xeon 3.2 GHz computer: measured between 4 and 5.5
+million events per second (100-200 million event workspace).</p></li>
+<li><p>32-core AMD Opteron 2.7 GHz computer: measured between 8 and 9
+million events per second (400-1000 million event workspaces).</p></li>
+</ul>
+<p>Usage</p>
+<p><strong>Example - Convert re-binned MARI 2D workspace to 3D MD workspace for further analysis/merging with data at different temperatures :</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create or load event workspace</span>
+<span class="n">events</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;events&#39;</span><span class="p">,</span> <span class="n">WorkspaceType</span><span class="o">=</span><span class="s1">&#39;Event&#39;</span><span class="p">,</span> <span class="n">Function</span><span class="o">=</span><span class="s1">&#39;Multiple Peaks&#39;</span><span class="p">)</span>
+<span class="c1"># convert to  MD workspace</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">ConvertToDiffractionMDWorkspace</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">events</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;md&#39;</span><span class="p">,</span> <span class="n">OneEventPerBin</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">LorentzCorrection</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">SplitThreshold</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">Version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># A way to look at these results as a text:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Resulting MD workspace has </span><span class="si">{0}</span><span class="s2"> events and </span><span class="si">{1}</span><span class="s2"> dimensions&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">md</span><span class="o">.</span><span class="n">getNEvents</span><span class="p">(),</span><span class="n">md</span><span class="o">.</span><span class="n">getNumDims</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Workspace Type is:  </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">md</span><span class="o">.</span><span class="n">id</span><span class="p">()))</span>
+</pre></div>
+</div>
+<p><strong>Output:</strong></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Resulting MD workspace has 194... events and 3 dimensions
+Workspace Type is:  MDEventWorkspace&lt;MDLeanEvent,3&gt;
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/MDAlgorithms/Creation.html">MDAlgorithms\Creation</a></p>
+</section>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/eea692df788805d655ad0462903b75258b202acb/Framework/MDAlgorithms/inc/MantidMDAlgorithms/ConvertToDiffractionMDWorkspace.h">ConvertToDiffractionMDWorkspace.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/eea692df788805d655ad0462903b75258b202acb/Framework/MDAlgorithms/src/ConvertToDiffractionMDWorkspace.cpp">ConvertToDiffractionMDWorkspace.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="ConvertToDetectorFaceMD-v1.html" title="Previous Chapter: ConvertToDetectorFaceMD v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; ConvertToDete...</span>
+    </a>
+  </li>
+  <li>
+    <a href="ConvertToDiffractionMDWorkspace-v2.html" title="Next Chapter: ConvertToDiffractionMDWorkspace v2"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">ConvertToDiff... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

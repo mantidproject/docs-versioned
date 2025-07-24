@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Poisson Cost Function</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <script src="../../_static/documentation_options.js?v=410c086f"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Fit Functions" href="../fitfunctions/index.html" />
+    <link rel="prev" title="Fit Cost Functions" href="index.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.13</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Fit Cost Functions</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Poisson Cost Function</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="poisson-cost-function">
+<span id="poisson"></span><h1>Poisson Cost Function<a class="headerlink" href="#poisson-cost-function" title="Link to this heading">¶</a></h1>
+<section id="description">
+<span id="index-0"></span><h2>Description<a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>The Poisson cost function is designed to be applied to data, which has a low number of counts/events.
+In this scenario a fit is being performed using a model (function) to some low stats data.</p>
+<p>The number of counts/events in bin <span class="math notranslate nohighlight">\(i\)</span> is given by <span class="math notranslate nohighlight">\(y_i\)</span> and the corresponding value for the model is <span class="math notranslate nohighlight">\(\mu_i\)</span>.
+Where the values of <span class="math notranslate nohighlight">\(y_i\)</span> and <span class="math notranslate nohighlight">\(\mu_i\)</span> are strictly positive.</p>
+<p>The quality of the fit can be represented numerically by the deviance (<span class="math notranslate nohighlight">\(D\)</span>)</p>
+<div class="math notranslate nohighlight">
+\[2\sum_{i}^{N} \left\{ y_{i} \log(y_i) -y_{i} \log(\mu_i)  - (y_{i} - \mu_i) \right\},\]</div>
+<p>where the first two terms provide a measure for small variations between <span class="math notranslate nohighlight">\(y_i\)</span> and <span class="math notranslate nohighlight">\(\mu_i\)</span>, whereas the third term provides a measure of large variations.
+Therefore, by minimizing the deviance the best fit can be identified.
+This method is also known as the Poisson deviance or Poisson log-linear model.</p>
+<p>When performing a fit on Poisson distributed data care needs to be taken when selecting the cost function.
+For a large number of events/counts the least squares cost function can be used to minimize Poisson distributed data.
+This is because in the limit of large numbers of events/counts the Poisson and Gaussian distributions are approximately equal.
+In the limits of low events/counts using a least squares cost function can lead to biased results.</p>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h2>
+<p>Given a workspace with low counts, a fit can be done in a script as follows:
+<code class="docutils literal notranslate"><span class="pre">Fit(Function=f,InputWorkspace=workspace,Output=&quot;outputName&quot;,CreateOutput=True,CostFunction=&quot;Poisson&quot;,Minimizer=&quot;Levenberg-MarquardtMD&quot;)</span></code></p>
+<p>The plot below demonstrates the difference between using the Poisson and Least Squares cost functions for a given
+parameter over a series of fits to data with different number of counts.
+The Poisson model gives a much more consistent result and means no special treatment is required for zero counts.</p>
+<img alt="Poisson cost function compared with least squares cost function" src="../../_images/Poisson.png" />
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<p>[1]  <a class="reference external" href="https://data.princeton.edu/wws509/notes/c4.pdf">Rodríguez, G. (2007). Lecture Notes on Generalized Linear Models</a>.</p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="index.html" title="Previous Chapter: Fit Cost Functions"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Fit Cost Functions</span>
+    </a>
+  </li>
+  <li>
+    <a href="../fitfunctions/index.html" title="Next Chapter: Fit Functions"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Fit Functions &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

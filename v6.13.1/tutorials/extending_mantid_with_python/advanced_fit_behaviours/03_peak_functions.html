@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Peak Functions</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+    <script src="../../../_static/documentation_options.js?v=410c086f"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Peak Function Methods" href="04_peak_function_methods.html" />
+    <link rel="prev" title="Analytical Derivatives" href="02_analytical_derivatives.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.13</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../../index.html" >Training</a> &#187;</li>
+          
+            <li class="nav-item nav-item-2"><a href="../index.html" >Extending Mantid With Python</a> &#187;</li>
+          
+            <li class="nav-item nav-item-3"><a href="index.html" accesskey="U">Advanced Fit Behaviours</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Peak Functions</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="peak-functions">
+<span id="id1"></span><h1>Peak Functions<a class="headerlink" href="#peak-functions" title="Link to this heading">¶</a></h1>
+<p>The Peak function type, <code class="docutils literal notranslate"><span class="pre">IPeakFunction</span></code>, is a specialized kind of 1D
+function. It is used when, for the given function, approximate values of
+<em>height</em>, <em>fwhm</em> &amp; <em>peak centre</em> can be determined from the function
+parameters. Their main use is to improve the choosing of starting values
+for these types of function from the GUI.</p>
+<p>The function calculation also only occurs around a given <em>peak radius</em>
+(defined in Settings-&gt;Fitting-&gt;CurveFitting menu). Any function
+values outside this radius are automatically zeroed. The best description
+here is to walk through defining an example. Here will implement a <code class="docutils literal notranslate"><span class="pre">Gaussian</span></code>
+(called PyGaussian so as not interfere with Mantid’s Gaussian).</p>
+<section id="parameters-attributes">
+<h2>Parameters &amp; Attributes<a class="headerlink" href="#parameters-attributes" title="Link to this heading">¶</a></h2>
+<p>The parameters &amp; attributes are defined in exactly the same manner as for the
+<code class="docutils literal notranslate"><span class="pre">IFunction1D</span></code> case:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mantid.api</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PyGaussian</span><span class="p">(</span><span class="n">IPeakFunction</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declareParameter</span><span class="p">(</span><span class="s2">&quot;Height&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declareParameter</span><span class="p">(</span><span class="s2">&quot;PeakCentre&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">declareParameter</span><span class="p">(</span><span class="s2">&quot;Sigma&quot;</span><span class="p">)</span>
+        <span class="c1"># We don&#39;t use any attributes in this example</span>
+
+<span class="n">FunctionFactory</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">PyGaussian</span><span class="p">)</span> <span class="c1"># Registration is identical</span>
+</pre></div>
+</div>
+</section>
+<section id="evaluating-the-function-derivative">
+<h2>Evaluating the Function &amp; Derivative<a class="headerlink" href="#evaluating-the-function-derivative" title="Link to this heading">¶</a></h2>
+<p>Function evaluation proceeds in a similar manner to <code class="docutils literal notranslate"><span class="pre">IFunction1D</span></code> with the
+exception that the method is now called <code class="docutils literal notranslate"><span class="pre">functionLocal</span></code>. Python
+<code class="docutils literal notranslate"><span class="pre">PeakFunctions</span></code> can also provide an analytical derivative by defining a
+<code class="docutils literal notranslate"><span class="pre">functionDerivLocal</span></code> method. This is optional and default is to be
+calculated numerical derivatives:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">functionLocal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xvals</span><span class="p">):</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getParameterValue</span><span class="p">(</span><span class="s2">&quot;Height&quot;</span><span class="p">)</span>
+    <span class="n">peak_centre</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getParameterValue</span><span class="p">(</span><span class="s2">&quot;PeakCentre&quot;</span><span class="p">)</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getParameterValue</span><span class="p">(</span><span class="s2">&quot;Sigma&quot;</span><span class="p">)</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">sigma</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">offset_sq</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">xvals</span><span class="o">-</span><span class="n">peak_centre</span><span class="p">)</span>
+    <span class="n">out</span><span class="o">=</span><span class="n">height</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">offset_sq</span><span class="o">*</span><span class="n">weight</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="c1"># the following method is optional</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">functionDerivLocal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xvals</span><span class="p">,</span> <span class="n">jacobian</span><span class="p">):</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getParameterValue</span><span class="p">(</span><span class="s2">&quot;Height&quot;</span><span class="p">)</span>
+    <span class="n">peak_centre</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getParameterValue</span><span class="p">(</span><span class="s2">&quot;PeakCentre&quot;</span><span class="p">)</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getParameterValue</span><span class="p">(</span><span class="s2">&quot;Sigma&quot;</span><span class="p">)</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="n">sigma</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># X index</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xvals</span><span class="p">:</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">x</span><span class="o">-</span><span class="n">peak_centre</span>
+        <span class="n">exp_term</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">diff</span><span class="o">*</span><span class="n">diff</span><span class="o">*</span><span class="n">weight</span><span class="p">)</span>
+        <span class="n">jacobian</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">exp_term</span><span class="p">)</span>
+        <span class="n">jacobian</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">diff</span><span class="o">*</span><span class="n">height</span><span class="o">*</span><span class="n">exp_term</span><span class="o">*</span><span class="n">weight</span><span class="p">)</span>
+        <span class="c1"># derivative with respect to weight not sigma</span>
+        <span class="n">jacobian</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">diff</span><span class="o">*</span><span class="n">diff</span><span class="o">*</span><span class="n">height</span><span class="o">*</span><span class="n">exp_term</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="02_analytical_derivatives.html" title="Previous Chapter: Analytical Derivatives"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Analytical De...</span>
+    </a>
+  </li>
+  <li>
+    <a href="04_peak_function_methods.html" title="Next Chapter: Peak Function Methods"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Peak Function Methods &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
