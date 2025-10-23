@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Time-of-Flight Powder Diffraction Calibration</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-sphinx.css?v=fadd4351" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=77160d70" />
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+    <script src="../../_static/documentation_options.js?v=6b2f7db8"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Python Code For Calibration" href="PythonCodeForCalibration.html" />
+    <link rel="prev" title="PSD Tube Calibration" href="PSDTubeCalibration.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+  <div id="navbar" class="navbar navbar-default ">
+    <div class="container">
+      <div class="navbar-header">
+        
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+           </a>
+        <span class="navbar-text navbar-version pull-left"><b>6.14</b></span>
+      </div>
+
+      
+        <div class="collapse navbar-collapse nav-collapse">
+      
+          <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            
+                <li><a href="https://www.mantidproject.org">Home</a></li>
+                <li><a href="https://download.mantidproject.org">Download</a></li>
+                <li><a href="https://docs.mantidproject.org">Documentation</a></li>
+                <li><a href="https://www.mantidproject.org/contact">Contact Us</a></li>
+            
+            
+              
+              
+            
+            
+            
+            
+          </ul>
+              
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+            </div>
+    </div>
+    <p>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Documentation</a> &#187;</li>
+        
+            <li class="nav-item nav-item-1"><a href="../index.html" >Concepts</a> &#187;</li>
+          
+            <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Calibration</a> &#187;</li>
+          
+        
+        
+          
+            <li class="nav-item nav-item-this"><a href="">Time-of-Flight Powder Diffraction Calibration</a></li>
+          
+        
+      </ul>
+    </div> </p>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <p><span class="math notranslate nohighlight">\(\renewcommand\AA{\unicode{x212B}}\)</span></p>
+<section id="time-of-flight-powder-diffraction-calibration">
+<span id="powder-diffraction-calibration"></span><h1>Time-of-Flight Powder Diffraction Calibration<a class="headerlink" href="#time-of-flight-powder-diffraction-calibration" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#data-required" id="id2">Data Required</a></p></li>
+<li><p><a class="reference internal" href="#calculating-calibration" id="id3">Calculating Calibration</a></p>
+<ul>
+<li><p><a class="reference internal" href="#relative-to-a-specific-spectrum" id="id4">Relative to a specific spectrum</a></p></li>
+<li><p><a class="reference internal" href="#using-known-peak-positions" id="id5">Using known peak positions</a></p></li>
+<li><p><a class="reference internal" href="#workflow-algorithms" id="id6">Workflow algorithms</a></p>
+<ul>
+<li><p><a class="reference internal" href="#group-calibration" id="id7">Group Calibration</a></p></li>
+<li><p><a class="reference internal" href="#group-calibration-how-to-s" id="id8">Group calibration how-to’s</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#saving-and-loading-calibration" id="id9">Saving and Loading Calibration</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#testing-your-calibration" id="id10">Testing your Calibration</a></p></li>
+<li><p><a class="reference internal" href="#expanding-on-detector-masking" id="id11">Expanding on detector masking</a></p></li>
+<li><p><a class="reference internal" href="#creating-detector-grouping" id="id12">Creating detector grouping</a></p></li>
+<li><p><a class="reference internal" href="#adjusting-the-instrument-definition" id="id13">Adjusting the Instrument Definition</a></p></li>
+<li><p><a class="reference internal" href="#calibration-diagnostics" id="id14">Calibration Diagnostics</a></p>
+<ul>
+<li><p><a class="reference internal" href="#pixel-by-pixel-results" id="id15">Pixel-by-pixel results</a></p></li>
+<li><p><a class="reference internal" href="#difc-of-unwrapped-instrument" id="id16">DIFC of unwrapped instrument</a></p></li>
+<li><p><a class="reference internal" href="#relative-strain" id="id17">Relative Strain</a></p></li>
+<li><p><a class="reference internal" href="#pearson-correlation-coefficient" id="id18">Pearson Correlation Coefficient</a></p></li>
+<li><p><a class="reference internal" href="#peak-information" id="id19">Peak Information</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="data-required">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Data Required</a><a class="headerlink" href="#data-required" title="Link to this heading">¶</a></h2>
+<p>To get a good calibration you will want good statistics with
+calibration data. For most of the calibration algorithms, this means
+having enough statistics in a single pixel to fit individual peaks or
+to cross-correlate data. Some of the calibration algorithms also
+require knowing the ideal positions of peaks in d-spacing. For these
+algorithms, it is not uncommen to calibrate the instrument, refine the
+results using a Rietveld program, then using the updated peak
+positions to calibrate again. Often the sample selected will be diamond.</p>
+</section>
+<section id="calculating-calibration">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Calculating Calibration</a><a class="headerlink" href="#calculating-calibration" title="Link to this heading">¶</a></h2>
+<section id="relative-to-a-specific-spectrum">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Relative to a specific spectrum</a><a class="headerlink" href="#relative-to-a-specific-spectrum" title="Link to this heading">¶</a></h3>
+<p>This technique of calibration uses a reference spectrum to calibrate
+the rest of the instrument to. The main algorithm that does this is
+<a class="reference internal" href="../../algorithms/GetDetectorOffsets-v1.html#algm-getdetectoroffsets"><span class="std std-ref">GetDetectorOffsets</span></a> whose
+<code class="docutils literal notranslate"><span class="pre">InputWorkspace</span></code> is the <code class="docutils literal notranslate"><span class="pre">OutputWorkspace</span></code> of <a class="reference internal" href="../../algorithms/CrossCorrelate-v1.html#algm-crosscorrelate"><span class="std std-ref">CrossCorrelate</span></a>. Generically the workflow is</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="../../algorithms/Load-v1.html#algm-load"><span class="std std-ref">Load</span></a> the calibration data</p></li>
+<li><p>Convert the X-Units to d-spacing using <a class="reference internal" href="../../algorithms/ConvertUnits-v1.html#algm-convertunits"><span class="std std-ref">ConvertUnits</span></a>. The “offsets” calculated are relative
+reference spectrum’s geometry.</p></li>
+<li><p>Run <a class="reference internal" href="../../algorithms/Rebin-v1.html#algm-rebin"><span class="std std-ref">Rebin</span></a> to set a common d-spacing bin
+structure across all of the spectra, you will need fine enough bins
+to allow fitting of your peak.  Whatever you choose, make a note of
+it you may need it later.</p></li>
+<li><p>Take a look at the data using the SpectrumViewer or a color map
+plot, find the workspace index of a spectrum that has the peak
+close to the known reference position.  This will be the reference
+spectra and will be used in the next step.</p></li>
+<li><p>Cross correlate the spectrum with <a class="reference internal" href="../../algorithms/CrossCorrelate-v1.html#algm-crosscorrelate"><span class="std std-ref">CrossCorrelate</span></a>, enter the workspace index as the
+<code class="docutils literal notranslate"><span class="pre">ReferenceSpectra</span></code> you found in the last step.</p></li>
+<li><p>Run <a class="reference internal" href="../../algorithms/GetDetectorOffsets-v1.html#algm-getdetectoroffsets"><span class="std std-ref">GetDetectorOffsets</span></a>, the
+InputWorkspace if the output from <a class="reference internal" href="../../algorithms/CrossCorrelate-v1.html#algm-crosscorrelate"><span class="std std-ref">CrossCorrelate</span></a>.  Use the rebinning step you made a note of
+in step 3 as the step parameter, and DReference as the expected
+value of the reference peak that you are fitting to.  XMax and XMin
+define the window around the reference peak to search for the peak
+in each spectra, if you find that some spectra do not find the peak
+try increasing those values.</p></li>
+<li><p>The output is an <code class="docutils literal notranslate"><span class="pre">OffsetsWorspace</span></code>. See below for how to save,
+load, and use the workspace.</p></li>
+</ol>
+</section>
+<section id="using-known-peak-positions">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Using known peak positions</a><a class="headerlink" href="#using-known-peak-positions" title="Link to this heading">¶</a></h3>
+<p>These techniques require knowing the precise location, in d-space, of
+diffraction peaks and benefit from knowing
+more. <cite>GetDetOffsetsMultiPeaks</cite> (deprecated)
+and <a class="reference internal" href="../../algorithms/PDCalibration-v1.html#algm-pdcalibration"><span class="std std-ref">PDCalibration</span></a> are the main choices for
+this. Both algorithms fit individual peak positions and use those fits
+to generate the calibration information.</p>
+<p>The workflow for <cite>GetDetOffsetsMultiPeaks</cite> (deprecated)
+is identical to that of
+<a class="reference internal" href="../../algorithms/GetDetectorOffsets-v1.html#algm-getdetectoroffsets"><span class="std std-ref">GetDetectorOffsets</span></a> without the
+cross-correlation step (5). The main difference in the operation of
+the algorithm is that it essentially calculates an offset from each
+peak then calculates a weighted average of those offsets for the
+individual spectrum.</p>
+<p>The workflow for <a class="reference internal" href="../../algorithms/PDCalibration-v1.html#algm-pdcalibration"><span class="std std-ref">PDCalibration</span></a> differs
+significantly from that of the other calibration techniques. It
+requires the data to be in time-of-flight, then uses either the
+instrument geometry, or a previous calibration, to convert the peak
+positions to time-of-flight. The individual peaks fits are then used
+to calculate <span class="math notranslate nohighlight">\(DIFC\)</span> values directly. The benefit of this method, is
+that it allows for calibrating starting from a “good” calibration,
+rather than returning back to the instrument geometry. The steps for
+using this are</p>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="../../algorithms/Load-v1.html#algm-load"><span class="std std-ref">Load</span></a> the calibration data</p></li>
+<li><p>Run <a class="reference internal" href="../../algorithms/PDCalibration-v1.html#algm-pdcalibration"><span class="std std-ref">PDCalibration</span></a> with appropriate
+properties</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">OutputCalibrationTable</span></code> is a <a class="reference internal" href="../TableWorkspaces.html#table-workspaces"><span class="std std-ref">TableWorkspace</span></a>. See
+below for how to save, load, and use the workspace.</p></li>
+</ol>
+</section>
+<section id="workflow-algorithms">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Workflow algorithms</a><a class="headerlink" href="#workflow-algorithms" title="Link to this heading">¶</a></h3>
+<p><cite>CalibrateRectangularDetectors</cite> (deprecated)
+will do most of the workflow for you, including applying the
+calibration to the data. While its name suggests it is only for a
+particular subset of detector types, it is not. It has many options
+for selecting between <a class="reference internal" href="../../algorithms/GetDetectorOffsets-v1.html#algm-getdetectoroffsets"><span class="std std-ref">GetDetectorOffsets</span></a> and <cite>GetDetOffsetsMultiPeaks</cite> (deprecated).</p>
+<section id="group-calibration">
+<span id="calibration-tofpd-group-calibration-ref"></span><h4><a class="toc-backref" href="#id7" role="doc-backlink">Group Calibration</a><a class="headerlink" href="#group-calibration" title="Link to this heading">¶</a></h4>
+<p>Some script have been created that provided a workflow for calibrating
+the instrument in groups using a combination of <a class="reference internal" href="../../algorithms/CrossCorrelate-v1.html#algm-crosscorrelate"><span class="std std-ref">CrossCorrelate</span></a>, <a class="reference internal" href="../../algorithms/GetDetectorOffsets-v1.html#algm-getdetectoroffsets"><span class="std std-ref">GetDetectorOffsets</span></a> and <a class="reference internal" href="../../algorithms/PDCalibration-v1.html#algm-pdcalibration"><span class="std std-ref">PDCalibration</span></a>.</p>
+<p>It works by performing the cross-correlations on only the detectors
+within a group, after which the grouped detectors are merge together
+to use with PDCalibration. The difc from the PDCalibration and
+cross-correlation are combined using <a class="reference internal" href="../../algorithms/CombineDiffCal-v1.html#algm-combinediffcal"><span class="std std-ref">CombineDiffCal</span></a></p>
+<p>The workflow follows these step:</p>
+<ol class="arabic simple">
+<li><p>Load data, usually diamond</p></li>
+<li><p>Convert to d-spacing</p></li>
+<li><p>CrossCorrelate a portion of the instrument according to the group information</p></li>
+<li><p>GetDetectorOffsets to calculate offsets for individual pixels with a group</p></li>
+<li><p>ConvertDiffCal to convert these constants to <span class="math notranslate nohighlight">\(DIFC_{CC}\)</span></p></li>
+<li><p>Use <span class="math notranslate nohighlight">\(DIFC_{CC}\)</span> to convert the origonal data to d-spacing. DiffractionFocus allows for combining a portion of the instrument into a single spectrum for improved statistics</p></li>
+<li><p>Pick an arbitrary constant, <span class="math notranslate nohighlight">\(DIFC_{arb}\)</span> to convert this combined spectrum back to time-of-flight</p></li>
+<li><p>PDCalibration the combined spectrum to determine a conversion constant <span class="math notranslate nohighlight">\(DIFC_{PD}\)</span></p></li>
+<li><p>Use <a class="reference internal" href="../../algorithms/CombineDiffCal-v1.html#algm-combinediffcal"><span class="std std-ref">CombineDiffCal</span></a> to combine <span class="math notranslate nohighlight">\(DIFC_{CC}\)</span>, <span class="math notranslate nohighlight">\(DIFC_{arb}\)</span>, and <span class="math notranslate nohighlight">\(DIFC_{PD}\)</span> into a new calibration constant, <span class="math notranslate nohighlight">\(DIFC_{eff}\)</span></p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a fake starting workspace in d-spacing then convert to TOF for calibration</span>
+<span class="n">myFunc</span> <span class="o">=</span> <span class="s2">&quot;name=Gaussian, PeakCentre=1, Height=100, Sigma=0.01;name=Gaussian, PeakCentre=2, Height=100, Sigma=0.01;name=Gaussian, PeakCentre=3, Height=100, Sigma=0.01&quot;</span>
+<span class="n">ws_d</span> <span class="o">=</span> <span class="n">CreateSampleWorkspace</span><span class="p">(</span><span class="s2">&quot;Event&quot;</span><span class="p">,</span><span class="s2">&quot;User Defined&quot;</span><span class="p">,</span> <span class="n">myFunc</span><span class="p">,</span> <span class="n">BankPixelWidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">XUnit</span><span class="o">=</span><span class="s1">&#39;dSpacing&#39;</span><span class="p">,</span> <span class="n">XMax</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">BinWidth</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">NumEvents</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">NumBanks</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">):</span>
+    <span class="n">MoveInstrumentComponent</span><span class="p">(</span><span class="n">ws_d</span><span class="p">,</span> <span class="n">ComponentName</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;bank</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">X</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">Z</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">RelativePosition</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Offset the different spectra</span>
+<span class="n">ws_d</span> <span class="o">=</span> <span class="n">ScaleX</span><span class="p">(</span><span class="n">ws_d</span><span class="p">,</span> <span class="n">Factor</span><span class="o">=</span><span class="mf">1.05</span><span class="p">,</span> <span class="n">IndexMin</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">IndexMax</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ws_d</span> <span class="o">=</span> <span class="n">ScaleX</span><span class="p">(</span><span class="n">ws_d</span><span class="p">,</span> <span class="n">Factor</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">IndexMin</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">IndexMax</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ws_d</span> <span class="o">=</span> <span class="n">ScaleX</span><span class="p">(</span><span class="n">ws_d</span><span class="p">,</span> <span class="n">Factor</span><span class="o">=</span><span class="mf">1.05</span><span class="p">,</span> <span class="n">IndexMin</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">IndexMax</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ws_d</span> <span class="o">=</span> <span class="n">ScaleX</span><span class="p">(</span><span class="n">ws_d</span><span class="p">,</span> <span class="n">Factor</span><span class="o">=</span><span class="mf">1.02</span><span class="p">,</span> <span class="n">IndexMin</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">IndexMax</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">ws_d</span> <span class="o">=</span> <span class="n">ScaleX</span><span class="p">(</span><span class="n">ws_d</span><span class="p">,</span> <span class="n">Factor</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span> <span class="n">IndexMin</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">IndexMax</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ws_d</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">ws_d</span><span class="p">,</span> <span class="s1">&#39;0,0.001,5&#39;</span><span class="p">)</span>
+<span class="n">ws</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">ws_d</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s1">&#39;TOF&#39;</span><span class="p">)</span>
+
+<span class="c1"># Make 2 groups of 3 detectors each</span>
+<span class="n">groups</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="o">=</span> <span class="n">CreateGroupingWorkspace</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">ComponentName</span><span class="o">=</span><span class="s1">&#39;basic_rect&#39;</span><span class="p">,</span> <span class="n">CustomGroupingString</span><span class="o">=</span><span class="s1">&#39;1-3,4-6&#39;</span><span class="p">)</span>
+
+<span class="c1"># starting DIFC are all the same</span>
+<span class="n">detectorTable</span> <span class="o">=</span> <span class="n">CreateDetectorTable</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DetID DIFC&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">detid</span><span class="p">,</span> <span class="n">difc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">detectorTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s1">&#39;Detector ID(s)&#39;</span><span class="p">),</span> <span class="n">detectorTable</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s1">&#39;DIFC&#39;</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">detid</span><span class="si">:</span><span class="s1">&gt;5</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">difc</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DetID DIFC
+    1 2208.3
+    2 2208.3
+    3 2208.3
+    4 2208.3
+    5 2208.3
+    6 2208.3
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">Calibration.tofpd.group_calibration</span><span class="w"> </span><span class="kn">import</span> <span class="n">cc_calibrate_groups</span>
+
+<span class="n">cc_diffcal</span><span class="p">,</span> <span class="n">to_skip</span> <span class="o">=</span> <span class="n">cc_calibrate_groups</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span>
+                                          <span class="n">groups</span><span class="p">,</span>
+                                          <span class="n">DReference</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+                                          <span class="n">Xmin</span><span class="o">=</span><span class="mf">1.75</span><span class="p">,</span>
+                                          <span class="n">Xmax</span><span class="o">=</span><span class="mf">2.25</span><span class="p">,</span>
+                                          <span class="n">OffsetThreshold</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DetID DIFC&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">detid</span><span class="p">,</span> <span class="n">difc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cc_diffcal</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s1">&#39;detid&#39;</span><span class="p">),</span> <span class="n">cc_diffcal</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s1">&#39;difc&#39;</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">detid</span><span class="si">:</span><span class="s1">&gt;5</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">difc</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DetID DIFC
+    1 2208.3
+    2 2318.6
+    3 2098.0
+    4 2208.3
+    5 2161.2
+    6 2115.7
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In this case, cycling through cross correlation until offset converges.</span>
+<span class="n">cc_diffcal</span><span class="p">,</span> <span class="n">to_skip</span> <span class="o">=</span> <span class="n">cc_calibrate_groups</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span>
+                                          <span class="n">groups</span><span class="p">,</span>
+                                          <span class="n">DReference</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+                                          <span class="n">Xmin</span><span class="o">=</span><span class="mf">1.75</span><span class="p">,</span>
+                                          <span class="n">Xmax</span><span class="o">=</span><span class="mf">2.25</span><span class="p">,</span>
+                                          <span class="n">OffsetThreshold</span><span class="o">=</span><span class="mf">1E-4</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DetID DIFC&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">detid</span><span class="p">,</span> <span class="n">difc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cc_diffcal</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s1">&#39;detid&#39;</span><span class="p">),</span> <span class="n">cc_diffcal</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s1">&#39;difc&#39;</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">detid</span><span class="si">:</span><span class="s1">&gt;5</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">difc</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DetID DIFC
+    1 2208.3
+    2 2318.7
+    3 2097.9
+    4 2208.3
+    5 2164.1
+    6 2121.7
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Turn on cross correlation cycling but skip cross correlation for group-1.</span>
+<span class="n">cc_diffcal</span><span class="p">,</span> <span class="n">to_skip</span> <span class="o">=</span> <span class="n">cc_calibrate_groups</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span>
+                                          <span class="n">groups</span><span class="p">,</span>
+                                          <span class="n">DReference</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+                                          <span class="n">Xmin</span><span class="o">=</span><span class="mf">1.75</span><span class="p">,</span>
+                                          <span class="n">Xmax</span><span class="o">=</span><span class="mf">2.25</span><span class="p">,</span>
+                                          <span class="n">OffsetThreshold</span><span class="o">=</span><span class="mf">1E-4</span><span class="p">,</span>
+                                          <span class="n">SkipCrossCorrelation</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DetID DIFC&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">detid</span><span class="p">,</span> <span class="n">difc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cc_diffcal</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s1">&#39;detid&#39;</span><span class="p">),</span> <span class="n">cc_diffcal</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s1">&#39;difc&#39;</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">detid</span><span class="si">:</span><span class="s1">&gt;5</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">difc</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DetID DIFC
+    1 2208.3
+    2 2208.3
+    3 2208.3
+    4 2208.3
+    5 2164.1
+    6 2121.7
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">Calibration.tofpd.group_calibration</span><span class="w"> </span><span class="kn">import</span> <span class="n">pdcalibration_groups</span>
+
+<span class="n">diffcal</span> <span class="o">=</span> <span class="n">pdcalibration_groups</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span>
+                               <span class="n">groups</span><span class="p">,</span>
+                               <span class="n">cc_diffcal</span><span class="p">,</span>
+                               <span class="n">to_skip</span><span class="p">,</span>
+                               <span class="n">PeakPositions</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span>
+                               <span class="n">PeakFunction</span><span class="o">=</span><span class="s1">&#39;Gaussian&#39;</span><span class="p">,</span>
+                               <span class="n">PeakWindow</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DetID DIFC&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">detid</span><span class="p">,</span> <span class="n">difc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">diffcal</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s1">&#39;detid&#39;</span><span class="p">),</span> <span class="n">diffcal</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s1">&#39;difc&#39;</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">detid</span><span class="si">:</span><span class="s1">&gt;5</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">difc</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DetID DIFC
+    1 2208.3
+    2 2208.3
+    3 2208.3
+    4 2365.6
+    5 2318.3
+    6 2272.8
+</pre></div>
+</div>
+<p>The evolution in the calibration can be seen with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="n">ws_d</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">ws_d</span><span class="p">,</span> <span class="s1">&#39;0.75,0.01,3.5&#39;</span><span class="p">)</span>
+
+<span class="n">ApplyDiffCal</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">CalibrationWorkspace</span><span class="o">=</span><span class="n">cc_diffcal</span><span class="p">)</span>
+<span class="n">ws_d_after_cc</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s1">&#39;dSpacing&#39;</span><span class="p">)</span>
+<span class="n">ws_d_after_cc</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">ws_d_after_cc</span><span class="p">,</span> <span class="s1">&#39;0.75,0.01,3.5&#39;</span><span class="p">)</span>
+
+<span class="n">ApplyDiffCal</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">CalibrationWorkspace</span><span class="o">=</span><span class="n">diffcal</span><span class="p">)</span>
+<span class="n">ws_d_after_cc_and_pd</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s1">&#39;dSpacing&#39;</span><span class="p">)</span>
+<span class="n">ws_d_after_cc_and_pd</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">ws_d_after_cc_and_pd</span><span class="p">,</span> <span class="s1">&#39;0.75,0.01,3.5&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">6.4</span><span class="p">,</span><span class="mf">9.6</span><span class="p">))</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">311</span><span class="p">,</span> <span class="n">projection</span> <span class="o">=</span> <span class="s1">&#39;mantid&#39;</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">312</span><span class="p">,</span> <span class="n">projection</span> <span class="o">=</span> <span class="s1">&#39;mantid&#39;</span><span class="p">)</span>
+<span class="n">ax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">313</span><span class="p">,</span> <span class="n">projection</span> <span class="o">=</span> <span class="s1">&#39;mantid&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">):</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ws_d</span><span class="p">,</span> <span class="n">specNum</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ws_d_after_cc</span><span class="p">,</span> <span class="n">specNum</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ws_d_after_cc_and_pd</span><span class="p">,</span> <span class="n">specNum</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Starting peaks&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;After cross-correlation, spectra in two groups&#39;</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;After all calibration&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1">#fig.savefig(&#39;tofpd_group_calibration.png&#39;)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<img alt="../../_images/tofpd_group_calibration.png" src="../../_images/tofpd_group_calibration.png" />
+</figure>
+<p>The same complete calibration can just be run with just
+<code class="docutils literal notranslate"><span class="pre">group_calibration.do_group_calibration</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">Calibration.tofpd.group_calibration</span><span class="w"> </span><span class="kn">import</span> <span class="n">do_group_calibration</span>
+
+<span class="n">diffcal</span> <span class="o">=</span> <span class="n">do_group_calibration</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span>
+                               <span class="n">groups</span><span class="p">,</span>
+                               <span class="n">cc_kwargs</span><span class="o">=</span><span class="p">{</span>
+                                   <span class="s2">&quot;DReference&quot;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+                                   <span class="s2">&quot;Xmin&quot;</span><span class="p">:</span> <span class="mf">1.75</span><span class="p">,</span>
+                                   <span class="s2">&quot;Xmax&quot;</span><span class="p">:</span> <span class="mf">2.25</span><span class="p">,</span>
+                                   <span class="s2">&quot;OffsetThreshold&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
+                               <span class="n">pdcal_kwargs</span><span class="o">=</span><span class="p">{</span>
+                                   <span class="s2">&quot;PeakPositions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">],</span>
+                                   <span class="s2">&quot;PeakFunction&quot;</span><span class="p">:</span> <span class="s1">&#39;Gaussian&#39;</span><span class="p">,</span>
+                                   <span class="s2">&quot;PeakWindow&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DetID DIFC&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">detid</span><span class="p">,</span> <span class="n">difc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">diffcal</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s1">&#39;detid&#39;</span><span class="p">),</span> <span class="n">diffcal</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="s1">&#39;difc&#39;</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">detid</span><span class="si">:</span><span class="s1">&gt;5</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">difc</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>DetID DIFC
+    1 2208.7
+    2 2319.0
+    3 2098.4
+    4 2368.8
+    5 2318.3
+    6 2269.5
+</pre></div>
+</div>
+<p>The resulting <a class="reference internal" href="../DiffractionCalibrationWorkspace.html#diffractioncalibrationworkspace"><span class="std std-ref">diffcal</span></a> can be
+saved with <a class="reference internal" href="../../algorithms/SaveDiffCal-v1.html#algm-savediffcal"><span class="std std-ref">SaveDiffCal</span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SaveDiffCal</span><span class="p">(</span><span class="n">CalibrationWorkspace</span><span class="o">=</span><span class="n">diffcal</span><span class="p">,</span>
+            <span class="n">MaskWorkspace</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span>
+            <span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;calibration.h5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="group-calibration-how-to-s">
+<span id="calibration-tofpd-group-calibration-howto-ref"></span><h4><a class="toc-backref" href="#id8" role="doc-backlink">Group calibration how-to’s</a><a class="headerlink" href="#group-calibration-how-to-s" title="Link to this heading">¶</a></h4>
+<p><strong>Generate grouping file</strong></p>
+<p>The first stage of the group calibration is to generate suitable grouping scheme
+for all spectra involved. The principle is to group similar spectra together.
+A natural choice for generating grouping file is to use <a class="reference internal" href="../../algorithms/CreateGroupingWorkspace-v1.html#algm-creategroupingworkspace"><span class="std std-ref">CreateGroupingWorkspace</span></a>
+algorithm which embodies several choices of grouping detectors according to physical geometry. A generic approach
+has also been implemented into the framework of <a class="reference external" href="https://github.com/neutrons/mantid_total_scattering">mantidtotalscattering</a>,
+which automatically groups input spectra according to the similarity among each other, based on a unsupervised clustering algorithm.
+<code class="docutils literal notranslate"><span class="pre">mantidtotalscattering</span></code> has been deployed on SNS analysis cluster and therefore the generic grouping routine can be accessed easily
+from analysis. To activate the <cite>mantidtotalscattering</cite> conda environment, one needs to first log into analysis cluster and the
+following commands could be executed from terminal,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.<span class="w"> </span>/opt/anaconda/etc/profile.d/conda.sh
+conda<span class="w"> </span>activate<span class="w"> </span>mantidtotalscattering
+</pre></div>
+</div>
+<p>With the <cite>mantidtotalscattering</cite> conda environment active, here follows is provided a simple Python script for calling the generic
+grouping routine on analysis,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">total_scattering.autogrouping.autogrouping</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span>
+
+<span class="n">jsonfile</span> <span class="o">=</span> <span class="s2">&quot;/SNS/users/y8z/Temp/autogrouping_config.json&quot;</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">jsonfile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">jf</span><span class="p">:</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">jf</span><span class="p">)</span>
+<span class="c1"># execute</span>
+<span class="n">main</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>An example json file is presented below to control the grouping behavior,</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;DiamondFile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/SNS/NOM/IPTS-24637/nexus/NOM_144974.nxs.h5&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;MaskFile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/SNS/users/y8z/Temp/mask144974.out&quot;</span><span class="p">,</span>
+
+<span class="w">    </span><span class="nt">&quot;GroupingMethod&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;KMEANS_ED&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;NumberOutputGroups&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;4&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;StandardScaling&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+
+<span class="w">    </span><span class="nt">&quot;FittingFunctionParameters&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Mixing,Intensity,PeakCentre,FWHM&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;FitPeaksArgs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;PeakFunction&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;PseudoVoigt&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;PeakParameterNames&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Mixing&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;PeakParameterValues&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0.6&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;HighBackground&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;MinimumPeakHeight&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;ConstrainPeakPositions&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">                    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;DiamondPeaks&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0.8920,1.0758,1.2615&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;ParameterThresholds&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;PeakCentre&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(0.01,10.0)&quot;</span><span class="p">,</span>
+<span class="w">                            </span><span class="nt">&quot;Height&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;(0.0,10000.0)&quot;</span>
+<span class="w">                        </span><span class="p">},</span>
+
+<span class="w">    </span><span class="nt">&quot;FilterByChi2&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;Enable&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;Value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1e4</span>
+<span class="w">                    </span><span class="p">},</span>
+
+
+<span class="w">    </span><span class="nt">&quot;OutputGroupingFile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;./outputgrouping.xml&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;OutputMaskFile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;./outputmask.txt&quot;</span><span class="p">,</span>
+
+<span class="w">    </span><span class="nt">&quot;OutputFitParamFile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;./outputfitparamtable.nxs&quot;</span><span class="p">,</span>
+
+<span class="w">    </span><span class="nt">&quot;CacheDir&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;./tmp/&quot;</span><span class="p">,</span>
+
+<span class="w">    </span><span class="nt">&quot;Plots&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nt">&quot;Grouping&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;ED_Features&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;PCA&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;KMeans_Elbow&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;KMeans_Silhouette&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>and description for entries in the input json file is summarized in the following table,</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33.3%" />
+<col style="width: 66.7%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DiamondFile</p></td>
+<td><p>Full name of the input nexus file. For calibration purpose, usually a diamond measurement will be used.</p></td>
+</tr>
+<tr class="row-odd"><td><p>MaskFile</p></td>
+<td><p>Full name of the input mask file. The file should contain a whole bunch of lines with a single integter in each line specifying the detector ID to be masked (index starting from 0).</p></td>
+</tr>
+<tr class="row-even"><td><p>GroupingMethod</p></td>
+<td><p>The method to be used for grouping. Valid input could be <code class="docutils literal notranslate"><span class="pre">KMEANS_CC</span></code>, <code class="docutils literal notranslate"><span class="pre">KMEANS_DG</span></code>, <code class="docutils literal notranslate"><span class="pre">KMEANS_ED</span></code>, <code class="docutils literal notranslate"><span class="pre">DBSCAN_CC</span></code>, <code class="docutils literal notranslate"><span class="pre">DBSCAN_DG</span></code> and <code class="docutils literal notranslate"><span class="pre">DBSCAN_ED</span></code>. <code class="docutils literal notranslate"><span class="pre">KMEANS</span></code> and <code class="docutils literal notranslate"><span class="pre">DBSCAN</span></code> refers to the two clustering methods. The second part of those values refers to the method for calculating similarity between spectra. <code class="docutils literal notranslate"><span class="pre">CC</span></code> for cross-correlation, <code class="docutils literal notranslate"><span class="pre">DG</span></code> for De Gelder similarity and <code class="docutils literal notranslate"><span class="pre">ED</span></code> for Euclidean distance in parameter space.</p></td>
+</tr>
+<tr class="row-odd"><td><p>NumberOutputGroups</p></td>
+<td><p>The number of groups to cluster all input spectra into. If using <code class="docutils literal notranslate"><span class="pre">DBSCAN</span></code> method, there is no need to specify this parameter.</p></td>
+</tr>
+<tr class="row-even"><td><p>StandardScaling</p></td>
+<td><p>Whether or not to scale the input spectra by removing the mean and scaling to unit variance before clustering.</p></td>
+</tr>
+<tr class="row-odd"><td><p>WorkspaceIndexRange</p></td>
+<td><p>Range of workspace indeces to include in automatic grouping process.</p></td>
+</tr>
+<tr class="row-even"><td><p>FittingFunctionParameters</p></td>
+<td><p>If <code class="docutils literal notranslate"><span class="pre">ED</span></code> method is to be used for calculating similarity between spectra, this specifies the peak parameters to fit and to be used as the coordinate components in parameter space.</p></td>
+</tr>
+<tr class="row-odd"><td><p>FitPeaksArgs</p></td>
+<td><p>Refer to the input parameters for <a class="reference internal" href="../../algorithms/FitPeaks-v1.html#algm-fitpeaks"><span class="std std-ref">FitPeaks</span></a> algorithm.</p></td>
+</tr>
+<tr class="row-even"><td><p>DiamondPeaks</p></td>
+<td><p>If <code class="docutils literal notranslate"><span class="pre">ED</span></code> method is to be used for calculating similarity between spectra, this specifies the diamond peaks, as specified by the nominal peak positions, to be used for peak fitting and clustering.</p></td>
+</tr>
+<tr class="row-odd"><td><p>ParameterThresholds</p></td>
+<td><p>If <code class="docutils literal notranslate"><span class="pre">ED</span></code> method is to be used for calculating similarity between spectra, this specifies the threshold for relevant peak parameters. The threshold for each relevant peak parameter will be given as sub-entries.</p></td>
+</tr>
+<tr class="row-even"><td><p>FilterByChi2</p></td>
+<td><p>If <code class="docutils literal notranslate"><span class="pre">ED</span></code> method is to be used for calculating similarity between spectra, this specifies whether or not to mask out pixels based on chi square of peak fitting. Among the two sub-entries, <code class="docutils literal notranslate"><span class="pre">Enable</span></code> is a boolean trigger and <code class="docutils literal notranslate"><span class="pre">Value</span></code> is the threshold of chi square.</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputGroupingFile</p></td>
+<td><p>Full name of the output grouping file.</p></td>
+</tr>
+<tr class="row-even"><td><p>OutputMaskFile</p></td>
+<td><p>Full name of the output masking file.</p></td>
+</tr>
+<tr class="row-odd"><td><p>OutputFitParamFile</p></td>
+<td><p>If <code class="docutils literal notranslate"><span class="pre">ED</span></code> method is to be used for calculating similarity between spectra, this specifies the full name of the output fit parameters file.</p></td>
+</tr>
+<tr class="row-even"><td><p>CacheDir</p></td>
+<td><p>Cache directory.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Plots</p></td>
+<td><p>A series of boolean variables control the plotting options. <code class="docutils literal notranslate"><span class="pre">Grouping</span></code> for plotting the grouping of detectors. <code class="docutils literal notranslate"><span class="pre">ED_Features</span></code> for plotting parameters correlation features. <code class="docutils literal notranslate"><span class="pre">KMeans_Elbow</span></code> for plotting the elbow analysis result. <code class="docutils literal notranslate"><span class="pre">KMeans_Silhouette</span></code> for plotting the Silhouette score.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Here, it is worth noting that detectors may be masked out as belonging to none of the generated groups.
+For example, when using the <code class="docutils literal notranslate"><span class="pre">ED</span></code> method for defining the similarity between spectra, detectors will be masked out at the fitting stage if the corresponding spectra cannot be fitted successfully.</p>
+<p>Following is presented the clustering result for a NOMAD diamond measurement data,</p>
+<figure class="align-right">
+<a class="reference internal image-reference" href="../../_images/NOMAD_Grouping.png"><img alt="../../_images/NOMAD_Grouping.png" src="../../_images/NOMAD_Grouping.png" style="width: 400px;" />
+</a>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For certain instruments (e.g., POWGEN), the automatic grouping routine may not work due to special d-space coverage for detectors.
+In this case, one may need to treat various ranges of detectors individually (using the input entry <code class="docutils literal notranslate"><span class="pre">WorkspaceIndexRange</span></code> in the input json file) and also some of the groups may need to be manually specified.</p>
+</div>
+<p><strong>Group calibration</strong></p>
+<p>Having the grouping file (and potentially the masking file) ready, one can then open Mantid workbench interface and trigger the group calibration routine, using a simple Python script, as presented below,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import mantid algorithms, numpy and matplotlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">Calibration.tofpd</span><span class="w"> </span><span class="kn">import</span> <span class="n">group_calibration</span>
+
+<span class="n">infile</span> <span class="o">=</span> <span class="s2">&quot;/SNS/NOM/shared/User_story_test/NOM_US-231_240/group_calib.json&quot;</span>
+
+<span class="n">group_calibration</span><span class="o">.</span><span class="n">process_json</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here follows is presented a demo input json file,</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;Calibrant&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;161450&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;Groups&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/SNS/NOM/shared/User_story_test/NOM_US-231_240/outputgrouping.xml&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;Mask&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/SNS/NOM/shared/User_story_test/NOM_US-231_240/outputmask.xml&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;Instrument&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NOMAD&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;Date&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2021_07_21&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;SampleEnvironment&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;shifter&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;CalDirectory&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/SNS/NOM/shared/User_story_test/NOM_US-231_240/&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;CrossCorrelate&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;Step&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.001</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;DReference&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.2615</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;Xmin&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;Xmax&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">3.0</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;MaxDSpaceShift&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.25</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;OffsetThreshold&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1E-4</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;SkipCrossCorrelation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]},</span>
+<span class="w">    </span><span class="nt">&quot;PDCalibration&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">&quot;TofBinning&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">300</span><span class="p">,</span><span class="mf">0.01</span><span class="p">,</span><span class="mi">16666</span><span class="p">],</span>
+<span class="w">                    </span><span class="nt">&quot;PeakFunction&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Gaussian&quot;</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;PeakWindow&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1</span><span class="p">,</span>
+<span class="w">                    </span><span class="nt">&quot;PeakWidthPercent&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.001</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Parameters in the input json file should be self-explaining. Here only the <code class="docutils literal notranslate"><span class="pre">Calibrant</span></code> and <code class="docutils literal notranslate"><span class="pre">Groups</span></code> entries are mandatory. For <code class="docutils literal notranslate"><span class="pre">CrossCorrelate</span></code> entries, one can refer to the parameters for
+<a class="reference internal" href="../../algorithms/CrossCorrelate-v1.html#algm-crosscorrelate"><span class="std std-ref">CrossCorrelate</span></a> and <a class="reference internal" href="../../algorithms/GetDetectorOffsets-v1.html#algm-getdetectoroffsets"><span class="std std-ref">GetDetectorOffsets</span></a>. For <code class="docutils literal notranslate"><span class="pre">PDCalibration</span></code> entries, one can refer to the parameters for <a class="reference internal" href="../../algorithms/PDCalibration-v1.html#algm-pdcalibration"><span class="std std-ref">PDCalibration</span></a>. In the group calibration workflow, one of the crucial steps is to cross correlate spectra in a
+single group. A cycling cross correlation scheme is introduced at this point to continue cross correlate spectra until the median value of the offset of all
+spectra in a single group is below the preset threshold (specified by the <code class="docutils literal notranslate"><span class="pre">OffsetThreshol</span></code> parameter). If the <code class="docutils literal notranslate"><span class="pre">OffsetThreshold</span></code> is set to 1.0 or larger, that means no cycling of cross correlation will be conducted. The <code class="docutils literal notranslate"><span class="pre">SkipCrossCorrelation</span></code> parameter is to control the skipping of cross correlation for specified groups of spectra. For <code class="docutils literal notranslate"><span class="pre">Xmin</span></code>, <code class="docutils literal notranslate"><span class="pre">Xmax</span></code>, <code class="docutils literal notranslate"><span class="pre">MaxDSpaceShift</span></code> and <code class="docutils literal notranslate"><span class="pre">OffsetThreshold</span></code> parameters, they can be either provided with a single number or a list. When a single number is given, the value will apply to all groups, whereas if a list is given, each entry in the list will apply to each single group respectively.</p>
+<p>After the group calibration is complete, one can then inspect the quality of calibration by generating various diagnostics plots as documented in <a class="reference internal" href="#calibration-diagnostics"><span class="std std-ref">Calibration Diagnostics</span></a>.</p>
+</section>
+</section>
+<section id="saving-and-loading-calibration">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Saving and Loading Calibration</a><a class="headerlink" href="#saving-and-loading-calibration" title="Link to this heading">¶</a></h3>
+<p>There are two basic formats for the calibration information. The
+legacy ascii format is described in <a class="reference internal" href="CalFile.html#calfile"><span class="std std-ref">CalFile</span></a>. The newer HDF5
+version is described alongside the description of <a class="reference internal" href="../DiffractionCalibrationWorkspace.html#diffractioncalibrationworkspace"><span class="std std-ref">calibration
+table</span></a>.</p>
+<p>Saving and loading the HDF5 format is done with <a class="reference internal" href="../../algorithms/SaveDiffCal-v1.html#algm-savediffcal"><span class="std std-ref">SaveDiffCal</span></a> and <a class="reference internal" href="../../algorithms/LoadDiffCal-v1.html#algm-loaddiffcal"><span class="std std-ref">LoadDiffCal</span></a>.</p>
+<p>Saving and loading the legacy format is done with <a class="reference internal" href="../../algorithms/SaveCalFile-v1.html#algm-savecalfile"><span class="std std-ref">SaveCalFile</span></a> and <a class="reference internal" href="../../algorithms/LoadCalFile-v1.html#algm-loadcalfile"><span class="std std-ref">LoadCalFile</span></a>. This
+can be converted from an <code class="docutils literal notranslate"><span class="pre">OffsetsWorkspace</span></code> to a calibration table
+using <a class="reference internal" href="../../algorithms/ConvertDiffCal-v1.html#algm-convertdiffcal"><span class="std std-ref">ConvertDiffCal</span></a>.</p>
+<figure class="align-right">
+<a class="reference internal image-reference" href="../../_images/PG3_Calibrate.png"><img alt="../../_images/PG3_Calibrate.png" src="../../_images/PG3_Calibrate.png" style="width: 400px;" />
+</a>
+</figure>
+</section>
+</section>
+<section id="testing-your-calibration">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Testing your Calibration</a><a class="headerlink" href="#testing-your-calibration" title="Link to this heading">¶</a></h2>
+<figure class="align-right">
+<a class="reference internal image-reference" href="../../_images/SNAP_Calibrate.png"><img alt="../../_images/SNAP_Calibrate.png" src="../../_images/SNAP_Calibrate.png" style="width: 400px;" />
+</a>
+</figure>
+<p>The first thing that should be done is to convert the calibration
+workspace (either table or <code class="docutils literal notranslate"><span class="pre">OffsetsWorkspace</span></code> to a workspace of
+<span class="math notranslate nohighlight">\(DIFC\)</span> values to inspect using the <a class="reference internal" href="../../workbench/instrumentviewer.html#instrumentviewer"><span class="std std-ref">instrument view</span></a>. This can be done using
+<a class="reference internal" href="../../algorithms/CalculateDIFC-v1.html#algm-calculatedifc"><span class="std std-ref">CalculateDIFC</span></a>. The values of <span class="math notranslate nohighlight">\(DIFC\)</span>
+should vary continuously across the detectors that are close to each
+other (e.g. neighboring pixels in an LPSD).</p>
+<p>You will need to test that the calibration managed to find a
+reasonable calibration constant for each of the spectra in your data.
+The easiest way to do this is to apply the calibration to your
+calibration data and check that the bragg peaks align as expected.</p>
+<ol class="arabic simple">
+<li><p>Load the instrument data using <a class="reference internal" href="../../algorithms/Load-v1.html#algm-load"><span class="std std-ref">Load</span></a></p></li>
+<li><p>Apply the calibration to the workspace using <a class="reference internal" href="../../algorithms/ApplyDiffCal-v1.html#algm-applydiffcal"><span class="std std-ref">ApplyDiffCal</span></a> (the calibration can be provided using the <code class="docutils literal notranslate"><span class="pre">CalibrationFile</span></code>, the <code class="docutils literal notranslate"><span class="pre">CalibrationWorkspace</span></code>, or <code class="docutils literal notranslate"><span class="pre">OffsetsWorkspace</span></code>).</p></li>
+<li><p>Run <a class="reference internal" href="../../algorithms/ConvertUnits-v1.html#algm-convertunits"><span class="std std-ref">ConvertUnits</span></a>, to convert the data to d-spacing using the calibration.</p></li>
+<li><p>Plot the workspace as a Color Fill plot, in the spectrum view, or a few spectra in a line plot.</p></li>
+</ol>
+<p>Further insight can be gained by comparing the grouped (after aligning
+and focussing the data) spectra from a previous calibration or convert
+units to the newly calibrated version. This can be done using
+<a class="reference internal" href="../../algorithms/AlignAndFocusPowder-v1.html#algm-alignandfocuspowder"><span class="std std-ref">AlignAndFocusPowder</span></a> with and without
+calibration information. In the end, a Rietveld refinement is the best
+test of the calibration.</p>
+</section>
+<section id="expanding-on-detector-masking">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Expanding on detector masking</a><a class="headerlink" href="#expanding-on-detector-masking" title="Link to this heading">¶</a></h2>
+<p>While many of the calibration methods will generate a mask based on the detectors calibrated, sometimes additional metrics for masking are desired. One way is to use <a class="reference internal" href="../../algorithms/DetectorDiagnostic-v1.html#algm-detectordiagnostic"><span class="std std-ref">DetectorDiagnostic</span></a>. The result can be combined with an existing mask using</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">BinaryOperateMasks</span><span class="p">(</span><span class="n">InputWorkspace1</span><span class="o">=</span><span class="s1">&#39;mask_from_cal&#39;</span><span class="p">,</span> <span class="n">InputWorkspace2</span><span class="o">=</span><span class="s1">&#39;mask_detdiag&#39;</span><span class="p">,</span>
+                   <span class="n">OperationType</span><span class="o">=</span><span class="s1">&#39;OR&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;mask_final&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="creating-detector-grouping">
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">Creating detector grouping</a><a class="headerlink" href="#creating-detector-grouping" title="Link to this heading">¶</a></h2>
+<p>To create a grouping workspace for <a class="reference internal" href="../../algorithms/SaveDiffCal-v1.html#algm-savediffcal"><span class="std std-ref">SaveDiffCal</span></a> you need to specify which detector pixels to
+combine to make an output spectrum. This is done using
+<a class="reference internal" href="../../algorithms/CreateGroupingWorkspace-v1.html#algm-creategroupingworkspace"><span class="std std-ref">CreateGroupingWorkspace</span></a>. An
+alternative is to generate a grouping file to load with
+<a class="reference internal" href="../../algorithms/LoadDetectorsGroupingFile-v1.html#algm-loaddetectorsgroupingfile"><span class="std std-ref">LoadDetectorsGroupingFile</span></a>.</p>
+</section>
+<section id="adjusting-the-instrument-definition">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink">Adjusting the Instrument Definition</a><a class="headerlink" href="#adjusting-the-instrument-definition" title="Link to this heading">¶</a></h2>
+<p><cite>This section is out of date!</cite></p>
+<p>This approach attempts to correct the instrument component positions based on the calibration data. It can be more involved than applying the correction during focussing.</p>
+<ol class="arabic simple">
+<li><p>Perform a calibration using <cite>CalibrateRectangularDetectors</cite> (deprecated) or <cite>GetDetOffsetsMultiPeaks</cite> (deprecated).  Only these algorithms can export the <a class="reference internal" href="../DiffractionCalibrationWorkspace.html#diffractioncalibrationworkspace"><span class="std std-ref">Diffraction Calibration Workspace</span></a> required.</p></li>
+<li><p>Run <a class="reference internal" href="../../algorithms/AlignComponents-v1.html#algm-aligncomponents"><span class="std std-ref">AlignComponents</span></a> this will move aspects of the instrument to optimize the offsets.  It can move any named aspect of the instrument including the sample and source positions.  You will likely need to run this several times, perhaps focussing on a single bank at a time, and then the source and sample positions in order to  get a good alignment.</p></li>
+<li><p>Then either:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../algorithms/ExportGeometry-v1.html#algm-exportgeometry"><span class="std std-ref">ExportGeometry</span></a> will export the resulting geometry into a format that can be used to create a new XML instrument definition.  The Mantid team at ORNL have tools to automate this for some instruments at the SNS.</p></li>
+<li><p>At ISIS enter the resulting workspace as the calibration workspace into the DAE software when recording new runs.  The calibrated workspace will be copied into the resulting NeXuS file of the run.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="calibration-diagnostics">
+<span id="id1"></span><h2><a class="toc-backref" href="#id14" role="doc-backlink">Calibration Diagnostics</a><a class="headerlink" href="#calibration-diagnostics" title="Link to this heading">¶</a></h2>
+<section id="pixel-by-pixel-results">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink">Pixel-by-pixel results</a><a class="headerlink" href="#pixel-by-pixel-results" title="Link to this heading">¶</a></h3>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../../_images/VULCAN_192227_pixel_calibration.png"><img alt="../../_images/VULCAN_192227_pixel_calibration.png" src="../../_images/VULCAN_192227_pixel_calibration.png" style="width: 400px;" />
+</a>
+</figure>
+<p>There are some common ways of diagnosing the calibration results.
+One of the more common is to plot the aligned data in d-spacing.
+While this can be done via the “colorfill” plot or sliceviewer,
+a function has been created to annotate the plot with additional information.
+This can be done using the following code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">ApplyDiffCal</span><span class="p">,</span> <span class="n">ConvertUnits</span><span class="p">,</span> <span class="n">LoadEventNexus</span><span class="p">,</span> <span class="n">LoadInstrument</span><span class="p">,</span> <span class="n">Rebin</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">Calibration.tofpd</span><span class="w"> </span><span class="kn">import</span> <span class="n">diagnostics</span>
+
+<span class="n">LoadEventNexus</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s1">&#39;VULCAN_192227.nxs.h5&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">)</span>
+<span class="n">Rebin</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">Params</span><span class="o">=</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span><span class="o">-</span><span class="mf">.002</span><span class="p">,</span><span class="mi">70000</span><span class="p">))</span>
+<span class="n">ApplyDiffCal</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">CalibrationFile</span><span class="o">=</span><span class="s1">&#39;VULCAN_Calibration_CC_4runs_hybrid.h5&#39;</span><span class="p">)</span>
+<span class="n">ConvertUnits</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s2">&quot;dSpacing&quot;</span><span class="p">)</span>
+<span class="n">diagnostics</span><span class="o">.</span><span class="n">plot2d</span><span class="p">(</span><span class="n">mtd</span><span class="p">[</span><span class="s1">&#39;ws&#39;</span><span class="p">],</span> <span class="n">horiz_markers</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="o">*</span><span class="mi">512</span><span class="o">*</span><span class="mi">20</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="mi">8</span><span class="o">*</span><span class="mi">512</span><span class="o">*</span><span class="mi">20</span><span class="p">],</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">1.3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here the expected peak positions are vertical lines, the horizontal lines are boundaries between banks.
+When run interactively, the zoom/pan tools are available.</p>
+</section>
+<section id="difc-of-unwrapped-instrument">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink">DIFC of unwrapped instrument</a><a class="headerlink" href="#difc-of-unwrapped-instrument" title="Link to this heading">¶</a></h3>
+<p>To check the consistency of pixel-level calibration, the DIFC value of each
+pixel can be compared between two different instrument calibrations. The percent
+change in DIFC value is plotted over a view of the unwrapped instrument where the
+horizontal and vertical axis corresponds to the polar and azimuthal angle, respectively.
+The azimuthal angle of 0 corresponds to the direction parallel of the positive Y-axis in
+3D space.</p>
+<p>Below is an example of the change in DIFC between two different calibrations of the
+NOMAD instrument.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../../_images/NOMAD_difc_calibration.png"><img alt="../../_images/NOMAD_difc_calibration.png" src="../../_images/NOMAD_difc_calibration.png" style="width: 400px;" />
+</a>
+</figure>
+<p>This plot can be generated several different ways: by using calibration files,
+calibration workspaces, or resulting workspaces from <a class="reference internal" href="../../algorithms/CalculateDIFC-v1.html#algm-calculatedifc"><span class="std std-ref">CalculateDIFC</span></a>.
+The first input parameter is always required and represents the new calibration.
+The second parameter is optional and represents the old calibration. When it is
+not specified, the default instrument geometry is used for comparison. Masks can
+be included by providing a mask using the <code class="docutils literal notranslate"><span class="pre">mask</span></code> parameter. To control the
+scale of the plot, a tuple of the minimum and maximum percentage can be specified
+for the <code class="docutils literal notranslate"><span class="pre">vrange</span></code> parameter.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">Calibration.tofpd</span><span class="w"> </span><span class="kn">import</span> <span class="n">diagnostics</span>
+
+<span class="c1"># Use filenames to generate the plot</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">diagnostics</span><span class="o">.</span><span class="n">difc_plot2d</span><span class="p">(</span><span class="s2">&quot;NOM_calibrate_d135279_2019_11_28.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;NOM_calibrate_d131573_2019_08_18.h5&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When calibration tables are used as inputs, an additional workspace parameter
+is needed (<code class="docutils literal notranslate"><span class="pre">instr_ws</span></code>) to hold the instrument definition. This can be the GroupingWorkspace
+generated with the calibration tables from <a class="reference internal" href="../../algorithms/LoadDiffCal-v1.html#algm-loaddiffcal"><span class="std std-ref">LoadDiffCal</span></a> as seen below.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoadDiffCal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">Calibration.tofpd</span><span class="w"> </span><span class="kn">import</span> <span class="n">diagnostics</span>
+
+<span class="c1"># Use calibration tables to generate the plot</span>
+<span class="n">LoadDiffCal</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s2">&quot;NOM_calibrate_d135279_2019_11_28.h5&quot;</span><span class="p">,</span> <span class="n">WorkspaceName</span><span class="o">=</span><span class="s2">&quot;new&quot;</span><span class="p">)</span>
+<span class="n">LoadDiffCal</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s2">&quot;NOM_calibrate_d131573_2019_08_18.h5&quot;</span><span class="p">,</span> <span class="n">WorkspaceName</span><span class="o">=</span><span class="s2">&quot;old&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">diagnostics</span><span class="o">.</span><span class="n">difc_plot2d</span><span class="p">(</span><span class="s2">&quot;new_cal&quot;</span><span class="p">,</span> <span class="s2">&quot;old_cal&quot;</span><span class="p">,</span> <span class="n">instr_ws</span><span class="o">=</span><span class="s2">&quot;new_group&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, workspaces with DIFC values can be used directly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalculateDIFC</span><span class="p">,</span> <span class="n">LoadDiffCal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">Calibration.tofpd</span><span class="w"> </span><span class="kn">import</span> <span class="n">diagnostics</span>
+
+<span class="c1"># Use the results from CalculateDIFC directly</span>
+<span class="n">LoadDiffCal</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s2">&quot;NOM_calibrate_d135279_2019_11_28.h5&quot;</span><span class="p">,</span> <span class="n">WorkspaceName</span><span class="o">=</span><span class="s2">&quot;new&quot;</span><span class="p">)</span>
+<span class="n">LoadDiffCal</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s2">&quot;NOM_calibrate_d131573_2019_08_18.h5&quot;</span><span class="p">,</span> <span class="n">WorkspaceName</span><span class="o">=</span><span class="s2">&quot;old&quot;</span><span class="p">)</span>
+<span class="n">difc_new</span> <span class="o">=</span> <span class="n">CalculateDIFC</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s2">&quot;new_group&quot;</span><span class="p">,</span> <span class="n">CalibrationWorkspace</span><span class="o">=</span><span class="s2">&quot;new_cal&quot;</span><span class="p">)</span>
+<span class="n">difc_old</span> <span class="o">=</span> <span class="n">CalculateDIFC</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s2">&quot;old_group&quot;</span><span class="p">,</span> <span class="n">CalibrationWorkspace</span><span class="o">=</span><span class="s2">&quot;old_cal&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">diagnostics</span><span class="o">.</span><span class="n">difc_plot2d</span><span class="p">(</span><span class="n">difc_new</span><span class="p">,</span> <span class="n">difc_old</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A mask can also be applied with a <code class="docutils literal notranslate"><span class="pre">MaskWorkspace</span></code> to hide pixels from the plot:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoadDiffCal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">Calibration.tofpd</span><span class="w"> </span><span class="kn">import</span> <span class="n">diagnostics</span>
+
+<span class="c1"># Use calibration tables to generate the plot</span>
+<span class="n">LoadDiffCal</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s2">&quot;NOM_calibrate_d135279_2019_11_28.h5&quot;</span><span class="p">,</span> <span class="n">WorkspaceName</span><span class="o">=</span><span class="s2">&quot;new&quot;</span><span class="p">)</span>
+<span class="n">LoadDiffCal</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="s2">&quot;NOM_calibrate_d131573_2019_08_18.h5&quot;</span><span class="p">,</span> <span class="n">WorkspaceName</span><span class="o">=</span><span class="s2">&quot;old&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">diagnostics</span><span class="o">.</span><span class="n">difc_plot2d</span><span class="p">(</span><span class="s2">&quot;new_cal&quot;</span><span class="p">,</span> <span class="s2">&quot;old_cal&quot;</span><span class="p">,</span> <span class="n">instr_ws</span><span class="o">=</span><span class="s2">&quot;new_group&quot;</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="s2">&quot;new_mask&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="relative-strain">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">Relative Strain</a><a class="headerlink" href="#relative-strain" title="Link to this heading">¶</a></h3>
+<p>Plotting the relative strain of the d-spacing for a peak to the nominal d value (<span class="math notranslate nohighlight">\(\frac{observed}{expected}\)</span>)
+can be used as another method to check the calibration consistency at the pixel level. The relative strain
+is plotted along the Y-axis for each detector pixel, with the mean and standard deviation reported
+on the plot. A solid black line is drawn at the mean, and two dashed lines are drawn above and below
+the mean by a threshold percentage (one percent of the mean by default). This can be used to determine
+which pixels are bad up to a specific threshold.</p>
+<p>Below is an example of the relative strain plot for VULCAN at peak position 1.2615:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../../_images/VULCAN_relstrain_diagnostic.png"><img alt="../../_images/VULCAN_relstrain_diagnostic.png" src="../../_images/VULCAN_relstrain_diagnostic.png" style="width: 400px;" />
+</a>
+</figure>
+<p>The plot shown above can be generated from the following script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">LoadEventAndCompress</span><span class="p">,</span> <span class="n">LoadInstrument</span><span class="p">,</span> <span class="n">PDCalibration</span><span class="p">,</span> <span class="n">Rebin</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">Calibration.tofpd</span><span class="w"> </span><span class="kn">import</span> <span class="n">diagnostics</span>
+
+<span class="n">FILENAME</span> <span class="o">=</span> <span class="s1">&#39;VULCAN_192227.nxs.h5&#39;</span>
+<span class="n">CALFILE</span> <span class="o">=</span> <span class="s1">&#39;VULCAN_Calibration_CC_4runs_hybrid.h5&#39;</span>
+
+<span class="n">peakpositions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+  <span class="p">(</span><span class="mf">0.3117</span><span class="p">,</span> <span class="mf">0.3257</span><span class="p">,</span> <span class="mf">0.3499</span><span class="p">,</span> <span class="mf">0.3916</span><span class="p">,</span> <span class="mf">0.4205</span><span class="p">,</span> <span class="mf">0.4645</span><span class="p">,</span> <span class="mf">0.4768</span><span class="p">,</span> <span class="mf">0.4996</span><span class="p">,</span> <span class="mf">0.515</span><span class="p">,</span> <span class="mf">0.5441</span><span class="p">,</span> <span class="mf">0.5642</span><span class="p">,</span> <span class="mf">0.6307</span><span class="p">,</span> <span class="mf">0.6867</span><span class="p">,</span>
+   <span class="mf">0.7283</span><span class="p">,</span> <span class="mf">0.8186</span><span class="p">,</span> <span class="mf">0.892</span><span class="p">,</span> <span class="mf">1.0758</span><span class="p">,</span> <span class="mf">1.2615</span><span class="p">,</span> <span class="mf">2.06</span><span class="p">))</span>
+
+<span class="n">LoadEventAndCompress</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="n">FILENAME</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">FilterBadPulses</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">LoadInstrument</span><span class="p">(</span><span class="n">Workspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">InstrumentName</span><span class="o">=</span><span class="s2">&quot;VULCAN&quot;</span><span class="p">,</span> <span class="n">RewriteSpectraMap</span><span class="o">=</span><span class="s1">&#39;True&#39;</span><span class="p">)</span>
+<span class="n">Rebin</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">Params</span><span class="o">=</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span> <span class="o">-</span><span class="mf">.002</span><span class="p">,</span> <span class="mi">70000</span><span class="p">))</span>
+
+<span class="n">PDCalibration</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">TofBinning</span><span class="o">=</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span><span class="o">-</span><span class="mf">.002</span><span class="p">,</span><span class="mi">70000</span><span class="p">),</span>
+              <span class="n">PeakPositions</span><span class="o">=</span><span class="n">peakpositions</span><span class="p">,</span>
+              <span class="n">MinimumPeakHeight</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+              <span class="n">OutputCalibrationTable</span><span class="o">=</span><span class="s1">&#39;calib&#39;</span><span class="p">,</span>
+              <span class="n">DiagnosticWorkspaces</span><span class="o">=</span><span class="s1">&#39;diag&#39;</span><span class="p">)</span>
+
+<span class="n">dspacing</span> <span class="o">=</span> <span class="n">diagnostics</span><span class="o">.</span><span class="n">collect_peaks</span><span class="p">(</span><span class="s1">&#39;diag_dspacing&#39;</span><span class="p">,</span> <span class="s1">&#39;dspacing&#39;</span><span class="p">,</span> <span class="n">donor</span><span class="o">=</span><span class="s1">&#39;diag_fitted&#39;</span><span class="p">,</span>
+                                     <span class="n">infotype</span><span class="o">=</span><span class="s1">&#39;dspacing&#39;</span><span class="p">)</span>
+<span class="n">strain</span> <span class="o">=</span> <span class="n">diagnostics</span><span class="o">.</span><span class="n">collect_peaks</span><span class="p">(</span><span class="s1">&#39;diag_dspacing&#39;</span><span class="p">,</span> <span class="s1">&#39;strain&#39;</span><span class="p">,</span> <span class="n">donor</span><span class="o">=</span><span class="s1">&#39;diag_fitted&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">diagnostics</span><span class="o">.</span><span class="n">plot_peakd</span><span class="p">(</span><span class="s1">&#39;strain&#39;</span><span class="p">,</span> <span class="mf">1.2615</span><span class="p">,</span> <span class="n">drange</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">200000</span><span class="p">),</span> <span class="n">plot_regions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_bad_cnt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To plot the relative strain for multiple peaks, an array of positions can be passed instead of a single value.
+For example, using <code class="docutils literal notranslate"><span class="pre">peakpositions</span></code> in place of <code class="docutils literal notranslate"><span class="pre">1.2615</span></code> in the above example results in the relative strain for
+all peaks being plotted as shown below.</p>
+<figure class="align-default">
+<img alt="../../_images/VULCAN_relstrain_all.png" src="../../_images/VULCAN_relstrain_all.png" />
+</figure>
+<p>The vertical lines shown in the plot are drawn between detector regions and can be used to report the
+count of bad pixels found in each region. The solid vertical line indicates the start of a region,
+while the dashed vertical line indicates the end of a region. The vertical lines can be turned off
+with <code class="docutils literal notranslate"><span class="pre">plot_regions=False</span></code> and displaying the number of bad counts for each region can also be disabled
+with <code class="docutils literal notranslate"><span class="pre">show_bad_cnt=False</span></code>. When <code class="docutils literal notranslate"><span class="pre">plot_regions=False</span></code> but <code class="docutils literal notranslate"><span class="pre">show_bad_cnt=True</span></code>, a single count of bad
+pixels over the entire range is shown at the bottom center of the plot.</p>
+<p>As seen in the above example, the x-range of the plot can be narrowed down using the <code class="docutils literal notranslate"><span class="pre">drange</span></code> option,
+which accepts a tuple of the starting detector ID and ending detector ID to plot.</p>
+<p>To adjust the horizontal bars above and below the mean, a percent can be passed to the <code class="docutils literal notranslate"><span class="pre">threshold</span></code> option.</p>
+</section>
+<section id="pearson-correlation-coefficient">
+<h3><a class="toc-backref" href="#id18" role="doc-backlink">Pearson Correlation Coefficient</a><a class="headerlink" href="#pearson-correlation-coefficient" title="Link to this heading">¶</a></h3>
+<p>It can be useful to compare the linearity of the relationship between time of flight and d-spacing for each peak involved
+in calibration. In theory, the relationship between (TOF, d-spacing) will always be perfectly linear, but in practice,
+that is not always the case. This diagnostic plot primarily serves as a tool to ensure that the calibration makes sense,
+i.e., that a single DIFC parameter is enough to do the transformation. In the ideal case, all Pearson correlation
+coefficients will be close to 1. For more on Pearson correlation coefficients please see
+<a class="reference external" href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient">this wikipedia article</a>. Below is an example plot for the Pearson correlation
+coefficient of (TOF, d-spacing).</p>
+<figure class="align-default">
+<img alt="../../_images/VULCAN_pearsoncorr.png" src="../../_images/VULCAN_pearsoncorr.png" />
+</figure>
+<p>The following script can be used to generate the above plot.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># import mantid algorithms, numpy and matplotlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">npfrom</span> <span class="n">Calibration</span><span class="o">.</span><span class="n">tofpd</span> <span class="kn">import</span><span class="w"> </span><span class="nn">diagnosticsFILENAME</span> <span class="o">=</span> <span class="s1">&#39;VULCAN_192226.nxs.h5&#39;</span>  <span class="c1"># 88 sec</span>
+
+<span class="n">FILENAME</span> <span class="o">=</span> <span class="s1">&#39;VULCAN_192227.nxs.h5&#39;</span>  <span class="c1"># 2.8 hour</span>
+<span class="n">CALFILE</span> <span class="o">=</span> <span class="s1">&#39;VULCAN_Calibration_CC_4runs_hybrid.h5&#39;</span><span class="n">peakpositions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+  <span class="p">(</span><span class="mf">0.3117</span><span class="p">,</span> <span class="mf">0.3257</span><span class="p">,</span> <span class="mf">0.3499</span><span class="p">,</span> <span class="mf">0.3916</span><span class="p">,</span> <span class="mf">0.4205</span><span class="p">,</span> <span class="mf">0.4645</span><span class="p">,</span> <span class="mf">0.4768</span><span class="p">,</span> <span class="mf">0.4996</span><span class="p">,</span> <span class="mf">0.515</span><span class="p">,</span> <span class="mf">0.5441</span><span class="p">,</span> <span class="mf">0.5642</span><span class="p">,</span> <span class="mf">0.6307</span><span class="p">,</span> <span class="mf">0.6867</span><span class="p">,</span>
+   <span class="mf">0.7283</span><span class="p">,</span> <span class="mf">0.8186</span><span class="p">,</span> <span class="mf">0.892</span><span class="p">,</span> <span class="mf">1.0758</span><span class="p">,</span> <span class="mf">1.2615</span><span class="p">,</span> <span class="mf">2.06</span><span class="p">))</span>
+
+<span class="n">peakpositions</span> <span class="o">=</span> <span class="n">peakpositions</span><span class="p">[</span><span class="n">peakpositions</span> <span class="o">&gt;</span> <span class="mf">0.4</span><span class="p">]</span>
+<span class="n">peakpositions</span> <span class="o">=</span> <span class="n">peakpositions</span><span class="p">[</span><span class="n">peakpositions</span> <span class="o">&lt;</span> <span class="mf">1.5</span><span class="p">]</span>
+<span class="n">peakpositions</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span><span class="n">LoadEventAndCompress</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="n">FILENAME</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">FilterBadPulses</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">LoadInstrument</span><span class="p">(</span><span class="n">Workspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">Filename</span><span class="o">=</span><span class="s2">&quot;mantid/instrument/VULCAN_Definition.xml&quot;</span><span class="p">,</span> <span class="n">RewriteSpectraMap</span><span class="o">=</span><span class="s1">&#39;True&#39;</span><span class="p">)</span>
+<span class="n">Rebin</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">Params</span><span class="o">=</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span> <span class="o">-</span><span class="mf">.002</span><span class="p">,</span> <span class="mi">70000</span><span class="p">))</span>
+<span class="n">PDCalibration</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">TofBinning</span><span class="o">=</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span><span class="o">-</span><span class="mf">.002</span><span class="p">,</span><span class="mi">70000</span><span class="p">),</span>
+           <span class="n">PeakPositions</span><span class="o">=</span><span class="n">peakpositions</span><span class="p">,</span>
+           <span class="n">MinimumPeakHeight</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+           <span class="n">OutputCalibrationTable</span><span class="o">=</span><span class="s1">&#39;calib&#39;</span><span class="p">,</span>
+           <span class="n">DiagnosticWorkspaces</span><span class="o">=</span><span class="s1">&#39;diag&#39;</span><span class="p">)</span>
+<span class="n">center_tof</span> <span class="o">=</span> <span class="n">diagnostics</span><span class="o">.</span><span class="n">collect_fit_result</span><span class="p">(</span><span class="s1">&#39;diag_fitparam&#39;</span><span class="p">,</span> <span class="s1">&#39;center_tof&#39;</span><span class="p">,</span> <span class="n">peakpositions</span><span class="p">,</span> <span class="n">donor</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">infotype</span><span class="o">=</span><span class="s1">&#39;centre&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">diagnostics</span><span class="o">.</span><span class="n">plot_corr</span><span class="p">(</span><span class="s1">&#39;center_tof&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="peak-information">
+<h3><a class="toc-backref" href="#id19" role="doc-backlink">Peak Information</a><a class="headerlink" href="#peak-information" title="Link to this heading">¶</a></h3>
+<p>Plotting the fitted peak parameters for different instrument banks can also provide useful information for
+calibration diagnostics. The fitted peak parameters from <a class="reference internal" href="../../algorithms/FitPeaks-v1.html#algm-fitpeaks"><span class="std std-ref">FitPeaks</span></a> (center, width,
+height, and intensity) are plotted for each bank at different peak positions. This can be used to help calibrate
+each group rather than individual detector pixels.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="../../_images/VULCAN_peakinfo_diagnostic.png"><img alt="../../_images/VULCAN_peakinfo_diagnostic.png" src="../../_images/VULCAN_peakinfo_diagnostic.png" style="width: 400px;" />
+</a>
+</figure>
+<p>The above figure can be generated using the following script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">AlignAndFocusPowder</span><span class="p">,</span> <span class="n">ConvertUnits</span><span class="p">,</span> <span class="n">FitPeaks</span><span class="p">,</span> <span class="n">LoadEventAndCompress</span><span class="p">,</span>
+                              <span class="n">LoadDiffCal</span><span class="p">,</span> <span class="n">LoadInstrument</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">Calibration.tofpd</span><span class="w"> </span><span class="kn">import</span> <span class="n">diagnostics</span>
+
+<span class="n">FILENAME</span> <span class="o">=</span> <span class="s1">&#39;VULCAN_192227.nxs.h5&#39;</span>  <span class="c1"># 2.8 hour</span>
+<span class="n">CALFILE</span> <span class="o">=</span> <span class="s1">&#39;VULCAN_Calibration_CC_4runs_hybrid.h5&#39;</span>
+
+<span class="n">peakpositions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+    <span class="p">(</span><span class="mf">0.3117</span><span class="p">,</span> <span class="mf">0.3257</span><span class="p">,</span> <span class="mf">0.3499</span><span class="p">,</span> <span class="mf">0.3916</span><span class="p">,</span> <span class="mf">0.4205</span><span class="p">,</span> <span class="mf">0.4645</span><span class="p">,</span> <span class="mf">0.4768</span><span class="p">,</span> <span class="mf">0.4996</span><span class="p">,</span> <span class="mf">0.515</span><span class="p">,</span> <span class="mf">0.5441</span><span class="p">,</span> <span class="mf">0.5642</span><span class="p">,</span> <span class="mf">0.6307</span><span class="p">,</span> <span class="mf">0.6867</span><span class="p">,</span>
+     <span class="mf">0.7283</span><span class="p">,</span> <span class="mf">0.8186</span><span class="p">,</span> <span class="mf">0.892</span><span class="p">,</span> <span class="mf">1.0758</span><span class="p">,</span> <span class="mf">1.2615</span><span class="p">,</span> <span class="mf">2.06</span><span class="p">))</span>
+<span class="n">peakpositions</span> <span class="o">=</span> <span class="n">peakpositions</span><span class="p">[</span><span class="n">peakpositions</span> <span class="o">&gt;</span> <span class="mf">0.4</span><span class="p">]</span>
+<span class="n">peakpositions</span> <span class="o">=</span> <span class="n">peakpositions</span><span class="p">[</span><span class="n">peakpositions</span> <span class="o">&lt;</span> <span class="mf">1.5</span><span class="p">]</span>
+<span class="n">peakpositions</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="n">peakwindows</span> <span class="o">=</span> <span class="n">diagnostics</span><span class="o">.</span><span class="n">get_peakwindows</span><span class="p">(</span><span class="n">peakpositions</span><span class="p">)</span>
+
+<span class="n">LoadEventAndCompress</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="n">FILENAME</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">FilterBadPulses</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">LoadInstrument</span><span class="p">(</span><span class="n">Workspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">InstrumentName</span><span class="o">=</span><span class="s2">&quot;VULCAN&quot;</span><span class="p">,</span> <span class="n">RewriteSpectraMap</span><span class="o">=</span><span class="s1">&#39;True&#39;</span><span class="p">)</span>
+
+<span class="n">LoadDiffCal</span><span class="p">(</span><span class="n">Filename</span><span class="o">=</span><span class="n">CALFILE</span><span class="p">,</span> <span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span> <span class="n">WorkspaceName</span><span class="o">=</span><span class="s1">&#39;VULCAN&#39;</span><span class="p">)</span>
+<span class="n">AlignAndFocusPowder</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;ws&#39;</span><span class="p">,</span>
+                    <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;focus&#39;</span><span class="p">,</span>
+                    <span class="n">GroupingWorkspace</span><span class="o">=</span><span class="s2">&quot;VULCAN_group&quot;</span><span class="p">,</span>
+                    <span class="n">CalibrationWorkspace</span><span class="o">=</span><span class="s2">&quot;VULCAN_cal&quot;</span><span class="p">,</span>
+                    <span class="n">MaskWorkspace</span><span class="o">=</span><span class="s2">&quot;VULCAN_mask&quot;</span><span class="p">,</span>
+                    <span class="n">Dspacing</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">Params</span><span class="o">=</span><span class="s2">&quot;0.3,3e-4,1.5&quot;</span><span class="p">)</span>
+
+<span class="n">ConvertUnits</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;focus&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;focus&#39;</span><span class="p">,</span> <span class="n">Target</span><span class="o">=</span><span class="s1">&#39;dSpacing&#39;</span><span class="p">,</span> <span class="n">EMode</span><span class="o">=</span><span class="s1">&#39;Elastic&#39;</span><span class="p">)</span>
+<span class="n">FitPeaks</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;focus&#39;</span><span class="p">,</span>
+        <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">,</span>
+        <span class="n">PeakFunction</span><span class="o">=</span><span class="s1">&#39;Gaussian&#39;</span><span class="p">,</span>
+        <span class="n">RawPeakParameters</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">HighBackground</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># observe background</span>
+        <span class="n">ConstrainPeakPositions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">MinimumPeakHeight</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">PeakCenters</span><span class="o">=</span><span class="n">peakpositions</span><span class="p">,</span>
+        <span class="n">FitWindowBoundaryList</span><span class="o">=</span><span class="n">peakwindows</span><span class="p">,</span>
+        <span class="n">FittedPeaksWorkspace</span><span class="o">=</span><span class="s1">&#39;fitted&#39;</span><span class="p">,</span>
+        <span class="n">OutputPeakParametersWorkspace</span><span class="o">=</span><span class="s1">&#39;parameters&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">diagnostics</span><span class="o">.</span><span class="n">plot_peak_info</span><span class="p">(</span><span class="s1">&#39;parameters&#39;</span><span class="p">,</span> <span class="n">peakpositions</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Category</strong>: <a class="reference external" href="../categories/Calibration.html">Calibration</a></p>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul class="nav navbar-nav" style=" float: right;">
+      
+      
+          
+            
+  <li>
+    <a href="PSDTubeCalibration.html" title="Previous Chapter: PSD Tube Calibration"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; PSD Tube Calibration</span>
+    </a>
+  </li>
+  <li>
+    <a href="PythonCodeForCalibration.html" title="Next Chapter: Python Code For Calibration"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Python Code F... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
