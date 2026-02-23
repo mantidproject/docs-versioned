@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Texture Reduction</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=9aca6aaf" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=2d21b807"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API" href="../api/index.html" />
+    <link rel="prev" title="Scripting SANS Reductions" href="ScriptingSANSReductions.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+<nav id="navbar" class="navbar navbar-default navbar-fixed-top">
+  <div id="navbar-main" class="container">
+    <ul class="nav navbar-nav">
+      
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <li>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+         </a>
+      </li>
+      <span class="navbar-text navbar-version pull-left"><b>6.15</b></span>
+    </ul>
+
+    
+    <div class="collapse navbar-collapse nav-collapse">
+    
+      <ul class="nav navbar-nav">
+        <li class="divider-vertical"></li>
+        
+          <li>
+            <a href="https://www.mantidproject.org">Home</a>
+          </li>
+          <li>
+            <a href="https://download.mantidproject.org">Download</a>
+          </li>
+          <li>
+            <a href="https://docs.mantidproject.org">Documentation</a>
+          </li>
+          <li>
+            <a href="https://www.mantidproject.org/contact">Contact Us</a>
+          </li>
+        
+        
+          
+          
+        
+        
+        
+        
+      </ul>
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          </div>
+  </div> <!-- /navbar-main -->
+<div id="navbar-breadcrumbs" class="related" role="navigation" aria-label="related navigation">
+  <h3>Navigation</h3>
+  <ul>
+    <li class="nav-item nav-item-0">
+      <a href="../index.html">Documentation</a>
+         &#187;
+    </li>
+    
+    <li class="nav-item nav-item-1">
+      <a href="index.html" accesskey="U">
+        Techniques
+      </a>
+       &#187;
+    </li>
+    
+    
+    
+    
+    <li class="nav-item nav-item-this">
+      <a href="">Texture Reduction</a>
+    </li>
+    
+    
+  </ul>
+</div>
+</nav>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <section id="texture-reduction">
+<span id="id1"></span><h1>Texture Reduction<a class="headerlink" href="#texture-reduction" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#overview" id="id4">Overview</a></p>
+<ul>
+<li><p><a class="reference internal" href="#introduction" id="id5">Introduction</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#step-0-initial-set-up" id="id6">Step 0: Initial Set Up</a></p></li>
+<li><p><a class="reference internal" href="#step-1-preparing-input-workspaces-and-applying-absorption-corrections" id="id7">Step 1: Preparing Input Workspaces and Applying Absorption Corrections</a></p>
+<ul>
+<li><p><a class="reference internal" href="#loading-files-for-correction" id="id8">Loading Files for Correction</a></p></li>
+<li><p><a class="reference internal" href="#adding-sample-shape-to-reference-workspace" id="id9">Adding Sample Shape to Reference Workspace</a></p></li>
+<li><p><a class="reference internal" href="#adding-material-to-reference-workspace" id="id10">Adding Material to Reference Workspace</a></p></li>
+<li><p><a class="reference internal" href="#setting-sample-axes" id="id11">Setting Sample Axes</a></p></li>
+<li><p><a class="reference internal" href="#setting-the-sample-orientations" id="id12">Setting the Sample Orientations</a></p></li>
+<li><p><a class="reference internal" href="#transferring-sample-info-onto-workspaces" id="id13">Transferring Sample Info onto Workspaces</a></p></li>
+<li><p><a class="reference internal" href="#setting-the-gauge-volume" id="id14">Setting the Gauge Volume</a></p></li>
+<li><p><a class="reference internal" href="#creating-attenuation-table" id="id15">Creating Attenuation Table</a></p></li>
+<li><p><a class="reference internal" href="#including-beam-divergence-correction" id="id16">Including Beam Divergence Correction</a></p></li>
+<li><p><a class="reference internal" href="#running-corrections" id="id17">Running Corrections</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#step-2-setting-calibration-info" id="id18">Step 2: Setting Calibration Info</a></p></li>
+<li><p><a class="reference internal" href="#step-3-focusing-data" id="id19">Step 3: Focusing Data</a></p></li>
+<li><p><a class="reference internal" href="#step-4-fitting-data" id="id20">Step 4: Fitting Data</a></p></li>
+<li><p><a class="reference internal" href="#step-5-plotting-pole-figures" id="id21">Step 5: Plotting Pole Figures</a></p>
+<ul>
+<li><p><a class="reference internal" href="#basic-pole-figure-setup" id="id22">Basic Pole Figure Setup</a></p></li>
+<li><p><a class="reference internal" href="#adding-a-fit-parameter" id="id23">Adding a Fit Parameter</a></p></li>
+<li><p><a class="reference internal" href="#interpolating-the-experimental-pole-figure" id="id24">Interpolating the Experimental Pole Figure</a></p></li>
+<li><p><a class="reference internal" href="#adding-crystal-structure-information" id="id25">Adding Crystal Structure Information</a></p></li>
+<li><p><a class="reference internal" href="#modifying-sample-axes" id="id26">Modifying Sample Axes</a></p></li>
+<li><p><a class="reference internal" href="#customizing-the-plot" id="id27">Customizing the plot</a></p></li>
+<li><p><a class="reference internal" href="#debugging-the-plot" id="id28">Debugging the plot</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<section id="overview">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Overview</a><a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>This document serves as somewhat of a tutorial for running a texture reduction in mantid, primarily focusing on performing the reduction within the Engineering Diffraction Interface. Within this tutorial
+we will work through a reduction with some real data and highlight the different options and considerations when it comes to performing the same
+reduction on your own data.</p>
+<section id="introduction">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h3>
+<p>The basic workflow for performing a texture data reduction within the GUI is shown in the figure below:</p>
+<figure class="align-default" id="id2">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>From this diagram it can be seen that the main steps in the procedure are consolidated into the tabs of the interface, specifically: Correction; Calibration; Focusing; Fitting; and Texture. This diagram also gives
+a view of what data is required of the user (although in this diagram it is by no means comprehensive), but we can infer that, at the most basic level, we will require: some experimental data; some information on the
+orientation of the sample in each run; some calibration runs; and some diffraction peaks of interest.</p>
+<p>We will now step through the procedure of performing a reduction, loosely following the structure of this pipeline. We will touch on some of the choices available when running through a similar workflow on
+your own data, but will not explain in detail what each option entails, for this please refer to the <a class="reference internal" href="../interfaces/diffraction/Engineering%20Diffraction.html#engineering-diffraction-ref"><span class="std std-ref">interface documentation</span></a></p>
+</section>
+</section>
+<section id="step-0-initial-set-up">
+<span id="initial-setup"></span><h2><a class="toc-backref" href="#id6" role="doc-backlink">Step 0: Initial Set Up</a><a class="headerlink" href="#step-0-initial-set-up" title="Link to this heading">¶</a></h2>
+<p>To follow along with example data you will require the <a class="reference external" href="https://sourceforge.net/projects/mantid/files/Sample%20Data/TrainingCourseData.zip/download">Training Course Data</a> with the revelant files to be found within the texture folder.</p>
+<p>If you would like to follow along with all the below steps using your own experimental data you will require the following data/experimental information:</p>
+<ol class="arabic simple">
+<li><p>Raw Diffraction Data for each experimental run (this would ideally be nexus files or, if data search directories and priviledges are setup correctly, just the run numbers may suffice)</p></li>
+<li><p>Calibration Run Data files, for ENGINX this is a Ceria run for diffraction parameter calibration and a vanadium run for intensity normalisation (see <a class="reference internal" href="../interfaces/diffraction/Engineering%20Diffraction.html#engineering-diffraction-ref"><span class="std std-ref">interface documentation</span></a> for more information)</p></li>
+<li><p>Sample Shape information, either as an <code class="docutils literal notranslate"><span class="pre">STL</span></code> file that you have created/obtained already or as a Constructive Solid Geometry shape definition <code class="docutils literal notranslate"><span class="pre">XML</span></code> string (see <a class="reference internal" href="../concepts/HowToDefineGeometricShape.html#howtodefinegeometricshape"><span class="std std-ref">How To Define Geometric Shape</span></a> for more info)</p></li>
+<li><p>Sample Material Information, this is solely for attenuation correction and so the accuracy of the information will be determined by the accuracy required by your experiment (see <a class="reference internal" href="../concepts/Materials.html#materials"><span class="std std-ref">Materials</span></a> for more info)</p></li>
+<li><p>Correct definition of the Sample Shape in its initial state when the goniometer is homed/default (this would ideally be how the sample shape information is provided above, but the shape definition could be defined in a different orientation and transformed to the initial state if necessary)</p></li>
+<li><p>Orientation Information for each experimental run, either provided as transformation matrices or euler angles (if using euler angles you must know the axes of rotation for the goniometer and the sense of these rotations - <em>take care to get this correct</em>)</p></li>
+<li><p>Sample Directions relative to sample shape (texture can be defined relative to intrinsic directions of the sample, for example the Rolling, Normal and Tranverse Directions)</p></li>
+<li><p>The Shape of the experimental Gauge Volume</p></li>
+<li><p>The Beam Diveregence Parameters</p></li>
+<li><p>Crystal Structure either as lattice definition (see <a class="reference internal" href="../concepts/CrystalStructureAndReflections.html#crystal-structure-and-reflections"><span class="std std-ref">Crystal structure and reflections</span></a>) or a <code class="docutils literal notranslate"><span class="pre">CIF</span></code> file</p></li>
+<li><p>Diffraction peaks of interest and their corresponding HKLs</p></li>
+</ol>
+<p>Note: Not all of this information will be required to to perform a texture reduction <em>in some capacity</em> but absences will impose capability limits to greater or lesser extents.</p>
+<p>Once you have gathered the required data/info:</p>
+<ol class="arabic simple">
+<li><p>Open the Engineering Diffraction Interface (From the home screen this can be found under <code class="docutils literal notranslate"><span class="pre">Interfaces/Diffraction</span></code> on the main taskbar)</p></li>
+<li><p>Set an RB Number at the top of the interface (This acts as the root directory, to keep the work done for different experiments separate), for now, let’s use <code class="docutils literal notranslate"><span class="pre">TextureTutorial</span></code></p></li>
+</ol>
+</section>
+<section id="step-1-preparing-input-workspaces-and-applying-absorption-corrections">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Step 1: Preparing Input Workspaces and Applying Absorption Corrections</a><a class="headerlink" href="#step-1-preparing-input-workspaces-and-applying-absorption-corrections" title="Link to this heading">¶</a></h2>
+<p>The options and procedures for applying orientation data and subsequent absorption corrections within the GUI are shown in the figure below:</p>
+<figure class="align-default" id="id3">
+<img alt="../_images/ImageNotFound.png" src="../_images/ImageNotFound.png" />
+<figcaption>
+<p><span class="caption-text">diagram generation was disabled</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<section id="loading-files-for-correction">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">Loading Files for Correction</a><a class="headerlink" href="#loading-files-for-correction" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Click on the <code class="docutils literal notranslate"><span class="pre">Absorption</span> <span class="pre">Correction</span></code> tab</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Browse</span></code> next to  the <code class="docutils literal notranslate"><span class="pre">Sample</span> <span class="pre">Run(s)</span></code> box and select the raw experimental data (ENGINX003649AB where AB : 01, 11, 20, 26, 29, 35, 44)</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Load</span> <span class="pre">Files</span></code></p></li>
+</ol>
+<p>This should populate the table below with the seven experimental datasets. Shape, material and orientation should all be unset to begin with.</p>
+<ol class="arabic simple">
+<li><p>Click the <code class="docutils literal notranslate"><span class="pre">Select</span> <span class="pre">All</span></code> button below the table to make sure all your datasets have been flagged as selected</p></li>
+<li><p>Create a reference workspace by clicking <code class="docutils literal notranslate"><span class="pre">Create</span> <span class="pre">Reference</span> <span class="pre">Workspace</span></code> (these steps can be replaced with Loading an existing Reference workspace)</p></li>
+</ol>
+</section>
+<section id="adding-sample-shape-to-reference-workspace">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink">Adding Sample Shape to Reference Workspace</a><a class="headerlink" href="#adding-sample-shape-to-reference-workspace" title="Link to this heading">¶</a></h3>
+<p>To add a sample shape to the reference workspace you can have two options depending upon whether the shape is defined as an STL file or an XML file (see <a class="reference internal" href="#initial-setup"><span class="std std-ref">Step 0: Initial Set Up</span></a> if using your own data):</p>
+<ul class="simple">
+<li><p><em>STL</em>:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Load</span> <span class="pre">Shape</span> <span class="pre">onto</span> <span class="pre">single</span> <span class="pre">WS</span></code></p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">InputWorkspace</span></code> as <code class="docutils literal notranslate"><span class="pre">TextureTutorial_reference_workspace</span></code></p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Browse</span></code> next to <code class="docutils literal notranslate"><span class="pre">Filename</span></code> and navigate to the STL file provided in the Shapes folder</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">OutputWorkspace</span></code> as <code class="docutils literal notranslate"><span class="pre">TextureTutorial_reference_workspace</span></code></p></li>
+<li><p>For this tutorial example, the rest can be left as default, but these options offer means of transforming the geometry in the STL file to the correct scale and orientation</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Run</span></code></p></li>
+</ol>
+<ul class="simple">
+<li><p><em>XML</em>:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">Shape</span> <span class="pre">onto</span> <span class="pre">single</span> <span class="pre">WS</span></code></p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">InputWorkspace</span></code> as <code class="docutils literal notranslate"><span class="pre">TextureTutorial_reference_workspace</span></code></p></li>
+<li><p>Copy the contents of <code class="docutils literal notranslate"><span class="pre">example_sample_shape.xml</span></code> (or copy below) into the <code class="docutils literal notranslate"><span class="pre">ShapeXML</span></code> box</p></li>
+<li><p>Again for this example nothing else is required, but for more complex use cases <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">Reference</span> <span class="pre">Orientation</span></code> can be used <em>before</em> clicking <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">Shape</span> <span class="pre">onto</span> <span class="pre">single</span> <span class="pre">WS</span></code> to rotate the shape defined in XML (currently translations must be made in the shape definition)</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Run</span></code></p></li>
+</ol>
+<p>XML data:</p>
+<p>..testcode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">cuboid</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;some-cuboid&#39;</span><span class="o">&gt;</span> \
+<span class="o">&lt;</span><span class="n">height</span> <span class="n">val</span><span class="o">=</span><span class="s1">&#39;0.015&#39;</span>  <span class="o">/&gt;</span> \
+<span class="o">&lt;</span><span class="n">width</span> <span class="n">val</span><span class="o">=</span><span class="s1">&#39;0.012&#39;</span> <span class="o">/&gt;</span>  \
+<span class="o">&lt;</span><span class="n">depth</span>  <span class="n">val</span><span class="o">=</span><span class="s1">&#39;0.012&#39;</span> <span class="o">/&gt;</span>  \
+<span class="o">&lt;</span><span class="n">centre</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;0.0&#39;</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;0.0&#39;</span> <span class="n">z</span><span class="o">=</span><span class="s1">&#39;0.0&#39;</span>  <span class="o">/&gt;</span>  \
+<span class="o">&lt;/</span><span class="n">cuboid</span><span class="o">&gt;</span>  \
+<span class="o">&lt;</span><span class="n">algebra</span> <span class="n">val</span><span class="o">=</span><span class="s1">&#39;some-cuboid&#39;</span> <span class="o">/&gt;</span> \
+</pre></div>
+</div>
+</section>
+<section id="adding-material-to-reference-workspace">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Adding Material to Reference Workspace</a><a class="headerlink" href="#adding-material-to-reference-workspace" title="Link to this heading">¶</a></h3>
+<p>To add the material of the sample (see <a class="reference internal" href="#initial-setup"><span class="std std-ref">Step 0: Initial Set Up</span></a> if using your own data):</p>
+<ol class="arabic simple">
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">Sample</span> <span class="pre">Material</span></code></p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">InputWorkspace</span></code> as <code class="docutils literal notranslate"><span class="pre">TextureTutorial_reference_workspace</span></code></p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">ChemicalFormula</span></code> as <code class="docutils literal notranslate"><span class="pre">Fe</span></code></p></li>
+<li><p>For this tutorial example, the rest can be left as default</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Run</span></code></p></li>
+</ol>
+</section>
+<section id="setting-sample-axes">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">Setting Sample Axes</a><a class="headerlink" href="#setting-sample-axes" title="Link to this heading">¶</a></h3>
+<p>At this point is is also worth considering the sample directions that you would like use for plotting the final pole figure (see <a class="reference internal" href="#initial-setup"><span class="std std-ref">Step 0: Initial Set Up</span></a> if using your own data). Clicking the <code class="docutils literal notranslate"><span class="pre">View</span></code> button in the
+<code class="docutils literal notranslate"><span class="pre">Reference</span> <span class="pre">Workspace</span> <span class="pre">Information</span></code> section, you can see the three sample axes that will be used, where the pole figure will be projected into the plane of the red and blue vectors.
+To change the directions or labels of these axes:</p>
+<ol class="arabic simple">
+<li><p>Click the <code class="docutils literal notranslate"><span class="pre">Settings</span></code> menu (gear icon, in the bottom left of the interface)</p></li>
+<li><p>Under <code class="docutils literal notranslate"><span class="pre">General</span> <span class="pre">&gt;</span> <span class="pre">Texture</span> <span class="pre">Directions</span></code> you will see there is a matrix which defines these sample directions as they are on the reference workspace.</p></li>
+</ol>
+<ul class="simple">
+<li><p>The first column contains the names of the axes</p></li>
+<li><p>Next to each name are the three components (X, Y, Z) of the vector corresponding to that sample direction</p></li>
+<li><p><em>The second sample direction is always the out of plane direction for the pole figure</em></p></li>
+</ul>
+</section>
+<section id="setting-the-sample-orientations">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">Setting the Sample Orientations</a><a class="headerlink" href="#setting-the-sample-orientations" title="Link to this heading">¶</a></h3>
+<p>To set the orientation of the experimental runs there are three options: set each run individually; set runs from rotation matrices; or set runs from euler angles (see <a class="reference internal" href="#initial-setup"><span class="std std-ref">Step 0: Initial Set Up</span></a> if using your own data)</p>
+<ul class="simple">
+<li><p><em>Individually</em>:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">Single</span> <span class="pre">Orientation</span></code></p></li>
+<li><p>Select desired workspace</p></li>
+<li><p>Input the rotation either using the euler axes or the <code class="docutils literal notranslate"><span class="pre">GoniometerMatrix</span></code> field</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Run</span></code>, you should see the row in the table belonging to the chosen workspace has the <code class="docutils literal notranslate"><span class="pre">Orientation</span></code> change from <code class="docutils literal notranslate"><span class="pre">default</span></code> to <code class="docutils literal notranslate"><span class="pre">set</span></code></p></li>
+</ol>
+<ul class="simple">
+<li><p><em>From Rotation Matrices</em>:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Click the Settings button (gear/cog icon in the bottom left)</p></li>
+<li><p>Under Absorption Correction section, ensure <code class="docutils literal notranslate"><span class="pre">Orientation</span> <span class="pre">File</span> <span class="pre">is</span> <span class="pre">Euler</span> <span class="pre">Angles</span></code> is UNSELECTED</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">OK</span></code> to return to the main Interface Window</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Browse</span></code> next to the <code class="docutils literal notranslate"><span class="pre">Orientation</span> <span class="pre">File</span></code> box and navigate to <code class="docutils literal notranslate"><span class="pre">matrix_orientation_file.txt</span></code></p></li>
+<li><p>Again ensuring all the experimental runs have been selected, Click <code class="docutils literal notranslate"><span class="pre">Load</span> <span class="pre">Orientation</span> <span class="pre">File</span></code></p></li>
+<li><p>You should see all the rows in the table now have <code class="docutils literal notranslate"><span class="pre">Orientation</span></code> as <code class="docutils literal notranslate"><span class="pre">set</span></code></p></li>
+</ol>
+<ul class="simple">
+<li><p><em>From Euler Angles</em>:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Click the Settings button (gear/cog icon in the bottom left)</p></li>
+<li><p>Under Absorption Correction section, ensure <code class="docutils literal notranslate"><span class="pre">Orientation</span> <span class="pre">File</span> <span class="pre">is</span> <span class="pre">Euler</span> <span class="pre">Angles</span></code> is SELECTED</p></li>
+<li><p>Set Euler Angle Scheme to <code class="docutils literal notranslate"><span class="pre">YXY</span></code> (these are the axes of the goniometer when all motor values are 0, your experimental setup may vary from this)</p></li>
+<li><p>Set Euler Angles Sense to <code class="docutils literal notranslate"><span class="pre">-1,-1,-1</span></code> (these are the sense of rotation around the axis, 1 is counter-clockwise, -1 is clockwise)</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">OK</span></code> to return to the main Interface Window</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Browse</span></code> next to the <code class="docutils literal notranslate"><span class="pre">Orientation</span> <span class="pre">File</span></code> box and navigate to <code class="docutils literal notranslate"><span class="pre">euler_angles_orientation_file.txt</span></code></p></li>
+<li><p>Again ensuring all the experimental runs have been selected, Click <code class="docutils literal notranslate"><span class="pre">Load</span> <span class="pre">Orientation</span> <span class="pre">File</span></code></p></li>
+<li><p>You should see all the rows in the table now have <code class="docutils literal notranslate"><span class="pre">Orientation</span></code> as <code class="docutils literal notranslate"><span class="pre">set</span></code></p></li>
+</ol>
+</section>
+<section id="transferring-sample-info-onto-workspaces">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">Transferring Sample Info onto Workspaces</a><a class="headerlink" href="#transferring-sample-info-onto-workspaces" title="Link to this heading">¶</a></h3>
+<p>Once you have set the orientations on the workspaces you need to then define the sample shape. As this has already been done on the Reference Workspace this can simply be done by:</p>
+<ol class="arabic simple">
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Copy</span> <span class="pre">Reference</span> <span class="pre">Sample</span></code></p></li>
+</ol>
+<p><em>Alternatively, this can be done on an individual workspace-by-workspace basis, using the above steps for setting up the sample on the reference workspace, but instead using each workspace in turn – this is not recommended</em></p>
+</section>
+<section id="setting-the-gauge-volume">
+<h3><a class="toc-backref" href="#id14" role="doc-backlink">Setting the Gauge Volume</a><a class="headerlink" href="#setting-the-gauge-volume" title="Link to this heading">¶</a></h3>
+<p>Now ensure you have the <code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">Absorption</span> <span class="pre">Correction</span></code> selected and you can set a gauge volume on the experiment. Here your options are to use: the preset gauge volume (a 4mm cube);
+a custom gauge volume; or no gauge volume (see <a class="reference internal" href="#initial-setup"><span class="std std-ref">Step 0: Initial Set Up</span></a> if using your own data).</p>
+<ul class="simple">
+<li><p><em>4mmCube</em>:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Select the <code class="docutils literal notranslate"><span class="pre">4mmCube</span></code> option (select this one for this tutorial)</p></li>
+</ol>
+<ul class="simple">
+<li><p><em>No Gauge Volume</em>:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Select the <code class="docutils literal notranslate"><span class="pre">No</span> <span class="pre">Gauge</span> <span class="pre">Volume</span></code> option</p></li>
+</ol>
+<ul class="simple">
+<li><p><em>Custom</em>:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Select the <code class="docutils literal notranslate"><span class="pre">Custom</span> <span class="pre">Shape</span></code> option</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Browse</span></code> next to the <code class="docutils literal notranslate"><span class="pre">Custom</span> <span class="pre">Gauge</span> <span class="pre">Volume</span> <span class="pre">File</span></code> box</p></li>
+<li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">custom_gauge_vol.xml</span></code> file in the tutorial data <code class="docutils literal notranslate"><span class="pre">Shapes</span></code> directory</p></li>
+</ol>
+</section>
+<section id="creating-attenuation-table">
+<h3><a class="toc-backref" href="#id15" role="doc-backlink">Creating Attenuation Table</a><a class="headerlink" href="#creating-attenuation-table" title="Link to this heading">¶</a></h3>
+<p>To optionally create an attenuation table for the attenuation values at a specific data value:</p>
+<ol class="arabic simple">
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">Create</span> <span class="pre">Attenuation</span> <span class="pre">Value</span> <span class="pre">Table</span></code></p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">Evaluation</span> <span class="pre">Point</span></code> as <code class="docutils literal notranslate"><span class="pre">2.03</span></code></p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">Units</span></code> to <code class="docutils literal notranslate"><span class="pre">dSpacing</span></code></p></li>
+</ol>
+</section>
+<section id="including-beam-divergence-correction">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink">Including Beam Divergence Correction</a><a class="headerlink" href="#including-beam-divergence-correction" title="Link to this heading">¶</a></h3>
+<p>To optionally include beam divergence correction:</p>
+<ol class="arabic simple">
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">Beam</span> <span class="pre">Divergence</span> <span class="pre">Correction</span></code></p></li>
+<li><p>Set appropriate values for the three components of divergence</p></li>
+</ol>
+</section>
+<section id="running-corrections">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">Running Corrections</a><a class="headerlink" href="#running-corrections" title="Link to this heading">¶</a></h3>
+<p>Finally to run the correction for all selected workspaces:</p>
+<ol class="arabic simple">
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Apply</span> <span class="pre">Corrections</span></code></p></li>
+<li><p>This will take some time, you should see some <code class="docutils literal notranslate"><span class="pre">Corrected_ENGINX00XXXXXX</span></code> files appear in the Workspace List <em>if</em> the Setting <code class="docutils literal notranslate"><span class="pre">Remove</span> <span class="pre">Files</span> <span class="pre">from</span> <span class="pre">ADS</span> <span class="pre">after</span> <span class="pre">processing</span></code> is UNSELECTED</p></li>
+</ol>
+</section>
+</section>
+<section id="step-2-setting-calibration-info">
+<h2><a class="toc-backref" href="#id18" role="doc-backlink">Step 2: Setting Calibration Info</a><a class="headerlink" href="#step-2-setting-calibration-info" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Click on the <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">Processing</span></code> tab</p></li>
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">Create</span> <span class="pre">New</span> <span class="pre">Calibration</span></code></p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Browse</span></code> next to <code class="docutils literal notranslate"><span class="pre">Calibration</span> <span class="pre">Sample</span> <span class="pre">#</span></code> box (Note: here sample number is that of the instruments latest ceria run, see <a class="reference internal" href="../interfaces/diffraction/Engineering%20Diffraction.html#engineering-diffraction-ref"><span class="std std-ref">interface documentation</span></a> for more information)</p></li>
+<li><p>Navigate to <code class="docutils literal notranslate"><span class="pre">ENGINX00305738</span></code> in tutorial data <code class="docutils literal notranslate"><span class="pre">CalibrationData</span></code> folder (alternatively typing <code class="docutils literal notranslate"><span class="pre">305738</span></code> should work if your search directories have been correctly set up)</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">Calibration</span> <span class="pre">Region</span> <span class="pre">of</span> <span class="pre">Interest</span></code></p></li>
+<li><p>In <code class="docutils literal notranslate"><span class="pre">Select</span> <span class="pre">Region</span> <span class="pre">of</span> <span class="pre">Interest</span></code> select <code class="docutils literal notranslate"><span class="pre">Texture30</span></code> (this groups each detector bank into 3x5{x2 banks} spatial bins)</p></li>
+<li><p>If you would like to see plots of the calibration, ensure <code class="docutils literal notranslate"><span class="pre">Plot</span> <span class="pre">Calibrated</span> <span class="pre">Workspace</span></code> is selected, otherwise deselect this option</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Calibrate</span></code></p></li>
+</ol>
+</section>
+<section id="step-3-focusing-data">
+<h2><a class="toc-backref" href="#id19" role="doc-backlink">Step 3: Focusing Data</a><a class="headerlink" href="#step-3-focusing-data" title="Link to this heading">¶</a></h2>
+<p>Before starting this section it is worth making a mental note of your file save directory displayed at the bottom of the interface, and configurable in the settings tab (gear icon). It is also worth mentioning that if
+absorption correction has already been performed within this session, the <code class="docutils literal notranslate"><span class="pre">Sample</span> <span class="pre">Run</span> <span class="pre">#</span></code> box should already be populated with the correct file paths</p>
+<ol class="arabic simple">
+<li><p>While still on the <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">Processing</span></code> tab</p></li>
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">Sample</span> <span class="pre">Run</span> <span class="pre">#</span></code> box is empty, or different files are desired: Click <code class="docutils literal notranslate"><span class="pre">Browse</span></code> next to the <code class="docutils literal notranslate"><span class="pre">Sample</span> <span class="pre">Run</span> <span class="pre">#</span></code> box (Note: here sample run number are the experimental data to be focused)</p></li>
+<li><p>Navigate to your save directory and under <code class="docutils literal notranslate"><span class="pre">User/TextureTutorial/AbsorptionCorrection</span></code> select all of the seven corrected data files</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Browse</span></code> next to <code class="docutils literal notranslate"><span class="pre">Vanadium</span> <span class="pre">#</span></code> box</p></li>
+<li><p>Navigate to <code class="docutils literal notranslate"><span class="pre">ENGINX00361838</span></code> in tutorial data <code class="docutils literal notranslate"><span class="pre">CalibrationData</span></code> folder (if using own data, see <a class="reference internal" href="../interfaces/diffraction/Engineering%20Diffraction.html#engineering-diffraction-ref"><span class="std std-ref">interface documentation</span></a> for more information)</p></li>
+<li><p>If you would like to see plots of the focusing, ensure <code class="docutils literal notranslate"><span class="pre">Plot</span> <span class="pre">Focused</span> <span class="pre">Workspace</span></code> is selected, otherwise deselect this option</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Focus</span></code></p></li>
+</ol>
+</section>
+<section id="step-4-fitting-data">
+<h2><a class="toc-backref" href="#id20" role="doc-backlink">Step 4: Fitting Data</a><a class="headerlink" href="#step-4-fitting-data" title="Link to this heading">¶</a></h2>
+<p><em>Here, especially, we will not cover a comprehensive tutorial on how to fit general spectra, but this provides an example of how it can be done</em></p>
+<p>As with the focusing tab, if focused data has been produced in this session, some of the following steps may have been automatically applied (setting <code class="docutils literal notranslate"><span class="pre">Browse</span> <span class="pre">Filter</span></code> and file paths)</p>
+<ol class="arabic simple">
+<li><p>Click on the <code class="docutils literal notranslate"><span class="pre">Fitting</span></code> tab</p></li>
+<li><p>Where <code class="docutils literal notranslate"><span class="pre">TOF</span></code> is in the <code class="docutils literal notranslate"><span class="pre">Browse</span> <span class="pre">Filters</span></code> drop down box, select <code class="docutils literal notranslate"><span class="pre">dSpacing</span></code></p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Browse</span></code> next to the initial search box</p></li>
+<li><p>Navigate to your save directory and under <code class="docutils literal notranslate"><span class="pre">User/TextureTutorial/Focus/Texture30/CombinedFiles</span></code> select all of the seven focused data files</p></li>
+<li><p>Ensure <code class="docutils literal notranslate"><span class="pre">Add</span> <span class="pre">to</span> <span class="pre">Plot</span></code> is unchecked (this saves time plotting 210 spectra)</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Load</span></code></p></li>
+</ol>
+<p>After the loading has completed, you should see the table populated with all the spectra from the focused data</p>
+<ol class="arabic simple">
+<li><p>For a few of the spectra, check the <code class="docutils literal notranslate"><span class="pre">Plot</span></code> checkbox in the table (these spectra should now appear in the plot below, Note: spectra will be fit based on SG selected, not whether they are plotted or not, see <a class="reference internal" href="../interfaces/diffraction/Engineering%20Diffraction.html#engineering-diffraction-ref"><span class="std std-ref">interface documentation</span></a> for more info)</p></li>
+<li><p>In the plot toolbar below, click <code class="docutils literal notranslate"><span class="pre">Fit</span></code></p></li>
+<li><p>On the plot itself, two green, vertical dotted lines should have appeared, these are the fit window bounds, drag them to surround the peak at 2.03 (alternatively, in the <code class="docutils literal notranslate"><span class="pre">Fit</span> <span class="pre">Function</span></code> panel, set <code class="docutils literal notranslate"><span class="pre">StartX</span> <span class="pre">=</span> <span class="pre">1.98</span></code> and <code class="docutils literal notranslate"><span class="pre">EndX</span> <span class="pre">=</span> <span class="pre">2.10</span></code>)</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">Fit</span> <span class="pre">Function</span></code> panel, right click on the Functions dropdown title (the title not the arrow) and select the <code class="docutils literal notranslate"><span class="pre">Add</span> <span class="pre">function</span></code> option</p></li>
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">BackToBackExponential</span></code> (either search or under the <code class="docutils literal notranslate"><span class="pre">Peak</span></code> dropdown)</p></li>
+<li><p>Expand the <code class="docutils literal notranslate"><span class="pre">f0-BackToBackExponential</span></code> menu that has now appeared under <code class="docutils literal notranslate"><span class="pre">Functions</span></code></p></li>
+<li><p>Right click on <code class="docutils literal notranslate"><span class="pre">I</span></code> and select <code class="docutils literal notranslate"><span class="pre">Constrain</span> <span class="pre">&gt;</span> <span class="pre">Lower</span> <span class="pre">Bound</span> <span class="pre">&gt;</span> <span class="pre">Custom</span></code></p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">LowerBound</span> <span class="pre">=</span> <span class="pre">0.0</span></code></p></li>
+<li><p>Back in the plot toolbar, next to the now highlighted <code class="docutils literal notranslate"><span class="pre">Fit</span></code> option, click the <code class="docutils literal notranslate"><span class="pre">Serial</span> <span class="pre">Fit</span></code> button</p></li>
+</ol>
+</section>
+<section id="step-5-plotting-pole-figures">
+<h2><a class="toc-backref" href="#id21" role="doc-backlink">Step 5: Plotting Pole Figures</a><a class="headerlink" href="#step-5-plotting-pole-figures" title="Link to this heading">¶</a></h2>
+<p>As with some of the previous tabs, if focused data has been produced in this session, the <code class="docutils literal notranslate"><span class="pre">Sample</span> <span class="pre">Run(s)</span></code> paths should be auto-populated</p>
+<section id="basic-pole-figure-setup">
+<h3><a class="toc-backref" href="#id22" role="doc-backlink">Basic Pole Figure Setup</a><a class="headerlink" href="#basic-pole-figure-setup" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Click on the <code class="docutils literal notranslate"><span class="pre">Texture</span></code> tab</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Browse</span></code> next to <code class="docutils literal notranslate"><span class="pre">Sample</span> <span class="pre">Run(s)</span></code> box</p></li>
+<li><p>Navigate to your save directory and under <code class="docutils literal notranslate"><span class="pre">User/TextureTutorial/Focus/Texture30/CombinedFiles</span></code> select all of the seven focused data files</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Load</span> <span class="pre">Workspace</span> <span class="pre">Files</span></code></p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Select</span> <span class="pre">All</span> <span class="pre">Files</span></code> under the newly populated table</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Calculate</span> <span class="pre">Pole</span> <span class="pre">Figure</span></code></p></li>
+</ol>
+<p>You should see a pole figure plot created, with the colour map intensity denoting the index of the run in the table. This is the most basic pole figure that can be produced and just displays the experimental
+orientation information.</p>
+</section>
+<section id="adding-a-fit-parameter">
+<h3><a class="toc-backref" href="#id23" role="doc-backlink">Adding a Fit Parameter</a><a class="headerlink" href="#adding-a-fit-parameter" title="Link to this heading">¶</a></h3>
+<p>To add a fit parameter to the plot:</p>
+<ol class="arabic simple">
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Browse</span></code> next to <code class="docutils literal notranslate"><span class="pre">Fit</span> <span class="pre">Parameters</span></code> box</p></li>
+<li><p>Navigate to your save directory and under <code class="docutils literal notranslate"><span class="pre">User/TextureTutorial/FitParameters/Texture30/2.03</span></code> select all of the seven parameter files</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Load</span> <span class="pre">Parameter</span> <span class="pre">Files</span></code></p></li>
+<li><p>Next to the <code class="docutils literal notranslate"><span class="pre">Projection</span></code> drop down menu, a <code class="docutils literal notranslate"><span class="pre">Parameter</span> <span class="pre">Readout</span> <span class="pre">Column</span></code> should have appeared, select <code class="docutils literal notranslate"><span class="pre">I</span></code></p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Calculate</span> <span class="pre">Pole</span> <span class="pre">Figure</span></code></p></li>
+</ol>
+<p>Now the pole figure should be displaying the fit intensity for each detector group. This is quite a sparse view of the pole figure, due to the limited sampling, for an interpolated view of the
+experimental pole figure:</p>
+</section>
+<section id="interpolating-the-experimental-pole-figure">
+<h3><a class="toc-backref" href="#id24" role="doc-backlink">Interpolating the Experimental Pole Figure</a><a class="headerlink" href="#interpolating-the-experimental-pole-figure" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Click on the <code class="docutils literal notranslate"><span class="pre">Settings</span></code> button (gear icon) in the bottom left</p></li>
+<li><p>Under <code class="docutils literal notranslate"><span class="pre">Texture</span></code> uncheck the <code class="docutils literal notranslate"><span class="pre">Scatter</span> <span class="pre">Plot</span> <span class="pre">Experimental</span> <span class="pre">Pole</span> <span class="pre">Figure</span></code> Option (see <a class="reference internal" href="../algorithms/CreatePoleFigureTableWorkspace-v1.html#algm-createpolefiguretableworkspace"><span class="std std-ref">CreatePoleFigureTableWorkspace v1</span></a> for discussion of the thresholds)</p></li>
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">Contour</span> <span class="pre">Kernel</span> <span class="pre">Size</span> <span class="pre">=</span> <span class="pre">6.0</span></code> (larger values will give a more “smoothed-out” interpolated experimental pole figure)</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Apply</span></code> followed by <code class="docutils literal notranslate"><span class="pre">OK</span></code></p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Calculate</span> <span class="pre">Pole</span> <span class="pre">Figure</span></code></p></li>
+</ol>
+</section>
+<section id="adding-crystal-structure-information">
+<h3><a class="toc-backref" href="#id25" role="doc-backlink">Adding Crystal Structure Information</a><a class="headerlink" href="#adding-crystal-structure-information" title="Link to this heading">¶</a></h3>
+<p>In the Workspace list (<a class="reference internal" href="../concepts/AnalysisDataService.html#analysis-data-service"><span class="std std-ref">ADS</span></a>), in the main Mantid window, you might notice some pole figure Table Workspaces have been created. These are named with the convention:
+<code class="docutils literal notranslate"><span class="pre">{Peak}_{Instrument}_{StartRun}-{EndRun}_{Grouping}_pf_table_{parameter}</span></code> provided a parameter file is loaded to get <code class="docutils literal notranslate"><span class="pre">Peak</span></code> and <code class="docutils literal notranslate"><span class="pre">parameter</span></code> metadata. <code class="docutils literal notranslate"><span class="pre">Peak</span></code> will be the average peak centre value of all
+the parameter files. If, instead, you would like peak to be the HKL indices, you must provide crystal structure information, either as a <code class="docutils literal notranslate"><span class="pre">CIF</span></code> file or by input</p>
+<ul class="simple">
+<li><p><em>CIF</em>:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">Scattering</span> <span class="pre">Power</span> <span class="pre">Correction</span></code></p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Browse</span></code> next to the <code class="docutils literal notranslate"><span class="pre">CIF</span> <span class="pre">File</span></code> input box</p></li>
+<li><p>Navigate to <code class="docutils literal notranslate"><span class="pre">Fe.cif</span></code> in the <code class="docutils literal notranslate"><span class="pre">CIF</span></code> folder of the tutorial data</p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">Crystal</span> <span class="pre">to</span> <span class="pre">All</span></code> (or for individual structures: select specific workspaces in the drop down box and click <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">Crystal</span></code>)</p></li>
+</ol>
+<ul class="simple">
+<li><p><em>Input</em>:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Select <code class="docutils literal notranslate"><span class="pre">Include</span> <span class="pre">Scattering</span> <span class="pre">Power</span> <span class="pre">Correction</span></code></p></li>
+<li><p>Under the <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">Crystal</span> <span class="pre">Structure</span> <span class="pre">Properties</span></code> section, set <code class="docutils literal notranslate"><span class="pre">Lattice</span></code> to <code class="docutils literal notranslate"><span class="pre">2.8665</span>&#160; <span class="pre">2.8665</span>&#160; <span class="pre">2.8665</span></code>, <code class="docutils literal notranslate"><span class="pre">Space</span> <span class="pre">Group</span></code> to <code class="docutils literal notranslate"><span class="pre">I</span> <span class="pre">m</span> <span class="pre">-3</span> <span class="pre">m</span></code>, and <code class="docutils literal notranslate"><span class="pre">Basis</span></code> to <code class="docutils literal notranslate"><span class="pre">Fe</span> <span class="pre">0</span> <span class="pre">0</span> <span class="pre">0</span> <span class="pre">1.0</span> <span class="pre">0.05;</span> <span class="pre">Fe</span> <span class="pre">0.5</span> <span class="pre">0.5</span> <span class="pre">0.5</span> <span class="pre">1.0</span> <span class="pre">0.05</span></code></p></li>
+<li><p>Click <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">Crystal</span> <span class="pre">to</span> <span class="pre">All</span></code> (or for individual structures: select specific workspaces in the drop down box and click <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">Crystal</span></code>)</p></li>
+</ol>
+<p>Now the HKL indices <code class="docutils literal notranslate"><span class="pre">(1,1,0)</span></code> can be specified in the provided input section. Rerunning <code class="docutils literal notranslate"><span class="pre">Calculate</span> <span class="pre">Pole</span> <span class="pre">Figure</span></code> the HKL indices should now be in the output table.</p>
+</section>
+<section id="modifying-sample-axes">
+<h3><a class="toc-backref" href="#id26" role="doc-backlink">Modifying Sample Axes</a><a class="headerlink" href="#modifying-sample-axes" title="Link to this heading">¶</a></h3>
+<p>The projection axes of the pole figure can also be modified to produce the desired pole figure. By clicking <code class="docutils literal notranslate"><span class="pre">View</span> <span class="pre">Shape</span></code> next to any of the workspaces loaded in the table, it is
+possible to see how these are tied to the sample shape. As before, to change the directions or labels of these axes:</p>
+<ol class="arabic simple">
+<li><p>Click the <code class="docutils literal notranslate"><span class="pre">Settings</span></code> menu (gear icon)</p></li>
+<li><p>Under <code class="docutils literal notranslate"><span class="pre">General</span> <span class="pre">&gt;</span> <span class="pre">Texture</span> <span class="pre">Directions</span></code> you will see there is a matrix which defines these sample directions as they are on the reference workspace.</p></li>
+</ol>
+<ul class="simple">
+<li><p>The first column contains the names of the axes</p></li>
+<li><p>Next to each name are the three components (X, Y, Z) of the vector corresponding to that sample direction</p></li>
+<li><p><em>The second sample direction is always the out of plane direction for the pole figure</em></p></li>
+</ul>
+</section>
+<section id="customizing-the-plot">
+<h3><a class="toc-backref" href="#id27" role="doc-backlink">Customizing the plot</a><a class="headerlink" href="#customizing-the-plot" title="Link to this heading">¶</a></h3>
+<p>By clicking on the <code class="docutils literal notranslate"><span class="pre">Customize</span> <span class="pre">Plot</span></code> button (second last icon in the toolbar: a zig-zaging, upwards trending arrow), it is possible to change some aspects of the plot, like colour map and colour limits (which can be found under the <code class="docutils literal notranslate"><span class="pre">Images</span> <span class="pre">etc.</span></code> tab once the axes have been selected).</p>
+<p><em>Note: When changing colourbar settings, do this via the “Pole Figure Plot” axes rather than the axes with the plot parameter title</em></p>
+</section>
+<section id="debugging-the-plot">
+<h3><a class="toc-backref" href="#id28" role="doc-backlink">Debugging the plot</a><a class="headerlink" href="#debugging-the-plot" title="Link to this heading">¶</a></h3>
+<p>Individual points in the pole figure can be inspected by holding the <code class="docutils literal notranslate"><span class="pre">a</span></code> key on the keyboard and then clicking on the desired point. This should annotate the point with the
+relevant information from the pole figure table.</p>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Techniques.html">Techniques</a></p>
+</section>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul id="footer-nav" class="nav navbar-nav">
+      
+      
+          
+            
+  <li>
+    <a href="ScriptingSANSReductions.html" title="Previous Chapter: Scripting SANS Reductions"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Scripting SAN...</span>
+    </a>
+  </li>
+  <li>
+    <a href="../api/index.html" title="Next Chapter: API"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">API &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

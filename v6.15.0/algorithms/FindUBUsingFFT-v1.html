@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>FindUBUsingFFT v1</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap-sphinx.css?v=4468db6d" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=9aca6aaf" />
+    <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+    <script src="../_static/documentation_options.js?v=2d21b807"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FindUBUsingIndexedPeaks v1" href="FindUBUsingIndexedPeaks-v1.html" />
+    <link rel="prev" title="FindUBFromScatteringPlane v1" href="FindUBFromScatteringPlane-v1.html" />
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59110517-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  </head><body>
+
+
+
+
+
+<nav id="navbar" class="navbar navbar-default navbar-fixed-top">
+  <div id="navbar-main" class="container">
+    <ul class="nav navbar-nav">
+      
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <li>
+        <a class="navbar-brand" href="http://www.mantidproject.org">
+         </a>
+      </li>
+      <span class="navbar-text navbar-version pull-left"><b>6.15</b></span>
+    </ul>
+
+    
+    <div class="collapse navbar-collapse nav-collapse">
+    
+      <ul class="nav navbar-nav">
+        <li class="divider-vertical"></li>
+        
+          <li>
+            <a href="https://www.mantidproject.org">Home</a>
+          </li>
+          <li>
+            <a href="https://download.mantidproject.org">Download</a>
+          </li>
+          <li>
+            <a href="https://docs.mantidproject.org">Documentation</a>
+          </li>
+          <li>
+            <a href="https://www.mantidproject.org/contact">Contact Us</a>
+          </li>
+        
+        
+          
+          
+        
+        
+        
+        
+      </ul>
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          </div>
+  </div> <!-- /navbar-main -->
+<div id="navbar-breadcrumbs" class="related" role="navigation" aria-label="related navigation">
+  <h3>Navigation</h3>
+  <ul>
+    <li class="nav-item nav-item-0">
+      <a href="../index.html">Documentation</a>
+         &#187;
+    </li>
+    
+    <li class="nav-item nav-item-1">
+      <a href="index.html" accesskey="U">
+        Algorithms
+      </a>
+       &#187;
+    </li>
+    
+    
+    
+    
+    <li class="nav-item nav-item-this">
+      <a href="">FindUBUsingFFT v1</a>
+    </li>
+    
+    
+  </ul>
+</div>
+</nav>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <section id="findubusingfft-v1">
+<span id="algm-findubusingfft"></span><span id="algm-findubusingfft-v1"></span><h1>FindUBUsingFFT v1<a class="headerlink" href="#findubusingfft-v1" title="Link to this heading">¶</a></h1>
+<nav class="contents local" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#summary" id="id1">Summary</a></p>
+<ul>
+<li><p><a class="reference internal" href="#see-also" id="id2">See Also</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#properties" id="id3">Properties</a></p></li>
+<li><p><a class="reference internal" href="#description" id="id4">Description</a></p></li>
+<li><p><a class="reference internal" href="#usage" id="id5">Usage</a></p></li>
+<li><p><a class="reference internal" href="#source" id="id6">Source</a></p></li>
+</ul>
+</nav>
+<section id="summary">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Summary</a><a class="headerlink" href="#summary" title="Link to this heading">¶</a></h2>
+<p>Calculate the UB matrix from a peaks workspace, given min(a,b,c) and max(a,b,c).</p>
+<section id="see-also">
+<h3><a class="toc-backref" href="#id2" role="doc-backlink">See Also</a><a class="headerlink" href="#see-also" title="Link to this heading">¶</a></h3>
+<p><a class="reference internal" href="SetUB-v1.html#algm-setub"><span class="std std-ref">SetUB</span></a>, <a class="reference internal" href="FindUBUsingIndexedPeaks-v1.html#algm-findubusingindexedpeaks"><span class="std std-ref">FindUBUsingIndexedPeaks</span></a>, <a class="reference internal" href="FindUBUsingLatticeParameters-v1.html#algm-findubusinglatticeparameters"><span class="std std-ref">FindUBUsingLatticeParameters</span></a></p>
+</section>
+</section>
+<section id="properties">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Properties</a><a class="headerlink" href="#properties" title="Link to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Direction</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PeaksWorkspace</p></td>
+<td><p>InOut</p></td>
+<td><p>IPeaksWorkspace</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Input Peaks Workspace</p></td>
+</tr>
+<tr class="row-odd"><td><p>MinD</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Lower Bound on Lattice Parameters a, b, c</p></td>
+</tr>
+<tr class="row-even"><td><p>MaxD</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p><em>Mandatory</em></p></td>
+<td><p>Upper Bound on Lattice Parameters a, b, c</p></td>
+</tr>
+<tr class="row-odd"><td><p>Tolerance</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>0.15</p></td>
+<td><p>Indexing Tolerance (0.15)</p></td>
+</tr>
+<tr class="row-even"><td><p>Iterations</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>4</p></td>
+<td><p>Iterations to refine UB (4)</p></td>
+</tr>
+<tr class="row-odd"><td><p>DegreesPerStep</p></td>
+<td><p>Input</p></td>
+<td><p>number</p></td>
+<td><p>1.5</p></td>
+<td><p>The resolution of the search through possible orientations is specified by this parameter.  One to two degrees per step is usually adequate.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="description">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Description</a><a class="headerlink" href="#description" title="Link to this heading">¶</a></h2>
+<p>Given a set of peaks, and given a range of possible a,b,c values, this
+algorithm will attempt to find a <a class="reference internal" href="../concepts/Lattice.html#lattice"><span class="std std-ref">UB matrix</span></a>, corresponding
+to the Niggli reduced cell, that fits the data. The algorithm projects the
+peaks on many possible direction vectors and calculates a Fast Fourier Transform
+of the projections to identify regular patterns in the collection of
+peaks. Based on the calcuated FFTs, a list of directions corresponding
+to possible real space unit cell edge vectors is formed. The directions
+and lengths of the vectors in this list are optimized (using a least
+squares approach) to index the maximum number of peaks, after which the
+list is sorted in order of increasing length and duplicate vectors are
+removed from the list.</p>
+<p>The algorithm then chooses three of the remaining vectors with the
+shortest lengths that are linearly independent, form a unit cell with at
+least a minimum volume and for which the corresponding <a class="reference internal" href="../concepts/Lattice.html#lattice"><span class="std std-ref">UB matrix</span></a>
+indexes at least 80% of the maximum number of indexed using any set of three
+vectors chosen from the list.</p>
+<p>A <a class="reference internal" href="../concepts/Lattice.html#lattice"><span class="std std-ref">UB matrix</span></a> is formed using these three vectors and the resulting
+<a class="reference internal" href="../concepts/Lattice.html#lattice"><span class="std std-ref">UB matrix</span></a> is again optimized using a least squares method. Finally,
+starting from this matrix, a matrix corresponding to the Niggli reduced cell is
+calculated and returned as the <a class="reference internal" href="../concepts/Lattice.html#lattice"><span class="std std-ref">UB matrix</span></a>. If the specified peaks
+are accurate and belong to a single crystal, this method should produce the
+<a class="reference internal" href="../concepts/Lattice.html#lattice"><span class="std std-ref">UB matrix</span></a> corresponding to the Niggli reduced cell. However, other
+software will usually be needed to adjust this UB to match a desired
+conventional cell. While this algorithm will occasionally work for as
+few as four peaks, it works quite consistently with at least ten peaks,
+and in general works best with a larger number of peaks.</p>
+</section>
+<section id="usage">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Usage</a><a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
+<p><strong>Example:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ws</span><span class="o">=</span><span class="n">LoadIsawPeaks</span><span class="p">(</span><span class="s2">&quot;TOPAZ_3007.peaks&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After LoadIsawPeaks does the workspace have an orientedLattice: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">ws</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span><span class="o">.</span><span class="n">hasOrientedLattice</span><span class="p">())</span>
+
+<span class="n">FindUBUsingFFT</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span><span class="n">MinD</span><span class="o">=</span><span class="mf">8.0</span><span class="p">,</span><span class="n">MaxD</span><span class="o">=</span><span class="mf">13.0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After FindUBUsingFFT does the workspace have an orientedLattice: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">ws</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span><span class="o">.</span><span class="n">hasOrientedLattice</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ws</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span><span class="o">.</span><span class="n">getOrientedLattice</span><span class="p">()</span><span class="o">.</span><span class="n">getUB</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>After LoadIsawPeaks does the workspace have an orientedLattice: False
+After FindUBUsingFFT does the workspace have an orientedLattice: True
+[[ 0.01223576  0.00480107  0.08604016]
+ [-0.11654506  0.00178069 -0.00458823]
+ [-0.02737294 -0.08973552 -0.02525994]]
+</pre></div>
+</div>
+<p><strong>Categories</strong>: <a class="reference external" href="categories/AlgorithmIndex.html">AlgorithmIndex</a> | <a class="reference external" href="categories/Crystal/UBMatrix.html">Crystal\UBMatrix</a></p>
+</section>
+<section id="source">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Source</a><a class="headerlink" href="#source" title="Link to this heading">¶</a></h2>
+<p>C++ header: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/6762777a1cda710ac427c4efdb2a7fa75b50dc69/Framework/Crystal/inc/MantidCrystal/FindUBUsingFFT.h">FindUBUsingFFT.h</a></p>
+<p>C++ source: <a class="reference external" href="https://github.com/mantidproject/mantid/blob/6762777a1cda710ac427c4efdb2a7fa75b50dc69/Framework/Crystal/src/FindUBUsingFFT.cpp">FindUBUsingFFT.cpp</a></p>
+</section>
+</section>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+      <ul id="footer-nav" class="nav navbar-nav">
+      
+      
+          
+            
+  <li>
+    <a href="FindUBFromScatteringPlane-v1.html" title="Previous Chapter: FindUBFromScatteringPlane v1"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; FindUBFromSca...</span>
+    </a>
+  </li>
+  <li>
+    <a href="FindUBUsingIndexedPeaks-v1.html" title="Next Chapter: FindUBUsingIndexedPeaks v1"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">FindUBUsingIn... &raquo;</span>
+    </a>
+  </li>
+          
+       
+          <li><a href="#">Back to top</a></li>
+       </ul>
+    <p>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
