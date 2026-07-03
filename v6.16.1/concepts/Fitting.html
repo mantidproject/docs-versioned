@@ -1,0 +1,740 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fitting &#8212; MantidProject 6.16.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/style.css?v=562d7d41" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
+
+    <script src="../_static/documentation_options.js?v=2cfd6d13"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>window.MathJax = {"tex": {"macros": {"AA": "\\unicode{x212B}"}}, "startup": {"polyfillHasOwn": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'concepts/Fitting';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Which minimizers to use with Mantid" href="FittingMinimizers.html" />
+    <link rel="prev" title="Fit Functions In Python" href="FitFunctionsInPython.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    <link rel="icon" sizes="32x32" href="../_static/images/favicon.ico">
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  <img src="../_static/images/mantid_logo_light.png" class="logo__image only-light" alt="Logo image">
+  <img src="../_static/images/mantid_logo_dark.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><ul id="navbar-main-elements" class="navbar-nav">
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://download.mantidproject.org">Downloads</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/nightly/tutorials/">Tutorials</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org">User Docs</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://developer.mantidproject.org">Develop</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/release/">Release notes</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://www.mantidproject.org/contact">Contact Us</a>
+  </li>
+</ul></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+    <li class="nav-item">
+      <a class="nav-link" href="https://github.com/mantidproject/mantid" rel="noopener" target="_blank" title="GitHub">
+        <span><i class="fab fa-github-square"></i></span>
+        <label class="sr-only">GitHub</label>
+      </a>
+    </li>
+  </ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><ul id="navbar-main-elements" class="navbar-nav">
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://download.mantidproject.org">Downloads</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/nightly/tutorials/">Tutorials</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org">User Docs</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://developer.mantidproject.org">Develop</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/release/">Release notes</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://www.mantidproject.org/contact">Contact Us</a>
+  </li>
+</ul></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+    <li class="nav-item">
+      <a class="nav-link" href="https://github.com/mantidproject/mantid" rel="noopener" target="_blank" title="GitHub">
+        <span><i class="fab fa-github-square"></i></span>
+        <label class="sr-only">GitHub</label>
+      </a>
+    </li>
+  </ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="AbinsDataFormats.html">Abins Data Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AbinsImplementation.html">Abins: Implementation details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AbinsInterpolatedBroadening.html">Abins: Fast approximate broadening with “interpolate”</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AbsorptionAndMultipleScattering.html">Absorption and Multiple Scattering Corrections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CaChannel.html">CaChannel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Calibration.html">Calibration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ConvFit.html">Conv Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CreateanIDF.html">Create an IDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrystalField.html">Crystal Field Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrystalStructureAndReflections.html">Crystal structure and reflections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DataService.html">Data Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DiffractionCalibrationWorkspace.html">Diffraction Calibration Workspace</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="DynamicFactory.html">Dynamic Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DynamicalStructureFactorFromAbInitio.html">Ab initio calculation of dynamical structure factor (S)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ElementalAnalysisUsingNegativeMuons.html">Elemental analysis using negative muons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ErrorPropagation.html">Error Propagation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EventFiltering.html">Event Filtering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FABADA.html">FABADA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FacilitiesFile.html">Facilities File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FitConstraint.html">Fit Constraint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FitFunctionsInPython.html">Fit Functions In Python</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FittingMinimizers.html">Which minimizers to use with Mantid</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="FittingMinimizersComparisonDetailed.html">Comparison of minimizers for individual test problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FittingMinimizersWeightedComparisonDetailed.html">Comparison of minimizers, with weighted least squares</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FractionalRebinning.html">Fractional Rebinning (RebinnedOutput Workspaces)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Geometry.html">Geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GeometryofPosition.html">Geometry of Position</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GeometryofShape.html">Geometry of Shape</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HistogramData.html">Transition to the HistogramData module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToDefineGeometricShape.html">How To Define Geometric Shape</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Howtoresetdetectorscalibration.html">How to reset detectors calibration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InstrumentAccessLayers.html">Instrument Access via SpectrumInfo, DetectorInfo, ComponentInfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InstrumentDataService.html">Instrument Data Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InstrumentDefinitionFile.html">Instrument Definition File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InstrumentParameterFile.html">Instrument Parameter File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="KafkaLiveStreams.html">Listening on Kafka Live Streams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LETSampleIDF.html">IDF ISIS LET annotated</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Lattice.html">Lattice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LeBailFit.html">Theory of Le Bail Fit</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="MDNorm.html">Multi dimensional neutron scattering data normalization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MPI.html">MPI in Mantid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="McStas.html">McStas - A neutron ray-trace simulation package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModulatedStructure.html">Modulated Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NexusFile.html">Nexus File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ORNL_SANS_Reduction.html">Reduction for ORNL SANS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PSIMuonBinFile.html">PSI Muon Bin File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PipInstall.html">Pip Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plugin.html">Plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PointAndSpaceGroups.html">Point and space groups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Project.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ProjectRecovery.html">Project Recovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PropertiesFile.html">Properties File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PythonNotebook.html">Access Mantid in Python and Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAWFile.html">RAW File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Ragged_Workspace.html">Ragged Workspace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SANS2DSampleIDF.html">IDF ISIS SANS2D annotated</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SampleEnvironment.html">Sample Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SharedPointer.html">Shared Pointer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SymmetryGroups.html">Symmetry groups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TextureAnalysis.html">Texture Analysis Theory</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="UsingXMLSchema.html">Using XML Schemas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="WorkflowAlgorithm.html">Workflow Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="WorkingWithWorspaces.html">Working with Workspaces in Python</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="calibration/index.html">Calibration</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="calibration/AfterTubeCalibration.html">After Tube Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/CalFile.html">CalFile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/EngineeringCalibration.html">Engineering Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/PSDTubeCalibration.html">PSD Tube Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/PowderDiffractionCalibration.html">Time-of-Flight Powder Diffraction Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/PythonCodeForCalibration.html">Python Code For Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/SingleCrystalDiffractionPanelCalibration.html">Single Crystal Diffraction Panel Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/TubeCalibFitParams.html">TubeCalibFitParams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/TubeCalibrationCorelli.html">Corelli Tube Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/TubeCalibrationExamples.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/TubeCalibrationIntroduction.html">Tube Calibration Introduction</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="calibration/TubeSpec.html">TubeSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/Tubecalib.html">Tube calib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/VisualizationofCalibratedTubes.html">Visualization of Calibrated Tubes</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Concepts</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Fitting</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="fitting">
+<span id="id1"></span><h1>Fitting<a class="headerlink" href="#fitting" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>Fitting in Mantid is the process of trying to fit a model to some data,
+where data may originate from measurements at beamlines, simulations or
+in fact can be any data which has the form:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(x\)</span> - could for example be a TOF value, a Q value or a temperature value, or <span class="math notranslate nohighlight">\(x\)</span> can represent a point in a multi-dimensional space, for example, <span class="math notranslate nohighlight">\(x\)</span> could represent <span class="math notranslate nohighlight">\((Q_x, Q_y, Q_z)\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(y^{obs}\)</span> - is the observed or calculated value at <span class="math notranslate nohighlight">\(x\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\sigma\)</span> - is an error estimate of <span class="math notranslate nohighlight">\(y^{obs}\)</span></p></li>
+</ul>
+<p>Error estimates are important in data reduction and data analysis and
+see <a class="reference internal" href="ErrorPropagation.html#error-propagation"><span class="std std-ref">here</span></a> for information about how Mantid
+deals with error propagation. However, errors may optionally not be used in
+fitting, by choosing a cost function that does not depend on these.</p>
+<p>A cost function (also sometimes called a figure of merit or goodness of fit)
+is some metric which attempts to give an indication as to how good a given
+model fits some data. The by far most common way of measuring the difference
+between a model and data, for example for fitting neutron faciltiy data, is to use
+a so-called least-squares cost function which has the form</p>
+<div class="math notranslate nohighlight">
+\[\sum_i \left( \frac{y_i^{obs}-y_i}{\sigma_i} \right)^2\]</div>
+<p>where <span class="math notranslate nohighlight">\(y_i\)</span> is shorthand for <span class="math notranslate nohighlight">\(y(x_i)\)</span>, i.e. the <span class="math notranslate nohighlight">\(y\)</span>-value
+calculated at the observed value <span class="math notranslate nohighlight">\(x_i\)</span> from a model, and <span class="math notranslate nohighlight">\(y_i^{obs}\)</span>
+and <span class="math notranslate nohighlight">\(\sigma_i\)</span> the observed and error estimate values at <span class="math notranslate nohighlight">\(x_i\)</span> respectively.
+Mantid supports a number of other cost functions and these are described <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><span class="std std-ref">here</span></a>.
+The above cost function is the default Mantid cost function. If you use the
+<a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><span class="std std-ref">Fit algorithm</span></a> this cost function goes under the name
+‘Least squares’ and in some placed in Mantid is referred to as Chi-sq.</p>
+<p>Consider the simple example where a model depends on just one fitting parameter,
+here called Bob. The <span class="math notranslate nohighlight">\(y_i\)</span>’s then only depend on this parameter and hence the same
+is true for the cost function. Below is shown a made up example of how such a
+cost function could depend on the fitting parameter Bob:</p>
+<figure class="align-default">
+<img alt="CostFunctionVSbob.png" src="../_images/CostFunctionVSbob.png" />
+</figure>
+<p>The primary problem which Mantid deals with is that of
+local minimization, also referred to as downhill minimization. Referencing to
+the figure above, this corresponds either to reach target B through fitting from
+the value of the fitting parameter shown by the red label 1 or 2, or reach
+target A from the parameter position 3. This is the common problem in
+reducing/analysing where ‘good’ initial values of the fitting parameters are known, for
+instance from: knowledge of the instrument, the scientific problem in question,
+or a peak search algorithm is assumed to provide good initial fitting parameter values.</p>
+<p>Local minimization algorithms can be grouped into strictly downhill minimizers and local
+minimizers, where the former will find a lower value whereas
+for the latter this is not guaranteed. For a description of the minimizers
+Mantid supports see <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><span class="std std-ref">here</span></a>. The default Mantid minimizer is
+Levenberg-Marquardt,
+which is a strictly downhill mimimizer. Mantid has a plug-in mechanism for added
+minimizers and hence the number of minimizers which Mantid supports is not static.
+For example recently a minimizer called FABADA was added which
+is aimed at fitting for Bayesian data analysis. The minimizers supported in Mantid
+perform differently in terms of accuracy and run time requirements. For a
+comparison of different minimizers see <a class="reference internal" href="FittingMinimizers.html#fittingminimizers"><span class="std std-ref">Fitting Minimizers</span></a>. New fitting
+minimizers can be added through the plug-in mechanism or as is demonstrated in the
+section entitled ‘Global fitting’ can be scripted from minimizers that already exist.</p>
+<p>Fitting in Mantid is more than just selecting a cost functions and minimizer.
+The Mantid fitting framework it is a pluggable framework that at a top level
+looks like this</p>
+<figure class="align-default">
+<img alt="FittingTopLevelClassView.png" src="../_images/FittingTopLevelClassView.png" />
+</figure>
+<p><a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><span class="std std-ref">Fit</span></a> is the algorithm that puts together the users choice of
+minimizer (IFuncMinimizer) and cost function (ICostFunction), but also the fit
+function (IFunction). The fit function defines the model that is used to model
+the data. The user defined fit function can be a complex mathematical product,
+sum and convolution of other fit functions. For more information for
+how to create a model see the documentation for <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><span class="std std-ref">Fit</span></a>, the
+Fitting section of the Mantid Introduction <a class="reference internal" href="../tutorials/mantid_basic_course/index.html#mantid-basic-course"><span class="std std-ref">tutorial</span></a>
+for how to do this using the Fit Function Toolbox and
+this Python fit tutorial: <a class="reference internal" href="../tutorials/extending_mantid_with_python/python_fit_functions/index.html#emwp-py-fit-funcs"><span class="std std-ref">Python Fit Functions</span></a>.</p>
+<p>From the class diagram above note fitting also support constraints (IConstraint),
+see <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><span class="std std-ref">here</span></a> for more on this. Further fitting parameters can be
+<a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><span class="std std-ref">tied</span></a> to specific values or tied to other fitting parameters
+through mathematical formulas.</p>
+</section>
+<section id="multiple-datasets-and-sequential-fitting">
+<h2>Multiple datasets and sequential fitting<a class="headerlink" href="#multiple-datasets-and-sequential-fitting" title="Link to this heading">#</a></h2>
+<p>Mantid can fit multiple datasets to one model. This can perhaps most easily be
+done using the <a class="reference internal" href="../interfaces/general/Fit%20Script%20Generator.html#fit-script-generator-ref"><span class="std std-ref">Fit Script Generator interface</span></a>.</p>
+<p>Sequential fitting is simply the sequential fitting of datasets
+using the same fit function, and where, for example, fitting parameters obtained
+from one fit may be used as starting values in a next fit and so on. For
+an example of sequential fitting see <a class="reference internal" href="../workbench/plotwindow.html#workbenchplotwindow-fitting"><span class="std std-ref">here</span></a></p>
+</section>
+<section id="how-do-you-know-if-a-fit-is-successful">
+<h2>How do you know if a fit is successful<a class="headerlink" href="#how-do-you-know-if-a-fit-is-successful" title="Link to this heading">#</a></h2>
+<p>If you are fitting using the Fit Function toolbox or the Multi-dataset
+Fitting interface then you get visual feedback as to how well the fit was.</p>
+<p>If you are scientists experienced in fitting a particular type of data
+then the absolute value of the cost function may be sufficient in itself
+to tell whether a fit is successful.</p>
+<p>As described in the <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><span class="std std-ref">Fit algorithm documentation</span></a> this
+algorithm can output the result of parameters + error estimates and
+a matrix called the correlation matrix, which tells how
+parameters are correlated. The information from the correlation matrix
+and the error estimates (which happens to be the square root of the
+diagonal elements of the correlation matrix) can help highlight how much
+you can trust the fit. For example, if some fitting parameters are strongly
+correlated you may consider trying to introduce ties to help reduce
+this correlation.</p>
+<p>The <a class="reference internal" href="../algorithms/Fit-v1.html#algm-fit"><span class="std std-ref">Fit</span></a> algorithm returns an OutputStatus property,
+which can be monitored.</p>
+<p>Create an algorithm or code that aims to be clever, for a given fitting
+problem, beyond that of the generic Fit algorithm. An example of this
+is <a class="reference internal" href="../algorithms/FitPeak-v1.html#algm-fitpeak"><span class="std std-ref">FitPeak</span></a> which aims to fit single peaks
+with some checks to ensure results are physical.</p>
+<p>If you remain unsure if a given fit was successful then e.g. try the
+tool <a class="reference internal" href="../algorithms/ProfileChiSquared1D-v1.html#algm-profilechisquared1d"><span class="std std-ref">ProfileChiSquared1D</span></a>, which allows
+inspection of the cost function in the neighbourhood of a found minimum.</p>
+</section>
+<section id="global-fitting">
+<h2>Global fitting<a class="headerlink" href="#global-fitting" title="Link to this heading">#</a></h2>
+<p>As of this writing the primary use of Mantid fitting is to do local
+minimization.</p>
+<p>Many well known global fitting algorithms are very simple in their
+implementation.</p>
+<p>To demonstrate an example of this, below is shown how to script
+a global fitting algorithm, which for example in <a class="reference external" href="http://dx.doi.org/10.1107/S0021889810008113">http://dx.doi.org/10.1107/S0021889810008113</a>
+has been shown to be competitive with a tuned Simulation Annealing algorithm
+(<a class="reference external" href="https://en.wikipedia.org/wiki/Simulated_annealing">https://en.wikipedia.org/wiki/Simulated_annealing</a>)
+implementation used for solving crystal structures from powder diffraction data.</p>
+<p><strong>Example: Multi local minimizations from random starting points</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This script demonstrates a global fitting algorithm, which simply does local minimizations from random</span>
+<span class="c1"># starting positions of the fitting parameters.</span>
+<span class="c1"># For this demo example, just one fitting parameter is globally fitted, the peak center of a Gaussian peak</span>
+<span class="c1"># Please bear in mind the example here is to demonstrate this algorithm not provide a real global fitting problem</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">&#39;HRP39182.RAW&#39;</span><span class="p">,</span><span class="n">LoadLogFiles</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">SpectrumList</span><span class="o">=</span><span class="s2">&quot;1&quot;</span><span class="p">)</span>
+
+<span class="c1"># Specify the fitting interval</span>
+<span class="n">startX</span> <span class="o">=</span> <span class="mi">93000</span>
+<span class="n">endX</span> <span class="o">=</span> <span class="mi">93300</span>
+
+<span class="c1"># Set best very high value of the cost function to ensure lower is found at first attempt</span>
+<span class="n">costFuncBest</span> <span class="o">=</span> <span class="mf">1e+100</span>
+
+<span class="c1"># Do local minimization from random starting positions</span>
+<span class="n">numOfRandowAttempts</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="c1"># pick a randow value for the peak centre fitting parameter in the fitting interval</span>
+    <span class="n">tryCentre</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">startX</span> <span class="o">+</span> <span class="n">random</span><span class="p">()</span><span class="o">*</span><span class="p">(</span><span class="n">endX</span><span class="o">-</span><span class="n">startX</span><span class="p">))</span>
+
+    <span class="c1"># Do a fit from this starting value of the peak centre fitting parameter</span>
+    <span class="c1"># Note choice of local minimizer will affect the outcome</span>
+    <span class="n">fit_results</span> <span class="o">=</span> <span class="n">Fit</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">WorkspaceIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> \
+                      <span class="n">StartX</span> <span class="o">=</span> <span class="n">startX</span><span class="p">,</span> <span class="n">EndX</span><span class="o">=</span><span class="n">endX</span><span class="p">,</span> <span class="n">Output</span><span class="o">=</span><span class="s1">&#39;fit&#39;</span><span class="p">,</span> \
+                      <span class="n">Function</span><span class="o">=</span><span class="s1">&#39;name=Gaussian,Height=10,PeakCentre=&#39;</span><span class="o">+</span><span class="n">tryCentre</span><span class="o">+</span><span class="s1">&#39;,Sigma=20&#39;</span><span class="p">,</span>
+                      <span class="n">Minimizer</span><span class="o">=</span><span class="s1">&#39;Conjugate gradient (Fletcher-Reeves imp.)&#39;</span><span class="p">)</span>
+    <span class="n">costFuncVal</span> <span class="o">=</span> <span class="n">fit_results</span><span class="o">.</span><span class="n">OutputChi2overDoF</span>
+
+    <span class="c1"># Here simply keep record of the best fit found, but this could easily be extended to</span>
+    <span class="c1"># keep a record of all the minima found</span>
+    <span class="k">if</span> <span class="n">costFuncVal</span> <span class="o">&lt;</span> <span class="n">costFuncBest</span><span class="p">:</span>
+        <span class="n">costFuncBest</span> <span class="o">=</span> <span class="n">costFuncVal</span>
+        <span class="c1"># here keep clone of best fit</span>
+        <span class="n">CloneWorkspace</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">&#39;fit_Workspace&#39;</span><span class="p">,</span> <span class="n">OutputWorkspace</span><span class="o">=</span><span class="s1">&#39;fitBest&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Uncomment the sleep if would like to watch this algorithm trying to</span>
+    <span class="c1"># find the global minima (graphically and/or from command line)</span>
+    <span class="c1"># print(costFuncVal)</span>
+    <span class="c1"># sleep(2)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="FitFunctionsInPython.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Fit Functions In Python</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="FittingMinimizers.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Which minimizers to use with Mantid</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-datasets-and-sequential-fitting">Multiple datasets and sequential fitting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-you-know-if-a-fit-is-successful">How do you know if a fit is successful</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#global-fitting">Global fitting</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/concepts/Fitting.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Mantid.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.19.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
