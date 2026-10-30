@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Inelastic Data Processor &#8212; MantidProject 7.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/style.css?v=562d7d41" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../_static/documentation_options.js?v=efe5be6f"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>window.MathJax = {"tex": {"macros": {"AA": "\\unicode{x212B}"}}, "startup": {"polyfillHasOwn": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'interfaces/inelastic/Inelastic Data Processor';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Inelastic QENS Fitting" href="Inelastic%20QENS%20Fitting.html" />
+    <link rel="prev" title="Inelastic Corrections" href="Inelastic%20Corrections.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    <link rel="icon" sizes="32x32" href="../../_static/images/favicon.ico">
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  <img src="../../_static/images/mantid_logo_light.png" class="logo__image only-light" alt="Logo image">
+  <img src="../../_static/images/mantid_logo_dark.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><ul id="navbar-main-elements" class="navbar-nav">
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://download.mantidproject.org">Downloads</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/nightly/tutorials/">Tutorials</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org">User Docs</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://developer.mantidproject.org">Develop</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/release/">Release notes</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://www.mantidproject.org/contact">Contact Us</a>
+  </li>
+</ul></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+    <li class="nav-item">
+      <a class="nav-link" href="https://github.com/mantidproject/mantid" rel="noopener" target="_blank" title="GitHub">
+        <span><i class="fab fa-github-square"></i></span>
+        <label class="sr-only">GitHub</label>
+      </a>
+    </li>
+  </ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><ul id="navbar-main-elements" class="navbar-nav">
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://download.mantidproject.org">Downloads</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/nightly/tutorials/">Tutorials</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org">User Docs</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://developer.mantidproject.org">Develop</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/release/">Release notes</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://www.mantidproject.org/contact">Contact Us</a>
+  </li>
+</ul></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+    <li class="nav-item">
+      <a class="nav-link" href="https://github.com/mantidproject/mantid" rel="noopener" target="_blank" title="GitHub">
+        <span><i class="fab fa-github-square"></i></span>
+        <label class="sr-only">GitHub</label>
+      </a>
+    </li>
+  </ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../isis_sans/ISIS%20SANS.html">ISIS SANS</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../isis_sans/Batch%20File%20Format.html">Batch File Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../isis_sans/Beam%20Centre%20Tab.html">Beam centre tab</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../isis_sans/Diagnostic%20Tab.html">Diagnostic tab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../isis_sans/Runs%20Tab.html">Runs Tab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../isis_sans/Settings%20Tab.html">Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../isis_sans/Sum%20Runs.html">Run Summation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../isis_sans/User%20File%20Format.html">User File Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../isis_sans/Using%20The%20SANS%20GUI.html">Using The SANS GUI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../isis_sans/sans_save_other.html">Save Other</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../diffraction/Engineering%20Diffraction.html">Engineering Diffraction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diffraction/HFIR%20Single%20Crystal%20Reduction.html">HFIR Single Crystal Reduction Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diffraction/SCD%20Event%20Data%20Reduction.html">SCD Event Data Reduction interface(MantidEV)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../diffraction/Texture%20Planner.html">Texture Experiment Planner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/ALFView.html">ALFView</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/Crystal%20Field%20Python%20Interface.html">Crystal Field Python Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/DGS%20Planner.html">DGS Planner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/MSlice.html">MSlice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/PyChop.html">PyChop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../framework/ManageUserDirectories.html">Manage User Directories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general/Fit%20Script%20Generator.html">Fit Script Generator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general/Sample%20Transmission%20Calculator.html">Sample Transmission Calculator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../general/Step%20Scan%20Analysis.html">Step Scan Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ILL/DrILL.html">DrILL interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ILL/Simple%20Scan%20Viewer.html">SimpleScanViewer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indirect/Indirect%20Data%20Reduction.html">Indirect Data Reduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indirect/Indirect%20Diffraction.html">Indirect Diffraction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indirect/Indirect%20Settings.html">Indirect Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indirect/Indirect%20Simulation.html">Indirect Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indirect/Indirect%20Tools.html">Indirect Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Inelastic%20Bayes%20Fitting.html">Inelastic Bayes Fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Inelastic%20Corrections.html">Inelastic Corrections</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Inelastic Data Processor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Inelastic%20QENS%20Fitting.html">Inelastic QENS Fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/Feature%20Flags.html">Muon Feature Flags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/Frequency%20Domain%20Analysis.html">Frequency Domain Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/Muon%20ALC.html">Muon ALC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/Muon%20Analysis.html">Muon Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/Muon%20Elemental%20Analysis.html">Muon Elemental Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/frequency_plotting_window.html">Frequency Plotting Window</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/muon_analysis_plotting_window.html">Muon Analysis Plotting Window</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/muon_corrections_tab.html">Corrections Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/muon_fitting_tab.html">Fitting Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/muon_grouping_tab.html">Grouping Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/muon_home_tab.html">Home Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/muon_model_fitting_tab.html">Model Fitting Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/muon_phase_table_tab.html">Phase Table Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/muon_plotting_window.html">Plotting Window</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/muon_results_tab.html">Results Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/muon_sequential_fitting_tab.html">Sequential Fitting Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../muon/muon_transform_tab.html">Transformation Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reflectometry/ISIS%20Reflectometry.html">ISIS Reflectometry Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utility/Filter%20Events.html">Filter Events Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utility/QE%20Coverage.html">QE Coverage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../utility/TOF%20Converter.html">Time of Flight Converter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/dns_reduction/DNS%20Powder%20Elastic.html">DNS Powder Elastic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/dns_reduction/DNS%20Powder%20TOF.html">DNS Powder TOF</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../direct/dns_reduction/DNS%20Reduction.html">DNS Reduction</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="simple">
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/dns_reduction/DNS%20Single%20Crystal%20Elastic.html">DNS Single Crystal Elastic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/dns_reduction/dns_powder_elastic_options_tab.html">DNS Powder Elastic - Options Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/dns_reduction/dns_powder_elastic_plotting_tab.html">DNS Powder Elastic - Plotting Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/dns_reduction/dns_powder_elastic_script_generator_tab.html">DNS Powder Elastic - Script Generator Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/dns_reduction/dns_powder_tof_data_tab.html">DNS Reduction - Data Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/dns_reduction/dns_powder_tof_options_tab.html">DNS Powder TOF - Options Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/dns_reduction/dns_powder_tof_paths_tab.html">DNS Reduction - Paths Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/dns_reduction/dns_powder_tof_plotting_tab.html">DNS Powder TOF - Plotting Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/dns_reduction/dns_powder_tof_script_generator_tab.html">DNS Powder TOF - Script Generator Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/dns_reduction/dns_single_crystal_elastic_options_tab.html">DNS Single Crystal Elastic - Options Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/dns_reduction/dns_single_crystal_elastic_plotting_tab.html">DNS Single Crystal Elastic - Plotting Tab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../direct/dns_reduction/dns_single_crystal_elastic_script_generator_tab.html">DNS Single Crystal Elastic - Script Generator Tab</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Interfaces</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Inelastic Data Processor</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="inelastic-data-processor">
+<span id="interface-inelastic-data-processor"></span><h1>Inelastic Data Processor<a class="headerlink" href="#inelastic-data-processor" title="Link to this heading">#</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>The Inelastic Data Processor interface provides processes for transforming
+reduced data from, for example, <a class="reference internal" href="../indirect/Indirect%20Data%20Reduction.html#interface-indirect-data-reduction"><span class="std std-ref">Indirect Data Reduction</span></a>
+and Direct Reduction routines or S(Q, w). The output data can then be used for analysis by
+processes in, for example, the <a class="reference internal" href="Inelastic%20QENS%20Fitting.html#interface-inelastic-qens-fitting"><span class="std std-ref">Inelastic QENS Fitting</span></a> and
+<a class="reference internal" href="Inelastic%20Bayes%20Fitting.html#interface-inelastic-bayes-fitting"><span class="std std-ref">Inelastic Bayes Fitting</span></a> interfaces.</p>
+<figure class="align-right">
+<a class="screenshot reference internal image-reference" href="../../_images/Data_Processor_interface.png"><img alt="../../_images/Data_Processor_interface.png" class="screenshot" src="../../_images/Data_Processor_interface.png" style="width: 750px;" />
+</a>
+</figure>
+<section id="action-buttons">
+<h3>Action Buttons<a class="headerlink" href="#action-buttons" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>Settings</dt><dd><p>Opens the <a class="reference internal" href="../indirect/Indirect%20Settings.html#inelastic-interface-settings"><span class="std std-ref">Settings</span></a> GUI which allows you to
+customize the settings for the Inelastic interfaces.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>?</dt><dd><p>Opens this help page.</p>
+</dd>
+<dt>Py</dt><dd><p>Exports a Python script which will replicate the processing done by the current tab.</p>
+</dd>
+<dt>Manage Directories</dt><dd><p>Opens the Manage Directories dialog allowing you to change your search directories
+and default save directory and enable/disable data archive search.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="symmetrise">
+<span id="inelastic-symmetrise"></span><h2>Symmetrise<a class="headerlink" href="#symmetrise" title="Link to this heading">#</a></h2>
+<p>This tab allows you to take an asymmetric reduced file (<em>_red.nxs</em>) and symmetrise it about
+the Y axis.</p>
+<p>The center of energy in the Y axis (<em>E=0</em>) is indicated by a solid red line. Two green vertical dashed
+lines can be moved to change the value of <span class="math notranslate nohighlight">\(E_{low}\)</span> and <span class="math notranslate nohighlight">\(E_{high}\)</span>, which is the range of energies used to symmetrise
+the spectra. Additionally, two horizontal blue dotted lines can be moved to help in selecting a range that prevents rigged curves
+when the spectra is symmetrised.</p>
+<p>The curve can be symmetrised using either side of the spectra by changing the <em>Reflect Type</em> property. This choice influences
+the direction onto which the spectra is symmetrised. Note that <span class="math notranslate nohighlight">\(E_{low}\)</span> represents
+the lowest value on the range, so when the spectra is on the positive side, <span class="math notranslate nohighlight">\(E_{low}\)</span> will be closer to the centre
+while in the negative side <span class="math notranslate nohighlight">\(E_{low}\)</span> will be farther from the centre. The following methods are available on the <em>Reflect Type</em> property:</p>
+<ol class="arabic simple">
+<li><p><em>Positive to Negative</em> (default): the range of the positive values between <span class="math notranslate nohighlight">\(E_{low}\)</span> and <span class="math notranslate nohighlight">\(E_{high}\)</span>
+is reflected about the Y axis and replaces the corresponding values in the negative side of the spectra.
+The curve which ranges between <span class="math notranslate nohighlight">\(\pm|E_{low}|\)</span> is not modified.</p></li>
+<li><p><em>Negative to Positive</em>: the range of the negative values between <span class="math notranslate nohighlight">\(-E_{low}\)</span> and <span class="math notranslate nohighlight">\(-E_{high}\)</span>
+is reflected about the Y axis and replaces the corresponding values in the positive side of the spectra.
+The curve which ranges between <span class="math notranslate nohighlight">\(\pm|E_{high}|\)</span> is not modified.</p></li>
+</ol>
+<figure class="align-default">
+<a class="screenshot reference internal image-reference" href="../../_images/Data_Processor_tabSymmetrise_widget.png"><img alt="../../_images/Data_Processor_tabSymmetrise_widget.png" class="screenshot" src="../../_images/Data_Processor_tabSymmetrise_widget.png" style="width: 500px;" />
+</a>
+</figure>
+<section id="symmetrise-options">
+<h3>Symmetrise Options<a class="headerlink" href="#symmetrise-options" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>Input</dt><dd><p>Allows you to select a reduced NeXus file (<em>_red.nxs</em>) or workspace (<em>_red</em>) as the
+input to the algorithm.</p>
+</dd>
+<dt>ELow &amp; EHigh</dt><dd><p>Sets the energy range that is to be reflected about <span class="math notranslate nohighlight">\(y=0\)</span>.</p>
+</dd>
+<dt>Reflect Type</dt><dd><p>Whether to do <em>Positive to Negative</em> or <em>Negative to Positive</em> reflection.</p>
+</dd>
+<dt>Spectrum No</dt><dd><p>Changes the spectrum shown in the preview plots.</p>
+</dd>
+<dt>XRange</dt><dd><p>Changes the range of the preview plot, this can be useful for inspecting the
+curve before running the algorithm.</p>
+</dd>
+<dt>Preview</dt><dd><p>This button will update the preview plot and parameters under the Preview
+section.</p>
+</dd>
+<dt>Run</dt><dd><p>Runs the processing configured on the current tab.</p>
+</dd>
+<dt>Plot Spectra</dt><dd><p>If enabled, it will plot the selected workspace indices in the selected output workspace.</p>
+</dd>
+<dt>Save Result</dt><dd><p>If enabled the result will be saved as a NeXus file in the default save
+directory.</p>
+</dd>
+</dl>
+</section>
+<section id="preview">
+<span id="preview-properties"></span><h3>Preview<a class="headerlink" href="#preview" title="Link to this heading">#</a></h3>
+<p>The preview section shows what a given spectra in the input will look like after
+it has been symmetrised and gives an idea of how well the value of <span class="math notranslate nohighlight">\(E_{low}\)</span> fits the
+curve on both sides of the peak.</p>
+<dl class="simple">
+<dt>Negative Y</dt><dd><p>The value of <span class="math notranslate nohighlight">\(y\)</span> at <span class="math notranslate nohighlight">\(x=-|E_{low}|\)</span> on  <em>Positive to Negative</em> or at <span class="math notranslate nohighlight">\(x=-|E_{high}|\)</span> on <em>Negative to Positive</em>.</p>
+</dd>
+<dt>Positive Y</dt><dd><p>The value of <span class="math notranslate nohighlight">\(y\)</span> at <span class="math notranslate nohighlight">\(x=|E_{low}|\)</span> on  <em>Positive to Negative</em> or at <span class="math notranslate nohighlight">\(x=|E_{high}|\)</span> on <em>Negative to Positive</em>.</p>
+</dd>
+<dt>Delta Y</dt><dd><p>The difference between Negative and Positive Y. Typically this should be as
+close to zero as possible.</p>
+</dd>
+</dl>
+</section>
+<section id="symmetrise-example-workflow">
+<span id="id1"></span><h3>Symmetrise Example Workflow<a class="headerlink" href="#symmetrise-example-workflow" title="Link to this heading">#</a></h3>
+<p>The Symmetrise tab operates on <code class="docutils literal notranslate"><span class="pre">_red</span></code> files. The file used in this workflow can
+be produced using the 26176 run number on the ISIS Energy Transfer tab. The instrument used to
+produce this file is IRIS, the analyser is graphite and the reflection is 002. See the
+<a class="reference internal" href="../indirect/Indirect%20Data%20Reduction.html#isis-energy-transfer-example-workflow"><span class="std std-ref">ISIS Energy Transfer Example Workflow</span></a>.</p>
+<ol class="arabic simple">
+<li><p>In the <strong>Input</strong> box, load the file named <code class="docutils literal notranslate"><span class="pre">iris26176_graphite002_red</span></code>. This will
+automatically plot the data on the first mini-plot.</p></li>
+<li><p>Move the green slider located at x = 0.5 to be at x = 0.4.</p></li>
+<li><p>Click <strong>Preview</strong>. This will update the <a class="reference internal" href="#preview-properties"><span class="std std-ref">Preview properties</span></a> and
+the neighbouring mini-plot.</p></li>
+<li><p>Click <strong>Run</strong> and wait for the interface to finish processing. This will run the
+<a class="reference internal" href="../../algorithms/Symmetrise-v1.html#algm-symmetrise"><span class="std std-ref">Symmetrise</span></a> algorithm. The output workspace is called
+<code class="docutils literal notranslate"><span class="pre">iris26176_graphite002_sym_pn_red</span></code>.</p></li>
+<li><p>Click <strong>Plot Spectra</strong> to produce a spectra plot of the output workspace. Other indices can be
+plotted by entering indices in the box next to the <strong>Plot Spectra</strong> button. For example,
+entering indices 0-2,4,6-7 will plot the spectra with workspace indices 0, 1, 2, 4, 6 and 7.</p></li>
+</ol>
+<p>Go to the <a class="reference internal" href="#sqw-example-workflow"><span class="std std-ref">S(Q, w) Example Workflow</span></a>.</p>
+</section>
+</section>
+<section id="s-q-w">
+<span id="inelastic-sqw"></span><h2>S(Q, w)<a class="headerlink" href="#s-q-w" title="Link to this heading">#</a></h2>
+<p>Provides an interface for running the <a class="reference internal" href="../../algorithms/SofQW-v1.html#algm-sofqw"><span class="std std-ref">SofQW</span></a> algorithm
+<a class="reference internal" href="../../algorithms/SofQWNormalisedPolygon-v1.html#algm-sofqwnormalisedpolygon"><span class="std std-ref">SofQWNormalisedPolygon</span></a>.</p>
+<figure class="align-default">
+<a class="screenshot reference internal image-reference" href="../../_images/Data_Processor_tabSQw_widget.png"><img alt="../../_images/Data_Processor_tabSQw_widget.png" class="screenshot" src="../../_images/Data_Processor_tabSQw_widget.png" style="width: 500px;" />
+</a>
+</figure>
+<section id="s-q-w-options">
+<h3>S(Q, w) Options<a class="headerlink" href="#s-q-w-options" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>Input</dt><dd><p>Allows you to select a reduced NeXus file (<em>_red.nxs</em>) or workspace (<em>_red</em>) as the
+input to the algorithm. An automatic contour plot of <em>_rqw</em> will be plotted in the preview
+plot once a file has finished loading.</p>
+</dd>
+<dt>Q Low, Q Width &amp; Q High</dt><dd><p>Q binning parameters that are passed to the <a class="reference internal" href="../../algorithms/SofQWNormalisedPolygon-v1.html#algm-sofqwnormalisedpolygon"><span class="std std-ref">SofQW3</span></a> algorithm. The low and high
+values can be determined using the neighbouring contour plot. The default values given show
+the Q range where there is data in the reduced workspace and these values cannot be changed.</p>
+</dd>
+<dt>Rebin in Energy</dt><dd><p>If enabled the data will first be rebinned in energy before being passed to
+the <a class="reference internal" href="../../algorithms/SofQW-v1.html#algm-sofqw"><span class="std std-ref">SofQW</span></a> algorithm.</p>
+</dd>
+<dt>E Low, E Width &amp; E High</dt><dd><p>The energy rebinning parameters. The low and high values can be determined using the neighbouring contour plot.</p>
+</dd>
+<dt>Run</dt><dd><p>Runs the processing configured on the current tab.</p>
+</dd>
+<dt>Plot Spectra</dt><dd><p>If enabled, it will plot the selected workspace indices in the selected output workspace.</p>
+</dd>
+<dt>Open Slice Viewer</dt><dd><p>If enabled, it will open the slice viewer for the selected output workspace.</p>
+</dd>
+<dt>Save Result</dt><dd><p>If enabled the result will be saved as a NeXus file in the default save directory.</p>
+</dd>
+</dl>
+</section>
+<section id="s-q-w-example-workflow">
+<span id="sqw-example-workflow"></span><h3>S(Q, w) Example Workflow<a class="headerlink" href="#s-q-w-example-workflow" title="Link to this heading">#</a></h3>
+<p>The S(Q, w) tab operates on <code class="docutils literal notranslate"><span class="pre">_red</span></code> files. The file used in this workflow can be produced
+using the 26176 run number on the ISIS Energy Transfer tab. The instrument used to
+produce this file is IRIS, the analyser is graphite and the reflection is 002. See the
+<a class="reference internal" href="../indirect/Indirect%20Data%20Reduction.html#isis-energy-transfer-example-workflow"><span class="std std-ref">ISIS Energy Transfer Example Workflow</span></a>.</p>
+<ol class="arabic simple">
+<li><p>In the <strong>Input</strong> box, load the file named <code class="docutils literal notranslate"><span class="pre">iris26176_graphite002_red</span></code>. This will
+automatically plot the data as a contour plot within the interface.</p></li>
+<li><p>Set the <strong>Q Low</strong>, <strong>Q Width</strong> and <strong>Q High</strong> to be 0.5, 0.05 and 1.8. These values are
+read from the contour plot.</p></li>
+<li><p>Tick <strong>Rebin in Energy</strong>.</p></li>
+<li><p>Set the <strong>E Low</strong>, <strong>E Width</strong> and <strong>E High</strong> to be -0.5, 0.005 and 0.5. Again, these values
+should be read from the contour plot.</p></li>
+<li><p>Click <strong>Run</strong> and wait for the interface to finish processing. This will perform an energy
+rebin before performing the <a class="reference internal" href="../../algorithms/SofQW-v1.html#algm-sofqw"><span class="std std-ref">SofQW</span></a> algorithm. The output workspace ends
+with suffix _sqw and is called <code class="docutils literal notranslate"><span class="pre">iris26176_graphite002_sqw</span></code>.</p></li>
+<li><p>Enter a list of workspace indices in the output options (e.g. 0-2,4,6-7) and then click
+<strong>Plot Spectra</strong> to plot spectra from the output workspace.</p></li>
+</ol>
+<ol class="arabic simple" start="6">
+<li><p>Click the down arrow on the <strong>Plot Spectra</strong> button, and select <strong>Open Slice Viewer</strong>. This will
+open a slice viewer window for the output workspace.</p></li>
+<li><p>Choose a default save directory and then click <strong>Save Result</strong> to save the output workspace.
+The _sqw file is used in the <a class="reference internal" href="#moments-example-workflow"><span class="std std-ref">Moments Example Workflow</span></a>.</p></li>
+</ol>
+</section>
+</section>
+<section id="moments">
+<span id="inelastic-moments"></span><h2>Moments<a class="headerlink" href="#moments" title="Link to this heading">#</a></h2>
+<p>This interface uses the <a class="reference internal" href="../../algorithms/SofQWMoments-v1.html#algm-sofqwmoments"><span class="std std-ref">SofQWMoments</span></a> algorithm to
+calculate the <span class="math notranslate nohighlight">\(n^{th}\)</span> moment of an <span class="math notranslate nohighlight">\(S(Q, \omega)\)</span> workspace created
+by the SofQW tab.</p>
+<figure class="align-default">
+<a class="screenshot reference internal image-reference" href="../../_images/Data_Processor_tabMoments_widget.png"><img alt="../../_images/Data_Processor_tabMoments_widget.png" class="screenshot" src="../../_images/Data_Processor_tabMoments_widget.png" style="width: 500px;" />
+</a>
+</figure>
+<section id="moments-options">
+<h3>Moments Options<a class="headerlink" href="#moments-options" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>Input</dt><dd><p>Allows you to select an <span class="math notranslate nohighlight">\(S(Q, \omega)\)</span> file (<em>_sqw.nxs</em>) or workspace
+(<em>_sqw</em>) as the input to the algorithm.</p>
+</dd>
+<dt>Scale By</dt><dd><p>Used to set an optional scale factor by which to scale the output of the
+algorithm.</p>
+</dd>
+<dt>EMin &amp; EMax</dt><dd><p>Used to set the energy range of the sample that the algorithm will use for
+processing.</p>
+</dd>
+<dt>Run</dt><dd><p>Runs the processing configured on the current tab.</p>
+</dd>
+<dt>Plot Spectra</dt><dd><p>If enabled, it will plot the selected workspace indices in the selected output workspace.</p>
+</dd>
+<dt>Save Result</dt><dd><p>If enabled the result will be saved as a NeXus file in the default save directory.</p>
+</dd>
+</dl>
+</section>
+<section id="moments-example-workflow">
+<span id="id2"></span><h3>Moments Example Workflow<a class="headerlink" href="#moments-example-workflow" title="Link to this heading">#</a></h3>
+<p>The Moments tab operates on <code class="docutils literal notranslate"><span class="pre">_sqw</span></code> files. The file used in this workflow is produced during
+the <a class="reference internal" href="#sqw-example-workflow"><span class="std std-ref">S(Q, w) Example Workflow</span></a>.</p>
+<ol class="arabic simple">
+<li><p>In the <strong>Input</strong> box, load the file named <code class="docutils literal notranslate"><span class="pre">irs26176_graphite002_sqw</span></code>. This will
+automatically plot the data in the first mini-plot.</p></li>
+<li><p>Drag the blue sliders on the mini-plot so they are x=-0.4 and x=0.4.</p></li>
+<li><p>Click <strong>Run</strong> and wait for the interface to finish processing. This will run the
+<a class="reference internal" href="../../algorithms/SofQWMoments-v1.html#algm-sofqwmoments"><span class="std std-ref">SofQWMoments</span></a> algorithm. The output workspace ends
+with suffix _moments and is called <code class="docutils literal notranslate"><span class="pre">iris26176_graphite002_moments</span></code>.</p></li>
+</ol>
+</section>
+</section>
+<section id="elwin">
+<span id="id3"></span><h2>Elwin<a class="headerlink" href="#elwin" title="Link to this heading">#</a></h2>
+<p>Provides an interface for the <a class="reference internal" href="../../algorithms/ElasticWindow-v1.html#algm-elasticwindow"><span class="std std-ref">ElasticWindow</span></a>
+algorithm, with the option of selecting the range to integrate over as well as
+the background range. An on-screen plot is also provided.</p>
+<p>For workspaces that have a sample log, or have a sample log file available in the
+Mantid data search paths that contains the sample environment information the
+ELF workspace can also be normalised to the lowest temperature run in the range
+of input files.</p>
+<figure class="align-default">
+<a class="screenshot reference internal image-reference" href="../../_images/Data_Processor_tabElwin_widget.png"><img alt="../../_images/Data_Processor_tabElwin_widget.png" class="screenshot" src="../../_images/Data_Processor_tabElwin_widget.png" style="width: 600px;" />
+</a>
+</figure>
+<section id="elwin-options">
+<h3>Elwin Options<a class="headerlink" href="#elwin-options" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>File or Workspace</dt><dd><p>Choose to load data from a file or a workspace by using this dropdown menu. See image below for demonstration of how to load files using either option.</p>
+</dd>
+</dl>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../../_images/ElwinLoad.gif"><img alt="../../_images/ElwinLoad.gif" src="../../_images/ElwinLoad.gif" style="width: 600px;" />
+</a>
+</figure>
+<dl class="simple">
+<dt>Input File</dt><dd><p>Specify a range of input files that are either reduced (<em>_red.nxs</em>) or
+<span class="math notranslate nohighlight">\(S(Q, \omega)\)</span>.</p>
+</dd>
+<dt>Group Input</dt><dd><p>The <a class="reference internal" href="../../algorithms/ElasticWindowMultiple-v1.html#algm-elasticwindowmultiple"><span class="std std-ref">ElasticWindowMultiple</span></a> algorithm is performed on the input files and returns a group
+workspace as the output. This option, if unchecked, will ungroup these output workspaces.</p>
+</dd>
+<dt>Load History</dt><dd><p>If unchecked the input workspace will be loaded without it’s history.</p>
+</dd>
+<dt>Integration Range</dt><dd><p>The energy range over which to integrate the values.</p>
+</dd>
+<dt>Background Subtraction</dt><dd><p>If checked a background will be calculated and subtracted from the raw data.</p>
+</dd>
+<dt>Background Range</dt><dd><p>The energy range over which a background is calculated which is subtracted from
+the raw data.</p>
+</dd>
+<dt>Normalise to Lowest Temp</dt><dd><p>If checked the raw files will be normalised to the run with the lowest
+temperature, to do this there must be a valid sample environment entry in the
+sample logs for each of the input files.</p>
+</dd>
+<dt>SE log name</dt><dd><p>The name of the sample environment log entry in the input files sample logs
+(defaults to ‘sample’).</p>
+</dd>
+<dt>SE log value</dt><dd><p>The value to be taken from the “SE log name” data series (defaults to the
+specified value in the instrument parameters file, and in the absence of such
+specification, defaults to “last value”)</p>
+</dd>
+<dt>Preview File</dt><dd><p>The workspace currently active in the preview plot.</p>
+</dd>
+<dt>Spectrum</dt><dd><p>Changes the spectrum displayed in the preview plot.</p>
+</dd>
+<dt>Plot Current Preview</dt><dd><p>Plots the currently selected preview plot in a separate external window</p>
+</dd>
+<dt>Run</dt><dd><p>Runs the processing configured on the current tab.</p>
+</dd>
+<dt>Plot Spectra</dt><dd><p>If enabled, it will plot the selected workspace indices in the selected output workspace.</p>
+</dd>
+<dt>Save Result</dt><dd><p>Saves the result in the default save directory.</p>
+</dd>
+</dl>
+</section>
+<section id="elwin-example-workflow">
+<span id="id4"></span><h3>Elwin Example Workflow<a class="headerlink" href="#elwin-example-workflow" title="Link to this heading">#</a></h3>
+<p>The Elwin tab operates on <code class="docutils literal notranslate"><span class="pre">_red</span></code> and <code class="docutils literal notranslate"><span class="pre">_sqw</span></code> files. The files used in this workflow can
+be produced using the run numbers 104371-104375 on the
+<a class="reference internal" href="../indirect/Indirect%20Data%20Reduction.html#interface-indirect-data-reduction"><span class="std std-ref">Indirect Data Reduction</span></a> interface in the ISIS Energy
+Transfer tab. The instrument used to produce these files is OSIRIS, the analyser is graphite
+and the reflection is 002.</p>
+<ol class="arabic simple">
+<li><p>Untick the <strong>Load History</strong> checkbox next to the file selector if you want to load your data
+without history.</p></li>
+<li><p>Click <strong>Browse</strong> and select the files <code class="docutils literal notranslate"><span class="pre">osiris104371_graphite002_red</span></code>,
+<code class="docutils literal notranslate"><span class="pre">osiris104372_graphite002_red</span></code>, <code class="docutils literal notranslate"><span class="pre">osiris104373_graphite002_red</span></code>, <code class="docutils literal notranslate"><span class="pre">osiris104374_graphite002_red</span></code>
+and <code class="docutils literal notranslate"><span class="pre">osiris104375_graphite002_red</span></code>. Load these files and they will be plotted in the mini-plot
+automatically.</p></li>
+<li><p>The workspace and spectrum displayed in the mini-plot can be changed using the combobox and
+spinbox seen directly above the mini-plot.</p></li>
+<li><p>You may opt to change the x range of the mini-plot by changing the <strong>Integration Range</strong>, or
+by sliding the blue lines seen on the mini-plot using the cursor. For the purpose of this
+demonstration, use the default x range.</p></li>
+<li><p>Tick <strong>Normalise to Lowest Temp</strong>. This option will produce an extra workspace with end suffix
+_elt. However, for this to work the input workspaces must have a temperature. See the
+description above for more information.</p></li>
+<li><p>Click <strong>Plot Current Preview</strong> if you want a larger plot of the mini-plot.</p></li>
+<li><p>Click <strong>Run</strong> and wait for the interface to finish processing. This should generate four
+workspaces ending in _eq, _eq2, _elf and _elt.</p></li>
+<li><p>In the <strong>Output</strong> section, select the workspace ending with _eq and then choose some workspace
+indices (e.g. 0-2,4). Click <strong>Plot Spectra</strong> to plot the spectrum from the selected workspace.</p></li>
+<li><p>Choose a default save directory and then click <strong>Save Result</strong> to save the output workspaces.
+The workspace ending in _eq will be used in the <a class="reference internal" href="Inelastic%20QENS%20Fitting.html#msdfit-example-workflow"><span class="std std-ref">MSD Example Workflow</span></a>.</p></li>
+</ol>
+</section>
+</section>
+<section id="i-q-t">
+<span id="iqt"></span><h2>I(Q, t)<a class="headerlink" href="#i-q-t" title="Link to this heading">#</a></h2>
+<p>Given sample and resolution inputs, carries out a fit as per the theory detailed
+in the <a class="reference internal" href="../../algorithms/TransformToIqt-v1.html#algm-transformtoiqt"><span class="std std-ref">TransformToIqt</span></a> algorithm.</p>
+<figure class="align-default">
+<a class="screenshot reference internal image-reference" href="../../_images/Data_Processor_tabIqt_widget.png"><img alt="../../_images/Data_Processor_tabIqt_widget.png" class="screenshot" src="../../_images/Data_Processor_tabIqt_widget.png" style="width: 444px;" />
+</a>
+</figure>
+<section id="i-q-t-options">
+<h3>I(Q, t) Options<a class="headerlink" href="#i-q-t-options" title="Link to this heading">#</a></h3>
+<dl class="simple">
+<dt>Sample</dt><dd><p>Either a reduced file (<em>_red.nxs</em>) or workspace (<em>_red</em>) or an <span class="math notranslate nohighlight">\(S(Q,
+\omega)\)</span> file (<em>_sqw.nxs</em>) or workspace (<em>_sqw</em>).</p>
+</dd>
+<dt>Resolution</dt><dd><p>Either a resolution file (_res.nxs) or workspace (_res) or an <span class="math notranslate nohighlight">\(S(Q,
+\omega)\)</span> file (<em>_sqw.nxs</em>) or workspace (<em>_sqw</em>).</p>
+</dd>
+<dt>ELow, EHigh</dt><dd><p>The rebinning range.</p>
+</dd>
+<dt>Enforce Normalization</dt><dd><p>The LHSWorkspace from the output from <a class="reference internal" href="../../algorithms/ExtractFFTSpectrum-v1.html#algm-extractfftspectrum"><span class="std std-ref">ExtractFFTSpectrum v1</span></a> is used in both branches
+to perform the final workspace division and the two intermediate workspace divisions are skipped by unchecking
+this option.</p>
+</dd>
+<dt>SampleBinning</dt><dd><p>The number of neighbouring bins are summed.</p>
+</dd>
+<dt>Symmetric Energy Range</dt><dd><p>Untick to allow an asymmetric energy range.</p>
+</dd>
+<dt>Spectrum</dt><dd><p>Changes the spectrum displayed in the preview plot.</p>
+</dd>
+<dt>Plot Current Preview</dt><dd><p>Plots the currently selected preview plot in a separate external window</p>
+</dd>
+<dt>Calculate Errors</dt><dd><p>The calculation of errors using a Monte Carlo implementation can be skipped by unchecking
+this option.</p>
+</dd>
+<dt>Number Of Iterations</dt><dd><p>The number of iterations to perform in the Monte Carlo routine for error calculation
+in I(Q,t).</p>
+</dd>
+<dt>Run</dt><dd><p>Runs the processing configured on the current tab.</p>
+</dd>
+<dt>Plot Spectra</dt><dd><p>If enabled, it will plot the selected workspace indices in the selected output workspace.</p>
+</dd>
+<dt>Plot Tiled</dt><dd><p>Generates a tiled plot containing the selected workspace indices. This option is accessed via the down
+arrow on the <strong>Plot Spectra</strong> button.</p>
+</dd>
+<dt>Save Result</dt><dd><p>Saves the result workspace in the default save directory.</p>
+</dd>
+</dl>
+</section>
+<section id="i-q-t-example-workflow">
+<span id="iqt-example-workflow"></span><h3>I(Q, t) Example Workflow<a class="headerlink" href="#i-q-t-example-workflow" title="Link to this heading">#</a></h3>
+<p>The I(Q, t) tab allows <code class="docutils literal notranslate"><span class="pre">_red</span></code> and <code class="docutils literal notranslate"><span class="pre">_sqw</span></code> for it’s sample file, and allows <code class="docutils literal notranslate"><span class="pre">_red</span></code>, <code class="docutils literal notranslate"><span class="pre">_sqw</span></code> and
+<code class="docutils literal notranslate"><span class="pre">_res</span></code> for the resolution file. The sample file used in this workflow can be produced using the run
+number 26176 on the <a class="reference internal" href="../indirect/Indirect%20Data%20Reduction.html#interface-indirect-data-reduction"><span class="std std-ref">Indirect Data Reduction</span></a> interface in the ISIS
+Energy Transfer tab. The resolution file is created in the ISIS Calibration tab using the run number
+26173. The instrument used to produce these files is IRIS, the analyser is graphite
+and the reflection is 002.</p>
+<ol class="arabic simple">
+<li><p>Click <strong>Browse</strong> for the sample and select the file <code class="docutils literal notranslate"><span class="pre">iris26176_graphite002_red</span></code>. Then click <strong>Browse</strong>
+for the resolution and select the file <code class="docutils literal notranslate"><span class="pre">iris26173_graphite002_res</span></code>.</p></li>
+<li><p>Change the <strong>SampleBinning</strong> variable to be 5. Changing this will calculate values for the <strong>EWidth</strong>,
+<strong>SampleBins</strong> and <strong>ResolutionBins</strong> variables automatically by using the
+<a class="reference internal" href="../../algorithms/TransformToIqt-v1.html#algm-transformtoiqt"><span class="std std-ref">TransformToIqt</span></a> algorithm where the <strong>BinReductionFactor</strong> is given by the
+<strong>SampleBinning</strong> value. The <strong>SampleBinning</strong> value must be low enough for the <strong>ResolutionBins</strong> to be
+at least 5. A description of this option can be found in the <a class="reference internal" href="#a-note-on-binning"><span class="std std-ref">A note on Binning</span></a> section.</p></li>
+<li><p>Untick <strong>Calculate Errors</strong> if you do not want to calculate the errors for the output workspace which
+ends with the suffix _iqt.</p></li>
+<li><p>Click <strong>Run</strong> and wait for the interface to finish processing. This should generate a workspace ending
+with a suffix _iqt.</p></li>
+<li><p>In the <strong>Output</strong> section, select some workspace indices (e.g.0-2,4,6) for a tiled plot and then click
+the down arrow on the <strong>Plot Spectra</strong> button before clicking <strong>Plot Tiled</strong>.</p></li>
+<li><p>Choose a default save directory and then click <strong>Save Result</strong> to save the _iqt workspace.
+This workspace will be used in the <a class="reference internal" href="Inelastic%20QENS%20Fitting.html#iqtfit-example-workflow"><span class="std std-ref">I(Q, t)  Example Workflow</span></a>.</p></li>
+</ol>
+</section>
+<section id="a-note-on-binning">
+<span id="id5"></span><h3>A note on Binning<a class="headerlink" href="#a-note-on-binning" title="Link to this heading">#</a></h3>
+<p>The bin width is determined from the energy range and the sample binning factor. The number of bins is automatically
+calculated based on the <strong>SampleBinning</strong> specified. The width is determined from the width of the range divided
+by the number of bins.</p>
+<p>The following binning parameters cannot be modified by the user and are instead automatically calculated through
+the <a class="reference internal" href="../../algorithms/TransformToIqt-v1.html#algm-transformtoiqt"><span class="std std-ref">TransformToIqt</span></a> algorithm once a valid resolution file has been loaded. The calculated
+binning parameters are displayed alongside the binning options:</p>
+<dl class="simple">
+<dt>EWidth</dt><dd><p>The calculated bin width.</p>
+</dd>
+<dt>SampleBins</dt><dd><p>The number of bins in the sample after rebinning.</p>
+</dd>
+<dt>ResolutionBins</dt><dd><p>The number of bins in the resolution after rebinning. Typically this should be at
+least 5 and a warning will be shown if it is less.</p>
+</dd>
+</dl>
+<p><strong>Categories</strong>: <a class="reference external" href="../ILL/categories/Interfaces.html">Interfaces</a> | <a class="reference external" href="../../algorithms/categories/Inelastic.html">Inelastic</a></p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Inelastic%20Corrections.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Inelastic Corrections</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Inelastic%20QENS%20Fitting.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Inelastic QENS Fitting</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#action-buttons">Action Buttons</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#symmetrise">Symmetrise</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#symmetrise-options">Symmetrise Options</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#preview">Preview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#symmetrise-example-workflow">Symmetrise Example Workflow</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#s-q-w">S(Q, w)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#s-q-w-options">S(Q, w) Options</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#s-q-w-example-workflow">S(Q, w) Example Workflow</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#moments">Moments</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#moments-options">Moments Options</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#moments-example-workflow">Moments Example Workflow</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elwin">Elwin</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elwin-options">Elwin Options</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elwin-example-workflow">Elwin Example Workflow</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#i-q-t">I(Q, t)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#i-q-t-options">I(Q, t) Options</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#i-q-t-example-workflow">I(Q, t) Example Workflow</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#a-note-on-binning">A note on Binning</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/interfaces/inelastic/Inelastic Data Processor.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Mantid.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

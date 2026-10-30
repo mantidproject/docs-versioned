@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fit Functions In Python &#8212; MantidProject 7.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/style.css?v=562d7d41" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../_static/documentation_options.js?v=efe5be6f"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'concepts/FitFunctionsInPython';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Fitting" href="Fitting.html" />
+    <link rel="prev" title="Fit Constraint" href="FitConstraint.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    <link rel="icon" sizes="32x32" href="../_static/images/favicon.ico">
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  <img src="../_static/images/mantid_logo_light.png" class="logo__image only-light" alt="Logo image">
+  <img src="../_static/images/mantid_logo_dark.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><ul id="navbar-main-elements" class="navbar-nav">
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://download.mantidproject.org">Downloads</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/nightly/tutorials/">Tutorials</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org">User Docs</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://developer.mantidproject.org">Develop</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/release/">Release notes</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://www.mantidproject.org/contact">Contact Us</a>
+  </li>
+</ul></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+    <li class="nav-item">
+      <a class="nav-link" href="https://github.com/mantidproject/mantid" rel="noopener" target="_blank" title="GitHub">
+        <span><i class="fab fa-github-square"></i></span>
+        <label class="sr-only">GitHub</label>
+      </a>
+    </li>
+  </ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><ul id="navbar-main-elements" class="navbar-nav">
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://download.mantidproject.org">Downloads</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/nightly/tutorials/">Tutorials</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org">User Docs</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://developer.mantidproject.org">Develop</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/release/">Release notes</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://www.mantidproject.org/contact">Contact Us</a>
+  </li>
+</ul></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+    <li class="nav-item">
+      <a class="nav-link" href="https://github.com/mantidproject/mantid" rel="noopener" target="_blank" title="GitHub">
+        <span><i class="fab fa-github-square"></i></span>
+        <label class="sr-only">GitHub</label>
+      </a>
+    </li>
+  </ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="AbinsDataFormats.html">Abins Data Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AbinsImplementation.html">Abins: Implementation details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AbinsInterpolatedBroadening.html">Abins: Fast approximate broadening with “interpolate”</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AbsorptionAndMultipleScattering.html">Absorption and Multiple Scattering Corrections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CaChannel.html">CaChannel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Calibration.html">Calibration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ConvFit.html">Conv Fit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CreateanIDF.html">Create an IDF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrystalField.html">Crystal Field Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrystalStructureAndReflections.html">Crystal structure and reflections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DataService.html">Data Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DiffractionCalibrationWorkspace.html">Diffraction Calibration Workspace</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="DynamicFactory.html">Dynamic Factory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DynamicalStructureFactorFromAbInitio.html">Ab initio calculation of dynamical structure factor (S)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ElementalAnalysisUsingNegativeMuons.html">Elemental analysis using negative muons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ErrorPropagation.html">Error Propagation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EventFiltering.html">Event Filtering</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FABADA.html">FABADA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FacilitiesFile.html">Facilities File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FitConstraint.html">Fit Constraint</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Fit Functions In Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fitting.html">Fitting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FittingMinimizers.html">Which minimizers to use with Mantid</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="FittingMinimizersComparisonDetailed.html">Comparison of minimizers for individual test problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FittingMinimizersWeightedComparisonDetailed.html">Comparison of minimizers, with weighted least squares</a></li>
+<li class="toctree-l1"><a class="reference internal" href="FractionalRebinning.html">Fractional Rebinning (RebinnedOutput Workspaces)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Geometry.html">Geometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GeometryofPosition.html">Geometry of Position</a></li>
+<li class="toctree-l1"><a class="reference internal" href="GeometryofShape.html">Geometry of Shape</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HistogramData.html">Transition to the HistogramData module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HowToDefineGeometricShape.html">How To Define Geometric Shape</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Howtoresetdetectorscalibration.html">How to reset detectors calibration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InstrumentAccessLayers.html">Instrument Access via SpectrumInfo, DetectorInfo, ComponentInfo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InstrumentDataService.html">Instrument Data Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InstrumentDefinitionFile.html">Instrument Definition File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="InstrumentParameterFile.html">Instrument Parameter File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="KafkaLiveStreams.html">Listening on Kafka Live Streams</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LETSampleIDF.html">IDF ISIS LET annotated</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Lattice.html">Lattice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LeBailFit.html">Theory of Le Bail Fit</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="MDNorm.html">Multi dimensional neutron scattering data normalization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MPI.html">MPI in Mantid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="McStas.html">McStas - A neutron ray-trace simulation package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ModulatedStructure.html">Modulated Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NexusFile.html">Nexus File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ORNL_SANS_Reduction.html">Reduction for ORNL SANS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PSIMuonBinFile.html">PSI Muon Bin File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PipInstall.html">Pip Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Plugin.html">Plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PointAndSpaceGroups.html">Point and space groups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Project.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ProjectRecovery.html">Project Recovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PropertiesFile.html">Properties File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PythonNotebook.html">Access Mantid in Python and Notebook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RAWFile.html">RAW File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Ragged_Workspace.html">Ragged Workspace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SANS2DSampleIDF.html">IDF ISIS SANS2D annotated</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SampleEnvironment.html">Sample Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SharedPointer.html">Shared Pointer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SymmetryGroups.html">Symmetry groups</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TextureAnalysis.html">Texture Analysis Theory</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="UsingXMLSchema.html">Using XML Schemas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="WorkflowAlgorithm.html">Workflow Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="WorkingWithWorspaces.html">Working with Workspaces in Python</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="calibration/index.html">Calibration</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="calibration/AfterTubeCalibration.html">After Tube Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/CalFile.html">CalFile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/EngineeringCalibration.html">Engineering Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/PSDTubeCalibration.html">PSD Tube Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/PowderDiffractionCalibration.html">Time-of-Flight Powder Diffraction Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/PythonCodeForCalibration.html">Python Code For Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/SingleCrystalDiffractionPanelCalibration.html">Single Crystal Diffraction Panel Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/TubeCalibFitParams.html">TubeCalibFitParams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/TubeCalibrationCorelli.html">Corelli Tube Calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/TubeCalibrationExamples.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/TubeCalibrationIntroduction.html">Tube Calibration Introduction</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="calibration/TubeSpec.html">TubeSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/Tubecalib.html">Tube calib</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calibration/VisualizationofCalibratedTubes.html">Visualization of Calibrated Tubes</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Concepts</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Fit Functions In Python</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="fit-functions-in-python">
+<span id="fitfunctionsinpython"></span><h1>Fit Functions In Python<a class="headerlink" href="#fit-functions-in-python" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>Mantid enables Fit function objects to be produced in python. For example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">Gaussian</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>will make <code class="docutils literal notranslate"><span class="pre">g</span></code> into a Gaussian function with default values and</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">Height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will make <code class="docutils literal notranslate"><span class="pre">g</span></code> into a Gaussian function with <code class="docutils literal notranslate"><span class="pre">Height</span></code> set to 1, <code class="docutils literal notranslate"><span class="pre">Sigma</span></code> set to 0.1 and <code class="docutils literal notranslate"><span class="pre">PeakCentre</span></code> set to default value.</p>
+<p>One can also make function with attributes such as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">Polynomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">A0</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">A1</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">A2</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">A3</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>One can get and set function parameters and attributes, by array operations, for example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gSigma</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="s2">"Sigma"</span><span class="p">]</span>
+<span class="n">g</span><span class="p">[</span><span class="s2">"Height"</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.5</span>
+</pre></div>
+</div>
+<p>One can also get and set function parameters and attributes, by dot operations, for example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gSigma</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">Sigma</span>
+<span class="n">g</span><span class="o">.</span><span class="n">Height</span> <span class="o">=</span> <span class="mf">1.5</span>
+</pre></div>
+</div>
+</section>
+<section id="composite-functions">
+<h2>Composite Functions<a class="headerlink" href="#composite-functions" title="Link to this heading">#</a></h2>
+<p>Composite functions can be created by means of the plus operation and
+individual functions can be accessed by array index operations.
+For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spectrum</span> <span class="o">=</span> <span class="n">LinearBackground</span><span class="p">()</span> <span class="o">+</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">PeakCentre</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">PeakCentre</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">peak1</span> <span class="o">=</span> <span class="n">spectrum</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">peak1</span><span class="p">[</span><span class="s1">'Sigma'</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.123</span>
+<span class="n">spectrum</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">Lorentzian</span><span class="p">(</span><span class="n">PeakCentre</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which sets <code class="docutils literal notranslate"><span class="pre">Sigma</span></code> of the second function (first Gaussian) to 0.123 and changes the third function to a Lorentzian.</p>
+<p>Similarly product functions can be constructed using the multiplication operator.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">ExpDecay</span><span class="p">()</span> <span class="o">*</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">Height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">Sigma</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>One can get and set the parameters of a composite function, by array operations,
+but not by dot operations because the parameter name already contains a dot, for example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">f1Sigma</span> <span class="o">=</span> <span class="n">spectrum</span><span class="p">[</span><span class="s2">"f1.Sigma"</span><span class="p">]</span>
+<span class="n">spectrum</span><span class="p">[</span><span class="s2">"f1.Height"</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.5</span>
+</pre></div>
+</div>
+<p>One can add a function by the <code class="docutils literal notranslate"><span class="pre">+-</span></code> operator or remove be the <code class="docutils literal notranslate"><span class="pre">del</span></code> function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spectrum</span> <span class="o">+=</span> <span class="n">Lorentzian</span><span class="p">(</span><span class="n">PeakCentre</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">del</span> <span class="n">spectrum</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Also available is the <code class="docutils literal notranslate"><span class="pre">len</span></code> function and iteration over the member functions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n_peaks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">spectrum</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="n">spectrum</span><span class="p">:</span>
+   <span class="nb">print</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The plus and times operators are associative and
+so may not preserve a composite function within a composite function as such,
+but replace it with a list of its member functions.
+Instead you may use:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spectrum</span> <span class="o">=</span> <span class="n">CompositeFunctionWrapper</span><span class="p">(</span><span class="n">LinearBackground</span><span class="p">(),</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">PeakCentre</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">PeakCentre</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">P</span> <span class="o">=</span> <span class="n">ProductFunctionWrapper</span><span class="p">(</span><span class="n">ExpDecay</span><span class="p">(),</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">Height</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">Sigma</span><span class="o">=</span><span class="mf">0.2</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-domain-functions">
+<h2>Multi-Domain Functions<a class="headerlink" href="#multi-domain-functions" title="Link to this heading">#</a></h2>
+<p>Multi-Domain functions can be constructed like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">md_fun</span> <span class="o">=</span> <span class="n">MultiDomainFunction</span><span class="p">(</span><span class="n">Gaussian</span><span class="p">(</span><span class="n">PeakCentre</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.1</span><span class="p">),</span> <span class="n">Gaussian</span><span class="p">(</span><span class="n">PeakCentre</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Sigma</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span> <span class="o">...</span><span class="p">,</span> <span class="n">Global</span><span class="o">=</span><span class="p">[</span><span class="s1">'Height'</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="setting-ties">
+<h2>Setting Ties<a class="headerlink" href="#setting-ties" title="Link to this heading">#</a></h2>
+<p>The parameters of functions can be tied or fixed like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">func1</span><span class="o">.</span><span class="n">tie</span><span class="p">(</span><span class="n">A0</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">func2</span><span class="o">.</span><span class="n">tie</span><span class="p">({</span><span class="s1">'f1.A2'</span><span class="p">:</span> <span class="s1">'2*f0.A1'</span><span class="p">,</span> <span class="s1">'f2.A2'</span><span class="p">:</span> <span class="s1">'3*f0.A1 + 1'</span><span class="p">})</span>
+<span class="n">func3</span><span class="o">.</span><span class="n">fix</span><span class="p">(</span><span class="s1">'A0'</span><span class="p">)</span>
+<span class="n">func4</span><span class="o">.</span><span class="n">fix</span><span class="p">(</span><span class="s1">'f2.A2'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Both fixes and ties can be removed by <code class="docutils literal notranslate"><span class="pre">untie</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">func</span><span class="o">.</span><span class="n">untie</span><span class="p">(</span><span class="s1">'f3.Sigma'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To tie all parameters of the same local name in a composite function, one can use <code class="docutils literal notranslate"><span class="pre">TieAll</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">func</span><span class="o">.</span><span class="n">tieAll</span><span class="p">(</span><span class="s1">'Sigma'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>All members of the composite function must have this parameter (in this case <code class="docutils literal notranslate"><span class="pre">Sigma</span></code>).
+Similarly with fixing:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spectrum1</span><span class="o">.</span><span class="n">fixAll</span><span class="p">(</span><span class="s1">'FWHM'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Also parameters of a function can be fixed with <code class="docutils literal notranslate"><span class="pre">fixAllParameters</span></code> and unfixed with <code class="docutils literal notranslate"><span class="pre">untieAllParameters</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">fixAllParameters</span><span class="p">()</span>
+<span class="o">...</span>
+<span class="n">c</span><span class="o">.</span><span class="n">untieAllParameters</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="setting-constraints">
+<h2>Setting Constraints<a class="headerlink" href="#setting-constraints" title="Link to this heading">#</a></h2>
+<p>One can set and remove constraints as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">g</span><span class="o">.</span><span class="n">constrain</span><span class="p">(</span><span class="s2">"Sigma &lt; 2.0, Height &gt; 7.0"</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="n">g</span><span class="o">.</span><span class="n">unconstrain</span><span class="p">(</span><span class="s2">"Sigma"</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">unconstrain</span><span class="p">(</span><span class="s2">"Height"</span><span class="p">)</span>
+
+<span class="n">comp</span><span class="o">.</span><span class="n">constrain</span><span class="p">(</span><span class="s2">"f1.Sigma &lt; 2, f0.Height &gt; 7"</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="n">comp</span><span class="o">.</span><span class="n">unconstrain</span><span class="p">(</span><span class="s2">"f1.Sigma"</span><span class="p">)</span>
+<span class="n">comp</span><span class="o">.</span><span class="n">unconstrain</span><span class="p">(</span><span class="s2">"f0.Height"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>One can all constrain a given parameter in all members of a composite function that have this parameter
+and also remove such constraints.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">comp</span><span class="o">.</span><span class="n">constrainAll</span><span class="p">(</span><span class="s2">"Sigma &lt; 1.8"</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="n">comp</span><span class="o">.</span><span class="n">unconstrainAll</span><span class="p">(</span><span class="s2">"Sigma"</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="evaluation">
+<h2>Evaluation<a class="headerlink" href="#evaluation" title="Link to this heading">#</a></h2>
+<p>One can evaluate functions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">Polynomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">A0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">A1</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">A2</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># expect 1.0</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># expect 3.0</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>  <span class="c1"># expect 6.0</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]))</span>  <span class="c1"># expect [ 0. 1. 3. 6.]</span>
+
+<span class="n">ws</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">],</span> <span class="n">DataY</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span><span class="o">.</span><span class="n">y</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="c1"># expect [  0.375   1.875   4.375   7.875  12.375  17.875  24.375]</span>
+</pre></div>
+</div>
+<p>One can use numpy arrays:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">Polynomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">A0</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">A1</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">A2</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">A3</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">A4</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+<span class="c1"># expect [[   1.    5.]</span>
+<span class="c1">#         [  31.  121.]]</span>
+</pre></div>
+</div>
+<p>Also one can put parameters into the function when evaluating.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">Polynomial</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span> <span class="c1">#expect [ 0. 1. 3. 6.]</span>
+</pre></div>
+</div>
+<p>This enables one to fit the functions with <code class="docutils literal notranslate"><span class="pre">scipy.optimize.curve_fit</span></code>.</p>
+</section>
+<section id="errors">
+<h2>Errors<a class="headerlink" href="#errors" title="Link to this heading">#</a></h2>
+<p>The errors assoicated with a given parameter can be accessed using the <code class="docutils literal notranslate"><span class="pre">getError</span></code> method.
+<code class="docutils literal notranslate"><span class="pre">getError</span></code> takes either the parameter name or index as input. For example to get the error
+on <code class="docutils literal notranslate"><span class="pre">A1</span></code> in the above polynomial, the code is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find the parameter error by index</span>
+<span class="n">error_A1</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">getError</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># Find the parameter error by name</span>
+<span class="n">error_A1</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">getError</span><span class="p">(</span><span class="s1">'A1'</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="plotting">
+<h2>Plotting<a class="headerlink" href="#plotting" title="Link to this heading">#</a></h2>
+<p>Functions may be plotted by calling the <code class="docutils literal notranslate"><span class="pre">plot</span></code> method of the function.</p>
+<p>This method can be called in any of the following manners:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xValues</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.5</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span> <span class="c1"># for these x-values</span>
+<span class="n">f</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">workspace</span><span class="o">=</span><span class="n">ws</span><span class="p">)</span> <span class="c1"># for the x-values of workspace ws</span>
+<span class="n">f</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">workspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">workspaceIndex</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>   <span class="c1"># for x-values of workspace index i of ws</span>
+<span class="n">f</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">startX</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">endX</span><span class="o">=</span><span class="n">xmax</span><span class="p">)</span>  <span class="c1"># for 20 x-values between xmin and xmax</span>
+<span class="n">f</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">startX</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">endX</span><span class="o">=</span><span class="n">xmax</span><span class="p">,</span> <span class="n">nSteps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># for 10 x-values between xmin and xmax</span>
+<span class="n">f</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">workspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">startX</span><span class="o">=</span><span class="n">xmin</span><span class="p">,</span> <span class="n">endX</span><span class="o">=</span><span class="n">xmax</span><span class="p">)</span> <span class="c1"># for x-values of ws between xmin &amp; xmax</span>
+<span class="n">f</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">workspace</span><span class="o">=</span><span class="n">ws</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'Fred'</span><span class="p">)</span> <span class="c1"># for plot &amp; its workspace to be called 'Fred'</span>
+</pre></div>
+</div>
+<p>If you use <code class="docutils literal notranslate"><span class="pre">xValues</span></code>, then the list of x values must be in numerical order.
+This is not checked and if they are not in order the plot may fail to display properly.</p>
+<p>If you want to display multiple plots of the same function, then use
+<code class="docutils literal notranslate"><span class="pre">name</span></code> to give each plot a unique name. The default value of <code class="docutils literal notranslate"><span class="pre">name</span></code>
+is the name of the function.</p>
+<p><strong>Category</strong>: <a class="reference external" href="../api/python/mantid/api/categories/Concepts.html">Concepts</a></p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="FitConstraint.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Fit Constraint</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Fitting.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Fitting</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#composite-functions">Composite Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-domain-functions">Multi-Domain Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-ties">Setting Ties</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-constraints">Setting Constraints</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation">Evaluation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#errors">Errors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting">Plotting</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/concepts/FitFunctionsInPython.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Mantid.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
