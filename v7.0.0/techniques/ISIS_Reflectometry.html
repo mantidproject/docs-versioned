@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ISIS Reflectometry &#8212; MantidProject 7.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/style.css?v=562d7d41" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../_static/documentation_options.js?v=efe5be6f"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>window.MathJax = {"tex": {"macros": {"AA": "\\unicode{x212B}"}}, "startup": {"polyfillHasOwn": true}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'techniques/ISIS_Reflectometry';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ISIS Single Crystal Diffraction Reduction Scripts" href="ISIS_SingleCrystalDiffraction_Workflow.html" />
+    <link rel="prev" title="ISIS Powder Diffraction Scripts Workflow Diagrams" href="ISISPowder-Workflows-v1.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    <link rel="icon" sizes="32x32" href="../_static/images/favicon.ico">
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  <img src="../_static/images/mantid_logo_light.png" class="logo__image only-light" alt="Logo image">
+  <img src="../_static/images/mantid_logo_dark.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><ul id="navbar-main-elements" class="navbar-nav">
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://download.mantidproject.org">Downloads</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/nightly/tutorials/">Tutorials</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org">User Docs</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://developer.mantidproject.org">Develop</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/release/">Release notes</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://www.mantidproject.org/contact">Contact Us</a>
+  </li>
+</ul></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+    <li class="nav-item">
+      <a class="nav-link" href="https://github.com/mantidproject/mantid" rel="noopener" target="_blank" title="GitHub">
+        <span><i class="fab fa-github-square"></i></span>
+        <label class="sr-only">GitHub</label>
+      </a>
+    </li>
+  </ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><ul id="navbar-main-elements" class="navbar-nav">
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://download.mantidproject.org">Downloads</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/nightly/tutorials/">Tutorials</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org">User Docs</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://developer.mantidproject.org">Develop</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/release/">Release notes</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://www.mantidproject.org/contact">Contact Us</a>
+  </li>
+</ul></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+    <li class="nav-item">
+      <a class="nav-link" href="https://github.com/mantidproject/mantid" rel="noopener" target="_blank" title="GitHub">
+        <span><i class="fab fa-github-square"></i></span>
+        <label class="sr-only">GitHub</label>
+      </a>
+    </li>
+  </ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="ApplyingCorrections.html">Applying Corrections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="BinMDCoordinateTransformations.html">BinMD Coordinate Transformations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Calibration.html">Calibration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Calibration_implementation.html">Calibration Implementation Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CreateBackToBackParameters.html">Create Back To Back Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CreateIkedaCarpenterParameters.html">Create Ikeda Carpenter Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CreateIkedaCarpenterParametersFullprof.html">Create Ikeda Carpenter Parameters Fullprof</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CreateIkedaCarpenterParametersGSAS.html">Create Ikeda Carpenter Parameters GSAS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CrystalField.html">Crystal Field Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DirectILL.html">Data reduction for ILL’s direct geometry instruments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DirecttoolsPythonModule.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">directtools</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="ISISPowder-GEM-v1.html">ISIS Powder Diffraction Scripts - GEM Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ISISPowder-HRPD-v1.html">ISIS Powder Diffraction Scripts - HRPD Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ISISPowder-Index-v1.html">ISIS Powder Diffraction Scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ISISPowder-OSIRIS-v1.html">ISIS Powder Diffraction Scripts - OSIRIS Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ISISPowder-Pearl-v1.html">ISIS Powder Diffraction Scripts - PEARL Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ISISPowder-Polaris-v1.html">ISIS Powder Diffraction Scripts - POLARIS Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ISISPowder-SampleDetails-v1.html">ISIS Powder Diffraction Scripts - SampleDetails Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ISISPowder-Tutorials.html">ISIS Powder - Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ISISPowder-Workflows-v1.html">ISIS Powder Diffraction Scripts Workflow Diagrams</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">ISIS Reflectometry</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ISIS_SingleCrystalDiffraction_Workflow.html">ISIS Single Crystal Diffraction Reduction Scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PolarisedDiffractionILL.html">Data reduction for D7 instrument at the ILL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ReflectometryILL.html">Data reduction for reflectometry instruments at the ILL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SANS-Toml-v1.html">SANS TOML Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ScriptingSANSReductions.html">Scripting SANS Reductions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="TextureReduction.html">Texture Reduction</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Techniques</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">ISIS Reflectometry</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="isis-reflectometry">
+<span id="id1"></span><h1>ISIS Reflectometry<a class="headerlink" href="#isis-reflectometry" title="Link to this heading">#</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>This document explains set up of reflectometry instruments at ISIS and how Mantid is used to perform reduction of ISIS reflectometry data.</p>
+<section id="introduction">
+<h3>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h3>
+<p>Reflectometry is a non-invasive technique that allows us to analyse the properties of planar media and surfaces such as biological and metallic thin films.</p>
+<p>Interfaces and surfaces are scientifically crucial as they allow symmetry breaking, leading too many novel and interesting phenomena, such as ferroelectricity, wetting, adhesion and superconductivity. Interfaces are also critical in governing many important chemical and biological processes such as corrosion, catalysis and how cell membranes and antimicrobials work. Reflectivity is unique in its ability to probe buried interfaces while still providing the ensemble average of the properties of these buried interfaces. Most other probes are surface limited and local in nature.</p>
+<p>Reflectivity occurs whenever there is an equivalent refractive index change across a material boundary/interface; this is analogous to how light (travelling through air) reflects off the surface of water (our interface of interest). As a result it is very sensitive to the structural/magnetic profile of interfaces. Reflectivity allows the structural, sometimes called “nuclear”, scattering length density (SLD) depth profile to be obtained via a modelling and iterative fitting process. The SLD profile is the important piece of information that the reflectivity technique provides.</p>
+<p>To obtain the SLD profile, a model of the sample is used to create an initial SLD profile that via a fast Fourier transform is turned into a reflectivity curve. This curve is then compared to the actual reflectivity data curve. The iterative fitting procedure is used to modify the initial model and SLD profile until the generated reflectivity matches, to some goodness of fit metric, the actual data. Then end result being the final SLD profile.</p>
+<p>Assuming the most common model and parametrisation type, based on layers, then the SLD can then be deconvolved into a series of layers each with three fundamental properties: (1) The structural layer thicknesses, (2) interface roughness/grading (3) density/composition. These three properties can be linked back to a wealth of technological and scientifically relevant phenomena. Further to this, by polarising the incident neutron beam the magnetic equivalents of the above can also be obtained. It is also important to note that there are other models and parameterisation schemes that can be used, to generate SLD profiles.</p>
+<p>A reflectivity measurement is made by shining a collimated beam (low angular divergence) of neutrons onto a flat surface and the reflected intensity is measured as a function of angle and neutron wavelength. Reflectivity has two fundamental modes of operation. (1) Monochromatic (angle dispersive, fixed incident wavelength) and chromatic (wavelength dispersive, fixed angle). (2) Chromatic is usually referred to as Time of Flight (<span class="math notranslate nohighlight">\(TOF\)</span>) and <span class="math notranslate nohighlight">\(TOF\)</span> is the primary mode of operation on all the ISIS reflectometers and what is referred to throughout this document.</p>
+<p>Further to this, there are two geometric modes of operation. By far the most common is specular reflectivity. In this case the angle of incidence is equal to the angle of reflection or <span class="math notranslate nohighlight">\(\theta_i = \theta_f\)</span>. This is called the specular condition. It provides the SLD profile/information that is directly normal or perpendicular to the surface of the sample. Secondly there is off-specular reflectivity where the angle of incidence is not equal to the angle of reflection or <span class="math notranslate nohighlight">\(\theta_i \ne \theta_f\)</span> . This provides structural information in the plane of the sample.</p>
+<p>As a quick aside it is worth mentioning that there is an added complication in describing scattering geometries in that different techniques, sources and institutions use different notations for the same things. For instance the specular condition can also be referred to as the <span class="math notranslate nohighlight">\(\frac{\theta}{2\theta}\)</span> (where <span class="math notranslate nohighlight">\(2\theta\)</span> is the scattering/detector angle and <span class="math notranslate nohighlight">\(\theta\)</span> the sample angle) or <span class="math notranslate nohighlight">\(\frac{\omega}{\theta}\)</span> (where <span class="math notranslate nohighlight">\(\theta\)</span> is not the scattering/detector angle and <span class="math notranslate nohighlight">\(\omega\)</span> the sample angle) conditions. At ISIS reflectometers for historic reasons the detector angle is referred to as <span class="math notranslate nohighlight">\(\theta\)</span> and the sample angle as <span class="math notranslate nohighlight">\(\Phi\)</span>.</p>
+<p>For more information, see the <a class="reference external" href="https://www.isis.stfc.ac.uk/Pages/Reflectometry.aspx">ISIS website</a>.</p>
+</section>
+<section id="experimental-setup">
+<h3>Experimental Setup<a class="headerlink" href="#experimental-setup" title="Link to this heading">#</a></h3>
+<p>The main components in the instrument are shown below:</p>
+<figure class="align-center">
+<img alt="Diagram showing the basic setup of ISIS Reflectometry instruments" src="../_images/ISISReflectometry_setup_diagram.png" />
+</figure>
+<p>The basic reflectometry instrument setup as used on the Inter, Crisp and Surf beamlines. The black line is the incident beam and the red line the reflected beam. The dotted black line is the horizon of the sample which is at an angle <span class="math notranslate nohighlight">\(\theta_i\)</span> with respect to the incident beam. There are several caveats; the diagram depicts what happens with the 1D linear detectors’ on Inter, Crisp and Surf. In the case of the 0D point detectors on these beamlines the detector changes angle such that the beam is always perpendicular incident on the 0D detector surface. On Polref and Offspec, the detector plane rotates with the detector angle such that the beam is always perpendicular incident on the detector plane whether it is a 0D, 1D or 2D detector. This needs to be taken account of in the IDF depending on the beamline and detector in use.</p>
+<ul class="simple">
+<li><p><em>Source</em>: The source of neutrons</p></li>
+<li><p><em>Sample</em>: The planar material under analysis</p></li>
+<li><p><em>Slits</em>: These are used to collimate the beam. These have two primary effects:</p>
+<ul>
+<li><p>They set the angular divergence/resolution <span class="math notranslate nohighlight">\(\alpha\)</span> of the beamline via the collimation equation <span class="math notranslate nohighlight">\(\alpha = \frac{S_1+S_2}{L}\)</span>, where <span class="math notranslate nohighlight">\(S_1,S_2\)</span> are the widths of the slit gaps and <span class="math notranslate nohighlight">\(L\)</span> is the distance between Slit 1 and Slit 2. The resolution is often defined as <span class="math notranslate nohighlight">\(\frac{\delta Q}{Q}\)</span>, where <span class="math notranslate nohighlight">\(Q\)</span> is the momentum transfer. Please see the <a class="reference internal" href="../algorithms/NRCalculateSlitResolution-v1.html#algm-nrcalculateslitresolution"><span class="std std-ref">NRCalculateSlitResolution v1</span></a> algorithm for more details.</p></li>
+<li><p>They set the illuminated area on the sample. There are two regimes, under and over illumination and ideally you want to be under illuminating but that is not always possible as in the case of small samples.</p></li>
+</ul>
+</li>
+<li><p><em>Monitors</em>: These are low efficiency detectors used to normalize the detector signal and mainly provide scaling.</p></li>
+<li><p><em>Detectors</em>: These are high efficiency detectors. Scattered neutrons are recorded by a detector or banks of detectors located at different <em>scattering angles</em>, <span class="math notranslate nohighlight">\(2\theta_{det}\)</span>. Note that the terminology here differs from that in neutron diffraction, where <span class="math notranslate nohighlight">\(\theta\)</span> is referred to as the scattering angle rather than <span class="math notranslate nohighlight">\(2\theta\)</span>. We define three types of general geometry of detector:</p>
+<ul>
+<li><p><em>0D</em> or <em>point detectors</em>, where a simple tube is used to integrate intensity, the detector itself has no position sensitivity, just the angle it is positioned at.</p></li>
+<li><p><em>1D</em> also referred to as <em>linear</em>, <em>area</em> or <em>multidetector</em>’s, where a stack of tubes/pixels is used to integrate intensity with either vertical or horizontal position sensitivity equal to the pixel size.</p></li>
+<li><p><em>2D</em>, which can also be referred to as an <em>area</em> detector. Similar to the 1D but with both vertical and horizontal position sensitivity. Note pixels may not be uniform in horizontal/vertical size.</p></li>
+</ul>
+</li>
+<li><p><span class="math notranslate nohighlight">\(\theta_i\)</span>: the <em>incident angle</em>, that is, the angle between the incident beam and the sample, commonly called the sample angle or at ISIS reflectometers the <span class="math notranslate nohighlight">\(\Phi\)</span> axis.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\theta_f\)</span>: the <em>final angle</em>, that is, the angle between the reflected beam and the sample. At ISIS reflectometers this is referred to as <span class="math notranslate nohighlight">\(\theta\)</span>. In specular reflection, <span class="math notranslate nohighlight">\(\theta_i = \theta_f\)</span> and in off-specular analysis <span class="math notranslate nohighlight">\(\theta_i \neq \theta_f\)</span>.</p></li>
+</ul>
+<p>In addition, some instruments also use:</p>
+<ul class="simple">
+<li><p><em>Supermirrors</em>: Some samples, such as liquids, cannot be angled. Therefore non-polarising “supermirrors” can be used to change the incident angle of the beam to enable multiple angles to be measured from the surface.</p></li>
+<li><p><em>Polarizers</em>: Magnetic sensitivity is acquired by polarizing the neutron beam, via polarizing supermirrors.  Neutrons are in essence like little bar magnets; however the north/south alignment (referred to as the spin direction) is initially completely random. A polarizer is a magnetic supermirror where the magnetization direction of the mirror can be set by an applied magnetic field. When neutrons bounce off the polarizer, the neutrons align either parallel (spin “up”) or anti-parallel (spin “down”) to the magnetization direction of the mirror. The handy trick is that the refractive index of the magnetic mirror has a magnetic component, such that spin up neutrons have a different angle of reflection to spin down neutrons. Hence it is possible to reflect just one spin state down the beamline, while the other is rejected. It should be noted at this point that 50% of the incident flux is lost during this process.</p></li>
+</ul>
+</section>
+</section>
+<section id="reduction">
+<h2>Reduction<a class="headerlink" href="#reduction" title="Link to this heading">#</a></h2>
+<p>The main reduction algorithm is <a class="reference internal" href="../algorithms/ReflectometryReductionOneAuto-v3.html#algm-reflectometryreductiononeauto"><span class="std std-ref">ReflectometryReductionOneAuto v3</span></a>, which can be used from a python script or via the <a class="reference internal" href="../interfaces/reflectometry/ISIS%20Reflectometry.html#interface-isis-refl"><span class="std std-ref">ISIS Reflectometry Interface</span></a>. It currently only deals with specular reflection, but off-specular analysis is planned. It supports point detectors, linear detectors and 2D detectors.</p>
+<section id="specular-reflection">
+<h3>Specular Reflection<a class="headerlink" href="#specular-reflection" title="Link to this heading">#</a></h3>
+<p>In an experiment, the reflected intensity, <span class="math notranslate nohighlight">\(I\)</span> (i.e. the number of neutrons received at the detector) is measured as a function of time-of-flight, <span class="math notranslate nohighlight">\(TOF\)</span>. The desired outcome of the reduction is a one-dimensional plot (summed over the detectors) of reflectivity normalised by an un-reflected beam, <span class="math notranslate nohighlight">\(\frac{I}{I_0}\)</span> against momentum transfer, <span class="math notranslate nohighlight">\(Q\)</span>. <span class="math notranslate nohighlight">\(\frac{I}{I_0}\)</span> is referred to as reflectivity and is dimensionless and by definition. Total reflection, below the critical edge is then by definition <span class="math notranslate nohighlight">\(\frac{I}{I_0} = 1\)</span></p>
+<p>To achieve this, the input workspace in <span class="math notranslate nohighlight">\(TOF\)</span> is first converted to wavelength, <span class="math notranslate nohighlight">\(\lambda\)</span>, and normalised by some combination of monitors and direct beam transmission runs, that have all also been converted to <span class="math notranslate nohighlight">\(\lambda\)</span>. It is critical that the detector and monitor workspaces all have the same binning regarding number of bins and bin size in <span class="math notranslate nohighlight">\(\lambda\)</span>.</p>
+<p>The workspace is summed over all detectors in the region of interest, using either constant-<span class="math notranslate nohighlight">\(\lambda\)</span> or constant-<span class="math notranslate nohighlight">\(Q\)</span> binning. The result is a one-dimensional array of <span class="math notranslate nohighlight">\(I\)</span> against <span class="math notranslate nohighlight">\(\lambda\)</span>. The summed workspace is converted to <span class="math notranslate nohighlight">\(Q\)</span> and rebinned to the required resolution, as determined either by the slits or the user. The <a class="reference internal" href="../algorithms/NRCalculateSlitResolution-v1.html#algm-nrcalculateslitresolution"><span class="std std-ref">NRCalculateSlitResolution v1</span></a> algorithm is used to calculate the slit resolution.</p>
+<p>The resulting one-dimensional plot of <span class="math notranslate nohighlight">\(I\)</span> against <span class="math notranslate nohighlight">\(Q\)</span> is typically referred to as <code class="docutils literal notranslate"><span class="pre">IvsQ</span></code>. <a class="reference internal" href="../algorithms/ReflectometryReductionOneAuto-v3.html#algm-reflectometryreductiononeauto"><span class="std std-ref">ReflectometryReductionOneAuto v3</span></a> also outputs the unbinned workspace in <span class="math notranslate nohighlight">\(Q\)</span>, as well as the summed workspace in <span class="math notranslate nohighlight">\(\lambda\)</span>, and these are typically referred to as <code class="docutils literal notranslate"><span class="pre">IvsQ_unbinned</span></code> and <code class="docutils literal notranslate"><span class="pre">IvsLam</span></code> respectively.</p>
+<p>A standard measurement will involve sample under certain conditions (temperature, magnetic field, etc) being measured at two or three different incident angles, <span class="math notranslate nohighlight">\(\theta_i\)</span>. This means that we typically end up with two or three <span class="math notranslate nohighlight">\(TOF\)</span> workspaces that are combined (stitched) and processed to give a single plot covering a larger range of <span class="math notranslate nohighlight">\(Q\)</span>. The stitching is achieved using the <a class="reference internal" href="../algorithms/Stitch1D-v3.html#algm-stitch1d"><span class="std std-ref">Stitch1D v3</span></a> and <a class="reference internal" href="../algorithms/Stitch1DMany-v1.html#algm-stitch1dmany"><span class="std std-ref">Stitch1DMany v1</span></a> algorithms.</p>
+<p>The actual reduction is relatively simple and produces a simple one dimensional plot which can be saved as either an ORSO or an ASCII file. However, there can be many files to deal with and we need to make sure that we process the correct runs together and with the correct parameters, transmission runs etc.</p>
+<section id="divergent-beam">
+<h4>Divergent Beam<a class="headerlink" href="#divergent-beam" title="Link to this heading">#</a></h4>
+<p>If the divergence of the input beam is significant, we need to take the variability in <span class="math notranslate nohighlight">\(\theta_i\)</span> and <span class="math notranslate nohighlight">\(\theta_f\)</span> into account. Consider a range of incident angles on a sample of fixed orientation:</p>
+<figure class="align-center" id="id2">
+<img alt="Diagram showing the divergent beam case" src="../_images/ISISReflectometry_divergent_beam_diagram.png" />
+<figcaption>
+<p><span class="caption-text">A range of incident angles from a divergent beam on a sample of fixed orientation <span class="math notranslate nohighlight">\(\theta_i\)</span>. The black lines show the expected beam and reflection directions, and the red lines show a divergent beam path and reflection.</span><a class="headerlink" href="#id2" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The difference between the actual and expected beam directions is the same as that between the actual and expected reflection directions:</p>
+<p><span class="math notranslate nohighlight">\(\phi = 2\theta_{det} - 2\theta_i\)</span></p>
+<p>Therefore, <span class="math notranslate nohighlight">\(\theta_f\)</span> can be calculated as:</p>
+<p><span class="math notranslate nohighlight">\(\theta_f = \theta_i + \phi = 2\theta_{det} - \theta_i\)</span></p>
+<p>The effect of the divergence is that the data follow lines of constant-<span class="math notranslate nohighlight">\(Q\)</span>. Therefore we need to sum along lines of constant-<span class="math notranslate nohighlight">\(Q\)</span> rather than constant-<span class="math notranslate nohighlight">\(\lambda\)</span>. <a class="reference internal" href="../algorithms/ReflectometryReductionOneAuto-v3.html#algm-reflectometryreductiononeauto"><span class="std std-ref">ReflectometryReductionOneAuto v3</span></a> has an option to do this.</p>
+<figure class="align-center" id="id3">
+<img alt="Plot showing the measured intensity" src="../_images/ISISReflectometry_divergent_beam_measured.png" />
+<figcaption>
+<p><span class="caption-text">Measured intensity for each detector vs <span class="math notranslate nohighlight">\(TOF\)</span>. The data follow lines of constant <span class="math notranslate nohighlight">\(Q\)</span>.</span><a class="headerlink" href="#id3" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id4">
+<img alt="Plot showing the reduced data" src="../_images/ISISReflectometry_divergent_beam_result.png" />
+<figcaption>
+<p><span class="caption-text">The reduced data as a plot of <span class="math notranslate nohighlight">\(I\)</span> vs <span class="math notranslate nohighlight">\(Q\)</span>, showing the improved resolution when summing in <span class="math notranslate nohighlight">\(Q\)</span> rather than <span class="math notranslate nohighlight">\(\lambda\)</span></span><a class="headerlink" href="#id4" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="non-flat-sample">
+<h4>Non-Flat Sample<a class="headerlink" href="#non-flat-sample" title="Link to this heading">#</a></h4>
+<p>A bent sample causes variability in the reflected angle, <span class="math notranslate nohighlight">\(\theta_f\)</span>. It can be considered as a flat sample of variable orientation:</p>
+<figure class="align-center" id="id5">
+<img alt="Diagram showing the non-flat sample case" src="../_images/ISISReflectometry_non_flat_sample_diagram.png" />
+<figcaption>
+<p><span class="caption-text">Divergence in the reflected angle from a non-flat sample is considered as a flat sample of variable orientation. The black lines show the incident beam and the expected reflection direction with the sample horizon at <span class="math notranslate nohighlight">\(\theta_i\)</span>. The red line shows a divergent reflected beam, and the dotted blue line shows the related sample horizon.</span><a class="headerlink" href="#id5" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>The difference between the actual and expected reflection directions is:</p>
+<p><span class="math notranslate nohighlight">\(\phi = 2\theta_{det} - 2\theta_i\)</span></p>
+<p>Therefore, <span class="math notranslate nohighlight">\(\theta_f\)</span> can be calculated as:</p>
+<p><span class="math notranslate nohighlight">\(\theta_f = \theta_i + \frac{\phi}{2} = \frac{2\theta_{det}}{2}\)</span></p>
+<p>Similarly to the divergent beam case, the data should be summed along lines of constant-<span class="math notranslate nohighlight">\(Q\)</span> using the relevant options in <a class="reference internal" href="../algorithms/ReflectometryReductionOneAuto-v3.html#algm-reflectometryreductiononeauto"><span class="std std-ref">ReflectometryReductionOneAuto v3</span></a>.</p>
+</section>
+</section>
+</section>
+<section id="instruments">
+<h2>Instruments<a class="headerlink" href="#instruments" title="Link to this heading">#</a></h2>
+<section id="isis-instruments">
+<h3>ISIS Instruments<a class="headerlink" href="#isis-instruments" title="Link to this heading">#</a></h3>
+<p>There are five reflectometry instruments at ISIS:</p>
+<ul class="simple">
+<li><p><em>Inter</em>: High-intensity reflectometer. Specialised for free liquid surfaces.</p></li>
+<li><p><em>Offspec</em>: Polarised neutron reflectometer with optional polarisation analysis, using a high resolution position sensitive detector. Used to study magnetic ordering in and between the layers and surfaces of thin film materials.</p></li>
+<li><p><em>Polref</em>: Polarised neutron reflectometer. Used to study magnetic ordering in and between the layers and surfaces of thin film materials.</p></li>
+<li><p><em>Crisp</em>: Designed for studies of a wide range of interfacial phenomena.</p></li>
+<li><p><em>Surf</em>: Optimised for higher flux and short wavelengths. Designed for liquid interface research.</p></li>
+</ul>
+</section>
+<section id="detectors">
+<h3>Detectors<a class="headerlink" href="#detectors" title="Link to this heading">#</a></h3>
+<p>Currently at ISIS we deal with two types of detector: point-detectors (e.g. Inter) or multi-/linear-detectors (e.g. Polref and Offspec). Note that most instruments have both point and linear detectors. We are expecting to add 2D detectors in the near future.</p>
+<p>Because runs are performed at different incident angles, the <strong>detectors are moved</strong> between different runs. Some instruments (e.g. Inter) move detectors vertically, whereas others (Polref, Offspec) rotate them around the sample.</p>
+<p>Historically, detector positions needed to be adjusted within the reflectometry reduction algorithms. The <a class="reference internal" href="../algorithms/SpecularReflectionPositionCorrect-v2.html#algm-specularreflectionpositioncorrect"><span class="std std-ref">SpecularReflectionPositionCorrect v2</span></a> algorithm deals with this. However, some instruments (e.g. Inter) now move detectors to the correct position on load, so correcting positions within the reflectometry algorithms is not required. This is the preferred approach going forward.</p>
+</section>
+<section id="instrument-definition-files">
+<h3>Instrument Definition Files<a class="headerlink" href="#instrument-definition-files" title="Link to this heading">#</a></h3>
+<p>Mantid can handle instruments with different <strong>reference frames</strong> because it uses the beam direction, sample position, detector positions, etc. The reference frames currently used by ISIS reflectometry instruments are:</p>
+<ul class="simple">
+<li><p>Inter, Offspec, Crisp and Surf define the beam direction along the <span class="math notranslate nohighlight">\(z\)</span> axis and <em>Up</em> (perpendicular to the beam) along the <span class="math notranslate nohighlight">\(y\)</span> axis.</p></li>
+<li><p>Polref defines the beam direction along the <span class="math notranslate nohighlight">\(x\)</span> axis and <em>Up</em> along the <span class="math notranslate nohighlight">\(z\)</span> axis.</p></li>
+</ul>
+<p>The way in which <strong>components are arranged</strong> in the IDF is different. Some instruments, such as Offspec, have a component “DetectorBench” that is the parent component of all the detectors. Others don’t have this component. This has to be taken into account when moving detectors.</p>
+<p>Some of the instrument IDFs are set up such that detectors are at the correct <strong>position on loading</strong> a run. Some instruments are not be set up to do this yet, so <a class="reference internal" href="../algorithms/ReflectometryReductionOneAuto-v3.html#algm-reflectometryreductiononeauto"><span class="std std-ref">ReflectometryReductionOneAuto v3</span></a> has an option to correct detector positions using another algorithm, <a class="reference internal" href="../algorithms/SpecularReflectionPositionCorrect-v2.html#algm-specularreflectionpositioncorrect"><span class="std std-ref">SpecularReflectionPositionCorrect v2</span></a>. It is important that the detectors are in the correct position in order for Mantid algorithms to produce the correct results, otherwise some calculations (e.g. the conversion from <span class="math notranslate nohighlight">\(\lambda\)</span> to <span class="math notranslate nohighlight">\(Q\)</span>) will be wrong. There are plans to try and harmonise the IDF’s as much as possible.</p>
+</section>
+</section>
+<section id="mantid">
+<h2>Mantid<a class="headerlink" href="#mantid" title="Link to this heading">#</a></h2>
+<section id="algorithms">
+<h3>Algorithms<a class="headerlink" href="#algorithms" title="Link to this heading">#</a></h3>
+<p>The main reduction algorithm is <a class="reference internal" href="../algorithms/ReflectometryReductionOneAuto-v3.html#algm-reflectometryreductiononeauto"><span class="std std-ref">ReflectometryReductionOneAuto v3</span></a>. This sets a lot of the input properties from defaults in the instrument parameter file. It must also populate some input properties so that they can be updated in the GUI (this has to work both for single period datasets and multi period datasets). This algorithm is a wrapper around <a class="reference internal" href="../algorithms/ReflectometryReductionOne-v3.html#algm-reflectometryreductionone"><span class="std std-ref">ReflectometryReductionOne v3</span></a>, which actually does the work. This arrangement seems to be unusual in Mantid.</p>
+<p><a class="reference internal" href="../algorithms/SpecularReflectionPositionCorrect-v2.html#algm-specularreflectionpositioncorrect"><span class="std std-ref">SpecularReflectionPositionCorrect v2</span></a> can be used to correct detector positions if they are not at the correct position when loaded. It can shift them vertically or rotate them around the sample position. This algorithm is called as a child by <a class="reference internal" href="../algorithms/ReflectometryReductionOneAuto-v3.html#algm-reflectometryreductiononeauto"><span class="std std-ref">ReflectometryReductionOneAuto v3</span></a>.</p>
+<p>Related to <a class="reference internal" href="../algorithms/ReflectometryReductionOne-v3.html#algm-reflectometryreductionone"><span class="std std-ref">ReflectometryReductionOne v3</span></a> and <a class="reference internal" href="../algorithms/ReflectometryReductionOneAuto-v3.html#algm-reflectometryreductiononeauto"><span class="std std-ref">ReflectometryReductionOneAuto v3</span></a> we also have <a class="reference internal" href="../algorithms/CreateTransmissionWorkspace-v2.html#algm-createtransmissionworkspace"><span class="std std-ref">CreateTransmissionWorkspace v2</span></a> and <a class="reference internal" href="../algorithms/CreateTransmissionWorkspaceAuto-v2.html#algm-createtransmissionworkspaceauto"><span class="std std-ref">CreateTransmissionWorkspaceAuto v2</span></a>, which converts transmission run(s) to wavelength and stitches transmission runs together when two are provided.</p>
+<p><a class="reference internal" href="../algorithms/Stitch1DMany-v1.html#algm-stitch1dmany"><span class="std std-ref">Stitch1DMany v1</span></a> does the work to stitch multiple runs together, which is quite a complicated operation.</p>
+<p><a class="reference internal" href="../algorithms/ConvertToReflectometryQ-v2.html#algm-converttoreflectometryq"><span class="std std-ref">ConvertToReflectometryQ v2</span></a>: This algorithm is generally used to examine off-specular scattering. The input is a workspace in wavelength, and the output is a <span class="math notranslate nohighlight">\(QxQz\)</span> map (or <span class="math notranslate nohighlight">\(KiKf\)</span> or <span class="math notranslate nohighlight">\(PiPf\)</span>). It doesn’t normalize by monitors, transmission run, etc (in fact, scientists typically run <a class="reference internal" href="../algorithms/ReflectometryReductionOneAuto-v3.html#algm-reflectometryreductiononeauto"><span class="std std-ref">ReflectometryReductionOneAuto v3</span></a> prior to running this algorithm, so that they obtain the normalized intensity). This algorithm is generally used to examine off-specular scattering.</p>
+</section>
+<section id="interface">
+<h3>Interface<a class="headerlink" href="#interface" title="Link to this heading">#</a></h3>
+<p>The <a class="reference internal" href="../interfaces/reflectometry/ISIS%20Reflectometry.html#interface-isis-refl"><span class="std std-ref">ISIS Reflectometry Interface</span></a> provides a graphical front-end for the <a class="reference internal" href="../algorithms/ReflectometryReductionOneAuto-v3.html#algm-reflectometryreductiononeauto"><span class="std std-ref">ReflectometryReductionOneAuto v3</span></a> algorithm. It includes the facility to:</p>
+<ul class="simple">
+<li><p>batch process all runs from an experiment (or a selected subset);</p></li>
+<li><p>apply default settings, which can be overridden on a per-run basis;</p></li>
+<li><p>process data in histogram or event modes;</p></li>
+<li><p>output processing steps to an IPython notebook; and</p></li>
+<li><p>output reduced data to ORSO or ASCII files.</p></li>
+</ul>
+<p>See the <a class="reference internal" href="../interfaces/reflectometry/ISIS%20Reflectometry.html#interface-isis-refl"><span class="std std-ref">full documentation</span></a> for more information.</p>
+<p><strong>Category</strong>: <a class="reference external" href="categories/Techniques.html">Techniques</a></p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ISISPowder-Workflows-v1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">ISIS Powder Diffraction Scripts Workflow Diagrams</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="ISIS_SingleCrystalDiffraction_Workflow.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">ISIS Single Crystal Diffraction Reduction Scripts</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#experimental-setup">Experimental Setup</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reduction">Reduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#specular-reflection">Specular Reflection</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#divergent-beam">Divergent Beam</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#non-flat-sample">Non-Flat Sample</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instruments">Instruments</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isis-instruments">ISIS Instruments</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#detectors">Detectors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#instrument-definition-files">Instrument Definition Files</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mantid">Mantid</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#algorithms">Algorithms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interface">Interface</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/techniques/ISIS_Reflectometry.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Mantid.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

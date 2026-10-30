@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Matplotlib in Mantid &#8212; MantidProject 7.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/style.css?v=562d7d41" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../_static/documentation_options.js?v=efe5be6f"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'plotting/index';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Basic 1D and Tiled Plots" href="1DPlotsHelp.html" />
+    <link rel="prev" title="Python API Changes" href="../api/python/changes.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en">
+    <link rel="icon" sizes="32x32" href="../_static/images/favicon.ico">
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  <img src="../_static/images/mantid_logo_light.png" class="logo__image only-light" alt="Logo image">
+  <img src="../_static/images/mantid_logo_dark.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><ul id="navbar-main-elements" class="navbar-nav">
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://download.mantidproject.org">Downloads</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/nightly/tutorials/">Tutorials</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org">User Docs</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://developer.mantidproject.org">Develop</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/release/">Release notes</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://www.mantidproject.org/contact">Contact Us</a>
+  </li>
+</ul></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+    <li class="nav-item">
+      <a class="nav-link" href="https://github.com/mantidproject/mantid" rel="noopener" target="_blank" title="GitHub">
+        <span><i class="fab fa-github-square"></i></span>
+        <label class="sr-only">GitHub</label>
+      </a>
+    </li>
+  </ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><ul id="navbar-main-elements" class="navbar-nav">
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://download.mantidproject.org">Downloads</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/nightly/tutorials/">Tutorials</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org">User Docs</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://developer.mantidproject.org">Develop</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://docs.mantidproject.org/release/">Release notes</a>
+  </li>
+  <li class="nav-item">
+    <a class="reference internal nav-link" href="https://www.mantidproject.org/contact">Contact Us</a>
+  </li>
+</ul></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+    <li class="nav-item">
+      <a class="nav-link" href="https://github.com/mantidproject/mantid" rel="noopener" target="_blank" title="GitHub">
+        <span><i class="fab fa-github-square"></i></span>
+        <label class="sr-only">GitHub</label>
+      </a>
+    </li>
+  </ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="1DPlotsHelp.html">Basic 1D and Tiled Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="WaterfallPlotsHelp.html">Waterfall Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ColorfillPlotsHelp.html">Colorfill and Contour Plots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3DPlotsHelp.html">3D Plots: Surface and Wireframe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MeshPlotHelp.html">3D Mesh Plots for Sample Shapes</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Matplotlib in Mantid</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="matplotlib-in-mantid">
+<span id="plotting"></span><h1>Matplotlib in Mantid<a class="headerlink" href="#matplotlib-in-mantid" title="Link to this heading">#</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p><strong>Other Plotting Documentation</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../tutorials/python_in_mantid/plotting/02_scripting_plots.html#scripting-plots"><span class="std std-ref">Formatting Plots with a script</span></a></p></li>
+<li><p><a class="reference internal" href="../tutorials/mantid_basic_course/loading_and_displaying_data/06_formatting_plots.html#formatting-plots"><span class="std std-ref">Formatting Plots with the User Interface</span></a></p></li>
+<li><p><a class="reference external" href="https://matplotlib.org/stable/users/explain/figure/interactive.html#navigation-keyboard-shortcuts">Matplotlib Keyboard Shortcuts</a></p></li>
+</ul>
+<p><strong>Help Documentation</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="1DPlotsHelp.html#basic-1d-plots"><span class="std std-ref">Basic 1D and Tiled Plots</span></a></p></li>
+<li><p><a class="reference internal" href="WaterfallPlotsHelp.html#waterfall-plots"><span class="std std-ref">Waterfall Plots</span></a></p></li>
+<li><p><a class="reference internal" href="ColorfillPlotsHelp.html#colorfill-plots"><span class="std std-ref">Colorfill and Contour Plots</span></a></p></li>
+<li><p><a class="reference internal" href="3DPlotsHelp.html#d-plots"><span class="std std-ref">3D Plots: Surface and Wireframe</span></a></p></li>
+<li><p><a class="reference internal" href="MeshPlotHelp.html#mesh-plots"><span class="std std-ref">3D Mesh Plots for Sample Shapes</span></a></p></li>
+</ul>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>Mantid can now use <a class="reference external" href="https://matplotlib.org/">Matplotlib</a> to produce figures.
+There are several advantages of using this software package:</p>
+<ul class="simple">
+<li><p>it is python based, so it can easily be incorporated into Mantid scripts</p></li>
+<li><p>there is a large user community, and therefore excellent documentation and examples are available</p></li>
+<li><p>it is easy to change from plotting on the screen to produce publication quality plots in various image formats</p></li>
+</ul>
+<p>While Matplotlib is using data arrays for inputs in the plotting routines,
+it is now possible to also use several types on Mantid workspaces instead.
+For a detailed list of functions that use workspaces, see the documentation
+of the <a class="reference internal" href="../api/python/mantid/plots/index.html#mantid-plots"><span class="std std-ref">mantid.plots</span></a> module.</p>
+<p>This page is intended to provide examples about how to use different
+Matplotlib commands for several types of common task that Mantid users are interested in.</p>
+<p>To understand the matplotlib vocabulary, a useful tool is the <a class="reference external" href="https://matplotlib.org/stable/gallery/showcase/anatomy.html#sphx-glr-gallery-showcase-anatomy-py">“anatomy of a figure”</a>, also shown below.</p>
+<p>(<a class="reference download internal" download="" href="../_downloads/93f8b6b08a1a4278637a60b2f2942db0/index-1.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/fbefcffaac5e8e660296c6b4d3d1d6f9/index-1.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/f94f2f77bab522ade33ee87942340f54/index-1.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/5e1fea10b15d5e74a5b3a65db5f72424/index-1.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/index-1.png" class="plot-directive" src="../_images/index-1.png" />
+</figure>
+<p>Here are some of the highlights:</p>
+<ul class="simple">
+<li><p><strong>Figure</strong> is the main container in matplotlib. You can think of it as the page</p></li>
+<li><p><strong>Axes</strong> is the coordinate system. It contains most of the figure elements, such as Axis, Line2D, Text.
+One can have multiple Axes objects in one Figure</p></li>
+<li><p><strong>Axis</strong> is the container for the ticks and labels for the x and y axis of the plot</p></li>
+</ul>
+</section>
+<section id="showing-saving-figures">
+<h2>Showing/saving figures<a class="headerlink" href="#showing-saving-figures" title="Link to this heading">#</a></h2>
+<p>There are two main ways that one can visualize images produced by matplotlib. The first one
+is to pop up a window with the required graph. For that, we use the <cite>show()</cite> function of the figure.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="c1">#some code to generate figure</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If one wants to save the output, the figure object has a function called <cite>savefig</cite>.
+The main argument of savefig is the filename. Matplotlib will figure out the format of the figure
+from the file extension. The ‘png’, ‘ps’, ‘eps’, and ‘pdf’ extensions will work with
+almost any backend. For more information, see the documentation of
+<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html">Figure.savefig</a>
+Just replace the code above with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="c1">#some code to generate figure</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">'plot1.png'</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">'plot1.eps'</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Sometimes one wants to save a multi-page pdf document. Here is how to do this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.backends.backend_pdf</span><span class="w"> </span><span class="kn">import</span> <span class="n">PdfPages</span>
+
+<span class="k">with</span> <span class="n">PdfPages</span><span class="p">(</span><span class="s1">'/home/andrei/Desktop/multipage_pdf.pdf'</span><span class="p">)</span> <span class="k">as</span> <span class="n">pdf</span><span class="p">:</span>
+    <span class="c1">#page1</span>
+    <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Page1'</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+    <span class="c1">#page2</span>
+    <span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Page2'</span><span class="p">)</span>
+    <span class="n">pdf</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="simple-plots">
+<h2>Simple plots<a class="headerlink" href="#simple-plots" title="Link to this heading">#</a></h2>
+<p>For matrix workspaces, if we use the <cite>mantid</cite> projection, one can plot the data in a similar
+fashion as the plotting of arrays in matplotlib. Moreover, one can combine the two in the same figure</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreateWorkspace</span>
+
+<span class="c1"># Create a workspace that has a Gaussian peak</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">y0</span> <span class="o">=</span> <span class="mf">10.</span><span class="o">+</span><span class="mi">50</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">err</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">y0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">10.</span><span class="o">+</span><span class="mi">50</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">+=</span> <span class="n">err</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+<span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">DataE</span><span class="o">=</span><span class="n">err</span><span class="p">,</span> <span class="n">NSpec</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">UnitX</span><span class="o">=</span><span class="s1">'DeltaE'</span><span class="p">)</span>
+
+<span class="c1"># Plot - note that the projection='mantid' keyword is passed to all axes</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">'projection'</span><span class="p">:</span><span class="s1">'mantid'</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="s1">'rs'</span><span class="p">)</span> <span class="c1"># plot the workspace with errorbars, using red squares</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="s1">'k-'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Initial guess'</span><span class="p">)</span> <span class="c1"># plot the initial guess with black line</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span> <span class="c1"># show the legend</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/d497f1c6893c8d66e0b622d5df49885d/index-2.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/b986d767a3eb82fc673e2c7336125bdf/index-2.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/cc43bc049750f0afad3f54edfc9026d9/index-2.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/102edc90ac0c185c63ecc5390f93f850/index-2.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/index-2.png" class="plot-directive" src="../_images/index-2.png" />
+</figure>
+<p>Some data should be visualized as two dimensional colormaps</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Load</span><span class="p">,</span> <span class="n">ConvertToMD</span><span class="p">,</span> <span class="n">BinMD</span><span class="p">,</span> <span class="n">ConvertUnits</span><span class="p">,</span> <span class="n">Rebin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogNorm</span>
+
+<span class="c1"># generate a nice 2D multi-dimensional workspace</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">'CNCS_7860'</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">data</span><span class="p">,</span><span class="n">Target</span><span class="o">=</span><span class="s1">'DeltaE'</span><span class="p">,</span> <span class="n">EMode</span><span class="o">=</span><span class="s1">'Direct'</span><span class="p">,</span> <span class="n">EFixed</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">Params</span><span class="o">=</span><span class="s1">'-3,0.025,3'</span><span class="p">,</span> <span class="n">PreserveEvents</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">ConvertToMD</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+                 <span class="n">QDimensions</span><span class="o">=</span><span class="s1">'|Q|'</span><span class="p">,</span>
+                 <span class="n">dEAnalysisMode</span><span class="o">=</span><span class="s1">'Direct'</span><span class="p">)</span>
+<span class="n">sqw</span> <span class="o">=</span> <span class="n">BinMD</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">md</span><span class="p">,</span>
+            <span class="n">AlignedDim0</span><span class="o">=</span><span class="s1">'|Q|,0,3,100'</span><span class="p">,</span>
+            <span class="n">AlignedDim1</span><span class="o">=</span><span class="s1">'DeltaE,-3,3,100'</span><span class="p">)</span>
+
+<span class="c1">#2D plot</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">'projection'</span><span class="p">:</span><span class="s1">'mantid'</span><span class="p">})</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">sqw</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">LogNorm</span><span class="p">())</span>
+<span class="n">cbar</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">'Intensity (arb. units)'</span><span class="p">)</span> <span class="c1">#add text to colorbar</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/b1c667ea44daeb5afbaedf50fac8ec53/index-3.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/96603e9b7c28e132b412557d626cb8ff/index-3.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/fcf9c84a24d00b89c064fe77b1697cec/index-3.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/d985ebf5ffdbd64324774e95055951df/index-3.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/index-3.png" class="plot-directive" src="../_images/index-3.png" />
+</figure>
+<p id="markerws-example">Some data is best visualized as a Marker type workspace with no lines connecting the points.
+<a class="reference internal" href="../api/python/mantid/api/MatrixWorkspace.html#matrixworkspace-plotting"><span class="std std-ref">Matrix workspace</span></a> has some built-in functions to simplify plotting Marker type workspaces.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreateWorkspace</span>
+
+<span class="c1"># Generate random x and y values for two workspaces</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x1</span><span class="p">))</span>  <span class="c1"># Random values between 5 and 50</span>
+
+<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x2</span><span class="p">))</span>  <span class="c1"># Different random values</span>
+
+<span class="c1"># Create a marker workspace</span>
+<span class="n">w1</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span><span class="o">=</span><span class="n">x1</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">y1</span><span class="p">,</span> <span class="n">NSpec</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">w1</span><span class="o">.</span><span class="n">setPlotType</span><span class="p">(</span><span class="s1">'marker'</span><span class="p">)</span>
+
+<span class="c1"># Create a second marker workspace</span>
+<span class="n">w2</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span><span class="o">=</span><span class="n">x2</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">y2</span><span class="p">,</span> <span class="n">NSpec</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">w2</span><span class="o">.</span><span class="n">setPlotType</span><span class="p">(</span><span class="s1">'marker'</span><span class="p">)</span>
+<span class="n">w2</span><span class="o">.</span><span class="n">setMarkerStyle</span><span class="p">(</span><span class="s1">'circle'</span><span class="p">)</span>
+<span class="n">w2</span><span class="o">.</span><span class="n">setMarkerSize</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># Plot using the mantid projection</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">'projection'</span><span class="p">:</span> <span class="s1">'mantid'</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w1</span><span class="p">)</span>  <span class="c1"># First marker workspace</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w2</span><span class="p">)</span>  <span class="c1"># Second marker workspace with different style marker</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"Marker Workspace Example"</span><span class="p">)</span>  <span class="c1"># Set plot title</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>  <span class="c1"># Show the legend</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/a4cc7c93fcd540fe0cc0183f10a04e41/index-4.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/7fb1aeb682d649a7b578428877b583f8/index-4.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/45ee58a44fb4a1ac4bda802d9e3551c9/index-4.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/1c4cf3e8db1d154f4025b8cc88e409e3/index-4.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/index-4.png" class="plot-directive" src="../_images/index-4.png" />
+</figure>
+<p>One can then change properties of the plot. Here is an example that
+changes the label of the data, changes the label of the x and y axis,
+changes the limits for the y axis, adds a title, change tick orientations,
+and adds a grid</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreateWorkspace</span>
+
+<span class="c1"># Create a workspace that has a Gaussian peak</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">y0</span> <span class="o">=</span> <span class="mf">10.</span><span class="o">+</span><span class="mf">50.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">10.</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">20.</span><span class="p">)</span>
+<span class="n">err</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">y0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">10.</span><span class="o">+</span><span class="mi">50</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">20.</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">+=</span> <span class="n">err</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+<span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">DataE</span><span class="o">=</span><span class="n">err</span><span class="p">,</span> <span class="n">NSpec</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">UnitX</span><span class="o">=</span><span class="s1">'DeltaE'</span><span class="p">)</span>
+
+<span class="c1"># Plot - note that the projection='mantid' keyword is passed to all axes</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">'projection'</span><span class="p">:</span><span class="s1">'mantid'</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="s1">'rs'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Data'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="s1">'k-'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Initial guess'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'Better energy estimate ($10^3\mu eV$)'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'Neutron counts'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Gaussian example'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">'x'</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">'in'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">'y'</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">'out'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/944e3b25e7bc19f2edf35d009ea0ac3b/index-5.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/9c3a3aaccb99b93fcdf71fbdc795be6a/index-5.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/f8a9543d137f3417d216a89e35f10d68/index-5.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/eb2d734f6bc50fd307cf4679508b1bd6/index-5.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/index-5.png" class="plot-directive" src="../_images/index-5.png" />
+</figure>
+<p>Let’s create now a figure with two panels. In the upper part we show the workspace as
+above, but we add a fit, In the bottom part we add the difference.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreateWorkspace</span><span class="p">,</span> <span class="n">Fit</span>
+
+<span class="c1"># Create a workspace that has a Gaussian peak</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">y0</span> <span class="o">=</span> <span class="mf">10.</span><span class="o">+</span><span class="mi">50</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">err</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">y0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">10.</span><span class="o">+</span><span class="mi">50</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">10</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">+=</span> <span class="n">err</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+<span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">DataX</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">DataY</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">DataE</span><span class="o">=</span><span class="n">err</span><span class="p">,</span> <span class="n">NSpec</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">UnitX</span><span class="o">=</span><span class="s1">'DeltaE'</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">Fit</span><span class="p">(</span><span class="n">Function</span><span class="o">=</span><span class="s1">'name=LinearBackground,A0=10,A1=0.;name=Gaussian,Height=60.,PeakCentre=10.,Sigma=3.'</span><span class="p">,</span>
+             <span class="n">InputWorkspace</span><span class="o">=</span><span class="s1">'w'</span><span class="p">,</span>
+             <span class="n">Output</span><span class="o">=</span><span class="s1">'w'</span><span class="p">,</span>
+             <span class="n">OutputCompositeMembers</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># The handle to the output workspace is result.OutputWorkspace. The first spectrum is the data,</span>
+<span class="c1"># the second is the fit, the third is the difference. Subsequent spectra are the calculated</span>
+<span class="c1"># functions of each of the components of the fit (here LinearBackground and Gaussian)</span>
+<span class="c1"># Note that the difference spectrum has 0 errors. One can copy the errors from data</span>
+<span class="n">result</span><span class="o">.</span><span class="n">OutputWorkspace</span><span class="o">.</span><span class="n">setE</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">result</span><span class="o">.</span><span class="n">OutputWorkspace</span><span class="o">.</span><span class="n">e</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+<span class="c1">#do the plotting</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">[</span><span class="n">ax_top</span><span class="p">,</span> <span class="n">ax_bottom</span><span class="p">]</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+                                        <span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                        <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                        <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                        <span class="n">gridspec_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">'height_ratios'</span><span class="p">:[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]},</span>
+                                        <span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">'projection'</span><span class="p">:</span><span class="s1">'mantid'</span><span class="p">})</span>
+
+<span class="n">ax_top</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">OutputWorkspace</span><span class="p">,</span><span class="s1">'rs'</span><span class="p">,</span><span class="n">wkspIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Data'</span><span class="p">)</span>
+<span class="n">ax_top</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">OutputWorkspace</span><span class="p">,</span><span class="s1">'b-'</span><span class="p">,</span><span class="n">wkspIndex</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Fit'</span><span class="p">)</span>
+<span class="n">ax_top</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax_top</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">''</span><span class="p">)</span>
+<span class="n">ax_top</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'Neutron counts'</span><span class="p">)</span>
+<span class="n">ax_top</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">'both'</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">'in'</span><span class="p">)</span>
+<span class="n">ax_bottom</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">OutputWorkspace</span><span class="p">,</span><span class="s1">'ko'</span><span class="p">,</span><span class="n">wkspIndex</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax_bottom</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">'both'</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s1">'in'</span><span class="p">)</span>
+<span class="n">ax_bottom</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'Difference'</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/7a43704ff894e45c21227b81d055bda3/index-6.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/cd0e437864e97e67ecb6ef8122c5b60d/index-6.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/6237a8fe265ecff93c9123bbd5fc33a8/index-6.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/4168c82e205a546c96b7ceaf6410d9ba/index-6.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/index-6.png" class="plot-directive" src="../_images/index-6.png" />
+</figure>
+<p>One can do twin axes as well:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreateWorkspace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="c1"># Create some mock data</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="n">data1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="n">data2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+<span class="n">ws1</span><span class="o">=</span><span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">data1</span><span class="p">,</span><span class="n">UnitX</span><span class="o">=</span><span class="s1">'MomentumTransfer'</span><span class="p">)</span>
+<span class="n">ws2</span><span class="o">=</span><span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">data2</span><span class="p">,</span><span class="n">UnitX</span><span class="o">=</span><span class="s1">'MomentumTransfer'</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">'projection'</span><span class="p">:</span><span class="s1">'mantid'</span><span class="p">})</span>
+<span class="n">color</span> <span class="o">=</span> <span class="s1">'red'</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ws1</span><span class="p">,</span><span class="s1">'r-'</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'exp'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">'y'</span><span class="p">,</span> <span class="n">labelcolor</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+<span class="n">color</span> <span class="o">=</span> <span class="s1">'blue'</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ws2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'sin'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">'y'</span><span class="p">,</span> <span class="n">labelcolor</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/4c7347987fd216441f894c21ad6540aa/index-7.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/e769b828f61d9bca02c31a4aac4cdef1/index-7.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/db3c54ce69e38add73afa551c5001197/index-7.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/4eeb6070078c3e2d15222f1bc46c0489/index-7.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/index-7.png" class="plot-directive" src="../_images/index-7.png" />
+</figure>
+</section>
+<section id="custom-colors">
+<h2>Custom Colors<a class="headerlink" href="#custom-colors" title="Link to this heading">#</a></h2>
+<section id="custom-color-cycle-line-1d-plots">
+<h3>Custom Color Cycle (Line / 1D plots)<a class="headerlink" href="#custom-color-cycle-line-1d-plots" title="Link to this heading">#</a></h3>
+<p>The Default Color Cycle doesn’t have to be used. Here is an example where a Custom Color Cycle is chosen. Make sure to fill the list <cite>custom_colors</cite> with either the HTML hex codes (eg. #b3457f) or recognised names for the desired colours.
+Both can be found <a class="reference external" href="https://www.rapidtables.com/web/color/html-color-codes.html">online</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">ws</span><span class="o">=</span><span class="n">Load</span><span class="p">(</span><span class="s1">'GEM40979.raw'</span><span class="p">)</span>
+<span class="n">Number</span> <span class="o">=</span> <span class="mi">12</span> <span class="c1"># How many Spectra to Plot</span>
+
+<span class="n">prop_cycle</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'axes.prop_cycle'</span><span class="p">]</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">prop_cycle</span><span class="o">.</span><span class="n">by_key</span><span class="p">()[</span><span class="s1">'color'</span><span class="p">]</span> <span class="c1"># 10 colors in default cycle</span>
+
+<span class="sd">'''Change the following two parameters as you wish'''</span>
+<span class="n">custom_colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'#0000ffff'</span><span class="p">,</span> <span class="s1">'salmon'</span><span class="p">,</span><span class="s1">'#00ff00ff'</span><span class="p">]</span> <span class="c1"># I've chosen Blue, Salmon, Green</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s1">'mantid'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Number</span><span class="p">):</span>
+   <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">specNum</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)])</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Default'</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s1">'mantid'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Number</span><span class="p">):</span>
+   <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ws</span><span class="p">,</span> <span class="n">specNum</span><span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">custom_colors</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="nb">len</span><span class="p">(</span><span class="n">custom_colors</span><span class="p">)])</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Custom'</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">'Line Plots: Color Cycle'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">'x-large'</span><span class="p">)</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/9742b5dca8414f6e4447d2e479ec67a1/index-8.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/7a963e6f8360ad1e2453b60218bba46e/index-8.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/f1f0df4f54875806dd08bd8f7e4a237f/index-8.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/c8ffec569d58fdc9f50049a07a5d2188/index-8.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/index-8.png" class="plot-directive" src="../_images/index-8.png" />
+</figure>
+</section>
+<section id="custom-colormap-mantidworkbench">
+<span id="id1"></span><h3>Custom Colormap (MantidWorkbench)<a class="headerlink" href="#custom-colormap-mantidworkbench" title="Link to this heading">#</a></h3>
+<p>You can view the premade Colormaps <a class="reference external" href="https://matplotlib.org/stable/gallery/color/colormap_reference.html">here</a>.
+These Colormaps can be registered and remain for the current session, but need to be rerun if Mantid has been reopened. Choose the location to Save your Colormap file wisely, outside of your MantidInstall folder!</p>
+<p>The following methods show how to Load, Convert from MantidPlot format, Create from Scratch and Visualise a Custom Colormap.</p>
+<ul class="simple">
+<li><p>If you already have a Colormap file in an (N by 4) format, with all values between 0 and 1, then use:</p></li>
+</ul>
+<p><em>1a. Load Colormap and Register</em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">ListedColormap</span><span class="p">,</span> <span class="n">LinearSegmentedColormap</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">colormaps</span>
+
+<span class="n">Cmap_Name</span> <span class="o">=</span> <span class="s1">'Beach'</span> <span class="c1"># Colormap name</span>
+<span class="n">Loaded_Cmap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">"/Path/to/file/Filename.txt"</span><span class="p">)</span>
+<span class="c1"># Register the Loaded Colormap</span>
+<span class="n">Listed_CustomCmap</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">Loaded_Cmap</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">Cmap_Name</span><span class="p">)</span>
+<span class="n">colormaps</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">Cmap_Name</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span> <span class="n">Listed_CustomCmap</span><span class="p">)</span>
+
+<span class="c1"># Create and register the reverse colormap</span>
+<span class="n">Res</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Loaded_Cmap</span><span class="p">)</span>
+<span class="n">Reverse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Res</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Res</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+      <span class="n">Reverse</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Loaded_Cmap</span><span class="p">[</span><span class="n">Res</span><span class="o">-</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="n">j</span><span class="p">]</span>
+
+<span class="n">Listed_CustomCmap_r</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">Reverse</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="p">(</span><span class="n">Cmap_Name</span> <span class="o">+</span> <span class="s1">'_r'</span><span class="p">)</span> <span class="p">)</span>
+<span class="n">colormaps</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="p">(</span><span class="n">Cmap_Name</span> <span class="o">+</span> <span class="s1">'_r'</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span> <span class="n">Listed_CustomCmap_r</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If you have a Colormap file in a Mantid format (N by 3) with all values between 0 and 255, firstly <strong>rename the file extension from .map to .txt</strong>, then use:</p></li>
+</ul>
+<p><em>1b. Convert Mantid Colormap and Register</em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">ListedColormap</span><span class="p">,</span> <span class="n">LinearSegmentedColormap</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">colormaps</span>
+
+<span class="n">Cmap_Name</span> <span class="o">=</span> <span class="s1">'Beach'</span>
+<span class="n">Loaded_Cmap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">"/Path/to/file/Beach.txt"</span><span class="p">)</span>
+
+<span class="n">Res</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Loaded_Cmap</span><span class="p">)</span>
+<span class="n">Cmap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Res</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Res</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">'''Normalise RGB values, Add 4th column alpha set to 1'''</span>
+  <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">Cmap</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">Loaded_Cmap</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span> <span class="o">/</span> <span class="mi">255</span>
+  <span class="n">Cmap</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="w">  </span><span class="sd">'''Checks all values b/w 0 and 1'''</span>
+  <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">Cmap</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+          <span class="nb">print</span><span class="p">(</span><span class="n">Cmap</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+          <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'Values must be between 0 and 1, one of the above is &gt; 1'</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">Cmap</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="nb">print</span><span class="p">(</span><span class="n">Cmap</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+          <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'Values must be between 0 and 1, one of the above is negative'</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+          <span class="k">pass</span>
+
+<span class="c1">#np.savetxt("C:\Path\to\File\Filename.txt",Cmap) #uncomment to save to file</span>
+
+<span class="c1"># Register the Loaded Colormap</span>
+<span class="n">Listed_CustomCmap</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">Cmap</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">Cmap_Name</span><span class="p">)</span>
+<span class="n">colormaps</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">Cmap_Name</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span> <span class="n">Listed_CustomCmap</span><span class="p">)</span>
+
+<span class="c1"># Create and register the reverse colormap</span>
+<span class="n">Reverse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Res</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Res</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+      <span class="n">Reverse</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Cmap</span><span class="p">[</span><span class="n">Res</span><span class="o">-</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="n">j</span><span class="p">]</span>
+
+<span class="n">Listed_CustomCmap_r</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">Reverse</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="p">(</span><span class="n">Cmap_Name</span> <span class="o">+</span> <span class="s1">'_r'</span><span class="p">)</span> <span class="p">)</span>
+<span class="n">colormaps</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="p">(</span><span class="n">Cmap_Name</span> <span class="o">+</span> <span class="s1">'_r'</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span> <span class="n">Listed_CustomCmap_r</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>To Create a Colormap from scratch, use:</p></li>
+</ul>
+<p><em>1c. Create and Register</em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">ListedColormap</span><span class="p">,</span> <span class="n">LinearSegmentedColormap</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">colormaps</span>
+
+<span class="n">Cmap_Name</span> <span class="o">=</span> <span class="s1">'Beach'</span> <span class="c1"># Colormap name</span>
+<span class="n">Res</span> <span class="o">=</span> <span class="mi">500</span> <span class="c1"># Resolution of your Colormap (number of steps in colormap)</span>
+
+<span class="n">Re</span> <span class="o">=</span> <span class="n">Res</span><span class="o">-</span><span class="mi">1</span>
+<span class="n">Cmap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Res</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Res</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">'''Input functions inside float(), Divide by Res to normalise'''</span>
+  <span class="n">Cmap</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">Res</span><span class="p">)</span>   <span class="o">/</span> <span class="n">Res</span>       <span class="c1">#Red   #just 1</span>
+  <span class="n">Cmap</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>     <span class="o">/</span> <span class="n">Re</span>        <span class="c1">#Green #+ve i divisible by Res-1 = Re</span>
+  <span class="n">Cmap</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">Res</span><span class="o">-</span><span class="n">i</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">Res</span><span class="o">**</span><span class="mi">2</span> <span class="c1">#Blue  #Make sure Norm_factor correct</span>
+  <span class="n">Cmap</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="w">  </span><span class="sd">'''Checks all values b/w 0 and 1'''</span>
+  <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">Cmap</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+          <span class="nb">print</span><span class="p">(</span><span class="n">Cmap</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+          <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'Values must be between 0 and 1, one of the above is &gt; 1'</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">Cmap</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="nb">print</span><span class="p">(</span><span class="n">Cmap</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+          <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'Values must be between 0 and 1, one of the above is Negative'</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+          <span class="k">pass</span>
+
+<span class="c1">#np.savetxt("C:\Path\to\File\Filename.txt",Cmap) #uncomment to save to file</span>
+
+<span class="n">Listed_CustomCmap</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">Cmap</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">Cmap_Name</span><span class="p">)</span>
+<span class="n">colormaps</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="n">Cmap_Name</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">Listed_CustomCmap</span><span class="p">)</span>
+
+<span class="c1"># Create and register the reverse colormap</span>
+<span class="n">Reverse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">Res</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Res</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+      <span class="n">Reverse</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">Cmap</span><span class="p">[</span><span class="n">Res</span><span class="o">-</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)][</span><span class="n">j</span><span class="p">]</span>
+
+<span class="n">Listed_CustomCmap_r</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">Reverse</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="p">(</span><span class="n">Cmap_Name</span> <span class="o">+</span> <span class="s1">'_r'</span><span class="p">)</span> <span class="p">)</span>
+<span class="n">colormaps</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="p">(</span><span class="n">Cmap_Name</span> <span class="o">+</span> <span class="s1">'_r'</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span> <span class="n">Listed_CustomCmap_r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now the Custom Colormap has been registered, right-click on a workspace and produce a colorfill plot. In Figure Options (Gear Icon in Plot Figure), under the Images Tab, you can use the drop down-menu to select the new Colormap, and use the check-box to select its Reverse!</p>
+<ul class="simple">
+<li><p>Otherwise, use a script like this (from above in Section “Simple Plots”) to plot with your new Colormap:</p></li>
+</ul>
+<p><em>2. Plot New Colormap</em> (change the “cmap” name in line 12 accordingly)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Load</span><span class="p">,</span> <span class="n">ConvertToMD</span><span class="p">,</span> <span class="n">BinMD</span><span class="p">,</span> <span class="n">ConvertUnits</span><span class="p">,</span> <span class="n">Rebin</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogNorm</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">'CNCS_7860'</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">ConvertUnits</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">data</span><span class="p">,</span><span class="n">Target</span><span class="o">=</span><span class="s1">'DeltaE'</span><span class="p">,</span> <span class="n">EMode</span><span class="o">=</span><span class="s1">'Direct'</span><span class="p">,</span> <span class="n">EFixed</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">Rebin</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">Params</span><span class="o">=</span><span class="s1">'-3,0.025,3'</span><span class="p">,</span> <span class="n">PreserveEvents</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">md</span> <span class="o">=</span> <span class="n">ConvertToMD</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">data</span><span class="p">,</span><span class="n">QDimensions</span><span class="o">=</span><span class="s1">'|Q|'</span><span class="p">,</span><span class="n">dEAnalysisMode</span><span class="o">=</span><span class="s1">'Direct'</span><span class="p">)</span>
+<span class="n">sqw</span> <span class="o">=</span> <span class="n">BinMD</span><span class="p">(</span><span class="n">InputWorkspace</span><span class="o">=</span><span class="n">md</span><span class="p">,</span><span class="n">AlignedDim0</span><span class="o">=</span><span class="s1">'|Q|,0,3,100'</span><span class="p">,</span><span class="n">AlignedDim1</span><span class="o">=</span><span class="s1">'DeltaE,-3,3,100'</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">'projection'</span><span class="p">:</span><span class="s1">'mantid'</span><span class="p">})</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">sqw</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'Beach'</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">LogNorm</span><span class="p">())</span>
+<span class="n">cbar</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">'Intensity (arb. units)'</span><span class="p">)</span> <span class="c1">#add text to colorbar</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/ca7e704babc07fffa816096cc0c79404/index-9.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/18689086632bb62dbf7e6e194500e5d6/index-9.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/34a3c3048005f4f8a91fe5bc1cd6382c/index-9.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/07a1b5f592d05a149eee209d0ba17606/index-9.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/index-9.png" class="plot-directive" src="../_images/index-9.png" />
+</figure>
+<p>Colormaps can also be created with the <a class="reference external" href="https://colormap.readthedocs.io/en/latest/">colormap package</a> or by <a class="reference external" href="https://matplotlib.org/stable/users/explain/colors/colormap-manipulation.html">concatenating existing colormaps</a>.</p>
+</section>
+</section>
+<section id="plotting-sample-logs">
+<h2>Plotting Sample Logs<a class="headerlink" href="#plotting-sample-logs" title="Link to this heading">#</a></h2>
+<p>The <a class="reference internal" href="../api/python/mantid/plots/index.html#mantid.plots.MantidAxes.plot" title="mantid.plots.MantidAxes.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">mantid.plots.MantidAxes.plot</span></code></a> function can show sample logs. By default,
+the time axis represents the time since the first proton charge pulse (the
+beginning of the run), but one can also plot absolute time using <cite>FullTime=True</cite></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Load</span>
+
+<span class="n">w</span><span class="o">=</span><span class="n">Load</span><span class="p">(</span><span class="s1">'CNCS_7860'</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s1">'mantid'</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s1">'mantid'</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">LogName</span><span class="o">=</span><span class="s1">'ChopperStatus5'</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'From run start'</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">LogName</span><span class="o">=</span><span class="s1">'ChopperStatus5'</span><span class="p">,</span><span class="n">FullTime</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Absolute time'</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/376dac472466eeaeb4053ff06979d7d4/index-10.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/5fcee323ef316e5dfdf21b6d82561bcd/index-10.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/fa7e1a8f25ee7ba2a9fdae300621ceae/index-10.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/440aaea1f28f6e327104a32127651385/index-10.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/index-10.png" class="plot-directive" src="../_images/index-10.png" />
+</figure>
+<p>Note that the parasite axes in matplotlib do not accept the projection keyword.
+So one needs to use <a class="reference internal" href="../api/python/mantid/plots/index.html#mantid.plots.axesfunctions.plot" title="mantid.plots.axesfunctions.plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">mantid.plots.axesfunctions.plot</span></code></a> instead.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mantid.plots.axesfunctions</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">axesfuncs</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Load</span>
+<span class="n">w</span><span class="o">=</span><span class="n">Load</span><span class="p">(</span><span class="s1">'CNCS_7860'</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">'projection'</span><span class="p">:</span><span class="s1">'mantid'</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">LogName</span><span class="o">=</span><span class="s1">'ChopperStatus5'</span><span class="p">)</span>
+<span class="n">axt</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">twiny</span><span class="p">()</span>
+<span class="n">axesfuncs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axt</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">LogName</span><span class="o">=</span><span class="s1">'ChopperStatus5'</span><span class="p">,</span> <span class="n">FullTime</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/97e7a844d81808672dcb7796889d34d4/index-11.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/493b97126fdbc9c4283a81b7cb054eee/index-11.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/ecba5292f18fd2b022b74e14e5d6aa06/index-11.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/9a98d4406ff4ef553be0e2b18232b99d/index-11.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/index-11.png" class="plot-directive" src="../_images/index-11.png" />
+</figure>
+<p>If a TimeROI is applied to the workspace, the Sample Logs can also include shaded regions to indicate the regions
+of the logs that are being excluded by the TimeROI.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Load</span><span class="p">,</span> <span class="n">FilterByTime</span>
+
+<span class="n">w</span> <span class="o">=</span> <span class="n">Load</span><span class="p">(</span><span class="s1">'CNCS_7860'</span><span class="p">)</span>
+<span class="n">ws_filtered</span> <span class="o">=</span> <span class="n">FilterByTime</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">StartTime</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">StopTime</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s1">'mantid'</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s1">'mantid'</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ws_filtered</span><span class="p">,</span> <span class="n">LogName</span><span class="o">=</span><span class="s1">'ChopperStatus5'</span><span class="p">,</span><span class="n">ShowTimeROI</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'From run start'</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ws_filtered</span><span class="p">,</span> <span class="n">LogName</span><span class="o">=</span><span class="s1">'ChopperStatus5'</span><span class="p">,</span><span class="n">FullTime</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">ShowTimeROI</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Absolute time'</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/fa484a6efdb8a41b87bba7998ae7dc89/index-12.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/4c0892ef36a16f55cd44eb7b52ef0dd9/index-12.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/fe51899cc3d1d46f7104b0529e3b4f11/index-12.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/0abc20e7754e647627fa7cbb1086055e/index-12.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/index-12.png" class="plot-directive" src="../_images/index-12.png" />
+</figure>
+</section>
+<section id="complex-plots">
+<h2>Complex plots<a class="headerlink" href="#complex-plots" title="Link to this heading">#</a></h2>
+<p>One common type of a slightly more complex figure involves drawing an inset.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreateWorkspace</span><span class="p">,</span> <span class="n">FFT</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">rcParams</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">y</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">1.1</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="mf">7.</span><span class="p">)</span>
+<span class="n">err</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.01</span><span class="o">+</span><span class="n">x</span><span class="o">/</span><span class="mf">200.</span><span class="p">)</span>
+<span class="n">w</span><span class="o">=</span><span class="n">CreateWorkspace</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">err</span><span class="p">,</span><span class="n">UnitX</span><span class="o">=</span><span class="s1">'tof'</span><span class="p">)</span>
+<span class="n">fft</span><span class="o">=</span><span class="n">FFT</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+<span class="c1"># make all ticks point in</span>
+<span class="n">rcParams</span><span class="p">[</span><span class="s1">'xtick.direction'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'in'</span>
+<span class="n">rcParams</span><span class="p">[</span><span class="s1">'ytick.direction'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'in'</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">subplot_kw</span><span class="o">=</span><span class="p">{</span><span class="s1">'projection'</span><span class="p">:</span><span class="s1">'mantid'</span><span class="p">})</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="s1">'ks'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'Asymmetry'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax_inset</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.7</span><span class="p">,</span><span class="mf">0.72</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.2</span><span class="p">],</span><span class="n">projection</span><span class="o">=</span><span class="s1">'mantid'</span><span class="p">)</span>
+<span class="n">ax_inset</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fft</span><span class="p">,</span><span class="n">specNum</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">ax_inset</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax_inset</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'Frequency (MHz)'</span><span class="p">)</span>
+<span class="n">ax_inset</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'|FFT|'</span><span class="p">)</span>
+<span class="c1"># note that thight_layout will produce a warning here "This figure includes</span>
+<span class="c1"># Axes that are not compatible with tight_layout, so its results might be incorrect."</span>
+<span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/cfbf27ccd9e1cf8bc942cf3bb60bc880/index-13.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/6cd46cecc5729c8b83bf0770a151dbc6/index-13.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/d0442a7a9a17cadca7e49f4919d8daf6/index-13.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/53533d89b3f54ae6dd6b5898e62342c1/index-13.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/index-13.png" class="plot-directive" src="../_images/index-13.png" />
+</figure>
+<p>Plotting dispersion curves  on multiple panels can also be done using matplotlib:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.gridspec</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridSpec</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid.simpleapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">CreateMDHistoWorkspace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mantid</span><span class="w"> </span><span class="kn">import</span> <span class="n">plots</span>
+
+<span class="c1"># Generate nice (fake) dispersion data</span>
+<span class="c1"># Gamma to K</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.333</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>
+<span class="n">omega_hh</span> <span class="o">=</span> <span class="mf">20.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="n">I_hh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="mf">5.</span><span class="p">)</span>
+<span class="n">signal</span> <span class="o">=</span> <span class="n">I_hh</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="n">omega_hh</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">signal</span><span class="p">[</span><span class="n">y</span><span class="o">&gt;</span><span class="mi">25</span><span class="o">+</span><span class="mi">100</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+<span class="n">ws1</span><span class="o">=</span><span class="n">CreateMDHistoWorkspace</span><span class="p">(</span><span class="n">Dimensionality</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                           <span class="n">Extents</span><span class="o">=</span><span class="s1">'0,0.3333,0,60'</span><span class="p">,</span>
+                           <span class="n">SignalInput</span><span class="o">=</span><span class="n">signal</span><span class="p">,</span>
+                           <span class="n">ErrorInput</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span>
+                           <span class="n">NumberOfBins</span><span class="o">=</span><span class="s1">'</span><span class="si">{0}</span><span class="s1">,</span><span class="si">{1}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">)),</span>
+                           <span class="n">Names</span><span class="o">=</span><span class="s1">'Dim1,Dim2'</span><span class="p">,</span>
+                           <span class="n">Units</span><span class="o">=</span><span class="s1">'MomentumTransfer,EnergyTransfer'</span><span class="p">)</span>
+<span class="c1"># K to M</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span> <span class="p">(</span><span class="mf">0.333</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>
+<span class="n">omega_hm2h</span><span class="o">=</span><span class="mf">20.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">0.333</span><span class="p">))</span>
+<span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">y</span><span class="o">-</span><span class="n">omega_hm2h</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">signal</span><span class="p">[</span><span class="n">y</span><span class="o">&gt;</span><span class="mi">35</span><span class="p">]</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+<span class="n">ws2</span><span class="o">=</span><span class="n">CreateMDHistoWorkspace</span><span class="p">(</span><span class="n">Dimensionality</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                           <span class="n">Extents</span><span class="o">=</span><span class="s1">'0.3333,0.5,0,60'</span><span class="p">,</span>
+                           <span class="n">SignalInput</span><span class="o">=</span><span class="n">signal</span><span class="p">,</span>
+                           <span class="n">ErrorInput</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span>
+                           <span class="n">NumberOfBins</span><span class="o">=</span><span class="s1">'</span><span class="si">{0}</span><span class="s1">,</span><span class="si">{1}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">)),</span>
+                           <span class="n">Names</span><span class="o">=</span><span class="s1">'Dim1,Dim2'</span><span class="p">,</span>
+                           <span class="n">Units</span><span class="o">=</span><span class="s1">'MomentumTransfer,EnergyTransfer'</span><span class="p">)</span>
+
+
+<span class="n">d</span><span class="o">=</span><span class="mf">6.7</span>
+<span class="n">a</span><span class="o">=</span><span class="mf">2.454</span>
+<span class="c1">#Gamma is (0,0,0)</span>
+<span class="c1">#A is (0,0,1/2)</span>
+<span class="c1">#K is (1/3,1/3,0)</span>
+<span class="c1">#M is (1/2,0,0)</span>
+<span class="n">gamma_a</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">d</span>
+<span class="n">gamma_m</span><span class="o">=</span><span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">3.</span><span class="p">)</span><span class="o">/</span><span class="n">a</span>
+<span class="n">m_k</span><span class="o">=</span><span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="n">a</span>
+<span class="n">gamma_k</span><span class="o">=</span><span class="mf">4.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="o">/</span><span class="n">a</span>
+
+<span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">GridSpec</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span>
+              <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="n">gamma_k</span><span class="p">,</span><span class="n">m_k</span><span class="p">,</span><span class="n">gamma_m</span><span class="p">,</span><span class="n">gamma_a</span><span class="p">],</span>
+              <span class="n">wspace</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">projection</span><span class="o">=</span><span class="s1">'mantid'</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">sharey</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s1">'mantid'</span><span class="p">)</span>
+<span class="n">ax3</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">sharey</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+<span class="n">ax4</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="n">sharey</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">ws1</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">ws2</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mf">17.</span><span class="p">])</span>
+<span class="n">ax4</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+
+
+<span class="c1">#Adjust plotting parameters</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'E (meV)'</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">''</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="mf">40.</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$[\epsilon,\epsilon,0], 0 \leq \epsilon \leq 1/3$'</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">'$\Gamma$'</span><span class="p">,</span><span class="s1">'$K$'</span><span class="p">])</span>
+<span class="c1">#ax1.spines['right'].set_visible(False)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s1">'in'</span><span class="p">)</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">''</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$[1/3+\epsilon,1/3-2\epsilon,0], 0 \leq \epsilon \leq 1/6$'</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mf">1.</span><span class="o">/</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">'$M$'</span><span class="p">])</span>
+<span class="c1">#ax2.spines['left'].set_visible(False)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s1">'in'</span><span class="p">)</span>
+
+<span class="c1">#invert axis</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$[\epsilon,0,0], 1/2 \geq \epsilon \geq 0$'</span><span class="p">)</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">'$\Gamma$'</span><span class="p">])</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s1">'in'</span><span class="p">)</span>
+
+<span class="n">ax4</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax4</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax4</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">'$[0,0,\epsilon], 0 \leq \epsilon \leq 1/2$'</span><span class="p">)</span>
+<span class="n">ax4</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mf">1.</span><span class="o">/</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">ax4</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">'$A$'</span><span class="p">])</span>
+<span class="n">ax4</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s1">'in'</span><span class="p">)</span>
+<span class="c1">#fig.show()</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/f60c2fd6e1af4d5f3543dfdb35695f05/index-14.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>, <a class="reference download internal" download="" href="../_downloads/7ea720247ba25e45ffb1a6ed6f92270b/index-14.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/c6aba0ef3e27a7b721f39867834e6030/index-14.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/e8ca7aa13267743cd51f4732bf195cc2/index-14.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</p>
+<figure class="align-default">
+<img alt="../_images/index-14.png" class="plot-directive" src="../_images/index-14.png" />
+</figure>
+</section>
+<section id="change-matplotlib-defaults">
+<span id="mpldefaults"></span><h2>Change Matplotlib Defaults<a class="headerlink" href="#change-matplotlib-defaults" title="Link to this heading">#</a></h2>
+<p>It is possible to alter the default appearance of Matplotlib plots, e.g. linewidths, label sizes,
+colour cycles etc. This is most readily achieved by setting the <code class="docutils literal notranslate"><span class="pre">rcParams</span></code> at the start of a
+Mantid Workbench session. The example below shows a plot with the default line width, followed be resetting the parameters with <code class="docutils literal notranslate"><span class="pre">rcParams</span></code>. An example with many of the
+editable parameters is available at <a class="reference external" href="https://matplotlib.org/stable/users/explain/customizing.html">the Matplotlib site</a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="c1"># Set up the data</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">offsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="c1"># Create array with shifted-sine curve along each column</span>
+<span class="n">yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">phi</span><span class="p">)</span> <span class="k">for</span> <span class="n">phi</span> <span class="ow">in</span> <span class="n">offsets</span><span class="p">])</span>
+<span class="c1"># Plot the data</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">yy</span><span class="p">)</span>
+
+<span class="c1">## Reset the parameters</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'lines.linewidth'</span><span class="p">]</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'axes.grid'</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'axes.facecolor'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">)</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">'grid.linestyle'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'--'</span>
+<span class="c1"># Plot the data</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">yy</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>(<a class="reference download internal" download="" href="../_downloads/088e05eddbdd8969cf2a24abe123283f/index-15.py"><code class="xref download docutils literal notranslate"><span class="pre">Source</span> <span class="pre">code</span></code></a>)</p>
+<figure class="align-default" id="id2">
+<img alt="../_images/index-15_00.png" class="plot-directive" src="../_images/index-15_00.png" />
+<figcaption>
+<p><span class="caption-text">(<a class="reference download internal" download="" href="../_downloads/f71f193f45c3a6ae50e63b53d53a4f5b/index-15_00.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/fe817d9a8f0987931f57c37d121306bb/index-15_00.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/ad2c0057e7ac3c0f98b8c5bbb61335ad/index-15_00.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</span><a class="headerlink" href="#id2" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id3">
+<img alt="../_images/index-15_01.png" class="plot-directive" src="../_images/index-15_01.png" />
+<figcaption>
+<p><span class="caption-text">(<a class="reference download internal" download="" href="../_downloads/000efedb4f1530b2b32165372d791bdf/index-15_01.png"><code class="xref download docutils literal notranslate"><span class="pre">png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/8bbfb4f853dbebea8029b38f215bbb39/index-15_01.hires.png"><code class="xref download docutils literal notranslate"><span class="pre">hires.png</span></code></a>, <a class="reference download internal" download="" href="../_downloads/e6e8b6e985a975c5f3a6ac9198f6f8f5/index-15_01.pdf"><code class="xref download docutils literal notranslate"><span class="pre">pdf</span></code></a>)</span><a class="headerlink" href="#id3" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<p>For much more on customising the graph appearance see the <a class="reference external" href="https://matplotlib.org/stable/users/prev_whats_new/dflt_style_changes.html">Matplotlib documentation</a>.</p>
+<p>A list of some common properties you might want to change and the keywords to set:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p>Parameter</p></td>
+<td><p>Keyword</p></td>
+<td><p>Default</p></td>
+</tr>
+<tr class="row-even"><td><p>Error bar cap</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">errorbar.capsize</span></code></p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p>Line width</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">lines.linewidth</span></code></p></td>
+<td><p>1.25</p></td>
+</tr>
+<tr class="row-even"><td><p>Grid on/off</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">axes.grid</span></code></p></td>
+<td><p>False</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ticklabel size</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xtick.labelsize</span></code>
+<code class="docutils literal notranslate"><span class="pre">ytick.labelsize</span></code></p></td>
+<td><p>medium</p></td>
+</tr>
+<tr class="row-even"><td><p>Minor ticks on/off</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">xtick.minor.visible</span></code>
+<code class="docutils literal notranslate"><span class="pre">ytick.minor.visible</span></code></p></td>
+<td><p>False</p></td>
+</tr>
+<tr class="row-odd"><td><p>Face colour</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">axes.facecolor</span></code></p></td>
+<td><p>white</p></td>
+</tr>
+<tr class="row-even"><td><p>Font type</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">font.family</span></code></p></td>
+<td><p>sans-serif</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A much fuller list of properties is available <a class="reference external" href="https://matplotlib.org/stable/users/explain/customizing.html">in the Matplotlib documentation</a>.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../api/python/changes.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Python API Changes</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="1DPlotsHelp.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Basic 1D and Tiled Plots</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#showing-saving-figures">Showing/saving figures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-plots">Simple plots</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-colors">Custom Colors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-color-cycle-line-1d-plots">Custom Color Cycle (Line / 1D plots)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-colormap-mantidworkbench">Custom Colormap (MantidWorkbench)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-sample-logs">Plotting Sample Logs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#complex-plots">Complex plots</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#change-matplotlib-defaults">Change Matplotlib Defaults</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/plotting/index.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Mantid.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
